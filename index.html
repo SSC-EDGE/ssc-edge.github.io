@@ -1,71 +1,1408 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SSC EDGE</title>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0,
+      maximum-scale=1.0, user-scalable=no">
 
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<title>SSC EDGE</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0f1020;
-      color: white;
-      text-align: center;
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+    --bg: #080914;
+    --card: #111323;
+    --card2: #17192d;
+    --primary: #8b5cf6;
+    --primary2: #a855f7;
+    --text: #ffffff;
+    --muted: #9ca3af;
+    --border: rgba(255,255,255,0.08);
+    --danger: #ef4444;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+/* APP */
+
+.app {
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    min-height: 100vh;
+    padding-bottom: 85px;
+}
+
+/* HEADER */
+
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 16px 18px;
+    background: rgba(8,9,20,0.92);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid var(--border);
+}
+
+.header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.logo {
+    width: 43px;
+    height: 43px;
+    border-radius: 13px;
+    background: linear-gradient(
+        135deg,
+        #8b5cf6,
+        #c026d3
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 17px;
+    box-shadow:
+        0 8px 25px rgba(139,92,246,0.25);
+}
+
+.brand-name {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+}
+
+.brand-sub {
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 2px;
+}
+
+.profile {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--card2);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+/* MAIN */
+
+.main {
+    padding: 20px 16px;
+}
+
+/* HERO */
+
+.hero {
+    position: relative;
+    overflow: hidden;
+    padding: 25px 22px;
+    border-radius: 22px;
+    background:
+        linear-gradient(
+            135deg,
+            #17152d,
+            #22173a 55%,
+            #141526
+        );
+    border: 1px solid rgba(139,92,246,0.22);
+    box-shadow:
+        0 15px 45px rgba(0,0,0,0.25);
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    right: -55px;
+    top: -55px;
+    border-radius: 50%;
+    background: rgba(139,92,246,0.15);
+    filter: blur(5px);
+}
+
+.hero-title {
+    position: relative;
+    z-index: 2;
+    font-size: 28px;
+    font-weight: 850;
+    margin: 0;
+}
+
+.hero-title span {
+    color: #a78bfa;
+}
+
+.hero-text {
+    position: relative;
+    z-index: 2;
+    color: #c4c7d4;
+    font-size: 14px;
+    line-height: 1.55;
+    margin: 8px 0 20px;
+}
+
+.hero-button {
+    position: relative;
+    z-index: 2;
+    border: 0;
+    background: linear-gradient(
+        135deg,
+        var(--primary),
+        var(--primary2)
+    );
+    color: white;
+    padding: 13px 19px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 750;
+    box-shadow:
+        0 8px 22px rgba(139,92,246,0.28);
+}
+
+/* SECTION */
+
+.section {
+    margin-top: 27px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 13px;
+}
+
+.section-title {
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.section-link {
+    color: #a78bfa;
+    font-size: 12px;
+}
+
+/* GRID */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 11px;
+}
+
+.card {
+    padding: 17px 14px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 17px;
+    transition: 0.15s;
+}
+
+.card:active {
+    transform: scale(0.97);
+    background: var(--card2);
+}
+
+.card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: rgba(139,92,246,0.14);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+    margin-bottom: 12px;
+}
+
+.card-title {
+    font-size: 14px;
+    font-weight: 750;
+}
+
+.card-text {
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.45;
+    margin-top: 4px;
+}
+
+/* QUICK ACTIONS */
+
+.quick {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 3px;
+}
+
+.quick::-webkit-scrollbar {
+    display: none;
+}
+
+.quick-card {
+    flex: 0 0 135px;
+    padding: 15px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+}
+
+.quick-icon {
+    font-size: 21px;
+    margin-bottom: 9px;
+}
+
+.quick-title {
+    font-size: 12px;
+    font-weight: 750;
+}
+
+/* UPDATES */
+
+.update {
+    padding: 15px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    margin-bottom: 10px;
+}
+
+.update-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.update-title {
+    font-size: 13px;
+    font-weight: 750;
+}
+
+.badge {
+    background: rgba(34,197,94,0.12);
+    color: #86efac;
+    border-radius: 7px;
+    padding: 4px 7px;
+    font-size: 9px;
+    font-weight: 750;
+}
+
+.update-date {
+    color: var(--muted);
+    font-size: 10px;
+    margin-top: 7px;
+}
+
+/* SEARCH */
+
+.search {
+    margin-top: 20px;
+    position: relative;
+}
+
+.search input {
+    width: 100%;
+    border: 1px solid var(--border);
+    outline: none;
+    background: var(--card);
+    color: white;
+    padding: 14px 16px 14px 43px;
+    border-radius: 13px;
+    font-size: 13px;
+}
+
+.search-icon {
+    position: absolute;
+    left: 15px;
+    top: 13px;
+    color: var(--muted);
+}
+
+/* PAGES */
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.back {
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: white;
+    border-radius: 11px;
+    font-size: 18px;
+}
+
+.page-title {
+    font-size: 22px;
+    font-weight: 800;
+}
+
+/* LIST */
+
+.list-item {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 15px;
+    background: var(--card);
+    border: 1px solid var(--border);
+}
+
+.list-icon {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background: rgba(139,92,246,0.13);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.list-info {
+    flex: 1;
+}
+
+.list-title {
+    font-size: 13px;
+    font-weight: 750;
+}
+
+.list-sub {
+    color: var(--muted);
+    font-size: 10px;
+    margin-top: 4px;
+}
+
+.arrow {
+    color: var(--muted);
+}
+
+/* BOTTOM NAV */
+
+.bottom-nav {
+    position: fixed;
+    z-index: 200;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 600px;
+    padding: 9px 8px;
+    background: rgba(12,13,25,0.96);
+    backdrop-filter: blur(18px);
+    border-top: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+}
+
+.nav-item {
+    text-align: center;
+    color: #777b8c;
+    font-size: 10px;
+    padding: 5px 0;
+}
+
+.nav-icon {
+    display: block;
+    font-size: 19px;
+    margin-bottom: 3px;
+}
+
+.nav-item.active {
+    color: #a78bfa;
+}
+
+/* PROFILE MODAL */
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    background: rgba(0,0,0,0.7);
+    align-items: flex-end;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-box {
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    padding: 25px 20px 30px;
+    background: #121426;
+    border-radius: 25px 25px 0 0;
+    border-top: 1px solid var(--border);
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 20px;
+}
+
+.close {
+    float: right;
+    border: 0;
+    background: var(--card);
+    color: white;
+    border-radius: 9px;
+    width: 32px;
+    height: 32px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 360px) {
+    .hero-title {
+        font-size: 24px;
     }
 
-    .container {
-      padding: 30px 20px;
+    .grid {
+        gap: 8px;
     }
 
-    h1 {
-      margin-top: 30px;
-      font-size: 32px;
+    .card {
+        padding: 14px 11px;
     }
-
-    .subtitle {
-      color: #aaa;
-      margin-bottom: 30px;
-    }
-
-    button {
-      width: 100%;
-      padding: 15px;
-      margin: 8px 0;
-      border: 0;
-      border-radius: 12px;
-      font-size: 17px;
-      background: #7c3aed;
-      color: white;
-    }
-  </style>
+}
+</style>
 </head>
 
 <body>
 
-  <div class="container">
+<div class="app">
 
-    <h1>SSC EDGE</h1>
+<!-- HEADER -->
 
-    <div class="subtitle">
-      Your SSC Preparation Hub
+<header class="header">
+    <div class="header-row">
+
+        <div class="brand">
+            <div class="logo">SE</div>
+
+            <div>
+                <div class="brand-name">SSC EDGE</div>
+                <div class="brand-sub">
+                    Smart SSC Preparation
+                </div>
+            </div>
+        </div>
+
+        <button class="profile" onclick="openProfile()">
+            👤
+        </button>
+
+    </div>
+</header>
+
+
+<main class="main">
+
+<!-- HOME -->
+
+<section id="homePage" class="page active">
+
+    <div class="hero">
+
+        <h1 class="hero-title">
+            Welcome to <span>SSC EDGE</span>
+        </h1>
+
+        <p class="hero-text">
+            Your focused preparation hub for SSC exams.
+            Learn, practice and stay updated.
+        </p>
+
+        <button
+            class="hero-button"
+            onclick="openPage('practicePage')">
+            🚀 Start Practice
+        </button>
+
     </div>
 
-    <button>📚 Study Material</button>
-    <button>📝 Practice Tests</button>
-    <button>📢 SSC Updates</button>
-    <button>🎯 Previous Papers</button>
 
-  </div>
+    <div class="search">
+        <span class="search-icon">🔎</span>
 
-  <script>
-    const tg = window.Telegram.WebApp;
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search SSC EDGE..."
+            oninput="searchContent()">
+    </div>
 
-    tg.ready();
-    tg.expand();
-  </script>
+
+    <!-- MAIN CATEGORIES -->
+
+    <div class="section">
+
+        <div class="section-header">
+            <div class="section-title">
+                Explore
+            </div>
+
+            <div class="section-link">
+                SSC EDGE
+            </div>
+        </div>
+
+
+        <div class="grid">
+
+            <div class="card"
+                 onclick="openPage('studyPage')">
+
+                <div class="card-icon">📚</div>
+
+                <div class="card-title">
+                    Study Material
+                </div>
+
+                <div class="card-text">
+                    Notes, concepts and study resources.
+                </div>
+
+            </div>
+
+
+            <div class="card"
+                 onclick="openPage('practicePage')">
+
+                <div class="card-icon">📝</div>
+
+                <div class="card-title">
+                    Practice
+                </div>
+
+                <div class="card-text">
+                    Practice questions and mock tests.
+                </div>
+
+            </div>
+
+
+            <div class="card"
+                 onclick="openPage('updatesPage')">
+
+                <div class="card-icon">📢</div>
+
+                <div class="card-title">
+                    SSC Updates
+                </div>
+
+                <div class="card-text">
+                    Latest SSC notifications and news.
+                </div>
+
+            </div>
+
+
+            <div class="card"
+                 onclick="openPage('papersPage')">
+
+                <div class="card-icon">🎯</div>
+
+                <div class="card-title">
+                    Previous Papers
+                </div>
+
+                <div class="card-text">
+                    Previous year exam papers.
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- QUICK ACCESS -->
+
+    <div class="section">
+
+        <div class="section-header">
+            <div class="section-title">
+                Quick Access
+            </div>
+        </div>
+
+        <div class="quick">
+
+            <div class="quick-card"
+                 onclick="openPage('practicePage')">
+
+                <div class="quick-icon">⚡</div>
+
+                <div class="quick-title">
+                    Quick Test
+                </div>
+
+            </div>
+
+
+            <div class="quick-card"
+                 onclick="openPage('studyPage')">
+
+                <div class="quick-icon">🧠</div>
+
+                <div class="quick-title">
+                    Grammar
+                </div>
+
+            </div>
+
+
+            <div class="quick-card"
+                 onclick="openPage('papersPage')">
+
+                <div class="quick-icon">📄</div>
+
+                <div class="quick-title">
+                    PYQs
+                </div>
+
+            </div>
+
+
+            <div class="quick-card"
+                 onclick="openPage('updatesPage')">
+
+                <div class="quick-icon">🔔</div>
+
+                <div class="quick-title">
+                    Notices
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- LATEST -->
+
+    <div class="section">
+
+        <div class="section-header">
+
+            <div class="section-title">
+                Latest Updates
+            </div>
+
+            <div
+                class="section-link"
+                onclick="openPage('updatesPage')">
+                View All
+            </div>
+
+        </div>
+
+
+        <div class="update">
+
+            <div class="update-top">
+
+                <div class="update-title">
+                    SSC Notifications
+                </div>
+
+                <div class="badge">
+                    LIVE
+                </div>
+
+            </div>
+
+            <div class="update-date">
+                Stay updated with official SSC announcements.
+            </div>
+
+        </div>
+
+
+        <div class="update">
+
+            <div class="update-top">
+
+                <div class="update-title">
+                    New Practice Content
+                </div>
+
+                <div class="badge">
+                    NEW
+                </div>
+
+            </div>
+
+            <div class="update-date">
+                New questions and practice material coming soon.
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- STUDY PAGE -->
+
+<section id="studyPage" class="page">
+
+    <div class="page-header">
+
+        <button class="back"
+                onclick="goHome()">
+            ←
+        </button>
+
+        <div class="page-title">
+            Study Material
+        </div>
+
+    </div>
+
+
+    <div class="list-item">
+
+        <div class="list-icon">📖</div>
+
+        <div class="list-info">
+
+            <div class="list-title">
+                English Grammar
+            </div>
+
+            <div class="list-sub">
+                Grammar concepts and rules
+            </div>
+
+        </div>
+
+        <div class="arrow">›</div>
+
+    </div>
+
+
+    <div class="list-item">
+
+        <div class="list-icon">🔢</div>
+
+        <div class="list-info">
+
+            <div class="list-title">
+                Quantitative Aptitude
+            </div>
+
+            <div class="list-sub">
+                Maths concepts and practice
+            </div>
+
+        </div>
+
+        <div class="arrow">›</div>
+
+    </div>
+
+
+    <div class="list-item">
+
+        <div class="list-icon">🌍</div>
+
+        <div class="list-info">
+
+            <div class="list-title">
+                General Awareness
+            </div>
+
+            <div class="list-sub">
+                GK and current affairs
+            </div>
+
+        </div>
+
+        <div class="arrow">›</div>
+
+    </div>
+
+
+    <div class="list-item">
+
+        <div class="list-icon">🧠</div>
+
+        <div class="list-info">
+
+            <div class="list-title">
+                Reasoning
+            </div>
+
+            <div class="list-sub">
+                Logical and analytical reasoning
+            </div>
+
+        </div>
+
+        <div class="arrow">›</div>
+
+    </div>
+
+</section>
+
+
+<!-- PRACTICE PAGE -->
+
+<section id="practicePage" class="page">
+
+    <div class="page-header">
+
+        <button class="back"
+                onclick="goHome()">
+            ←
+        </button>
+
+        <div class="page-title">
+            Practice
+        </div>
+
+    </div>
+
+
+    <div class="list-item"
+         onclick="comingSoon()">
+
+        <div class="list-icon">⚡</div>
+
+        <div class="list-info">
+
+            <div class="list-title">
+                Quick Test
+            </div>
+
+            <div class="list-sub">
+                Short practice test
+            </div>
+
+        </div>
+
+        <div class="arrow">›</div>
+
+    </div>
+
+
+    <div class="list-item"
+         onclick="comingSoon()">
+
+        <div class="list-icon">📝</div>
+
+        <div class="list-info">
+
+            <div class="list-title">
+                Subject Tests
+            </div>
+
+            <div class="list-sub">
+                Practice by subject
+            </div>
+
+        </div>
+
+        <div class="arrow">›</div>
+
+    </div>
+
+
+    <div class="list-item"
+         onclick="comingSoon()">
+
+        <div class="list-icon">🎯</div>
+
+        <div class="list-info">
+
+            <div class="list-title">
+                Mock Tests
+            </div>
+
+            <div class="list-sub">
+                Full-length SSC practice
+            </div>
+
+        </div>
+
+        <div class="arrow">›</div>
+
+    </div>
+
+</section>
+
+
+<!-- UPDATES PAGE -->
+
+<section id="updatesPage" class="page">
+
+    <div class="page-header">
+
+        <button class="back"
+                onclick="goHome()">
+            ←
+        </button>
+
+        <div class="page-title">
+            SSC Updates
+        </div>
+
+    </div>
+
+
+    <div class="update">
+
+        <div class="update-top">
+
+            <div class="update-title">
+                SSC Official Updates
+            </div>
+
+            <div class="badge">
+                LIVE
+            </div>
+
+        </div>
+
+        <div class="update-date">
+            Official SSC notifications will appear here.
+        </div>
+
+    </div>
+
+
+    <div class="update">
+
+        <div class="update-top">
+
+            <div class="update-title">
+                Exam Notifications
+            </div>
+
+            <div class="badge">
+                NEW
+            </div>
+
+        </div>
+
+        <div class="update-date">
+            Stay tuned for the latest updates.
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- PAPERS PAGE -->
+
+<section id="papersPage" class="page">
+
+    <div class="page-header">
+
+        <button class="back"
+                onclick="goHome()">
+            ←
+        </button>
+
+        <div class="page-title">
+            Previous Papers
+        </div>
+
+    </div>
+
+
+    <div class="list-item"
+         onclick="comingSoon()">
+
+        <div class="list-icon">📄</div>
+
+        <div class="list-info">
+
+            <div class="list-title">
+                SSC CGL
+            </div>
+
+            <div class="list-sub">
+                Previous year papers
+            </div>
+
+        </div>
+
+        <div class="arrow">›</div>
+
+    </div>
+
+
+    <div class="list-item"
+         onclick="comingSoon()">
+
+        <div class="list-icon">📄</div>
+
+        <div class="list-info">
+
+            <div class="list-title">
+                SSC CHSL
+            </div>
+
+            <div class="list-sub">
+                Previous year papers
+            </div>
+
+        </div>
+
+        <div class="arrow">›</div>
+
+    </div>
+
+
+    <div class="list-item"
+         onclick="comingSoon()">
+
+        <div class="list-icon">📄</div>
+
+        <div class="list-info">
+
+            <div class="list-title">
+                SSC MTS
+            </div>
+
+            <div class="list-sub">
+                Previous year papers
+            </div>
+
+        </div>
+
+        <div class="arrow">›</div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- BOTTOM NAV -->
+
+<nav class="bottom-nav">
+
+    <div class="nav-item active"
+         onclick="goHome()">
+
+        <span class="nav-icon">🏠</span>
+        Home
+
+    </div>
+
+
+    <div class="nav-item"
+         onclick="openPage('studyPage')">
+
+        <span class="nav-icon">📚</span>
+        Study
+
+    </div>
+
+
+    <div class="nav-item"
+         onclick="openPage('practicePage')">
+
+        <span class="nav-icon">📝</span>
+        Practice
+
+    </div>
+
+
+    <div class="nav-item"
+         onclick="openProfile()">
+
+        <span class="nav-icon">👤</span>
+        Profile
+
+    </div>
+
+</nav>
+
+
+<!-- PROFILE -->
+
+<div id="profileModal"
+     class="modal"
+     onclick="closeProfile(event)">
+
+    <div class="modal-box"
+         onclick="event.stopPropagation()">
+
+        <button class="close"
+                onclick="closeProfile()">
+            ✕
+        </button>
+
+        <div class="modal-title">
+            Telegram Profile
+        </div>
+
+        <div class="list-item">
+
+            <div class="list-icon">
+                👤
+            </div>
+
+            <div class="list-info">
+
+                <div id="userName"
+                     class="list-title">
+                    Telegram User
+                </div>
+
+                <div id="userUsername"
+                     class="list-sub">
+                    SSC EDGE Member
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* TELEGRAM */
+
+const tg = window.Telegram.WebApp;
+
+tg.ready();
+tg.expand();
+
+
+/* PAGE NAVIGATION */
+
+function openPage(pageId) {
+
+    document.querySelectorAll(".page")
+        .forEach(page => {
+            page.classList.remove("active");
+        });
+
+    const page =
+        document.getElementById(pageId);
+
+    if (page) {
+        page.classList.add("active");
+    }
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+function goHome() {
+    openPage("homePage");
+}
+
+
+/* PROFILE */
+
+function openProfile() {
+
+    const modal =
+        document.getElementById("profileModal");
+
+    modal.classList.add("show");
+
+    loadTelegramUser();
+
+}
+
+
+function closeProfile(event) {
+
+    if (
+        !event ||
+        event.target.id === "profileModal"
+    ) {
+
+        document
+            .getElementById("profileModal")
+            .classList.remove("show");
+
+    }
+
+}
+
+
+function loadTelegramUser() {
+
+    const user =
+        tg.initDataUnsafe &&
+        tg.initDataUnsafe.user;
+
+    if (!user) return;
+
+    const name =
+        [user.first_name, user.last_name]
+        .filter(Boolean)
+        .join(" ");
+
+    document.getElementById("userName")
+        .textContent =
+        name || "Telegram User";
+
+    document.getElementById("userUsername")
+        .textContent =
+        user.username
+        ? "@" + user.username
+        : "SSC EDGE Member";
+
+}
+
+
+/* SEARCH */
+
+function searchContent() {
+
+    const query =
+        document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase()
+        .trim();
+
+    const cards =
+        document.querySelectorAll(
+            "#homePage .card"
+        );
+
+    cards.forEach(card => {
+
+        const text =
+            card.textContent.toLowerCase();
+
+        card.style.display =
+            text.includes(query)
+            ? ""
+            : "none";
+
+    });
+
+}
+
+
+/* TELEGRAM FEEDBACK */
+
+function comingSoon() {
+
+    if (tg.HapticFeedback) {
+        tg.HapticFeedback
+          .impactOccurred("light");
+    }
+
+    tg.showAlert(
+        "This section is coming soon in SSC EDGE."
+    );
+
+}
+
+
+/* HAPTIC BUTTON FEEDBACK */
+
+document.addEventListener(
+    "click",
+    function(event) {
+
+        const clickable =
+            event.target.closest(
+                "button, .card, .quick-card, .list-item, .nav-item"
+            );
+
+        if (
+            clickable &&
+            tg.HapticFeedback
+        ) {
+
+            tg.HapticFeedback
+              .impactOccurred("light");
+
+        }
+
+    }
+);
+
+</script>
 
 </body>
-</html>
+                                     </html>
