@@ -2,151 +2,345 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>SSC EDGE</title>
 
 <style>
-* {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
+*{
+ box-sizing:border-box;
+ -webkit-tap-highlight-color:transparent;
 }
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #0f0b1d;
-    color: white;
-    padding-bottom: 82px;
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#0b0815;
+ color:#fff;
+ padding-bottom:88px;
 }
 
-header {
-    padding: 25px 20px;
-    background: #17102b;
+button{
+ font-family:inherit;
 }
 
-.logo {
-    font-size: 29px;
-    font-weight: 800;
+header{
+ padding:22px 20px 20px;
+ background:linear-gradient(135deg,#17102b,#21143d);
+ border-bottom:1px solid #2c2140;
 }
 
-.subtitle {
-    color: #aaa;
-    margin-top: 6px;
+.logo{
+ font-size:28px;
+ font-weight:900;
+ letter-spacing:.5px;
 }
 
-.container {
-    padding: 20px;
-    max-width: 700px;
-    margin: auto;
+.logo span{
+ color:#a875ff;
 }
 
-.page {
-    display: none;
+.subtitle{
+ color:#a9a2b7;
+ margin-top:5px;
+ font-size:13px;
 }
 
-.page.active {
-    display: block;
+.container{
+ max-width:720px;
+ margin:auto;
+ padding:18px;
 }
 
-.card {
-    width: 100%;
-    border: none;
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 15px;
-    background: #21163a;
-    color: white;
-    text-align: left;
-    font-size: 17px;
-    cursor: pointer;
-    display: block;
+.page{
+ display:none;
 }
 
-.card:active {
-    transform: scale(0.97);
+.page.active{
+ display:block;
 }
 
-.icon {
-    font-size: 30px;
-    margin-bottom: 8px;
+.welcome{
+ margin-bottom:20px;
 }
 
-.card-title {
-    font-weight: bold;
-    font-size: 18px;
+.welcome h2{
+ margin:0;
+ font-size:24px;
 }
 
-.card-text {
-    color: #aaa;
-    margin-top: 6px;
+.welcome p{
+ color:#aaa2b5;
+ margin:7px 0 0;
+ font-size:14px;
 }
 
-.back {
-    border: none;
-    background: #21163a;
-    color: white;
-    padding: 12px 18px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    font-size: 15px;
+/* HERO */
+
+.hero{
+ background:linear-gradient(135deg,#261344,#17102b);
+ border:1px solid #3a2754;
+ border-radius:22px;
+ padding:22px;
+ margin-bottom:18px;
+ box-shadow:0 10px 30px rgba(0,0,0,.25);
 }
 
-h2 {
-    margin-top: 0;
+.hero-title{
+ font-size:20px;
+ font-weight:800;
 }
 
-.notice {
-    background: #21163a;
-    border-radius: 16px;
-    padding: 20px;
-    color: #aaa;
-    text-align: center;
+.hero-text{
+ color:#aaa2b5;
+ font-size:13px;
+ line-height:1.5;
+ margin-top:7px;
 }
 
-/* =========================
-   BOTTOM NAVIGATION
-========================= */
-
-.bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 72px;
-    background: #17102b;
-    border-top: 1px solid #302447;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    z-index: 9999;
+.hero-btn{
+ margin-top:15px;
+ border:0;
+ border-radius:12px;
+ padding:12px 18px;
+ background:#8d5cf6;
+ color:#fff;
+ font-weight:700;
+ cursor:pointer;
 }
 
-.nav-button {
-    border: none;
-    background: transparent;
-    color: #888;
-    font-size: 11px;
-    min-width: 25%;
-    height: 65px;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
+/* QUICK ACTIONS */
+
+.section-title{
+ font-size:17px;
+ font-weight:800;
+ margin:22px 0 12px;
 }
 
-.nav-icon {
-    font-size: 21px;
+.grid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:12px;
 }
 
-.nav-button.active {
-    color: white;
-    font-weight: 800;
+.action{
+ border:1px solid #2d2240;
+ background:#171126;
+ color:#fff;
+ border-radius:18px;
+ padding:17px;
+ text-align:left;
+ cursor:pointer;
 }
 
-.nav-button.active .nav-label {
-    font-weight: 800;
+.action:active,.card:active,.hero-btn:active{
+ transform:scale(.97);
+}
+
+.action-icon{
+ font-size:25px;
+}
+
+.action-title{
+ font-weight:800;
+ margin-top:9px;
+ font-size:15px;
+}
+
+.action-text{
+ color:#898394;
+ font-size:12px;
+ margin-top:4px;
+ line-height:1.4;
+}
+
+/* CONTINUE */
+
+.continue{
+ background:#171126;
+ border:1px solid #2d2240;
+ border-radius:18px;
+ padding:17px;
+ display:flex;
+ align-items:center;
+ gap:14px;
+}
+
+.continue-icon{
+ width:48px;
+ height:48px;
+ border-radius:14px;
+ background:#271943;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:23px;
+}
+
+.continue-info{
+ flex:1;
+}
+
+.continue-title{
+ font-weight:800;
+ font-size:15px;
+}
+
+.continue-text{
+ color:#898394;
+ font-size:12px;
+ margin-top:4px;
+}
+
+/* CARDS */
+
+.card{
+ width:100%;
+ border:1px solid #2d2240;
+ border-radius:18px;
+ padding:18px;
+ margin-bottom:12px;
+ background:#171126;
+ color:#fff;
+ text-align:left;
+ cursor:pointer;
+}
+
+.card-icon{
+ font-size:28px;
+}
+
+.card-title{
+ font-size:17px;
+ font-weight:800;
+ margin-top:7px;
+}
+
+.card-text{
+ color:#918a9c;
+ font-size:12px;
+ margin-top:5px;
+}
+
+/* NOTICE */
+
+.notice{
+ background:#171126;
+ border:1px solid #2d2240;
+ border-radius:18px;
+ padding:20px;
+ color:#9e97aa;
+ text-align:center;
+ line-height:1.5;
+}
+
+/* PROFILE */
+
+.profile-head{
+ background:linear-gradient(135deg,#261344,#17102b);
+ border:1px solid #3a2754;
+ border-radius:22px;
+ padding:24px;
+ text-align:center;
+}
+
+.avatar{
+ width:72px;
+ height:72px;
+ margin:auto;
+ border-radius:50%;
+ background:#8d5cf6;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:31px;
+ font-weight:900;
+}
+
+.profile-name{
+ font-size:20px;
+ font-weight:800;
+ margin-top:12px;
+}
+
+.profile-sub{
+ color:#a49cab;
+ font-size:13px;
+ margin-top:5px;
+}
+
+/* BACK */
+
+.back{
+ border:0;
+ background:#171126;
+ color:#fff;
+ padding:11px 16px;
+ border-radius:11px;
+ margin-bottom:18px;
+ cursor:pointer;
+}
+
+/* BOTTOM NAV */
+
+.bottom-nav{
+ position:fixed;
+ bottom:0;
+ left:0;
+ right:0;
+ height:76px;
+ background:#110d1e;
+ border-top:1px solid #2d2240;
+ display:flex;
+ align-items:center;
+ justify-content:space-around;
+ z-index:9999;
+}
+
+.nav-button{
+ width:25%;
+ height:70px;
+ border:0;
+ background:transparent;
+ color:#777181;
+ cursor:pointer;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ gap:4px;
+}
+
+.nav-icon{
+ font-size:21px;
+}
+
+.nav-label{
+ font-size:10px;
+}
+
+.nav-button.active{
+ color:#fff;
+ font-weight:900;
+}
+
+.nav-button.active .nav-label{
+ font-weight:900;
+}
+
+/* MOBILE */
+
+@media(max-width:380px){
+ .container{
+  padding:14px;
+ }
+
+ .grid{
+  gap:9px;
+ }
+
+ .action{
+  padding:14px;
+ }
 }
 </style>
 </head>
@@ -154,8 +348,8 @@ h2 {
 <body>
 
 <header>
-    <div class="logo">SSC EDGE</div>
-    <div class="subtitle">Your SSC Preparation Hub</div>
+ <div class="logo">SSC <span>EDGE</span></div>
+ <div class="subtitle">Your SSC Preparation Hub</div>
 </header>
 
 <div class="container">
@@ -164,19 +358,68 @@ h2 {
 
 <div id="home" class="page active">
 
-    <h2>Welcome to SSC EDGE 👋</h2>
+ <div class="welcome">
+  <h2>Welcome to SSC EDGE 👋</h2>
+  <p>Learn smarter. Practice better. Prepare with confidence.</p>
+ </div>
 
-    <button class="card" data-page="study">
-        <div class="icon">📚</div>
-        <div class="card-title">Study Material</div>
-        <div class="card-text">Notes and practice material</div>
-    </button>
+ <div class="hero">
+  <div class="hero-title">Your preparation starts here 🚀</div>
+  <div class="hero-text">
+   Access your study material, practice questions and important SSC resources from one place.
+  </div>
 
-    <button class="card" data-page="updates">
-        <div class="icon">🔔</div>
-        <div class="card-title">SSC Updates</div>
-        <div class="card-text">Latest SSC notifications</div>
-    </button>
+  <button class="hero-btn" data-page="study">
+   Explore Study Material →
+  </button>
+ </div>
+
+ <div class="section-title">Quick Access</div>
+
+ <div class="grid">
+
+  <button class="action" data-page="notes">
+   <div class="action-icon">📖</div>
+   <div class="action-title">Notes</div>
+   <div class="action-text">Study concepts and revision material</div>
+  </button>
+
+  <button class="action" data-page="practice">
+   <div class="action-icon">📝</div>
+   <div class="action-title">Practice</div>
+   <div class="action-text">Improve with practice questions</div>
+  </button>
+
+  <button class="action" data-page="updates">
+   <div class="action-icon">🔔</div>
+   <div class="action-title">Updates</div>
+   <div class="action-text">Check important SSC updates</div>
+  </button>
+
+  <button class="action" data-page="profile">
+   <div class="action-icon">👤</div>
+   <div class="action-title">Profile</div>
+   <div class="action-text">View your profile</div>
+  </button>
+
+ </div>
+
+ <div class="section-title">Continue Learning</div>
+
+ <div class="continue">
+
+  <div class="continue-icon">📚</div>
+
+  <div class="continue-info">
+   <div class="continue-title">Study Material</div>
+   <div class="continue-text">Explore subjects and start learning</div>
+  </div>
+
+  <button class="hero-btn" data-page="study">
+   Open
+  </button>
+
+ </div>
 
 </div>
 
@@ -185,13 +428,13 @@ h2 {
 
 <div id="updates" class="page">
 
-    <h2>🔔 Updates</h2>
+ <h2>🔔 Updates</h2>
 
-    <div class="notice">
-        <strong>SSC Updates</strong>
-        <br><br>
-        Latest SSC notifications will appear here.
-    </div>
+ <div class="notice">
+  <strong>SSC Updates</strong>
+  <br><br>
+  Latest SSC notifications will appear here.
+ </div>
 
 </div>
 
@@ -200,32 +443,36 @@ h2 {
 
 <div id="study" class="page">
 
-    <h2>📚 Study Material</h2>
+ <h2>📚 Study Material</h2>
 
-    <button class="card" data-page="notes">
+ <p style="color:#918a9c;font-size:13px;">
+  Choose what you want to study.
+ </p>
 
-        <div class="icon">📖</div>
+ <button class="card" data-page="notes">
 
-        <div class="card-title">Notes</div>
+  <div class="card-icon">📖</div>
 
-        <div class="card-text">
-            SSC EDGE notes and study material
-        </div>
+  <div class="card-title">Notes</div>
 
-    </button>
+  <div class="card-text">
+   Subject-wise notes and study material
+  </div>
+
+ </button>
 
 
-    <button class="card" data-page="practice">
+ <button class="card" data-page="practice">
 
-        <div class="icon">📝</div>
+  <div class="card-icon">📝</div>
 
-        <div class="card-title">Practice</div>
+  <div class="card-title">Practice</div>
 
-        <div class="card-text">
-            Practice questions and tests
-        </div>
+  <div class="card-text">
+   Practice questions and tests
+  </div>
 
-    </button>
+ </button>
 
 </div>
 
@@ -234,62 +481,33 @@ h2 {
 
 <div id="notes" class="page">
 
-    <button class="back" data-page="study">
-        ← Back
-    </button>
+ <button class="back" data-page="study">← Back</button>
 
-    <h2>📖 Notes</h2>
+ <h2>📖 Notes</h2>
 
-    <button class="card" data-page="english">
+ <button class="card" data-page="english">
+  <div class="card-icon">🇬🇧</div>
+  <div class="card-title">English</div>
+  <div class="card-text">Grammar and vocabulary notes</div>
+ </button>
 
-        <div class="icon">🇬🇧</div>
+ <button class="card" data-page="gk">
+  <div class="card-icon">🌎</div>
+  <div class="card-title">General Awareness</div>
+  <div class="card-text">GK notes and important topics</div>
+ </button>
 
-        <div class="card-title">English</div>
+ <button class="card" data-page="maths">
+  <div class="card-icon">🔢</div>
+  <div class="card-title">Quantitative Aptitude</div>
+  <div class="card-text">Maths concepts and formulas</div>
+ </button>
 
-        <div class="card-text">
-            Grammar and vocabulary notes
-        </div>
-
-    </button>
-
-
-    <button class="card" data-page="gk">
-
-        <div class="icon">🌎</div>
-
-        <div class="card-title">General Awareness</div>
-
-        <div class="card-text">
-            GK notes and important topics
-        </div>
-
-    </button>
-
-
-    <button class="card" data-page="maths">
-
-        <div class="icon">🔢</div>
-
-        <div class="card-title">Quantitative Aptitude</div>
-
-        <div class="card-text">
-            Maths concepts and formulas
-        </div>
-
-    </button>
-
-
-    <button class="card" data-page="reasoning">
-
-        <div class="icon">🧠</div>
-
-        <div class="card-title">Reasoning</div>
-
-        <div class="card-text">
-            Reasoning concepts
-        </div>
-
-    </button>
+ <button class="card" data-page="reasoning">
+  <div class="card-icon">🧠</div>
+  <div class="card-title">Reasoning</div>
+  <div class="card-text">Reasoning concepts and notes</div>
+ </button>
 
 </div>
 
@@ -298,36 +516,21 @@ h2 {
 
 <div id="english" class="page">
 
-    <button class="back" data-page="notes">
-        ← Back
-    </button>
+ <button class="back" data-page="notes">← Back</button>
 
-    <h2>🇬🇧 English</h2>
+ <h2>🇬🇧 English</h2>
 
-    <button class="card" data-page="grammar">
+ <button class="card" data-page="grammar">
+  <div class="card-icon">📖</div>
+  <div class="card-title">Grammar</div>
+  <div class="card-text">Grammar concepts and notes</div>
+ </button>
 
-        <div class="icon">📖</div>
-
-        <div class="card-title">Grammar</div>
-
-        <div class="card-text">
-            English grammar notes
-        </div>
-
-    </button>
-
-
-    <button class="card" data-page="vocabulary">
-
-        <div class="icon">🔤</div>
-
-        <div class="card-title">Vocabulary</div>
-
-        <div class="card-text">
-            Vocabulary notes
-        </div>
-
-    </button>
+ <button class="card" data-page="vocabulary">
+  <div class="card-icon">🔤</div>
+  <div class="card-title">Vocabulary</div>
+  <div class="card-text">Vocabulary study material</div>
+ </button>
 
 </div>
 
@@ -336,15 +539,15 @@ h2 {
 
 <div id="grammar" class="page">
 
-    <button class="back" data-page="english">
-        ← Back
-    </button>
+ <button class="back" data-page="english">← Back</button>
 
-    <h2>📖 Grammar</h2>
+ <h2>📖 Grammar</h2>
 
-    <div class="notice">
-        Grammar chapters will be added here.
-    </div>
+ <button class="card">
+  <div class="card-icon">📘</div>
+  <div class="card-title">Grammar Notes</div>
+  <div class="card-text">SSC EDGE grammar notes</div>
+ </button>
 
 </div>
 
@@ -353,15 +556,13 @@ h2 {
 
 <div id="vocabulary" class="page">
 
-    <button class="back" data-page="english">
-        ← Back
-    </button>
+ <button class="back" data-page="english">← Back</button>
 
-    <h2>🔤 Vocabulary</h2>
+ <h2>🔤 Vocabulary</h2>
 
-    <div class="notice">
-        Vocabulary material will be added here.
-    </div>
+ <div class="notice">
+  Vocabulary material will be added here.
+ </div>
 
 </div>
 
@@ -370,45 +571,39 @@ h2 {
 
 <div id="gk" class="page">
 
-    <button class="back" data-page="notes">
-        ← Back
-    </button>
+ <button class="back" data-page="notes">← Back</button>
 
-    <h2>🌎 General Awareness</h2>
+ <h2>🌎 General Awareness</h2>
 
-    <div class="notice">
-        GK notes will be added here.
-    </div>
+ <div class="notice">
+  GK notes will be added here.
+ </div>
 
 </div>
 
 
 <div id="maths" class="page">
 
-    <button class="back" data-page="notes">
-        ← Back
-    </button>
+ <button class="back" data-page="notes">← Back</button>
 
-    <h2>🔢 Quantitative Aptitude</h2>
+ <h2>🔢 Quantitative Aptitude</h2>
 
-    <div class="notice">
-        Maths notes will be added here.
-    </div>
+ <div class="notice">
+  Maths notes will be added here.
+ </div>
 
 </div>
 
 
 <div id="reasoning" class="page">
 
-    <button class="back" data-page="notes">
-        ← Back
-    </button>
+ <button class="back" data-page="notes">← Back</button>
 
-    <h2>🧠 Reasoning</h2>
+ <h2>🧠 Reasoning</h2>
 
-    <div class="notice">
-        Reasoning notes will be added here.
-    </div>
+ <div class="notice">
+  Reasoning notes will be added here.
+ </div>
 
 </div>
 
@@ -417,11 +612,35 @@ h2 {
 
 <div id="practice" class="page">
 
-    <h2>📝 Practice</h2>
+ <h2>📝 Practice</h2>
 
-    <div class="notice">
-        Practice questions and tests will be added here.
-    </div>
+ <div class="grid">
+
+  <button class="action">
+   <div class="action-icon">🇬🇧</div>
+   <div class="action-title">English</div>
+   <div class="action-text">Practice English questions</div>
+  </button>
+
+  <button class="action">
+   <div class="action-icon">🔢</div>
+   <div class="action-title">Maths</div>
+   <div class="action-text">Practice Maths questions</div>
+  </button>
+
+  <button class="action">
+   <div class="action-icon">🧠</div>
+   <div class="action-title">Reasoning</div>
+   <div class="action-text">Practice Reasoning questions</div>
+  </button>
+
+  <button class="action">
+   <div class="action-icon">🌎</div>
+   <div class="action-title">GK</div>
+   <div class="action-text">Practice GK questions</div>
+  </button>
+
+ </div>
 
 </div>
 
@@ -430,125 +649,913 @@ h2 {
 
 <div id="profile" class="page">
 
-    <h2>👤 Profile</h2>
+ <h2>👤 Profile</h2>
 
-    <div class="notice">
-        <strong>SSC EDGE Profile</strong>
-        <br><br>
-        Your profile information will appear here.
-    </div>
+ <div class="profile-head">
+
+  <div class="avatar">S</div>
+
+  <div class="profile-name">SSC EDGE Student</div>
+
+  <div class="profile-sub">
+   Your preparation dashboard
+  </div>
+
+ </div>
+
+ <div class="section-title">Your Dashboard</div>
+
+ <div class="grid">
+
+  <div class="action">
+   <div class="action-icon">📚</div>
+   <div class="action-title">Notes</div>
+   <div class="action-text">Your study material</div>
+  </div>
+
+  <div class="action">
+   <div class="action-icon">📝</div>
+   <div class="action-title">Practice</div>
+   <div class="action-text">Practice section</div>
+  </div>
+
+ </div>
 
 </div>
 
 </div>
 
 
-<!-- =========================
-     BOTTOM NAVIGATION
-========================= -->
+<!-- ================= BOTTOM NAV ================= -->
 
 <nav class="bottom-nav">
 
-    <button class="nav-button active" data-page="home">
+ <button class="nav-button active" data-page="home">
+  <span class="nav-icon">🏠</span>
+  <span class="nav-label">HOME</span>
+ </button>
 
-        <span class="nav-icon">🏠</span>
-        <span class="nav-label">HOME</span>
+ <button class="nav-button" data-page="updates">
+  <span class="nav-icon">🔔</span>
+  <span class="nav-label">UPDATES</span>
+ </button>
 
-    </button>
+ <button class="nav-button" data-page="study">
+  <span class="nav-icon">📚</span>
+  <span class="nav-label">STUDY MATERIAL</span>
+ </button>
 
-
-    <button class="nav-button" data-page="updates">
-
-        <span class="nav-icon">🔔</span>
-        <span class="nav-label">UPDATES</span>
-
-    </button>
-
-
-    <button class="nav-button" data-page="study">
-
-        <span class="nav-icon">📚</span>
-        <span class="nav-label">STUDY MATERIAL</span>
-
-    </button>
-
-
-    <button class="nav-button" data-page="profile">
-
-        <span class="nav-icon">👤</span>
-        <span class="nav-label">PROFILE</span>
-
-    </button>
+ <button class="nav-button" data-page="profile">
+  <span class="nav-icon">👤</span>
+  <span class="nav-label">PROFILE</span>
+ </button>
 
 </nav>
 
 
 <script>
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function(){
 
-    const buttons = document.querySelectorAll("[data-page]");
+ const buttons=document.querySelectorAll("[data-page]");
 
-    buttons.forEach(function(button) {
+ buttons.forEach(function(button){
 
-        button.addEventListener("click", function() {
+  button.addEventListener("click",function(){
 
-            const target = this.getAttribute("data-page");
+   const target=this.getAttribute("data-page");
 
-            document.querySelectorAll(".page").forEach(function(page) {
-                page.classList.remove("active");
-            });
+   document.querySelectorAll(".page").forEach(function(page){
+    page.classList.remove("active");
+   });
 
-            const targetPage = document.getElementById(target);
+   const targetPage=document.getElementById(target);
 
-            if (targetPage) {
-                targetPage.classList.add("active");
-                window.scrollTo(0, 0);
-            }
+   if(targetPage){
+    targetPage.classList.add("active");
+    window.scrollTo(0,0);
+   }
 
-            updateBottomNavigation(target);
+   updateNavigation(target);
 
-        });
+  });
 
-    });
+ });
 
 
-    function updateBottomNavigation(target) {
+ function updateNavigation(target){
 
-        let activeTab = target;
+  let activeTab=target;
 
-        /*
-          Notes, English, Grammar etc.
-          belong to STUDY MATERIAL.
-        */
+  const studyPages=[
+   "study",
+   "notes",
+   "english",
+   "grammar",
+   "vocabulary",
+   "gk",
+   "maths",
+   "reasoning",
+   "practice"
+  ];
 
-        const studyPages = [
-            "study",
-            "notes",
-            "english",
-            "grammar",
-            "vocabulary",
-            "gk",
-            "maths",
-            "reasoning",
-            "practice"
-        ];
+  if(studyPages.includes(target)){
+   activeTab="study";
+  }
 
-        if (studyPages.includes(target)) {
-            activeTab = "study";
-        }
+  document.querySelectorAll(".nav-button").forEach(function(nav){
 
-        document.querySelectorAll(".nav-button").forEach(function(nav) {
+   nav.classList.remove("active");
 
-            nav.classList.remove("active");
+   if(nav.getAttribute("data-page")===activeTab){
+    nav.classList.add("active");
+   }
 
-            if (nav.getAttribute("data-page") === activeTab) {
-                nav.classList.add("active");
-            }
+  });
 
-        });
+ }
 
-    }
+});
+
+</script>
+
+</body>
+    </html><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SSC EDGE</title>
+
+<style>
+*{
+ box-sizing:border-box;
+ -webkit-tap-highlight-color:transparent;
+}
+
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#0b0815;
+ color:#fff;
+ padding-bottom:88px;
+}
+
+button{
+ font-family:inherit;
+}
+
+header{
+ padding:22px 20px 20px;
+ background:linear-gradient(135deg,#17102b,#21143d);
+ border-bottom:1px solid #2c2140;
+}
+
+.logo{
+ font-size:28px;
+ font-weight:900;
+ letter-spacing:.5px;
+}
+
+.logo span{
+ color:#a875ff;
+}
+
+.subtitle{
+ color:#a9a2b7;
+ margin-top:5px;
+ font-size:13px;
+}
+
+.container{
+ max-width:720px;
+ margin:auto;
+ padding:18px;
+}
+
+.page{
+ display:none;
+}
+
+.page.active{
+ display:block;
+}
+
+.welcome{
+ margin-bottom:20px;
+}
+
+.welcome h2{
+ margin:0;
+ font-size:24px;
+}
+
+.welcome p{
+ color:#aaa2b5;
+ margin:7px 0 0;
+ font-size:14px;
+}
+
+/* HERO */
+
+.hero{
+ background:linear-gradient(135deg,#261344,#17102b);
+ border:1px solid #3a2754;
+ border-radius:22px;
+ padding:22px;
+ margin-bottom:18px;
+ box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+.hero-title{
+ font-size:20px;
+ font-weight:800;
+}
+
+.hero-text{
+ color:#aaa2b5;
+ font-size:13px;
+ line-height:1.5;
+ margin-top:7px;
+}
+
+.hero-btn{
+ margin-top:15px;
+ border:0;
+ border-radius:12px;
+ padding:12px 18px;
+ background:#8d5cf6;
+ color:#fff;
+ font-weight:700;
+ cursor:pointer;
+}
+
+/* QUICK ACTIONS */
+
+.section-title{
+ font-size:17px;
+ font-weight:800;
+ margin:22px 0 12px;
+}
+
+.grid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:12px;
+}
+
+.action{
+ border:1px solid #2d2240;
+ background:#171126;
+ color:#fff;
+ border-radius:18px;
+ padding:17px;
+ text-align:left;
+ cursor:pointer;
+}
+
+.action:active,.card:active,.hero-btn:active{
+ transform:scale(.97);
+}
+
+.action-icon{
+ font-size:25px;
+}
+
+.action-title{
+ font-weight:800;
+ margin-top:9px;
+ font-size:15px;
+}
+
+.action-text{
+ color:#898394;
+ font-size:12px;
+ margin-top:4px;
+ line-height:1.4;
+}
+
+/* CONTINUE */
+
+.continue{
+ background:#171126;
+ border:1px solid #2d2240;
+ border-radius:18px;
+ padding:17px;
+ display:flex;
+ align-items:center;
+ gap:14px;
+}
+
+.continue-icon{
+ width:48px;
+ height:48px;
+ border-radius:14px;
+ background:#271943;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:23px;
+}
+
+.continue-info{
+ flex:1;
+}
+
+.continue-title{
+ font-weight:800;
+ font-size:15px;
+}
+
+.continue-text{
+ color:#898394;
+ font-size:12px;
+ margin-top:4px;
+}
+
+/* CARDS */
+
+.card{
+ width:100%;
+ border:1px solid #2d2240;
+ border-radius:18px;
+ padding:18px;
+ margin-bottom:12px;
+ background:#171126;
+ color:#fff;
+ text-align:left;
+ cursor:pointer;
+}
+
+.card-icon{
+ font-size:28px;
+}
+
+.card-title{
+ font-size:17px;
+ font-weight:800;
+ margin-top:7px;
+}
+
+.card-text{
+ color:#918a9c;
+ font-size:12px;
+ margin-top:5px;
+}
+
+/* NOTICE */
+
+.notice{
+ background:#171126;
+ border:1px solid #2d2240;
+ border-radius:18px;
+ padding:20px;
+ color:#9e97aa;
+ text-align:center;
+ line-height:1.5;
+}
+
+/* PROFILE */
+
+.profile-head{
+ background:linear-gradient(135deg,#261344,#17102b);
+ border:1px solid #3a2754;
+ border-radius:22px;
+ padding:24px;
+ text-align:center;
+}
+
+.avatar{
+ width:72px;
+ height:72px;
+ margin:auto;
+ border-radius:50%;
+ background:#8d5cf6;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:31px;
+ font-weight:900;
+}
+
+.profile-name{
+ font-size:20px;
+ font-weight:800;
+ margin-top:12px;
+}
+
+.profile-sub{
+ color:#a49cab;
+ font-size:13px;
+ margin-top:5px;
+}
+
+/* BACK */
+
+.back{
+ border:0;
+ background:#171126;
+ color:#fff;
+ padding:11px 16px;
+ border-radius:11px;
+ margin-bottom:18px;
+ cursor:pointer;
+}
+
+/* BOTTOM NAV */
+
+.bottom-nav{
+ position:fixed;
+ bottom:0;
+ left:0;
+ right:0;
+ height:76px;
+ background:#110d1e;
+ border-top:1px solid #2d2240;
+ display:flex;
+ align-items:center;
+ justify-content:space-around;
+ z-index:9999;
+}
+
+.nav-button{
+ width:25%;
+ height:70px;
+ border:0;
+ background:transparent;
+ color:#777181;
+ cursor:pointer;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ gap:4px;
+}
+
+.nav-icon{
+ font-size:21px;
+}
+
+.nav-label{
+ font-size:10px;
+}
+
+.nav-button.active{
+ color:#fff;
+ font-weight:900;
+}
+
+.nav-button.active .nav-label{
+ font-weight:900;
+}
+
+/* MOBILE */
+
+@media(max-width:380px){
+ .container{
+  padding:14px;
+ }
+
+ .grid{
+  gap:9px;
+ }
+
+ .action{
+  padding:14px;
+ }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+ <div class="logo">SSC <span>EDGE</span></div>
+ <div class="subtitle">Your SSC Preparation Hub</div>
+</header>
+
+<div class="container">
+
+<!-- ================= HOME ================= -->
+
+<div id="home" class="page active">
+
+ <div class="welcome">
+  <h2>Welcome to SSC EDGE 👋</h2>
+  <p>Learn smarter. Practice better. Prepare with confidence.</p>
+ </div>
+
+ <div class="hero">
+  <div class="hero-title">Your preparation starts here 🚀</div>
+  <div class="hero-text">
+   Access your study material, practice questions and important SSC resources from one place.
+  </div>
+
+  <button class="hero-btn" data-page="study">
+   Explore Study Material →
+  </button>
+ </div>
+
+ <div class="section-title">Quick Access</div>
+
+ <div class="grid">
+
+  <button class="action" data-page="notes">
+   <div class="action-icon">📖</div>
+   <div class="action-title">Notes</div>
+   <div class="action-text">Study concepts and revision material</div>
+  </button>
+
+  <button class="action" data-page="practice">
+   <div class="action-icon">📝</div>
+   <div class="action-title">Practice</div>
+   <div class="action-text">Improve with practice questions</div>
+  </button>
+
+  <button class="action" data-page="updates">
+   <div class="action-icon">🔔</div>
+   <div class="action-title">Updates</div>
+   <div class="action-text">Check important SSC updates</div>
+  </button>
+
+  <button class="action" data-page="profile">
+   <div class="action-icon">👤</div>
+   <div class="action-title">Profile</div>
+   <div class="action-text">View your profile</div>
+  </button>
+
+ </div>
+
+ <div class="section-title">Continue Learning</div>
+
+ <div class="continue">
+
+  <div class="continue-icon">📚</div>
+
+  <div class="continue-info">
+   <div class="continue-title">Study Material</div>
+   <div class="continue-text">Explore subjects and start learning</div>
+  </div>
+
+  <button class="hero-btn" data-page="study">
+   Open
+  </button>
+
+ </div>
+
+</div>
+
+
+<!-- ================= UPDATES ================= -->
+
+<div id="updates" class="page">
+
+ <h2>🔔 Updates</h2>
+
+ <div class="notice">
+  <strong>SSC Updates</strong>
+  <br><br>
+  Latest SSC notifications will appear here.
+ </div>
+
+</div>
+
+
+<!-- ================= STUDY MATERIAL ================= -->
+
+<div id="study" class="page">
+
+ <h2>📚 Study Material</h2>
+
+ <p style="color:#918a9c;font-size:13px;">
+  Choose what you want to study.
+ </p>
+
+ <button class="card" data-page="notes">
+
+  <div class="card-icon">📖</div>
+
+  <div class="card-title">Notes</div>
+
+  <div class="card-text">
+   Subject-wise notes and study material
+  </div>
+
+ </button>
+
+
+ <button class="card" data-page="practice">
+
+  <div class="card-icon">📝</div>
+
+  <div class="card-title">Practice</div>
+
+  <div class="card-text">
+   Practice questions and tests
+  </div>
+
+ </button>
+
+</div>
+
+
+<!-- ================= NOTES ================= -->
+
+<div id="notes" class="page">
+
+ <button class="back" data-page="study">← Back</button>
+
+ <h2>📖 Notes</h2>
+
+ <button class="card" data-page="english">
+  <div class="card-icon">🔠</div>
+  <div class="card-title">English</div>
+  <div class="card-text">Grammar and vocabulary notes</div>
+ </button>
+
+ <button class="card" data-page="gk">
+  <div class="card-icon">🌎</div>
+  <div class="card-title">General Awareness</div>
+  <div class="card-text">GK notes and important topics</div>
+ </button>
+
+ <button class="card" data-page="maths">
+  <div class="card-icon">🔢</div>
+  <div class="card-title">Quantitative Aptitude</div>
+  <div class="card-text">Maths concepts and formulas</div>
+ </button>
+
+ <button class="card" data-page="reasoning">
+  <div class="card-icon">🧠</div>
+  <div class="card-title">Reasoning</div>
+  <div class="card-text">Reasoning concepts and notes</div>
+ </button>
+
+</div>
+
+
+<!-- ================= ENGLISH ================= -->
+
+<div id="english" class="page">
+
+ <button class="back" data-page="notes">← Back</button>
+
+ <h2>🔠 English</h2>
+
+ <button class="card" data-page="grammar">
+  <div class="card-icon">📖</div>
+  <div class="card-title">Grammar</div>
+  <div class="card-text">Grammar concepts and notes</div>
+ </button>
+
+ <button class="card" data-page="vocabulary">
+  <div class="card-icon">🔤</div>
+  <div class="card-title">Vocabulary</div>
+  <div class="card-text">Vocabulary study material</div>
+ </button>
+
+</div>
+
+
+<!-- ================= GRAMMAR ================= -->
+
+<div id="grammar" class="page">
+
+ <button class="back" data-page="english">← Back</button>
+
+ <h2>📖 Grammar</h2>
+
+ <button class="card">
+  <div class="card-icon">📘</div>
+  <div class="card-title">Grammar Notes</div>
+  <div class="card-text">SSC EDGE grammar notes</div>
+ </button>
+
+</div>
+
+
+<!-- ================= VOCABULARY ================= -->
+
+<div id="vocabulary" class="page">
+
+ <button class="back" data-page="english">← Back</button>
+
+ <h2>🔤 Vocabulary</h2>
+
+ <div class="notice">
+  Vocabulary material will be added here.
+ </div>
+
+</div>
+
+
+<!-- ================= OTHER SUBJECTS ================= -->
+
+<div id="gk" class="page">
+
+ <button class="back" data-page="notes">← Back</button>
+
+ <h2>🌎 General Awareness</h2>
+
+ <div class="notice">
+  GK notes will be added here.
+ </div>
+
+</div>
+
+
+<div id="maths" class="page">
+
+ <button class="back" data-page="notes">← Back</button>
+
+ <h2>🔢 Quantitative Aptitude</h2>
+
+ <div class="notice">
+  Maths notes will be added here.
+ </div>
+
+</div>
+
+
+<div id="reasoning" class="page">
+
+ <button class="back" data-page="notes">← Back</button>
+
+ <h2>🧠 Reasoning</h2>
+
+ <div class="notice">
+  Reasoning notes will be added here.
+ </div>
+
+</div>
+
+
+<!-- ================= PRACTICE ================= -->
+
+<div id="practice" class="page">
+
+ <h2>📝 Practice</h2>
+
+ <div class="grid">
+
+  <button class="action">
+   <div class="action-icon">🔠</div>
+   <div class="action-title">English</div>
+   <div class="action-text">Practice English questions</div>
+  </button>
+
+  <button class="action">
+   <div class="action-icon">🔢</div>
+   <div class="action-title">Maths</div>
+   <div class="action-text">Practice Maths questions</div>
+  </button>
+
+  <button class="action">
+   <div class="action-icon">🧠</div>
+   <div class="action-title">Reasoning</div>
+   <div class="action-text">Practice Reasoning questions</div>
+  </button>
+
+  <button class="action">
+   <div class="action-icon">🌎</div>
+   <div class="action-title">GK</div>
+   <div class="action-text">Practice GK questions</div>
+  </button>
+
+ </div>
+
+</div>
+
+
+<!-- ================= PROFILE ================= -->
+
+<div id="profile" class="page">
+
+ <h2>👤 Profile</h2>
+
+ <div class="profile-head">
+
+  <div class="avatar">S</div>
+
+  <div class="profile-name">SSC EDGE Student</div>
+
+  <div class="profile-sub">
+   Your preparation dashboard
+  </div>
+
+ </div>
+
+ <div class="section-title">Your Dashboard</div>
+
+ <div class="grid">
+
+  <div class="action">
+   <div class="action-icon">📚</div>
+   <div class="action-title">Notes</div>
+   <div class="action-text">Your study material</div>
+  </div>
+
+  <div class="action">
+   <div class="action-icon">📝</div>
+   <div class="action-title">Practice</div>
+   <div class="action-text">Practice section</div>
+  </div>
+
+ </div>
+
+</div>
+
+</div>
+
+
+<!-- ================= BOTTOM NAV ================= -->
+
+<nav class="bottom-nav">
+
+ <button class="nav-button active" data-page="home">
+  <span class="nav-icon">🏠</span>
+  <span class="nav-label">HOME</span>
+ </button>
+
+ <button class="nav-button" data-page="updates">
+  <span class="nav-icon">🔔</span>
+  <span class="nav-label">UPDATES</span>
+ </button>
+
+ <button class="nav-button" data-page="study">
+  <span class="nav-icon">📚</span>
+  <span class="nav-label">STUDY MATERIAL</span>
+ </button>
+
+ <button class="nav-button" data-page="profile">
+  <span class="nav-icon">👤</span>
+  <span class="nav-label">PROFILE</span>
+ </button>
+
+</nav>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function(){
+
+ const buttons=document.querySelectorAll("[data-page]");
+
+ buttons.forEach(function(button){
+
+  button.addEventListener("click",function(){
+
+   const target=this.getAttribute("data-page");
+
+   document.querySelectorAll(".page").forEach(function(page){
+    page.classList.remove("active");
+   });
+
+   const targetPage=document.getElementById(target);
+
+   if(targetPage){
+    targetPage.classList.add("active");
+    window.scrollTo(0,0);
+   }
+
+   updateNavigation(target);
+
+  });
+
+ });
+
+
+ function updateNavigation(target){
+
+  let activeTab=target;
+
+  const studyPages=[
+   "study",
+   "notes",
+   "english",
+   "grammar",
+   "vocabulary",
+   "gk",
+   "maths",
+   "reasoning",
+   "practice"
+  ];
+
+  if(studyPages.includes(target)){
+   activeTab="study";
+  }
+
+  document.querySelectorAll(".nav-button").forEach(function(nav){
+
+   nav.classList.remove("active");
+
+   if(nav.getAttribute("data-page")===activeTab){
+    nav.classList.add("active");
+   }
+
+  });
+
+ }
 
 });
 
