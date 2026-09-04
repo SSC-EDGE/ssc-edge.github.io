@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SSC EDGE</title>
+
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f1020;
+      color: white;
+      text-align: center;
+    }
+
+    .container {
+      padding: 30px 20px;
+    }
+
+    h1 {
+      margin-top: 30px;
+      font-size: 32px;
+    }
+
+    .subtitle {
+      color: #aaa;
+      margin-bottom: 30px;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      margin: 8px 0;
+      border: 0;
+      border-radius: 12px;
+      font-size: 17px;
+      background: #7c3aed;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>SSC EDGE</h1>
+
+    <div class="subtitle">
+      Your SSC Preparation Hub
+    </div>
+
+    <button>📚 Study Material</button>
+    <button>📝 Practice Tests</button>
+    <button>📢 SSC Updates</button>
+    <button>🎯 Previous Papers</button>
+
+  </div>
+
+  <script>
+    const tg = window.Telegram.WebApp;
+
+    tg.ready();
+    tg.expand();
+  </script>
+
+</body>
+</html>
