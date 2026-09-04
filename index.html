@@ -15,7 +15,7 @@ body {
     margin: 0;
     font-family: Arial, sans-serif;
     background: #0f0b1d;
-    color: white;
+    color: #ffffff;
 }
 
 header {
@@ -23,23 +23,33 @@ header {
     background: #17102b;
 }
 
-h1 {
-    margin: 0;
-    font-size: 28px;
+.logo {
+    font-size: 29px;
+    font-weight: 800;
 }
 
 .subtitle {
-    margin-top: 6px;
     color: #aaa;
+    margin-top: 6px;
 }
 
 .container {
     padding: 20px;
+    max-width: 700px;
+    margin: auto;
+}
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
 }
 
 .card {
     width: 100%;
-    border: 0;
+    border: none;
     border-radius: 16px;
     padding: 20px;
     margin-bottom: 15px;
@@ -56,7 +66,7 @@ h1 {
 }
 
 .icon {
-    font-size: 28px;
+    font-size: 30px;
     margin-bottom: 8px;
 }
 
@@ -67,29 +77,30 @@ h1 {
 
 .card-text {
     color: #aaa;
-    margin-top: 5px;
-}
-
-.page {
-    display: none;
-}
-
-.page.active {
-    display: block;
+    margin-top: 6px;
 }
 
 .back {
-    border: 0;
+    border: none;
     background: #21163a;
     color: white;
     padding: 12px 18px;
     border-radius: 10px;
     margin-bottom: 20px;
     font-size: 15px;
+    cursor: pointer;
 }
 
 h2 {
     margin-top: 0;
+}
+
+.notice {
+    background: #21163a;
+    border-radius: 16px;
+    padding: 20px;
+    color: #aaa;
+    text-align: center;
 }
 </style>
 </head>
@@ -97,88 +108,233 @@ h2 {
 <body>
 
 <header>
-    <h1>SSC EDGE</h1>
+    <div class="logo">SSC EDGE</div>
     <div class="subtitle">Your SSC Preparation Hub</div>
 </header>
 
 <div class="container">
 
-    <!-- HOME -->
-    <div id="home" class="page active">
+<!-- ================= HOME ================= -->
 
-        <button class="card" data-page="study">
-            <div class="icon">📚</div>
-            <div class="card-title">Study Material</div>
-            <div class="card-text">Notes, concepts and study resources</div>
-        </button>
+<div id="home" class="page active">
 
-        <button class="card" data-page="practice">
-            <div class="icon">📝</div>
-            <div class="card-title">Practice</div>
-            <div class="card-text">Practice questions and tests</div>
-        </button>
+    <button class="card" data-page="study">
+        <div class="icon">📚</div>
+        <div class="card-title">Study Material</div>
+        <div class="card-text">Notes, concepts and study resources</div>
+    </button>
 
-        <button class="card" data-page="updates">
-            <div class="icon">🔔</div>
-            <div class="card-title">SSC Updates</div>
-            <div class="card-text">Latest SSC notifications</div>
-        </button>
+    <button class="card" data-page="practice">
+        <div class="icon">📝</div>
+        <div class="card-title">Practice</div>
+        <div class="card-text">Practice questions and tests</div>
+    </button>
 
-        <button class="card" data-page="papers">
-            <div class="icon">📄</div>
-            <div class="card-title">Previous Papers</div>
-            <div class="card-text">Previous year question papers</div>
-        </button>
+    <button class="card" data-page="updates">
+        <div class="icon">🔔</div>
+        <div class="card-title">SSC Updates</div>
+        <div class="card-text">Latest SSC notifications</div>
+    </button>
 
-    </div>
+    <button class="card" data-page="papers">
+        <div class="icon">📄</div>
+        <div class="card-title">Previous Papers</div>
+        <div class="card-text">Previous year question papers</div>
+    </button>
 
-
-    <!-- STUDY -->
-    <div id="study" class="page">
-        <button class="back" data-page="home">← Back</button>
-        <h2>📚 Study Material</h2>
-        <p>SSC EDGE study material will appear here.</p>
-    </div>
+</div>
 
 
-    <!-- PRACTICE -->
-    <div id="practice" class="page">
-        <button class="back" data-page="home">← Back</button>
-        <h2>📝 Practice</h2>
-        <p>Practice questions will appear here.</p>
-    </div>
+<!-- ================= STUDY MATERIAL ================= -->
+
+<div id="study" class="page">
+
+    <button class="back" data-page="home">← Back</button>
+
+    <h2>📚 Study Material</h2>
+
+    <button class="card" data-page="english">
+        <div class="icon">🇬🇧</div>
+        <div class="card-title">English</div>
+        <div class="card-text">Grammar, vocabulary and concepts</div>
+    </button>
+
+    <button class="card" data-page="gk">
+        <div class="icon">🌎</div>
+        <div class="card-title">General Awareness</div>
+        <div class="card-text">Static GK and important topics</div>
+    </button>
+
+    <button class="card" data-page="maths">
+        <div class="icon">🔢</div>
+        <div class="card-title">Quantitative Aptitude</div>
+        <div class="card-text">Concepts and formulas</div>
+    </button>
+
+    <button class="card" data-page="reasoning">
+        <div class="icon">🧠</div>
+        <div class="card-title">Reasoning</div>
+        <div class="card-text">Concepts and practice material</div>
+    </button>
+
+</div>
 
 
-    <!-- UPDATES -->
-    <div id="updates" class="page">
-        <button class="back" data-page="home">← Back</button>
-        <h2>🔔 SSC Updates</h2>
-        <p>Latest SSC updates will appear here.</p>
-    </div>
+<!-- ================= ENGLISH ================= -->
+
+<div id="english" class="page">
+
+    <button class="back" data-page="study">← Back</button>
+
+    <h2>🇬🇧 English</h2>
+
+    <button class="card" data-page="grammar">
+        <div class="icon">📖</div>
+        <div class="card-title">Grammar</div>
+        <div class="card-text">Grammar notes and concepts</div>
+    </button>
+
+    <button class="card" data-page="vocabulary">
+        <div class="icon">🔤</div>
+        <div class="card-title">Vocabulary</div>
+        <div class="card-text">Vocabulary resources</div>
+    </button>
+
+</div>
 
 
-    <!-- PAPERS -->
-    <div id="papers" class="page">
-        <button class="back" data-page="home">← Back</button>
-        <h2>📄 Previous Papers</h2>
-        <p>Previous year papers will appear here.</p>
+<!-- ================= GRAMMAR ================= -->
+
+<div id="grammar" class="page">
+
+    <button class="back" data-page="english">← Back</button>
+
+    <h2>📖 Grammar</h2>
+
+    <button class="card" data-page="grammar-notes">
+        <div class="icon">📘</div>
+        <div class="card-title">Grammar Notes</div>
+        <div class="card-text">Complete grammar study material</div>
+    </button>
+
+</div>
+
+
+<!-- ================= GRAMMAR NOTES ================= -->
+
+<div id="grammar-notes" class="page">
+
+    <button class="back" data-page="grammar">← Back</button>
+
+    <h2>📘 Grammar Notes</h2>
+
+    <div class="notice">
+        <strong>Coming Soon</strong>
+        <br><br>
+        SSC EDGE grammar notes will be added here.
     </div>
 
 </div>
 
 
+<!-- ================= VOCABULARY ================= -->
+
+<div id="vocabulary" class="page">
+
+    <button class="back" data-page="english">← Back</button>
+
+    <h2>🔤 Vocabulary</h2>
+
+    <div class="notice">
+        <strong>Coming Soon</strong>
+        <br><br>
+        SSC EDGE vocabulary material will be added here.
+    </div>
+
+</div>
+
+
+<!-- ================= OTHER SUBJECTS ================= -->
+
+<div id="gk" class="page">
+    <button class="back" data-page="study">← Back</button>
+    <h2>🌎 General Awareness</h2>
+    <div class="notice">Study material will be added here.</div>
+</div>
+
+<div id="maths" class="page">
+    <button class="back" data-page="study">← Back</button>
+    <h2>🔢 Quantitative Aptitude</h2>
+    <div class="notice">Study material will be added here.</div>
+</div>
+
+<div id="reasoning" class="page">
+    <button class="back" data-page="study">← Back</button>
+    <h2>🧠 Reasoning</h2>
+    <div class="notice">Study material will be added here.</div>
+</div>
+
+
+<!-- ================= PRACTICE ================= -->
+
+<div id="practice" class="page">
+
+    <button class="back" data-page="home">← Back</button>
+
+    <h2>📝 Practice</h2>
+
+    <div class="notice">
+        Practice section will be added here.
+    </div>
+
+</div>
+
+
+<!-- ================= UPDATES ================= -->
+
+<div id="updates" class="page">
+
+    <button class="back" data-page="home">← Back</button>
+
+    <h2>🔔 SSC Updates</h2>
+
+    <div class="notice">
+        SSC updates section will be added here.
+    </div>
+
+</div>
+
+
+<!-- ================= PAPERS ================= -->
+
+<div id="papers" class="page">
+
+    <button class="back" data-page="home">← Back</button>
+
+    <h2>📄 Previous Papers</h2>
+
+    <div class="notice">
+        Previous papers section will be added here.
+    </div>
+
+</div>
+
+</div>
+
+
 <script>
+
 document.addEventListener("DOMContentLoaded", function () {
 
     const buttons = document.querySelectorAll("[data-page]");
 
-    buttons.forEach(function (button) {
+    buttons.forEach(function(button) {
 
-        button.addEventListener("click", function () {
+        button.addEventListener("click", function() {
 
             const target = this.getAttribute("data-page");
 
-            document.querySelectorAll(".page").forEach(function (page) {
+            document.querySelectorAll(".page").forEach(function(page) {
                 page.classList.remove("active");
             });
 
@@ -194,6 +350,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
+
 </script>
 
 </body>
