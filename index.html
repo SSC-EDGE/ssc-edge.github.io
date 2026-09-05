@@ -1,166 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>SSC EDGE</title>
-
-    <link rel="stylesheet" href="css/style.css">
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SSC EDGE</title>
+<link rel="stylesheet" href="css/style.css">
 </head>
+<body>
 
+<div class="welcome-page">
+  <div class="welcome-card">
+    <div class="logo">SSC<br><span>EDGE</span></div>
+    <h1>Welcome to SSC EDGE</h1>
+    <p>Start your preparation with SSC EDGE</p>
 
-<body class="welcome-page">
-
-
-<div class="welcome-container">
-
-
-    <div class="welcome-logo">
-        S
-    </div>
-
-
-    <h1>
-        SSC EDGE
-    </h1>
-
-
-    <p class="welcome-tagline">
-        Learn • Practice • Improve
-    </p>
-
-
-    <div class="welcome-box">
-
-
-        <h2>
-            Welcome to SSC EDGE
-        </h2>
-
-
-        <p>
-            Enter your name to create your
-            SSC EDGE profile.
-        </p>
-
-
-        <input
-            type="text"
-            id="candidateName"
-            placeholder="Enter your name"
-            maxlength="30"
-            autocomplete="name"
-        >
-
-
-        <button
-            onclick="startSSC()"
-        >
-            Continue
-        </button>
-
-
-    </div>
-
-
+    <label>Enter your name</label>
+    <input id="nameInput" type="text" placeholder="Your name" maxlength="40">
+    <button onclick="startApp()">Continue</button>
+  </div>
 </div>
 
-
 <script>
+const savedName = localStorage.getItem("ssc-edge-name");
+if(savedName) location.href="home.html";
 
-
-/* =====================================================
-   CHECK EXISTING NAME
-===================================================== */
-
-(function () {
-
-    const savedName =
-        localStorage.getItem(
-            "ssc-edge-name"
-        );
-
-
-    if (savedName) {
-
-        window.location.href =
-            "home.html";
-
-    }
-
-})();
-
-
-
-/* =====================================================
-   START SSC EDGE
-===================================================== */
-
-function startSSC() {
-
-
-    const input =
-        document.getElementById(
-            "candidateName"
-        );
-
-
-    const name =
-        input.value.trim();
-
-
-    if (name.length < 2) {
-
-        alert(
-            "Please enter your name."
-        );
-
-        input.focus();
-
-        return;
-
-    }
-
-
-    localStorage.setItem(
-        "ssc-edge-name",
-        name
-    );
-
-
-    /* Default theme */
-
-    if (
-        !localStorage.getItem(
-            "ssc-edge-theme"
-        )
-    ) {
-
-        localStorage.setItem(
-            "ssc-edge-theme",
-            "dark"
-        );
-
-    }
-
-
-    window.location.href =
-        "home.html";
-
+function startApp(){
+  const name=document.getElementById("nameInput").value.trim();
+  if(!name){
+    alert("Please enter your name");
+    return;
+  }
+  localStorage.setItem("ssc-edge-name",name);
+  if(!localStorage.getItem("ssc-edge-theme"))
+    localStorage.setItem("ssc-edge-theme","dark");
+  location.href="home.html";
 }
-
-
 </script>
-
-
 </body>
-
 </html>
