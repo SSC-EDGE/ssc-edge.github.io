@@ -540,168 +540,72 @@
 @media(max-width:600px){
 
   .home-header{
-    min-height:145px;
+    min-height:0 !important;
+    height:auto !important;
+    padding:0 !important;
   }
 
   .home-header-content{
-    padding:25px 20px 24px;
+    padding:14px 18px 14px !important;
+    min-height:0 !important;
+    height:auto !important;
   }
 
   .home-header .header-brand{
     font-size:26px !important;
-    letter-spacing:-.8px !important;
+    line-height:1 !important;
   }
 
   .home-header .header-tagline{
-    margin-top:13px;
-    font-size:16px;
+    margin-top:9px !important;
+    font-size:16px !important;
+    line-height:1.1 !important;
   }
 
   .update-bell{
-    width:40px;
-    height:40px;
-    border-radius:12px;
+    width:40px !important;
+    height:40px !important;
   }
 
-  .update-bell svg{
-    width:20px;
-    height:20px;
+}
+
+
+@media(max-width:380px){
+
+  .home-header-content{
+    padding:12px 17px 12px !important;
   }
 
-  /* WELCOME BANNER */
-
-  .home-container{
-    padding:22px 15px 25px;
+  .home-header .header-brand{
+    font-size:24px !important;
   }
 
-  .home-welcome{
-    min-height:0;
-    padding:27px 22px 30px;
-    border-radius:25px;
+  .home-header .header-tagline{
+    margin-top:8px !important;
+    font-size:15px !important;
   }
 
-  .welcome-pill{
-    padding:9px 17px;
-    font-size:11px;
-    letter-spacing:1.4px;
+  .update-bell{
+    width:38px !important;
+    height:38px !important;
   }
 
-  .home-welcome h1{
-    margin-top:23px;
-    font-size:26px;
-    line-height:1.18;
-    white-space:normal;
-    letter-spacing:-.5px;
+}
+
+
+@media(max-width:330px){
+
+  .home-header-content{
+    padding:11px 15px 11px !important;
   }
 
-  .home-welcome p{
-    margin-top:13px;
-    font-size:15px;
-    line-height:1.4;
+  .home-header .header-brand{
+    font-size:23px !important;
   }
 
-  /* DASHBOARD */
-
-  .section-heading{
-    margin-top:27px;
-    margin-bottom:12px;
-    font-size:19px;
-  }
-
-  .dashboard-grid{
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-  }
-
-  .dashboard-card{
-    padding:15px;
-    border-radius:15px;
-  }
-
-  .dash-icon{
-    width:37px;
-    height:37px;
-    margin-bottom:10px;
-    border-radius:10px;
-  }
-
-  .dash-icon svg{
-    width:20px;
-    height:20px;
-  }
-
-  .dashboard-card strong{
-    font-size:12px;
-  }
-
-  .dashboard-card span{
-    font-size:9px;
-  }
-
-  /* COMMUNITY */
-
-  .community-card{
-    min-width:235px;
-    padding:14px;
-    border-radius:16px;
-  }
-
-  .community-logo{
-    width:48px;
-    height:48px;
-    border-radius:13px;
-  }
-
-  .community-logo svg{
-    width:27px;
-    height:27px;
-  }
-
-  .community-card strong{
-    font-size:13px;
-  }
-
-  .community-card span{
-    font-size:10px;
-  }
-
-  /* CONTINUE LEARNING */
-
-  .continue-card{
-    padding:14px;
-    border-radius:16px;
-  }
-
-  .continue-icon{
-    width:39px;
-    height:39px;
-  }
-
-  .continue-icon svg{
-    width:21px;
-    height:21px;
-  }
-
-  .continue-card strong{
-    font-size:12px;
-  }
-
-  .continue-card span{
-    font-size:10px;
-  }
-
-  /* LAST BUTTON / FOOTER */
-
-  .home-footer{
-    padding:34px 20px 105px;
-  }
-
-  .home-footer h2{
-    font-size:25px;
-  }
-
-  .home-footer p{
-    font-size:12px;
+  .home-header .header-tagline{
+    margin-top:7px !important;
+    font-size:14px !important;
   }
 
 }
