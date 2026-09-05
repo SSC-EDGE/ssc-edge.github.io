@@ -2,39 +2,63 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>SSC EDGE</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
-<div class="welcome-page">
-  <div class="welcome-card">
-    <div class="logo">SSC<br><span>EDGE</span></div>
+<div class="welcome-screen">
+
+  <div class="start-card">
+
+    <div class="start-logo">SSC <span>EDGE</span></div>
+
     <h1>Welcome to SSC EDGE</h1>
-    <p>Start your preparation with SSC EDGE</p>
+
+    <p>Your smart preparation platform for SSC exams.</p>
 
     <label>Enter your name</label>
-    <input id="nameInput" type="text" placeholder="Your name" maxlength="40">
+
+    <input
+      id="nameInput"
+      type="text"
+      placeholder="Enter your name"
+      maxlength="40"
+    >
+
     <button onclick="startApp()">Continue</button>
+
   </div>
+
 </div>
 
 <script>
-const savedName = localStorage.getItem("ssc-edge-name");
-if(savedName) location.href="home.html";
+
+if(localStorage.getItem("ssc-edge-name")){
+  window.location.href="home.html";
+}
 
 function startApp(){
+
   const name=document.getElementById("nameInput").value.trim();
+
   if(!name){
     alert("Please enter your name");
     return;
   }
+
   localStorage.setItem("ssc-edge-name",name);
-  if(!localStorage.getItem("ssc-edge-theme"))
+
+  if(!localStorage.getItem("ssc-edge-theme")){
     localStorage.setItem("ssc-edge-theme","dark");
-  location.href="home.html";
+  }
+
+  window.location.href="home.html";
 }
+
 </script>
+
 </body>
 </html>
