@@ -1,183 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>SSC EDGE - Study Material</title>
-
-    <link rel="stylesheet" href="css/style.css">
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SSC EDGE - Study Material</title>
+<link rel="stylesheet" href="css/style.css">
+<script>
+document.documentElement.dataset.theme=localStorage.getItem("ssc-edge-theme")||"dark";
+</script>
 </head>
-
-
 <body>
 
-
-<!-- ================= HEADER ================= -->
-
-<header class="top-header">
-
-    <div>
-
-        <h1>Study Material</h1>
-
-        <p>Learn • Revise • Improve</p>
-
-    </div>
-
+<header class="topbar">
+  <div class="brand">SSC <span>EDGE</span></div>
 </header>
 
+<main class="page">
+  <h1 class="page-title">Study Material</h1>
+  <p class="page-subtitle">Choose a subject to start learning</p>
 
-<!-- ================= CONTENT ================= -->
+  <section class="subject-grid">
+    <a href="#" class="subject-card">
+      <div>➗</div>
+      <h3>Quantitative Aptitude</h3>
+      <span>Notes & Practice</span>
+    </a>
 
-<main class="container">
+    <a href="#" class="subject-card">
+      <div>🌍</div>
+      <h3>GK</h3>
+      <span>General Knowledge</span>
+    </a>
 
+    <a href="#" class="subject-card">
+      <div>🔤</div>
+      <h3>English</h3>
+      <span>Grammar & Vocabulary</span>
+    </a>
 
-    <section class="page-heading">
-
-        <span class="badge">
-            SSC EDGE
-        </span>
-
-        <h2>What are you looking for?</h2>
-
-        <p>
-            Choose a subject to start learning.
-        </p>
-
-    </section>
-
-
-    <!-- ================= SUBJECT GRID ================= -->
-
-    <div class="study-grid">
-
-
-        <!-- 1. QUANTITATIVE APTITUDE -->
-
-        <a href="#" class="study-card quant">
-
-            <span class="study-arrow">→</span>
-
-            <div class="study-icon">
-                ∑
-            </div>
-
-            <div class="study-name">
-                Quantitative<br>
-                Aptitude
-            </div>
-
-        </a>
-
-
-        <!-- 2. GENERAL AWARENESS -->
-
-        <a href="#" class="study-card gk">
-
-            <span class="study-arrow">→</span>
-
-            <div class="study-icon">
-                💡
-            </div>
-
-            <div class="study-name">
-                General<br>
-                Awareness
-            </div>
-
-        </a>
-
-
-        <!-- 3. ENGLISH -->
-
-        <a href="#" class="study-card english">
-
-            <span class="study-arrow">→</span>
-
-            <div class="study-icon">
-                A
-            </div>
-
-            <div class="study-name">
-                English
-            </div>
-
-        </a>
-
-
-        <!-- 4. REASONING -->
-
-        <a href="#" class="study-card reasoning">
-
-            <span class="study-arrow">→</span>
-
-            <div class="study-icon">
-                🧩
-            </div>
-
-            <div class="study-name">
-                Reasoning
-            </div>
-
-        </a>
-
-
-    </div>
-
-
+    <a href="#" class="subject-card">
+      <div>🧩</div>
+      <h3>Reasoning</h3>
+      <span>Notes & Practice</span>
+    </a>
+  </section>
 </main>
 
-
-<!-- ================= BOTTOM NAV ================= -->
-
 <nav class="bottom-nav">
-
-    <a href="home.html" class="nav-item">
-
-        <span>⌂</span>
-
-        <small>Home</small>
-
-    </a>
-
-
-    <a href="study.html" class="nav-item active">
-
-        <span>📚</span>
-
-        <small>Study Material</small>
-
-    </a>
-
-
-    <a href="practice.html" class="nav-item">
-
-        <span>✎</span>
-
-        <small>Practice</small>
-
-    </a>
-
-
-    <a href="profile.html" class="nav-item">
-
-        <span>●</span>
-
-        <small>Profile</small>
-
-    </a>
-
+  <a href="home.html">⌂<span>Home</span></a>
+  <a class="active" href="study.html">📚<span>Study Material</span></a>
+  <a href="practice.html">📝<span>Practice</span></a>
+  <a href="profile.html">👤<span>Profile</span></a>
 </nav>
 
-
 </body>
-
 </html>
