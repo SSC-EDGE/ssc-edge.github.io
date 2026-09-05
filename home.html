@@ -2,80 +2,198 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>SSC EDGE - Home</title>
+
 <link rel="stylesheet" href="css/style.css">
+
 <script>
-document.documentElement.dataset.theme=localStorage.getItem("ssc-edge-theme")||"dark";
+document.documentElement.dataset.theme =
+localStorage.getItem("ssc-edge-theme") || "dark";
 </script>
 </head>
+
 <body>
 
-<header class="topbar">
-  <div class="brand">SSC <span>EDGE</span></div>
+<header class="home-header">
+
+  <div class="header-brand">SSC EDGE</div>
+
+  <div class="header-tagline">
+    Learn • Practice • Improve
+  </div>
+
 </header>
 
-<main class="page home-page">
 
-<section class="hero">
-  <p class="small">WELCOME TO</p>
-  <h1>SSC EDGE</h1>
-  <p>Your smart preparation companion for SSC exams.</p>
-</section>
+<main class="home-container">
 
-<h2>Dashboard</h2>
+  <section class="home-welcome">
 
-<section class="stats">
-  <div class="stat"><b>📚</b><strong>Study Material</strong><span>Learn</span></div>
-  <div class="stat"><b>📝</b><strong>Practice</strong><span>Test Yourself</span></div>
-  <div class="stat"><b>📈</b><strong>Progress</strong><span>Track Growth</span></div>
-  <div class="stat"><b>🔥</b><strong>Study Streak</strong><span>Keep Going</span></div>
-</section>
+    <div class="welcome-pill">
+      SSC PREPARATION
+    </div>
 
-<h2>Join Our Community</h2>
+    <h1>Welcome to SSC EDGE</h1>
 
-<div class="community">
-  <a href="https://t.me/+QCNa39ZJZnBhMzll" target="_blank" class="community-card">
-    <span class="community-icon">✈</span>
-    <div><b>Telegram Channel</b><small>Latest SSC updates</small></div>
-  </a>
+    <p>
+      Your smart preparation platform for SSC exams.
+    </p>
 
-  <a href="https://youtube.com/@sscedge07" target="_blank" class="community-card">
-    <span class="community-icon">▶</span>
-    <div><b>YouTube</b><small>Classes & preparation</small></div>
-  </a>
+  </section>
 
-  <a href="https://www.instagram.com/ssc_edge" target="_blank" class="community-card">
-    <span class="community-icon">◎</span>
-    <div><b>Instagram</b><small>Follow SSC EDGE</small></div>
-  </a>
 
-  <a href="https://t.me/+nHIcGkweGB5mNDdl" target="_blank" class="community-card">
-    <span class="community-icon">💬</span>
-    <div><b>Discussion Group</b><small>Discuss & learn together</small></div>
-  </a>
-</div>
+  <h2 class="section-heading">Dashboard</h2>
 
-<h2>Continue Learning</h2>
+  <section class="dashboard-grid">
 
-<div class="continue-grid">
-  <a href="study.html" class="learning-card">
-    <span>📚</span>
-    <div><b>Study Material</b><small>Continue your learning</small></div>
-  </a>
-  <a href="practice.html" class="learning-card">
-    <span>📝</span>
-    <div><b>Practice</b><small>Improve your score</small></div>
-  </a>
-</div>
+    <div class="dashboard-card">
+      <div class="dash-icon">▣</div>
+      <strong>Study Material</strong>
+      <span>Learn</span>
+    </div>
+
+    <div class="dashboard-card">
+      <div class="dash-icon">✓</div>
+      <strong>Practice</strong>
+      <span>Test Yourself</span>
+    </div>
+
+    <div class="dashboard-card">
+      <div class="dash-icon">↗</div>
+      <strong>Progress</strong>
+      <span>Track Growth</span>
+    </div>
+
+    <div class="dashboard-card">
+      <div class="dash-icon">★</div>
+      <strong>Study Streak</strong>
+      <span>Keep Going</span>
+    </div>
+
+  </section>
+
+
+  <h2 class="section-heading">Join Our Community</h2>
+
+  <section class="community-scroll">
+
+    <a href="https://t.me/+QCNa39ZJZnBhMzll"
+       target="_blank"
+       class="community-card">
+
+      <div class="community-logo telegram">✈</div>
+
+      <div>
+        <strong>Telegram Channel</strong>
+        <span>Latest SSC updates</span>
+      </div>
+
+    </a>
+
+
+    <a href="https://youtube.com/@sscedge07"
+       target="_blank"
+       class="community-card">
+
+      <div class="community-logo youtube">▶</div>
+
+      <div>
+        <strong>YouTube</strong>
+        <span>Classes & preparation</span>
+      </div>
+
+    </a>
+
+
+    <a href="https://www.instagram.com/ssc_edge"
+       target="_blank"
+       class="community-card">
+
+      <div class="community-logo instagram">◎</div>
+
+      <div>
+        <strong>Instagram</strong>
+        <span>Follow SSC EDGE</span>
+      </div>
+
+    </a>
+
+
+    <a href="https://t.me/+nHIcGkweGB5mNDdl"
+       target="_blank"
+       class="community-card">
+
+      <div class="community-logo discussion">◆</div>
+
+      <div>
+        <strong>Discussion Group</strong>
+        <span>Discuss & learn</span>
+      </div>
+
+    </a>
+
+  </section>
+
+
+  <h2 class="section-heading">Continue Learning</h2>
+
+  <section class="continue-grid">
+
+    <a href="study.html" class="continue-card">
+
+      <div class="continue-icon">▣</div>
+
+      <div>
+        <strong>Study Material</strong>
+        <span>Continue your learning</span>
+      </div>
+
+      <b>›</b>
+
+    </a>
+
+
+    <a href="practice.html" class="continue-card">
+
+      <div class="continue-icon">✓</div>
+
+      <div>
+        <strong>Practice</strong>
+        <span>Improve your score</span>
+      </div>
+
+      <b>›</b>
+
+    </a>
+
+  </section>
 
 </main>
 
+
 <nav class="bottom-nav">
-  <a class="active" href="home.html">⌂<span>Home</span></a>
-  <a href="study.html">📚<span>Study Material</span></a>
-  <a href="practice.html">📝<span>Practice</span></a>
-  <a href="profile.html">👤<span>Profile</span></a>
+
+  <a href="home.html" class="active">
+    <span class="nav-icon">⌂</span>
+    <small>Home</small>
+  </a>
+
+  <a href="study.html">
+    <span class="nav-icon">▣</span>
+    <small>Study Material</small>
+  </a>
+
+  <a href="practice.html">
+    <span class="nav-icon">✓</span>
+    <small>Practice</small>
+  </a>
+
+  <a href="profile.html">
+    <span class="nav-icon">○</span>
+    <small>Profile</small>
+  </a>
+
 </nav>
 
 </body>
