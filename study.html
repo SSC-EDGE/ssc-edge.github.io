@@ -2,55 +2,150 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>SSC EDGE - Study Material</title>
+
 <link rel="stylesheet" href="css/style.css">
+
 <script>
-document.documentElement.dataset.theme=localStorage.getItem("ssc-edge-theme")||"dark";
+document.documentElement.dataset.theme =
+localStorage.getItem("ssc-edge-theme") || "dark";
 </script>
 </head>
+
 <body>
 
-<header class="topbar">
-  <div class="brand">SSC <span>EDGE</span></div>
+<header class="simple-header">
+  <div class="header-brand">SSC EDGE</div>
 </header>
 
-<main class="page">
+
+<main class="page-container">
+
   <h1 class="page-title">Study Material</h1>
-  <p class="page-subtitle">Choose a subject to start learning</p>
+
+  <p class="page-subtitle">
+    Choose a subject to start learning
+  </p>
+
 
   <section class="subject-grid">
+
+
+    <!-- QUANT -->
+
     <a href="#" class="subject-card">
-      <div>➗</div>
+
+      <div class="subject-icon">
+
+        <svg viewBox="0 0 64 64">
+          <rect x="15" y="7" width="34" height="50" rx="5"/>
+          <rect x="21" y="14" width="22" height="10" rx="2"/>
+          <circle cx="23" cy="32" r="2"/>
+          <circle cx="32" cy="32" r="2"/>
+          <circle cx="41" cy="32" r="2"/>
+          <circle cx="23" cy="41" r="2"/>
+          <circle cx="32" cy="41" r="2"/>
+          <circle cx="41" cy="41" r="2"/>
+          <circle cx="23" cy="50" r="2"/>
+          <circle cx="32" cy="50" r="2"/>
+          <circle cx="41" cy="50" r="2"/>
+        </svg>
+
+      </div>
+
       <h3>Quantitative Aptitude</h3>
       <span>Notes & Practice</span>
+
     </a>
 
+
+    <!-- GK -->
+
     <a href="#" class="subject-card">
-      <div>🌍</div>
+
+      <div class="subject-icon">
+
+        <svg viewBox="0 0 64 64">
+          <circle cx="32" cy="32" r="24"/>
+          <path d="M8 32h48M32 8c8 8 8 40 0 48M32 8c-8 8-8 40 0 48"/>
+          <path d="M14 20h36M14 44h36"/>
+        </svg>
+
+      </div>
+
       <h3>GK</h3>
       <span>General Knowledge</span>
+
     </a>
 
+
+    <!-- ENGLISH -->
+
     <a href="#" class="subject-card">
-      <div>🔤</div>
+
+      <div class="subject-icon">
+
+        <svg viewBox="0 0 64 64">
+          <path d="M10 12h28a8 8 0 0 1 8 8v30H18a8 8 0 0 0-8 8V12z"/>
+          <path d="M46 50h8V20a8 8 0 0 0-8-8"/>
+          <path d="M20 25h16M20 33h13M20 41h10"/>
+        </svg>
+
+      </div>
+
       <h3>English</h3>
       <span>Grammar & Vocabulary</span>
+
     </a>
+
+
+    <!-- REASONING -->
 
     <a href="#" class="subject-card">
-      <div>🧩</div>
+
+      <div class="subject-icon">
+
+        <svg viewBox="0 0 64 64">
+          <path d="M24 10h16v10h10v16H40v18H24V36H14V20h10z"/>
+          <path d="M24 20h16M24 36h16"/>
+        </svg>
+
+      </div>
+
       <h3>Reasoning</h3>
       <span>Notes & Practice</span>
+
     </a>
+
+
   </section>
+
 </main>
 
+
 <nav class="bottom-nav">
-  <a href="home.html">⌂<span>Home</span></a>
-  <a class="active" href="study.html">📚<span>Study Material</span></a>
-  <a href="practice.html">📝<span>Practice</span></a>
-  <a href="profile.html">👤<span>Profile</span></a>
+
+  <a href="home.html">
+    <span class="nav-icon">⌂</span>
+    <small>Home</small>
+  </a>
+
+  <a href="study.html" class="active">
+    <span class="nav-icon">▣</span>
+    <small>Study Material</small>
+  </a>
+
+  <a href="practice.html">
+    <span class="nav-icon">✓</span>
+    <small>Practice</small>
+  </a>
+
+  <a href="profile.html">
+    <span class="nav-icon">○</span>
+    <small>Profile</small>
+  </a>
+
 </nav>
 
 </body>
