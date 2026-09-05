@@ -848,3 +848,76 @@
     font-size:13px !important;
   }
 }
+
+   /* =========================================
+   HOME — LIGHT THEME
+   ========================================= */
+
+body.light-theme .home-header{
+  background:linear-gradient(115deg,#ffffff 0%,#f8f5ff 50%,#f3effb 100%) !important;
+  border-bottom:2px solid #e5def2 !important;
+}
+
+body.light-theme .home-header .header-brand{
+  color:#241333 !important;
+}
+
+body.light-theme .home-header .header-tagline{
+  color:#6b6175 !important;
+}
+
+body.light-theme .home-welcome{
+  background:linear-gradient(135deg,#ffffff 0%,#f7f2ff 100%) !important;
+  border:1px solid #e4dcef !important;
+  box-shadow:0 12px 35px rgba(50,30,70,.08) !important;
+}
+
+body.light-theme .home-welcome h1{
+  color:#241333 !important;
+}
+
+body.light-theme .home-welcome p{
+  color:#6b6175 !important;
+}
+
+body.light-theme .welcome-pill{
+  background:#eee5ff !important;
+  color:#6d3db5 !important;
+}
+
+body.light-theme .section-heading{
+  color:#241333 !important;
+}
+
+body.light-theme .dashboard-card,
+body.light-theme .community-card,
+body.light-theme .continue-card{
+  background:#ffffff !important;
+  border:1px solid #e6dfed !important;
+  box-shadow:0 6px 20px rgba(40,25,55,.06) !important;
+}
+
+body.light-theme .dashboard-card strong,
+body.light-theme .community-card strong,
+body.light-theme .continue-card strong{
+  color:#241333 !important;
+}
+
+body.light-theme .dashboard-card span,
+body.light-theme .community-card span,
+body.light-theme .continue-card span{
+  color:#746b7d !important;
+}
+
+body.light-theme .home-footer{
+  background:#f5f1f8 !important;
+  border-top:1px solid #e5deeb !important;
+}
+
+body.light-theme .home-footer h2{
+  color:#241333 !important;
+}
+
+body.light-theme .home-footer p{
+  color:#746b7d !important;
+}
