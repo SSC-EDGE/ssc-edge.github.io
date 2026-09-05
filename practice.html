@@ -1,241 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>SSC EDGE - Practice</title>
-
-    <link rel="stylesheet" href="css/style.css">
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SSC EDGE - Practice</title>
+<link rel="stylesheet" href="css/style.css">
+<script>
+document.documentElement.dataset.theme=localStorage.getItem("ssc-edge-theme")||"dark";
+</script>
 </head>
-
 <body>
 
-<header class="top-header">
-
-    <div>
-        <h1>Practice</h1>
-        <p>Test • Practice • Improve</p>
-    </div>
-
+<header class="topbar">
+  <div class="brand">SSC <span>EDGE</span></div>
 </header>
 
+<main class="page practice-page">
 
-<main class="container practice-page">
+<h1 class="page-title">Practice</h1>
 
+<section class="practice-section">
+  <h2>FULL MOCKS</h2>
 
-    <!-- ================= HEADING ================= -->
+  <div class="mock-grid">
+    <a href="#" class="mock-card">
+      <strong>CGL PRE</strong>
+      <span>Full Mock Test</span>
+    </a>
 
-    <section class="page-heading">
+    <a href="#" class="mock-card">
+      <strong>CGL MAINS</strong>
+      <span>Full Mock Test</span>
+    </a>
+  </div>
+</section>
 
-        <span class="badge">
-            SSC EDGE
-        </span>
+<section class="practice-section">
+  <h2>SECTIONAL MOCKS</h2>
 
-        <h2>Practice Tests</h2>
+  <div class="sectional-grid">
+    <a href="#" class="practice-card">
+      <b>➗</b>
+      <strong>Quant</strong>
+    </a>
 
-        <p>
-            Choose your test and start practicing.
-        </p>
+    <a href="#" class="practice-card">
+      <b>🌍</b>
+      <strong>GK</strong>
+    </a>
 
-    </section>
+    <a href="#" class="practice-card">
+      <b>🔤</b>
+      <strong>English</strong>
+    </a>
 
-
-    <!-- ================= FULL MOCKS ================= -->
-
-    <section class="practice-section">
-
-        <div class="practice-title">
-            FULL MOCKS
-        </div>
-
-
-        <div class="mock-grid">
-
-
-            <a href="#" class="mock-card cgl-pre">
-
-                <span class="mock-arrow">→</span>
-
-                <div class="mock-icon">
-                    ✓
-                </div>
-
-                <div class="mock-name">
-                    CGL PRE
-                </div>
-
-            </a>
-
-
-            <a href="#" class="mock-card cgl-mains">
-
-                <span class="mock-arrow">→</span>
-
-                <div class="mock-icon">
-                    ★
-                </div>
-
-                <div class="mock-name">
-                    CGL MAINS
-                </div>
-
-            </a>
-
-
-        </div>
-
-    </section>
-
-
-    <!-- ================= SECTIONAL MOCKS ================= -->
-
-    <section class="practice-section">
-
-        <div class="practice-title">
-            SECTIONAL MOCKS
-        </div>
-
-
-        <div class="mock-grid">
-
-
-            <a href="#" class="mock-card sectional-quant">
-
-                <span class="mock-arrow">→</span>
-
-                <div class="mock-icon">
-                    ∑
-                </div>
-
-                <div class="mock-name">
-                    Quant
-                </div>
-
-            </a>
-
-
-            <a href="#" class="mock-card sectional-gk">
-
-                <span class="mock-arrow">→</span>
-
-                <div class="mock-icon">
-                    ?
-                </div>
-
-                <div class="mock-name">
-                    GK
-                </div>
-
-            </a>
-
-
-            <a href="#" class="mock-card sectional-english">
-
-                <span class="mock-arrow">→</span>
-
-                <div class="mock-icon">
-                    A
-                </div>
-
-                <div class="mock-name">
-                    English
-                </div>
-
-            </a>
-
-
-            <a href="#" class="mock-card sectional-reasoning">
-
-                <span class="mock-arrow">→</span>
-
-                <div class="mock-icon">
-                    🧩
-                </div>
-
-                <div class="mock-name">
-                    Reasoning
-                </div>
-
-            </a>
-
-
-        </div>
-
-    </section>
-
+    <a href="#" class="practice-card">
+      <b>🧩</b>
+      <strong>Reasoning</strong>
+    </a>
+  </div>
+</section>
 
 </main>
 
-
-<!-- ================= BOTTOM NAV ================= -->
-
 <nav class="bottom-nav">
-
-    <a href="home.html" class="nav-item">
-
-        <span>⌂</span>
-
-        <small>Home</small>
-
-    </a>
-
-
-    <a href="study.html" class="nav-item">
-
-        <span>📚</span>
-
-        <small>Study Material</small>
-
-    </a>
-
-
-    <a href="practice.html" class="nav-item active">
-
-        <span>✎</span>
-
-        <small>Practice</small>
-
-    </a>
-
-
-    <a href="profile.html" class="nav-item">
-
-        <span>●</span>
-
-        <small>Profile</small>
-
-    </a>
-
+  <a href="home.html">⌂<span>Home</span></a>
+  <a href="study.html">📚<span>Study Material</span></a>
+  <a class="active" href="practice.html">📝<span>Practice</span></a>
+  <a href="profile.html">👤<span>Profile</span></a>
 </nav>
-
-
-<!-- ================= THEME ================= -->
-
-<script>
-
-(function () {
-
-    const theme =
-        localStorage.getItem("ssc-edge-theme");
-
-    if (theme === "light") {
-
-        document.body.classList.add("light-theme");
-
-    }
-
-})();
-
-</script>
-
 
 </body>
 </html>
