@@ -16,29 +16,22 @@
 
 </head>
 
-
 <body>
-
-
-<!-- ================= HEADER ================= -->
 
 <header class="top-header">
 
     <div>
-
         <h1>Practice</h1>
-
-        <p>Practice • Test • Improve</p>
-
+        <p>Test • Practice • Improve</p>
     </div>
 
 </header>
 
 
-<!-- ================= CONTENT ================= -->
+<main class="container practice-page">
 
-<main class="container">
 
+    <!-- ================= HEADING ================= -->
 
     <section class="page-heading">
 
@@ -46,124 +39,135 @@
             SSC EDGE
         </span>
 
-        <h2>Practice Questions</h2>
+        <h2>Practice Tests</h2>
 
         <p>
-            Choose a subject and start practicing.
+            Choose your test and start practicing.
         </p>
 
     </section>
 
 
-    <!-- ENGLISH -->
+    <!-- ================= FULL MOCKS ================= -->
 
-    <div class="practice-card">
+    <section class="practice-section">
 
-        <div class="practice-number">
-            01
+        <div class="practice-title">
+            FULL MOCKS
         </div>
 
-        <div class="subject-info">
 
-            <h3>English</h3>
-
-            <p>
-                Grammar & Vocabulary Questions
-            </p>
-
-        </div>
-
-        <a href="#" class="button">
-            Start
-        </a>
-
-    </div>
+        <div class="mock-grid">
 
 
-    <!-- GENERAL AWARENESS -->
+            <a href="#" class="mock-card cgl-pre">
 
-    <div class="practice-card">
+                <span class="mock-arrow">→</span>
 
-        <div class="practice-number">
-            02
-        </div>
+                <div class="mock-icon">
+                    ✓
+                </div>
 
-        <div class="subject-info">
+                <div class="mock-name">
+                    CGL PRE
+                </div>
 
-            <h3>General Awareness</h3>
-
-            <p>
-                GK & Current Affairs
-            </p>
-
-        </div>
-
-        <a href="#" class="button">
-            Start
-        </a>
-
-    </div>
+            </a>
 
 
-    <!-- QUANT -->
+            <a href="#" class="mock-card cgl-mains">
 
-    <div class="practice-card">
+                <span class="mock-arrow">→</span>
 
-        <div class="practice-number">
-            03
-        </div>
+                <div class="mock-icon">
+                    ★
+                </div>
 
-        <div class="subject-info">
+                <div class="mock-name">
+                    CGL MAINS
+                </div>
 
-            <h3>Quantitative Aptitude</h3>
+            </a>
 
-            <p>
-                Practice numerical questions
-            </p>
 
         </div>
 
-        <a href="#" class="button">
-            Start
-        </a>
-
-    </div>
+    </section>
 
 
-    <!-- REASONING -->
+    <!-- ================= SECTIONAL MOCKS ================= -->
 
-    <div class="practice-card">
+    <section class="practice-section">
 
-        <div class="practice-number">
-            04
+        <div class="practice-title">
+            SECTIONAL MOCKS
         </div>
 
-        <div class="subject-info">
 
-            <h3>Reasoning</h3>
+        <div class="mock-grid">
 
-            <p>
-                Practice reasoning questions
-            </p>
+
+            <a href="#" class="mock-card sectional-quant">
+
+                <span class="mock-arrow">→</span>
+
+                <div class="mock-icon">
+                    ∑
+                </div>
+
+                <div class="mock-name">
+                    Quant
+                </div>
+
+            </a>
+
+
+            <a href="#" class="mock-card sectional-gk">
+
+                <span class="mock-arrow">→</span>
+
+                <div class="mock-icon">
+                    ?
+                </div>
+
+                <div class="mock-name">
+                    GK
+                </div>
+
+            </a>
+
+
+            <a href="#" class="mock-card sectional-english">
+
+                <span class="mock-arrow">→</span>
+
+                <div class="mock-icon">
+                    A
+                </div>
+
+                <div class="mock-name">
+                    English
+                </div>
+
+            </a>
+
+
+            <a href="#" class="mock-card sectional-reasoning">
+
+                <span class="mock-arrow">→</span>
+
+                <div class="mock-icon">
+                    🧩
+                </div>
+
+                <div class="mock-name">
+                    Reasoning
+                </div>
+
+            </a>
+
 
         </div>
-
-        <a href="#" class="button">
-            Start
-        </a>
-
-    </div>
-
-
-    <!-- ================= COMING SOON ================= -->
-
-    <section class="coming-soon">
-
-        <h3>More Tests Coming Soon</h3>
-
-        <p>
-            SSC EDGE practice system is being developed.
-        </p>
 
     </section>
 
@@ -171,7 +175,7 @@
 </main>
 
 
-<!-- ================= NAVIGATION ================= -->
+<!-- ================= BOTTOM NAV ================= -->
 
 <nav class="bottom-nav">
 
@@ -213,6 +217,25 @@
 </nav>
 
 
-</body>
+<!-- ================= THEME ================= -->
 
+<script>
+
+(function () {
+
+    const theme =
+        localStorage.getItem("ssc-edge-theme");
+
+    if (theme === "light") {
+
+        document.body.classList.add("light-theme");
+
+    }
+
+})();
+
+</script>
+
+
+</body>
 </html>
