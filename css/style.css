@@ -1,1097 +1,374 @@
-/* =========================================================
-   SSC EDGE — COMPLETE STYLE SHEET
-   Home • Study Material • Practice • Profile
-   Light / Dark Theme
-========================================================= */
-
-
-/* =========================================================
-   1. BASIC RESET
-========================================================= */
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    min-height: 100vh;
-    background: #0d0813;
-    color: #ffffff;
-    font-family: Arial, Helvetica, sans-serif;
-    padding-bottom: 82px;
-}
-
-button,
-a,
-input {
-    font-family: inherit;
-}
-
-button {
-    cursor: pointer;
-}
-
-a {
-    text-decoration: none;
-    color: inherit;
-}
-
-
-/* =========================================================
-   2. COMMON CONTAINER
-========================================================= */
-
-.container {
-    width: 100%;
-    max-width: 600px;
-    margin: auto;
-    padding: 18px 15px 30px;
-}
-
-
-/* =========================================================
-   3. TOP HEADER
-========================================================= */
-
-.top-header {
-    width: 100%;
-    padding: 25px 18px 15px;
-    background:
-        linear-gradient(
-            145deg,
-            #391080,
-            #641bc9,
-            #9460d6
-        );
-}
-
-.top-header h1 {
-    font-size: 27px;
-    font-weight: 800;
-}
-
-.top-header p {
-    margin-top: 5px;
-    font-size: 12px;
-    color: rgba(255,255,255,0.78);
-}
-
-
-/* =========================================================
-   4. HOME HERO
-========================================================= */
-
-.hero {
-    padding: 22px 5px;
-}
-
-.hero h1,
-.hero h2 {
-    font-size: 27px;
-    line-height: 1.2;
-    font-weight: 800;
-}
-
-.hero p {
-    margin-top: 9px;
-    color: #aaa1b2;
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-
-/* =========================================================
-   5. SECTION TITLES
-========================================================= */
-
-.section {
-    margin-top: 24px;
-}
-
-.section-title {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 13px;
-}
-
-.section-title h3 {
-    font-size: 20px;
-    font-weight: 800;
-}
-
-.section-title p {
-    font-size: 11px;
-    color: #91879c;
-}
-
-
-/* =========================================================
-   6. DASHBOARD STATS
-========================================================= */
-
-.stats {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.stat-card {
-    padding: 17px;
-    border-radius: 17px;
-    background: #17101f;
-    border: 1px solid #281d31;
-}
-
-.stat-card strong {
-    display: block;
-    font-size: 22px;
-    font-weight: 800;
-}
-
-.stat-card span {
-    display: block;
-    margin-top: 5px;
-    color: #948a9d;
-    font-size: 10px;
-}
-
-
-/* =========================================================
-   7. COMMUNITY SECTION
-========================================================= */
-
-.community-scroll {
-    display: flex;
-    gap: 12px;
-    overflow-x: auto;
-    padding: 3px 2px 12px;
-    scroll-snap-type: x mandatory;
-}
-
-.community-scroll::-webkit-scrollbar {
-    display: none;
-}
-
-.community-card {
-    min-width: 210px;
-    padding: 18px;
-    border-radius: 20px;
-    background: #17101f;
-    scroll-snap-align: start;
-}
-
-.community-card h4 {
-    margin-top: 10px;
-    font-size: 15px;
-}
-
-.community-card p {
-    margin-top: 5px;
-    color: #958a9d;
-    font-size: 10px;
-}
-
-.community-card a {
-    display: inline-flex;
-    margin-top: 13px;
-    padding: 9px 13px;
-    border-radius: 10px;
-    background: #7045a5;
-    color: white;
-    font-size: 10px;
-    font-weight: 700;
-}
-
-
-/* =========================================================
-   8. CONTINUE LEARNING
-========================================================= */
-
-.learning-card {
-    display: flex;
-    align-items: center;
-    gap: 13px;
-    width: 100%;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 17px;
-    background: #17101f;
-}
-
-.learning-icon {
-    width: 44px;
-    height: 44px;
-    min-width: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 13px;
-    background: #29183d;
-    font-size: 20px;
-}
-
-.learning-card h4 {
-    font-size: 14px;
-}
-
-.learning-card p {
-    margin-top: 4px;
-    color: #92889b;
-    font-size: 10px;
-}
-
-
-/* =========================================================
-   9. STUDY MATERIAL
-========================================================= */
-
-.subject-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-}
-
-.subject-card {
-    min-height: 145px;
-    padding: 17px;
-    border-radius: 20px;
-    background:
-        linear-gradient(
-            145deg,
-            #261735,
-            #17101f
-        );
-    border: 1px solid #30233b;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.subject-card h3 {
-    font-size: 17px;
-    font-weight: 800;
-}
-
-.subject-card p {
-    margin-top: 6px;
-    color: #958a9e;
-    font-size: 10px;
-}
-
-.subject-card .card-arrow {
-    align-self: flex-end;
-    font-size: 23px;
-    color: #a879e0;
-}
-
-
-/* =========================================================
-   10. NOTES / ENGLISH
-========================================================= */
-
-.notes-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.note-card {
-    display: flex;
-    align-items: center;
-    gap: 13px;
-    padding: 16px;
-    border-radius: 17px;
-    background: #17101f;
-}
-
-.note-icon {
-    width: 44px;
-    height: 44px;
-    min-width: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 13px;
-    background: #29183d;
-    font-size: 20px;
-}
-
-.note-card h4 {
-    font-size: 14px;
-}
-
-.note-card p {
-    margin-top: 4px;
-    color: #93899b;
-    font-size: 10px;
-}
-
-
-/* =========================================================
-   11. PRACTICE PAGE
-========================================================= */
-
-.practice-title {
-    padding: 20px 5px 12px;
-}
-
-.practice-title h2 {
-    font-size: 26px;
-    font-weight: 800;
-}
-
-.practice-title p {
-    margin-top: 6px;
-    color: #9a90a3;
-    font-size: 12px;
-}
-
-
-/* FULL MOCKS */
-
-.mock-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 11px;
-}
-
-.mock-card {
-    min-height: 125px;
-    padding: 18px;
-    border-radius: 19px;
-    background:
-        linear-gradient(
-            145deg,
-            #271634,
-            #17101f
-        );
-    border: 1px solid #32223e;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.mock-card h3 {
-    font-size: 15px;
-}
-
-.mock-card p {
-    color: #958a9d;
-    font-size: 10px;
-}
-
-.mock-card span {
-    align-self: flex-end;
-    font-size: 22px;
-    color: #a978dc;
-}
-
-
-/* SECTIONAL MOCKS */
-
-.sectional-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 11px;
-}
-
-.sectional-card {
-    padding: 17px;
-    min-height: 105px;
-    border-radius: 18px;
-    background: #17101f;
-    border: 1px solid #2d2136;
-}
-
-.sectional-card h4 {
-    font-size: 14px;
-}
-
-.sectional-card p {
-    margin-top: 7px;
-    color: #91869b;
-    font-size: 10px;
-}
-
-
-/* =========================================================
-   12. PROFILE
-========================================================= */
-
-.profile-box {
-    text-align: center;
-    padding: 25px 10px 20px;
-}
-
-.profile-avatar {
-    width: 76px;
-    height: 76px;
-    margin: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background:
-        linear-gradient(
-            135deg,
-            #5420bd,
-            #8d56d0
-        );
-    color: white;
-    font-size: 29px;
-    font-weight: 800;
-    box-shadow:
-        0 8px 25px rgba(84,32,189,0.35);
-}
-
-.profile-box h2 {
-    margin-top: 13px;
-    font-size: 21px;
-    font-weight: 800;
-}
-
-.profile-box p {
-    margin-top: 5px;
-    color: #91869b;
-    font-size: 11px;
-}
-
-
-/* =========================================================
-   13. PROFILE SETTINGS
-========================================================= */
-
-.setting-card {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 13px;
-    padding: 16px;
-    margin-bottom: 11px;
-    border: none;
-    border-radius: 18px;
-    background: #17101f;
-    color: #ffffff;
-    text-align: left;
-    box-shadow:
-        0 4px 14px rgba(0,0,0,0.12);
-}
-
-.setting-card:active {
-    transform: scale(0.98);
-}
-
-.setting-icon {
-    width: 45px;
-    height: 45px;
-    min-width: 45px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 13px;
-    background: #29183d;
-    color: #ffffff;
-    font-size: 21px;
-}
-
-.setting-content {
-    flex: 1;
-}
-
-.setting-content h4 {
-    font-size: 14px;
-    font-weight: 700;
-}
-
-.setting-content p {
-    margin-top: 5px;
-    color: #91889d;
-    font-size: 10px;
-}
-
-.setting-arrow {
-    color: #aaa0b2;
-    font-size: 27px;
-    line-height: 1;
-}
-
-
-/* =========================================================
-   14. THEME BUTTONS
-========================================================= */
-
-.theme-setting {
-    cursor: default;
-}
-
-.theme-buttons {
-    display: flex;
-    gap: 6px;
-}
-
-.theme-buttons button {
-    border: none;
-    padding: 9px 11px;
-    border-radius: 10px;
-    background: #2a2035;
-    color: #aaa1b5;
-    font-size: 10px;
-    font-weight: 700;
-}
-
-.theme-buttons button.selected {
-    background: #7045a5;
-    color: #ffffff;
-}
-
-
-/* =========================================================
-   15. RESET PROFILE
-========================================================= */
-
-.danger-setting {
-    color: #ffb5b5;
-}
-
-.danger-setting .setting-icon {
-    background: #3b2028;
-    color: #ffb5b5;
-}
-
-
-/* =========================================================
-   16. POPUPS
-========================================================= */
-
-.popup-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 20000;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background: rgba(0,0,0,0.65);
-    backdrop-filter: blur(5px);
-}
-
-.popup-overlay.show {
-    display: flex;
-}
-
-.popup-box {
-    position: relative;
-    width: 100%;
-    max-width: 390px;
-    padding: 27px 22px 22px;
-    border-radius: 24px;
-    background: #1a1122;
-    color: #ffffff;
-    text-align: center;
-    box-shadow:
-        0 15px 45px rgba(0,0,0,0.35);
-}
-
-.popup-close {
-    position: absolute;
-    top: 11px;
-    right: 14px;
-    width: 32px;
-    height: 32px;
-    border: none;
-    border-radius: 50%;
-    background: #2c2135;
-    color: #ffffff;
-    font-size: 22px;
-}
-
-.popup-icon {
-    width: 55px;
-    height: 55px;
-    margin: 5px auto 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 16px;
-    background:
-        linear-gradient(
-            135deg,
-            #5420bd,
-            #8e55d0
-        );
-    font-size: 25px;
-}
-
-.popup-box h2 {
-    font-size: 21px;
-}
-
-.popup-box > p {
-    margin-top: 8px;
-    color: #aaa1b1;
-    font-size: 12px;
-    line-height: 1.5;
-}
-
-
-/* INPUT */
-
-.popup-box input {
-    width: 100%;
-    margin-top: 17px;
-    padding: 13px 14px;
-    border: 1px solid #44364d;
-    outline: none;
-    border-radius: 12px;
-    background: #251a2e;
-    color: #ffffff;
-    font-size: 14px;
-}
-
-.popup-box input:focus {
-    border-color: #8050bd;
-}
-
-.popup-box input::placeholder {
-    color: #817589;
-}
-
-
-/* POPUP BUTTON */
-
-.popup-button {
-    width: 100%;
-    margin-top: 14px;
-    padding: 13px;
-    border: none;
-    border-radius: 12px;
-    background:
-        linear-gradient(
-            135deg,
-            #5420bd,
-            #7742c5
-        );
-    color: #ffffff;
-    font-size: 13px;
-    font-weight: 700;
-}
-
-
-/* ABOUT */
-
-.about-text {
-    text-align: left;
-    margin-top: 14px !important;
-    max-height: 280px;
-    overflow-y: auto;
-    padding-right: 4px;
-}
-
-.about-text strong {
-    color: #ffffff;
-}
-
-
-/* =========================================================
-   17. FIRST-TIME WELCOME SCREEN
-========================================================= */
-
-.welcome-page {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 25px;
-    background:
-        linear-gradient(
-            145deg,
-            #32106f,
-            #5b1bc4,
-            #9b62dc
-        );
-}
-
-.welcome-container {
-    width: 100%;
-    max-width: 390px;
-    text-align: center;
-}
-
-.welcome-logo {
-    width: 78px;
-    height: 78px;
-    margin: 0 auto 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 24px;
-    background: rgba(255,255,255,0.16);
-    border:
-        1px solid
-        rgba(255,255,255,0.25);
-    color: #ffffff;
-    font-size: 34px;
-    font-weight: 800;
-}
-
-.welcome-container > h1 {
-    color: #ffffff;
-    font-size: 34px;
-    font-weight: 800;
-}
-
-.welcome-tagline {
-    margin-top: 7px;
-    color: rgba(255,255,255,0.85);
-    font-size: 13px;
-}
-
-.welcome-box {
-    margin-top: 40px;
-    padding: 27px 21px;
-    border-radius: 25px;
-    background: rgba(255,255,255,0.97);
-    box-shadow:
-        0 15px 40px rgba(0,0,0,0.25);
-}
-
-.welcome-box h2 {
-    color: #17101f;
-    font-size: 22px;
-}
-
-.welcome-box p {
-    margin-top: 9px;
-    color: #777777;
-    font-size: 12px;
-    line-height: 1.5;
-}
-
-.welcome-box input {
-    width: 100%;
-    margin-top: 20px;
-    padding: 14px;
-    border:
-        1px solid
-        #ddd5e4;
-    outline: none;
-    border-radius: 12px;
-    background: #f7f5f9;
-    color: #111111;
-    font-size: 14px;
-}
-
-.welcome-box input:focus {
-    border-color: #7045a5;
-}
-
-.welcome-box button {
-    width: 100%;
-    margin-top: 12px;
-    padding: 14px;
-    border: none;
-    border-radius: 12px;
-    background:
-        linear-gradient(
-            135deg,
-            #5420bd,
-            #7944c7
-        );
-    color: #ffffff;
-    font-size: 14px;
-    font-weight: 700;
-}
-
-
-/* =========================================================
-   18. BOTTOM NAVIGATION
-========================================================= */
-
-.bottom-nav {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 10000;
-    height: 72px;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    background: #ffffff;
-    border-top: 1px solid #dedede;
-    box-shadow:
-        0 -3px 14px rgba(0,0,0,0.12);
-}
-
-.nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    color: #858585;
-    font-size: 23px;
-}
-
-.nav-item small {
-    font-size: 9px;
-    font-weight: 600;
-}
-
-.nav-item.active {
-    color: #5420bd;
-}
-
-.nav-item.active span {
-    font-weight: 800;
-}
-
-
-/* =========================================================
-   19. LIGHT THEME
-========================================================= */
-
-body.light-theme {
-    background: #f7f5f9;
-    color: #17101f;
-}
-
-
-/* Header */
-
-body.light-theme .top-header {
-    background:
-        linear-gradient(
-            145deg,
-            #5420bd,
-            #7944c7,
-            #9b6bd5
-        );
-}
-
-
-/* Text */
-
-body.light-theme .hero p,
-body.light-theme .practice-title p {
-    color: #716879;
-}
-
-body.light-theme .section-title p {
-    color: #77707d;
-}
-
-
-/* Cards */
-
-body.light-theme .stat-card,
-body.light-theme .community-card,
-body.light-theme .learning-card,
-body.light-theme .subject-card,
-body.light-theme .note-card,
-body.light-theme .mock-card,
-body.light-theme .sectional-card {
-    background: #ffffff;
-    border-color: #e5dfea;
-    box-shadow:
-        0 3px 12px rgba(0,0,0,0.06);
-}
-
-
-/* Card text */
-
-body.light-theme .stat-card span,
-body.light-theme .community-card p,
-body.light-theme .learning-card p,
-body.light-theme .subject-card p,
-body.light-theme .note-card p,
-body.light-theme .mock-card p,
-body.light-theme .sectional-card p {
-    color: #77707d;
-}
-
-
-/* Icons */
-
-body.light-theme .learning-icon,
-body.light-theme .note-icon {
-    background: #eee7f7;
-    color: #5420bd;
-}
-
-
-/* Profile */
-
-body.light-theme .profile-box p {
-    color: #77707d;
-}
-
-
-/* Settings */
-
-body.light-theme .setting-card {
-    background: #ffffff;
-    color: #111111;
-    border: 1px solid #e6e0eb;
-    box-shadow:
-        0 3px 12px rgba(0,0,0,0.07);
-}
-
-body.light-theme .setting-icon {
-    background: #eee7f7;
-    color: #5420bd;
-}
-
-body.light-theme .setting-content p {
-    color: #777777;
-}
-
-body.light-theme .setting-arrow {
-    color: #777777;
-}
-
-
-/* Theme */
-
-body.light-theme .theme-buttons button {
-    background: #eeeaf2;
-    color: #666666;
-}
-
-body.light-theme .theme-buttons button.selected {
-    background: #7045a5;
-    color: #ffffff;
-}
-
-
-/* Popup */
-
-body.light-theme .popup-box {
-    background: #ffffff;
-    color: #111111;
-}
-
-body.light-theme .popup-close {
-    background: #eeeeee;
-    color: #333333;
-}
-
-body.light-theme .popup-box > p {
-    color: #666666;
-}
-
-body.light-theme .popup-box input {
-    background: #f7f5f8;
-    color: #111111;
-    border-color: #ddd5e4;
-}
-
-body.light-theme .popup-box input::placeholder {
-    color: #999999;
-}
-
-body.light-theme .about-text strong {
-    color: #5420bd;
-}
-
-
-/* =========================================================
-   20. MOBILE RESPONSIVE
-========================================================= */
-
-@media (max-width: 500px) {
-
-    .container {
-        padding-left: 14px;
-        padding-right: 14px;
-    }
-
-    .hero h1,
-    .hero h2 {
-        font-size: 25px;
-    }
-
-    .section-title h3 {
-        font-size: 19px;
-    }
-
-    .subject-card {
-        min-height: 135px;
-    }
-
-}
-
-
-/* =========================================================
-   21. SMALL PHONES
-========================================================= */
-
-@media (max-width: 370px) {
-
-    .top-header h1 {
-        font-size: 24px;
-    }
-
-    .stats {
-        gap: 8px;
-    }
-
-    .stat-card {
-        padding: 14px;
-    }
-
-    .subject-grid,
-    .mock-grid,
-    .sectional-grid {
-        gap: 8px;
-    }
-
-    .subject-card {
-        padding: 14px;
-        min-height: 125px;
-    }
-
-    .subject-card h3 {
-        font-size: 15px;
-    }
-
-    .theme-buttons {
-        gap: 4px;
-    }
-
-    .theme-buttons button {
-        padding: 8px 9px;
-        font-size: 9px;
-    }
-
-    .setting-card {
-        padding: 13px;
-    }
-
-    .setting-icon {
-        width: 41px;
-        height: 41px;
-        min-width: 41px;
-    }
-
-    .setting-content h4 {
-        font-size: 13px;
-    }
-
-    .setting-content p {
-        font-size: 9px;
-    }
-
-}
-
-
-/* =========================================================
-   SSC EDGE CSS COMPLETE
-========================================================= */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+ --bg:#0b0714;
+ --card:#151025;
+ --card2:#1b1530;
+ --text:#fff;
+ --muted:#a9a2ba;
+ --accent:#8b5cf6;
+ --border:#29213d;
+}
+:root[data-theme="light"]{
+ --bg:#f5f3fa;
+ --card:#fff;
+ --card2:#f0edf8;
+ --text:#171321;
+ --muted:#716a7e;
+ --accent:#7040d8;
+ --border:#ddd7e8;
+}
+body{
+ font-family:Arial,sans-serif;
+ background:var(--bg);
+ color:var(--text);
+ min-height:100vh;
+ padding-bottom:85px;
+}
+a{text-decoration:none;color:inherit}
+button,input{font:inherit}
+.topbar{
+ height:64px;
+ display:flex;
+ align-items:center;
+ padding:0 20px;
+ border-bottom:1px solid var(--border);
+ background:var(--bg);
+}
+.brand{font-size:21px;font-weight:900;letter-spacing:.5px}
+.brand span{color:var(--accent)}
+.page{max-width:760px;margin:auto;padding:24px 18px}
+.hero{
+ padding:28px 22px;
+ border:1px solid var(--border);
+ border-radius:22px;
+ background:linear-gradient(135deg,var(--card2),var(--card));
+ margin-bottom:28px;
+}
+.hero .small{color:var(--accent);font-size:12px;font-weight:bold;letter-spacing:2px}
+.hero h1{font-size:38px;margin:7px 0}
+.hero p:last-child{color:var(--muted);line-height:1.5}
+h2{font-size:19px;margin:24px 0 13px}
+.stats{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:12px;
+}
+.stat{
+ background:var(--card);
+ border:1px solid var(--border);
+ border-radius:16px;
+ padding:16px;
+ display:flex;
+ flex-direction:column;
+ gap:5px;
+}
+.stat b{font-size:22px}
+.stat strong{font-size:14px}
+.stat span,.community-card small,.learning-card small,
+.subject-card span{color:var(--muted);font-size:12px}
+.community{
+ display:flex;
+ gap:12px;
+ overflow-x:auto;
+ padding-bottom:5px;
+ scrollbar-width:none;
+}
+.community::-webkit-scrollbar{display:none}
+.community-card{
+ min-width:215px;
+ padding:15px;
+ border:1px solid var(--border);
+ background:var(--card);
+ border-radius:17px;
+ display:flex;
+ align-items:center;
+ gap:12px;
+}
+.community-icon{
+ width:42px;height:42px;border-radius:12px;
+ background:var(--card2);
+ display:grid;place-items:center;
+ font-size:20px;color:var(--accent);
+}
+.community-card b{display:block;font-size:14px;margin-bottom:4px}
+.continue-grid{display:grid;gap:12px}
+.learning-card{
+ display:flex;align-items:center;gap:14px;
+ padding:16px;
+ border:1px solid var(--border);
+ background:var(--card);
+ border-radius:17px;
+}
+.learning-card>span{font-size:27px}
+.learning-card b{display:block;margin-bottom:4px}
+
+.page-title{font-size:29px;margin-top:8px}
+.page-subtitle{color:var(--muted);margin-top:7px}
+.subject-grid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:14px;
+ margin-top:25px;
+}
+.subject-card{
+ min-height:175px;
+ padding:20px;
+ border-radius:20px;
+ background:var(--card);
+ border:1px solid var(--border);
+ display:flex;
+ flex-direction:column;
+ justify-content:center;
+ transition:.2s;
+}
+.subject-card:hover,.mock-card:hover,.practice-card:hover{transform:translateY(-2px)}
+.subject-card div{font-size:31px;margin-bottom:15px}
+.subject-card h3{font-size:17px;margin-bottom:7px}
+
+.practice-section{margin-top:30px}
+.practice-section h2{
+ font-size:14px;
+ letter-spacing:1.5px;
+ color:var(--accent);
+ margin-bottom:13px;
+}
+.mock-grid,.sectional-grid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:13px;
+}
+.mock-card{
+ background:var(--card);
+ border:1px solid var(--border);
+ border-radius:19px;
+ padding:22px 15px;
+ text-align:center;
+}
+.mock-card strong{display:block;font-size:18px}
+.mock-card span{display:block;color:var(--muted);font-size:12px;margin-top:6px}
+.practice-card{
+ background:var(--card);
+ border:1px solid var(--border);
+ border-radius:18px;
+ padding:24px 15px;
+ text-align:center;
+}
+.practice-card b{display:block;font-size:27px;margin-bottom:9px}
+.practice-card strong{font-size:15px}
+
+.profile-head{
+ text-align:center;
+ padding:18px 0 25px;
+}
+.avatar{
+ width:72px;height:72px;
+ margin:auto;
+ display:grid;place-items:center;
+ border-radius:50%;
+ background:var(--card2);
+ border:1px solid var(--border);
+ font-size:31px;
+}
+.profile-head h1{font-size:25px;margin-top:13px}
+.profile-head p{color:var(--muted);font-size:13px;margin-top:5px}
+
+.settings-box h2{
+ font-size:13px;
+ letter-spacing:1.5px;
+ color:var(--accent);
+ margin-bottom:10px;
+}
+.settings-box{
+ background:var(--card);
+ border:1px solid var(--border);
+ border-radius:18px;
+ padding:7px 15px;
+}
+.setting-row{
+ width:100%;
+ border:0;
+ border-bottom:1px solid var(--border);
+ background:none;
+ color:var(--text);
+ padding:17px 0;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ text-align:left;
+ cursor:pointer;
+}
+.setting-row:last-child{border-bottom:0}
+.setting-row i,.about-card i{
+ font-style:normal;
+ font-size:22px;
+ color:var(--muted);
+}
+.setting-row.danger{color:#e77b7b}
+
+.about-card{
+ margin-top:16px;
+ width:100%;
+ border:1px solid var(--border);
+ background:var(--card);
+ color:var(--text);
+ border-radius:18px;
+ padding:17px;
+ display:flex;
+ align-items:center;
+ gap:13px;
+ text-align:left;
+ cursor:pointer;
+}
+.about-card span{font-size:23px}
+.about-card div{flex:1}
+.about-card b{display:block;font-size:15px}
+.about-card small{display:block;color:var(--muted);margin-top:4px}
+
+.popup-bg{
+ position:fixed;
+ inset:0;
+ background:#0008;
+ display:none;
+ align-items:center;
+ justify-content:center;
+ padding:20px;
+ z-index:20;
+}
+.popup-bg.show{display:flex}
+.popup{
+ width:100%;
+ max-width:390px;
+ background:var(--card);
+ border:1px solid var(--border);
+ border-radius:22px;
+ padding:22px;
+}
+.popup h3{font-size:20px;margin-bottom:18px}
+.popup p{
+ color:var(--muted);
+ line-height:1.6;
+ font-size:14px;
+ margin-bottom:18px;
+}
+.popup input{
+ width:100%;
+ padding:13px;
+ border-radius:12px;
+ border:1px solid var(--border);
+ background:var(--bg);
+ color:var(--text);
+ outline:none;
+ margin-bottom:12px;
+}
+.theme-option{
+ width:100%;
+ padding:15px 3px;
+ background:none;
+ border:0;
+ border-bottom:1px solid var(--border);
+ color:var(--text);
+ display:flex;
+ gap:12px;
+ align-items:center;
+ text-align:left;
+ cursor:pointer;
+}
+.theme-option b{margin-left:auto;color:var(--accent)}
+.done-btn{
+ width:100%;
+ margin-top:15px;
+ padding:13px;
+ border:0;
+ border-radius:12px;
+ background:var(--accent);
+ color:white;
+ font-weight:bold;
+ cursor:pointer;
+}
+
+.welcome-page{
+ min-height:100vh;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ padding:20px;
+}
+.welcome-card{
+ width:100%;
+ max-width:390px;
+ text-align:center;
+ background:var(--card);
+ border:1px solid var(--border);
+ border-radius:25px;
+ padding:32px 24px;
+}
+.logo{
+ display:inline-flex;
+ flex-direction:column;
+ justify-content:center;
+ width:76px;height:76px;
+ border-radius:20px;
+ background:var(--accent);
+ color:white;
+ font-weight:900;
+ font-size:19px;
+ line-height:18px;
+ margin-bottom:22px;
+}
+.logo span{font-size:13px}
+.welcome-card h1{font-size:25px}
+.welcome-card p{color:var(--muted);font-size:13px;margin:9px 0 25px}
+.welcome-card label{
+ display:block;
+ text-align:left;
+ font-size:13px;
+ font-weight:bold;
+ margin-bottom:7px;
+}
+.welcome-card input{
+ width:100%;
+ padding:14px;
+ border:1px solid var(--border);
+ border-radius:12px;
+ background:var(--bg);
+ color:var(--text);
+ outline:none;
+ margin-bottom:12px;
+}
+.welcome-card button{
+ width:100%;
+ padding:14px;
+ border:0;
+ border-radius:12px;
+ background:var(--accent);
+ color:white;
+ font-weight:bold;
+ cursor:pointer;
+}
+
+.bottom-nav{
+ position:fixed;
+ left:0;right:0;bottom:0;
+ height:70px;
+ background:var(--card);
+ border-top:1px solid var(--border);
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ z-index:10;
+}
+.bottom-nav a{
+ display:flex;
+ flex-direction:column;
+ justify-content:center;
+ align-items:center;
+ gap:4px;
+ color:var(--muted);
+ font-size:19px;
+}
+.bottom-nav a span{font-size:10px}
+.bottom-nav a.active{color:var(--accent);font-weight:bold}
+
+@media(max-width:430px){
+ .subject-card{min-height:155px;padding:16px}
+ .hero h1{font-size:34px}
+   }
