@@ -1002,3 +1002,90 @@ body.light-theme .home-footer p{
 :root[data-theme="light"] .home-footer p{
   color:#746b7d;
 }
+
+   /* =========================================================
+   HOME LIGHT THEME
+========================================================= */
+
+:root[data-theme="light"] .home-header{
+  background:linear-gradient(
+    115deg,
+    #ffffff 0%,
+    #f8f5ff 50%,
+    #f3effb 100%
+  ) !important;
+  border-bottom-color:#e5def2 !important;
+}
+
+:root[data-theme="light"] .home-header .header-brand{
+  color:#241333 !important;
+}
+
+:root[data-theme="light"] .home-header .header-tagline{
+  color:#6b6175 !important;
+}
+
+:root[data-theme="light"] .home-welcome{
+  background:linear-gradient(
+    110deg,
+    #ffffff 0%,
+    #f7f2ff 100%
+  ) !important;
+  border-color:#e4dcef !important;
+  box-shadow:0 18px 55px rgba(50,30,70,.08) !important;
+}
+
+:root[data-theme="light"] .welcome-pill{
+  background:#eee5ff !important;
+  color:#6d3db5 !important;
+}
+
+:root[data-theme="light"] .home-welcome h1{
+  color:#241333 !important;
+}
+
+:root[data-theme="light"] .home-welcome p{
+  color:#6b6175 !important;
+}
+
+:root[data-theme="light"] .section-heading{
+  color:#241333 !important;
+}
+
+:root[data-theme="light"] .dashboard-card,
+:root[data-theme="light"] .community-card,
+:root[data-theme="light"] .continue-card{
+  background:#ffffff !important;
+  border-color:#e6dfed !important;
+}
+
+:root[data-theme="light"] .dashboard-card strong,
+:root[data-theme="light"] .community-card strong,
+:root[data-theme="light"] .continue-card strong{
+  color:#241333 !important;
+}
+
+:root[data-theme="light"] .dashboard-card span,
+:root[data-theme="light"] .community-card span,
+:root[data-theme="light"] .continue-card span{
+  color:#746b7d !important;
+}
+
+:root[data-theme="light"] .dash-icon,
+:root[data-theme="light"] .community-logo,
+:root[data-theme="light"] .continue-icon{
+  background:#eee6fa !important;
+}
+
+:root[data-theme="light"] .home-footer{
+  background:#f5f1f8 !important;
+  border-top-color:#e5deeb !important;
+}
+
+:root[data-theme="light"] .home-footer h2{
+  color:#241333 !important;
+}
+
+:root[data-theme="light"] .home-footer p{
+  color:#746b7d !important;
+}
