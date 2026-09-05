@@ -1,19 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>SSC EDGE</title>
 
-    <meta http-equiv="refresh" content="0; url=home.html">
+    <link rel="stylesheet" href="css/style.css">
+
 </head>
 
-<body>
-    <p>Opening SSC EDGE...</p>
 
-    <script>
-        window.location.href = "home.html";
-    </script>
+<body class="welcome-page">
+
+
+<div class="welcome-container">
+
+
+    <div class="welcome-logo">
+        S
+    </div>
+
+
+    <h1>
+        SSC EDGE
+    </h1>
+
+
+    <p class="welcome-tagline">
+        Learn • Practice • Improve
+    </p>
+
+
+    <div class="welcome-box">
+
+
+        <h2>
+            Welcome to SSC EDGE
+        </h2>
+
+
+        <p>
+            Enter your name to create your
+            SSC EDGE profile.
+        </p>
+
+
+        <input
+            type="text"
+            id="candidateName"
+            placeholder="Enter your name"
+            maxlength="30"
+            autocomplete="name"
+        >
+
+
+        <button
+            onclick="startSSC()"
+        >
+            Continue
+        </button>
+
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+
+/* =====================================================
+   CHECK EXISTING NAME
+===================================================== */
+
+(function () {
+
+    const savedName =
+        localStorage.getItem(
+            "ssc-edge-name"
+        );
+
+
+    if (savedName) {
+
+        window.location.href =
+            "home.html";
+
+    }
+
+})();
+
+
+
+/* =====================================================
+   START SSC EDGE
+===================================================== */
+
+function startSSC() {
+
+
+    const input =
+        document.getElementById(
+            "candidateName"
+        );
+
+
+    const name =
+        input.value.trim();
+
+
+    if (name.length < 2) {
+
+        alert(
+            "Please enter your name."
+        );
+
+        input.focus();
+
+        return;
+
+    }
+
+
+    localStorage.setItem(
+        "ssc-edge-name",
+        name
+    );
+
+
+    /* Default theme */
+
+    if (
+        !localStorage.getItem(
+            "ssc-edge-theme"
+        )
+    ) {
+
+        localStorage.setItem(
+            "ssc-edge-theme",
+            "dark"
+        );
+
+    }
+
+
+    window.location.href =
+        "home.html";
+
+}
+
+
+</script>
+
+
 </body>
+
 </html>
