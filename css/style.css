@@ -623,3 +623,215 @@ body {
     }
 
 }
+/* ==================================================
+   STUDY MATERIAL CARDS
+================================================== */
+
+.study-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 14px;
+
+    margin-top: 10px;
+
+}
+
+
+.study-card {
+
+    position: relative;
+
+    min-height: 235px;
+
+    border-radius: 24px;
+
+    padding: 20px;
+
+    overflow: hidden;
+
+    text-decoration: none;
+
+    color: #ffffff;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: flex-end;
+
+    border: none;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,0.18);
+
+}
+
+
+/* Arrow */
+
+.study-arrow {
+
+    position: absolute;
+
+    top: 17px;
+
+    right: 18px;
+
+    font-size: 32px;
+
+    font-weight: 300;
+
+    line-height: 1;
+
+}
+
+
+/* Icon */
+
+.study-icon {
+
+    width: 48px;
+
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-bottom: 12px;
+
+    border-radius: 13px;
+
+    background: rgba(255,255,255,0.92);
+
+    color: #222;
+
+    font-size: 28px;
+
+    font-weight: 800;
+
+}
+
+
+/* Subject name */
+
+.study-name {
+
+    font-size: 24px;
+
+    line-height: 1.05;
+
+    font-weight: 500;
+
+}
+
+
+/* ================= COLORS ================= */
+
+.study-card.quant {
+
+    background:
+        linear-gradient(
+            145deg,
+            #102d8a,
+            #304cc5
+        );
+
+}
+
+
+.study-card.gk {
+
+    background:
+        linear-gradient(
+            145deg,
+            #42205f,
+            #8950a2
+        );
+
+}
+
+
+.study-card.english {
+
+    background:
+        linear-gradient(
+            145deg,
+            #a50025,
+            #e52d50
+        );
+
+}
+
+
+.study-card.reasoning {
+
+    background:
+        linear-gradient(
+            145deg,
+            #b87900,
+            #f2b52d
+        );
+
+}
+
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 420px) {
+
+    .study-card {
+
+        min-height: 220px;
+
+        padding: 17px;
+
+        border-radius: 22px;
+
+    }
+
+    .study-name {
+
+        font-size: 21px;
+
+    }
+
+    .study-arrow {
+
+        font-size: 29px;
+
+    }
+
+}
+
+
+/* ================= SMALL PHONES ================= */
+
+@media (max-width: 350px) {
+
+    .study-grid {
+
+        gap: 10px;
+
+    }
+
+    .study-card {
+
+        min-height: 190px;
+
+        padding: 14px;
+
+    }
+
+    .study-name {
+
+        font-size: 18px;
+
+    }
+
+}
