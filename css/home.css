@@ -531,99 +531,177 @@
   .dashboard-grid{
     grid-template-columns:1fr 1fr;
   }
-}
-
+   
 
 /* =====================================================
-   MOBILE
+   MOBILE — BALANCED SIZE
    ===================================================== */
 
 @media(max-width:600px){
 
   .home-header{
-    min-height:170px;
+    min-height:145px;
   }
 
   .home-header-content{
-    padding:31px 22px 29px;
+    padding:25px 20px 24px;
   }
 
   .home-header .header-brand{
-    font-size:29px !important;
+    font-size:26px !important;
+    letter-spacing:-.8px !important;
   }
 
   .home-header .header-tagline{
-    margin-top:16px;
-    font-size:18px;
+    margin-top:13px;
+    font-size:16px;
   }
 
   .update-bell{
-    width:43px;
-    height:43px;
+    width:40px;
+    height:40px;
+    border-radius:12px;
   }
 
   .update-bell svg{
-    width:22px;
-    height:22px;
+    width:20px;
+    height:20px;
   }
 
-  .updates-overlay{
-    align-items:flex-end;
-    justify-content:center;
-    padding:0;
-  }
-
-  .updates-popup{
-    max-width:none;
-    max-height:80vh;
-    border-radius:23px 23px 0 0;
-  }
+  /* WELCOME BANNER */
 
   .home-container{
-    padding:28px 17px 28px;
+    padding:22px 15px 25px;
   }
 
   .home-welcome{
     min-height:0;
-    padding:35px 27px 38px;
-    border-radius:31px;
+    padding:27px 22px 30px;
+    border-radius:25px;
   }
 
   .welcome-pill{
-    padding:12px 20px;
-    font-size:13px;
-    letter-spacing:1.7px;
+    padding:9px 17px;
+    font-size:11px;
+    letter-spacing:1.4px;
   }
 
   .home-welcome h1{
-    margin-top:29px;
-    font-size:31px;
+    margin-top:23px;
+    font-size:26px;
     line-height:1.18;
     white-space:normal;
+    letter-spacing:-.5px;
   }
 
   .home-welcome p{
-    margin-top:17px;
-    font-size:17px;
+    margin-top:13px;
+    font-size:15px;
+    line-height:1.4;
   }
 
+  /* DASHBOARD */
+
   .section-heading{
-    margin-top:32px;
-    font-size:21px;
+    margin-top:27px;
+    margin-bottom:12px;
+    font-size:19px;
   }
 
   .dashboard-grid{
     grid-template-columns:1fr 1fr;
-    gap:11px;
+    gap:10px;
   }
 
   .dashboard-card{
-    padding:16px;
+    padding:15px;
+    border-radius:15px;
   }
 
+  .dash-icon{
+    width:37px;
+    height:37px;
+    margin-bottom:10px;
+    border-radius:10px;
+  }
+
+  .dash-icon svg{
+    width:20px;
+    height:20px;
+  }
+
+  .dashboard-card strong{
+    font-size:12px;
+  }
+
+  .dashboard-card span{
+    font-size:9px;
+  }
+
+  /* COMMUNITY */
+
   .community-card{
-    min-width:245px;
-    padding:16px;
+    min-width:235px;
+    padding:14px;
+    border-radius:16px;
+  }
+
+  .community-logo{
+    width:48px;
+    height:48px;
+    border-radius:13px;
+  }
+
+  .community-logo svg{
+    width:27px;
+    height:27px;
+  }
+
+  .community-card strong{
+    font-size:13px;
+  }
+
+  .community-card span{
+    font-size:10px;
+  }
+
+  /* CONTINUE LEARNING */
+
+  .continue-card{
+    padding:14px;
+    border-radius:16px;
+  }
+
+  .continue-icon{
+    width:39px;
+    height:39px;
+  }
+
+  .continue-icon svg{
+    width:21px;
+    height:21px;
+  }
+
+  .continue-card strong{
+    font-size:12px;
+  }
+
+  .continue-card span{
+    font-size:10px;
+  }
+
+  /* LAST BUTTON / FOOTER */
+
+  .home-footer{
+    padding:34px 20px 105px;
+  }
+
+  .home-footer h2{
+    font-size:25px;
+  }
+
+  .home-footer p{
+    font-size:12px;
   }
 
 }
@@ -636,44 +714,65 @@
 @media(max-width:380px){
 
   .home-header{
-    min-height:160px;
+    min-height:138px;
   }
 
   .home-header-content{
-    padding:29px 20px 27px;
+    padding:23px 18px 22px;
   }
 
   .home-header .header-brand{
-    font-size:27px !important;
+    font-size:24px !important;
   }
 
   .home-header .header-tagline{
-    font-size:17px;
+    margin-top:12px;
+    font-size:15px;
+  }
+
+  .update-bell{
+    width:38px;
+    height:38px;
   }
 
   .home-container{
-    padding:25px 15px;
+    padding:20px 14px 23px;
   }
 
   .home-welcome{
-    padding:32px 23px 36px;
+    padding:25px 19px 28px;
+    border-radius:23px;
   }
 
   .welcome-pill{
-    padding:11px 18px;
-    font-size:11px;
+    padding:8px 15px;
+    font-size:10px;
   }
 
   .home-welcome h1{
-    font-size:28px;
+    margin-top:21px;
+    font-size:24px;
   }
 
   .home-welcome p{
-    font-size:16px;
+    font-size:14px;
   }
 
   .section-heading{
-    font-size:20px;
+    margin-top:25px;
+    font-size:18px;
+  }
+
+  .dashboard-card{
+    padding:14px;
+  }
+
+  .community-card{
+    min-width:225px;
+  }
+
+  .home-footer h2{
+    font-size:23px;
   }
 
 }
@@ -685,20 +784,32 @@
 
 @media(max-width:330px){
 
+  .home-header{
+    min-height:132px;
+  }
+
+  .home-header-content{
+    padding:21px 16px 20px;
+  }
+
   .home-header .header-brand{
-    font-size:25px !important;
+    font-size:23px !important;
   }
 
   .home-header .header-tagline{
-    font-size:16px;
+    font-size:14px;
+  }
+
+  .home-welcome{
+    padding:23px 17px 26px;
   }
 
   .home-welcome h1{
-    font-size:26px;
+    font-size:22px;
   }
 
   .home-welcome p{
-    font-size:15px;
+    font-size:13px;
   }
 
 }
