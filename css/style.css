@@ -64,10 +64,10 @@ input{
 }
 
 .home-header .header-brand{
-  font-size:54px;
+  font-size:38px;
   line-height:1;
   font-weight:900;
-  letter-spacing:-2px;
+  letter-spacing:-1px;
 }
 
 .home-header .header-tagline{
@@ -83,7 +83,7 @@ input{
 ========================================================= */
 
 .simple-header{
-  height:68px;
+  height:64px;
   display:flex;
   align-items:center;
   padding:0 20px;
