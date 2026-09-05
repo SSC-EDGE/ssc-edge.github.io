@@ -20,7 +20,9 @@
 <body>
 
 
-<!-- ================= HEADER ================= -->
+<!-- =====================================================
+     HEADER
+===================================================== -->
 
 <header class="top-header">
 
@@ -28,41 +30,60 @@
 
         <h1>Profile</h1>
 
-        <p>Your SSC EDGE progress</p>
+        <p>
+            Your SSC EDGE account
+        </p>
 
     </div>
 
 </header>
 
 
-<!-- ================= PROFILE ================= -->
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
 
 <main class="container">
 
 
+    <!-- ================= PROFILE ================= -->
+
     <section class="profile-box">
 
-        <div class="profile-avatar">
+        <div
+            class="profile-avatar"
+            id="profileAvatar"
+        >
             S
         </div>
 
-        <h2>SSC EDGE Student</h2>
 
-        <p>
-            Keep learning. Keep improving.
+        <h2 id="profileName">
+            SSC EDGE Student
+        </h2>
+
+
+        <p id="profileUsername">
+            Your SSC EDGE profile
         </p>
 
     </section>
 
 
-    <!-- ================= STATS ================= -->
+
+    <!-- =================================================
+         STATS
+    ================================================= -->
 
     <section class="stats">
 
 
         <div class="stat-card">
 
-            <strong>0</strong>
+            <strong id="testsCount">
+                0
+            </strong>
 
             <span>
                 Tests
@@ -73,7 +94,9 @@
 
         <div class="stat-card">
 
-            <strong>0</strong>
+            <strong id="questionsCount">
+                0
+            </strong>
 
             <span>
                 Questions
@@ -84,7 +107,9 @@
 
         <div class="stat-card">
 
-            <strong>0%</strong>
+            <strong id="accuracyCount">
+                0%
+            </strong>
 
             <span>
                 Accuracy
@@ -95,10 +120,12 @@
 
         <div class="stat-card">
 
-            <strong>0</strong>
+            <strong id="streakCount">
+                0
+            </strong>
 
             <span>
-                Streak
+                Day Streak
             </span>
 
         </div>
@@ -107,99 +134,119 @@
     </section>
 
 
-    <!-- ================= PROGRESS ================= -->
+
+    <!-- =================================================
+         SETTINGS
+    ================================================= -->
 
     <section class="section">
+
 
         <div class="section-title">
 
-            <h3>Your Progress</h3>
+            <h3>
+                Settings
+            </h3>
 
         </div>
 
 
-        <div class="progress-card">
 
-            <div class="progress-row">
+        <!-- ================= CHANGE NAME ================= -->
 
-                <span>
-                    Study Material
-                </span>
+        <button
+            class="setting-card"
+            onclick="openNameBox()"
+        >
 
-                <strong>
-                    0%
-                </strong>
-
+            <div class="setting-icon">
+                👤
             </div>
 
 
-            <div class="progress-bar">
+            <div class="setting-content">
 
-                <div class="progress-fill"></div>
-
-            </div>
-
-        </div>
-
-
-        <div class="progress-card">
-
-            <div class="progress-row">
-
-                <span>
-                    Practice
-                </span>
-
-                <strong>
-                    0%
-                </strong>
-
-            </div>
-
-
-            <div class="progress-bar">
-
-                <div class="progress-fill"></div>
-
-            </div>
-
-        </div>
-
-
-    </section>
-
-
-    <!-- ================= PROFILE OPTIONS ================= -->
-
-    <section class="section">
-
-
-        <div class="profile-option">
-
-            <span>⚙️</span>
-
-            <div>
-
-                <h4>Settings</h4>
+                <h4>
+                    Change Name
+                </h4>
 
                 <p>
-                    App preferences
+                    Change your SSC EDGE username
                 </p>
 
             </div>
 
-            <span>›</span>
+
+            <span class="setting-arrow">
+                ›
+            </span>
+
+        </button>
+
+
+
+        <!-- ================= THEME ================= -->
+
+        <div class="setting-card theme-setting">
+
+            <div class="setting-icon">
+                ◐
+            </div>
+
+
+            <div class="setting-content">
+
+                <h4>
+                    Theme
+                </h4>
+
+                <p>
+                    Choose Light or Dark mode
+                </p>
+
+            </div>
+
+
+            <div class="theme-buttons">
+
+                <button
+                    id="lightBtn"
+                    onclick="setTheme('light')"
+                >
+                    Light
+                </button>
+
+
+                <button
+                    id="darkBtn"
+                    onclick="setTheme('dark')"
+                >
+                    Dark
+                </button>
+
+            </div>
 
         </div>
 
 
-        <div class="profile-option">
 
-            <span>ℹ️</span>
+        <!-- ================= ABOUT ================= -->
 
-            <div>
+        <button
+            class="setting-card"
+            onclick="openAbout()"
+        >
 
-                <h4>About SSC EDGE</h4>
+            <div class="setting-icon">
+                ℹ
+            </div>
+
+
+            <div class="setting-content">
+
+                <h4>
+                    About SSC EDGE
+                </h4>
 
                 <p>
                     Learn more about SSC EDGE
@@ -207,9 +254,45 @@
 
             </div>
 
-            <span>›</span>
 
-        </div>
+            <span class="setting-arrow">
+                ›
+            </span>
+
+        </button>
+
+
+
+        <!-- ================= RESET ================= -->
+
+        <button
+            class="setting-card danger-setting"
+            onclick="resetProfile()"
+        >
+
+            <div class="setting-icon">
+                ↻
+            </div>
+
+
+            <div class="setting-content">
+
+                <h4>
+                    Reset Profile
+                </h4>
+
+                <p>
+                    Clear your saved name and progress
+                </p>
+
+            </div>
+
+
+            <span class="setting-arrow">
+                ›
+            </span>
+
+        </button>
 
 
     </section>
@@ -218,46 +301,590 @@
 </main>
 
 
-<!-- ================= NAVIGATION ================= -->
+
+<!-- =====================================================
+     NAME POPUP
+===================================================== -->
+
+<div
+    class="popup-overlay"
+    id="namePopup"
+>
+
+
+    <div class="popup-box">
+
+
+        <button
+            class="popup-close"
+            onclick="closeNameBox()"
+        >
+            ×
+        </button>
+
+
+        <div class="popup-icon">
+            👤
+        </div>
+
+
+        <h2>
+            Change Your Name
+        </h2>
+
+
+        <p>
+            Enter the name you want to use on SSC EDGE.
+        </p>
+
+
+        <input
+            type="text"
+            id="nameInput"
+            placeholder="Enter your name"
+            maxlength="30"
+        >
+
+
+        <button
+            class="popup-button"
+            onclick="saveName()"
+        >
+            Save Name
+        </button>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     ABOUT POPUP
+===================================================== -->
+
+<div
+    class="popup-overlay"
+    id="aboutPopup"
+>
+
+
+    <div class="popup-box about-box">
+
+
+        <button
+            class="popup-close"
+            onclick="closeAbout()"
+        >
+            ×
+        </button>
+
+
+        <div class="popup-icon">
+            📚
+        </div>
+
+
+        <h2>
+            About SSC EDGE
+        </h2>
+
+
+        <p class="about-text">
+
+            <strong>SSC EDGE</strong> is a dedicated
+            preparation platform designed to help
+            aspirants learn, practice and improve
+            their performance for competitive
+            examinations.
+
+            <br><br>
+
+            The platform brings study material,
+            practice tests, notes and useful
+            preparation resources together in one
+            simple and student-friendly place.
+
+            <br><br>
+
+            <strong>
+                Learn • Practice • Improve
+            </strong>
+
+            <br><br>
+
+            Keep preparing consistently and move
+            one step closer to your goal.
+
+        </p>
+
+
+        <button
+            class="popup-button"
+            onclick="closeAbout()"
+        >
+            Got It
+        </button>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     BOTTOM NAVIGATION
+===================================================== -->
 
 <nav class="bottom-nav">
 
-    <a href="home.html" class="nav-item">
+
+    <a
+        href="home.html"
+        class="nav-item"
+    >
 
         <span>⌂</span>
 
-        <small>Home</small>
+        <small>
+            Home
+        </small>
 
     </a>
 
 
-    <a href="study.html" class="nav-item">
+    <a
+        href="study.html"
+        class="nav-item"
+    >
 
         <span>📚</span>
 
-        <small>Study Material</small>
+        <small>
+            Study Material
+        </small>
 
     </a>
 
 
-    <a href="practice.html" class="nav-item">
+    <a
+        href="practice.html"
+        class="nav-item"
+    >
 
         <span>✎</span>
 
-        <small>Practice</small>
+        <small>
+            Practice
+        </small>
 
     </a>
 
 
-    <a href="profile.html" class="nav-item active">
+    <a
+        href="profile.html"
+        class="nav-item active"
+    >
 
         <span>●</span>
 
-        <small>Profile</small>
+        <small>
+            Profile
+        </small>
 
     </a>
 
+
 </nav>
+
+
+
+<!-- =====================================================
+     PROFILE SYSTEM
+===================================================== -->
+
+<script>
+
+
+/* =====================================================
+   LOAD PROFILE
+===================================================== */
+
+function loadProfile() {
+
+
+    const name =
+        localStorage.getItem(
+            "ssc-edge-name"
+        );
+
+
+    if (!name) {
+
+        window.location.href =
+            "index.html";
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "profileName"
+    ).textContent = name;
+
+
+    document.getElementById(
+        "profileUsername"
+    ).textContent =
+        "SSC EDGE • " + name;
+
+
+    const firstLetter =
+        name
+        .trim()
+        .charAt(0)
+        .toUpperCase();
+
+
+    document.getElementById(
+        "profileAvatar"
+    ).textContent = firstLetter;
+
+
+    loadStats();
+
+    updateThemeButtons();
+
+}
+
+
+
+/* =====================================================
+   LOAD STATS
+===================================================== */
+
+function loadStats() {
+
+
+    const tests =
+        localStorage.getItem(
+            "ssc-edge-tests"
+        ) || "0";
+
+
+    const questions =
+        localStorage.getItem(
+            "ssc-edge-questions"
+        ) || "0";
+
+
+    const accuracy =
+        localStorage.getItem(
+            "ssc-edge-accuracy"
+        ) || "0";
+
+
+    const streak =
+        localStorage.getItem(
+            "ssc-edge-streak"
+        ) || "0";
+
+
+    document.getElementById(
+        "testsCount"
+    ).textContent = tests;
+
+
+    document.getElementById(
+        "questionsCount"
+    ).textContent = questions;
+
+
+    document.getElementById(
+        "accuracyCount"
+    ).textContent =
+        accuracy + "%";
+
+
+    document.getElementById(
+        "streakCount"
+    ).textContent = streak;
+
+}
+
+
+
+/* =====================================================
+   CHANGE NAME
+===================================================== */
+
+function openNameBox() {
+
+
+    const currentName =
+        localStorage.getItem(
+            "ssc-edge-name"
+        ) || "";
+
+
+    document.getElementById(
+        "nameInput"
+    ).value = currentName;
+
+
+    document.getElementById(
+        "namePopup"
+    ).classList.add("show");
+
+
+    setTimeout(function () {
+
+        document.getElementById(
+            "nameInput"
+        ).focus();
+
+    }, 100);
+
+}
+
+
+function closeNameBox() {
+
+    document.getElementById(
+        "namePopup"
+    ).classList.remove("show");
+
+}
+
+
+function saveName() {
+
+
+    const input =
+        document.getElementById(
+            "nameInput"
+        );
+
+
+    const name =
+        input.value.trim();
+
+
+    if (name.length < 2) {
+
+        alert(
+            "Please enter a valid name."
+        );
+
+        return;
+
+    }
+
+
+    localStorage.setItem(
+        "ssc-edge-name",
+        name
+    );
+
+
+    closeNameBox();
+
+    loadProfile();
+
+}
+
+
+
+/* =====================================================
+   THEME
+===================================================== */
+
+function setTheme(theme) {
+
+
+    localStorage.setItem(
+        "ssc-edge-theme",
+        theme
+    );
+
+
+    document.body.classList.remove(
+        "light-theme"
+    );
+
+
+    if (theme === "light") {
+
+        document.body.classList.add(
+            "light-theme"
+        );
+
+    }
+
+
+    updateThemeButtons();
+
+}
+
+
+function updateThemeButtons() {
+
+
+    const theme =
+        localStorage.getItem(
+            "ssc-edge-theme"
+        ) || "dark";
+
+
+    const light =
+        document.getElementById(
+            "lightBtn"
+        );
+
+
+    const dark =
+        document.getElementById(
+            "darkBtn"
+        );
+
+
+    light.classList.remove(
+        "selected"
+    );
+
+
+    dark.classList.remove(
+        "selected"
+    );
+
+
+    if (theme === "light") {
+
+        light.classList.add(
+            "selected"
+        );
+
+    } else {
+
+        dark.classList.add(
+            "selected"
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   ABOUT
+===================================================== */
+
+function openAbout() {
+
+    document.getElementById(
+        "aboutPopup"
+    ).classList.add("show");
+
+}
+
+
+function closeAbout() {
+
+    document.getElementById(
+        "aboutPopup"
+    ).classList.remove("show");
+
+}
+
+
+
+/* =====================================================
+   RESET PROFILE
+===================================================== */
+
+function resetProfile() {
+
+
+    const confirmReset =
+        confirm(
+            "Are you sure you want to reset your SSC EDGE profile?"
+        );
+
+
+    if (!confirmReset) {
+
+        return;
+
+    }
+
+
+    localStorage.removeItem(
+        "ssc-edge-name"
+    );
+
+
+    localStorage.removeItem(
+        "ssc-edge-tests"
+    );
+
+
+    localStorage.removeItem(
+        "ssc-edge-questions"
+    );
+
+
+    localStorage.removeItem(
+        "ssc-edge-accuracy"
+    );
+
+
+    localStorage.removeItem(
+        "ssc-edge-streak"
+    );
+
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+
+/* =====================================================
+   LOAD SAVED THEME
+===================================================== */
+
+(function () {
+
+
+    const theme =
+        localStorage.getItem(
+            "ssc-edge-theme"
+        ) || "dark";
+
+
+    if (theme === "light") {
+
+        document.body.classList.add(
+            "light-theme"
+        );
+
+    }
+
+
+})();
+
+
+/* Load profile */
+
+loadProfile();
+
+
+</script>
 
 
 </body>
