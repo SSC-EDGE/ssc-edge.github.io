@@ -2,166 +2,343 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>SSC EDGE - Profile</title>
+
 <link rel="stylesheet" href="css/style.css">
+
 <script>
-document.documentElement.dataset.theme=localStorage.getItem("ssc-edge-theme")||"dark";
+document.documentElement.dataset.theme =
+localStorage.getItem("ssc-edge-theme") || "dark";
 </script>
 </head>
+
 <body>
 
-<header class="topbar">
-  <div class="brand">SSC <span>EDGE</span></div>
+<header class="simple-header">
+  <div class="header-brand">SSC EDGE</div>
 </header>
 
-<main class="page profile-page">
 
-<section class="profile-head">
-  <div class="avatar">👤</div>
-  <h1 id="profileName">Your Name</h1>
-  <p>SSC EDGE Candidate</p>
-</section>
+<main class="page-container profile-page">
 
-<section class="settings-box">
-  <h2>SETTINGS</h2>
 
-  <button class="setting-row" onclick="changeName()">
-    <span>✏️ <b>Change Name</b></span>
+  <!-- NAME FIRST -->
+
+  <section class="profile-user">
+
+    <div class="profile-avatar">
+      <svg viewBox="0 0 64 64">
+        <circle cx="32" cy="22" r="11"/>
+        <path d="M12 56c2-13 10-19 20-19s18 6 20 19"/>
+      </svg>
+    </div>
+
+    <h1 id="profileName">Your Name</h1>
+
+    <p>SSC EDGE Candidate</p>
+
+  </section>
+
+
+  <!-- SETTINGS -->
+
+  <section class="settings-box">
+
+    <h2>SETTINGS</h2>
+
+
+    <button class="setting-row" onclick="openName()">
+
+      <span>
+        <b>Change Name</b>
+        <small>Update your profile name</small>
+      </span>
+
+      <i>›</i>
+
+    </button>
+
+
+    <button class="setting-row" onclick="openTheme()">
+
+      <span>
+        <b>Theme</b>
+        <small id="themeText">Dark</small>
+      </span>
+
+      <i>›</i>
+
+    </button>
+
+
+    <button class="setting-row reset-row" onclick="resetProfile()">
+
+      <span>
+        <b>Reset Profile</b>
+        <small>Clear saved profile data</small>
+      </span>
+
+      <i>›</i>
+
+    </button>
+
+  </section>
+
+
+  <!-- ABOUT OUTSIDE SETTINGS -->
+
+  <button class="about-card" onclick="openAbout()">
+
+    <div class="about-icon">i</div>
+
+    <div>
+      <b>About SSC EDGE</b>
+      <small>Learn more about us</small>
+    </div>
+
     <i>›</i>
+
   </button>
 
-  <button class="setting-row" onclick="openTheme()">
-    <span>🎨 <b>Theme</b></span>
-    <i>›</i>
-  </button>
-
-  <button class="setting-row danger" onclick="resetProfile()">
-    <span>↻ <b>Reset Profile</b></span>
-    <i>›</i>
-  </button>
-</section>
-
-<button class="about-card" onclick="openAbout()">
-  <span>ℹ️</span>
-  <div>
-    <b>About SSC EDGE</b>
-    <small>Learn more about us</small>
-  </div>
-  <i>›</i>
-</button>
 
 </main>
 
-<!-- THEME POPUP -->
+
+<!-- THEME -->
+
 <div id="themePopup" class="popup-bg" onclick="closeTheme(event)">
+
   <div class="popup" onclick="event.stopPropagation()">
+
     <h3>Choose Theme</h3>
 
     <button class="theme-option" onclick="setTheme('dark')">
-      <span>🌙</span> Dark
+      <span>Dark</span>
       <b id="darkTick">○</b>
     </button>
 
     <button class="theme-option" onclick="setTheme('light')">
-      <span>☀️</span> Light
+      <span>Light</span>
       <b id="lightTick">○</b>
     </button>
 
-    <button class="done-btn" onclick="closeTheme()">Done</button>
+    <button class="popup-button" onclick="closeTheme()">
+      Done
+    </button>
+
   </div>
+
 </div>
 
-<!-- ABOUT POPUP -->
+
+<!-- ABOUT -->
+
 <div id="aboutPopup" class="popup-bg" onclick="closeAbout(event)">
+
   <div class="popup about-popup" onclick="event.stopPropagation()">
+
     <h3>About SSC EDGE</h3>
+
     <p>
       SSC EDGE is a dedicated preparation platform created to help SSC
       aspirants learn, practice and improve their performance. It brings
       study material, practice tests, notes and useful preparation resources
       together in one simple and student-friendly platform.
     </p>
-    <strong>Learn • Practice • Improve 🚀</strong>
-    <button class="done-btn" onclick="closeAbout()">Close</button>
+
+    <strong>Learn • Practice • Improve</strong>
+
+    <button class="popup-button" onclick="closeAbout()">
+      Close
+    </button>
+
   </div>
+
 </div>
 
-<!-- NAME POPUP -->
+
+<!-- CHANGE NAME -->
+
 <div id="namePopup" class="popup-bg" onclick="closeName(event)">
+
   <div class="popup" onclick="event.stopPropagation()">
+
     <h3>Change Name</h3>
-    <input id="newName" type="text" maxlength="40" placeholder="Enter your name">
-    <button class="done-btn" onclick="saveName()">Save Name</button>
+
+    <input
+      id="newName"
+      type="text"
+      maxlength="40"
+      placeholder="Enter your name"
+    >
+
+    <button class="popup-button" onclick="saveName()">
+      Save Name
+    </button>
+
   </div>
+
 </div>
+
 
 <nav class="bottom-nav">
-  <a href="home.html">⌂<span>Home</span></a>
-  <a href="study.html">📚<span>Study Material</span></a>
-  <a href="practice.html">📝<span>Practice</span></a>
-  <a class="active" href="profile.html">👤<span>Profile</span></a>
+
+  <a href="home.html">
+    <span class="nav-icon">⌂</span>
+    <small>Home</small>
+  </a>
+
+  <a href="study.html">
+    <span class="nav-icon">▣</span>
+    <small>Study Material</small>
+  </a>
+
+  <a href="practice.html">
+    <span class="nav-icon">✓</span>
+    <small>Practice</small>
+  </a>
+
+  <a href="profile.html" class="active">
+    <span class="nav-icon">○</span>
+    <small>Profile</small>
+  </a>
+
 </nav>
 
-<script>
-const name=localStorage.getItem("ssc-edge-name")||"Your Name";
-document.getElementById("profileName").textContent=name;
 
-function changeName(){
-  document.getElementById("newName").value=
-    localStorage.getItem("ssc-edge-name")||"";
+<script>
+
+const savedName =
+localStorage.getItem("ssc-edge-name") || "Your Name";
+
+document.getElementById("profileName").textContent=savedName;
+
+updateThemeText();
+updateTicks();
+
+
+/* CHANGE NAME */
+
+function openName(){
+
+  document.getElementById("newName").value =
+  localStorage.getItem("ssc-edge-name") || "";
+
   document.getElementById("namePopup").classList.add("show");
 }
+
 function saveName(){
-  const n=document.getElementById("newName").value.trim();
-  if(!n){alert("Please enter your name");return;}
-  localStorage.setItem("ssc-edge-name",n);
-  document.getElementById("profileName").textContent=n;
+
+  const name =
+  document.getElementById("newName").value.trim();
+
+  if(!name){
+    alert("Please enter your name");
+    return;
+  }
+
+  localStorage.setItem("ssc-edge-name",name);
+
+  document.getElementById("profileName").textContent=name;
+
   closeName();
+
 }
+
 function closeName(e){
-  if(!e||e.target.id==="namePopup")
+
+  if(!e || e.target.id==="namePopup"){
     document.getElementById("namePopup").classList.remove("show");
+  }
+
 }
+
+
+/* THEME */
 
 function openTheme(){
+
   updateTicks();
+
   document.getElementById("themePopup").classList.add("show");
+
 }
+
 function closeTheme(e){
-  if(!e||e.target.id==="themePopup")
+
+  if(!e || e.target.id==="themePopup"){
     document.getElementById("themePopup").classList.remove("show");
+  }
+
 }
+
 function setTheme(theme){
+
   localStorage.setItem("ssc-edge-theme",theme);
+
   document.documentElement.dataset.theme=theme;
+
   updateTicks();
+  updateThemeText();
+
 }
+
 function updateTicks(){
-  const t=localStorage.getItem("ssc-edge-theme")||"dark";
-  document.getElementById("darkTick").textContent=t==="dark"?"●":"○";
-  document.getElementById("lightTick").textContent=t==="light"?"●":"○";
+
+  const theme =
+  localStorage.getItem("ssc-edge-theme") || "dark";
+
+  document.getElementById("darkTick").textContent =
+  theme==="dark" ? "●" : "○";
+
+  document.getElementById("lightTick").textContent =
+  theme==="light" ? "●" : "○";
+
 }
+
+function updateThemeText(){
+
+  const theme =
+  localStorage.getItem("ssc-edge-theme") || "dark";
+
+  document.getElementById("themeText").textContent =
+  theme==="dark" ? "Dark" : "Light";
+
+}
+
+
+/* ABOUT */
 
 function openAbout(){
+
   document.getElementById("aboutPopup").classList.add("show");
-}
-function closeAbout(e){
-  if(!e||e.target.id==="aboutPopup")
-    document.getElementById("aboutPopup").classList.remove("show");
+
 }
 
-function resetProfile(){
-  if(confirm("Reset your SSC EDGE profile and saved progress?")){
-    localStorage.removeItem("ssc-edge-name");
-    localStorage.removeItem("ssc-edge-theme");
-    localStorage.removeItem("ssc-edge-tests");
-    localStorage.removeItem("ssc-edge-questions");
-    localStorage.removeItem("ssc-edge-accuracy");
-    localStorage.removeItem("ssc-edge-streak");
-    location.href="index.html";
+function closeAbout(e){
+
+  if(!e || e.target.id==="aboutPopup"){
+    document.getElementById("aboutPopup").classList.remove("show");
   }
+
 }
+
+
+/* RESET */
+
+function resetProfile(){
+
+  if(confirm("Reset your SSC EDGE profile?")){
+
+    localStorage.clear();
+
+    window.location.href="index.html";
+
+  }
+
+}
+
 </script>
 
 </body>
