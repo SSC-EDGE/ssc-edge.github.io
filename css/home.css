@@ -1,16 +1,15 @@
 /* =====================================================
    SSC EDGE — HOME PAGE
-   Page-specific styling
    ===================================================== */
 
 
-/* =========================
-   HOME HEADER
-   ========================= */
+/* =====================================================
+   HOME HEADER — DESKTOP / WEB
+   ===================================================== */
 
 .home-header{
-  min-height:290px;
-  padding:48px 40px 42px;
+  min-height:360px;
+  padding:68px 52px 55px;
 
   background:linear-gradient(
     115deg,
@@ -23,37 +22,43 @@
 }
 
 .home-header .header-brand{
-  font-size:34px !important;
+  font-size:54px !important;
   line-height:1 !important;
   font-weight:900 !important;
-  letter-spacing:-1px !important;
+  letter-spacing:-2px !important;
 }
 
 .home-header .header-tagline{
-  margin-top:28px;
+  margin-top:42px;
   color:#b7afc4;
-  font-size:25px;
+  font-size:31px;
   line-height:1.2;
 }
 
 
-/* =========================
-   WELCOME SECTION
-   ========================= */
+/* =====================================================
+   HOME CONTENT
+   ===================================================== */
 
 .home-container{
+  width:100%;
   max-width:1450px;
   margin:auto;
-  padding:52px 36px 35px;
+  padding:64px 36px 35px;
 }
+
+
+/* =====================================================
+   WELCOME CARD
+   ===================================================== */
 
 .home-welcome{
   width:100%;
-  min-height:430px;
+  min-height:555px;
 
-  padding:62px 70px;
+  padding:86px 88px;
 
-  border-radius:42px;
+  border-radius:58px;
 
   background:linear-gradient(
     110deg,
@@ -63,72 +68,99 @@
   );
 
   border:1px solid #5c2a94;
+
   box-shadow:0 18px 55px #0007;
 }
 
 .welcome-pill{
   display:inline-block;
 
-  padding:15px 32px;
+  padding:18px 40px;
 
   border-radius:50px;
 
   background:#7650a366;
+
   color:#e8dff3;
 
-  font-size:19px;
+  font-size:22px;
   font-weight:800;
+
   letter-spacing:3px;
 }
 
 .home-welcome h1{
-  margin-top:50px;
+  margin-top:68px;
 
-  font-size:52px;
+  font-size:62px;
   line-height:1.12;
+
   font-weight:800;
-  letter-spacing:-1.2px;
+
+  letter-spacing:-1.5px;
+
+  white-space:nowrap;
 }
 
 .home-welcome p{
-  margin-top:24px;
+  margin-top:30px;
 
   color:#b9b0c7;
 
-  font-size:25px;
+  font-size:32px;
   line-height:1.45;
 }
 
 
-/* =========================
-   DASHBOARD
-   ========================= */
+/* =====================================================
+   SECTION HEADINGS
+   ===================================================== */
 
 .section-heading{
   margin:42px 0 16px;
-  font-size:24px;
+
+  font-size:21px;
+
   font-weight:800;
 }
 
+
+/* =====================================================
+   DASHBOARD
+   ===================================================== */
+
 .dashboard-grid{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+
+  grid-template-columns:
+    repeat(4,1fr);
+
   gap:14px;
 }
 
 .dashboard-card{
+  display:block;
+
   padding:20px;
 
   border-radius:18px;
+
   border:1px solid var(--border);
+
   background:var(--card);
 
-  transition:.2s;
+  transition:
+    transform .2s,
+    border-color .2s;
 }
 
 .dashboard-card:hover{
-  transform:translateY(-2px);
+  transform:translateY(-3px);
   border-color:var(--purple);
+}
+
+.dashboard-card:active{
+  transform:scale(.98);
 }
 
 .dash-icon{
@@ -143,6 +175,7 @@
   border-radius:12px;
 
   background:var(--card2);
+
   color:var(--purple2);
 
   font-size:21px;
@@ -151,6 +184,7 @@
 
 .dashboard-card strong{
   display:block;
+
   font-size:14px;
 }
 
@@ -160,16 +194,18 @@
   margin-top:5px;
 
   color:var(--muted);
+
   font-size:11px;
 }
 
 
-/* =========================
+/* =====================================================
    COMMUNITY
-   ========================= */
+   ===================================================== */
 
 .community-scroll{
   display:flex;
+
   gap:14px;
 
   overflow-x:auto;
@@ -187,7 +223,9 @@
   min-width:270px;
 
   display:flex;
+
   align-items:center;
+
   gap:14px;
 
   padding:18px;
@@ -195,14 +233,21 @@
   border-radius:20px;
 
   background:var(--card);
+
   border:1px solid var(--border);
 
-  transition:.2s;
+  transition:
+    transform .2s,
+    border-color .2s;
 }
 
 .community-card:hover{
   border-color:var(--purple);
   transform:translateY(-2px);
+}
+
+.community-card:active{
+  transform:scale(.98);
 }
 
 .community-logo{
@@ -217,6 +262,7 @@
   border-radius:15px;
 
   background:var(--card2);
+
   color:var(--purple2);
 }
 
@@ -253,6 +299,7 @@
 
 .community-card strong{
   display:block;
+
   font-size:15px;
 }
 
@@ -262,30 +309,49 @@
   margin-top:5px;
 
   color:var(--muted);
+
   font-size:12px;
 }
 
 
-/* =========================
+/* =====================================================
    CONTINUE LEARNING
-   ========================= */
+   ===================================================== */
 
 .continue-grid{
   display:grid;
+
   gap:12px;
 }
 
 .continue-card{
   display:flex;
+
   align-items:center;
+
   gap:14px;
 
   padding:17px;
 
   border:1px solid var(--border);
+
   border-radius:18px;
 
   background:var(--card);
+
+  transition:
+    transform .2s,
+    border-color .2s;
+}
+
+.continue-card:hover{
+  border-color:var(--purple);
+
+  transform:translateY(-2px);
+}
+
+.continue-card:active{
+  transform:scale(.99);
 }
 
 .continue-icon{
@@ -298,6 +364,7 @@
   border-radius:13px;
 
   background:var(--card2);
+
   color:var(--purple2);
 
   font-size:21px;
@@ -309,6 +376,7 @@
 
 .continue-card strong{
   display:block;
+
   font-size:14px;
 }
 
@@ -318,18 +386,20 @@
   margin-top:5px;
 
   color:var(--muted);
+
   font-size:11px;
 }
 
 .continue-card>b{
   color:var(--muted);
+
   font-size:24px;
 }
 
 
-/* =========================
+/* =====================================================
    HOME FOOTER
-   ========================= */
+   ===================================================== */
 
 .home-footer{
   padding:36px 20px 100px;
@@ -339,7 +409,9 @@
 
 .home-footer h2{
   font-size:25px;
+
   font-weight:900;
+
   letter-spacing:1px;
 }
 
@@ -347,35 +419,83 @@
   margin-top:8px;
 
   color:var(--muted);
+
   font-size:12px;
 }
 
 
-/* =========================
+/* =====================================================
+   TABLET
+   ===================================================== */
+
+@media(max-width:900px){
+
+  .home-header{
+    min-height:310px;
+    padding:58px 42px 48px;
+  }
+
+  .home-header .header-brand{
+    font-size:46px !important;
+  }
+
+  .home-header .header-tagline{
+    margin-top:34px;
+    font-size:27px;
+  }
+
+  .home-container{
+    padding:50px 28px 35px;
+  }
+
+  .home-welcome{
+    min-height:470px;
+    padding:70px 65px;
+    border-radius:48px;
+  }
+
+  .home-welcome h1{
+    font-size:50px;
+    white-space:normal;
+  }
+
+  .home-welcome p{
+    font-size:27px;
+  }
+
+  .dashboard-grid{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+
+/* =====================================================
    MOBILE
-   ========================= */
+   ===================================================== */
 
 @media(max-width:600px){
 
   .home-header{
     min-height:220px;
+
     padding:38px 28px 35px;
   }
 
   .home-header .header-brand{
     font-size:31px !important;
+    line-height:1 !important;
+    letter-spacing:-1px !important;
   }
 
   .home-header .header-tagline{
     margin-top:23px;
+
     font-size:20px;
   }
-
 
   .home-container{
     padding:34px 18px 30px;
   }
-
 
   .home-welcome{
     min-height:0;
@@ -387,29 +507,39 @@
 
   .welcome-pill{
     padding:14px 24px;
+
     font-size:14px;
+
     letter-spacing:2px;
   }
 
   .home-welcome h1{
     margin-top:34px;
+
     font-size:34px;
+
+    line-height:1.18;
+
+    letter-spacing:-.8px;
+
+    white-space:normal;
   }
 
   .home-welcome p{
     margin-top:20px;
+
     font-size:18px;
   }
 
-
   .section-heading{
     margin-top:38px;
+
     font-size:23px;
   }
 
-
   .dashboard-grid{
     grid-template-columns:1fr 1fr;
+
     gap:12px;
   }
 
@@ -417,9 +547,9 @@
     padding:18px;
   }
 
-
   .community-card{
     min-width:255px;
+
     padding:17px;
   }
 
@@ -432,7 +562,6 @@
     width:30px;
     height:30px;
   }
-
 
   .home-footer{
     padding:30px 20px 95px;
@@ -448,14 +577,15 @@
 }
 
 
-/* =========================
+/* =====================================================
    SMALL PHONES
-   ========================= */
+   ===================================================== */
 
 @media(max-width:380px){
 
   .home-header{
     min-height:205px;
+
     padding:35px 23px 32px;
   }
 
@@ -467,11 +597,9 @@
     font-size:18px;
   }
 
-
   .home-container{
     padding:30px 15px 28px;
   }
-
 
   .home-welcome{
     padding:37px 25px 42px;
@@ -479,6 +607,7 @@
 
   .welcome-pill{
     padding:13px 20px;
+
     font-size:12px;
   }
 
@@ -490,16 +619,13 @@
     font-size:16px;
   }
 
-
   .section-heading{
     font-size:21px;
   }
 
-
   .community-card{
     min-width:245px;
   }
-
 
   .home-footer h2{
     font-size:20px;
@@ -507,9 +633,9 @@
 }
 
 
-/* =========================
+/* =====================================================
    VERY SMALL PHONES
-   ========================= */
+   ===================================================== */
 
 @media(max-width:330px){
 
@@ -528,4 +654,4 @@
   .home-welcome p{
     font-size:15px;
   }
-  }
+}
