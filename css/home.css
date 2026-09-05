@@ -922,6 +922,7 @@ body.light-theme .home-footer p{
   color:#746b7d !important;
 }
 
+   
    /* =========================================
    HOME — LIGHT THEME
    ========================================= */
@@ -1072,4 +1073,26 @@ body.light-theme .home-footer p{
 
 :root[data-theme="light"] .home-footer p{
   color:#746b7d !important;
+}
+   /* =========================================
+   LIGHT THEME — WELCOME BANNER
+   ========================================= */
+
+:root[data-theme="light"] .home-welcome{
+  background:#ffffff !important;
+  border-color:#e4dcef !important;
+  box-shadow:0 15px 40px rgba(50,30,70,.08) !important;
+}
+
+:root[data-theme="light"] .welcome-pill{
+  background:#eee5ff !important;
+  color:#6d35d4 !important;
+}
+
+:root[data-theme="light"] .home-welcome h1{
+  color:#241333 !important;
+}
+
+:root[data-theme="light"] .home-welcome p{
+  color:#6b6175 !important;
 }
