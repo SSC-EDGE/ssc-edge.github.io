@@ -2,72 +2,184 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>SSC EDGE - Practice</title>
+
 <link rel="stylesheet" href="css/style.css">
+
 <script>
-document.documentElement.dataset.theme=localStorage.getItem("ssc-edge-theme")||"dark";
+document.documentElement.dataset.theme =
+localStorage.getItem("ssc-edge-theme") || "dark";
 </script>
 </head>
+
 <body>
 
-<header class="topbar">
-  <div class="brand">SSC <span>EDGE</span></div>
+<header class="simple-header">
+  <div class="header-brand">SSC EDGE</div>
 </header>
 
-<main class="page practice-page">
 
-<h1 class="page-title">Practice</h1>
+<main class="page-container">
 
-<section class="practice-section">
-  <h2>FULL MOCKS</h2>
+  <h1 class="page-title">Practice</h1>
 
-  <div class="mock-grid">
-    <a href="#" class="mock-card">
-      <strong>CGL PRE</strong>
-      <span>Full Mock Test</span>
-    </a>
+  <p class="page-subtitle">
+    Test your preparation and improve your score
+  </p>
 
-    <a href="#" class="mock-card">
-      <strong>CGL MAINS</strong>
-      <span>Full Mock Test</span>
-    </a>
-  </div>
-</section>
 
-<section class="practice-section">
-  <h2>SECTIONAL MOCKS</h2>
+  <!-- FULL MOCKS -->
 
-  <div class="sectional-grid">
-    <a href="#" class="practice-card">
-      <b>➗</b>
-      <strong>Quant</strong>
-    </a>
+  <section class="practice-section">
 
-    <a href="#" class="practice-card">
-      <b>🌍</b>
-      <strong>GK</strong>
-    </a>
+    <h2>FULL MOCKS</h2>
 
-    <a href="#" class="practice-card">
-      <b>🔤</b>
-      <strong>English</strong>
-    </a>
+    <div class="mock-grid">
 
-    <a href="#" class="practice-card">
-      <b>🧩</b>
-      <strong>Reasoning</strong>
-    </a>
-  </div>
-</section>
+      <a href="#" class="mock-card">
+
+        <div class="mock-icon">
+          <svg viewBox="0 0 64 64">
+            <rect x="12" y="8" width="40" height="48" rx="5"/>
+            <path d="M21 20h22M21 30h22M21 40h13"/>
+            <circle cx="42" cy="42" r="4"/>
+          </svg>
+        </div>
+
+        <strong>CGL PRE</strong>
+        <span>Full Mock Test</span>
+
+      </a>
+
+
+      <a href="#" class="mock-card">
+
+        <div class="mock-icon">
+          <svg viewBox="0 0 64 64">
+            <rect x="12" y="8" width="40" height="48" rx="5"/>
+            <path d="M21 20h22M21 30h22M21 40h13"/>
+            <circle cx="42" cy="42" r="4"/>
+          </svg>
+        </div>
+
+        <strong>CGL MAINS</strong>
+        <span>Full Mock Test</span>
+
+      </a>
+
+    </div>
+
+  </section>
+
+
+  <!-- SECTIONAL MOCKS -->
+
+  <section class="practice-section">
+
+    <h2>SECTIONAL MOCKS</h2>
+
+    <div class="sectional-grid">
+
+
+      <!-- QUANT -->
+
+      <a href="#" class="practice-card">
+
+        <div class="practice-icon">
+          <svg viewBox="0 0 64 64">
+            <rect x="15" y="7" width="34" height="50" rx="5"/>
+            <rect x="21" y="14" width="22" height="10" rx="2"/>
+            <circle cx="23" cy="32" r="2"/>
+            <circle cx="32" cy="32" r="2"/>
+            <circle cx="41" cy="32" r="2"/>
+            <circle cx="23" cy="42" r="2"/>
+            <circle cx="32" cy="42" r="2"/>
+            <circle cx="41" cy="42" r="2"/>
+          </svg>
+        </div>
+
+        <strong>Quant</strong>
+
+      </a>
+
+
+      <!-- GK -->
+
+      <a href="#" class="practice-card">
+
+        <div class="practice-icon">
+          <svg viewBox="0 0 64 64">
+            <circle cx="32" cy="32" r="24"/>
+            <path d="M8 32h48M32 8c8 8 8 40 0 48M32 8c-8 8-8 40 0 48"/>
+          </svg>
+        </div>
+
+        <strong>GK</strong>
+
+      </a>
+
+
+      <!-- ENGLISH -->
+
+      <a href="#" class="practice-card">
+
+        <div class="practice-icon">
+          <svg viewBox="0 0 64 64">
+            <path d="M10 12h28a8 8 0 0 1 8 8v30H18a8 8 0 0 0-8 8V12z"/>
+            <path d="M20 25h16M20 33h13M20 41h10"/>
+          </svg>
+        </div>
+
+        <strong>English</strong>
+
+      </a>
+
+
+      <!-- REASONING -->
+
+      <a href="#" class="practice-card">
+
+        <div class="practice-icon">
+          <svg viewBox="0 0 64 64">
+            <path d="M24 10h16v10h10v16H40v18H24V36H14V20h10z"/>
+          </svg>
+        </div>
+
+        <strong>Reasoning</strong>
+
+      </a>
+
+
+    </div>
+
+  </section>
 
 </main>
 
+
 <nav class="bottom-nav">
-  <a href="home.html">⌂<span>Home</span></a>
-  <a href="study.html">📚<span>Study Material</span></a>
-  <a class="active" href="practice.html">📝<span>Practice</span></a>
-  <a href="profile.html">👤<span>Profile</span></a>
+
+  <a href="home.html">
+    <span class="nav-icon">⌂</span>
+    <small>Home</small>
+  </a>
+
+  <a href="study.html">
+    <span class="nav-icon">▣</span>
+    <small>Study Material</small>
+  </a>
+
+  <a href="practice.html" class="active">
+    <span class="nav-icon">✓</span>
+    <small>Practice</small>
+  </a>
+
+  <a href="profile.html">
+    <span class="nav-icon">○</span>
+    <small>Profile</small>
+  </a>
+
 </nav>
 
 </body>
