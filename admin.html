@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>SSC EDGE Admin</title>
+
+  <script>
+    document.documentElement.dataset.theme =
+      localStorage.getItem("ssc-edge-theme") || "dark";
+  </script>
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    .admin-page{
+      min-height:100vh;
+      padding:24px 18px 100px;
+    }
+
+    .admin-header{
+      margin-bottom:28px;
+    }
+
+    .admin-header h1{
+      margin:0;
+      font-size:28px;
+    }
+
+    .admin-header p{
+      margin:6px 0 0;
+      color:var(--muted);
+    }
+
+    .admin-card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:20px;
+      margin-bottom:16px;
+    }
+
+    .admin-card h2{
+      margin:0 0 8px;
+      font-size:20px;
+    }
+
+    .admin-card p{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .admin-btn{
+      width:100%;
+      margin-top:16px;
+      padding:13px;
+      border:0;
+      border-radius:12px;
+      background:var(--purple);
+      color:white;
+      font-size:15px;
+      font-weight:600;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="admin-page">
+
+    <div class="admin-header">
+      <h1>SSC EDGE Admin</h1>
+      <p>Manage your SSC EDGE platform</p>
+    </div>
+
+    <div class="admin-card">
+      <h2>📚 Study Material</h2>
+      <p>Add and manage videos, e-books and PDFs.</p>
+      <button class="admin-btn">Manage Study Material</button>
+    </div>
+
+    <div class="admin-card">
+      <h2>📝 Mock Tests</h2>
+      <p>Create and manage SSC & RRB mock tests.</p>
+      <button class="admin-btn">Manage Mock Tests</button>
+    </div>
+
+    <div class="admin-card">
+      <h2>❓ Questions</h2>
+      <p>Add questions, options and explanations.</p>
+      <button class="admin-btn">Manage Questions</button>
+    </div>
+
+    <div class="admin-card">
+      <h2>📖 Chapters</h2>
+      <p>Manage chapter-wise practice content.</p>
+      <button class="admin-btn">Manage Chapters</button>
+    </div>
+
+  </main>
+
+</body>
+</html>
