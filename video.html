@@ -6,173 +6,115 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>SSC EDGE - Videos</title>
+<title>Videos - SSC EDGE</title>
 
 <script>
 document.documentElement.dataset.theme =
 localStorage.getItem("ssc-edge-theme") || "dark";
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <link rel="stylesheet" href="css/style.css">
 
 <style>
 
-body{
-  margin:0;
-  padding-bottom:90px;
-}
-
-.video-page{
-  padding:25px 18px;
-  max-width:800px;
-  margin:auto;
+.container{
+padding:20px;
+padding-bottom:90px;
 }
 
 .page-title{
-  font-size:28px;
-  font-weight:800;
-  margin-bottom:5px;
+font-size:26px;
+font-weight:bold;
+margin-bottom:6px;
 }
 
 .page-subtitle{
-  color:var(--muted);
-  margin-bottom:25px;
+color:var(--muted);
+margin-bottom:20px;
 }
 
 .video-list{
-  display:flex;
-  flex-direction:column;
-  gap:18px;
+display:flex;
+flex-direction:column;
+gap:16px;
 }
 
 .video-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:15px;
-  overflow:hidden;
+background:var(--card);
+border:1px solid var(--border);
+border-radius:14px;
+padding:16px;
 }
 
-.player{
-  width:100%;
-  aspect-ratio:16/9;
-  background:#000;
-  border-radius:12px;
-  overflow:hidden;
-  margin-bottom:15px;
+.video-title{
+font-size:18px;
+font-weight:bold;
+margin-bottom:7px;
 }
 
-.player video{
-  width:100%;
-  height:100%;
-  display:block;
-  background:#000;
+.video-description{
+color:var(--muted);
+font-size:14px;
+margin-bottom:14px;
 }
 
-.player iframe{
-  width:100%;
-  height:100%;
-  border:0;
+.video-player{
+width:100%;
+border-radius:12px;
+background:#000;
+display:block;
 }
 
-.video-card h3{
-  margin:5px 0 8px;
-  font-size:19px;
+.video-link{
+display:inline-block;
+background:var(--purple);
+color:white;
+padding:11px 15px;
+border-radius:10px;
+text-decoration:none;
+font-weight:bold;
 }
 
-.subject{
-  display:inline-block;
-  background:var(--card2);
-  color:var(--purple2);
-  padding:5px 10px;
-  border-radius:20px;
-  font-size:12px;
-  font-weight:bold;
-}
-
-.description{
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.5;
-  margin-top:8px;
-}
-
-.empty,
-.loading{
-  text-align:center;
-  padding:50px 20px;
-  color:var(--muted);
+.empty{
+text-align:center;
+color:var(--muted);
+padding:30px 10px;
 }
 
 </style>
 
 </head>
 
-
 <body>
 
+<div class="container">
 
-<div class="video-page">
+<div class="page-title">
+Videos
+</div>
 
-  <div class="page-title">
-    Video Classes
-  </div>
+<div class="page-subtitle">
+SSC EDGE Video Classes
+</div>
 
-  <div class="page-subtitle">
-    Learn with SSC EDGE video classes
-  </div>
+<div id="videoList" class="video-list">
 
+<div class="empty">
+Loading videos...
+</div>
 
-  <div id="videoList" class="video-list">
-
-    <div class="loading">
-      Loading videos...
-    </div>
-
-  </div>
+</div>
 
 </div>
 
 
-
-<!-- =========================
-     BOTTOM NAV
-========================= -->
-
-<nav class="bottom-nav">
-
-  <a href="home.html">
-    <span>⌂</span>
-    <small>Home</small>
-  </a>
-
-  <a href="study.html" class="active">
-    <span>📚</span>
-    <small>Study</small>
-  </a>
-
-  <a href="practice.html">
-    <span>📝</span>
-    <small>Practice</small>
-  </a>
-
-  <a href="profile.html">
-    <span>👤</span>
-    <small>Profile</small>
-  </a>
-
-</nav>
-
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
-
-// =========================
-// SUPABASE
-// =========================
+/* =========================
+   SUPABASE
+========================= */
 
 const SUPABASE_URL =
 "https://dvvyoygahzzbnpqrfhen.supabase.co";
@@ -182,356 +124,248 @@ const SUPABASE_KEY =
 
 const supabaseClient =
 supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
+SUPABASE_URL,
+SUPABASE_KEY
 );
 
 
+/* =========================
+   ESCAPE HTML
+========================= */
 
-// =========================
-// LOAD VIDEOS
-// =========================
+function escapeHtml(value){
+
+return String(value || "")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================
+   CHECK EXTERNAL VIDEO
+========================= */
+
+function isExternalVideo(url){
+
+if(!url){
+return false;
+}
+
+const lower =
+url.toLowerCase();
+
+return (
+lower.includes("youtube.com") ||
+lower.includes("youtu.be") ||
+lower.includes("vimeo.com") ||
+lower.startsWith("http://") ||
+lower.startsWith("https://")
+);
+
+}
+
+
+/* =========================
+   LOAD VIDEOS
+========================= */
 
 async function loadVideos(){
 
-  const container =
-    document.getElementById("videoList");
+const videoList =
+document.getElementById("videoList");
 
 
-  const { data, error } =
-    await supabaseClient
+const {
+data: videos,
+error
+} = await supabaseClient
 
-      .from("study_material")
+.from("study_material")
 
-      .select(`
-        id,
-        title,
-        description,
-        file_url,
-        created_at,
-        subjects (
-          name
-        )
-      `)
+.select(`
+*,
+subjects (
+name
+)
+`)
 
-      .eq("material_type","VIDEO")
+.eq("material_type","VIDEO")
 
-      .eq("is_active",true)
+.eq("is_active",true)
 
-      .order("created_at", {
-        ascending:false
-      });
-
-
-  if(error){
-
-    console.error(error);
-
-    container.innerHTML = `
-      <div class="empty">
-        Unable to load videos.<br>
-        Please try again later.
-      </div>
-    `;
-
-    return;
-  }
+.order(
+"created_at",
+{ascending:false}
+);
 
 
-  if(!data || data.length === 0){
+/* =========================
+   ERROR
+========================= */
 
-    container.innerHTML = `
-      <div class="empty">
+if(error){
 
-        <div style="font-size:40px;">
-          🎬
-        </div>
+console.error(error);
 
-        <h3>No videos available</h3>
+videoList.innerHTML =
+`
+<div class="empty">
+Unable to load videos.
+</div>
+`;
 
-        <p>
-          New video classes will appear here soon.
-        </p>
-
-      </div>
-    `;
-
-    return;
-  }
-
-
-  container.innerHTML = "";
-
-
-  data.forEach(video => {
-
-    const card =
-      document.createElement("div");
-
-    card.className =
-      "video-card";
-
-
-    const subject =
-      video.subjects?.name || "General";
-
-
-    const player =
-      createPlayer(video.file_url);
-
-
-    card.innerHTML = `
-
-      <div class="player"></div>
-
-      <span class="subject">
-        ${escapeHTML(subject)}
-      </span>
-
-      <h3>
-        ${escapeHTML(video.title)}
-      </h3>
-
-      ${
-        video.description
-        ?
-        `<div class="description">
-          ${escapeHTML(video.description)}
-        </div>`
-        :
-        ""
-      }
-
-    `;
-
-
-    card
-      .querySelector(".player")
-      .appendChild(player);
-
-
-    container.appendChild(card);
-
-  });
+return;
 
 }
 
 
+/* =========================
+   EMPTY
+========================= */
 
-// =========================
-// CREATE VIDEO PLAYER
-// =========================
+if(!videos || videos.length === 0){
 
-function createPlayer(url){
+videoList.innerHTML =
+`
+<div class="empty">
+No videos available yet.
+</div>
+`;
 
-  const youtubeId =
-    getYouTubeId(url);
-
-
-  // =========================
-  // YOUTUBE
-  // =========================
-
-  if(youtubeId){
-
-    const iframe =
-      document.createElement("iframe");
-
-
-    iframe.src =
-      "https://www.youtube.com/embed/" +
-      youtubeId;
-
-
-    iframe.title =
-      "SSC EDGE Video";
-
-
-    iframe.allow =
-      "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-
-
-    iframe.allowFullscreen =
-      true;
-
-
-    return iframe;
-
-  }
-
-
-  // =========================
-  // DIRECT VIDEO
-  // =========================
-
-  const video =
-    document.createElement("video");
-
-
-  video.controls =
-    true;
-
-
-  video.playsInline =
-    true;
-
-
-  video.preload =
-    "metadata";
-
-
-  video.src =
-    safeURL(url);
-
-
-  return video;
+return;
 
 }
 
 
+/* =========================
+   RENDER
+========================= */
 
-// =========================
-// YOUTUBE URL DETECTION
-// =========================
+videoList.innerHTML =
+videos.map(video => {
 
-function getYouTubeId(url){
+const title =
+escapeHtml(
+video.title || "Untitled Video"
+);
 
-  try{
+const description =
+escapeHtml(
+video.description || ""
+);
 
-    const parsed =
-      new URL(url);
+const subject =
+escapeHtml(
+video.subjects?.name || "General"
+);
 
-
-    // youtube.com/watch?v=
-
-    if(
-      parsed.hostname.includes("youtube.com")
-      &&
-      parsed.searchParams.get("v")
-    ){
-
-      return parsed.searchParams.get("v");
-
-    }
-
-
-    // youtube.com/shorts/ID
-
-    if(
-      parsed.hostname.includes("youtube.com")
-      &&
-      parsed.pathname.startsWith("/shorts/")
-    ){
-
-      return parsed.pathname
-        .split("/shorts/")[1]
-        .split("/")[0];
-
-    }
+const url =
+escapeHtml(
+video.file_url || ""
+);
 
 
-    // youtube.com/embed/ID
+/* =========================
+   EXTERNAL LINK
+========================= */
 
-    if(
-      parsed.hostname.includes("youtube.com")
-      &&
-      parsed.pathname.startsWith("/embed/")
-    ){
+if(isExternalVideo(video.file_url)){
 
-      return parsed.pathname
-        .split("/embed/")[1]
-        .split("/")[0];
+return `
 
-    }
+<div class="video-card">
 
+<div class="video-title">
+${title}
+</div>
 
-    // youtu.be/ID
+<div class="video-description">
+Subject: ${subject}
+</div>
 
-    if(
-      parsed.hostname === "youtu.be"
-    ){
+${description ? `
 
-      return parsed.pathname
-        .replace("/","")
-        .split("/")[0];
+<div class="video-description">
+${description}
+</div>
 
-    }
+` : ""}
 
-  }
-  catch(e){
+<a
+class="video-link"
+href="${url}"
+target="_blank"
+rel="noopener noreferrer">
 
-    return null;
+▶️ Open Video
 
-  }
+</a>
 
+</div>
 
-  return null;
+`;
 
 }
 
 
+/* =========================
+   UPLOADED VIDEO
+========================= */
 
-// =========================
-// SAFE URL
-// =========================
+return `
 
-function safeURL(url){
+<div class="video-card">
 
-  try{
+<div class="video-title">
+${title}
+</div>
 
-    const parsed =
-      new URL(url);
+<div class="video-description">
+Subject: ${subject}
+</div>
 
+${description ? `
 
-    if(
-      parsed.protocol === "https:" ||
-      parsed.protocol === "http:"
-    ){
+<div class="video-description">
+${description}
+</div>
 
-      return parsed.href;
+` : ""}
 
-    }
+<video
+class="video-player"
+controls
+preload="none"
+playsinline>
 
-  }
-  catch(e){}
+<source
+src="${url}"
+type="video/mp4">
 
+Your browser does not support video playback.
 
-  return "";
+</video>
 
-}
+</div>
 
+`;
 
-
-// =========================
-// ESCAPE HTML
-// =========================
-
-function escapeHTML(text){
-
-  return String(text ?? "")
-
-    .replace(/&/g,"&amp;")
-
-    .replace(/</g,"&lt;")
-
-    .replace(/>/g,"&gt;")
-
-    .replace(/"/g,"&quot;")
-
-    .replace(/'/g,"&#039;");
+}).join("");
 
 }
 
 
-
-// =========================
-// START
-// =========================
+/* =========================
+   INITIAL LOAD
+========================= */
 
 loadVideos();
 
 </script>
-
 
 </body>
 
