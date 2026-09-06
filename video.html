@@ -44,18 +44,41 @@ body{
 .video-list{
   display:flex;
   flex-direction:column;
-  gap:15px;
+  gap:18px;
 }
 
 .video-card{
   background:var(--card);
   border:1px solid var(--border);
   border-radius:18px;
-  padding:18px;
+  padding:15px;
+  overflow:hidden;
+}
+
+.player{
+  width:100%;
+  aspect-ratio:16/9;
+  background:#000;
+  border-radius:12px;
+  overflow:hidden;
+  margin-bottom:15px;
+}
+
+.player video{
+  width:100%;
+  height:100%;
+  display:block;
+  background:#000;
+}
+
+.player iframe{
+  width:100%;
+  height:100%;
+  border:0;
 }
 
 .video-card h3{
-  margin:0 0 8px;
+  margin:5px 0 8px;
   font-size:19px;
 }
 
@@ -67,37 +90,19 @@ body{
   border-radius:20px;
   font-size:12px;
   font-weight:bold;
-  margin-bottom:10px;
 }
 
 .description{
   color:var(--muted);
   font-size:14px;
   line-height:1.5;
-  margin-bottom:15px;
+  margin-top:8px;
 }
 
-.watch-btn{
-  display:block;
-  width:100%;
-  text-align:center;
-  text-decoration:none;
-  background:var(--purple);
-  color:#fff;
-  padding:12px;
-  border-radius:10px;
-  font-weight:bold;
-}
-
-.empty{
-  text-align:center;
-  padding:50px 20px;
-  color:var(--muted);
-}
-
+.empty,
 .loading{
   text-align:center;
-  padding:40px;
+  padding:50px 20px;
   color:var(--muted);
 }
 
@@ -108,10 +113,6 @@ body{
 
 <body>
 
-
-<!-- =========================
-     PAGE
-========================= -->
 
 <div class="video-page">
 
@@ -137,7 +138,7 @@ body{
 
 
 <!-- =========================
-     BOTTOM NAVIGATION
+     BOTTOM NAV
 ========================= -->
 
 <nav class="bottom-nav">
@@ -222,10 +223,6 @@ async function loadVideos(){
       });
 
 
-  // =========================
-  // ERROR
-  // =========================
-
   if(error){
 
     console.error(error);
@@ -241,17 +238,21 @@ async function loadVideos(){
   }
 
 
-  // =========================
-  // NO VIDEOS
-  // =========================
-
   if(!data || data.length === 0){
 
     container.innerHTML = `
       <div class="empty">
-        <div style="font-size:40px;">🎬</div>
+
+        <div style="font-size:40px;">
+          🎬
+        </div>
+
         <h3>No videos available</h3>
-        <p>New video classes will appear here soon.</p>
+
+        <p>
+          New video classes will appear here soon.
+        </p>
+
       </div>
     `;
 
@@ -259,26 +260,29 @@ async function loadVideos(){
   }
 
 
-  // =========================
-  // SHOW VIDEOS
-  // =========================
-
   container.innerHTML = "";
 
 
   data.forEach(video => {
 
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "video-card";
+
+
     const subject =
       video.subjects?.name || "General";
 
 
-    const card =
-      document.createElement("div");
-
-    card.className = "video-card";
+    const player =
+      createPlayer(video.file_url);
 
 
     card.innerHTML = `
+
+      <div class="player"></div>
 
       <span class="subject">
         ${escapeHTML(subject)}
@@ -298,16 +302,12 @@ async function loadVideos(){
         ""
       }
 
-      <a
-        class="watch-btn"
-        href="${safeURL(video.file_url)}"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        ▶ Watch Video
-      </a>
-
     `;
+
+
+    card
+      .querySelector(".player")
+      .appendChild(player);
 
 
     container.appendChild(card);
@@ -319,20 +319,161 @@ async function loadVideos(){
 
 
 // =========================
-// SECURITY HELPERS
+// CREATE VIDEO PLAYER
 // =========================
 
-function escapeHTML(text){
+function createPlayer(url){
 
-  return String(text ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+  const youtubeId =
+    getYouTubeId(url);
+
+
+  // =========================
+  // YOUTUBE
+  // =========================
+
+  if(youtubeId){
+
+    const iframe =
+      document.createElement("iframe");
+
+
+    iframe.src =
+      "https://www.youtube.com/embed/" +
+      youtubeId;
+
+
+    iframe.title =
+      "SSC EDGE Video";
+
+
+    iframe.allow =
+      "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+
+
+    iframe.allowFullscreen =
+      true;
+
+
+    return iframe;
+
+  }
+
+
+  // =========================
+  // DIRECT VIDEO
+  // =========================
+
+  const video =
+    document.createElement("video");
+
+
+  video.controls =
+    true;
+
+
+  video.playsInline =
+    true;
+
+
+  video.preload =
+    "metadata";
+
+
+  video.src =
+    safeURL(url);
+
+
+  return video;
 
 }
 
+
+
+// =========================
+// YOUTUBE URL DETECTION
+// =========================
+
+function getYouTubeId(url){
+
+  try{
+
+    const parsed =
+      new URL(url);
+
+
+    // youtube.com/watch?v=
+
+    if(
+      parsed.hostname.includes("youtube.com")
+      &&
+      parsed.searchParams.get("v")
+    ){
+
+      return parsed.searchParams.get("v");
+
+    }
+
+
+    // youtube.com/shorts/ID
+
+    if(
+      parsed.hostname.includes("youtube.com")
+      &&
+      parsed.pathname.startsWith("/shorts/")
+    ){
+
+      return parsed.pathname
+        .split("/shorts/")[1]
+        .split("/")[0];
+
+    }
+
+
+    // youtube.com/embed/ID
+
+    if(
+      parsed.hostname.includes("youtube.com")
+      &&
+      parsed.pathname.startsWith("/embed/")
+    ){
+
+      return parsed.pathname
+        .split("/embed/")[1]
+        .split("/")[0];
+
+    }
+
+
+    // youtu.be/ID
+
+    if(
+      parsed.hostname === "youtu.be"
+    ){
+
+      return parsed.pathname
+        .replace("/","")
+        .split("/")[0];
+
+    }
+
+  }
+  catch(e){
+
+    return null;
+
+  }
+
+
+  return null;
+
+}
+
+
+
+// =========================
+// SAFE URL
+// =========================
 
 function safeURL(url){
 
@@ -340,6 +481,7 @@ function safeURL(url){
 
     const parsed =
       new URL(url);
+
 
     if(
       parsed.protocol === "https:" ||
@@ -350,9 +492,33 @@ function safeURL(url){
 
     }
 
-  }catch(e){}
+  }
+  catch(e){}
 
-  return "#";
+
+  return "";
+
+}
+
+
+
+// =========================
+// ESCAPE HTML
+// =========================
+
+function escapeHTML(text){
+
+  return String(text ?? "")
+
+    .replace(/&/g,"&amp;")
+
+    .replace(/</g,"&lt;")
+
+    .replace(/>/g,"&gt;")
+
+    .replace(/"/g,"&quot;")
+
+    .replace(/'/g,"&#039;");
 
 }
 
@@ -364,8 +530,9 @@ function safeURL(url){
 
 loadVideos();
 
-
 </script>
 
+
 </body>
+
 </html>
