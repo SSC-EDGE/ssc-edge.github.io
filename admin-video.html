@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>SSC EDGE - Add Video</title>
+<title>SSC EDGE - Manage Videos</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -25,7 +25,7 @@ body{
 }
 
 .container{
-  max-width:600px;
+  max-width:700px;
   margin:auto;
 }
 
@@ -50,6 +50,7 @@ h1{
   border:1px solid #302044;
   border-radius:18px;
   padding:20px;
+  margin-bottom:20px;
 }
 
 label{
@@ -101,24 +102,79 @@ textarea{
   display:none;
 }
 
-.source-content{
-  margin-top:15px;
+.hidden{
+  display:none;
 }
 
 button{
   width:100%;
-  margin-top:22px;
-  padding:14px;
+  margin-top:20px;
+  padding:13px;
   border:0;
-  border-radius:12px;
+  border-radius:10px;
   background:#7c3aed;
   color:#fff;
-  font-size:16px;
+  font-size:15px;
   font-weight:bold;
 }
 
 button:disabled{
   opacity:.6;
+}
+
+.cancel-btn{
+  background:#302044;
+}
+
+.video-item{
+  background:#171025;
+  border:1px solid #302044;
+  border-radius:16px;
+  padding:16px;
+  margin-top:12px;
+}
+
+.video-title{
+  font-size:17px;
+  font-weight:bold;
+  margin-bottom:7px;
+}
+
+.video-subject{
+  display:inline-block;
+  color:#a66bff;
+  background:#251344;
+  padding:5px 9px;
+  border-radius:20px;
+  font-size:12px;
+  margin-bottom:10px;
+}
+
+.video-description{
+  color:#aaa2b9;
+  font-size:14px;
+  line-height:1.5;
+}
+
+.video-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:15px;
+}
+
+.edit-btn{
+  background:#302044;
+}
+
+.delete-btn{
+  background:#8b2435;
+}
+
+.empty{
+  text-align:center;
+  padding:35px 10px;
+  color:#aaa2b9;
 }
 
 #status{
@@ -129,8 +185,9 @@ button:disabled{
   line-height:1.5;
 }
 
-.hidden{
-  display:none;
+.section-title{
+  margin-top:30px;
+  margin-bottom:12px;
 }
 
 </style>
@@ -140,20 +197,32 @@ button:disabled{
 
 <body>
 
+
 <div class="container">
+
 
 <a href="admin-study.html" class="back">
 ← Back
 </a>
 
-<h1>Add Video</h1>
+
+<h1>Manage Videos</h1>
 
 <div class="subtitle">
-Add a video to SSC EDGE Study Material
+Add, edit and delete SSC EDGE video classes
 </div>
 
 
+<!-- =========================
+     ADD / EDIT FORM
+========================= -->
+
 <div class="card">
+
+<h2 id="formTitle">
+Add Video
+</h2>
+
 
 <label>Video Title</label>
 
@@ -168,9 +237,9 @@ Add a video to SSC EDGE Study Material
 
 <select id="subject">
 
-  <option value="">
-    Loading subjects...
-  </option>
+<option value="">
+Loading subjects...
+</option>
 
 </select>
 
@@ -185,53 +254,59 @@ Add a video to SSC EDGE Study Material
 
 <label>Video Source</label>
 
+
 <div class="source-box">
 
-  <label class="source-option active" id="uploadOption">
 
-    <input
-      type="radio"
-      name="source"
-      value="upload"
-      checked
-      onchange="changeSource('upload')"
-    >
+<label
+  class="source-option active"
+  id="uploadOption"
+>
 
-    📁 Upload Video
+<input
+  type="radio"
+  name="source"
+  value="upload"
+  checked
+  onchange="changeSource('upload')"
+>
 
-  </label>
+📁 Upload Video
+
+</label>
 
 
-  <label class="source-option" id="urlOption">
+<label
+  class="source-option"
+  id="urlOption"
+>
 
-    <input
-      type="radio"
-      name="source"
-      value="url"
-      onchange="changeSource('url')"
-    >
+<input
+  type="radio"
+  name="source"
+  value="url"
+  onchange="changeSource('url')"
+>
 
-    🔗 Video URL
+🔗 Video URL
 
-  </label>
+</label>
+
 
 </div>
 
 
 <!-- UPLOAD -->
 
-<div
-  id="uploadBox"
-  class="source-content"
+<div id="uploadBox">
+
+<label>Choose Video File</label>
+
+<input
+  type="file"
+  id="videoFile"
+  accept="video/*"
 >
-
-  <label>Choose Video File</label>
-
-  <input
-    type="file"
-    id="videoFile"
-    accept="video/*"
-  >
 
 </div>
 
@@ -240,16 +315,16 @@ Add a video to SSC EDGE Study Material
 
 <div
   id="urlBox"
-  class="source-content hidden"
+  class="hidden"
 >
 
-  <label>Video URL</label>
+<label>Video URL</label>
 
-  <input
-    type="url"
-    id="videoUrl"
-    placeholder="https://..."
-  >
+<input
+  type="url"
+  id="videoUrl"
+  placeholder="https://..."
+>
 
 </div>
 
@@ -262,11 +337,41 @@ Save Video
 </button>
 
 
+<button
+  id="cancelBtn"
+  class="cancel-btn hidden"
+  onclick="cancelEdit()"
+>
+Cancel Edit
+</button>
+
+
 <div id="status"></div>
 
 </div>
 
+
+
+<!-- =========================
+     EXISTING VIDEOS
+========================= -->
+
+<h2 class="section-title">
+Existing Videos
+</h2>
+
+
+<div id="videoList">
+
+<div class="empty">
+Loading videos...
 </div>
+
+</div>
+
+
+</div>
+
 
 
 <script>
@@ -290,44 +395,12 @@ supabase.createClient(
 
 
 // =========================
-// SOURCE CHANGE
+// STATE
 // =========================
 
-function changeSource(source){
+let editingId = null;
 
-  const uploadBox =
-    document.getElementById("uploadBox");
-
-  const urlBox =
-    document.getElementById("urlBox");
-
-  const uploadOption =
-    document.getElementById("uploadOption");
-
-  const urlOption =
-    document.getElementById("urlOption");
-
-
-  if(source === "upload"){
-
-    uploadBox.classList.remove("hidden");
-    urlBox.classList.add("hidden");
-
-    uploadOption.classList.add("active");
-    urlOption.classList.remove("active");
-
-  }
-  else{
-
-    uploadBox.classList.add("hidden");
-    urlBox.classList.remove("hidden");
-
-    uploadOption.classList.remove("active");
-    urlOption.classList.add("active");
-
-  }
-
-}
+let editingOldFilePath = null;
 
 
 // =========================
@@ -344,7 +417,9 @@ function showStatus(message, success){
   status.textContent = message;
 
   status.style.background =
-    success ? "#17351f" : "#3a1820";
+    success
+      ? "#17351f"
+      : "#3a1820";
 
 }
 
@@ -417,7 +492,7 @@ async function loadSubjects(){
 
       .select("id,name")
 
-      .eq("is_active", true)
+      .eq("is_active",true)
 
       .order("name");
 
@@ -456,6 +531,64 @@ async function loadSubjects(){
 
 
 // =========================
+// SOURCE SWITCH
+// =========================
+
+function changeSource(source){
+
+  const uploadBox =
+    document.getElementById("uploadBox");
+
+  const urlBox =
+    document.getElementById("urlBox");
+
+  const uploadOption =
+    document.getElementById("uploadOption");
+
+  const urlOption =
+    document.getElementById("urlOption");
+
+
+  if(source === "upload"){
+
+    uploadBox.classList.remove("hidden");
+
+    urlBox.classList.add("hidden");
+
+    uploadOption.classList.add("active");
+
+    urlOption.classList.remove("active");
+
+  }
+  else{
+
+    uploadBox.classList.add("hidden");
+
+    urlBox.classList.remove("hidden");
+
+    uploadOption.classList.remove("active");
+
+    urlOption.classList.add("active");
+
+  }
+
+}
+
+
+// =========================
+// GET SELECTED SOURCE
+// =========================
+
+function getSource(){
+
+  return document.querySelector(
+    'input[name="source"]:checked'
+  ).value;
+
+}
+
+
+// =========================
 // SAVE VIDEO
 // =========================
 
@@ -482,20 +615,12 @@ async function saveVideo(){
 
 
   const source =
-    document
-      .querySelector(
-        'input[name="source"]:checked'
-      )
-      .value;
+    getSource();
 
 
   const button =
     document.getElementById("saveBtn");
 
-
-  // =========================
-  // BASIC VALIDATION
-  // =========================
 
   if(!title){
 
@@ -520,7 +645,25 @@ async function saveVideo(){
 
 
   // =========================
-  // URL SOURCE
+  // EDIT EXISTING VIDEO
+  // =========================
+
+  if(editingId){
+
+    await updateVideo(
+      title,
+      subjectId,
+      description,
+      source,
+      button
+    );
+
+    return;
+  }
+
+
+  // =========================
+  // NEW URL VIDEO
   // =========================
 
   if(source === "url"){
@@ -543,26 +686,7 @@ async function saveVideo(){
     }
 
 
-    try{
-
-      const parsed =
-        new URL(videoUrl);
-
-      if(
-        parsed.protocol !== "https:" &&
-        parsed.protocol !== "http:"
-      ){
-
-        showStatus(
-          "Please enter a valid video URL.",
-          false
-        );
-
-        return;
-      }
-
-    }
-    catch(e){
+    if(!isValidURL(videoUrl)){
 
       showStatus(
         "Please enter a valid video URL.",
@@ -631,19 +755,16 @@ async function saveVideo(){
     );
 
 
-    clearForm();
+    resetForm();
 
-    button.disabled = false;
-
-    button.textContent =
-      "Save Video";
+    await loadVideos();
 
     return;
   }
 
 
   // =========================
-  // UPLOAD SOURCE
+  // NEW UPLOAD VIDEO
   // =========================
 
   const file =
@@ -686,10 +807,6 @@ async function saveVideo(){
   );
 
 
-  // =========================
-  // FILE NAME
-  // =========================
-
   const extension =
     file.name.includes(".")
       ? file.name
@@ -712,10 +829,6 @@ async function saveVideo(){
   const filePath =
     "videos/" + fileName;
 
-
-  // =========================
-  // UPLOAD
-  // =========================
 
   const { error: uploadError } =
     await supabaseClient
@@ -755,10 +868,6 @@ async function saveVideo(){
   }
 
 
-  // =========================
-  // PUBLIC URL
-  // =========================
-
   const { data: publicData } =
     supabaseClient
 
@@ -772,10 +881,6 @@ async function saveVideo(){
   const videoUrl =
     publicData.publicUrl;
 
-
-  // =========================
-  // DATABASE
-  // =========================
 
   const { error: dbError } =
     await supabaseClient
@@ -825,7 +930,6 @@ async function saveVideo(){
       false
     );
 
-
     button.disabled = false;
 
     button.textContent =
@@ -841,32 +945,758 @@ async function saveVideo(){
   );
 
 
-  clearForm();
+  resetForm();
 
-
-  button.disabled = false;
-
-  button.textContent =
-    "Save Video";
+  await loadVideos();
 
 }
 
 
 // =========================
-// CLEAR FORM
+// UPDATE VIDEO
 // =========================
 
-function clearForm(){
+async function updateVideo(
+  title,
+  subjectId,
+  description,
+  source,
+  button
+){
 
-  document.getElementById("title").value = "";
+  button.disabled = true;
 
-  document.getElementById("subject").value = "";
+  button.textContent =
+    "Updating...";
 
-  document.getElementById("description").value = "";
 
-  document.getElementById("videoFile").value = "";
+  let newVideoUrl = null;
 
-  document.getElementById("videoUrl").value = "";
+  let newFilePath = null;
+
+
+  // =========================
+  // NEW URL
+  // =========================
+
+  if(source === "url"){
+
+    const url =
+      document
+        .getElementById("videoUrl")
+        .value
+        .trim();
+
+
+    if(!url){
+
+      showStatus(
+        "Please enter video URL.",
+        false
+      );
+
+      button.disabled = false;
+
+      button.textContent =
+        "Update Video";
+
+      return;
+    }
+
+
+    if(!isValidURL(url)){
+
+      showStatus(
+        "Please enter a valid video URL.",
+        false
+      );
+
+      button.disabled = false;
+
+      button.textContent =
+        "Update Video";
+
+      return;
+    }
+
+
+    newVideoUrl = url;
+
+  }
+
+
+  // =========================
+  // NEW UPLOAD
+  // =========================
+
+  if(source === "upload"){
+
+    const file =
+      document
+        .getElementById("videoFile")
+        .files[0];
+
+
+    if(file){
+
+      if(!file.type.startsWith("video/")){
+
+        showStatus(
+          "Please select a valid video file.",
+          false
+        );
+
+        button.disabled = false;
+
+        button.textContent =
+          "Update Video";
+
+        return;
+      }
+
+
+      showStatus(
+        "Uploading new video...",
+        true
+      );
+
+
+      const extension =
+        file.name.includes(".")
+          ? file.name
+              .split(".")
+              .pop()
+              .toLowerCase()
+          : "mp4";
+
+
+      const fileName =
+        Date.now() +
+        "-" +
+        Math.random()
+          .toString(36)
+          .substring(2,8) +
+        "." +
+        extension;
+
+
+      newFilePath =
+        "videos/" + fileName;
+
+
+      const { error } =
+        await supabaseClient
+
+          .storage
+
+          .from("ssc-edge-videos")
+
+          .upload(
+            newFilePath,
+            file,
+            {
+              contentType:
+                file.type,
+
+              upsert:false
+            }
+          );
+
+
+      if(error){
+
+        showStatus(
+          "Upload failed: " +
+          error.message,
+          false
+        );
+
+        button.disabled = false;
+
+        button.textContent =
+          "Update Video";
+
+        return;
+      }
+
+
+      const { data } =
+        supabaseClient
+
+          .storage
+
+          .from("ssc-edge-videos")
+
+          .getPublicUrl(
+            newFilePath
+          );
+
+
+      newVideoUrl =
+        data.publicUrl;
+
+    }
+
+  }
+
+
+  // =========================
+  // UPDATE DATABASE
+  // =========================
+
+  const updateData = {
+
+    subject_id:
+      Number(subjectId),
+
+    title:
+      title,
+
+    description:
+      description || null
+
+  };
+
+
+  if(newVideoUrl){
+
+    updateData.file_url =
+      newVideoUrl;
+
+  }
+
+
+  const { error } =
+    await supabaseClient
+
+      .from("study_material")
+
+      .update(updateData)
+
+      .eq("id",editingId);
+
+
+  if(error){
+
+    console.error(error);
+
+
+    if(newFilePath){
+
+      await supabaseClient
+
+        .storage
+
+        .from("ssc-edge-videos")
+
+        .remove([newFilePath]);
+
+    }
+
+
+    showStatus(
+      "Update failed: " +
+      error.message,
+      false
+    );
+
+    button.disabled = false;
+
+    button.textContent =
+      "Update Video";
+
+    return;
+  }
+
+
+  // =========================
+  // REMOVE OLD FILE
+  // =========================
+
+  if(
+    newFilePath &&
+    editingOldFilePath
+  ){
+
+    await supabaseClient
+
+      .storage
+
+      .from("ssc-edge-videos")
+
+      .remove([
+        editingOldFilePath
+      ]);
+
+  }
+
+
+  showStatus(
+    "✅ Video updated successfully!",
+    true
+  );
+
+
+  resetForm();
+
+  await loadVideos();
+
+}
+
+
+// =========================
+// EDIT VIDEO
+// =========================
+
+async function editVideo(video){
+
+  editingId =
+    video.id;
+
+
+  editingOldFilePath =
+    getStoragePath(
+      video.file_url
+    );
+
+
+  document.getElementById("formTitle")
+    .textContent =
+      "Edit Video";
+
+
+  document.getElementById("title")
+    .value =
+      video.title || "";
+
+
+  document.getElementById("description")
+    .value =
+      video.description || "";
+
+
+  document.getElementById("subject")
+    .value =
+      video.subject_id || "";
+
+
+  document.getElementById("videoUrl")
+    .value =
+      video.file_url || "";
+
+
+  // Default edit source to URL
+  // unless the old video is from
+  // our Supabase Storage.
+
+  if(editingOldFilePath){
+
+    document.querySelector(
+      'input[name="source"][value="upload"]'
+    ).checked = true;
+
+    changeSource("upload");
+
+  }
+  else{
+
+    document.querySelector(
+      'input[name="source"][value="url"]'
+    ).checked = true;
+
+    changeSource("url");
+
+  }
+
+
+  document.getElementById("saveBtn")
+    .textContent =
+      "Update Video";
+
+
+  document.getElementById("cancelBtn")
+    .classList
+    .remove("hidden");
+
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+// =========================
+// DELETE VIDEO
+// =========================
+
+async function deleteVideo(video){
+
+  const confirmed =
+    confirm(
+      "Delete this video?\n\n" +
+      video.title
+    );
+
+
+  if(!confirmed){
+
+    return;
+  }
+
+
+  const storagePath =
+    getStoragePath(
+      video.file_url
+    );
+
+
+  const { error } =
+    await supabaseClient
+
+      .from("study_material")
+
+      .delete()
+
+      .eq("id",video.id);
+
+
+  if(error){
+
+    console.error(error);
+
+    alert(
+      "Delete failed: " +
+      error.message
+    );
+
+    return;
+  }
+
+
+  // Delete actual uploaded file
+
+  if(storagePath){
+
+    const { error: storageError } =
+      await supabaseClient
+
+        .storage
+
+        .from("ssc-edge-videos")
+
+        .remove([
+          storagePath
+        ]);
+
+
+    if(storageError){
+
+      console.error(storageError);
+
+    }
+
+  }
+
+
+  showStatus(
+    "✅ Video deleted successfully!",
+    true
+  );
+
+
+  await loadVideos();
+
+}
+
+
+// =========================
+// LOAD VIDEOS
+// =========================
+
+async function loadVideos(){
+
+  const container =
+    document.getElementById("videoList");
+
+
+  container.innerHTML =
+    '<div class="empty">Loading videos...</div>';
+
+
+  const { data, error } =
+    await supabaseClient
+
+      .from("study_material")
+
+      .select(`
+        id,
+        title,
+        description,
+        file_url,
+        subject_id,
+        created_at,
+        subjects (
+          name
+        )
+      `)
+
+      .eq("material_type","VIDEO")
+
+      .order("created_at",{
+        ascending:false
+      });
+
+
+  if(error){
+
+    console.error(error);
+
+    container.innerHTML =
+      `<div class="empty">
+        Unable to load videos.
+      </div>`;
+
+    return;
+  }
+
+
+  if(!data || data.length === 0){
+
+    container.innerHTML =
+      `<div class="empty">
+        No videos added yet.
+      </div>`;
+
+    return;
+  }
+
+
+  container.innerHTML = "";
+
+
+  data.forEach(video => {
+
+    const item =
+      document.createElement("div");
+
+
+    item.className =
+      "video-item";
+
+
+    const subject =
+      video.subjects?.name ||
+      "General";
+
+
+    item.innerHTML = `
+
+      <div class="video-title">
+        ${escapeHTML(video.title)}
+      </div>
+
+      <div class="video-subject">
+        ${escapeHTML(subject)}
+      </div>
+
+      ${
+        video.description
+        ?
+        `<div class="video-description">
+          ${escapeHTML(video.description)}
+        </div>`
+        :
+        ""
+      }
+
+      <div class="video-actions">
+
+        <button
+          class="edit-btn"
+          data-action="edit"
+        >
+          ✏️ Edit
+        </button>
+
+        <button
+          class="delete-btn"
+          data-action="delete"
+        >
+          🗑️ Delete
+        </button>
+
+      </div>
+
+    `;
+
+
+    item
+      .querySelector('[data-action="edit"]')
+      .onclick =
+        () => editVideo(video);
+
+
+    item
+      .querySelector('[data-action="delete"]')
+      .onclick =
+        () => deleteVideo(video);
+
+
+    container.appendChild(item);
+
+  });
+
+}
+
+
+// =========================
+// STORAGE PATH
+// =========================
+
+function getStoragePath(url){
+
+  if(!url){
+
+    return null;
+  }
+
+
+  const marker =
+    "/storage/v1/object/public/ssc-edge-videos/";
+
+
+  const index =
+    url.indexOf(marker);
+
+
+  if(index === -1){
+
+    return null;
+  }
+
+
+  return decodeURIComponent(
+    url.substring(
+      index + marker.length
+    )
+  );
+
+}
+
+
+// =========================
+// URL VALIDATION
+// =========================
+
+function isValidURL(url){
+
+  try{
+
+    const parsed =
+      new URL(url);
+
+
+    return (
+      parsed.protocol === "https:" ||
+      parsed.protocol === "http:"
+    );
+
+  }
+  catch(e){
+
+    return false;
+
+  }
+
+}
+
+
+// =========================
+// ESCAPE HTML
+// =========================
+
+function escapeHTML(text){
+
+  return String(text ?? "")
+
+    .replace(/&/g,"&amp;")
+
+    .replace(/</g,"&lt;")
+
+    .replace(/>/g,"&gt;")
+
+    .replace(/"/g,"&quot;")
+
+    .replace(/'/g,"&#039;");
+
+}
+
+
+// =========================
+// CANCEL EDIT
+// =========================
+
+function cancelEdit(){
+
+  resetForm();
+
+}
+
+
+// =========================
+// RESET FORM
+// =========================
+
+function resetForm(){
+
+  editingId = null;
+
+  editingOldFilePath = null;
+
+
+  document.getElementById("formTitle")
+    .textContent =
+      "Add Video";
+
+
+  document.getElementById("title")
+    .value = "";
+
+
+  document.getElementById("subject")
+    .value = "";
+
+
+  document.getElementById("description")
+    .value = "";
+
+
+  document.getElementById("videoFile")
+    .value = "";
+
+
+  document.getElementById("videoUrl")
+    .value = "";
+
+
+  document.querySelector(
+    'input[name="source"][value="upload"]'
+  ).checked = true;
+
+
+  changeSource("upload");
+
+
+  document.getElementById("saveBtn")
+    .textContent =
+      "Save Video";
+
+
+  document.getElementById("cancelBtn")
+    .classList
+    .add("hidden");
 
 }
 
@@ -889,9 +1719,12 @@ function clearForm(){
 
   await loadSubjects();
 
+  await loadVideos();
+
 })();
 
 </script>
+
 
 </body>
 
