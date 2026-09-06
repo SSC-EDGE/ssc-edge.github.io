@@ -3,70 +3,244 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
 
 <title>SSC EDGE - English</title>
-
-<link rel="stylesheet" href="css/style.css">
 
 <script>
 document.documentElement.dataset.theme =
 localStorage.getItem("ssc-edge-theme") || "dark";
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<link rel="stylesheet"
+href="css/style.css">
+
+<style>
+
+.page{
+max-width:850px;
+margin:auto;
+padding:20px 16px 100px;
+}
+
+.back{
+color:var(--text);
+text-decoration:none;
+display:inline-block;
+margin-bottom:20px;
+}
+
+.header h1{
+margin:0 0 5px;
+}
+
+.header p{
+color:var(--muted);
+}
+
+.pdf-card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:16px;
+padding:17px;
+margin-bottom:14px;
+}
+
+.title{
+font-size:18px;
+font-weight:bold;
+}
+
+.description{
+color:var(--muted);
+font-size:14px;
+margin:8px 0 14px;
+line-height:1.5;
+}
+
+.open{
+display:inline-block;
+background:var(--purple);
+color:white;
+padding:11px 15px;
+border-radius:10px;
+text-decoration:none;
+font-weight:bold;
+}
+
+.empty{
+text-align:center;
+padding:40px 15px;
+color:var(--muted);
+}
+
+</style>
+
 </head>
 
 <body>
 
-<header class="simple-header">
-  <div class="header-brand">SSC EDGE</div>
-</header>
+<div class="page">
 
-<main class="page-container">
+<a href="study.html"
+class="back">
+← Back to Study Material
+</a>
 
-  <h1 class="page-title">English</h1>
 
-  <p class="page-subtitle">
-    Grammar & Vocabulary
-  </p>
+<div class="header">
 
-  <section class="content-empty">
+<h1>🔤 English</h1>
 
-    <div class="empty-icon">A</div>
+<p>Subject-wise Notes & PDFs</p>
 
-    <h2>English</h2>
+</div>
 
-    <p>
-      Notes and PDFs will appear here.
-    </p>
 
-  </section>
+<div id="pdfs">
+Loading...
+</div>
 
-</main>
+</div>
 
-<nav class="bottom-nav">
 
-  <a href="home.html">
-    <span class="nav-icon">⌂</span>
-    <small>Home</small>
-  </a>
+<script>
 
-  <a href="study.html" class="active">
-    <span class="nav-icon">▣</span>
-    <small>Study Material</small>
-  </a>
+const SUPABASE_URL =
+"https://dvvyoygahzzbnpqrfhen.supabase.co";
 
-  <a href="practice.html">
-    <span class="nav-icon">✓</span>
-    <small>Practice</small>
-  </a>
+const SUPABASE_KEY =
+"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
 
-  <a href="profile.html">
-    <span class="nav-icon">○</span>
-    <small>Profile</small>
-  </a>
+const db =
+supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
 
-</nav>
+
+async function load(){
+
+const box=
+document.getElementById("pdfs");
+
+
+const {data:subject,error:subjectError}=
+await db
+.from("subjects")
+.select("id")
+.eq("name","English")
+.single();
+
+
+if(subjectError || !subject){
+
+box.innerHTML=
+`<div class="empty">
+Subject not found.
+</div>`;
+
+return;
+
+}
+
+
+const {data,error}=
+await db
+.from("study_material")
+.select(`
+id,
+title,
+description,
+file_url
+`)
+.eq("material_type","PDF")
+.eq("subject_id",subject.id)
+.eq("is_active",true)
+.order(
+"created_at",
+{ascending:false}
+);
+
+
+if(error){
+
+box.innerHTML=
+`<div class="empty">
+Unable to load PDFs.
+</div>`;
+
+return;
+
+}
+
+
+if(!data.length){
+
+box.innerHTML=
+`<div class="empty">
+No English PDFs available yet.
+</div>`;
+
+return;
+
+}
+
+
+box.innerHTML=
+data.map(pdf=>`
+
+<div class="pdf-card">
+
+<div class="title">
+${escapeHtml(pdf.title)}
+</div>
+
+${
+pdf.description
+?
+`<div class="description">
+${escapeHtml(pdf.description)}
+</div>`
+:""
+}
+
+<a
+class="open"
+href="${escapeHtml(pdf.file_url)}"
+target="_blank"
+rel="noopener">
+
+📄 Open PDF
+
+</a>
+
+</div>
+
+`).join("");
+
+}
+
+
+function escapeHtml(value){
+
+return String(value || "")
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+
+}
+
+
+load();
+
+</script>
 
 </body>
 </html>
