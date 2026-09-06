@@ -3,70 +3,319 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
 
 <title>SSC EDGE - E-Books</title>
-
-<link rel="stylesheet" href="css/style.css">
 
 <script>
 document.documentElement.dataset.theme =
 localStorage.getItem("ssc-edge-theme") || "dark";
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<link rel="stylesheet"
+href="css/style.css">
+
+<style>
+
+.page{
+max-width:850px;
+margin:auto;
+padding:20px 16px 100px;
+}
+
+.header{
+margin-bottom:20px;
+}
+
+.header h1{
+margin:0 0 5px;
+}
+
+.header p{
+margin:0;
+color:var(--muted);
+}
+
+.back{
+display:inline-block;
+margin-bottom:18px;
+text-decoration:none;
+color:var(--text);
+}
+
+.tabs{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin-bottom:20px;
+}
+
+.tab{
+padding:14px;
+border-radius:14px;
+border:1px solid var(--border);
+background:var(--card);
+color:var(--text);
+font-weight:bold;
+cursor:pointer;
+}
+
+.tab.active{
+background:var(--purple);
+color:white;
+}
+
+.material{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:16px;
+padding:17px;
+margin-bottom:14px;
+}
+
+.title{
+font-size:18px;
+font-weight:bold;
+margin-bottom:7px;
+}
+
+.subject{
+font-size:13px;
+color:var(--purple2);
+margin-bottom:8px;
+}
+
+.description{
+color:var(--muted);
+font-size:14px;
+line-height:1.5;
+margin-bottom:14px;
+}
+
+.open{
+display:inline-block;
+padding:11px 15px;
+border-radius:10px;
+background:var(--purple);
+color:white;
+text-decoration:none;
+font-weight:bold;
+}
+
+.empty{
+text-align:center;
+padding:35px;
+color:var(--muted);
+}
+
+</style>
+
 </head>
 
 <body>
 
-<header class="simple-header">
-  <div class="header-brand">SSC EDGE</div>
-</header>
+<div class="page">
 
-<main class="page-container">
+<a href="study.html"
+class="back">
+← Back to Study Material
+</a>
 
-  <h1 class="page-title">E-Books</h1>
 
-  <p class="page-subtitle">
-    Study from SSC EDGE e-book compilations
-  </p>
+<div class="header">
 
-  <section class="content-empty">
+<h1>📚 E-Books</h1>
 
-    <div class="empty-icon">▤</div>
+<p>
+SSC EDGE E-Books & Compilation
+</p>
 
-    <h2>Compilation</h2>
+</div>
 
-    <p>
-      E-Book compilations will appear here.
-    </p>
 
-  </section>
+<div class="tabs">
 
-</main>
+<button
+id="ebookTab"
+class="tab active"
+onclick="loadType('EBOOK')">
 
-<nav class="bottom-nav">
+📚 E-Books
 
-  <a href="home.html">
-    <span class="nav-icon">⌂</span>
-    <small>Home</small>
-  </a>
+</button>
 
-  <a href="study.html" class="active">
-    <span class="nav-icon">▣</span>
-    <small>Study Material</small>
-  </a>
 
-  <a href="practice.html">
-    <span class="nav-icon">✓</span>
-    <small>Practice</small>
-  </a>
+<button
+id="pdfTab"
+class="tab"
+onclick="loadType('PDF')">
 
-  <a href="profile.html">
-    <span class="nav-icon">○</span>
-    <small>Profile</small>
-  </a>
+📄 All PDFs
 
-</nav>
+</button>
+
+</div>
+
+
+<div id="materials">
+Loading...
+</div>
+
+</div>
+
+
+<script>
+
+const SUPABASE_URL =
+"https://dvvyoygahzzbnpqrfhen.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
+const db =
+supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
+
+let currentType="EBOOK";
+
+
+async function loadType(type){
+
+currentType=type;
+
+
+document.getElementById("ebookTab")
+.classList.toggle(
+"active",
+type==="EBOOK"
+);
+
+
+document.getElementById("pdfTab")
+.classList.toggle(
+"active",
+type==="PDF"
+);
+
+
+const box=
+document.getElementById("materials");
+
+box.innerHTML="Loading...";
+
+
+const {data,error}=
+await db
+.from("study_material")
+.select(`
+id,
+title,
+description,
+file_url,
+subjects(name)
+`)
+.eq("material_type",type)
+.eq("is_active",true)
+.order(
+"created_at",
+{ascending:false}
+);
+
+
+if(error){
+
+box.innerHTML=
+`<div class="empty">
+Unable to load material.
+</div>`;
+
+return;
+
+}
+
+
+if(!data.length){
+
+box.innerHTML=
+`<div class="empty">
+No ${type==="EBOOK"
+?"E-Books"
+:"PDFs"} available yet.
+</div>`;
+
+return;
+
+}
+
+
+box.innerHTML=
+data.map(item=>`
+
+<div class="material">
+
+<div class="title">
+${escapeHtml(item.title)}
+</div>
+
+<div class="subject">
+${escapeHtml(
+item.subjects?.name ||
+"Study Material"
+)}
+</div>
+
+${
+item.description
+?
+`<div class="description">
+${escapeHtml(item.description)}
+</div>`
+:""
+}
+
+<a
+class="open"
+href="${escapeHtml(item.file_url)}"
+target="_blank"
+rel="noopener">
+
+${
+type==="EBOOK"
+?"📖 Open E-Book"
+:"📄 Open PDF"
+}
+
+</a>
+
+</div>
+
+`).join("");
+
+}
+
+
+function escapeHtml(value){
+
+return String(value || "")
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+
+}
+
+
+loadType("EBOOK");
+
+</script>
 
 </body>
 </html>
