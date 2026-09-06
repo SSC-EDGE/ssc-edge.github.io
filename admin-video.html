@@ -1,1 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>SSC EDGE - Add Video</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#08050e;
+  color:#fff;
+  padding:20px;
+}
+
+.container{
+  max-width:600px;
+  margin:auto;
+}
+
+h1{
+  margin-bottom:5px;
+}
+
+.subtitle{
+  color:#aaa2b9;
+  margin-bottom:25px;
+}
+
+.card{
+  background:#171025;
+  border:1px solid #302044;
+  border-radius:18px;
+  padding:20px;
+}
+
+label{
+  display:block;
+  margin:16px 0 7px;
+  font-weight:bold;
+}
+
+input,
+textarea,
+select{
+  width:100%;
+  padding:13px;
+  border-radius:10px;
+  border:1px solid #302044;
+  background:#08050e;
+  color:#fff;
+  font-size:15px;
+}
+
+textarea{
+  min-height:100px;
+  resize:vertical;
+}
+
+button{
+  width:100%;
+  margin-top:22px;
+  padding:14px;
+  border:0;
+  border-radius:12px;
+  background:#7c3aed;
+  color:#fff;
+  font-size:16px;
+  font-weight:bold;
+}
+
+button:disabled{
+  opacity:.6;
+}
+
+.back{
+  display:inline-block;
+  margin-bottom:20px;
+  color:#a66bff;
+  text-decoration:none;
+}
+
+#status{
+  margin-top:15px;
+  padding:12px;
+  border-radius:10px;
+  display:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<a href="admin-study.html" class="back">← Back</a>
+
+<h1>Add Video</h1>
+
+<div class="subtitle">
+Add a video to SSC EDGE Study Material
+</div>
+
+<div class="card">
+
+<label>Video Title</label>
+<input
+  type="text"
+  id="title"
+  placeholder="Enter video title"
+>
+
+<label>Subject</label>
+<select id="subject">
+  <option value="">Loading subjects...</option>
+</select>
+
+<label>Description</label>
+<textarea
+  id="description"
+  placeholder="Enter video description"
+></textarea>
+
+<label>Video URL</label>
+<input
+  type="url"
+  id="videoUrl"
+  placeholder="https://..."
+>
+
+<button id="saveBtn" onclick="saveVideo()">
+Save Video
+</button>
+
+<div id="status"></div>
+
+</div>
+</div>
+
+<script>
+
+const SUPABASE_URL =
+"https://dvvyoygahzzbnpqrfhen.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
+const supabaseClient =
+supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+// =========================
+// STATUS MESSAGE
+// =========================
+
+function showStatus(message, success){
+
+  const status =
+    document.getElementById("status");
+
+  status.style.display = "block";
+  status.textContent = message;
+
+  status.style.background =
+    success ? "#17351f" : "#3a1820";
+
+}
+
+
+// =========================
+// CHECK ADMIN
+// =========================
+
+async function checkAdmin(){
+
+  const {
+    data: { user }
+  } = await supabaseClient.auth.getUser();
+
+  if(!user){
+
+    alert("Please login first.");
+
+    window.location.href = "admin.html";
+
+    return false;
+  }
+
+  const { data, error } =
+    await supabaseClient
+      .from("admin_users")
+      .select("user_id")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+  if(error || !data){
+
+    alert("Access denied.");
+
+    window.location.href = "admin.html";
+
+    return false;
+  }
+
+  return true;
+}
+
+
+// =========================
+// LOAD SUBJECTS
+// =========================
+
+async function loadSubjects(){
+
+  const select =
+    document.getElementById("subject");
+
+  const { data, error } =
+    await supabaseClient
+      .from("subjects")
+      .select("id,name")
+      .eq("is_active", true)
+      .order("name");
+
+  if(error){
+
+    select.innerHTML =
+      '<option value="">Unable to load subjects</option>';
+
+    console.error(error);
+
+    return;
+  }
+
+  select.innerHTML =
+    '<option value="">Select Subject</option>';
+
+  data.forEach(subject => {
+
+    const option =
+      document.createElement("option");
+
+    option.value = subject.id;
+    option.textContent = subject.name;
+
+    select.appendChild(option);
+
+  });
+
+}
+
+
+// =========================
+// SAVE VIDEO
+// =========================
+
+async function saveVideo(){
+
+  const title =
+    document.getElementById("title").value.trim();
+
+  const subjectId =
+    document.getElementById("subject").value;
+
+  const description =
+    document.getElementById("description").value.trim();
+
+  const videoUrl =
+    document.getElementById("videoUrl").value.trim();
+
+  const button =
+    document.getElementById("saveBtn");
+
+
+  // =========================
+  // VALIDATION
+  // =========================
+
+  if(!title){
+
+    showStatus("Please enter video title.", false);
+
+    return;
+  }
+
+  if(!subjectId){
+
+    showStatus("Please select a subject.", false);
+
+    return;
+  }
+
+  if(!videoUrl){
+
+    showStatus("Please enter video URL.", false);
+
+    return;
+  }
+
+
+  button.disabled = true;
+  button.textContent = "Saving...";
+
+
+  // =========================
+  // INSERT DATA
+  // =========================
+
+  const { error } =
+    await supabaseClient
+      .from("study_material")
+      .insert({
+
+        subject_id: Number(subjectId),
+
+        title: title,
+
+        description:
+          description || null,
+
+        material_type: "VIDEO",
+
+        file_url: videoUrl,
+
+        is_active: true
+
+      });
+
+
+  // =========================
+  // RESULT
+  // =========================
+
+  if(error){
+
+    console.error(error);
+
+    showStatus(
+      "Error: " + error.message,
+      false
+    );
+
+    button.disabled = false;
+    button.textContent = "Save Video";
+
+    return;
+  }
+
+
+  showStatus(
+    "✅ Video saved successfully!",
+    true
+  );
+
+
+  // Clear form
+
+  document.getElementById("title").value = "";
+  document.getElementById("subject").value = "";
+  document.getElementById("description").value = "";
+  document.getElementById("videoUrl").value = "";
+
+  button.disabled = false;
+  button.textContent = "Save Video";
+
+}
+
+
+// =========================
+// START
+// =========================
+
+(async function(){
+
+  const isAdmin =
+    await checkAdmin();
+
+  if(!isAdmin) return;
+
+  await loadSubjects();
+
+})();
+
+</script>
+
+</body>
+</html>
