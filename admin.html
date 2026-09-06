@@ -13,6 +13,8 @@
 
   <link rel="stylesheet" href="css/style.css">
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     .admin-page{
       min-height:100vh;
@@ -52,7 +54,9 @@
       font-size:14px;
     }
 
-    .admin-btn{
+    .admin-btn,
+    .login-btn,
+    .logout-btn{
       width:100%;
       margin-top:16px;
       padding:13px;
@@ -63,43 +67,239 @@
       font-size:15px;
       font-weight:600;
     }
+
+    .login-box{
+      max-width:420px;
+      margin:60px auto;
+    }
+
+    .login-box input{
+      width:100%;
+      box-sizing:border-box;
+      margin-top:12px;
+      padding:14px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:var(--card);
+      color:var(--text);
+      font-size:15px;
+    }
+
+    .error{
+      color:#ff6b6b;
+      margin-top:12px;
+      font-size:14px;
+    }
+
+    .logout-btn{
+      background:transparent;
+      border:1px solid var(--border);
+      color:var(--text);
+      margin-bottom:25px;
+    }
+
+    #adminPanel{
+      display:none;
+    }
   </style>
 </head>
 
 <body>
 
-  <main class="admin-page">
+  <!-- LOGIN -->
+  <div id="loginScreen" class="login-box admin-card">
+
+    <h1>SSC EDGE Admin</h1>
+
+    <p>Admin Login</p>
+
+    <input
+      type="email"
+      id="email"
+      placeholder="Email"
+      autocomplete="email"
+    >
+
+    <input
+      type="password"
+      id="password"
+      placeholder="Password"
+      autocomplete="current-password"
+    >
+
+    <button class="login-btn" onclick="login()">
+      Login
+    </button>
+
+    <div id="loginError" class="error"></div>
+
+  </div>
+
+
+  <!-- ADMIN PANEL -->
+  <main id="adminPanel" class="admin-page">
 
     <div class="admin-header">
       <h1>SSC EDGE Admin</h1>
       <p>Manage your SSC EDGE platform</p>
     </div>
 
+    <button class="logout-btn" onclick="logout()">
+      Logout
+    </button>
+
     <div class="admin-card">
       <h2>📚 Study Material</h2>
       <p>Add and manage videos, e-books and PDFs.</p>
-      <button class="admin-btn">Manage Study Material</button>
+      <button class="admin-btn">
+        Manage Study Material
+      </button>
     </div>
 
     <div class="admin-card">
       <h2>📝 Mock Tests</h2>
       <p>Create and manage SSC & RRB mock tests.</p>
-      <button class="admin-btn">Manage Mock Tests</button>
+      <button class="admin-btn">
+        Manage Mock Tests
+      </button>
     </div>
 
     <div class="admin-card">
       <h2>❓ Questions</h2>
       <p>Add questions, options and explanations.</p>
-      <button class="admin-btn">Manage Questions</button>
+      <button class="admin-btn">
+        Manage Questions
+      </button>
     </div>
 
     <div class="admin-card">
       <h2>📖 Chapters</h2>
       <p>Manage chapter-wise practice content.</p>
-      <button class="admin-btn">Manage Chapters</button>
+      <button class="admin-btn">
+        Manage Chapters
+      </button>
     </div>
 
   </main>
+
+
+<script>
+
+const SUPABASE_URL =
+  "https://dvvyoygahzzbnpqrfhen.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
+const supabaseClient =
+  supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+async function login(){
+
+  const email =
+    document.getElementById("email").value.trim();
+
+  const password =
+    document.getElementById("password").value;
+
+  const error =
+    document.getElementById("loginError");
+
+  error.textContent = "";
+
+  if(!email || !password){
+    error.textContent =
+      "Please enter email and password.";
+    return;
+  }
+
+  const { error: loginError } =
+    await supabaseClient.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
+
+  if(loginError){
+    error.textContent =
+      loginError.message;
+    return;
+  }
+
+  await checkAdmin();
+
+}
+
+
+async function checkAdmin(){
+
+  const {
+    data: { user }
+  } = await supabaseClient.auth.getUser();
+
+  if(!user){
+    showLogin();
+    return;
+  }
+
+  const { data, error } =
+    await supabaseClient
+      .from("admin_users")
+      .select("user_id")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+  if(error){
+    console.log(error);
+    showLogin();
+    document.getElementById("loginError").textContent =
+      "Unable to verify admin access.";
+    return;
+  }
+
+  if(!data){
+    await supabaseClient.auth.signOut();
+
+    showLogin();
+
+    document.getElementById("loginError").textContent =
+      "Access denied. Admin account required.";
+
+    return;
+  }
+
+  document.getElementById("loginScreen").style.display =
+    "none";
+
+  document.getElementById("adminPanel").style.display =
+    "block";
+}
+
+
+function showLogin(){
+
+  document.getElementById("loginScreen").style.display =
+    "block";
+
+  document.getElementById("adminPanel").style.display =
+    "none";
+}
+
+
+async function logout(){
+
+  await supabaseClient.auth.signOut();
+
+  showLogin();
+}
+
+
+checkAdmin();
+
+</script>
 
 </body>
 </html>
