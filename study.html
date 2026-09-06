@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
 <title>SSC EDGE - Study Material</title>
 
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/study.css">
 
 <script>
 document.documentElement.dataset.theme =
 localStorage.getItem("ssc-edge-theme") || "dark";
 </script>
+
 </head>
 
 <body>
@@ -27,6 +31,73 @@ localStorage.getItem("ssc-edge-theme") || "dark";
   <p class="page-subtitle">
     Choose a subject to start learning
   </p>
+
+
+  <!-- =========================================
+       QUICK STUDY OPTIONS
+       ========================================= -->
+
+  <section class="study-options">
+
+
+    <!-- VIDEO -->
+
+    <a href="#" class="study-option-card">
+
+      <div class="study-option-icon">
+
+        <svg viewBox="0 0 64 64">
+          <rect x="8" y="14" width="48" height="36" rx="6"/>
+          <path d="M27 24l14 8-14 8z"/>
+        </svg>
+
+      </div>
+
+      <div class="study-option-text">
+        <h3>Video</h3>
+      </div>
+
+    </a>
+
+
+    <!-- E-BOOKS -->
+
+    <a href="#" class="study-option-card">
+
+      <div class="study-option-icon">
+
+        <svg viewBox="0 0 64 64">
+          <path d="M10 12h20a10 10 0 0 1 10 10v30H20a10 10 0 0 0-10 10V12z"/>
+          <path d="M54 12H34a10 10 0 0 0-10 10v30h20a10 10 0 0 1 10 10V12z"/>
+        </svg>
+
+      </div>
+
+      <div class="study-option-text">
+        <h3>E-Books</h3>
+        <span>Compilation</span>
+      </div>
+
+    </a>
+
+
+  </section>
+
+
+  <!-- =========================================
+       DIVIDER
+       ========================================= -->
+
+  <div class="study-divider"></div>
+
+
+  <!-- =========================================
+       SUBJECT SECTION
+       ========================================= -->
+
+  <h2 class="study-section-title">
+    SUBJECT WISE NOTES &amp; PDF
+  </h2>
 
 
   <section class="subject-grid">
@@ -55,7 +126,7 @@ localStorage.getItem("ssc-edge-theme") || "dark";
       </div>
 
       <h3>Quantitative Aptitude</h3>
-      <span>Notes & Practice</span>
+      <span>Notes &amp; Practice</span>
 
     </a>
 
@@ -95,7 +166,7 @@ localStorage.getItem("ssc-edge-theme") || "dark";
       </div>
 
       <h3>English</h3>
-      <span>Grammar & Vocabulary</span>
+      <span>Grammar &amp; Vocabulary</span>
 
     </a>
 
@@ -114,7 +185,7 @@ localStorage.getItem("ssc-edge-theme") || "dark";
       </div>
 
       <h3>Reasoning</h3>
-      <span>Notes & Practice</span>
+      <span>Notes &amp; Practice</span>
 
     </a>
 
@@ -123,6 +194,10 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 
 </main>
 
+
+<!-- =========================================
+     BOTTOM NAVIGATION
+     ========================================= -->
 
 <nav class="bottom-nav">
 
@@ -147,6 +222,7 @@ localStorage.getItem("ssc-edge-theme") || "dark";
   </a>
 
 </nav>
+
 
 </body>
 </html>
