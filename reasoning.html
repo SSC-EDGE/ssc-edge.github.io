@@ -1,81 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="viewport"
-content="width=device-width,initial-scale=1.0">
-
-<title>SSC EDGE - Reasoning</title>
+<title>Reasoning - SSC EDGE</title>
 
 <script>
 document.documentElement.dataset.theme =
 localStorage.getItem("ssc-edge-theme") || "dark";
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<link rel="stylesheet"
-href="css/style.css">
+<link rel="stylesheet" href="css/style.css">
 
 <style>
 
-.page{
-max-width:850px;
-margin:auto;
-padding:20px 16px 100px;
+.container{
+padding:20px;
+padding-bottom:90px;
 }
 
-.back{
-color:var(--text);
-text-decoration:none;
-display:inline-block;
+.page-title{
+font-size:26px;
+font-weight:bold;
+margin-bottom:6px;
+}
+
+.page-subtitle{
+color:var(--muted);
 margin-bottom:20px;
 }
 
-.header h1{
-margin:0 0 5px;
-}
-
-.header p{
-color:var(--muted);
+.pdf-list{
+display:flex;
+flex-direction:column;
+gap:14px;
 }
 
 .pdf-card{
 background:var(--card);
 border:1px solid var(--border);
-border-radius:16px;
-padding:17px;
+border-radius:14px;
+padding:16px;
+}
+
+.pdf-title{
+font-size:18px;
+font-weight:bold;
+margin-bottom:7px;
+}
+
+.pdf-description{
+color:var(--muted);
+font-size:14px;
 margin-bottom:14px;
 }
 
-.title{
-font-size:18px;
-font-weight:bold;
+.pdf-actions{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
 }
 
-.description{
-color:var(--muted);
-font-size:14px;
-margin:8px 0 14px;
-line-height:1.5;
-}
-
-.open{
+.open,
+.download{
 display:inline-block;
-background:var(--purple);
-color:white;
 padding:11px 15px;
 border-radius:10px;
 text-decoration:none;
 font-weight:bold;
 }
 
+.open{
+background:var(--purple);
+color:white;
+}
+
+.download{
+background:var(--card2);
+color:var(--text);
+border:1px solid var(--border);
+}
+
 .empty{
 text-align:center;
-padding:40px 15px;
 color:var(--muted);
+padding:30px 10px;
 }
 
 </style>
@@ -84,29 +96,28 @@ color:var(--muted);
 
 <body>
 
-<div class="page">
+<div class="container">
 
-<a href="study.html"
-class="back">
-← Back to Study Material
-</a>
-
-
-<div class="header">
-
-<h1>🧠 Reasoning</h1>
-
-<p>Subject-wise Notes & PDFs</p>
-
+<div class="page-title">
+Reasoning
 </div>
 
+<div class="page-subtitle">
+SSC EDGE Reasoning PDFs
+</div>
 
-<div id="pdfs">
-Loading...
+<div id="pdfList" class="pdf-list">
+
+<div class="empty">
+Loading PDFs...
 </div>
 
 </div>
 
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
@@ -116,32 +127,67 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
 
-const db =
+const supabaseClient =
 supabase.createClient(
 SUPABASE_URL,
 SUPABASE_KEY
 );
 
 
-async function load(){
+function escapeHtml(value){
 
-const box=
-document.getElementById("pdfs");
+return String(value || "")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+}
 
 
-const {data:subject,error:subjectError}=
-await db
+function getDownloadUrl(url){
+
+if(
+url &&
+url.includes(
+"/storage/v1/object/public/ssc-edge-pdfs/"
+)
+){
+
+return url.replace(
+"/storage/v1/object/public/ssc-edge-pdfs/",
+"/storage/v1/object/download/ssc-edge-pdfs/"
+);
+
+}
+
+return url;
+
+}
+
+
+async function loadPDFs(){
+
+const pdfList =
+document.getElementById("pdfList");
+
+
+const {
+data: subject,
+error: subjectError
+} = await supabaseClient
 .from("subjects")
-.select("id")
+.select("id,name")
 .eq("name","Reasoning")
 .single();
 
 
 if(subjectError || !subject){
 
-box.innerHTML=
+pdfList.innerHTML =
 `<div class="empty">
-Subject not found.
+Unable to load Reasoning subject.
 </div>`;
 
 return;
@@ -149,27 +195,21 @@ return;
 }
 
 
-const {data,error}=
-await db
+const {
+data: pdfs,
+error
+} = await supabaseClient
 .from("study_material")
-.select(`
-id,
-title,
-description,
-file_url
-`)
+.select("*")
 .eq("material_type","PDF")
 .eq("subject_id",subject.id)
 .eq("is_active",true)
-.order(
-"created_at",
-{ascending:false}
-);
+.order("created_at",{ascending:false});
 
 
 if(error){
 
-box.innerHTML=
+pdfList.innerHTML =
 `<div class="empty">
 Unable to load PDFs.
 </div>`;
@@ -179,9 +219,9 @@ return;
 }
 
 
-if(!data.length){
+if(!pdfs || pdfs.length === 0){
 
-box.innerHTML=
+pdfList.innerHTML =
 `<div class="empty">
 No Reasoning PDFs available yet.
 </div>`;
@@ -191,56 +231,67 @@ return;
 }
 
 
-box.innerHTML=
-data.map(pdf=>`
+pdfList.innerHTML = pdfs.map(pdf => {
+
+const title =
+escapeHtml(pdf.title || "Untitled PDF");
+
+const description =
+escapeHtml(pdf.description || "");
+
+const openUrl =
+escapeHtml(pdf.file_url || "");
+
+const downloadUrl =
+escapeHtml(getDownloadUrl(pdf.file_url || ""));
+
+
+return `
 
 <div class="pdf-card">
 
-<div class="title">
-${escapeHtml(pdf.title)}
+<div class="pdf-title">
+${title}
 </div>
 
-${
-pdf.description
-?
-`<div class="description">
-${escapeHtml(pdf.description)}
-</div>`
-:""
-}
+${description ? `
+<div class="pdf-description">
+${description}
+</div>
+` : ""}
+
+<div class="pdf-actions">
 
 <a
 class="open"
-href="${escapeHtml(pdf.file_url)}"
+href="${openUrl}"
 target="_blank"
 rel="noopener">
-
 📄 Open PDF
+</a>
 
+<a
+class="download"
+href="${downloadUrl}"
+download>
+📥 Download
 </a>
 
 </div>
 
-`).join("");
+</div>
+
+`;
+
+}).join("");
 
 }
 
 
-function escapeHtml(value){
-
-return String(value || "")
-.replaceAll("&","&amp;")
-.replaceAll("<","&lt;")
-.replaceAll(">","&gt;")
-.replaceAll('"',"&quot;")
-.replaceAll("'","&#039;");
-
-}
-
-
-load();
+loadPDFs();
 
 </script>
 
 </body>
+
 </html>
