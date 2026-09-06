@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>SSC EDGE - Study Material</title>
+
+  <script>
+    document.documentElement.dataset.theme =
+      localStorage.getItem("ssc-edge-theme") || "dark";
+  </script>
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    .admin-page{
+      min-height:100vh;
+      padding:24px 18px 100px;
+    }
+
+    .admin-header{
+      margin-bottom:24px;
+    }
+
+    .admin-header h1{
+      margin:0;
+      font-size:26px;
+    }
+
+    .admin-header p{
+      margin:6px 0 0;
+      color:var(--muted);
+    }
+
+    .material-card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:20px;
+      margin-bottom:16px;
+    }
+
+    .material-card h2{
+      margin:0 0 8px;
+      font-size:20px;
+    }
+
+    .material-card p{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.5;
+    }
+
+    .material-btn{
+      width:100%;
+      margin-top:16px;
+      padding:13px;
+      border:0;
+      border-radius:12px;
+      background:var(--purple);
+      color:white;
+      font-size:15px;
+      font-weight:600;
+    }
+
+    .back-btn{
+      margin-bottom:20px;
+      padding:10px 16px;
+      border-radius:10px;
+      border:1px solid var(--border);
+      background:transparent;
+      color:var(--text);
+      font-size:14px;
+    }
+  </style>
+</head>
+
+<body>
+
+<main class="admin-page">
+
+  <button class="back-btn" onclick="history.back()">
+    ← Back
+  </button>
+
+  <div class="admin-header">
+    <h1>📚 Study Material</h1>
+    <p>Manage videos, e-books and PDFs</p>
+  </div>
+
+  <div class="material-card">
+    <h2>🎥 Videos</h2>
+    <p>Add and manage video study material.</p>
+    <button class="material-btn">
+      Add Video
+    </button>
+  </div>
+
+  <div class="material-card">
+    <h2>📕 E-Books</h2>
+    <p>Add and manage e-books for SSC EDGE students.</p>
+    <button class="material-btn">
+      Add E-Book
+    </button>
+  </div>
+
+  <div class="material-card">
+    <h2>📄 PDFs</h2>
+    <p>Add and manage PDF study material.</p>
+    <button class="material-btn">
+      Add PDF
+    </button>
+  </div>
+
+</main>
+
+<script>
+
+const SUPABASE_URL =
+  "https://dvvyoygahzzbnpqrfhen.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
+const supabaseClient =
+  supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+async function checkAdmin(){
+
+  const {
+    data: { user }
+  } = await supabaseClient.auth.getUser();
+
+  if(!user){
+    window.location.href = "admin.html";
+    return;
+  }
+
+  const { data } =
+    await supabaseClient
+      .from("admin_users")
+      .select("user_id")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+  if(!data){
+    await supabaseClient.auth.signOut();
+    window.location.href = "admin.html";
+  }
+
+}
+
+checkAdmin();
+
+</script>
+
+</body>
+</html>
