@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -9,6 +11,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+
 *{
   box-sizing:border-box;
 }
@@ -24,6 +27,13 @@ body{
 .container{
   max-width:600px;
   margin:auto;
+}
+
+.back{
+  display:inline-block;
+  margin-bottom:20px;
+  color:#a66bff;
+  text-decoration:none;
 }
 
 h1{
@@ -65,6 +75,36 @@ textarea{
   resize:vertical;
 }
 
+.source-box{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:10px;
+}
+
+.source-option{
+  border:1px solid #302044;
+  border-radius:12px;
+  padding:13px;
+  text-align:center;
+  cursor:pointer;
+  color:#aaa2b9;
+}
+
+.source-option.active{
+  border-color:#7c3aed;
+  background:#251344;
+  color:#fff;
+}
+
+.source-option input{
+  display:none;
+}
+
+.source-content{
+  margin-top:15px;
+}
+
 button{
   width:100%;
   margin-top:22px;
@@ -81,27 +121,30 @@ button:disabled{
   opacity:.6;
 }
 
-.back{
-  display:inline-block;
-  margin-bottom:20px;
-  color:#a66bff;
-  text-decoration:none;
-}
-
 #status{
   margin-top:15px;
   padding:12px;
   border-radius:10px;
   display:none;
+  line-height:1.5;
 }
+
+.hidden{
+  display:none;
+}
+
 </style>
+
 </head>
+
 
 <body>
 
 <div class="container">
 
-<a href="admin-study.html" class="back">← Back</a>
+<a href="admin-study.html" class="back">
+← Back
+</a>
 
 <h1>Add Video</h1>
 
@@ -109,43 +152,129 @@ button:disabled{
 Add a video to SSC EDGE Study Material
 </div>
 
+
 <div class="card">
 
 <label>Video Title</label>
+
 <input
   type="text"
   id="title"
   placeholder="Enter video title"
 >
 
+
 <label>Subject</label>
+
 <select id="subject">
-  <option value="">Loading subjects...</option>
+
+  <option value="">
+    Loading subjects...
+  </option>
+
 </select>
 
+
 <label>Description</label>
+
 <textarea
   id="description"
   placeholder="Enter video description"
 ></textarea>
 
-<label>Video URL</label>
-<input
-  type="url"
-  id="videoUrl"
-  placeholder="https://..."
+
+<label>Video Source</label>
+
+<div class="source-box">
+
+  <label class="source-option active" id="uploadOption">
+
+    <input
+      type="radio"
+      name="source"
+      value="upload"
+      checked
+      onchange="changeSource('upload')"
+    >
+
+    📁 Upload Video
+
+  </label>
+
+
+  <label class="source-option" id="urlOption">
+
+    <input
+      type="radio"
+      name="source"
+      value="url"
+      onchange="changeSource('url')"
+    >
+
+    🔗 Video URL
+
+  </label>
+
+</div>
+
+
+<!-- UPLOAD -->
+
+<div
+  id="uploadBox"
+  class="source-content"
 >
 
-<button id="saveBtn" onclick="saveVideo()">
+  <label>Choose Video File</label>
+
+  <input
+    type="file"
+    id="videoFile"
+    accept="video/*"
+  >
+
+</div>
+
+
+<!-- URL -->
+
+<div
+  id="urlBox"
+  class="source-content hidden"
+>
+
+  <label>Video URL</label>
+
+  <input
+    type="url"
+    id="videoUrl"
+    placeholder="https://..."
+  >
+
+</div>
+
+
+<button
+  id="saveBtn"
+  onclick="saveVideo()"
+>
 Save Video
 </button>
+
 
 <div id="status"></div>
 
 </div>
+
 </div>
 
+
 <script>
+
+
+// =========================
+// SUPABASE
+// =========================
 
 const SUPABASE_URL =
 "https://dvvyoygahzzbnpqrfhen.supabase.co";
@@ -161,7 +290,48 @@ supabase.createClient(
 
 
 // =========================
-// STATUS MESSAGE
+// SOURCE CHANGE
+// =========================
+
+function changeSource(source){
+
+  const uploadBox =
+    document.getElementById("uploadBox");
+
+  const urlBox =
+    document.getElementById("urlBox");
+
+  const uploadOption =
+    document.getElementById("uploadOption");
+
+  const urlOption =
+    document.getElementById("urlOption");
+
+
+  if(source === "upload"){
+
+    uploadBox.classList.remove("hidden");
+    urlBox.classList.add("hidden");
+
+    uploadOption.classList.add("active");
+    urlOption.classList.remove("active");
+
+  }
+  else{
+
+    uploadBox.classList.add("hidden");
+    urlBox.classList.remove("hidden");
+
+    uploadOption.classList.remove("active");
+    urlOption.classList.add("active");
+
+  }
+
+}
+
+
+// =========================
+// STATUS
 // =========================
 
 function showStatus(message, success){
@@ -170,6 +340,7 @@ function showStatus(message, success){
     document.getElementById("status");
 
   status.style.display = "block";
+
   status.textContent = message;
 
   status.style.background =
@@ -186,34 +357,46 @@ async function checkAdmin(){
 
   const {
     data: { user }
-  } = await supabaseClient.auth.getUser();
+  } =
+    await supabaseClient.auth.getUser();
+
 
   if(!user){
 
     alert("Please login first.");
 
-    window.location.href = "admin.html";
+    window.location.href =
+      "admin.html";
 
     return false;
   }
 
+
   const { data, error } =
     await supabaseClient
+
       .from("admin_users")
+
       .select("user_id")
+
       .eq("user_id", user.id)
+
       .maybeSingle();
+
 
   if(error || !data){
 
     alert("Access denied.");
 
-    window.location.href = "admin.html";
+    window.location.href =
+      "admin.html";
 
     return false;
   }
 
+
   return true;
+
 }
 
 
@@ -226,33 +409,44 @@ async function loadSubjects(){
   const select =
     document.getElementById("subject");
 
+
   const { data, error } =
     await supabaseClient
+
       .from("subjects")
+
       .select("id,name")
+
       .eq("is_active", true)
+
       .order("name");
 
+
   if(error){
+
+    console.error(error);
 
     select.innerHTML =
       '<option value="">Unable to load subjects</option>';
 
-    console.error(error);
-
     return;
   }
 
+
   select.innerHTML =
     '<option value="">Select Subject</option>';
+
 
   data.forEach(subject => {
 
     const option =
       document.createElement("option");
 
-    option.value = subject.id;
-    option.textContent = subject.name;
+    option.value =
+      subject.id;
+
+    option.textContent =
+      subject.name;
 
     select.appendChild(option);
 
@@ -268,111 +462,411 @@ async function loadSubjects(){
 async function saveVideo(){
 
   const title =
-    document.getElementById("title").value.trim();
+    document
+      .getElementById("title")
+      .value
+      .trim();
+
 
   const subjectId =
-    document.getElementById("subject").value;
+    document
+      .getElementById("subject")
+      .value;
+
 
   const description =
-    document.getElementById("description").value.trim();
+    document
+      .getElementById("description")
+      .value
+      .trim();
 
-  const videoUrl =
-    document.getElementById("videoUrl").value.trim();
+
+  const source =
+    document
+      .querySelector(
+        'input[name="source"]:checked'
+      )
+      .value;
+
 
   const button =
     document.getElementById("saveBtn");
 
 
   // =========================
-  // VALIDATION
+  // BASIC VALIDATION
   // =========================
 
   if(!title){
 
-    showStatus("Please enter video title.", false);
+    showStatus(
+      "Please enter video title.",
+      false
+    );
 
     return;
   }
+
 
   if(!subjectId){
 
-    showStatus("Please select a subject.", false);
+    showStatus(
+      "Please select a subject.",
+      false
+    );
 
     return;
   }
 
-  if(!videoUrl){
 
-    showStatus("Please enter video URL.", false);
+  // =========================
+  // URL SOURCE
+  // =========================
+
+  if(source === "url"){
+
+    const videoUrl =
+      document
+        .getElementById("videoUrl")
+        .value
+        .trim();
+
+
+    if(!videoUrl){
+
+      showStatus(
+        "Please enter video URL.",
+        false
+      );
+
+      return;
+    }
+
+
+    try{
+
+      const parsed =
+        new URL(videoUrl);
+
+      if(
+        parsed.protocol !== "https:" &&
+        parsed.protocol !== "http:"
+      ){
+
+        showStatus(
+          "Please enter a valid video URL.",
+          false
+        );
+
+        return;
+      }
+
+    }
+    catch(e){
+
+      showStatus(
+        "Please enter a valid video URL.",
+        false
+      );
+
+      return;
+    }
+
+
+    button.disabled = true;
+
+    button.textContent =
+      "Saving...";
+
+
+    const { error } =
+      await supabaseClient
+
+        .from("study_material")
+
+        .insert({
+
+          subject_id:
+            Number(subjectId),
+
+          title:
+            title,
+
+          description:
+            description || null,
+
+          material_type:
+            "VIDEO",
+
+          file_url:
+            videoUrl,
+
+          is_active:
+            true
+
+        });
+
+
+    if(error){
+
+      console.error(error);
+
+      showStatus(
+        "Error: " + error.message,
+        false
+      );
+
+      button.disabled = false;
+
+      button.textContent =
+        "Save Video";
+
+      return;
+    }
+
+
+    showStatus(
+      "✅ Video URL saved successfully!",
+      true
+    );
+
+
+    clearForm();
+
+    button.disabled = false;
+
+    button.textContent =
+      "Save Video";
+
+    return;
+  }
+
+
+  // =========================
+  // UPLOAD SOURCE
+  // =========================
+
+  const file =
+    document
+      .getElementById("videoFile")
+      .files[0];
+
+
+  if(!file){
+
+    showStatus(
+      "Please choose a video file.",
+      false
+    );
+
+    return;
+  }
+
+
+  if(!file.type.startsWith("video/")){
+
+    showStatus(
+      "Please select a valid video file.",
+      false
+    );
 
     return;
   }
 
 
   button.disabled = true;
-  button.textContent = "Saving...";
+
+  button.textContent =
+    "Uploading...";
+
+
+  showStatus(
+    "Uploading video...",
+    true
+  );
 
 
   // =========================
-  // INSERT DATA
+  // FILE NAME
   // =========================
 
-  const { error } =
+  const extension =
+    file.name.includes(".")
+      ? file.name
+          .split(".")
+          .pop()
+          .toLowerCase()
+      : "mp4";
+
+
+  const fileName =
+    Date.now() +
+    "-" +
+    Math.random()
+      .toString(36)
+      .substring(2,8) +
+    "." +
+    extension;
+
+
+  const filePath =
+    "videos/" + fileName;
+
+
+  // =========================
+  // UPLOAD
+  // =========================
+
+  const { error: uploadError } =
     await supabaseClient
-      .from("study_material")
-      .insert({
 
-        subject_id: Number(subjectId),
+      .storage
 
-        title: title,
+      .from("ssc-edge-videos")
 
-        description:
-          description || null,
+      .upload(
+        filePath,
+        file,
+        {
+          contentType:
+            file.type,
 
-        material_type: "VIDEO",
-
-        file_url: videoUrl,
-
-        is_active: true
-
-      });
+          upsert:false
+        }
+      );
 
 
-  // =========================
-  // RESULT
-  // =========================
+  if(uploadError){
 
-  if(error){
-
-    console.error(error);
+    console.error(uploadError);
 
     showStatus(
-      "Error: " + error.message,
+      "Upload failed: " +
+      uploadError.message,
       false
     );
 
     button.disabled = false;
-    button.textContent = "Save Video";
+
+    button.textContent =
+      "Save Video";
+
+    return;
+  }
+
+
+  // =========================
+  // PUBLIC URL
+  // =========================
+
+  const { data: publicData } =
+    supabaseClient
+
+      .storage
+
+      .from("ssc-edge-videos")
+
+      .getPublicUrl(filePath);
+
+
+  const videoUrl =
+    publicData.publicUrl;
+
+
+  // =========================
+  // DATABASE
+  // =========================
+
+  const { error: dbError } =
+    await supabaseClient
+
+      .from("study_material")
+
+      .insert({
+
+        subject_id:
+          Number(subjectId),
+
+        title:
+          title,
+
+        description:
+          description || null,
+
+        material_type:
+          "VIDEO",
+
+        file_url:
+          videoUrl,
+
+        is_active:
+          true
+
+      });
+
+
+  if(dbError){
+
+    console.error(dbError);
+
+
+    await supabaseClient
+
+      .storage
+
+      .from("ssc-edge-videos")
+
+      .remove([filePath]);
+
+
+    showStatus(
+      "Database error: " +
+      dbError.message,
+      false
+    );
+
+
+    button.disabled = false;
+
+    button.textContent =
+      "Save Video";
 
     return;
   }
 
 
   showStatus(
-    "✅ Video saved successfully!",
+    "✅ Video uploaded and saved successfully!",
     true
   );
 
 
-  // Clear form
+  clearForm();
 
-  document.getElementById("title").value = "";
-  document.getElementById("subject").value = "";
-  document.getElementById("description").value = "";
-  document.getElementById("videoUrl").value = "";
 
   button.disabled = false;
-  button.textContent = "Save Video";
+
+  button.textContent =
+    "Save Video";
+
+}
+
+
+// =========================
+// CLEAR FORM
+// =========================
+
+function clearForm(){
+
+  document.getElementById("title").value = "";
+
+  document.getElementById("subject").value = "";
+
+  document.getElementById("description").value = "";
+
+  document.getElementById("videoFile").value = "";
+
+  document.getElementById("videoUrl").value = "";
 
 }
 
@@ -386,7 +880,12 @@ async function saveVideo(){
   const isAdmin =
     await checkAdmin();
 
-  if(!isAdmin) return;
+
+  if(!isAdmin){
+
+    return;
+  }
+
 
   await loadSubjects();
 
@@ -395,4 +894,5 @@ async function saveVideo(){
 </script>
 
 </body>
+
 </html>
