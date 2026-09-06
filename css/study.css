@@ -1,0 +1,179 @@
+/* =========================================
+   SSC EDGE — STUDY MATERIAL
+   ========================================= */
+
+
+/* =========================================
+   QUICK STUDY OPTIONS
+   ========================================= */
+
+.study-options{
+  width:100%;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:22px;
+  margin-top:34px;
+}
+
+
+.study-option-card{
+  min-height:150px;
+  padding:28px;
+  border-radius:28px;
+
+  background:var(--card);
+  border:1px solid var(--border);
+
+  display:flex;
+  align-items:center;
+  gap:22px;
+
+  color:var(--text);
+  text-decoration:none;
+
+  transition:.2s ease;
+}
+
+
+.study-option-card:hover{
+  transform:translateY(-2px);
+  border-color:var(--purple);
+}
+
+
+.study-option-icon{
+  width:72px;
+  height:72px;
+  flex-shrink:0;
+
+  border-radius:22px;
+
+  background:var(--card2);
+  color:var(--purple2);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+
+.study-option-icon svg{
+  width:42px;
+  height:42px;
+
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2.5;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+
+.study-option-text h3{
+  margin:0;
+
+  font-size:22px;
+  font-weight:800;
+
+  color:var(--text);
+}
+
+
+.study-option-text span{
+  display:block;
+
+  margin-top:7px;
+
+  font-size:15px;
+  color:var(--muted);
+}
+
+
+/* =========================================
+   DIVIDER
+   ========================================= */
+
+.study-divider{
+  width:100%;
+  height:1px;
+
+  margin:42px 0 28px;
+
+  background:var(--border);
+}
+
+
+/* =========================================
+   SUBJECT SECTION TITLE
+   ========================================= */
+
+.study-section-title{
+  margin:0 0 24px;
+
+  font-size:20px;
+  font-weight:800;
+
+  letter-spacing:.5px;
+
+  color:var(--text);
+}
+
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media(max-width:700px){
+
+  .study-options{
+    gap:14px;
+    margin-top:30px;
+  }
+
+
+  .study-option-card{
+    min-height:130px;
+    padding:20px;
+
+    border-radius:24px;
+
+    gap:14px;
+  }
+
+
+  .study-option-icon{
+    width:58px;
+    height:58px;
+
+    border-radius:18px;
+  }
+
+
+  .study-option-icon svg{
+    width:34px;
+    height:34px;
+  }
+
+
+  .study-option-text h3{
+    font-size:18px;
+  }
+
+
+  .study-option-text span{
+    font-size:13px;
+    margin-top:5px;
+  }
+
+
+  .study-divider{
+    margin:34px 0 24px;
+  }
+
+
+  .study-section-title{
+    font-size:17px;
+    margin-bottom:20px;
+  }
+
+}
