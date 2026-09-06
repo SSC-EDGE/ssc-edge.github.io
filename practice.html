@@ -1,16 +1,245 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
 <title>SSC EDGE - Practice</title>
 
 <link rel="stylesheet" href="css/style.css">
+
+<style>
+
+/* =========================
+   PRACTICE PAGE
+========================= */
+
+.practice-page{
+  padding-bottom:100px;
+}
+
+.practice-title{
+  font-size:30px;
+  font-weight:800;
+  margin:20px 0 6px;
+}
+
+.practice-subtitle{
+  color:var(--muted);
+  font-size:14px;
+  margin-bottom:28px;
+}
+
+/* =========================
+   MAIN OPTIONS
+========================= */
+
+.mock-main-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
+}
+
+.mock-main-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:25px 15px;
+  text-align:center;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.mock-main-card:active{
+  transform:scale(.97);
+}
+
+.mock-main-icon{
+  width:58px;
+  height:58px;
+  margin:0 auto 12px;
+  border-radius:16px;
+  background:var(--card2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+}
+
+.mock-main-card strong{
+  display:block;
+  font-size:17px;
+}
+
+.mock-main-card span{
+  display:block;
+  margin-top:5px;
+  font-size:12px;
+  color:var(--muted);
+}
+
+/* =========================
+   SCREEN / SECTIONS
+========================= */
+
+.mock-screen{
+  display:none;
+}
+
+.mock-screen.active{
+  display:block;
+}
+
+.mock-heading{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:20px 0 20px;
+}
+
+.back-btn{
+  width:38px;
+  height:38px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:var(--card);
+  color:var(--text);
+  font-size:20px;
+  cursor:pointer;
+}
+
+.mock-heading h2{
+  margin:0;
+  font-size:22px;
+}
+
+/* =========================
+   EXAM LIST
+========================= */
+
+.exam-list{
+  display:grid;
+  gap:12px;
+}
+
+.exam-card{
+  width:100%;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:18px;
+  color:var(--text);
+  text-align:left;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.exam-card:active{
+  transform:scale(.98);
+}
+
+.exam-card strong{
+  font-size:15px;
+}
+
+.exam-arrow{
+  font-size:20px;
+  color:var(--purple2);
+}
+
+/* =========================
+   MOCK TABS
+========================= */
+
+.mock-tabs{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  background:var(--card);
+  padding:6px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  margin-bottom:20px;
+}
+
+.mock-tab{
+  border:0;
+  border-radius:10px;
+  padding:12px 8px;
+  background:transparent;
+  color:var(--muted);
+  font-weight:700;
+  font-size:13px;
+  cursor:pointer;
+}
+
+.mock-tab.active{
+  background:var(--purple);
+  color:#fff;
+}
+
+/* =========================
+   MOCK CONTENT
+========================= */
+
+.mock-content{
+  display:none;
+}
+
+.mock-content.active{
+  display:block;
+}
+
+.empty-mock{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:35px 20px;
+  text-align:center;
+  color:var(--muted);
+}
+
+.empty-mock-icon{
+  font-size:38px;
+  margin-bottom:10px;
+}
+
+.empty-mock strong{
+  display:block;
+  color:var(--text);
+  margin-bottom:5px;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:500px){
+
+  .practice-title{
+    font-size:27px;
+  }
+
+  .mock-main-grid{
+    gap:12px;
+  }
+
+  .mock-main-card{
+    padding:22px 10px;
+  }
+
+}
+
+</style>
 
 <script>
 document.documentElement.dataset.theme =
 localStorage.getItem("ssc-edge-theme") || "dark";
 </script>
+
 </head>
 
 <body>
@@ -20,143 +249,208 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 </header>
 
 
-<main class="page-container">
+<main class="page-container practice-page">
 
-  <h1 class="page-title">Practice</h1>
+  <h1 class="practice-title">Mock Test</h1>
 
-  <p class="page-subtitle">
+  <p class="practice-subtitle">
     Test your preparation and improve your score
   </p>
 
 
-  <!-- FULL MOCKS -->
+  <!-- =========================
+       MAIN SCREEN
+  ========================== -->
 
-  <section class="practice-section">
+  <div id="mainScreen" class="mock-screen active">
 
-    <h2>FULL MOCKS</h2>
+    <div class="mock-main-grid">
 
-    <div class="mock-grid">
-
-      <a href="#" class="mock-card">
-
-        <div class="mock-icon">
-          <svg viewBox="0 0 64 64">
-            <rect x="12" y="8" width="40" height="48" rx="5"/>
-            <path d="M21 20h22M21 30h22M21 40h13"/>
-            <circle cx="42" cy="42" r="4"/>
-          </svg>
-        </div>
-
-        <strong>CGL PRE</strong>
-        <span>Full Mock Test</span>
-
-      </a>
+      <div class="mock-main-card" onclick="openSSC()">
+        <div class="mock-main-icon">📝</div>
+        <strong>SSC</strong>
+        <span>Staff Selection Commission</span>
+      </div>
 
 
-      <a href="#" class="mock-card">
-
-        <div class="mock-icon">
-          <svg viewBox="0 0 64 64">
-            <rect x="12" y="8" width="40" height="48" rx="5"/>
-            <path d="M21 20h22M21 30h22M21 40h13"/>
-            <circle cx="42" cy="42" r="4"/>
-          </svg>
-        </div>
-
-        <strong>CGL MAINS</strong>
-        <span>Full Mock Test</span>
-
-      </a>
+      <div class="mock-main-card" onclick="openRRB()">
+        <div class="mock-main-icon">🚆</div>
+        <strong>RRB</strong>
+        <span>Railway</span>
+      </div>
 
     </div>
 
-  </section>
+  </div>
 
 
-  <!-- SECTIONAL MOCKS -->
+  <!-- =========================
+       SSC EXAMS
+  ========================== -->
 
-  <section class="practice-section">
+  <div id="sscScreen" class="mock-screen">
 
-    <h2>SECTIONAL MOCKS</h2>
+    <div class="mock-heading">
 
-    <div class="sectional-grid">
+      <button class="back-btn" onclick="goHome()">‹</button>
 
-
-      <!-- QUANT -->
-
-      <a href="#" class="practice-card">
-
-        <div class="practice-icon">
-          <svg viewBox="0 0 64 64">
-            <rect x="15" y="7" width="34" height="50" rx="5"/>
-            <rect x="21" y="14" width="22" height="10" rx="2"/>
-            <circle cx="23" cy="32" r="2"/>
-            <circle cx="32" cy="32" r="2"/>
-            <circle cx="41" cy="32" r="2"/>
-            <circle cx="23" cy="42" r="2"/>
-            <circle cx="32" cy="42" r="2"/>
-            <circle cx="41" cy="42" r="2"/>
-          </svg>
-        </div>
-
-        <strong>Quant</strong>
-
-      </a>
-
-
-      <!-- GK -->
-
-      <a href="#" class="practice-card">
-
-        <div class="practice-icon">
-          <svg viewBox="0 0 64 64">
-            <circle cx="32" cy="32" r="24"/>
-            <path d="M8 32h48M32 8c8 8 8 40 0 48M32 8c-8 8-8 40 0 48"/>
-          </svg>
-        </div>
-
-        <strong>GK</strong>
-
-      </a>
-
-
-      <!-- ENGLISH -->
-
-      <a href="#" class="practice-card">
-
-        <div class="practice-icon">
-          <svg viewBox="0 0 64 64">
-            <path d="M10 12h28a8 8 0 0 1 8 8v30H18a8 8 0 0 0-8 8V12z"/>
-            <path d="M20 25h16M20 33h13M20 41h10"/>
-          </svg>
-        </div>
-
-        <strong>English</strong>
-
-      </a>
-
-
-      <!-- REASONING -->
-
-      <a href="#" class="practice-card">
-
-        <div class="practice-icon">
-          <svg viewBox="0 0 64 64">
-            <path d="M24 10h16v10h10v16H40v18H24V36H14V20h10z"/>
-          </svg>
-        </div>
-
-        <strong>Reasoning</strong>
-
-      </a>
-
+      <h2>SSC</h2>
 
     </div>
 
-  </section>
+
+    <div class="exam-list">
+
+      <div class="exam-card" onclick="openExam('SSC CGL','ssc')">
+        <strong>SSC CGL</strong>
+        <span class="exam-arrow">›</span>
+      </div>
+
+      <div class="exam-card" onclick="openExam('SSC CHSL','ssc')">
+        <strong>SSC CHSL</strong>
+        <span class="exam-arrow">›</span>
+      </div>
+
+      <div class="exam-card" onclick="openExam('SSC MTS','ssc')">
+        <strong>SSC MTS</strong>
+        <span class="exam-arrow">›</span>
+      </div>
+
+      <div class="exam-card" onclick="openExam('SSC CPO','ssc')">
+        <strong>SSC CPO</strong>
+        <span class="exam-arrow">›</span>
+      </div>
+
+      <div class="exam-card" onclick="openExam('SSC STENO','ssc')">
+        <strong>SSC STENO</strong>
+        <span class="exam-arrow">›</span>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       RRB EXAMS
+  ========================== -->
+
+  <div id="rrbScreen" class="mock-screen">
+
+    <div class="mock-heading">
+
+      <button class="back-btn" onclick="goHome()">‹</button>
+
+      <h2>RRB (Railway)</h2>
+
+    </div>
+
+
+    <div class="exam-list">
+
+      <div class="exam-card" onclick="openExam('NTPC - Graduate Level','rrb')">
+        <strong>NTPC - Graduate Level</strong>
+        <span class="exam-arrow">›</span>
+      </div>
+
+      <div class="exam-card" onclick="openExam('NTPC - Under Graduate Level','rrb')">
+        <strong>NTPC - Under Graduate Level</strong>
+        <span class="exam-arrow">›</span>
+      </div>
+
+      <div class="exam-card" onclick="openExam('NTPC GROUP D','rrb')">
+        <strong>NTPC GROUP D</strong>
+        <span class="exam-arrow">›</span>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       EXAM MOCK SCREEN
+  ========================== -->
+
+  <div id="examScreen" class="mock-screen">
+
+    <div class="mock-heading">
+
+      <button class="back-btn" onclick="goBackToExams()">‹</button>
+
+      <h2 id="examTitle">SSC CGL</h2>
+
+    </div>
+
+
+    <!-- TABS -->
+
+    <div class="mock-tabs">
+
+      <button
+        id="fullTab"
+        class="mock-tab active"
+        onclick="showMockType('full')">
+        FULL MOCKS
+      </button>
+
+      <button
+        id="sectionTab"
+        class="mock-tab"
+        onclick="showMockType('section')">
+        SECTIONAL MOCKS
+      </button>
+
+    </div>
+
+
+    <!-- FULL MOCKS -->
+
+    <div id="fullMocks" class="mock-content active">
+
+      <div class="empty-mock">
+
+        <div class="empty-mock-icon">📝</div>
+
+        <strong>Full Mock Tests</strong>
+
+        <span>
+          Mock tests will be available here.
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- SECTIONAL / SUBJECT MOCKS -->
+
+    <div id="sectionMocks" class="mock-content">
+
+      <div class="empty-mock">
+
+        <div class="empty-mock-icon">📚</div>
+
+        <strong id="sectionHeading">
+          Sectional Mock Tests
+        </strong>
+
+        <span>
+          Tests will be available here.
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
 
 </main>
 
+
+<!-- =========================
+     BOTTOM NAV
+========================= -->
 
 <nav class="bottom-nav">
 
@@ -181,6 +475,178 @@ localStorage.getItem("ssc-edge-theme") || "dark";
   </a>
 
 </nav>
+
+
+<script>
+
+/* =========================
+   VARIABLES
+========================= */
+
+let currentBoard = "";
+let currentExam = "";
+
+
+/* =========================
+   SCREEN CONTROL
+========================= */
+
+function hideAllScreens(){
+
+  document.querySelectorAll(".mock-screen")
+    .forEach(screen => {
+      screen.classList.remove("active");
+    });
+
+}
+
+
+/* =========================
+   SSC
+========================= */
+
+function openSSC(){
+
+  hideAllScreens();
+
+  document.getElementById("sscScreen")
+    .classList.add("active");
+
+}
+
+
+/* =========================
+   RRB
+========================= */
+
+function openRRB(){
+
+  hideAllScreens();
+
+  document.getElementById("rrbScreen")
+    .classList.add("active");
+
+}
+
+
+/* =========================
+   OPEN EXAM
+========================= */
+
+function openExam(exam,board){
+
+  currentExam = exam;
+  currentBoard = board;
+
+  document.getElementById("examTitle")
+    .textContent = exam;
+
+  /* RRB uses SUBJECT WISE MOCKS */
+  if(board === "rrb"){
+
+    document.getElementById("sectionTab")
+      .textContent = "SUBJECT WISE MOCKS";
+
+    document.getElementById("sectionHeading")
+      .textContent = "Subject Wise Mock Tests";
+
+  }else{
+
+    document.getElementById("sectionTab")
+      .textContent = "SECTIONAL MOCKS";
+
+    document.getElementById("sectionHeading")
+      .textContent = "Sectional Mock Tests";
+
+  }
+
+  hideAllScreens();
+
+  document.getElementById("examScreen")
+    .classList.add("active");
+
+  showMockType("full");
+
+}
+
+
+/* =========================
+   MOCK TYPE
+========================= */
+
+function showMockType(type){
+
+  const fullTab =
+    document.getElementById("fullTab");
+
+  const sectionTab =
+    document.getElementById("sectionTab");
+
+  const fullMocks =
+    document.getElementById("fullMocks");
+
+  const sectionMocks =
+    document.getElementById("sectionMocks");
+
+
+  if(type === "full"){
+
+    fullTab.classList.add("active");
+    sectionTab.classList.remove("active");
+
+    fullMocks.classList.add("active");
+    sectionMocks.classList.remove("active");
+
+  }else{
+
+    sectionTab.classList.add("active");
+    fullTab.classList.remove("active");
+
+    sectionMocks.classList.add("active");
+    fullMocks.classList.remove("active");
+
+  }
+
+}
+
+
+/* =========================
+   BACK TO MAIN
+========================= */
+
+function goHome(){
+
+  hideAllScreens();
+
+  document.getElementById("mainScreen")
+    .classList.add("active");
+
+}
+
+
+/* =========================
+   BACK TO SSC / RRB
+========================= */
+
+function goBackToExams(){
+
+  hideAllScreens();
+
+  if(currentBoard === "ssc"){
+
+    document.getElementById("sscScreen")
+      .classList.add("active");
+
+  }else{
+
+    document.getElementById("rrbScreen")
+      .classList.add("active");
+
+  }
+
+}
+
+</script>
 
 </body>
 </html>
