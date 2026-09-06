@@ -13,8 +13,6 @@
 
   <link rel="stylesheet" href="css/style.css">
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <style>
     .admin-page{
       min-height:100vh;
@@ -56,7 +54,9 @@
     }
 
     .material-btn{
+      display:block;
       width:100%;
+      box-sizing:border-box;
       margin-top:16px;
       padding:13px;
       border:0;
@@ -65,9 +65,13 @@
       color:white;
       font-size:15px;
       font-weight:600;
+      text-align:center;
+      text-decoration:none;
+      cursor:pointer;
     }
 
     .back-btn{
+      display:inline-block;
       margin-bottom:20px;
       padding:10px 16px;
       border-radius:10px;
@@ -75,6 +79,7 @@
       background:transparent;
       color:var(--text);
       font-size:14px;
+      text-decoration:none;
     }
   </style>
 </head>
@@ -83,84 +88,66 @@
 
 <main class="admin-page">
 
-  <button class="back-btn" onclick="history.back()">
-    ← Back
-  </button>
+  <a href="admin.html" class="back-btn">
+    ← Back to Admin
+  </a>
 
   <div class="admin-header">
     <h1>📚 Study Material</h1>
     <p>Manage videos, e-books and PDFs</p>
   </div>
 
+  <!-- VIDEO -->
+
   <div class="material-card">
+
     <h2>🎥 Videos</h2>
-    <p>Add and manage video study material.</p>
-    <button class="material-btn">
+
+    <p>
+      Add and manage video study material.
+    </p>
+
+    <a href="admin-video.html" class="material-btn">
       Add Video
-    </button>
+    </a>
+
   </div>
 
+
+  <!-- E-BOOK -->
+
   <div class="material-card">
+
     <h2>📕 E-Books</h2>
-    <p>Add and manage e-books for SSC EDGE students.</p>
-    <button class="material-btn">
+
+    <p>
+      Add and manage e-books for SSC EDGE students.
+    </p>
+
+    <a href="admin-ebook.html" class="material-btn">
       Add E-Book
-    </button>
+    </a>
+
   </div>
 
+
+  <!-- PDF -->
+
   <div class="material-card">
+
     <h2>📄 PDFs</h2>
-    <p>Add and manage PDF study material.</p>
-    <button class="material-btn">
+
+    <p>
+      Add and manage PDF study material.
+    </p>
+
+    <a href="admin-pdf.html" class="material-btn">
       Add PDF
-    </button>
+    </a>
+
   </div>
 
 </main>
-
-<script>
-
-const SUPABASE_URL =
-  "https://dvvyoygahzzbnpqrfhen.supabase.co";
-
-const SUPABASE_KEY =
-  "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
-
-const supabaseClient =
-  supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
-
-
-async function checkAdmin(){
-
-  const {
-    data: { user }
-  } = await supabaseClient.auth.getUser();
-
-  if(!user){
-    window.location.href = "admin.html";
-    return;
-  }
-
-  const { data } =
-    await supabaseClient
-      .from("admin_users")
-      .select("user_id")
-      .eq("user_id", user.id)
-      .maybeSingle();
-
-  if(!data){
-    await supabaseClient.auth.signOut();
-    window.location.href = "admin.html";
-  }
-
-}
-
-checkAdmin();
-
-</script>
 
 </body>
 </html>
