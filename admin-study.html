@@ -1,153 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>SSC EDGE - Study Material</title>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
 
-  <script>
-    document.documentElement.dataset.theme =
-      localStorage.getItem("ssc-edge-theme") || "dark";
-  </script>
+<title>SSC EDGE - Study Material Admin</title>
 
-  <link rel="stylesheet" href="css/style.css">
+<script>
+document.documentElement.dataset.theme =
+localStorage.getItem("ssc-edge-theme") || "dark";
+</script>
 
-  <style>
-    .admin-page{
-      min-height:100vh;
-      padding:24px 18px 100px;
-    }
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    .admin-header{
-      margin-bottom:24px;
-    }
+<link rel="stylesheet" href="css/style.css">
 
-    .admin-header h1{
-      margin:0;
-      font-size:26px;
-    }
+<style>
 
-    .admin-header p{
-      margin:6px 0 0;
-      color:var(--muted);
-    }
+.admin-page{
+  max-width:700px;
+  margin:auto;
+  padding:20px;
+}
 
-    .material-card{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:18px;
-      padding:20px;
-      margin-bottom:16px;
-    }
+.admin-card{
+  display:block;
+  text-decoration:none;
+  color:var(--text);
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:20px;
+  margin:14px 0;
+}
 
-    .material-card h2{
-      margin:0 0 8px;
-      font-size:20px;
-    }
+.admin-card h2{
+  margin:0 0 7px;
+}
 
-    .material-card p{
-      margin:0;
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.5;
-    }
+.admin-card p{
+  margin:0;
+  color:var(--muted);
+}
 
-    .material-btn{
-      display:block;
-      width:100%;
-      box-sizing:border-box;
-      margin-top:16px;
-      padding:13px;
-      border:0;
-      border-radius:12px;
-      background:var(--purple);
-      color:white;
-      font-size:15px;
-      font-weight:600;
-      text-align:center;
-      text-decoration:none;
-      cursor:pointer;
-    }
+.back{
+  margin-top:15px;
+  padding:12px 18px;
+}
 
-    .back-btn{
-      display:inline-block;
-      margin-bottom:20px;
-      padding:10px 16px;
-      border-radius:10px;
-      border:1px solid var(--border);
-      background:transparent;
-      color:var(--text);
-      font-size:14px;
-      text-decoration:none;
-    }
-  </style>
+</style>
+
 </head>
 
 <body>
 
-<main class="admin-page">
+<div class="admin-page">
 
-  <a href="admin.html" class="back-btn">
-    ← Back to Admin
-  </a>
+<h1>📚 Study Material</h1>
 
-  <div class="admin-header">
-    <h1>📚 Study Material</h1>
-    <p>Manage videos, e-books and PDFs</p>
-  </div>
-
-  <!-- VIDEO -->
-
-  <div class="material-card">
-
-    <h2>🎥 Videos</h2>
-
-    <p>
-      Add and manage video study material.
-    </p>
-
-    <a href="admin-video.html" class="material-btn">
-      Add Video
-    </a>
-
-  </div>
+<p>Manage SSC EDGE study content</p>
 
 
-  <!-- E-BOOK -->
+<a href="admin-video.html"
+class="admin-card">
 
-  <div class="material-card">
+<h2>🎬 Videos</h2>
 
-    <h2>📕 E-Books</h2>
+<p>
+Upload, add URL, edit or delete videos
+</p>
 
-    <p>
-      Add and manage e-books for SSC EDGE students.
-    </p>
-
-    <a href="admin-ebook.html" class="material-btn">
-      Add E-Book
-    </a>
-
-  </div>
+</a>
 
 
-  <!-- PDF -->
+<a href="admin-ebook.html"
+class="admin-card">
 
-  <div class="material-card">
+<h2>📚 E-Books</h2>
 
-    <h2>📄 PDFs</h2>
+<p>
+Upload, add URL, edit or delete E-Books
+</p>
 
-    <p>
-      Add and manage PDF study material.
-    </p>
+</a>
 
-    <a href="admin-pdf.html" class="material-btn">
-      Add PDF
-    </a>
 
-  </div>
+<a href="admin-pdf.html"
+class="admin-card">
 
-</main>
+<h2>📄 PDFs</h2>
+
+<p>
+Upload subject-wise PDFs or add PDF URLs
+</p>
+
+</a>
+
+
+<button
+class="back"
+onclick="history.back()">
+
+← Back
+
+</button>
+
+</div>
+
+
+<script>
+
+const SUPABASE_URL =
+"https://dvvyoygahzzbnpqrfhen.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
+const db =
+supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+(async()=>{
+
+  const {
+    data:{user}
+  } = await db.auth.getUser();
+
+  if(!user){
+    location.href="admin.html";
+    return;
+  }
+
+  const {data,error}=await db
+    .from("admin_users")
+    .select("user_id")
+    .eq("user_id",user.id)
+    .maybeSingle();
+
+  if(error || !data){
+
+    await db.auth.signOut();
+
+    location.href="admin.html";
+
+  }
+
+})();
+
+</script>
 
 </body>
 </html>
