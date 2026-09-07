@@ -173,10 +173,6 @@ Practice smarter. Improve faster.
 </div>
 
 
-<!-- =========================
-     MAIN PRACTICE
-========================= -->
-
 <div id="mainScreen">
 
 <div class="section-title">
@@ -229,10 +225,6 @@ Reasoning
 </div>
 
 
-<!-- =========================
-     SSC EXAMS
-========================= -->
-
 <div id="sscScreen" class="hidden">
 
 <div class="back" onclick="showMain()">
@@ -248,10 +240,6 @@ Loading...
 </div>
 
 
-<!-- =========================
-     RRB EXAMS
-========================= -->
-
 <div id="rrbScreen" class="hidden">
 
 <div class="back" onclick="showMain()">
@@ -266,10 +254,6 @@ Loading...
 
 </div>
 
-
-<!-- =========================
-     EXAM TESTS
-========================= -->
 
 <div id="testScreen" class="hidden">
 
@@ -304,10 +288,6 @@ Loading...
 </div>
 
 
-<!-- =========================
-     CHAPTER SCREEN
-========================= -->
-
 <div id="chapterScreen" class="hidden">
 
 <div class="back" onclick="showMain()">
@@ -326,10 +306,6 @@ Loading...
 
 </div>
 
-
-<!-- =========================
-     BOTTOM NAV
-========================= -->
 
 <div class="bottom-nav">
 
@@ -356,10 +332,6 @@ Loading...
 
 <script>
 
-/* =========================
-   SUPABASE
-========================= */
-
 const SUPABASE_URL =
 "https://dvvyoygahzzbnpqrfhen.supabase.co";
 
@@ -373,10 +345,6 @@ SUPABASE_KEY
 );
 
 
-/* =========================
-   DATA
-========================= */
-
 let exams=[];
 let subjects=[];
 let tests=[];
@@ -385,10 +353,6 @@ let currentGateway="";
 let currentExam=null;
 let currentType=0;
 
-
-/* =========================
-   ESCAPE
-========================= */
 
 function escapeHtml(value){
 
@@ -412,11 +376,12 @@ const examResult =
 await supabaseClient
 .from("exams")
 .select("id,name")
-.order("name");
+.order("id");
 
 if(examResult.error){
 
-console.error(examResult.error);
+console.error("EXAMS ERROR:",examResult.error);
+
 return;
 
 }
@@ -428,11 +393,12 @@ const subjectResult =
 await supabaseClient
 .from("subjects")
 .select("id,name")
-.order("name");
+.order("id");
 
 if(subjectResult.error){
 
-console.error(subjectResult.error);
+console.error("SUBJECT ERROR:",subjectResult.error);
+
 return;
 
 }
@@ -449,13 +415,23 @@ await supabaseClient
 
 if(testResult.error){
 
-console.error(testResult.error);
+console.error("MOCK TEST ERROR:",testResult.error);
+
+document.getElementById("testList").innerHTML=
+`
+<div class="empty">
+Unable to load tests.
+</div>
+`;
 
 return;
 
 }
 
 tests=testResult.data || [];
+
+console.log("EXAMS:",exams);
+console.log("MOCK TESTS:",tests);
 
 }
 
@@ -546,41 +522,43 @@ renderExams("RRB");
 
 function renderExams(type){
 
-const list=
+const list =
 type==="SSC"
 ?document.getElementById("sscList")
 :document.getElementById("rrbList");
 
 
-let filtered=[];
-
-if(type==="SSC"){
-
-filtered=
-exams.filter(e=>
-[
+const sscNames=[
 "SSC CGL",
 "SSC CHSL",
 "SSC MTS",
 "SSC CPO",
 "SSC STENO"
-]
-.includes(e.name)
-);
+];
 
-}else{
-
-filtered=
-exams.filter(e=>
-[
+const rrbNames=[
 "NTPC - Graduate Level",
 "NTPC - Under Graduate Level",
 "NTPC GROUP D"
-]
-.includes(e.name)
-);
+];
 
-}
+
+const names =
+type==="SSC"
+?sscNames
+:rrbNames;
+
+
+const filtered =
+exams.filter(exam =>
+names.some(name =>
+String(exam.name || "")
+.trim()
+.toLowerCase()
+===
+name.trim().toLowerCase()
+)
+);
 
 
 if(filtered.length===0){
@@ -603,7 +581,7 @@ filtered.map(exam=>`
 <div
 class="box"
 style="margin-bottom:12px"
-onclick="openExam(${exam.id})">
+onclick="openExam('${exam.id}')">
 
 ${escapeHtml(exam.name)}
 
@@ -620,12 +598,20 @@ ${escapeHtml(exam.name)}
 
 function openExam(id){
 
-currentExam=
-exams.find(e=>e.id==id);
+currentExam =
+exams.find(exam =>
+String(exam.id) === String(id)
+);
+
 
 if(!currentExam){
+
+console.error("Exam not found:",id);
+
 return;
+
 }
+
 
 currentType=0;
 
@@ -638,7 +624,7 @@ document
 
 document
 .getElementById("examTitle")
-.textContent=
+.textContent =
 currentExam.name;
 
 showTestType(0);
@@ -684,29 +670,80 @@ document
 .toggle("active",type===1);
 
 
+if(!currentExam){
+
+return;
+
+}
+
+
+const examId =
+String(currentExam.id);
+
+
 let filtered=[];
 
 
 if(type===0){
 
-filtered=
-tests.filter(t=>
-t.exam_id==currentExam.id &&
-t.test_type==="FULL"
+filtered =
+tests.filter(test => {
+
+const testExamId =
+String(test.exam_id);
+
+const testType =
+String(test.test_type || "")
+.trim()
+.toUpperCase();
+
+return (
+testExamId === examId &&
+testType === "FULL"
 );
+
+});
 
 }else{
 
-filtered=
-tests.filter(t=>
-t.exam_id==currentExam.id &&
+filtered =
+tests.filter(test => {
+
+const testExamId =
+String(test.exam_id);
+
+const testType =
+String(test.test_type || "")
+.trim()
+.toUpperCase();
+
+return (
+testExamId === examId &&
 (
-t.test_type==="SECTIONAL" ||
-t.test_type==="SUBJECT_WISE"
+testType === "SECTIONAL" ||
+testType === "SUBJECT_WISE"
 )
 );
 
+});
+
 }
+
+
+console.log(
+"Selected Exam:",
+currentExam
+);
+
+console.log(
+"Exam ID:",
+examId
+);
+
+console.log(
+"Filtered Tests:",
+filtered
+);
 
 
 renderTests(filtered);
@@ -720,7 +757,7 @@ renderTests(filtered);
 
 function renderTests(list){
 
-const box=
+const box =
 document.getElementById("testList");
 
 
@@ -738,17 +775,21 @@ return;
 }
 
 
-box.innerHTML=
+box.innerHTML =
 list.map(test=>{
 
 let subjectName="";
 
+
 if(test.subject_id){
 
-const subject=
-subjects.find(s=>s.id==test.subject_id);
+const subject =
+subjects.find(subject =>
+String(subject.id) ===
+String(test.subject_id)
+);
 
-subjectName=
+subjectName =
 subject
 ?subject.name
 :"";
@@ -766,7 +807,10 @@ ${escapeHtml(test.title)}
 
 <div class="meta">
 
-${escapeHtml(test.test_type)}
+${escapeHtml(
+String(test.test_type || "")
+.trim()
+)}
 
 ${subjectName
 ?` • ${escapeHtml(subjectName)}`
@@ -774,17 +818,17 @@ ${subjectName
 
 <br>
 
-⏱ ${test.duration_minutes} minutes
+⏱ ${escapeHtml(test.duration_minutes)} minutes
 
 <br>
 
-📝 ${test.total_questions} questions
+📝 ${escapeHtml(test.total_questions)} questions
 
 </div>
 
 <a
 class="test-btn"
-href="test.html?id=${test.id}">
+href="test.html?id=${encodeURIComponent(test.id)}">
 
 Start Test →
 
@@ -812,16 +856,20 @@ document
 .classList
 .remove("hidden");
 
+
 document
 .getElementById("chapterTitle")
-textContent=
+.textContent =
 subjectName+" Practice";
 
 
-const subject=
-subjects.find(s=>
-s.name.toLowerCase()===
-subjectName.toLowerCase()
+const subject =
+subjects.find(subject =>
+String(subject.name || "")
+.trim()
+.toLowerCase()
+===
+subjectName.trim().toLowerCase()
 );
 
 
@@ -842,11 +890,21 @@ return;
 }
 
 
-const list=
-tests.filter(t=>
-t.test_type==="CHAPTER_WISE" &&
-t.subject_id==subject.id
+const list =
+tests.filter(test => {
+
+const testType =
+String(test.test_type || "")
+.trim()
+.toUpperCase();
+
+return (
+testType === "CHAPTER_WISE" &&
+String(test.subject_id) ===
+String(subject.id)
 );
+
+});
 
 
 if(list.length===0){
@@ -867,7 +925,7 @@ return;
 
 document
 .getElementById("chapterList")
-.innerHTML=
+.innerHTML =
 list.map(test=>`
 
 <div class="test-card">
@@ -878,15 +936,17 @@ ${escapeHtml(test.title)}
 
 <div class="meta">
 
-⏱ ${test.duration_minutes} minutes
+⏱ ${escapeHtml(test.duration_minutes)} minutes
+
 <br>
-📝 ${test.total_questions} questions
+
+📝 ${escapeHtml(test.total_questions)} questions
 
 </div>
 
 <a
 class="test-btn"
-href="test.html?id=${test.id}">
+href="test.html?id=${encodeURIComponent(test.id)}">
 
 Start Practice →
 
