@@ -1,47 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Question Bank - SSC EDGE</title>
+
+<title>SSC EDGE Question Bank</title>
 
 <script>
 document.documentElement.dataset.theme =
 localStorage.getItem("ssc-edge-theme") || "dark";
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <link rel="stylesheet" href="css/style.css">
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-*{
-  box-sizing:border-box;
-}
 
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:var(--bg);
-  color:var(--text);
-}
-
-.container{
-  max-width:900px;
+.page{
+  min-height:100vh;
+  padding:22px 16px 100px;
+  max-width:950px;
   margin:auto;
-  padding:20px 16px 100px;
 }
 
 .header{
   display:flex;
-  align-items:center;
   justify-content:space-between;
+  align-items:center;
   margin-bottom:20px;
 }
 
 .header h1{
   margin:0;
-  font-size:24px;
+  font-size:25px;
 }
 
 .back{
@@ -53,27 +46,27 @@ body{
 .card{
   background:var(--card);
   border:1px solid var(--border);
-  border-radius:14px;
+  border-radius:16px;
   padding:16px;
   margin-bottom:16px;
 }
 
 .card h2{
-  margin:0 0 14px;
-  font-size:18px;
+  margin:0 0 12px;
 }
 
 label{
   display:block;
-  margin:12px 0 6px;
-  font-size:14px;
+  margin:10px 0 6px;
   color:var(--muted);
+  font-size:14px;
 }
 
 input,
 select,
 textarea{
   width:100%;
+  box-sizing:border-box;
   padding:12px;
   border-radius:9px;
   border:1px solid var(--border);
@@ -83,25 +76,8 @@ textarea{
 }
 
 textarea{
-  min-height:110px;
+  min-height:100px;
   resize:vertical;
-}
-
-.option-row{
-  display:flex;
-  gap:8px;
-  align-items:center;
-  margin-bottom:9px;
-}
-
-.option-label{
-  width:42px;
-  min-width:42px;
-  text-align:center;
-  padding:11px 4px;
-  border-radius:8px;
-  background:var(--card2);
-  font-weight:bold;
 }
 
 .grid{
@@ -110,14 +86,31 @@ textarea{
   gap:12px;
 }
 
+.option-row{
+  display:flex;
+  gap:8px;
+  margin-bottom:9px;
+}
+
+.option-label{
+  width:42px;
+  min-width:42px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:8px;
+  background:var(--card2);
+  font-weight:bold;
+}
+
 button{
   border:0;
   border-radius:9px;
-  padding:12px 16px;
-  cursor:pointer;
-  font-weight:bold;
+  padding:11px 15px;
   background:var(--purple);
   color:white;
+  font-weight:bold;
+  cursor:pointer;
 }
 
 button.secondary{
@@ -130,17 +123,16 @@ button.danger{
 
 .actions{
   display:flex;
-  gap:10px;
+  gap:8px;
   flex-wrap:wrap;
-  margin-top:15px;
+  margin-top:14px;
 }
 
 .question{
   border:1px solid var(--border);
   border-radius:12px;
-  padding:14px;
-  margin-top:12px;
-  background:var(--card);
+  padding:15px;
+  margin-bottom:12px;
 }
 
 .question-title{
@@ -148,18 +140,14 @@ button.danger{
   line-height:1.5;
 }
 
-.question-meta{
+.meta{
   color:var(--muted);
   font-size:13px;
-  margin-top:7px;
-}
-
-.options{
-  margin-top:10px;
+  margin-top:6px;
 }
 
 .option{
-  padding:7px 0;
+  padding:6px 0;
   font-size:14px;
 }
 
@@ -169,137 +157,223 @@ button.danger{
 
 .status{
   padding:12px;
-  border-radius:9px;
-  margin-bottom:15px;
+  border-radius:10px;
   background:var(--card2);
+  margin-bottom:15px;
 }
 
 .empty{
   text-align:center;
   color:var(--muted);
-  padding:25px 10px;
+  padding:25px;
 }
 
 @media(max-width:600px){
+
   .grid{
     grid-template-columns:1fr;
   }
 
-  .container{
-    padding-left:12px;
-    padding-right:12px;
-  }
 }
+
 </style>
+
 </head>
 
 <body>
 
-<div class="container">
+<div class="page">
 
   <div class="header">
-    <div>
-      <h1>Question Bank</h1>
-    </div>
 
-    <a class="back" href="admin.html">← Admin</a>
+    <h1>❓ Question Bank</h1>
+
+    <a
+      class="back"
+      href="admin.html"
+    >
+      ← Admin
+    </a>
+
   </div>
 
-  <div id="status" class="status">
+
+  <div
+    id="status"
+    class="status"
+  >
     Checking admin access...
   </div>
 
+
   <div id="app" style="display:none;">
 
-    <!-- =========================
-         ADD / EDIT QUESTION
-    ========================== -->
+
+    <!-- ADD QUESTION -->
 
     <div class="card">
 
-      <h2 id="formTitle">Add Question</h2>
+      <h2 id="formTitle">
+        Add Question
+      </h2>
+
 
       <label>Subject</label>
+
       <select id="subject">
-        <option value="">Select Subject</option>
+        <option value="">
+          Select Subject
+        </option>
       </select>
+
 
       <label>Chapter</label>
+
       <select id="chapter">
-        <option value="">Select Chapter</option>
+
+        <option value="">
+          Select Chapter
+        </option>
+
       </select>
 
+
       <label>Question</label>
+
       <textarea
         id="questionText"
         placeholder="Enter question..."
       ></textarea>
 
+
       <label>Options</label>
 
-      <div class="option-row">
-        <div class="option-label">A</div>
-        <input id="optionA" placeholder="Option A">
-      </div>
 
       <div class="option-row">
-        <div class="option-label">B</div>
-        <input id="optionB" placeholder="Option B">
+
+        <div class="option-label">
+          A
+        </div>
+
+        <input
+          id="optionA"
+          placeholder="Option A"
+        >
+
       </div>
+
 
       <div class="option-row">
-        <div class="option-label">C</div>
-        <input id="optionC" placeholder="Option C">
+
+        <div class="option-label">
+          B
+        </div>
+
+        <input
+          id="optionB"
+          placeholder="Option B"
+        >
+
       </div>
+
 
       <div class="option-row">
-        <div class="option-label">D</div>
-        <input id="optionD" placeholder="Option D">
+
+        <div class="option-label">
+          C
+        </div>
+
+        <input
+          id="optionC"
+          placeholder="Option C"
+        >
+
       </div>
 
-      <label>Correct Option</label>
+
+      <div class="option-row">
+
+        <div class="option-label">
+          D
+        </div>
+
+        <input
+          id="optionD"
+          placeholder="Option D"
+        >
+
+      </div>
+
+
+      <label>
+        Correct Option
+      </label>
+
       <select id="correctOption">
-        <option value="">Select Correct Option</option>
+
+        <option value="">
+          Select Correct Option
+        </option>
+
         <option value="A">A</option>
         <option value="B">B</option>
         <option value="C">C</option>
         <option value="D">D</option>
+
       </select>
+
 
       <div class="grid">
 
         <div>
-          <label>Marks</label>
+
+          <label>
+            Marks
+          </label>
+
           <input
             id="marks"
             type="number"
             step="0.01"
             value="2"
           >
+
         </div>
 
+
         <div>
-          <label>Negative Marks</label>
+
+          <label>
+            Negative Marks
+          </label>
+
           <input
             id="negativeMarks"
             type="number"
             step="0.01"
             value="0.5"
           >
+
         </div>
 
       </div>
 
-      <label>Explanation</label>
+
+      <label>
+        Explanation
+      </label>
 
       <textarea
         id="explanation"
         placeholder="Optional explanation..."
       ></textarea>
 
+
       <div class="actions">
 
-        <button onclick="saveQuestion()">
+        <button
+          onclick="saveQuestion()"
+        >
           Save Question
         </button>
 
@@ -315,48 +389,68 @@ button.danger{
     </div>
 
 
-    <!-- =========================
-         FILTER
-    ========================== -->
+    <!-- FILTER -->
 
     <div class="card">
 
-      <h2>Question Bank</h2>
+      <h2>
+        Question Bank
+      </h2>
+
 
       <div class="grid">
 
         <div>
-          <label>Filter Subject</label>
 
-          <select id="filterSubject">
-            <option value="">All Subjects</option>
+          <label>
+            Subject
+          </label>
+
+          <select
+            id="filterSubject"
+          >
+
+            <option value="">
+              All Subjects
+            </option>
+
           </select>
+
         </div>
 
-        <div>
-          <label>Filter Chapter</label>
 
-          <select id="filterChapter">
-            <option value="">All Chapters</option>
+        <div>
+
+          <label>
+            Chapter
+          </label>
+
+          <select
+            id="filterChapter"
+          >
+
+            <option value="">
+              All Chapters
+            </option>
+
           </select>
+
         </div>
 
       </div>
 
-      <label>Search</label>
+
+      <label>
+        Search
+      </label>
 
       <input
         id="search"
         placeholder="Search question..."
-        oninput="renderQuestions()"
       >
 
     </div>
 
-
-    <!-- =========================
-         QUESTIONS
-    ========================== -->
 
     <div id="questionList"></div>
 
@@ -379,20 +473,12 @@ supabase.createClient(
   SUPABASE_KEY
 );
 
+
 let subjects = [];
 let chapters = [];
 let questions = [];
 
-let editingQuestionId = null;
-
-
-/* =========================
-   STATUS
-========================= */
-
-function setStatus(text){
-  document.getElementById("status").textContent = text;
-}
+let editingId = null;
 
 
 /* =========================
@@ -401,55 +487,91 @@ function setStatus(text){
 
 async function checkAdmin(){
 
-  setStatus("Checking admin access...");
+  const {
+    data:{user}
+  } =
+    await db.auth.getUser();
 
-  try{
 
-    const {
-      data,
-      error
-    } = await db.rpc("is_admin");
+  if(!user){
 
-    if(error){
-      console.error(error);
-      setStatus(
-        "Admin check failed: " + error.message
-      );
-      return false;
-    }
+    showStatus(
+      "Admin access required."
+    );
 
-    if(data !== true){
+    return false;
+  }
 
-      setStatus(
-        "Admin access required."
-      );
 
-      return false;
-    }
+  const {
+    data,
+    error
+  } =
+    await db
+      .from("admin_users")
+      .select("user_id")
+      .eq(
+        "user_id",
+        user.id
+      )
+      .maybeSingle();
 
-    document.getElementById("status").style.display =
-      "none";
 
-    document.getElementById("app").style.display =
-      "block";
+  if(error){
 
-    return true;
+    console.error(error);
 
-  }catch(err){
-
-    console.error(err);
-
-    setStatus(
+    showStatus(
       "Unable to verify admin access."
     );
 
     return false;
   }
+
+
+  if(!data){
+
+    await db.auth.signOut();
+
+    showStatus(
+      "Access denied. Admin account required."
+    );
+
+    return false;
+  }
+
+
+  document.getElementById(
+    "status"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "app"
+  ).style.display =
+    "block";
+
+
+  return true;
+
+}
+
+
+/* STATUS */
+
+function showStatus(text){
+
+  document.getElementById(
+    "status"
+  ).textContent =
+    text;
+
 }
 
 
 /* =========================
-   LOAD SUBJECTS
+   SUBJECTS
 ========================= */
 
 async function loadSubjects(){
@@ -457,14 +579,14 @@ async function loadSubjects(){
   const {
     data,
     error
-  } = await db
-    .from("subjects")
-    .select("*")
-    .order("name");
+  } =
+    await db
+      .from("subjects")
+      .select("*")
+      .order("name");
+
 
   if(error){
-
-    console.error(error);
 
     alert(
       "Could not load subjects:\n" +
@@ -474,19 +596,33 @@ async function loadSubjects(){
     return;
   }
 
-  subjects = data || [];
+
+  subjects =
+    data || [];
+
 
   const subject =
-    document.getElementById("subject");
+    document.getElementById(
+      "subject"
+    );
 
-  const filterSubject =
-    document.getElementById("filterSubject");
+  const filter =
+    document.getElementById(
+      "filterSubject"
+    );
+
 
   subject.innerHTML =
-    '<option value="">Select Subject</option>';
+    `<option value="">
+      Select Subject
+    </option>`;
 
-  filterSubject.innerHTML =
-    '<option value="">All Subjects</option>';
+
+  filter.innerHTML =
+    `<option value="">
+      All Subjects
+    </option>`;
+
 
   subjects.forEach(s => {
 
@@ -495,17 +631,19 @@ async function loadSubjects(){
         ${escapeHtml(s.name)}
       </option>`;
 
-    filterSubject.innerHTML +=
+
+    filter.innerHTML +=
       `<option value="${s.id}">
         ${escapeHtml(s.name)}
       </option>`;
 
   });
+
 }
 
 
 /* =========================
-   LOAD CHAPTERS
+   CHAPTERS
 ========================= */
 
 async function loadChapters(){
@@ -513,14 +651,14 @@ async function loadChapters(){
   const {
     data,
     error
-  } = await db
-    .from("chapters")
-    .select("*")
-    .order("name");
+  } =
+    await db
+      .from("chapters")
+      .select("*")
+      .order("name");
+
 
   if(error){
-
-    console.error(error);
 
     alert(
       "Could not load chapters:\n" +
@@ -530,66 +668,46 @@ async function loadChapters(){
     return;
   }
 
-  chapters = data || [];
+
+  chapters =
+    data || [];
+
 
   updateChapterSelect();
+
+  updateFilterChapter();
+
 }
 
 
-/* =========================
-   UPDATE CHAPTER SELECT
-========================= */
+/* FORM CHAPTERS */
 
 function updateChapterSelect(){
 
   const subjectId =
-    document.getElementById("subject").value;
+    document.getElementById(
+      "subject"
+    ).value;
 
-  const chapter =
-    document.getElementById("chapter");
-
-  chapter.innerHTML =
-    '<option value="">Select Chapter</option>';
-
-  chapters
-    .filter(c => {
-
-      if(!subjectId) return true;
-
-      return String(c.subject_id) ===
-        String(subjectId);
-
-    })
-    .forEach(c => {
-
-      chapter.innerHTML +=
-        `<option value="${c.id}">
-          ${escapeHtml(c.name)}
-        </option>`;
-
-    });
-}
-
-
-/* =========================
-   FILTER CHAPTERS
-========================= */
-
-function updateFilterChapter(){
-
-  const subjectId =
-    document.getElementById("filterSubject").value;
 
   const select =
-    document.getElementById("filterChapter");
+    document.getElementById(
+      "chapter"
+    );
+
 
   select.innerHTML =
-    '<option value="">All Chapters</option>';
+    `<option value="">
+      Select Chapter
+    </option>`;
+
 
   chapters
     .filter(c => {
 
-      if(!subjectId) return true;
+      if(!subjectId){
+        return false;
+      }
 
       return String(c.subject_id) ===
         String(subjectId);
@@ -604,12 +722,59 @@ function updateFilterChapter(){
 
     });
 
+}
+
+
+/* FILTER CHAPTERS */
+
+function updateFilterChapter(){
+
+  const subjectId =
+    document.getElementById(
+      "filterSubject"
+    ).value;
+
+
+  const select =
+    document.getElementById(
+      "filterChapter"
+    );
+
+
+  select.innerHTML =
+    `<option value="">
+      All Chapters
+    </option>`;
+
+
+  chapters
+    .filter(c => {
+
+      if(!subjectId){
+        return true;
+      }
+
+      return String(c.subject_id) ===
+        String(subjectId);
+
+    })
+    .forEach(c => {
+
+      select.innerHTML +=
+        `<option value="${c.id}">
+          ${escapeHtml(c.name)}
+        </option>`;
+
+    });
+
+
   renderQuestions();
+
 }
 
 
 /* =========================
-   LOAD QUESTION BANK
+   LOAD QUESTIONS
 ========================= */
 
 async function loadQuestions(){
@@ -617,21 +782,24 @@ async function loadQuestions(){
   const {
     data,
     error
-  } = await db
-    .from("questions")
-    .select(`
-      *,
-      subjects(name),
-      chapters(name)
-    `)
-    .is("mock_test_id", null)
-    .order("id", {
-      ascending:false
-    });
+  } =
+    await db
+      .from("questions")
+      .select(`
+        *,
+        subjects(name),
+        chapters(name)
+      `)
+      .is(
+        "mock_test_id",
+        null
+      )
+      .order("id",{
+        ascending:false
+      });
+
 
   if(error){
-
-    console.error(error);
 
     alert(
       "Could not load questions:\n" +
@@ -641,35 +809,49 @@ async function loadQuestions(){
     return;
   }
 
-  questions = data || [];
+
+  questions =
+    data || [];
+
 
   renderQuestions();
+
 }
 
 
 /* =========================
-   RENDER QUESTIONS
+   RENDER
 ========================= */
 
 async function renderQuestions(){
 
   const list =
-    document.getElementById("questionList");
+    document.getElementById(
+      "questionList"
+    );
+
 
   const subjectId =
-    document.getElementById("filterSubject").value;
+    document.getElementById(
+      "filterSubject"
+    ).value;
+
 
   const chapterId =
-    document.getElementById("filterChapter").value;
+    document.getElementById(
+      "filterChapter"
+    ).value;
+
 
   const search =
-    document.getElementById("search")
-      .value
+    document.getElementById(
+      "search"
+    ).value
       .trim()
       .toLowerCase();
 
 
-  let filtered =
+  const filtered =
     questions.filter(q => {
 
       if(
@@ -680,6 +862,7 @@ async function renderQuestions(){
         return false;
       }
 
+
       if(
         chapterId &&
         String(q.chapter_id) !==
@@ -688,14 +871,18 @@ async function renderQuestions(){
         return false;
       }
 
+
       if(
         search &&
-        !String(q.question_text || "")
-          .toLowerCase()
-          .includes(search)
+        !String(
+          q.question_text || ""
+        )
+        .toLowerCase()
+        .includes(search)
       ){
         return false;
       }
+
 
       return true;
 
@@ -713,24 +900,25 @@ async function renderQuestions(){
   }
 
 
-  /* Load options for displayed questions */
-
   const ids =
     filtered.map(q => q.id);
 
+
   const {
-    data: options,
+    data:options,
     error
-  } = await db
-    .from("question_options")
-    .select("*")
-    .in("question_id", ids)
-    .order("option_label");
+  } =
+    await db
+      .from("question_options")
+      .select("*")
+      .in(
+        "question_id",
+        ids
+      )
+      .order("option_label");
 
 
   if(error){
-
-    console.error(error);
 
     list.innerHTML =
       `<div class="card empty">
@@ -743,13 +931,15 @@ async function renderQuestions(){
 
   const optionMap = {};
 
+
   (options || []).forEach(o => {
 
     if(!optionMap[o.question_id]){
       optionMap[o.question_id] = [];
     }
 
-    optionMap[o.question_id].push(o);
+    optionMap[o.question_id]
+      .push(o);
 
   });
 
@@ -762,27 +952,36 @@ async function renderQuestions(){
     const opts =
       optionMap[q.id] || [];
 
-    let optionsHtml = "";
+
+    let optionHtml = "";
+
 
     opts.forEach(o => {
 
-      optionsHtml +=
+      optionHtml +=
         `<div class="option ${
-          o.is_correct ? "correct" : ""
+          o.is_correct
+          ? "correct"
+          : ""
         }">
-          ${escapeHtml(o.option_label)}.
-          ${escapeHtml(o.option_text)}
-          ${o.is_correct ? " ✓" : ""}
+
+          ${escapeHtml(
+            o.option_label
+          )}.
+
+          ${escapeHtml(
+            o.option_text
+          )}
+
+          ${
+            o.is_correct
+            ? " ✓"
+            : ""
+          }
+
         </div>`;
 
     });
-
-
-    const subjectName =
-      q.subjects?.name || "No Subject";
-
-    const chapterName =
-      q.chapters?.name || "No Chapter";
 
 
     list.innerHTML +=
@@ -790,35 +989,56 @@ async function renderQuestions(){
       `<div class="question">
 
         <div class="question-title">
-          ${index + 1}. ${escapeHtml(
-            q.question_text || ""
+
+          ${index+1}.
+          ${escapeHtml(
+            q.question_text
           )}
+
         </div>
 
-        <div class="question-meta">
-          ${escapeHtml(subjectName)}
+
+        <div class="meta">
+
+          ${escapeHtml(
+            q.subjects?.name ||
+            "No Subject"
+          )}
+
           •
-          ${escapeHtml(chapterName)}
-          •
-          Marks: ${q.marks ?? 0}
-          •
-          Negative: ${q.negative_marks ?? 0}
+          
+          ${escapeHtml(
+            q.chapters?.name ||
+            "No Chapter"
+          )}
+
+          • Marks:
+          ${q.marks ?? 0}
+
+          • Negative:
+          ${q.negative_marks ?? 0}
+
         </div>
 
-        <div class="options">
-          ${optionsHtml}
+
+        <div>
+          ${optionHtml}
         </div>
+
 
         ${
           q.explanation
           ?
-          `<div class="question-meta">
+          `<div class="meta">
             Explanation:
-            ${escapeHtml(q.explanation)}
+            ${escapeHtml(
+              q.explanation
+            )}
           </div>`
           :
           ""
         }
+
 
         <div class="actions">
 
@@ -828,6 +1048,7 @@ async function renderQuestions(){
           >
             Edit
           </button>
+
 
           <button
             class="danger"
@@ -852,110 +1073,123 @@ async function renderQuestions(){
 async function saveQuestion(){
 
   const subjectId =
-    document.getElementById("subject").value;
+    document.getElementById(
+      "subject"
+    ).value;
+
 
   const chapterId =
-    document.getElementById("chapter").value;
+    document.getElementById(
+      "chapter"
+    ).value;
 
-  const questionText =
-    document.getElementById("questionText")
-      .value
-      .trim();
 
-  const optionA =
-    document.getElementById("optionA")
-      .value
-      .trim();
+  const text =
+    document.getElementById(
+      "questionText"
+    ).value.trim();
 
-  const optionB =
-    document.getElementById("optionB")
-      .value
-      .trim();
 
-  const optionC =
-    document.getElementById("optionC")
-      .value
-      .trim();
+  const A =
+    document.getElementById(
+      "optionA"
+    ).value.trim();
 
-  const optionD =
-    document.getElementById("optionD")
-      .value
-      .trim();
+
+  const B =
+    document.getElementById(
+      "optionB"
+    ).value.trim();
+
+
+  const C =
+    document.getElementById(
+      "optionC"
+    ).value.trim();
+
+
+  const D =
+    document.getElementById(
+      "optionD"
+    ).value.trim();
+
 
   const correct =
-    document.getElementById("correctOption")
-      .value;
+    document.getElementById(
+      "correctOption"
+    ).value;
+
 
   const marks =
     parseFloat(
-      document.getElementById("marks").value
+      document.getElementById(
+        "marks"
+      ).value
     ) || 0;
 
-  const negativeMarks =
+
+  const negative =
     parseFloat(
-      document.getElementById("negativeMarks").value
+      document.getElementById(
+        "negativeMarks"
+      ).value
     ) || 0;
+
 
   const explanation =
-    document.getElementById("explanation")
-      .value
-      .trim();
+    document.getElementById(
+      "explanation"
+    ).value.trim();
 
 
   if(!subjectId){
-    alert("Please select a subject.");
+
+    alert(
+      "Please select a subject."
+    );
+
     return;
   }
+
 
   if(!chapterId){
-    alert("Please select a chapter.");
+
+    alert(
+      "Please select a chapter."
+    );
+
     return;
   }
 
-  if(!questionText){
-    alert("Please enter the question.");
+
+  if(!text){
+
+    alert(
+      "Please enter the question."
+    );
+
     return;
   }
 
-  if(
-    !optionA ||
-    !optionB ||
-    !optionC ||
-    !optionD
-  ){
-    alert("Please enter all four options.");
+
+  if(!A || !B || !C || !D){
+
+    alert(
+      "Please enter all four options."
+    );
+
     return;
   }
+
 
   if(!correct){
-    alert("Please select the correct option.");
+
+    alert(
+      "Please select the correct option."
+    );
+
     return;
   }
-
-
-  const optionData = [
-
-    {
-      label:"A",
-      text:optionA
-    },
-
-    {
-      label:"B",
-      text:optionB
-    },
-
-    {
-      label:"C",
-      text:optionC
-    },
-
-    {
-      label:"D",
-      text:optionD
-    }
-
-  ];
 
 
   try{
@@ -963,30 +1197,29 @@ async function saveQuestion(){
     let questionId;
 
 
-    /* =========================
-       UPDATE
-    ========================== */
+    /* UPDATE */
 
-    if(editingQuestionId){
+    if(editingId){
 
       const {
         error
-      } = await db
-        .from("questions")
-        .update({
+      } =
+        await db
+          .from("questions")
+          .update({
 
-          subject_id:subjectId,
-          chapter_id:chapterId,
-          question_text:questionText,
-          explanation:explanation,
-          marks:marks,
-          negative_marks:negativeMarks
+            subject_id:subjectId,
+            chapter_id:chapterId,
+            question_text:text,
+            explanation:explanation,
+            marks:marks,
+            negative_marks:negative
 
-        })
-        .eq(
-          "id",
-          editingQuestionId
-        );
+          })
+          .eq(
+            "id",
+            editingId
+          );
 
 
       if(error){
@@ -995,49 +1228,57 @@ async function saveQuestion(){
 
 
       questionId =
-        editingQuestionId;
+        editingId;
 
 
-      await db
-        .from("question_options")
-        .delete()
-        .eq(
-          "question_id",
-          questionId
-        );
+      const {
+        error:deleteError
+      } =
+        await db
+          .from("question_options")
+          .delete()
+          .eq(
+            "question_id",
+            questionId
+          );
+
+
+      if(deleteError){
+        throw deleteError;
+      }
 
     }
 
 
-    /* =========================
-       INSERT
-    ========================== */
+    /* INSERT */
 
     else{
 
       const {
         data,
         error
-      } = await db
-        .from("questions")
-        .insert({
+      } =
+        await db
+          .from("questions")
+          .insert({
 
-          mock_test_id:null,
-          subject_id:subjectId,
-          chapter_id:chapterId,
-          question_text:questionText,
-          explanation:explanation,
-          marks:marks,
-          negative_marks:negativeMarks
+            mock_test_id:null,
+            subject_id:subjectId,
+            chapter_id:chapterId,
+            question_text:text,
+            explanation:explanation,
+            marks:marks,
+            negative_marks:negative
 
-        })
-        .select("id")
-        .single();
+          })
+          .select("id")
+          .single();
 
 
       if(error){
         throw error;
       }
+
 
       questionId =
         data.id;
@@ -1045,27 +1286,53 @@ async function saveQuestion(){
     }
 
 
-    /* =========================
-       INSERT OPTIONS
-    ========================== */
+    /* OPTIONS */
 
-    const rows =
-      optionData.map(o => ({
+    const optionRows = [
 
+      {
         question_id:questionId,
-        option_text:o.text,
-        option_label:o.label,
+        option_text:A,
+        option_label:"A",
         is_correct:
-          o.label === correct
+          correct === "A"
+      },
 
-      }));
+      {
+        question_id:questionId,
+        option_text:B,
+        option_label:"B",
+        is_correct:
+          correct === "B"
+      },
+
+      {
+        question_id:questionId,
+        option_text:C,
+        option_label:"C",
+        is_correct:
+          correct === "C"
+      },
+
+      {
+        question_id:questionId,
+        option_text:D,
+        option_label:"D",
+        is_correct:
+          correct === "D"
+      }
+
+    ];
 
 
     const {
       error:optionError
-    } = await db
-      .from("question_options")
-      .insert(rows);
+    } =
+      await db
+        .from("question_options")
+        .insert(
+          optionRows
+        );
 
 
     if(optionError){
@@ -1074,7 +1341,7 @@ async function saveQuestion(){
 
 
     alert(
-      editingQuestionId
+      editingId
       ?
       "Question updated successfully."
       :
@@ -1101,79 +1368,91 @@ async function saveQuestion(){
 
 
 /* =========================
-   EDIT QUESTION
+   EDIT
 ========================= */
 
 async function editQuestion(id){
 
   const q =
     questions.find(
-      x => String(x.id) === String(id)
+      x =>
+        String(x.id) ===
+        String(id)
     );
+
 
   if(!q){
     return;
   }
 
 
-  editingQuestionId = id;
+  editingId =
+    q.id;
 
-  document.getElementById("formTitle")
-    .textContent =
+
+  document.getElementById(
+    "formTitle"
+  ).textContent =
     "Edit Question";
 
 
-  document.getElementById("subject")
-    .value =
+  document.getElementById(
+    "subject"
+  ).value =
     q.subject_id || "";
 
 
   updateChapterSelect();
 
 
-  document.getElementById("chapter")
-    .value =
+  document.getElementById(
+    "chapter"
+  ).value =
     q.chapter_id || "";
 
 
-  document.getElementById("questionText")
-    .value =
+  document.getElementById(
+    "questionText"
+  ).value =
     q.question_text || "";
 
 
-  document.getElementById("marks")
-    .value =
+  document.getElementById(
+    "marks"
+  ).value =
     q.marks ?? 0;
 
 
-  document.getElementById("negativeMarks")
-    .value =
+  document.getElementById(
+    "negativeMarks"
+  ).value =
     q.negative_marks ?? 0;
 
 
-  document.getElementById("explanation")
-    .value =
+  document.getElementById(
+    "explanation"
+  ).value =
     q.explanation || "";
 
 
   const {
     data,
     error
-  } = await db
-    .from("question_options")
-    .select("*")
-    .eq(
-      "question_id",
-      id
-    )
-    .order("option_label");
+  } =
+    await db
+      .from("question_options")
+      .select("*")
+      .eq(
+        "question_id",
+        id
+      )
+      .order("option_label");
 
 
   if(error){
 
     alert(
-      "Could not load options:\n" +
-      error.message
+      "Could not load options."
     );
 
     return;
@@ -1182,21 +1461,36 @@ async function editQuestion(id){
 
   const map = {};
 
+
   (data || []).forEach(o => {
-    map[o.option_label] = o;
+
+    map[o.option_label] =
+      o;
+
   });
 
 
-  document.getElementById("optionA").value =
+  document.getElementById(
+    "optionA"
+  ).value =
     map.A?.option_text || "";
 
-  document.getElementById("optionB").value =
+
+  document.getElementById(
+    "optionB"
+  ).value =
     map.B?.option_text || "";
 
-  document.getElementById("optionC").value =
+
+  document.getElementById(
+    "optionC"
+  ).value =
     map.C?.option_text || "";
 
-  document.getElementById("optionD").value =
+
+  document.getElementById(
+    "optionD"
+  ).value =
     map.D?.option_text || "";
 
 
@@ -1206,8 +1500,9 @@ async function editQuestion(id){
     );
 
 
-  document.getElementById("correctOption")
-    .value =
+  document.getElementById(
+    "correctOption"
+  ).value =
     correct?.option_label || "";
 
 
@@ -1220,7 +1515,7 @@ async function editQuestion(id){
 
 
 /* =========================
-   DELETE QUESTION
+   DELETE
 ========================= */
 
 async function deleteQuestion(id){
@@ -1234,100 +1529,121 @@ async function deleteQuestion(id){
   }
 
 
-  try{
-
-    const {
-      error
-    } = await db
+  const {
+    error
+  } =
+    await db
       .from("questions")
       .delete()
-      .eq("id",id);
+      .eq(
+        "id",
+        id
+      );
 
 
-    if(error){
-      throw error;
-    }
-
-
-    alert(
-      "Question deleted."
-    );
-
-
-    await loadQuestions();
-
-  }catch(error){
-
-    console.error(error);
+  if(error){
 
     alert(
       "Could not delete question:\n" +
       error.message
     );
 
+    return;
   }
+
+
+  alert(
+    "Question deleted."
+  );
+
+
+  await loadQuestions();
 
 }
 
 
 /* =========================
-   RESET FORM
+   RESET
 ========================= */
 
 function resetForm(){
 
-  editingQuestionId = null;
+  editingId = null;
 
 
-  document.getElementById("formTitle")
-    .textContent =
+  document.getElementById(
+    "formTitle"
+  ).textContent =
     "Add Question";
 
 
-  document.getElementById("subject")
-    .value = "";
+  document.getElementById(
+    "subject"
+  ).value =
+    "";
 
 
   updateChapterSelect();
 
 
-  document.getElementById("questionText")
-    .value = "";
+  document.getElementById(
+    "questionText"
+  ).value =
+    "";
 
 
-  document.getElementById("optionA")
-    .value = "";
-
-  document.getElementById("optionB")
-    .value = "";
-
-  document.getElementById("optionC")
-    .value = "";
-
-  document.getElementById("optionD")
-    .value = "";
+  document.getElementById(
+    "optionA"
+  ).value =
+    "";
 
 
-  document.getElementById("correctOption")
-    .value = "";
+  document.getElementById(
+    "optionB"
+  ).value =
+    "";
 
 
-  document.getElementById("marks")
-    .value = "2";
+  document.getElementById(
+    "optionC"
+  ).value =
+    "";
 
 
-  document.getElementById("negativeMarks")
-    .value = "0.5";
+  document.getElementById(
+    "optionD"
+  ).value =
+    "";
 
 
-  document.getElementById("explanation")
-    .value = "";
+  document.getElementById(
+    "correctOption"
+  ).value =
+    "";
+
+
+  document.getElementById(
+    "marks"
+  ).value =
+    "2";
+
+
+  document.getElementById(
+    "negativeMarks"
+  ).value =
+    "0.5";
+
+
+  document.getElementById(
+    "explanation"
+  ).value =
+    "";
 
 }
 
 
 /* =========================
-   ESCAPE HTML
+   ESCAPE
 ========================= */
 
 function escapeHtml(value){
@@ -1366,6 +1682,14 @@ document
   .getElementById("filterChapter")
   .addEventListener(
     "change",
+    renderQuestions
+  );
+
+
+document
+  .getElementById("search")
+  .addEventListener(
+    "input",
     renderQuestions
   );
 
