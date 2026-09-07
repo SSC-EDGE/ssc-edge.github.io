@@ -1,263 +1,463 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<title>Admin Mock Tests - SSC EDGE</title>
+<title>SSC EDGE - Admin Mock Tests</title>
+
+<link rel="stylesheet" href="css/style.css">
 
 <script>
 document.documentElement.dataset.theme =
 localStorage.getItem("ssc-edge-theme") || "dark";
 </script>
 
-<link rel="stylesheet" href="css/style.css">
-
 <style>
 
-.container{
-max-width:700px;
-margin:auto;
-padding:20px;
-padding-bottom:80px;
+body{
+  margin:0;
 }
 
-h1{
-font-size:25px;
-margin-bottom:5px;
+.admin-container{
+  max-width:700px;
+  margin:auto;
+  padding:20px 16px 40px;
 }
 
-.subtitle{
-color:var(--muted);
-margin-bottom:20px;
+.simple-header{
+  display:flex;
+  align-items:center;
+  padding:16px;
+  background:var(--header);
+  border-bottom:1px solid var(--border);
 }
 
-.card{
-background:var(--card);
-border:1px solid var(--border);
-border-radius:14px;
-padding:16px;
-margin-bottom:16px;
+.header-brand{
+  font-size:19px;
+  font-weight:900;
+}
+
+.page-title{
+  margin:8px 0 4px;
+}
+
+.page-subtitle{
+  color:var(--muted);
+  margin-bottom:22px;
+}
+
+.form-card,
+.test-card,
+.section-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:16px;
 }
 
 label{
-display:block;
-font-weight:bold;
-margin:12px 0 6px;
+  display:block;
+  font-size:12px;
+  font-weight:800;
+  margin:14px 0 6px;
 }
 
 input,
 select,
 textarea{
-width:100%;
-box-sizing:border-box;
-padding:12px;
-border-radius:10px;
-border:1px solid var(--border);
-background:var(--bg);
-color:var(--text);
-font-size:15px;
+  width:100%;
+  box-sizing:border-box;
+  border:1px solid var(--border);
+  background:var(--bg);
+  color:var(--text);
+  border-radius:10px;
+  padding:11px;
+  font-size:14px;
+  outline:none;
 }
 
 textarea{
-min-height:80px;
-resize:vertical;
+  min-height:80px;
+  resize:vertical;
 }
 
-button{
-border:0;
-border-radius:10px;
-padding:11px 15px;
-font-weight:bold;
-cursor:pointer;
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:var(--purple);
 }
 
-.primary{
-background:var(--purple);
-color:white;
-width:100%;
-margin-top:16px;
+.grid2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
 }
 
-.secondary{
-background:var(--card2);
-color:var(--text);
-border:1px solid var(--border);
+.checkbox-row{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin:15px 0;
 }
 
-.danger{
-background:#b91c1c;
-color:white;
+.checkbox-row input{
+  width:auto;
 }
 
-.test-card{
-background:var(--card);
-border:1px solid var(--border);
-border-radius:14px;
-padding:16px;
-margin-bottom:12px;
-}
-
-.test-title{
-font-size:18px;
-font-weight:bold;
-margin-bottom:7px;
-}
-
-.meta{
-color:var(--muted);
-font-size:13px;
-line-height:1.7;
-}
-
-.actions{
-display:flex;
-gap:8px;
-flex-wrap:wrap;
-margin-top:12px;
-}
-
-.status{
-display:inline-block;
-padding:4px 8px;
-border-radius:7px;
-font-size:12px;
-font-weight:bold;
-}
-
-.active{
-background:#166534;
-color:white;
-}
-
-.inactive{
-background:#7f1d1d;
-color:white;
+.checkbox-row label{
+  margin:0;
 }
 
 .hidden{
-display:none;
+  display:none !important;
+}
+
+.section-card{
+  padding:13px;
+}
+
+.section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+
+.section-number{
+  font-weight:900;
+}
+
+.section-controls{
+  display:flex;
+  gap:5px;
+}
+
+.small-btn{
+  border:1px solid var(--border);
+  background:var(--bg);
+  color:var(--text);
+  border-radius:8px;
+  padding:6px 9px;
+  cursor:pointer;
+  font-weight:800;
+}
+
+.remove-btn{
+  color:#ff6868;
+}
+
+.primary-btn,
+.secondary-btn,
+.danger-btn{
+  width:100%;
+  border:0;
+  border-radius:11px;
+  padding:12px;
+  font-size:14px;
+  font-weight:800;
+  cursor:pointer;
+  margin-top:10px;
+}
+
+.primary-btn{
+  background:var(--purple);
+  color:white;
+}
+
+.secondary-btn{
+  background:var(--card2);
+  color:var(--text);
+  border:1px solid var(--border);
+}
+
+.danger-btn{
+  background:#8f2525;
+  color:white;
+}
+
+.test-title{
+  font-size:17px;
+  font-weight:900;
+}
+
+.test-info{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.7;
+  margin-top:7px;
+}
+
+.test-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:12px;
+}
+
+.status{
+  display:inline-block;
+  margin-top:8px;
+  padding:4px 8px;
+  border-radius:7px;
+  font-size:10px;
+  font-weight:800;
+}
+
+.active-status{
+  background:#174f2a;
+  color:#8cffae;
+}
+
+.inactive-status{
+  background:#512020;
+  color:#ff9999;
 }
 
 .message{
-margin-top:12px;
-text-align:center;
-font-weight:bold;
+  padding:12px;
+  border-radius:10px;
+  background:var(--card2);
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:14px;
+}
+
+.total-time{
+  text-align:center;
+  padding:10px;
+  background:var(--card2);
+  border-radius:10px;
+  margin:10px 0;
+  font-size:13px;
+  font-weight:800;
+}
+
+@media(max-width:420px){
+
+  .grid2{
+    grid-template-columns:1fr;
+  }
+
+  .test-actions{
+    grid-template-columns:1fr;
+  }
+
 }
 
 </style>
-
 </head>
 
 <body>
 
-<div class="container">
+<header class="simple-header">
+  <div class="header-brand">SSC EDGE — Admin</div>
+</header>
 
-<h1>Admin Mock Tests</h1>
+<main class="admin-container">
 
-<div class="subtitle">
+<h1 class="page-title">Mock Tests</h1>
+
+<p class="page-subtitle">
 Create and manage SSC EDGE mock tests
-</div>
+</p>
 
+<div id="message"></div>
 
-<!-- =========================
-     CREATE / EDIT TEST
-========================= -->
+<!-- =========================================
+     FORM
+========================================= -->
 
-<div class="card">
+<div class="form-card">
+
+<input
+type="hidden"
+id="editId"
+>
 
 <label>Test Title</label>
 
 <input
 id="title"
-type="text"
-placeholder="Example: SSC CHSL Full Mock Test 1">
-
+placeholder="Example: CGL Full Mock Test 1"
+>
 
 <label>Description</label>
 
 <textarea
 id="description"
-placeholder="Optional description"></textarea>
+placeholder="Test description">
+</textarea>
 
+<div class="grid2">
+
+<div>
 
 <label>Exam</label>
 
 <select id="exam">
-
-<option value="">
-Select Exam
-</option>
-
+<option value="">Select Exam</option>
 </select>
 
+</div>
+
+<div>
 
 <label>Test Type</label>
 
-<select id="testType" onchange="updateFields()">
+<select
+id="testType"
+onchange="handleTestType()">
 
-<option value="">
-Select Test Type
-</option>
-
-<option value="FULL">
-Full Mock
-</option>
-
-<option value="SECTIONAL">
-Sectional Mock
-</option>
-
-<option value="SUBJECT_WISE">
-Subject Wise Mock
-</option>
-
-<option value="CHAPTER_WISE">
-Chapter Wise Practice
-</option>
-
-</select>
-
-
-<div id="subjectBox" class="hidden">
-
-<label>Subject</label>
-
-<select id="subject" onchange="loadChapters()">
-
-<option value="">
-Select Subject
-</option>
+<option value="FULL">FULL</option>
+<option value="SECTIONAL">SECTIONAL</option>
+<option value="SUBJECT_WISE">SUBJECT_WISE</option>
+<option value="CHAPTER_WISE">CHAPTER_WISE</option>
 
 </select>
 
 </div>
 
+</div>
+
+
+<!-- =========================================
+     NORMAL DURATION
+========================================= -->
+
+<div id="normalDurationBox">
+
+<label>Total Duration (minutes)</label>
+
+<input
+id="duration"
+type="number"
+min="1"
+value="60"
+>
+
+</div>
+
+
+<!-- =========================================
+     SUBJECT SELECTION
+========================================= -->
+
+<div id="singleSubjectBox" class="hidden">
+
+<label>Subject</label>
+
+<select id="subject">
+<option value="">Select Subject</option>
+</select>
+
+</div>
+
+
+<!-- =========================================
+     CHAPTER
+========================================= -->
 
 <div id="chapterBox" class="hidden">
 
 <label>Chapter</label>
 
 <select id="chapter">
-
-<option value="">
-Select Chapter
-</option>
-
+<option value="">Select Chapter</option>
 </select>
 
 </div>
 
 
-<label>Duration (Minutes)</label>
+<!-- =========================================
+     FULL TEST SETTINGS
+========================================= -->
+
+<div id="fullSettings">
+
+<div class="checkbox-row">
 
 <input
-id="duration"
+type="checkbox"
+id="subjectTiming"
+onchange="toggleSubjectTiming()"
+>
+
+<label for="subjectTiming">
+Enable Subject-wise Timing
+</label>
+
+</div>
+
+
+<div id="sectionSettings" class="hidden">
+
+<div class="message">
+Set the subject order and timing for this FULL test.
+Each subject can have a different duration.
+</div>
+
+<div
+id="sections">
+</div>
+
+<button
+type="button"
+class="secondary-btn"
+onclick="addSection()">
+
++ Add Subject
+
+</button>
+
+<div
+id="totalSectionTime"
+class="total-time">
+
+Total Section Time: 0 minutes
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =========================================
+     MARKING
+========================================= -->
+
+<div class="grid2">
+
+<div>
+
+<label>Marks per Question</label>
+
+<input
+id="marks"
 type="number"
-value="60"
-min="1">
+step="0.01"
+value="2"
+>
+
+</div>
+
+<div>
+
+<label>Negative Marks</label>
+
+<input
+id="negative"
+type="number"
+step="0.01"
+value="0"
+>
+
+</div>
+
+</div>
 
 
 <label>Total Questions</label>
@@ -265,102 +465,56 @@ min="1">
 <input
 id="totalQuestions"
 type="number"
-value="0"
-min="0">
-
-
-<label>Marks Per Question</label>
-
-<input
-id="marks"
-type="number"
-value="2"
-step="0.01"
-min="0">
-
-
-<label>Negative Marks</label>
-
-<input
-id="negativeMarks"
-type="number"
-value="0"
-step="0.01"
-min="0">
-
-
-<label>Active</label>
-
-<select id="isActive">
-
-<option value="true">
-Yes
-</option>
-
-<option value="false">
-No
-</option>
-
-</select>
+min="1"
+value="25"
+>
 
 
 <button
-id="saveButton"
-class="primary"
+id="saveBtn"
+class="primary-btn"
 onclick="saveTest()">
 
-➕ Create Mock Test
+Create Test
 
 </button>
 
 
 <button
-id="cancelButton"
-class="secondary hidden"
-style="width:100%;margin-top:10px"
+id="cancelBtn"
+class="secondary-btn hidden"
 onclick="cancelEdit()">
 
 Cancel Edit
 
 </button>
 
-
-<div
-id="message"
-class="message">
-</div>
-
 </div>
 
 
-<!-- =========================
+<!-- =========================================
      EXISTING TESTS
-========================= -->
+========================================= -->
 
-<div class="card">
+<h2 class="page-title">
+Existing Tests
+</h2>
 
-<h2>Existing Mock Tests</h2>
-
-<div
-id="testList"
-style="margin-top:15px">
-
+<div id="tests">
 Loading...
-
 </div>
 
-</div>
-
-</div>
+</main>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+</script>
 
 <script>
 
-/* =========================
+/* =========================================
    SUPABASE
-========================= */
+========================================= */
 
 const SUPABASE_URL =
 "https://dvvyoygahzzbnpqrfhen.supabase.co";
@@ -368,892 +522,1658 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
 
-const supabaseClient =
+const db =
 supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
+  SUPABASE_URL,
+  SUPABASE_KEY
 );
 
 
-/* =========================
-   VARIABLES
-========================= */
+/* =========================================
+   DATA
+========================================= */
 
 let exams = [];
 let subjects = [];
-let editingId = null;
+let chapters = [];
+let tests = [];
+let sections = [];
 
 
-/* =========================
-   ESCAPE
-========================= */
-
-function escapeHtml(value){
-
-return String(value ?? "")
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
-
-}
-
-
-/* =========================
+/* =========================================
    ADMIN CHECK
-========================= */
+========================================= */
 
 async function checkAdmin(){
 
-const {
-data:{
-session
-}
-} =
-await supabaseClient
-.auth
-.getSession();
+  const {
+    data:{user}
+  } =
+  await db.auth.getUser();
+
+  if(!user){
+
+    document.body.innerHTML =
+    "<div style='padding:30px;text-align:center'>Please login as admin.</div>";
+
+    return false;
+
+  }
 
 
-if(!session){
-
-location.href="admin.html";
-return false;
-
-}
-
-
-const {
-data:admin,
-error
-} =
-await supabaseClient
-
-.from("admin_users")
-
-.select("user_id")
-
-.eq("user_id",session.user.id)
-
-.maybeSingle();
+  const {
+    data,
+    error
+  } =
+  await db
+  .from("admin_users")
+  .select("user_id")
+  .eq("user_id",user.id)
+  .maybeSingle();
 
 
-if(error || !admin){
+  if(error || !data){
 
-document.body.innerHTML = `
-<div style="padding:30px;text-align:center">
-<h2>Access Denied</h2>
-<p>You are not an admin.</p>
-</div>
-`;
+    document.body.innerHTML =
+    "<div style='padding:30px;text-align:center'>Access denied.</div>";
 
-return false;
+    return false;
 
-}
+  }
 
-return true;
+  return true;
 
 }
 
 
-/* =========================
-   LOAD EXAMS
-========================= */
+/* =========================================
+   LOAD DATA
+========================================= */
 
-async function loadExams(){
+async function loadData(){
 
-const {
-data,
-error
-} =
-await supabaseClient
-
-.from("exams")
-
-.select("id,name")
-
-.order("name");
+  if(!await checkAdmin()) return;
 
 
-if(error){
-
-console.error(error);
-return;
-
-}
-
-exams = data || [];
-
-const select =
-document.getElementById("exam");
-
-select.innerHTML =
-`
-<option value="">
-Select Exam
-</option>
-`;
-
-exams.forEach(exam => {
-
-select.innerHTML += `
-<option value="${exam.id}">
-${escapeHtml(exam.name)}
-</option>
-`;
-
-});
-
-}
+  const examResult =
+  await db
+  .from("exams")
+  .select("*")
+  .order("id");
 
 
-/* =========================
-   LOAD SUBJECTS
-========================= */
+  if(examResult.error){
 
-async function loadSubjects(){
+    showMessage(
+      examResult.error.message
+    );
 
-const {
-data,
-error
-} =
-await supabaseClient
+    return;
 
-.from("subjects")
-
-.select("id,name")
-
-.order("name");
+  }
 
 
-if(error){
+  exams =
+  examResult.data || [];
 
-console.error(error);
-return;
 
-}
+  const subjectResult =
+  await db
+  .from("subjects")
+  .select("*")
+  .order("id");
 
-subjects = data || [];
 
-const select =
-document.getElementById("subject");
+  if(subjectResult.error){
 
-select.innerHTML =
-`
-<option value="">
-Select Subject
-</option>
-`;
+    showMessage(
+      subjectResult.error.message
+    );
 
-subjects.forEach(subject => {
+    return;
 
-select.innerHTML += `
-<option value="${subject.id}">
-${escapeHtml(subject.name)}
-</option>
-`;
+  }
 
-});
+
+  subjects =
+  subjectResult.data || [];
+
+
+  const chapterResult =
+  await db
+  .from("chapters")
+  .select("*")
+  .order("id");
+
+
+  if(!chapterResult.error){
+
+    chapters =
+    chapterResult.data || [];
+
+  }
+
+
+  fillExams();
+
+  fillSubjects();
+
+  await loadTests();
+
+  handleTestType();
 
 }
 
 
-/* =========================
-   UPDATE FIELDS
-========================= */
+/* =========================================
+   FILL EXAMS
+========================================= */
 
-function updateFields(){
+function fillExams(){
 
-const type =
-document.getElementById("testType").value;
+  const select =
+  document.getElementById("exam");
 
-const subjectBox =
-document.getElementById("subjectBox");
-
-const chapterBox =
-document.getElementById("chapterBox");
+  select.innerHTML =
+  '<option value="">Select Exam</option>';
 
 
-subjectBox.classList.add("hidden");
-chapterBox.classList.add("hidden");
+  exams.forEach(e=>{
 
+    select.innerHTML += `
 
-if(
-type === "SECTIONAL" ||
-type === "SUBJECT_WISE" ||
-type === "CHAPTER_WISE"
-){
+      <option value="${e.id}">
+        ${escapeHtml(
+          e.name ||
+          e.title ||
+          e.exam_name ||
+          "Exam "+e.id
+        )}
+      </option>
 
-subjectBox.classList.remove("hidden");
+    `;
 
-}
-
-
-if(type === "CHAPTER_WISE"){
-
-chapterBox.classList.remove("hidden");
-
-}
+  });
 
 }
 
 
-/* =========================
-   LOAD CHAPTERS
-========================= */
+/* =========================================
+   FILL SUBJECTS
+========================================= */
 
-async function loadChapters(){
+function fillSubjects(){
 
-const subjectId =
-document.getElementById("subject").value;
+  const select =
+  document.getElementById("subject");
 
-const chapter =
-document.getElementById("chapter");
-
-
-chapter.innerHTML =
-`
-<option value="">
-Select Chapter
-</option>
-`;
-
-if(!subjectId){
-return;
-}
+  select.innerHTML =
+  '<option value="">Select Subject</option>';
 
 
-const {
-data,
-error
-} =
-await supabaseClient
+  subjects.forEach(s=>{
 
-.from("chapters")
+    select.innerHTML += `
 
-.select("id,name")
+      <option value="${s.id}">
+        ${escapeHtml(
+          s.name ||
+          s.title ||
+          "Subject "+s.id
+        )}
+      </option>
 
-.eq("subject_id",subjectId)
+    `;
 
-.order("name");
-
-
-if(error){
-
-console.error(error);
-return;
+  });
 
 }
 
 
-(data || []).forEach(item => {
+/* =========================================
+   FILL CHAPTERS
+========================================= */
 
-chapter.innerHTML += `
-<option value="${item.id}">
-${escapeHtml(item.name)}
-</option>
-`;
+function fillChapters(){
 
-});
+  const subjectId =
+  document.getElementById("subject").value;
 
-}
+  const select =
+  document.getElementById("chapter");
 
-
-/* =========================
-   SAVE TEST
-========================= */
-
-async function saveTest(){
-
-const title =
-document.getElementById("title").value.trim();
-
-const description =
-document.getElementById("description").value.trim();
-
-const examId =
-document.getElementById("exam").value;
-
-const type =
-document.getElementById("testType").value;
-
-const subjectId =
-document.getElementById("subject").value || null;
-
-const chapterId =
-document.getElementById("chapter").value || null;
-
-const duration =
-Number(document.getElementById("duration").value);
-
-const totalQuestions =
-Number(document.getElementById("totalQuestions").value);
-
-const marks =
-Number(document.getElementById("marks").value);
-
-const negativeMarks =
-Number(document.getElementById("negativeMarks").value);
-
-const isActive =
-document.getElementById("isActive").value === "true";
+  select.innerHTML =
+  '<option value="">Select Chapter</option>';
 
 
-const message =
-document.getElementById("message");
+  if(!subjectId) return;
 
 
-if(!title){
+  chapters
+  .filter(c=>
 
-message.textContent =
-"Please enter a test title.";
+    String(
+      c.subject_id
+    ) === String(subjectId)
 
-return;
+  )
+  .forEach(c=>{
 
-}
+    select.innerHTML += `
 
-if(!examId){
+      <option value="${c.id}">
+        ${escapeHtml(
+          c.name ||
+          c.title ||
+          "Chapter "+c.id
+        )}
+      </option>
 
-message.textContent =
-"Please select an exam.";
+    `;
 
-return;
-
-}
-
-if(!type){
-
-message.textContent =
-"Please select test type.";
-
-return;
-
-}
-
-if(
-(type === "SECTIONAL" ||
-type === "SUBJECT_WISE" ||
-type === "CHAPTER_WISE")
-&&
-!subjectId
-){
-
-message.textContent =
-"Please select a subject.";
-
-return;
-
-}
-
-if(
-type === "CHAPTER_WISE"
-&&
-!chapterId
-){
-
-message.textContent =
-"Please select a chapter.";
-
-return;
+  });
 
 }
 
 
-const payload = {
-
-exam_id:examId,
-
-title:title,
-
-description:
-description || null,
-
-test_type:type,
-
-subject_id:
-subjectId,
-
-duration_minutes:
-duration,
-
-total_questions:
-totalQuestions,
-
-is_active:
-isActive
-
-};
-
-
-let result;
-
-
-if(editingId){
-
-result =
-await supabaseClient
-
-.from("mock_tests")
-
-.update(payload)
-
-.eq("id",editingId);
-
-}else{
-
-result =
-await supabaseClient
-
-.from("mock_tests")
-
-.insert(payload);
-
-}
-
-
-if(result.error){
-
-console.error(result.error);
-
-message.textContent =
-"Error: " + result.error.message;
-
-return;
-
-}
-
-
-message.textContent =
-editingId
-? "Mock Test updated successfully."
-: "Mock Test created successfully.";
-
-
-clearForm();
-
-await loadTests();
-
-}
-
-
-/* =========================
-   CLEAR FORM
-========================= */
-
-function clearForm(){
-
-editingId = null;
-
-document.getElementById("title").value="";
-document.getElementById("description").value="";
-document.getElementById("exam").value="";
-document.getElementById("testType").value="";
-document.getElementById("subject").value="";
-document.getElementById("chapter").innerHTML =
-`<option value="">Select Chapter</option>`;
-
-document.getElementById("duration").value=60;
-document.getElementById("totalQuestions").value=0;
-document.getElementById("marks").value=2;
-document.getElementById("negativeMarks").value=0;
-document.getElementById("isActive").value="true";
-
-updateFields();
-
-document.getElementById("saveButton").textContent =
-"➕ Create Mock Test";
+/* =========================================
+   SUBJECT CHANGE
+========================================= */
 
 document
-.getElementById("cancelButton")
-.classList
-.add("hidden");
-
-}
-
-
-/* =========================
-   EDIT TEST
-========================= */
-
-async function editTest(id){
-
-const {
-data:test,
-error
-} =
-await supabaseClient
-
-.from("mock_tests")
-
-.select("*")
-
-.eq("id",id)
-
-.single();
-
-
-if(error){
-
-alert(error.message);
-return;
-
-}
-
-
-editingId = id;
-
-document.getElementById("title").value =
-test.title || "";
-
-document.getElementById("description").value =
-test.description || "";
-
-document.getElementById("exam").value =
-test.exam_id || "";
-
-document.getElementById("testType").value =
-test.test_type || "";
-
-document.getElementById("duration").value =
-test.duration_minutes || 60;
-
-document.getElementById("totalQuestions").value =
-test.total_questions || 0;
-
-document.getElementById("marks").value =
-test.marks_per_question || 2;
-
-document.getElementById("negativeMarks").value =
-test.negative_marks || 0;
-
-document.getElementById("isActive").value =
-test.is_active ? "true" : "false";
-
-
-updateFields();
-
-
-if(test.subject_id){
-
-document.getElementById("subject").value =
-test.subject_id;
-
-await loadChapters();
-
-}
-
-
-if(test.chapter_id){
-
-document.getElementById("chapter").value =
-test.chapter_id;
-
-}
-
-
-document.getElementById("saveButton").textContent =
-"💾 Update Mock Test";
-
-document
-.getElementById("cancelButton")
-.classList
-.remove("hidden");
-
-
-window.scrollTo({
-top:0,
-behavior:"smooth"
-});
-
-}
-
-
-/* =========================
-   CANCEL EDIT
-========================= */
-
-function cancelEdit(){
-
-clearForm();
-
-document.getElementById("message").textContent="";
-
-}
-
-
-/* =========================
-   DELETE TEST
-========================= */
-
-async function deleteTest(id){
-
-if(
-!confirm(
-"Delete this Mock Test?\n\nIts questions will also be affected if database cascade is configured."
-)
-){
-
-return;
-
-}
-
-
-const {
-error
-} =
-await supabaseClient
-
-.from("mock_tests")
-
-.delete()
-
-.eq("id",id);
-
-
-if(error){
-
-alert(error.message);
-return;
-
-}
-
-
-await loadTests();
-
-}
-
-
-/* =========================
-   TOGGLE ACTIVE
-========================= */
-
-async function toggleTest(id,current){
-
-const {
-error
-} =
-await supabaseClient
-
-.from("mock_tests")
-
-.update({
-is_active:!current
-})
-
-.eq("id",id);
-
-
-if(error){
-
-alert(error.message);
-return;
-
-}
-
-await loadTests();
-
-}
-
-
-/* =========================
-   LOAD TESTS
-========================= */
-
-async function loadTests(){
-
-const list =
-document.getElementById("testList");
-
-
-list.innerHTML =
-"Loading...";
-
-
-const {
-data,
-error
-} =
-await supabaseClient
-
-.from("mock_tests")
-
-.select(`
-*,
-exams(name),
-subjects(name)
-`)
-
-.order(
-"created_at",
-{ascending:false}
+.getElementById("subject")
+.addEventListener(
+  "change",
+  fillChapters
 );
 
 
-if(error){
+/* =========================================
+   TEST TYPE
+========================================= */
 
-console.error(error);
+function handleTestType(){
 
-list.innerHTML =
-`
-<div style="color:#f87171">
-Unable to load mock tests.
-</div>
-`;
-
-return;
-
-}
+  const type =
+  document.getElementById(
+    "testType"
+  ).value;
 
 
-if(!data || data.length === 0){
-
-list.innerHTML =
-`
-<div style="color:var(--muted)">
-No mock tests created yet.
-</div>
-`;
-
-return;
-
-}
+  document
+  .getElementById("fullSettings")
+  .classList.toggle(
+    "hidden",
+    type !== "FULL"
+  );
 
 
-list.innerHTML =
-data.map(test => {
-
-const examName =
-test.exams?.name || "Unknown Exam";
-
-const subjectName =
-test.subjects?.name || "";
-
-return `
-
-<div class="test-card">
-
-<div class="test-title">
-
-${escapeHtml(test.title)}
-
-</div>
+  document
+  .getElementById("singleSubjectBox")
+  .classList.toggle(
+    "hidden",
+    type !== "SECTIONAL" &&
+    type !== "SUBJECT_WISE" &&
+    type !== "CHAPTER_WISE"
+  );
 
 
-<div class="meta">
-
-Exam:
-${escapeHtml(examName)}
-
-<br>
-
-Type:
-${escapeHtml(test.test_type)}
-
-${subjectName
-? `<br>Subject: ${escapeHtml(subjectName)}`
-: ""}
-
-<br>
-
-Duration:
-${test.duration_minutes} minutes
-
-<br>
-
-Questions:
-${test.total_questions}
-
-<br>
-
-Status:
-
-<span class="status ${
-test.is_active
-? "active"
-: "inactive"
-}">
-
-${test.is_active
-? "ACTIVE"
-: "INACTIVE"}
-
-</span>
-
-</div>
+  document
+  .getElementById("chapterBox")
+  .classList.toggle(
+    "hidden",
+    type !== "CHAPTER_WISE"
+  );
 
 
-<div class="actions">
+  if(type === "FULL"){
 
-<button
-class="secondary"
-onclick="editTest(${test.id})">
+    document
+    .getElementById("normalDurationBox")
+    .classList.remove("hidden");
 
-✏️ Edit
-
-</button>
-
-
-<button
-class="secondary"
-onclick="toggleTest(
-${test.id},
-${test.is_active}
-)">
-
-${
-test.is_active
-? "⏸️ Disable"
-: "▶️ Activate"
-}
-
-</button>
-
-
-<button
-class="danger"
-onclick="deleteTest(${test.id})">
-
-🗑️ Delete
-
-</button>
-
-</div>
-
-</div>
-
-`;
-
-}).join("");
+  }
 
 }
 
 
-/* =========================
+/* =========================================
+   SUBJECT TIMING
+========================================= */
+
+function toggleSubjectTiming(){
+
+  const enabled =
+  document
+  .getElementById(
+    "subjectTiming"
+  )
+  .checked;
+
+
+  document
+  .getElementById(
+    "sectionSettings"
+  )
+  .classList.toggle(
+    "hidden",
+    !enabled
+  );
+
+
+  if(enabled &&
+     sections.length === 0){
+
+    addSection();
+
+  }
+
+
+  updateTotalTime();
+
+}
+
+
+/* =========================================
+   ADD SECTION
+========================================= */
+
+function addSection(
+  subjectId="",
+  duration=15
+){
+
+  sections.push({
+
+    subject_id:
+      subjectId,
+
+    duration_minutes:
+      duration
+
+  });
+
+
+  renderSections();
+
+}
+
+
+/* =========================================
+   RENDER SECTIONS
+========================================= */
+
+function renderSections(){
+
+  const box =
+  document.getElementById(
+    "sections"
+  );
+
+  box.innerHTML = "";
+
+
+  sections.forEach(
+    (section,index)=>{
+
+      const div =
+      document.createElement(
+        "div"
+      );
+
+      div.className =
+        "section-card";
+
+
+      div.innerHTML = `
+
+        <div class="section-head">
+
+          <div class="section-number">
+            Subject ${index + 1}
+          </div>
+
+          <div class="section-controls">
+
+            <button
+            class="small-btn"
+            onclick="moveSection(${index},-1)"
+            ${index===0 ? "disabled":""}>
+              ↑
+            </button>
+
+            <button
+            class="small-btn"
+            onclick="moveSection(${index},1)"
+            ${index===sections.length-1 ? "disabled":""}>
+              ↓
+            </button>
+
+            <button
+            class="small-btn remove-btn"
+            onclick="removeSection(${index})">
+              ×
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <label>Subject</label>
+
+        <select
+        onchange="changeSectionSubject(${index},this.value)">
+
+          <option value="">
+            Select Subject
+          </option>
+
+          ${subjects.map(s=>`
+
+            <option
+            value="${s.id}"
+            ${String(s.id)===String(section.subject_id)
+              ? "selected"
+              : ""}>
+
+              ${escapeHtml(
+                s.name ||
+                s.title ||
+                "Subject "+s.id
+              )}
+
+            </option>
+
+          `).join("")}
+
+        </select>
+
+
+        <label>Section Time (minutes)</label>
+
+        <input
+        type="number"
+        min="1"
+        value="${section.duration_minutes}"
+        onchange="changeSectionTime(${index},this.value)"
+        >
+
+      `;
+
+
+      box.appendChild(div);
+
+    }
+  );
+
+
+  updateTotalTime();
+
+}
+
+
+/* =========================================
+   CHANGE SUBJECT
+========================================= */
+
+function changeSectionSubject(
+  index,
+  value
+){
+
+  sections[index].subject_id =
+    value;
+
+}
+
+
+/* =========================================
+   CHANGE TIME
+========================================= */
+
+function changeSectionTime(
+  index,
+  value
+){
+
+  sections[index].duration_minutes =
+    Number(value) || 1;
+
+  updateTotalTime();
+
+}
+
+
+/* =========================================
+   MOVE SECTION
+========================================= */
+
+function moveSection(
+  index,
+  direction
+){
+
+  const newIndex =
+    index + direction;
+
+
+  if(
+    newIndex < 0 ||
+    newIndex >= sections.length
+  ){
+
+    return;
+
+  }
+
+
+  const temp =
+    sections[index];
+
+  sections[index] =
+    sections[newIndex];
+
+  sections[newIndex] =
+    temp;
+
+
+  renderSections();
+
+}
+
+
+/* =========================================
+   REMOVE SECTION
+========================================= */
+
+function removeSection(index){
+
+  sections.splice(
+    index,
+    1
+  );
+
+  renderSections();
+
+}
+
+
+/* =========================================
+   TOTAL SECTION TIME
+========================================= */
+
+function updateTotalTime(){
+
+  const total =
+    sections.reduce(
+      (sum,section)=>
+        sum +
+        (
+          Number(
+            section.duration_minutes
+          ) || 0
+        ),
+      0
+    );
+
+
+  document
+  .getElementById(
+    "totalSectionTime"
+  )
+  .textContent =
+  "Total Section Time: " +
+  total +
+  " minutes";
+
+
+  if(
+    document
+    .getElementById(
+      "subjectTiming"
+    ).checked
+  ){
+
+    document
+    .getElementById(
+      "duration"
+    )
+    .value =
+    total || "";
+
+  }
+
+}
+
+
+/* =========================================
+   SAVE TEST
+========================================= */
+
+async function saveTest(){
+
+  const editId =
+    document
+    .getElementById("editId")
+    .value;
+
+
+  const title =
+    document
+    .getElementById("title")
+    .value
+    .trim();
+
+
+  const description =
+    document
+    .getElementById("description")
+    .value
+    .trim();
+
+
+  const examId =
+    document
+    .getElementById("exam")
+    .value;
+
+
+  const type =
+    document
+    .getElementById("testType")
+    .value;
+
+
+  const duration =
+    Number(
+      document
+      .getElementById("duration")
+      .value
+    );
+
+
+  const subjectId =
+    document
+    .getElementById("subject")
+    .value;
+
+
+  const chapterId =
+    document
+    .getElementById("chapter")
+    .value;
+
+
+  const totalQuestions =
+    Number(
+      document
+      .getElementById("totalQuestions")
+      .value
+    );
+
+
+  const marks =
+    Number(
+      document
+      .getElementById("marks")
+      .value
+    );
+
+
+  const negative =
+    Number(
+      document
+      .getElementById("negative")
+      .value
+    );
+
+
+  const timingEnabled =
+    document
+    .getElementById(
+      "subjectTiming"
+    )
+    .checked;
+
+
+  /* =======================================
+     BASIC VALIDATION
+  ======================================= */
+
+  if(!title){
+
+    showMessage(
+      "Enter test title."
+    );
+
+    return;
+
+  }
+
+
+  if(!examId){
+
+    showMessage(
+      "Select an exam."
+    );
+
+    return;
+
+  }
+
+
+  if(!duration || duration <= 0){
+
+    showMessage(
+      "Enter valid duration."
+    );
+
+    return;
+
+  }
+
+
+  if(!totalQuestions ||
+     totalQuestions <= 0){
+
+    showMessage(
+      "Enter total questions."
+    );
+
+    return;
+
+  }
+
+
+  /* =======================================
+     FULL TIMING VALIDATION
+  ======================================= */
+
+  if(
+    type === "FULL" &&
+    timingEnabled
+  ){
+
+    if(sections.length === 0){
+
+      showMessage(
+        "Add at least one subject section."
+      );
+
+      return;
+
+    }
+
+
+    const invalid =
+      sections.some(
+        s =>
+        !s.subject_id ||
+        !Number(s.duration_minutes) ||
+        Number(s.duration_minutes) <= 0
+      );
+
+
+    if(invalid){
+
+      showMessage(
+        "Select subject and timing for every section."
+      );
+
+      return;
+
+    }
+
+
+    const subjectIds =
+      sections.map(
+        s=>String(s.subject_id)
+      );
+
+
+    if(
+      new Set(subjectIds).size !==
+      subjectIds.length
+    ){
+
+      showMessage(
+        "A subject cannot be repeated in the same FULL test."
+      );
+
+      return;
+
+    }
+
+  }
+
+
+  /* =======================================
+     DATA
+  ======================================= */
+
+  const payload = {
+
+    exam_id:
+      examId,
+
+    title:
+      title,
+
+    test_type:
+      type,
+
+    subject_id:
+      (
+        type === "FULL"
+        ? null
+        : subjectId || null
+      ),
+
+    duration_minutes:
+      duration,
+
+    total_questions:
+      totalQuestions,
+
+    is_active:
+      true,
+
+    description:
+      description || null,
+
+    marks_per_question:
+      marks,
+
+    negative_marks:
+      negative,
+
+    subject_wise_timing:
+      type === "FULL"
+      ? timingEnabled
+      : false
+
+  };
+
+
+  /* =======================================
+     INSERT / UPDATE
+  ======================================= */
+
+  let result;
+
+
+  if(editId){
+
+    result =
+      await db
+      .from("mock_tests")
+      .update(payload)
+      .eq("id",editId)
+      .select()
+      .single();
+
+  }else{
+
+    result =
+      await db
+      .from("mock_tests")
+      .insert(payload)
+      .select()
+      .single();
+
+  }
+
+
+  if(result.error){
+
+    console.error(
+      result.error
+    );
+
+    showMessage(
+      result.error.message
+    );
+
+    return;
+
+  }
+
+
+  const savedTest =
+    result.data;
+
+
+  /* =======================================
+     SAVE FULL SECTIONS
+  ======================================= */
+
+  if(type === "FULL"){
+
+    await db
+    .from("mock_test_sections")
+    .delete()
+    .eq(
+      "mock_test_id",
+      savedTest.id
+    );
+
+
+    if(
+      timingEnabled &&
+      sections.length
+    ){
+
+      const sectionRows =
+        sections.map(
+          (section,index)=>({
+
+            mock_test_id:
+              savedTest.id,
+
+            subject_id:
+              section.subject_id,
+
+            section_order:
+              index + 1,
+
+            duration_minutes:
+              Number(
+                section.duration_minutes
+              )
+
+          })
+        );
+
+
+      const sectionResult =
+        await db
+        .from("mock_test_sections")
+        .insert(
+          sectionRows
+        );
+
+
+      if(sectionResult.error){
+
+        showMessage(
+          "Test created, but sections could not be saved: " +
+          sectionResult.error.message
+        );
+
+        return;
+
+      }
+
+    }
+
+  }
+
+
+  /* =======================================
+     RESET
+  ======================================= */
+
+  resetForm();
+
+  showMessage(
+    editId
+    ? "Test updated successfully."
+    : "Test created successfully."
+  );
+
+
+  await loadTests();
+
+}
+
+
+/* =========================================
+   LOAD TESTS
+========================================= */
+
+async function loadTests(){
+
+  const result =
+  await db
+  .from("mock_tests")
+  .select(`
+    *,
+    exams(*),
+    subjects(*)
+  `)
+  .order(
+    "created_at",
+    {ascending:false}
+  );
+
+
+  if(result.error){
+
+    document
+    .getElementById("tests")
+    .textContent =
+    result.error.message;
+
+    return;
+
+  }
+
+
+  tests =
+  result.data || [];
+
+
+  renderTests();
+
+}
+
+
+/* =========================================
+   RENDER TESTS
+========================================= */
+
+function renderTests(){
+
+  const box =
+  document.getElementById(
+    "tests"
+  );
+
+
+  if(!tests.length){
+
+    box.innerHTML =
+    '<div class="message">No mock tests created yet.</div>';
+
+    return;
+
+  }
+
+
+  box.innerHTML = "";
+
+
+  tests.forEach(test=>{
+
+    const examName =
+      test.exams?.name ||
+      test.exams?.title ||
+      test.exams?.exam_name ||
+      "Exam";
+
+
+    const subjectName =
+      test.subjects?.name ||
+      test.subjects?.title ||
+      "";
+
+
+    const card =
+      document.createElement(
+        "div"
+      );
+
+    card.className =
+      "test-card";
+
+
+    card.innerHTML = `
+
+      <div class="test-title">
+        ${escapeHtml(test.title)}
+      </div>
+
+      <span class="status ${
+        test.is_active
+        ? "active-status"
+        : "inactive-status"
+      }">
+
+        ${
+          test.is_active
+          ? "ACTIVE"
+          : "INACTIVE"
+        }
+
+      </span>
+
+      <div class="test-info">
+
+        Exam:
+        ${escapeHtml(examName)}
+
+        <br>
+
+        Type:
+        ${escapeHtml(test.test_type)}
+
+        ${
+          subjectName
+          ?
+          "<br>Subject: "+
+          escapeHtml(subjectName)
+          :
+          ""
+        }
+
+        <br>
+
+        Duration:
+        ${test.duration_minutes} min
+
+        <br>
+
+        Questions:
+        ${test.total_questions}
+
+        <br>
+
+        Marks:
+        ${test.marks_per_question ?? 2}
+
+        &nbsp; | &nbsp;
+
+        Negative:
+        ${test.negative_marks ?? 0}
+
+        ${
+          test.test_type === "FULL"
+          ?
+          "<br>Subject-wise Timing: "+
+          (
+            test.subject_wise_timing
+            ? "ON"
+            : "OFF"
+          )
+          :
+          ""
+        }
+
+      </div>
+
+      <div class="test-actions">
+
+        <button
+        class="secondary-btn"
+        onclick="editTest('${test.id}')">
+
+          Edit
+
+        </button>
+
+        <button
+        class="secondary-btn"
+        onclick="toggleActive('${test.id}',${test.is_active})">
+
+          ${
+            test.is_active
+            ? "Deactivate"
+            : "Activate"
+          }
+
+        </button>
+
+      </div>
+
+      <button
+      class="danger-btn"
+      onclick="deleteTest('${test.id}')">
+
+        Delete
+
+      </button>
+
+    `;
+
+
+    box.appendChild(card);
+
+  });
+
+}
+
+
+/* =========================================
+   EDIT TEST
+========================================= */
+
+async function editTest(id){
+
+  const test =
+  tests.find(
+    t =>
+    String(t.id) ===
+    String(id)
+  );
+
+
+  if(!test) return;
+
+
+  document
+  .getElementById("editId")
+  .value =
+  test.id;
+
+
+  document
+  .getElementById("title")
+  .value =
+  test.title || "";
+
+
+  document
+  .getElementById("description")
+  .value =
+  test.description || "";
+
+
+  document
+  .getElementById("exam")
+  .value =
+  test.exam_id || "";
+
+
+  document
+  .getElementById("testType")
+  .value =
+  test.test_type || "FULL";
+
+
+  document
+  .getElementById("duration")
+  .value =
+  test.duration_minutes || 60;
+
+
+  document
+  .getElementById("totalQuestions")
+  .value =
+  test.total_questions || 25;
+
+
+  document
+  .getElementById("marks")
+  .value =
+  test.marks_per_question ?? 2;
+
+
+  document
+  .getElementById("negative")
+  .value =
+  test.negative_marks ?? 0;
+
+
+  document
+  .getElementById("subject")
+  .value =
+  test.subject_id || "";
+
+
+  fillChapters();
+
+
+  handleTestType();
+
+
+  sections = [];
+
+
+  if(
+    test.test_type === "FULL" &&
+    test.subject_wise_timing
+  ){
+
+    const result =
+      await db
+      .from("mock_test_sections")
+      .select("*")
+      .eq(
+        "mock_test_id",
+        test.id
+      )
+      .order(
+        "section_order"
+      );
+
+
+    if(!result.error){
+
+      sections =
+      (result.data || [])
+      .map(s=>({
+
+        subject_id:
+          s.subject_id,
+
+        duration_minutes:
+          s.duration_minutes
+
+      }));
+
+    }
+
+
+    document
+    .getElementById(
+      "subjectTiming"
+    )
+    .checked =
+    true;
+
+
+    renderSections();
+
+
+  }else{
+
+    document
+    .getElementById(
+      "subjectTiming"
+    )
+    .checked =
+    false;
+
+  }
+
+
+  toggleSubjectTiming();
+
+
+  document
+  .getElementById(
+    "saveBtn"
+  )
+  .textContent =
+  "Update Test";
+
+
+  document
+  .getElementById(
+    "cancelBtn"
+  )
+  .classList
+  .remove("hidden");
+
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+/* =========================================
+   CANCEL EDIT
+========================================= */
+
+function cancelEdit(){
+
+  resetForm();
+
+}
+
+
+/* =========================================
+   RESET FORM
+========================================= */
+
+function resetForm(){
+
+  document
+  .getElementById(
+    "editId"
+  )
+  .value = "";
+
+
+  document
+  .getElementById(
+    "title"
+  )
+  .value = "";
+
+
+  document
+  .getElementById(
+    "description"
+  )
+  .value = "";
+
+
+  document
+  .getElementById(
+    "exam"
+  )
+  .value = "";
+
+
+  document
+  .getElementById(
+    "testType"
+  )
+  .value = "FULL";
+
+
+  document
+  .getElementById(
+    "duration"
+  )
+  .value = 60;
+
+
+  document
+  .getElementById(
+    "subject"
+  )
+  .value = "";
+
+
+  document
+  .getElementById(
+    "chapter"
+  )
+  .innerHTML =
+  '<option value="">Select Chapter</option>';
+
+
+  document
+  .getElementById(
+    "totalQuestions"
+  )
+  .value = 25;
+
+
+  document
+  .getElementById(
+    "marks"
+  )
+  .value = 2;
+
+
+  document
+  .getElementById(
+    "negative"
+  )
+  .value = 0;
+
+
+  document
+  .getElementById(
+    "subjectTiming"
+  )
+  .checked = false;
+
+
+  sections = [];
+
+
+  document
+  .getElementById(
+    "sections"
+  )
+  .innerHTML = "";
+
+
+  document
+  .getElementById(
+    "saveBtn"
+  )
+  .textContent =
+  "Create Test";
+
+
+  document
+  .getElementById(
+    "cancelBtn"
+  )
+  .classList
+  .add("hidden");
+
+
+  handleTestType();
+
+}
+
+
+/* =========================================
+   ACTIVATE / DEACTIVATE
+========================================= */
+
+async function toggleActive(
+  id,
+  current
+){
+
+  const result =
+  await db
+  .from("mock_tests")
+  .update({
+    is_active:!current
+  })
+  .eq(
+    "id",
+    id
+  );
+
+
+  if(result.error){
+
+    showMessage(
+      result.error.message
+    );
+
+    return;
+
+  }
+
+
+  await loadTests();
+
+}
+
+
+/* =========================================
+   DELETE
+========================================= */
+
+async function deleteTest(id){
+
+  if(
+    !confirm(
+      "Delete this mock test?"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  const result =
+  await db
+  .from("mock_tests")
+  .delete()
+  .eq(
+    "id",
+    id
+  );
+
+
+  if(result.error){
+
+    showMessage(
+      result.error.message
+    );
+
+    return;
+
+  }
+
+
+  await loadTests();
+
+}
+
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+function showMessage(text){
+
+  const box =
+  document.getElementById(
+    "message"
+  );
+
+
+  box.innerHTML = `
+
+    <div class="message">
+      ${escapeHtml(text)}
+    </div>
+
+  `;
+
+
+  setTimeout(
+    ()=>{
+      box.innerHTML="";
+    },
+    4000
+  );
+
+}
+
+
+/* =========================================
+   ESCAPE
+========================================= */
+
+function escapeHtml(value){
+
+  return String(
+    value ?? ""
+  )
+  .replace(/&/g,"&amp;")
+  .replace(/</g,"&lt;")
+  .replace(/>/g,"&gt;")
+  .replace(/"/g,"&quot;")
+  .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================================
    START
-========================= */
+========================================= */
 
-async function start(){
-
-const allowed =
-await checkAdmin();
-
-if(!allowed){
-return;
-}
-
-await loadExams();
-
-await loadSubjects();
-
-await loadTests();
-
-}
-
-start();
+loadData();
 
 </script>
 
 </body>
-
-  </html>
+</html>
