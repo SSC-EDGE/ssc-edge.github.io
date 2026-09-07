@@ -4,9 +4,11 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<title>Practice - SSC EDGE</title>
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
+
+<title>SSC EDGE - Practice</title>
 
 <script>
 document.documentElement.dataset.theme =
@@ -17,167 +19,490 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 
 <style>
 
+/* =========================
+   CONTAINER
+========================= */
+
 .container{
 max-width:700px;
 margin:auto;
-padding:20px;
-padding-bottom:90px;
+padding:32px;
+padding-bottom:110px;
 }
 
+
+/* =========================
+   HEADER
+========================= */
+
 h1{
-margin-bottom:5px;
+font-size:34px;
+margin:0 0 8px;
 }
 
 .subtitle{
+font-size:18px;
 color:var(--muted);
-margin-bottom:25px;
+margin-bottom:50px;
 }
 
+
+/* =========================
+   SECTION TITLE
+========================= */
+
 .section-title{
-font-size:18px;
-font-weight:bold;
-margin:25px 0 12px;
+font-size:27px;
+font-weight:800;
+margin:0 0 25px;
 }
+
+
+/* =========================
+   GRID
+========================= */
 
 .grid{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:12px;
+gap:20px;
 }
+
+
+/* =========================
+   MAIN PRACTICE CARD
+========================= */
 
 .box{
 background:var(--card);
 border:1px solid var(--border);
-border-radius:14px;
-padding:20px;
+border-radius:30px;
+
+min-height:245px;
+
+padding:30px 18px;
+
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+
 text-align:center;
+
 cursor:pointer;
-font-weight:bold;
+
+transition:.2s;
 }
 
 .box:hover{
 border-color:var(--purple);
+transform:translateY(-2px);
 }
+
+
+/* =========================
+   ICON BOX
+========================= */
+
+.card-icon{
+width:105px;
+height:105px;
+
+border-radius:28px;
+
+background:#241047;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-size:60px;
+
+margin-bottom:18px;
+}
+
+
+/* =========================
+   CARD TITLE
+========================= */
+
+.card-title{
+font-size:29px;
+font-weight:800;
+line-height:1.2;
+}
+
+.card-subtitle{
+font-size:20px;
+color:var(--muted);
+line-height:1.25;
+margin-top:10px;
+}
+
+
+/* =========================
+   CHAPTER CARDS
+========================= */
+
+.chapter-box{
+min-height:215px;
+}
+
+.chapter-box .card-icon{
+width:90px;
+height:90px;
+
+font-size:48px;
+
+border-radius:25px;
+
+margin-bottom:18px;
+}
+
+.chapter-box .card-title{
+font-size:24px;
+}
+
+
+/* =========================
+   LIST SCREENS
+========================= */
+
+h2{
+font-size:28px;
+margin:0 0 25px;
+}
+
+.back{
+display:inline-block;
+margin-bottom:20px;
+
+color:var(--purple2);
+
+cursor:pointer;
+
+font-weight:bold;
+font-size:16px;
+}
+
+
+/* =========================
+   TEST CARD
+========================= */
 
 .test-card{
 background:var(--card);
+
 border:1px solid var(--border);
-border-radius:14px;
-padding:15px;
-margin-bottom:12px;
+
+border-radius:18px;
+
+padding:18px;
+
+margin-bottom:14px;
 }
 
 .test-title{
-font-size:17px;
+font-size:18px;
 font-weight:bold;
-margin-bottom:7px;
+
+margin-bottom:8px;
 }
 
 .meta{
-font-size:13px;
+font-size:14px;
+
 color:var(--muted);
+
 line-height:1.7;
 }
 
 .test-btn{
 display:inline-block;
+
 margin-top:12px;
-padding:10px 14px;
-border-radius:9px;
+
+padding:11px 17px;
+
+border-radius:10px;
+
 background:var(--purple);
+
 color:white;
+
 text-decoration:none;
+
 font-weight:bold;
 }
 
-.back{
-display:inline-block;
-margin-bottom:15px;
-color:var(--purple2);
-cursor:pointer;
-font-weight:bold;
-}
 
-.hidden{
-display:none;
-}
-
-.empty{
-text-align:center;
-padding:25px;
-color:var(--muted);
-}
-
-.loading{
-text-align:center;
-padding:25px;
-color:var(--muted);
-}
+/* =========================
+   TABS
+========================= */
 
 .tabs{
 display:flex;
-gap:8px;
-margin-bottom:15px;
+
+gap:10px;
+
+margin-bottom:18px;
 }
 
 .tab{
 flex:1;
-padding:11px;
-border-radius:10px;
+
+padding:12px;
+
+border-radius:12px;
+
 border:1px solid var(--border);
+
 background:var(--card);
+
 color:var(--text);
+
 text-align:center;
+
 font-weight:bold;
+
 cursor:pointer;
 }
 
 .tab.active{
 background:var(--purple);
+
 color:white;
+
 border-color:var(--purple);
 }
 
+
+/* =========================
+   EMPTY / LOADING
+========================= */
+
+.empty{
+text-align:center;
+
+padding:30px;
+
+color:var(--muted);
+}
+
+.loading{
+text-align:center;
+
+padding:30px;
+
+color:var(--muted);
+}
+
+
+/* =========================
+   HIDDEN
+========================= */
+
+.hidden{
+display:none;
+}
+
+
+/* =========================
+   BOTTOM NAV
+========================= */
+
 .bottom-nav{
+
 position:fixed;
+
 bottom:0;
 left:0;
 right:0;
+
+height:92px;
+
 background:var(--header);
+
 border-top:1px solid var(--border);
+
 display:flex;
+
 justify-content:space-around;
-padding:10px 5px;
+
+align-items:center;
+
 z-index:100;
 }
 
 .bottom-nav a{
+
+flex:1;
+
+height:100%;
+
+display:flex;
+
+flex-direction:column;
+
+align-items:center;
+
+justify-content:center;
+
+gap:5px;
+
 color:var(--muted);
+
 text-decoration:none;
-font-size:12px;
-text-align:center;
+
+font-size:14px;
+}
+
+.nav-icon{
+
+font-size:27px;
+
+height:30px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+}
+
+.nav-label{
+font-size:14px;
+}
+
+.bottom-nav a.active{
+color:var(--purple2);
+}
+
+.bottom-nav a.active .nav-icon{
+font-size:31px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:500px){
+
+.container{
+padding:30px 32px 110px;
+}
+
+h1{
+font-size:34px;
+}
+
+.subtitle{
+font-size:18px;
+margin-bottom:50px;
+}
+
+.section-title{
+font-size:26px;
+}
+
+.grid{
+gap:20px;
+}
+
+.box{
+min-height:230px;
+padding:25px 12px;
+border-radius:28px;
+}
+
+.card-icon{
+width:100px;
+height:100px;
+font-size:56px;
+}
+
+.card-title{
+font-size:27px;
+}
+
+.card-subtitle{
+font-size:19px;
+}
+
+.chapter-box{
+min-height:205px;
+}
+
+.chapter-box .card-icon{
+width:88px;
+height:88px;
+font-size:45px;
+}
+
+.chapter-box .card-title{
+font-size:23px;
+}
+
+}
+
+
+/* =========================
+   VERY SMALL SCREEN
+========================= */
+
+@media(max-width:360px){
+
+.container{
+padding-left:20px;
+padding-right:20px;
+}
+
+.box{
+min-height:210px;
+}
+
+.card-icon{
+width:85px;
+height:85px;
+font-size:48px;
+}
+
+.card-title{
+font-size:23px;
+}
+
+.card-subtitle{
+font-size:16px;
+}
+
 }
 
 </style>
 
 </head>
 
+
 <body>
 
+
 <div class="container">
+
+
+<!-- =========================
+     MAIN SCREEN
+========================= -->
+
+<div id="mainScreen">
 
 <h1>Practice</h1>
 
 <div class="subtitle">
-Practice smarter. Improve faster.
+Test your preparation and improve your score
 </div>
 
 
-<!-- =========================
-     MAIN PRACTICE
-========================= -->
-
-<div id="mainScreen">
+<!-- MOCK TEST -->
 
 <div class="section-title">
 MOCK TEST
@@ -185,120 +510,220 @@ MOCK TEST
 
 <div class="grid">
 
-<div class="box" onclick="openSSC()">
-📝<br><br>
+
+<div class="box"
+onclick="openSSC()">
+
+<div class="card-icon">
+📝
+</div>
+
+<div class="card-title">
 SSC
 </div>
 
-<div class="box" onclick="openRRB()">
-🚆<br><br>
-RRB
+<div class="card-subtitle">
+Staff Selection<br>
+Commission
 </div>
 
 </div>
 
 
-<div class="section-title">
+<div class="box"
+onclick="openRRB()">
+
+<div class="card-icon">
+🚆
+</div>
+
+<div class="card-title">
+RRB (Railway)
+</div>
+
+<div class="card-subtitle">
+Railway Recruitment Board
+</div>
+
+</div>
+
+
+</div>
+
+
+<!-- CHAPTER WISE -->
+
+<div class="section-title"
+style="margin-top:50px;">
+
 CHAPTER WISE PRACTICE
+
 </div>
 
 <div class="grid">
 
-<div class="box" onclick="openChapter('Quant')">
-➗<br><br>
+
+<div class="box chapter-box"
+onclick="openChapter('Quant')">
+
+<div class="card-icon">
+🔢
+</div>
+
+<div class="card-title">
 Quant
 </div>
 
-<div class="box" onclick="openChapter('GK')">
-🌍<br><br>
+</div>
+
+
+<div class="box chapter-box"
+onclick="openChapter('GK')">
+
+<div class="card-icon">
+🌐
+</div>
+
+<div class="card-title">
 GK
 </div>
 
-<div class="box" onclick="openChapter('English')">
-📖<br><br>
+</div>
+
+
+<div class="box chapter-box"
+onclick="openChapter('English')">
+
+<div class="card-icon">
+📖
+</div>
+
+<div class="card-title">
 English
 </div>
 
-<div class="box" onclick="openChapter('Reasoning')">
-🧠<br><br>
+</div>
+
+
+<div class="box chapter-box"
+onclick="openChapter('Reasoning')">
+
+<div class="card-icon">
+🧩
+</div>
+
+<div class="card-title">
 Reasoning
 </div>
 
 </div>
 
+
+</div>
+
 </div>
 
 
 <!-- =========================
-     SSC EXAMS
+     SSC SCREEN
 ========================= -->
 
-<div id="sscScreen" class="hidden">
+<div id="sscScreen"
+class="hidden">
 
-<div class="back" onclick="showMain()">
+<div class="back"
+onclick="showMain()">
+
 ← Back
+
 </div>
 
-<h2>SSC Mock Tests</h2>
+<h2>
+SSC Mock Tests
+</h2>
 
-<div id="sscList" class="loading">
+<div id="sscList"
+class="loading">
+
 Loading...
+
 </div>
 
 </div>
 
 
 <!-- =========================
-     RRB EXAMS
+     RRB SCREEN
 ========================= -->
 
-<div id="rrbScreen" class="hidden">
+<div id="rrbScreen"
+class="hidden">
 
-<div class="back" onclick="showMain()">
+<div class="back"
+onclick="showMain()">
+
 ← Back
+
 </div>
 
-<h2>RRB Mock Tests</h2>
+<h2>
+RRB Mock Tests
+</h2>
 
-<div id="rrbList" class="loading">
+<div id="rrbList"
+class="loading">
+
 Loading...
+
 </div>
 
 </div>
 
 
 <!-- =========================
-     EXAM TESTS
+     TEST SCREEN
 ========================= -->
 
-<div id="testScreen" class="hidden">
+<div id="testScreen"
+class="hidden">
 
-<div class="back" onclick="backToGateway()">
+<div class="back"
+onclick="backToGateway()">
+
 ← Back
+
 </div>
 
 <h2 id="examTitle"></h2>
 
+
 <div class="tabs">
 
-<div
-id="tab1"
+<div id="tab1"
 class="tab active"
 onclick="showTestType(0)">
+
 FULL MOCKS
+
 </div>
 
-<div
-id="tab2"
+
+<div id="tab2"
 class="tab"
 onclick="showTestType(1)">
+
 SECTIONAL / SUBJECT WISE
-</div>
 
 </div>
 
-<div id="testList" class="loading">
+</div>
+
+
+<div id="testList"
+class="loading">
+
 Loading...
+
 </div>
 
 </div>
@@ -308,21 +733,31 @@ Loading...
      CHAPTER SCREEN
 ========================= -->
 
-<div id="chapterScreen" class="hidden">
+<div id="chapterScreen"
+class="hidden">
 
-<div class="back" onclick="showMain()">
+<div class="back"
+onclick="showMain()">
+
 ← Back
+
 </div>
 
 <h2 id="chapterTitle">
+
 Chapter Wise Practice
+
 </h2>
 
-<div id="chapterList" class="loading">
+<div id="chapterList"
+class="loading">
+
 Loading...
+
 </div>
 
 </div>
+
 
 </div>
 
@@ -333,26 +768,67 @@ Loading...
 
 <div class="bottom-nav">
 
+
 <a href="home.html">
-🏠<br>Home
+
+<div class="nav-icon">
+⌂
+</div>
+
+<div class="nav-label">
+Home
+</div>
+
 </a>
+
 
 <a href="study.html">
-📚<br>Study
+
+<div class="nav-icon">
+▣
+</div>
+
+<div class="nav-label">
+Study Material
+</div>
+
 </a>
 
-<a href="practice.html">
-📝<br>Practice
+
+<a href="practice.html"
+class="active">
+
+<div class="nav-icon">
+✓
+</div>
+
+<div class="nav-label">
+Practice
+</div>
+
 </a>
+
 
 <a href="profile.html">
-👤<br>Profile
+
+<div class="nav-icon">
+○
+</div>
+
+<div class="nav-label">
+Profile
+</div>
+
 </a>
+
 
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script
+src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+</script>
+
 
 <script>
 
@@ -383,7 +859,6 @@ let tests=[];
 
 let currentGateway="";
 let currentExam=null;
-let currentType=0;
 
 
 /* =========================
@@ -418,7 +893,7 @@ await supabaseClient
 if(examResult.error){
 
 console.error(
-"Exam loading error:",
+"Exams:",
 examResult.error
 );
 
@@ -439,7 +914,7 @@ await supabaseClient
 if(subjectResult.error){
 
 console.error(
-"Subject loading error:",
+"Subjects:",
 subjectResult.error
 );
 
@@ -471,7 +946,7 @@ created_at
 if(testResult.error){
 
 console.error(
-"Mock test loading error:",
+"Mock Tests:",
 testResult.error
 );
 
@@ -480,22 +955,6 @@ return;
 }
 
 tests=testResult.data || [];
-
-}
-
-
-/* =========================
-   SHOW MAIN
-========================= */
-
-function showMain(){
-
-hideAll();
-
-document
-.getElementById("mainScreen")
-.classList
-.remove("hidden");
 
 }
 
@@ -520,6 +979,22 @@ document
 .add("hidden");
 
 });
+
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+function showMain(){
+
+hideAll();
+
+document
+.getElementById("mainScreen")
+.classList
+.remove("hidden");
 
 }
 
@@ -583,8 +1058,7 @@ let filtered=[];
 
 if(type==="SSC"){
 
-filtered =
-exams.filter(e=>{
+filtered=exams.filter(e=>{
 
 const name =
 String(e.name || "")
@@ -592,22 +1066,20 @@ String(e.name || "")
 .toUpperCase();
 
 return [
+
 "SSC CGL",
 "SSC CHSL",
 "SSC MTS",
 "SSC CPO",
 "SSC STENO"
-]
-.some(x =>
-x.toUpperCase()===name
-);
+
+].includes(name);
 
 });
 
 }else{
 
-filtered =
-exams.filter(e=>{
+filtered=exams.filter(e=>{
 
 const name =
 String(e.name || "")
@@ -615,13 +1087,12 @@ String(e.name || "")
 .toUpperCase();
 
 return [
-"NTPC - Graduate Level",
-"NTPC - Under Graduate Level",
+
+"NTPC - GRADUATE LEVEL",
+"NTPC - UNDER GRADUATE LEVEL",
 "NTPC GROUP D"
-]
-.some(x =>
-x.toUpperCase()===name
-);
+
+].includes(name);
 
 });
 
@@ -631,9 +1102,13 @@ x.toUpperCase()===name
 if(filtered.length===0){
 
 list.innerHTML=`
+
 <div class="empty">
+
 No ${type} exams available.
+
 </div>
+
 `;
 
 return;
@@ -646,10 +1121,15 @@ filtered.map(exam=>`
 
 <div
 class="box"
-style="margin-bottom:12px"
+style="margin-bottom:14px;min-height:90px;"
 onclick="openExam('${exam.id}')">
 
+<div class="card-title"
+style="font-size:21px;">
+
 ${escapeHtml(exam.name)}
+
+</div>
 
 </div>
 
@@ -666,7 +1146,7 @@ function openExam(id){
 
 currentExam =
 exams.find(e =>
-String(e.id) === String(id)
+String(e.id)===String(id)
 );
 
 
@@ -676,8 +1156,6 @@ return;
 
 }
 
-
-currentType=0;
 
 hideAll();
 
@@ -718,31 +1196,10 @@ openRRB();
 
 
 /* =========================
-   TEST TYPE
+   SHOW TEST TYPE
 ========================= */
 
 function showTestType(type){
-
-currentType=type;
-
-
-document
-.getElementById("tab1")
-.classList
-.toggle(
-"active",
-type===0
-);
-
-
-document
-.getElementById("tab2")
-.classList
-.toggle(
-"active",
-type===1
-);
-
 
 if(!currentExam){
 
@@ -751,7 +1208,19 @@ return;
 }
 
 
-const currentExamId =
+document
+.getElementById("tab1")
+.classList
+.toggle("active",type===0);
+
+
+document
+.getElementById("tab2")
+.classList
+.toggle("active",type===1);
+
+
+const examId =
 String(currentExam.id);
 
 
@@ -763,17 +1232,14 @@ if(type===0){
 filtered =
 tests.filter(test=>{
 
-const testExamId =
-String(test.exam_id);
+return (
 
-const testType =
+String(test.exam_id)===examId &&
+
 String(test.test_type || "")
 .trim()
-.toUpperCase();
+.toUpperCase()==="FULL"
 
-return (
-testExamId === currentExamId &&
-testType === "FULL"
 );
 
 });
@@ -783,20 +1249,20 @@ testType === "FULL"
 filtered =
 tests.filter(test=>{
 
-const testExamId =
-String(test.exam_id);
-
 const testType =
 String(test.test_type || "")
 .trim()
 .toUpperCase();
 
 return (
-testExamId === currentExamId &&
+
+String(test.exam_id)===examId &&
+
 (
-testType === "SECTIONAL" ||
-testType === "SUBJECT_WISE"
+testType==="SECTIONAL" ||
+testType==="SUBJECT_WISE"
 )
+
 );
 
 });
@@ -822,9 +1288,13 @@ document.getElementById("testList");
 if(list.length===0){
 
 box.innerHTML=`
+
 <div class="empty">
+
 No tests available yet.
+
 </div>
+
 `;
 
 return;
@@ -842,14 +1312,13 @@ if(test.subject_id){
 
 const subject =
 subjects.find(s =>
-String(s.id) ===
+String(s.id)===
 String(test.subject_id)
 );
 
 if(subject){
 
-subjectName =
-subject.name;
+subjectName=subject.name;
 
 }
 
@@ -861,15 +1330,14 @@ return `
 <div class="test-card">
 
 <div class="test-title">
+
 ${escapeHtml(test.title)}
+
 </div>
 
 <div class="meta">
 
-${escapeHtml(
-String(test.test_type || "")
-.trim()
-)}
+${escapeHtml(test.test_type)}
 
 ${subjectName
 ?
@@ -879,15 +1347,13 @@ ${subjectName
 
 <br>
 
-⏱ ${escapeHtml(
-test.duration_minutes
-)} minutes
+⏱ ${escapeHtml(test.duration_minutes)}
+minutes
 
 <br>
 
-📝 ${escapeHtml(
-test.total_questions
-)} questions
+📝 ${escapeHtml(test.total_questions)}
+questions
 
 </div>
 
@@ -925,15 +1391,20 @@ document
 document
 .getElementById("chapterTitle")
 .textContent =
-subjectName + " Practice";
+subjectName+" Practice";
 
 
 const subject =
-subjects.find(s =>
+subjects.find(s=>
+
 String(s.name || "")
 .trim()
-.toLowerCase() ===
-subjectName.trim().toLowerCase()
+.toLowerCase()===
+
+subjectName
+.trim()
+.toLowerCase()
+
 );
 
 
@@ -942,10 +1413,14 @@ if(!subject){
 document
 .getElementById("chapterList")
 .innerHTML=`
+
 <div class="empty">
+
 No ${escapeHtml(subjectName)}
 practice available yet.
+
 </div>
+
 `;
 
 return;
@@ -956,15 +1431,15 @@ return;
 const list =
 tests.filter(test=>{
 
-const testType =
+return (
+
 String(test.test_type || "")
 .trim()
-.toUpperCase();
+.toUpperCase()==="CHAPTER_WISE" &&
 
-return (
-testType === "CHAPTER_WISE" &&
-String(test.subject_id) ===
+String(test.subject_id)===
 String(subject.id)
+
 );
 
 });
@@ -975,9 +1450,13 @@ if(list.length===0){
 document
 .getElementById("chapterList")
 .innerHTML=`
+
 <div class="empty">
+
 No chapter-wise tests available yet.
+
 </div>
+
 `;
 
 return;
@@ -987,26 +1466,27 @@ return;
 
 document
 .getElementById("chapterList")
-.innerHTML =
+.innerHTML=
+
 list.map(test=>`
 
 <div class="test-card">
 
 <div class="test-title">
+
 ${escapeHtml(test.title)}
+
 </div>
 
 <div class="meta">
 
-⏱ ${escapeHtml(
-test.duration_minutes
-)} minutes
+⏱ ${escapeHtml(test.duration_minutes)}
+minutes
 
 <br>
 
-📝 ${escapeHtml(
-test.total_questions
-)} questions
+📝 ${escapeHtml(test.total_questions)}
+questions
 
 </div>
 
@@ -1029,16 +1509,10 @@ Start Practice →
    START
 ========================= */
 
-async function start(){
-
-await loadData();
-
-}
-
-start();
+loadData();
 
 </script>
 
 </body>
 
-     </html>
+</html>
