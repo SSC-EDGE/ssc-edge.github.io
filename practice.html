@@ -162,6 +162,7 @@ text-align:center;
 
 </head>
 
+
 <body>
 
 <div class="container">
@@ -172,6 +173,10 @@ text-align:center;
 Practice smarter. Improve faster.
 </div>
 
+
+<!-- =========================
+     MAIN PRACTICE
+========================= -->
 
 <div id="mainScreen">
 
@@ -225,6 +230,10 @@ Reasoning
 </div>
 
 
+<!-- =========================
+     SSC EXAMS
+========================= -->
+
 <div id="sscScreen" class="hidden">
 
 <div class="back" onclick="showMain()">
@@ -240,6 +249,10 @@ Loading...
 </div>
 
 
+<!-- =========================
+     RRB EXAMS
+========================= -->
+
 <div id="rrbScreen" class="hidden">
 
 <div class="back" onclick="showMain()">
@@ -254,6 +267,10 @@ Loading...
 
 </div>
 
+
+<!-- =========================
+     EXAM TESTS
+========================= -->
 
 <div id="testScreen" class="hidden">
 
@@ -288,6 +305,10 @@ Loading...
 </div>
 
 
+<!-- =========================
+     CHAPTER SCREEN
+========================= -->
+
 <div id="chapterScreen" class="hidden">
 
 <div class="back" onclick="showMain()">
@@ -306,6 +327,10 @@ Loading...
 
 </div>
 
+
+<!-- =========================
+     BOTTOM NAV
+========================= -->
 
 <div class="bottom-nav">
 
@@ -330,7 +355,12 @@ Loading...
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
 <script>
+
+/* =========================
+   SUPABASE
+========================= */
 
 const SUPABASE_URL =
 "https://dvvyoygahzzbnpqrfhen.supabase.co";
@@ -345,14 +375,22 @@ SUPABASE_KEY
 );
 
 
-let exams=[];
-let subjects=[];
-let tests=[];
+/* =========================
+   DATA
+========================= */
 
-let currentGateway="";
-let currentExam=null;
-let currentType=0;
+let exams = [];
+let subjects = [];
+let tests = [];
 
+let currentGateway = "";
+let currentExam = null;
+let currentType = 0;
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
 
 function escapeHtml(value){
 
@@ -372,39 +410,55 @@ return String(value ?? "")
 
 async function loadData(){
 
+/* ---------- EXAMS ---------- */
+
 const examResult =
 await supabaseClient
 .from("exams")
 .select("id,name")
-.order("id");
+.order("name");
+
 
 if(examResult.error){
 
-console.error("EXAMS ERROR:",examResult.error);
+console.error(
+"Exams error:",
+examResult.error
+);
 
-return;
+return false;
 
 }
 
-exams=examResult.data || [];
+exams =
+examResult.data || [];
 
+
+/* ---------- SUBJECTS ---------- */
 
 const subjectResult =
 await supabaseClient
 .from("subjects")
 .select("id,name")
-.order("id");
+.order("name");
+
 
 if(subjectResult.error){
 
-console.error("SUBJECT ERROR:",subjectResult.error);
+console.error(
+"Subjects error:",
+subjectResult.error
+);
 
-return;
+return false;
 
 }
 
-subjects=subjectResult.data || [];
+subjects =
+subjectResult.data || [];
 
+
+/* ---------- MOCK TESTS ---------- */
 
 const testResult =
 await supabaseClient
@@ -413,25 +467,33 @@ await supabaseClient
 .eq("is_active",true)
 .order("created_at",{ascending:false});
 
+
 if(testResult.error){
 
-console.error("MOCK TEST ERROR:",testResult.error);
+console.error(
+"Mock tests error:",
+testResult.error
+);
 
-document.getElementById("testList").innerHTML=
-`
-<div class="empty">
-Unable to load tests.
-</div>
-`;
-
-return;
+return false;
 
 }
 
-tests=testResult.data || [];
+tests =
+testResult.data || [];
 
-console.log("EXAMS:",exams);
-console.log("MOCK TESTS:",tests);
+
+console.log(
+"Loaded exams:",
+exams
+);
+
+console.log(
+"Loaded tests:",
+tests
+);
+
+return true;
 
 }
 
@@ -482,7 +544,7 @@ document
 
 function openSSC(){
 
-currentGateway="SSC";
+currentGateway = "SSC";
 
 hideAll();
 
@@ -502,7 +564,7 @@ renderExams("SSC");
 
 function openRRB(){
 
-currentGateway="RRB";
+currentGateway = "RRB";
 
 hideAll();
 
@@ -523,48 +585,62 @@ renderExams("RRB");
 function renderExams(type){
 
 const list =
-type==="SSC"
-?document.getElementById("sscList")
-:document.getElementById("rrbList");
+type === "SSC"
+?
+document.getElementById("sscList")
+:
+document.getElementById("rrbList");
 
 
-const sscNames=[
-"SSC CGL",
-"SSC CHSL",
-"SSC MTS",
-"SSC CPO",
-"SSC STENO"
-];
-
-const rrbNames=[
-"NTPC - Graduate Level",
-"NTPC - Under Graduate Level",
-"NTPC GROUP D"
-];
+let filtered = [];
 
 
-const names =
-type==="SSC"
-?sscNames
-:rrbNames;
+if(type === "SSC"){
 
+filtered =
+exams.filter(exam => {
 
-const filtered =
-exams.filter(exam =>
-names.some(name =>
+const name =
 String(exam.name || "")
 .trim()
-.toLowerCase()
-===
-name.trim().toLowerCase()
-)
-);
+.toLowerCase();
+
+return [
+"ssc cgl",
+"ssc chsl",
+"ssc mts",
+"ssc cpo",
+"ssc steno"
+]
+.includes(name);
+
+});
+
+}else{
+
+filtered =
+exams.filter(exam => {
+
+const name =
+String(exam.name || "")
+.trim()
+.toLowerCase();
+
+return [
+"ntpc - graduate level",
+"ntpc - under graduate level",
+"ntpc group d"
+]
+.includes(name);
+
+});
+
+}
 
 
-if(filtered.length===0){
+if(filtered.length === 0){
 
-list.innerHTML=
-`
+list.innerHTML = `
 <div class="empty">
 No ${type} exams available.
 </div>
@@ -575,8 +651,8 @@ return;
 }
 
 
-list.innerHTML=
-filtered.map(exam=>`
+list.innerHTML =
+filtered.map(exam => `
 
 <div
 class="box"
@@ -606,14 +682,17 @@ String(exam.id) === String(id)
 
 if(!currentExam){
 
-console.error("Exam not found:",id);
+console.error(
+"Exam not found:",
+id
+);
 
 return;
 
 }
 
 
-currentType=0;
+currentType = 0;
 
 hideAll();
 
@@ -622,10 +701,12 @@ document
 .classList
 .remove("hidden");
 
+
 document
 .getElementById("examTitle")
 .textContent =
 currentExam.name;
+
 
 showTestType(0);
 
@@ -638,7 +719,7 @@ showTestType(0);
 
 function backToGateway(){
 
-if(currentGateway==="SSC"){
+if(currentGateway === "SSC"){
 
 openSSC();
 
@@ -657,20 +738,37 @@ openRRB();
 
 function showTestType(type){
 
-currentType=type;
+currentType = type;
+
 
 document
 .getElementById("tab1")
 .classList
-.toggle("active",type===0);
+.toggle(
+"active",
+type === 0
+);
+
 
 document
 .getElementById("tab2")
 .classList
-.toggle("active",type===1);
+.toggle(
+"active",
+type === 1
+);
 
 
 if(!currentExam){
+
+document
+.getElementById("testList")
+.innerHTML =
+`
+<div class="empty">
+Please select an exam.
+</div>
+`;
 
 return;
 
@@ -681,10 +779,12 @@ const examId =
 String(currentExam.id);
 
 
-let filtered=[];
+let filtered = [];
 
 
-if(type===0){
+/* ---------- FULL MOCKS ---------- */
+
+if(type === 0){
 
 filtered =
 tests.filter(test => {
@@ -703,6 +803,9 @@ testType === "FULL"
 );
 
 });
+
+
+/* ---------- SECTIONAL / SUBJECT WISE ---------- */
 
 }else{
 
@@ -730,22 +833,6 @@ testType === "SUBJECT_WISE"
 }
 
 
-console.log(
-"Selected Exam:",
-currentExam
-);
-
-console.log(
-"Exam ID:",
-examId
-);
-
-console.log(
-"Filtered Tests:",
-filtered
-);
-
-
 renderTests(filtered);
 
 }
@@ -761,10 +848,9 @@ const box =
 document.getElementById("testList");
 
 
-if(list.length===0){
+if(list.length === 0){
 
-box.innerHTML=
-`
+box.innerHTML = `
 <div class="empty">
 No tests available yet.
 </div>
@@ -776,23 +862,25 @@ return;
 
 
 box.innerHTML =
-list.map(test=>{
+list.map(test => {
 
-let subjectName="";
+let subjectName = "";
 
 
 if(test.subject_id){
 
 const subject =
-subjects.find(subject =>
-String(subject.id) ===
+subjects.find(item =>
+String(item.id) ===
 String(test.subject_id)
 );
 
+if(subject){
+
 subjectName =
-subject
-?subject.name
-:"";
+subject.name;
+
+}
 
 }
 
@@ -813,16 +901,22 @@ String(test.test_type || "")
 )}
 
 ${subjectName
-?` • ${escapeHtml(subjectName)}`
-:""}
+?
+` • ${escapeHtml(subjectName)}`
+:
+""}
 
 <br>
 
-⏱ ${escapeHtml(test.duration_minutes)} minutes
+⏱ ${escapeHtml(
+test.duration_minutes
+)} minutes
 
 <br>
 
-📝 ${escapeHtml(test.total_questions)} questions
+📝 ${escapeHtml(
+test.total_questions
+)} questions
 
 </div>
 
@@ -860,12 +954,12 @@ document
 document
 .getElementById("chapterTitle")
 .textContent =
-subjectName+" Practice";
+subjectName + " Practice";
 
 
 const subject =
-subjects.find(subject =>
-String(subject.name || "")
+subjects.find(item =>
+String(item.name || "")
 .trim()
 .toLowerCase()
 ===
@@ -877,8 +971,7 @@ if(!subject){
 
 document
 .getElementById("chapterList")
-.innerHTML=
-`
+.innerHTML = `
 <div class="empty">
 No ${escapeHtml(subjectName)}
 practice available yet.
@@ -907,12 +1000,11 @@ String(subject.id)
 });
 
 
-if(list.length===0){
+if(list.length === 0){
 
 document
 .getElementById("chapterList")
-.innerHTML=
-`
+.innerHTML = `
 <div class="empty">
 No chapter-wise tests available yet.
 </div>
@@ -926,7 +1018,7 @@ return;
 document
 .getElementById("chapterList")
 .innerHTML =
-list.map(test=>`
+list.map(test => `
 
 <div class="test-card">
 
@@ -936,11 +1028,15 @@ ${escapeHtml(test.title)}
 
 <div class="meta">
 
-⏱ ${escapeHtml(test.duration_minutes)} minutes
+⏱ ${escapeHtml(
+test.duration_minutes
+)} minutes
 
 <br>
 
-📝 ${escapeHtml(test.total_questions)} questions
+📝 ${escapeHtml(
+test.total_questions
+)} questions
 
 </div>
 
