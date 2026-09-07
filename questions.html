@@ -1,0 +1,1789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>SSC EDGE - Question Bank</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<script>
+document.documentElement.dataset.theme =
+localStorage.getItem("ssc-edge-theme") || "dark";
+</script>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,sans-serif;
+}
+
+.simple-header{
+  height:60px;
+  display:flex;
+  align-items:center;
+  padding:0 18px;
+  background:var(--header);
+  border-bottom:1px solid var(--border);
+}
+
+.header-brand{
+  font-size:20px;
+  font-weight:800;
+}
+
+.page-container{
+  max-width:900px;
+  margin:auto;
+  padding:25px 16px 100px;
+}
+
+.page-title{
+  margin:0;
+  font-size:28px;
+  font-weight:800;
+}
+
+.page-subtitle{
+  margin:7px 0 25px;
+  color:var(--muted);
+}
+
+.panel{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:20px;
+}
+
+.field{
+  margin-bottom:15px;
+}
+
+label{
+  display:block;
+  margin-bottom:7px;
+  font-size:13px;
+  font-weight:700;
+}
+
+input,
+select,
+textarea{
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--bg);
+  color:var(--text);
+  font:inherit;
+  outline:none;
+}
+
+textarea{
+  min-height:100px;
+  resize:vertical;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.option-row{
+  display:grid;
+  grid-template-columns:40px 1fr;
+  gap:8px;
+  margin-bottom:10px;
+  align-items:center;
+}
+
+.option-label{
+  text-align:center;
+  font-weight:800;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+button{
+  border:0;
+  border-radius:10px;
+  padding:12px 16px;
+  background:var(--purple);
+  color:white;
+  font-weight:800;
+  cursor:pointer;
+}
+
+button.secondary{
+  background:var(--card2);
+  color:var(--text);
+  border:1px solid var(--border);
+}
+
+button.danger{
+  background:#b42318;
+}
+
+.question-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:12px;
+}
+
+.question-top{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:flex-start;
+}
+
+.question-text{
+  font-weight:800;
+  line-height:1.4;
+}
+
+.badge{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:8px;
+  background:var(--card2);
+  color:var(--muted);
+  font-size:11px;
+  margin:8px 5px 0 0;
+}
+
+.option-preview{
+  margin-top:12px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.6;
+}
+
+.explanation{
+  margin-top:10px;
+  padding-top:10px;
+  border-top:1px solid var(--border);
+  color:var(--muted);
+  font-size:13px;
+}
+
+.status{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:10px;
+}
+
+.hidden{
+  display:none!important;
+}
+
+.empty{
+  text-align:center;
+  padding:25px;
+  color:var(--muted);
+}
+
+.search-box{
+  margin-bottom:16px;
+}
+
+@media(max-width:600px){
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .question-top{
+    flex-direction:column;
+  }
+
+  .page-title{
+    font-size:24px;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="simple-header">
+  <div class="header-brand">SSC EDGE</div>
+</header>
+
+<main class="page-container">
+
+<h1 class="page-title">Question Bank</h1>
+
+<p class="page-subtitle">
+  Create reusable questions for SSC EDGE mock tests
+</p>
+
+
+<!-- FILTERS -->
+
+<section class="panel">
+
+<h2 style="margin-top:0">Question Bank</h2>
+
+<div class="grid">
+
+<div class="field">
+<label>Subject</label>
+
+<select id="subjectFilter">
+<option value="">All Subjects</option>
+</select>
+
+</div>
+
+
+<div class="field">
+<label>Chapter</label>
+
+<select id="chapterFilter">
+<option value="">All Chapters</option>
+</select>
+
+</div>
+
+</div>
+
+
+<div class="search-box">
+
+<label>Search Question</label>
+
+<input
+id="searchInput"
+placeholder="Search question..."
+>
+
+</div>
+
+</section>
+
+
+<!-- ADD / EDIT -->
+
+<section class="panel">
+
+<h2 id="formTitle" style="margin-top:0">
+Add Question
+</h2>
+
+
+<div class="grid">
+
+<div class="field">
+
+<label>Subject</label>
+
+<select id="questionSubject">
+
+<option value="">
+Select Subject
+</option>
+
+</select>
+
+</div>
+
+
+<div class="field">
+
+<label>Chapter</label>
+
+<select id="questionChapter">
+
+<option value="">
+Select Chapter
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+<div class="field">
+
+<label>Question</label>
+
+<textarea
+id="questionText"
+placeholder="Enter question"
+></textarea>
+
+</div>
+
+
+<div class="field">
+
+<label>Options</label>
+
+
+<div class="option-row">
+<div class="option-label">A</div>
+<input id="optionA" placeholder="Option A">
+</div>
+
+
+<div class="option-row">
+<div class="option-label">B</div>
+<input id="optionB" placeholder="Option B">
+</div>
+
+
+<div class="option-row">
+<div class="option-label">C</div>
+<input id="optionC" placeholder="Option C">
+</div>
+
+
+<div class="option-row">
+<div class="option-label">D</div>
+<input id="optionD" placeholder="Option D">
+</div>
+
+</div>
+
+
+<div class="field">
+
+<label>Correct Option</label>
+
+<select id="correctOption">
+
+<option value="">
+Select Correct Option
+</option>
+
+<option value="A">A</option>
+<option value="B">B</option>
+<option value="C">C</option>
+<option value="D">D</option>
+
+</select>
+
+</div>
+
+
+<div class="grid">
+
+<div class="field">
+
+<label>Marks</label>
+
+<input
+id="marks"
+type="number"
+step="0.01"
+value="2"
+>
+
+</div>
+
+
+<div class="field">
+
+<label>Negative Marks</label>
+
+<input
+id="negativeMarks"
+type="number"
+step="0.01"
+value="0"
+>
+
+</div>
+
+</div>
+
+
+<div class="field">
+
+<label>Explanation</label>
+
+<textarea
+id="explanation"
+placeholder="Enter explanation"
+></textarea>
+
+</div>
+
+
+<div class="actions">
+
+<button onclick="saveQuestion()" id="saveBtn">
+Add Question
+</button>
+
+<button
+onclick="cancelEdit()"
+id="cancelBtn"
+class="secondary hidden"
+>
+Cancel
+</button>
+
+</div>
+
+
+<div id="saveStatus" class="status"></div>
+
+</section>
+
+
+<!-- LIST -->
+
+<section class="panel">
+
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+margin-bottom:15px;
+">
+
+<h2 style="margin:0">
+Questions
+</h2>
+
+<span id="questionCount" class="badge">
+0 Questions
+</span>
+
+</div>
+
+
+<div id="questionsList"></div>
+
+</section>
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+"https://dvvyoygahzzbnpqrfhen.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
+const supabaseClient =
+supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+let subjects=[];
+let chapters=[];
+let questions=[];
+
+let editingQuestionId=null;
+
+
+/* =========================
+   ADMIN CHECK
+========================= */
+
+async function checkAdmin(){
+
+  const {
+    data:{session}
+  } =
+    await supabaseClient.auth.getSession();
+
+  if(!session){
+
+    location.href="admin.html";
+
+    return false;
+  }
+
+
+  const {data,error} =
+    await supabaseClient
+      .from("admin_users")
+      .select("id")
+      .eq("user_id",session.user.id)
+      .maybeSingle();
+
+
+  if(error || !data){
+
+    alert("Admin access required.");
+
+    location.href="index.html";
+
+    return false;
+  }
+
+
+  return true;
+
+}
+
+
+/* =========================
+   LOAD SUBJECTS
+========================= */
+
+async function loadSubjects(){
+
+  const {data,error} =
+    await supabaseClient
+      .from("subjects")
+      .select("*")
+      .order("id");
+
+
+  if(error){
+
+    console.error(error);
+
+    return;
+  }
+
+
+  subjects=data || [];
+
+
+  const subjectFilter=
+    document.getElementById("subjectFilter");
+
+  const questionSubject=
+    document.getElementById("questionSubject");
+
+
+  subjects.forEach(subject=>{
+
+    const name=
+      subject.name ||
+      subject.title ||
+      ("Subject "+subject.id);
+
+
+    const a=
+      document.createElement("option");
+
+    a.value=subject.id;
+    a.textContent=name;
+
+    subjectFilter.appendChild(a);
+
+
+    const b=
+      document.createElement("option");
+
+    b.value=subject.id;
+    b.textContent=name;
+
+    questionSubject.appendChild(b);
+
+  });
+
+}
+
+
+/* =========================
+   LOAD CHAPTERS
+========================= */
+
+async function loadChapters(){
+
+  const {data,error} =
+    await supabaseClient
+      .from("chapters")
+      .select("*")
+      .order("id");
+
+
+  if(error){
+
+    console.error(error);
+
+    return;
+  }
+
+
+  chapters=data || [];
+
+}
+
+
+/* =========================
+   FILTER CHAPTERS
+========================= */
+
+function populateChapters(
+  selectId,
+  subjectId=""
+){
+
+  const select=
+    document.getElementById(selectId);
+
+
+  select.innerHTML=
+    '<option value="">'+
+    (selectId==="chapterFilter"
+      ?"All Chapters"
+      :"Select Chapter")+
+    '</option>';
+
+
+  chapters
+    .filter(chapter=>{
+
+      if(!subjectId) return true;
+
+      return String(
+        chapter.subject_id
+      )===String(subjectId);
+
+    })
+    .forEach(chapter=>{
+
+      const option=
+        document.createElement("option");
+
+
+      option.value=chapter.id;
+
+
+      option.textContent=
+        chapter.name ||
+        chapter.title ||
+        ("Chapter "+chapter.id);
+
+
+      select.appendChild(option);
+
+    });
+
+}
+
+
+/* =========================
+   SUBJECT FILTER
+========================= */
+
+document
+.getElementById("subjectFilter")
+.addEventListener(
+  "change",
+  async function(){
+
+    populateChapters(
+      "chapterFilter",
+      this.value
+    );
+
+    await loadQuestions();
+
+  }
+);
+
+
+/* =========================
+   CHAPTER FILTER
+========================= */
+
+document
+.getElementById("chapterFilter")
+.addEventListener(
+  "change",
+  loadQuestions
+);
+
+
+/* =========================
+   FORM SUBJECT
+========================= */
+
+document
+.getElementById("questionSubject")
+.addEventListener(
+  "change",
+  function(){
+
+    populateChapters(
+      "questionChapter",
+      this.value
+    );
+
+  }
+);
+
+
+/* =========================
+   SEARCH
+========================= */
+
+document
+.getElementById("searchInput")
+.addEventListener(
+  "input",
+  renderQuestions
+);
+
+
+/* =========================
+   LOAD QUESTIONS
+========================= */
+
+async function loadQuestions(){
+
+  const subjectId=
+    document.getElementById(
+      "subjectFilter"
+    ).value;
+
+
+  const chapterId=
+    document.getElementById(
+      "chapterFilter"
+    ).value;
+
+
+  let query=
+    supabaseClient
+      .from("questions")
+      .select("*")
+      .is("mock_test_id",null)
+      .order("created_at",{ascending:true});
+
+
+  if(subjectId){
+
+    query=
+      query.eq(
+        "subject_id",
+        subjectId
+      );
+
+  }
+
+
+  if(chapterId){
+
+    query=
+      query.eq(
+        "chapter_id",
+        chapterId
+      );
+
+  }
+
+
+  const {data,error}=
+    await query;
+
+
+  if(error){
+
+    console.error(error);
+
+    document
+      .getElementById("questionsList")
+      .innerHTML=
+        '<div class="empty">'+
+        escapeHtml(error.message)+
+        '</div>';
+
+    return;
+  }
+
+
+  questions=data || [];
+
+
+  renderQuestions();
+
+}
+
+
+/* =========================
+   SAVE QUESTION
+========================= */
+
+async function saveQuestion(){
+
+  const subjectId=
+    document.getElementById(
+      "questionSubject"
+    ).value;
+
+
+  const chapterId=
+    document.getElementById(
+      "questionChapter"
+    ).value;
+
+
+  const questionText=
+    document.getElementById(
+      "questionText"
+    ).value.trim();
+
+
+  const optionA=
+    document.getElementById(
+      "optionA"
+    ).value.trim();
+
+
+  const optionB=
+    document.getElementById(
+      "optionB"
+    ).value.trim();
+
+
+  const optionC=
+    document.getElementById(
+      "optionC"
+    ).value.trim();
+
+
+  const optionD=
+    document.getElementById(
+      "optionD"
+    ).value.trim();
+
+
+  const correct=
+    document.getElementById(
+      "correctOption"
+    ).value;
+
+
+  const explanation=
+    document.getElementById(
+      "explanation"
+    ).value.trim();
+
+
+  const marks=
+    Number(
+      document.getElementById(
+        "marks"
+      ).value || 0
+    );
+
+
+  const negativeMarks=
+    Number(
+      document.getElementById(
+        "negativeMarks"
+      ).value || 0
+    );
+
+
+  if(!subjectId){
+
+    alert("Select a subject.");
+
+    return;
+  }
+
+
+  if(!chapterId){
+
+    alert("Select a chapter.");
+
+    return;
+  }
+
+
+  if(!questionText){
+
+    alert("Enter the question.");
+
+    return;
+  }
+
+
+  if(
+    !optionA ||
+    !optionB ||
+    !optionC ||
+    !optionD
+  ){
+
+    alert("Enter all four options.");
+
+    return;
+  }
+
+
+  if(!correct){
+
+    alert("Select the correct option.");
+
+    return;
+  }
+
+
+  const payload={
+
+    mock_test_id:null,
+
+    subject_id:Number(subjectId),
+
+    chapter_id:Number(chapterId),
+
+    question_text:questionText,
+
+    explanation:
+      explanation || null,
+
+    marks:marks,
+
+    negative_marks:
+      negativeMarks
+
+  };
+
+
+  document
+    .getElementById("saveStatus")
+    .textContent=
+      "Saving...";
+
+
+  let questionId=
+    editingQuestionId;
+
+
+  if(editingQuestionId){
+
+    const {error} =
+      await supabaseClient
+        .from("questions")
+        .update(payload)
+        .eq("id",editingQuestionId);
+
+
+    if(error){
+
+      console.error(error);
+
+      document
+        .getElementById("saveStatus")
+        .textContent=
+          "Error: "+error.message;
+
+      return;
+    }
+
+
+  }else{
+
+    const {data,error} =
+      await supabaseClient
+        .from("questions")
+        .insert(payload)
+        .select("id")
+        .single();
+
+
+    if(error){
+
+      console.error(error);
+
+      document
+        .getElementById("saveStatus")
+        .textContent=
+          "Error: "+error.message;
+
+      return;
+    }
+
+
+    questionId=data.id;
+
+  }
+
+
+  /* OPTIONS */
+
+  if(editingQuestionId){
+
+    const {error} =
+      await supabaseClient
+        .from("question_options")
+        .delete()
+        .eq(
+          "question_id",
+          questionId
+        );
+
+
+    if(error){
+
+      console.error(error);
+
+      return;
+    }
+
+  }
+
+
+  const options=[
+
+    {
+      question_id:questionId,
+      option_label:"A",
+      option_text:optionA,
+      is_correct:correct==="A"
+    },
+
+    {
+      question_id:questionId,
+      option_label:"B",
+      option_text:optionB,
+      is_correct:correct==="B"
+    },
+
+    {
+      question_id:questionId,
+      option_label:"C",
+      option_text:optionC,
+      is_correct:correct==="C"
+    },
+
+    {
+      question_id:questionId,
+      option_label:"D",
+      option_text:optionD,
+      is_correct:correct==="D"
+    }
+
+  ];
+
+
+  const {error:optionError} =
+    await supabaseClient
+      .from("question_options")
+      .insert(options);
+
+
+  if(optionError){
+
+    console.error(optionError);
+
+    document
+      .getElementById("saveStatus")
+      .textContent=
+        "Question saved but options failed.";
+
+    return;
+  }
+
+
+  document
+    .getElementById("saveStatus")
+    .textContent=
+      editingQuestionId
+        ?"Question updated successfully."
+        :"Question added successfully.";
+
+
+  cancelEdit();
+
+  await loadQuestions();
+
+}
+
+
+/* =========================
+   EDIT
+========================= */
+
+async function editQuestion(id){
+
+  const question=
+    questions.find(
+      q=>String(q.id)===String(id)
+    );
+
+
+  if(!question) return;
+
+
+  const {data:options,error} =
+    await supabaseClient
+      .from("question_options")
+      .select("*")
+      .eq("question_id",id)
+      .order("option_label");
+
+
+  if(error){
+
+    alert("Unable to load options.");
+
+    return;
+  }
+
+
+  editingQuestionId=id;
+
+
+  document
+    .getElementById("formTitle")
+    .textContent=
+      "Edit Question";
+
+
+  document
+    .getElementById("saveBtn")
+    .textContent=
+      "Update Question";
+
+
+  document
+    .getElementById("cancelBtn")
+    .classList.remove("hidden");
+
+
+  document
+    .getElementById("questionSubject")
+    .value=
+      question.subject_id || "";
+
+
+  populateChapters(
+    "questionChapter",
+    question.subject_id
+  );
+
+
+  document
+    .getElementById("questionChapter")
+    .value=
+      question.chapter_id || "";
+
+
+  document
+    .getElementById("questionText")
+    .value=
+      question.question_text || "";
+
+
+  const map={};
+
+
+  (options || []).forEach(option=>{
+
+    map[option.option_label]=option;
+
+  });
+
+
+  document
+    .getElementById("optionA")
+    .value=
+      map.A?.option_text || "";
+
+
+  document
+    .getElementById("optionB")
+    .value=
+      map.B?.option_text || "";
+
+
+  document
+    .getElementById("optionC")
+    .value=
+      map.C?.option_text || "";
+
+
+  document
+    .getElementById("optionD")
+    .value=
+      map.D?.option_text || "";
+
+
+  const correct=
+    (options || []).find(
+      o=>o.is_correct
+    );
+
+
+  document
+    .getElementById("correctOption")
+    .value=
+      correct?.option_label || "";
+
+
+  document
+    .getElementById("marks")
+    .value=
+      question.marks ?? 2;
+
+
+  document
+    .getElementById("negativeMarks")
+    .value=
+      question.negative_marks ?? 0;
+
+
+  document
+    .getElementById("explanation")
+    .value=
+      question.explanation || "";
+
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+/* =========================
+   DELETE
+========================= */
+
+async function deleteQuestion(id){
+
+  if(!confirm(
+    "Delete this question from the Question Bank?"
+  )) return;
+
+
+  const {error:optionError} =
+    await supabaseClient
+      .from("question_options")
+      .delete()
+      .eq(
+        "question_id",
+        id
+      );
+
+
+  if(optionError){
+
+    alert(
+      "Unable to delete options."
+    );
+
+    return;
+  }
+
+
+  const {error} =
+    await supabaseClient
+      .from("questions")
+      .delete()
+      .eq("id",id);
+
+
+  if(error){
+
+    alert(
+      "Unable to delete question: "+
+      error.message
+    );
+
+    return;
+  }
+
+
+  await loadQuestions();
+
+}
+
+
+/* =========================
+   CANCEL
+========================= */
+
+function cancelEdit(){
+
+  editingQuestionId=null;
+
+
+  document
+    .getElementById("formTitle")
+    .textContent=
+      "Add Question";
+
+
+  document
+    .getElementById("saveBtn")
+    .textContent=
+      "Add Question";
+
+
+  document
+    .getElementById("cancelBtn")
+    .classList.add("hidden");
+
+
+  clearForm();
+
+}
+
+
+/* =========================
+   CLEAR
+========================= */
+
+function clearForm(){
+
+  document
+    .getElementById("questionSubject")
+    .value="";
+
+
+  populateChapters(
+    "questionChapter"
+  );
+
+
+  document
+    .getElementById("questionChapter")
+    .value="";
+
+
+  document
+    .getElementById("questionText")
+    .value="";
+
+
+  document
+    .getElementById("optionA")
+    .value="";
+
+
+  document
+    .getElementById("optionB")
+    .value="";
+
+
+  document
+    .getElementById("optionC")
+    .value="";
+
+
+  document
+    .getElementById("optionD")
+    .value="";
+
+
+  document
+    .getElementById("correctOption")
+    .value="";
+
+
+  document
+    .getElementById("marks")
+    .value="2";
+
+
+  document
+    .getElementById("negativeMarks")
+    .value="0";
+
+
+  document
+    .getElementById("explanation")
+    .value="";
+
+}
+
+
+/* =========================
+   RENDER
+========================= */
+
+function renderQuestions(){
+
+  const list=
+    document.getElementById(
+      "questionsList"
+    );
+
+
+  const search=
+    document
+      .getElementById(
+        "searchInput"
+      )
+      .value
+      .trim()
+      .toLowerCase();
+
+
+  const filtered=
+    questions.filter(question=>{
+
+      if(!search) return true;
+
+
+      return String(
+        question.question_text || ""
+      )
+      .toLowerCase()
+      .includes(search);
+
+    });
+
+
+  document
+    .getElementById(
+      "questionCount"
+    )
+    .textContent=
+      filtered.length+
+      (
+        filtered.length===1
+        ?" Question"
+        :" Questions"
+      );
+
+
+  if(!filtered.length){
+
+    list.innerHTML=
+      '<div class="empty">'+
+      'No questions found.'+
+      '</div>';
+
+    return;
+  }
+
+
+  list.innerHTML="";
+
+
+  filtered.forEach(
+    (question,index)=>{
+
+      const card=
+        document.createElement(
+          "div"
+        );
+
+      card.className=
+        "question-card";
+
+
+      const top=
+        document.createElement(
+          "div"
+        );
+
+      top.className=
+        "question-top";
+
+
+      const text=
+        document.createElement(
+          "div"
+        );
+
+      text.className=
+        "question-text";
+
+
+      text.textContent=
+        "Q"+(index+1)+". "+
+        question.question_text;
+
+
+      const actions=
+        document.createElement(
+          "div"
+        );
+
+      actions.className=
+        "actions";
+
+
+      const edit=
+        document.createElement(
+          "button"
+        );
+
+      edit.className=
+        "secondary";
+
+      edit.textContent=
+        "Edit";
+
+      edit.onclick=
+        ()=>editQuestion(
+          question.id
+        );
+
+
+      const del=
+        document.createElement(
+          "button"
+        );
+
+      del.className=
+        "danger";
+
+      del.textContent=
+        "Delete";
+
+      del.onclick=
+        ()=>deleteQuestion(
+          question.id
+        );
+
+
+      actions.appendChild(edit);
+      actions.appendChild(del);
+
+
+      top.appendChild(text);
+      top.appendChild(actions);
+
+      card.appendChild(top);
+
+
+      const badges=
+        document.createElement(
+          "div"
+        );
+
+
+      const subject=
+        subjects.find(
+          s=>String(s.id)===
+             String(question.subject_id)
+        );
+
+
+      const chapter=
+        chapters.find(
+          c=>String(c.id)===
+             String(question.chapter_id)
+        );
+
+
+      badges.innerHTML=
+        '<span class="badge">'+
+        escapeHtml(
+          subject?.name ||
+          subject?.title ||
+          "Subject"
+        )+
+        '</span>'+
+        '<span class="badge">'+
+        escapeHtml(
+          chapter?.name ||
+          chapter?.title ||
+          "Chapter"
+        )+
+        '</span>'+
+        '<span class="badge">Marks: '+
+        (question.marks ?? 0)+
+        '</span>'+
+        '<span class="badge">Negative: '+
+        (question.negative_marks ?? 0)+
+        '</span>';
+
+
+      card.appendChild(badges);
+
+
+      const optionPreview=
+        document.createElement(
+          "div"
+        );
+
+      optionPreview.className=
+        "option-preview";
+
+
+      loadOptions(
+        question.id,
+        optionPreview
+      );
+
+
+      card.appendChild(
+        optionPreview
+      );
+
+
+      if(question.explanation){
+
+        const exp=
+          document.createElement(
+            "div"
+          );
+
+        exp.className=
+          "explanation";
+
+        exp.textContent=
+          "Explanation: "+
+          question.explanation;
+
+        card.appendChild(exp);
+
+      }
+
+
+      list.appendChild(card);
+
+    }
+  );
+
+}
+
+
+/* =========================
+   OPTIONS
+========================= */
+
+async function loadOptions(
+  questionId,
+  element
+){
+
+  const {data,error} =
+    await supabaseClient
+      .from("question_options")
+      .select(
+        "option_label,option_text,is_correct"
+      )
+      .eq(
+        "question_id",
+        questionId
+      )
+      .order("option_label");
+
+
+  if(error){
+
+    element.textContent=
+      "Unable to load options.";
+
+    return;
+  }
+
+
+  element.innerHTML="";
+
+
+  (data || []).forEach(
+    option=>{
+
+      const row=
+        document.createElement(
+          "div"
+        );
+
+
+      row.textContent=
+        option.option_label+
+        ". "+
+        option.option_text+
+        (
+          option.is_correct
+          ?" ✓"
+          :""
+        );
+
+
+      if(option.is_correct){
+
+        row.style.fontWeight="800";
+
+      }
+
+
+      element.appendChild(row);
+
+    }
+  );
+
+}
+
+
+/* =========================
+   ESCAPE
+========================= */
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+(async function(){
+
+  const allowed=
+    await checkAdmin();
+
+  if(!allowed) return;
+
+
+  await loadSubjects();
+
+  await loadChapters();
+
+
+  populateChapters(
+    "chapterFilter"
+  );
+
+  populateChapters(
+    "questionChapter"
+  );
+
+
+  await loadQuestions();
+
+})();
+
+</script>
+
+</body>
+  </html>
