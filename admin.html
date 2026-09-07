@@ -1,210 +1,342 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>SSC EDGE Admin</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-  <script>
-    document.documentElement.dataset.theme =
-      localStorage.getItem("ssc-edge-theme") || "dark";
-  </script>
+<title>SSC EDGE Admin</title>
 
-  <link rel="stylesheet" href="css/style.css">
+<script>
+document.documentElement.dataset.theme =
+localStorage.getItem("ssc-edge-theme") || "dark";
+</script>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="css/style.css">
 
-  <style>
-    .admin-page{
-      min-height:100vh;
-      padding:24px 18px 100px;
-    }
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    .admin-header{
-      margin-bottom:28px;
-    }
+<style>
 
-    .admin-header h1{
-      margin:0;
-      font-size:28px;
-    }
+.admin-page{
+  min-height:100vh;
+  padding:24px 18px 100px;
+}
 
-    .admin-header p{
-      margin:6px 0 0;
-      color:var(--muted);
-    }
+.admin-header{
+  margin-bottom:25px;
+}
 
-    .admin-card{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:18px;
-      padding:20px;
-      margin-bottom:16px;
-    }
+.admin-header h1{
+  margin:0;
+  font-size:28px;
+}
 
-    .admin-card h2{
-      margin:0 0 8px;
-      font-size:20px;
-    }
+.admin-header p{
+  margin:6px 0 0;
+  color:var(--muted);
+}
 
-    .admin-card p{
-      margin:0;
-      color:var(--muted);
-      font-size:14px;
-    }
+.admin-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+  margin-bottom:16px;
+}
 
-    .admin-btn,
-    .login-btn,
-    .logout-btn{
-      width:100%;
-      margin-top:16px;
-      padding:13px;
-      border:0;
-      border-radius:12px;
-      background:var(--purple);
-      color:white;
-      font-size:15px;
-      font-weight:600;
-    }
+.admin-card h2{
+  margin:0 0 8px;
+  font-size:19px;
+}
 
-    .login-box{
-      max-width:420px;
-      margin:60px auto;
-    }
+.admin-card p{
+  margin:0;
+  color:var(--muted);
+  font-size:14px;
+}
 
-    .login-box input{
-      width:100%;
-      box-sizing:border-box;
-      margin-top:12px;
-      padding:14px;
-      border-radius:12px;
-      border:1px solid var(--border);
-      background:var(--card);
-      color:var(--text);
-      font-size:15px;
-    }
+.admin-btn,
+.login-btn,
+.logout-btn{
+  width:100%;
+  margin-top:16px;
+  padding:13px;
+  border:0;
+  border-radius:12px;
+  background:var(--purple);
+  color:white;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+}
 
-    .error{
-      color:#ff6b6b;
-      margin-top:12px;
-      font-size:14px;
-    }
+.login-box{
+  max-width:420px;
+  margin:60px auto;
+}
 
-    .logout-btn{
-      background:transparent;
-      border:1px solid var(--border);
-      color:var(--text);
-      margin-bottom:25px;
-    }
+.login-box input{
+  width:100%;
+  box-sizing:border-box;
+  margin-top:12px;
+  padding:14px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+  font-size:15px;
+}
 
-    #adminPanel{
-      display:none;
-    }
-  </style>
+.error{
+  color:#ff6b6b;
+  margin-top:12px;
+  font-size:14px;
+}
+
+.logout-btn{
+  background:transparent;
+  border:1px solid var(--border);
+  color:var(--text);
+  margin-bottom:25px;
+}
+
+#adminPanel{
+  display:none;
+}
+
+</style>
+
 </head>
 
 <body>
 
-  <!-- LOGIN -->
-  <div id="loginScreen" class="login-box admin-card">
+<!-- LOGIN -->
+
+<div id="loginScreen" class="login-box admin-card">
+
+  <h1>SSC EDGE Admin</h1>
+
+  <p>Admin Login</p>
+
+  <input
+    type="email"
+    id="email"
+    placeholder="Email"
+    autocomplete="email"
+  >
+
+  <input
+    type="password"
+    id="password"
+    placeholder="Password"
+    autocomplete="current-password"
+  >
+
+  <button
+    class="login-btn"
+    onclick="login()"
+  >
+    Login
+  </button>
+
+  <div id="loginError" class="error"></div>
+
+</div>
+
+
+<!-- ADMIN PANEL -->
+
+<main id="adminPanel" class="admin-page">
+
+  <div class="admin-header">
 
     <h1>SSC EDGE Admin</h1>
 
-    <p>Admin Login</p>
-
-    <input
-      type="email"
-      id="email"
-      placeholder="Email"
-      autocomplete="email"
-    >
-
-    <input
-      type="password"
-      id="password"
-      placeholder="Password"
-      autocomplete="current-password"
-    >
-
-    <button class="login-btn" onclick="login()">
-      Login
-    </button>
-
-    <div id="loginError" class="error"></div>
+    <p>
+      Manage your SSC EDGE platform
+    </p>
 
   </div>
 
 
-  <!-- ADMIN PANEL -->
-  <main id="adminPanel" class="admin-page">
+  <button
+    class="logout-btn"
+    onclick="logout()"
+  >
+    Logout
+  </button>
 
-    <div class="admin-header">
-      <h1>SSC EDGE Admin</h1>
-      <p>Manage your SSC EDGE platform</p>
-    </div>
 
-    <button class="logout-btn" onclick="logout()">
-      Logout
+  <!-- STUDY MATERIAL -->
+
+  <div class="admin-card">
+
+    <h2>📚 Study Material</h2>
+
+    <p>
+      Manage videos, e-books and PDFs.
+    </p>
+
+    <button
+      class="admin-btn"
+      onclick="openPage('admin-study.html')"
+    >
+      Manage Study Material
     </button>
 
-    <div class="admin-card">
-      <h2>📚 Study Material</h2>
-      <p>Add and manage videos, e-books and PDFs.</p>
-      <button class="admin-btn">
-        Manage Study Material
-      </button>
-    </div>
+  </div>
 
-    <div class="admin-card">
-      <h2>📝 Mock Tests</h2>
-      <p>Create and manage SSC & RRB mock tests.</p>
-      <button class="admin-btn">
-        Manage Mock Tests
-      </button>
-    </div>
 
-    <div class="admin-card">
-      <h2>❓ Questions</h2>
-      <p>Add questions, options and explanations.</p>
-      <button class="admin-btn">
-        Manage Questions
-      </button>
-    </div>
+  <!-- VIDEOS -->
 
-    <div class="admin-card">
-      <h2>📖 Chapters</h2>
-      <p>Manage chapter-wise practice content.</p>
-      <button class="admin-btn">
-        Manage Chapters
-      </button>
-    </div>
+  <div class="admin-card">
 
-  </main>
+    <h2>🎥 Videos</h2>
+
+    <p>
+      Upload and manage study videos.
+    </p>
+
+    <button
+      class="admin-btn"
+      onclick="openPage('admin-video.html')"
+    >
+      Manage Videos
+    </button>
+
+  </div>
+
+
+  <!-- EBOOKS -->
+
+  <div class="admin-card">
+
+    <h2>📕 E-Books</h2>
+
+    <p>
+      Add and manage SSC EDGE e-books.
+    </p>
+
+    <button
+      class="admin-btn"
+      onclick="openPage('admin-ebook.html')"
+    >
+      Manage E-Books
+    </button>
+
+  </div>
+
+
+  <!-- PDF -->
+
+  <div class="admin-card">
+
+    <h2>📄 PDFs</h2>
+
+    <p>
+      Upload and manage subject-wise PDFs.
+    </p>
+
+    <button
+      class="admin-btn"
+      onclick="openPage('admin-pdf.html')"
+    >
+      Manage PDFs
+    </button>
+
+  </div>
+
+
+  <!-- MOCK TEST -->
+
+  <div class="admin-card">
+
+    <h2>📝 Mock Tests</h2>
+
+    <p>
+      Create tests, sections, timing and assign questions.
+    </p>
+
+    <button
+      class="admin-btn"
+      onclick="openPage('admin-mock.html')"
+    >
+      Manage Mock Tests
+    </button>
+
+  </div>
+
+
+  <!-- QUESTION BANK -->
+
+  <div class="admin-card">
+
+    <h2>❓ Question Bank</h2>
+
+    <p>
+      Create and manage reusable questions.
+    </p>
+
+    <button
+      class="admin-btn"
+      onclick="openPage('questions.html')"
+    >
+      Manage Questions
+    </button>
+
+  </div>
+
+
+  <!-- CHAPTERS -->
+
+  <div class="admin-card">
+
+    <h2>📖 Chapters</h2>
+
+    <p>
+      Manage subject-wise chapters.
+    </p>
+
+    <button
+      class="admin-btn"
+      onclick="openPage('admin-chapters.html')"
+    >
+      Manage Chapters
+    </button>
+
+  </div>
+
+</main>
 
 
 <script>
 
 const SUPABASE_URL =
-  "https://dvvyoygahzzbnpqrfhen.supabase.co";
+"https://dvvyoygahzzbnpqrfhen.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
 
 const supabaseClient =
-  supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
+supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
+
+/* LOGIN */
 
 async function login(){
 
   const email =
-    document.getElementById("email").value.trim();
+    document.getElementById("email")
+      .value
+      .trim();
 
   const password =
-    document.getElementById("password").value;
+    document.getElementById("password")
+      .value;
 
   const error =
     document.getElementById("loginError");
@@ -212,20 +344,29 @@ async function login(){
   error.textContent = "";
 
   if(!email || !password){
+
     error.textContent =
       "Please enter email and password.";
+
     return;
   }
 
-  const { error: loginError } =
-    await supabaseClient.auth.signInWithPassword({
-      email: email,
-      password: password
-    });
+  const {
+    error:loginError
+  } =
+    await supabaseClient.auth
+      .signInWithPassword({
+
+        email:email,
+        password:password
+
+      });
 
   if(loginError){
+
     error.textContent =
       loginError.message;
+
     return;
   }
 
@@ -234,68 +375,121 @@ async function login(){
 }
 
 
+/* ADMIN CHECK */
+
 async function checkAdmin(){
 
   const {
-    data: { user }
-  } = await supabaseClient.auth.getUser();
+    data:{user}
+  } =
+    await supabaseClient.auth
+      .getUser();
 
   if(!user){
+
     showLogin();
+
     return;
   }
 
-  const { data, error } =
+
+  const {
+    data,
+    error
+  } =
     await supabaseClient
       .from("admin_users")
       .select("user_id")
-      .eq("user_id", user.id)
+      .eq(
+        "user_id",
+        user.id
+      )
       .maybeSingle();
 
+
   if(error){
+
     console.log(error);
+
     showLogin();
-    document.getElementById("loginError").textContent =
+
+    document.getElementById(
+      "loginError"
+    ).textContent =
       "Unable to verify admin access.";
+
     return;
   }
 
+
   if(!data){
+
     await supabaseClient.auth.signOut();
 
     showLogin();
 
-    document.getElementById("loginError").textContent =
+    document.getElementById(
+      "loginError"
+    ).textContent =
       "Access denied. Admin account required.";
 
     return;
   }
 
-  document.getElementById("loginScreen").style.display =
+
+  document.getElementById(
+    "loginScreen"
+  ).style.display =
     "none";
 
-  document.getElementById("adminPanel").style.display =
+  document.getElementById(
+    "adminPanel"
+  ).style.display =
     "block";
+
 }
 
+
+/* SHOW LOGIN */
 
 function showLogin(){
 
-  document.getElementById("loginScreen").style.display =
+  document.getElementById(
+    "loginScreen"
+  ).style.display =
     "block";
 
-  document.getElementById("adminPanel").style.display =
+  document.getElementById(
+    "adminPanel"
+  ).style.display =
     "none";
+
 }
 
+
+/* OPEN PAGE */
+
+function openPage(page){
+
+  window.location.href =
+    page;
+
+}
+
+
+/* LOGOUT */
 
 async function logout(){
 
-  await supabaseClient.auth.signOut();
+  await supabaseClient.auth
+    .signOut();
 
   showLogin();
+
 }
 
+
+/* START */
 
 checkAdmin();
 
