@@ -16,14 +16,12 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 
 <style>
 
-body{
-  margin:0;
-}
+body{margin:0}
 
 .admin-container{
-  max-width:700px;
+  max-width:850px;
   margin:auto;
-  padding:20px 16px 40px;
+  padding:20px 16px 60px;
 }
 
 .simple-header{
@@ -39,9 +37,7 @@ body{
   font-weight:900;
 }
 
-.page-title{
-  margin:8px 0 4px;
-}
+.page-title{margin:8px 0 4px}
 
 .page-subtitle{
   color:var(--muted);
@@ -50,7 +46,8 @@ body{
 
 .form-card,
 .test-card,
-.section-card{
+.section-card,
+.bank-card{
   background:var(--card);
   border:1px solid var(--border);
   border-radius:16px;
@@ -107,12 +104,10 @@ textarea:focus{
   width:auto;
 }
 
-.checkbox-row label{
-  margin:0;
-}
+.checkbox-row label{margin:0}
 
 .hidden{
-  display:none !important;
+  display:none!important;
 }
 
 .section-card{
@@ -145,9 +140,7 @@ textarea:focus{
   font-weight:800;
 }
 
-.remove-btn{
-  color:#ff6868;
-}
+.remove-btn{color:#ff6868}
 
 .primary-btn,
 .secondary-btn,
@@ -235,7 +228,75 @@ textarea:focus{
   font-weight:800;
 }
 
-@media(max-width:420px){
+.bank-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+
+.bank-count{
+  font-size:12px;
+  color:var(--muted);
+}
+
+.bank-list{
+  max-height:430px;
+  overflow-y:auto;
+  margin-top:14px;
+}
+
+.bank-question{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  padding:12px;
+  border:1px solid var(--border);
+  border-radius:11px;
+  margin-bottom:8px;
+  cursor:pointer;
+}
+
+.bank-question input{
+  width:auto;
+  margin-top:3px;
+}
+
+.bank-question-text{
+  font-size:13px;
+  line-height:1.45;
+}
+
+.bank-meta{
+  color:var(--muted);
+  font-size:11px;
+  margin-top:4px;
+}
+
+.selected-box{
+  margin-top:14px;
+  padding:12px;
+  border-radius:10px;
+  background:var(--card2);
+  font-size:13px;
+  font-weight:800;
+}
+
+.assigned-item{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:center;
+  padding:9px 0;
+  border-bottom:1px solid var(--border);
+  font-size:12px;
+}
+
+.assigned-item:last-child{
+  border-bottom:0;
+}
+
+@media(max-width:500px){
 
   .grid2{
     grid-template-columns:1fr;
@@ -261,21 +322,19 @@ textarea:focus{
 <h1 class="page-title">Mock Tests</h1>
 
 <p class="page-subtitle">
-Create and manage SSC EDGE mock tests
+Create tests and select questions from the Question Bank
 </p>
 
 <div id="message"></div>
 
+
 <!-- =========================================
-     FORM
+     TEST FORM
 ========================================= -->
 
 <div class="form-card">
 
-<input
-type="hidden"
-id="editId"
->
+<input type="hidden" id="editId">
 
 <label>Test Title</label>
 
@@ -284,12 +343,13 @@ id="title"
 placeholder="Example: CGL Full Mock Test 1"
 >
 
+
 <label>Description</label>
 
 <textarea
 id="description"
-placeholder="Test description">
-</textarea>
+placeholder="Test description"></textarea>
+
 
 <div class="grid2">
 
@@ -307,9 +367,7 @@ placeholder="Test description">
 
 <label>Test Type</label>
 
-<select
-id="testType"
-onchange="handleTestType()">
+<select id="testType" onchange="handleTestType()">
 
 <option value="FULL">FULL</option>
 <option value="SECTIONAL">SECTIONAL</option>
@@ -323,10 +381,6 @@ onchange="handleTestType()">
 </div>
 
 
-<!-- =========================================
-     NORMAL DURATION
-========================================= -->
-
 <div id="normalDurationBox">
 
 <label>Total Duration (minutes)</label>
@@ -335,15 +389,10 @@ onchange="handleTestType()">
 id="duration"
 type="number"
 min="1"
-value="60"
->
+value="60">
 
 </div>
 
-
-<!-- =========================================
-     SUBJECT SELECTION
-========================================= -->
 
 <div id="singleSubjectBox" class="hidden">
 
@@ -356,10 +405,6 @@ value="60"
 </div>
 
 
-<!-- =========================================
-     CHAPTER
-========================================= -->
-
 <div id="chapterBox" class="hidden">
 
 <label>Chapter</label>
@@ -371,9 +416,7 @@ value="60"
 </div>
 
 
-<!-- =========================================
-     FULL TEST SETTINGS
-========================================= -->
+<!-- FULL SETTINGS -->
 
 <div id="fullSettings">
 
@@ -382,8 +425,7 @@ value="60"
 <input
 type="checkbox"
 id="subjectTiming"
-onchange="toggleSubjectTiming()"
->
+onchange="toggleSubjectTiming()">
 
 <label for="subjectTiming">
 Enable Subject-wise Timing
@@ -395,13 +437,12 @@ Enable Subject-wise Timing
 <div id="sectionSettings" class="hidden">
 
 <div class="message">
+
 Set the subject order and timing for this FULL test.
-Each subject can have a different duration.
+
 </div>
 
-<div
-id="sections">
-</div>
+<div id="sections"></div>
 
 <button
 type="button"
@@ -425,10 +466,6 @@ Total Section Time: 0 minutes
 </div>
 
 
-<!-- =========================================
-     MARKING
-========================================= -->
-
 <div class="grid2">
 
 <div>
@@ -439,8 +476,7 @@ Total Section Time: 0 minutes
 id="marks"
 type="number"
 step="0.01"
-value="2"
->
+value="2">
 
 </div>
 
@@ -452,8 +488,7 @@ value="2"
 id="negative"
 type="number"
 step="0.01"
-value="0"
->
+value="0">
 
 </div>
 
@@ -466,8 +501,7 @@ value="0"
 id="totalQuestions"
 type="number"
 min="1"
-value="25"
->
+value="25">
 
 
 <button
@@ -493,6 +527,137 @@ Cancel Edit
 
 
 <!-- =========================================
+     QUESTION BANK ASSIGNMENT
+========================================= -->
+
+<div
+id="questionManager"
+class="bank-card hidden">
+
+<div class="bank-header">
+
+<h2 style="margin:0">
+Question Bank
+</h2>
+
+<div
+id="bankCount"
+class="bank-count">
+0 available
+</div>
+
+</div>
+
+
+<p
+id="bankHelp"
+style="
+color:var(--muted);
+font-size:12px;
+line-height:1.5;
+">
+
+Select questions from your central Question Bank.
+
+</p>
+
+
+<div class="grid2">
+
+<div>
+
+<label>Subject Filter</label>
+
+<select id="bankSubject">
+<option value="">All Subjects</option>
+</select>
+
+</div>
+
+<div>
+
+<label>Chapter Filter</label>
+
+<select id="bankChapter">
+<option value="">All Chapters</option>
+</select>
+
+</div>
+
+</div>
+
+
+<label>Search</label>
+
+<input
+id="bankSearch"
+placeholder="Search question..."
+oninput="renderBank()">
+
+
+<div
+id="sectionAssignmentBox"
+class="hidden">
+
+<label>
+Section for Selected Questions
+</label>
+
+<select id="assignmentSection">
+
+<option value="">
+Select Section
+</option>
+
+</select>
+
+</div>
+
+
+<div class="selected-box">
+
+Selected:
+<span id="selectedCount">0</span>
+
+</div>
+
+
+<div
+id="bankList"
+class="bank-list">
+
+<div class="message">
+Select a test first.
+</div>
+
+</div>
+
+
+<button
+class="primary-btn"
+onclick="assignSelectedQuestions()">
+
+Add Selected Questions to Test
+
+</button>
+
+
+<h3 style="margin-top:22px">
+Questions in This Test
+</h3>
+
+<div id="assignedList">
+
+<div class="message">
+No questions assigned yet.
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =========================================
      EXISTING TESTS
 ========================================= -->
 
@@ -507,8 +672,7 @@ Loading...
 </main>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
@@ -533,11 +697,16 @@ supabase.createClient(
    DATA
 ========================================= */
 
-let exams = [];
-let subjects = [];
-let chapters = [];
-let tests = [];
-let sections = [];
+let exams=[];
+let subjects=[];
+let chapters=[];
+let tests=[];
+let sections=[];
+
+let bankQuestions=[];
+let assignedQuestions=[];
+
+let selectedQuestionIds=new Set();
 
 
 /* =========================================
@@ -553,32 +722,27 @@ async function checkAdmin(){
 
   if(!user){
 
-    document.body.innerHTML =
+    document.body.innerHTML=
     "<div style='padding:30px;text-align:center'>Please login as admin.</div>";
 
     return false;
-
   }
 
 
-  const {
-    data,
-    error
-  } =
+  const {data,error} =
   await db
-  .from("admin_users")
-  .select("user_id")
-  .eq("user_id",user.id)
-  .maybeSingle();
+    .from("admin_users")
+    .select("user_id")
+    .eq("user_id",user.id)
+    .maybeSingle();
 
 
   if(error || !data){
 
-    document.body.innerHTML =
+    document.body.innerHTML=
     "<div style='padding:30px;text-align:center'>Access denied.</div>";
 
     return false;
-
   }
 
   return true;
@@ -596,10 +760,10 @@ async function loadData(){
 
 
   const examResult =
-  await db
-  .from("exams")
-  .select("*")
-  .order("id");
+    await db
+      .from("exams")
+      .select("*")
+      .order("id");
 
 
   if(examResult.error){
@@ -609,19 +773,18 @@ async function loadData(){
     );
 
     return;
-
   }
 
 
-  exams =
-  examResult.data || [];
+  exams=
+    examResult.data || [];
 
 
   const subjectResult =
-  await db
-  .from("subjects")
-  .select("*")
-  .order("id");
+    await db
+      .from("subjects")
+      .select("*")
+      .order("id");
 
 
   if(subjectResult.error){
@@ -631,32 +794,31 @@ async function loadData(){
     );
 
     return;
-
   }
 
 
-  subjects =
-  subjectResult.data || [];
+  subjects=
+    subjectResult.data || [];
 
 
   const chapterResult =
-  await db
-  .from("chapters")
-  .select("*")
-  .order("id");
+    await db
+      .from("chapters")
+      .select("*")
+      .order("id");
 
 
   if(!chapterResult.error){
 
-    chapters =
-    chapterResult.data || [];
+    chapters=
+      chapterResult.data || [];
 
   }
 
 
   fillExams();
-
   fillSubjects();
+  fillBankSubjects();
 
   await loadTests();
 
@@ -671,27 +833,27 @@ async function loadData(){
 
 function fillExams(){
 
-  const select =
-  document.getElementById("exam");
+  const select=
+    document.getElementById("exam");
 
-  select.innerHTML =
-  '<option value="">Select Exam</option>';
+  select.innerHTML=
+    '<option value="">Select Exam</option>';
 
 
   exams.forEach(e=>{
 
-    select.innerHTML += `
+    const option=
+      document.createElement("option");
 
-      <option value="${e.id}">
-        ${escapeHtml(
-          e.name ||
-          e.title ||
-          e.exam_name ||
-          "Exam "+e.id
-        )}
-      </option>
+    option.value=e.id;
 
-    `;
+    option.textContent=
+      e.name ||
+      e.title ||
+      e.exam_name ||
+      "Exam "+e.id;
+
+    select.appendChild(option);
 
   });
 
@@ -704,26 +866,26 @@ function fillExams(){
 
 function fillSubjects(){
 
-  const select =
-  document.getElementById("subject");
+  const select=
+    document.getElementById("subject");
 
-  select.innerHTML =
-  '<option value="">Select Subject</option>';
+  select.innerHTML=
+    '<option value="">Select Subject</option>';
 
 
   subjects.forEach(s=>{
 
-    select.innerHTML += `
+    const option=
+      document.createElement("option");
 
-      <option value="${s.id}">
-        ${escapeHtml(
-          s.name ||
-          s.title ||
-          "Subject "+s.id
-        )}
-      </option>
+    option.value=s.id;
 
-    `;
+    option.textContent=
+      s.name ||
+      s.title ||
+      "Subject "+s.id;
+
+    select.appendChild(option);
 
   });
 
@@ -731,47 +893,76 @@ function fillSubjects(){
 
 
 /* =========================================
-   FILL CHAPTERS
+   BANK SUBJECTS
+========================================= */
+
+function fillBankSubjects(){
+
+  const select=
+    document.getElementById("bankSubject");
+
+  select.innerHTML=
+    '<option value="">All Subjects</option>';
+
+
+  subjects.forEach(s=>{
+
+    const option=
+      document.createElement("option");
+
+    option.value=s.id;
+
+    option.textContent=
+      s.name ||
+      s.title ||
+      "Subject "+s.id;
+
+    select.appendChild(option);
+
+  });
+
+}
+
+
+/* =========================================
+   CHAPTERS
 ========================================= */
 
 function fillChapters(){
 
-  const subjectId =
-  document.getElementById("subject").value;
+  const subjectId=
+    document.getElementById("subject").value;
 
-  const select =
-  document.getElementById("chapter");
+  const select=
+    document.getElementById("chapter");
 
-  select.innerHTML =
-  '<option value="">Select Chapter</option>';
+  select.innerHTML=
+    '<option value="">Select Chapter</option>';
 
 
   if(!subjectId) return;
 
 
   chapters
-  .filter(c=>
+    .filter(c=>
+      String(c.subject_id)===
+      String(subjectId)
+    )
+    .forEach(c=>{
 
-    String(
-      c.subject_id
-    ) === String(subjectId)
+      const option=
+        document.createElement("option");
 
-  )
-  .forEach(c=>{
+      option.value=c.id;
 
-    select.innerHTML += `
+      option.textContent=
+        c.name ||
+        c.title ||
+        "Chapter "+c.id;
 
-      <option value="${c.id}">
-        ${escapeHtml(
-          c.name ||
-          c.title ||
-          "Chapter "+c.id
-        )}
-      </option>
+      select.appendChild(option);
 
-    `;
-
-  });
+    });
 
 }
 
@@ -789,80 +980,168 @@ document
 
 
 /* =========================================
-   TEST TYPE
+   BANK FILTER CHANGE
 ========================================= */
 
-function handleTestType(){
+document
+.getElementById("bankSubject")
+.addEventListener(
+  "change",
+  function(){
 
-  const type =
-  document.getElementById(
-    "testType"
-  ).value;
+    fillBankChapters();
 
-
-  document
-  .getElementById("fullSettings")
-  .classList.toggle(
-    "hidden",
-    type !== "FULL"
-  );
-
-
-  document
-  .getElementById("singleSubjectBox")
-  .classList.toggle(
-    "hidden",
-    type !== "SECTIONAL" &&
-    type !== "SUBJECT_WISE" &&
-    type !== "CHAPTER_WISE"
-  );
-
-
-  document
-  .getElementById("chapterBox")
-  .classList.toggle(
-    "hidden",
-    type !== "CHAPTER_WISE"
-  );
-
-
-  if(type === "FULL"){
-
-    document
-    .getElementById("normalDurationBox")
-    .classList.remove("hidden");
+    renderBank();
 
   }
+);
+
+
+document
+.getElementById("bankChapter")
+.addEventListener(
+  "change",
+  renderBank
+);
+
+
+/* =========================================
+   BANK CHAPTERS
+========================================= */
+
+function fillBankChapters(){
+
+  const subjectId=
+    document.getElementById(
+      "bankSubject"
+    ).value;
+
+  const select=
+    document.getElementById(
+      "bankChapter"
+    );
+
+
+  select.innerHTML=
+    '<option value="">All Chapters</option>';
+
+
+  chapters
+    .filter(c=>{
+
+      if(!subjectId)
+        return true;
+
+      return String(c.subject_id)===
+        String(subjectId);
+
+    })
+    .forEach(c=>{
+
+      const option=
+        document.createElement("option");
+
+      option.value=c.id;
+
+      option.textContent=
+        c.name ||
+        c.title ||
+        "Chapter "+c.id;
+
+      select.appendChild(option);
+
+    });
 
 }
 
 
 /* =========================================
-   SUBJECT TIMING
+   TEST TYPE
+========================================= */
+
+function handleTestType(){
+
+  const type=
+    document.getElementById(
+      "testType"
+    ).value;
+
+
+  document
+    .getElementById("fullSettings")
+    .classList.toggle(
+      "hidden",
+      type!=="FULL"
+    );
+
+
+  document
+    .getElementById("singleSubjectBox")
+    .classList.toggle(
+      "hidden",
+      ![
+        "SECTIONAL",
+        "SUBJECT_WISE",
+        "CHAPTER_WISE"
+      ].includes(type)
+    );
+
+
+  document
+    .getElementById("chapterBox")
+    .classList.toggle(
+      "hidden",
+      type!=="CHAPTER_WISE"
+    );
+
+
+  if(type!=="FULL"){
+
+    document
+      .getElementById(
+        "subjectTiming"
+      ).checked=false;
+
+    document
+      .getElementById(
+        "sectionSettings"
+      ).classList.add("hidden");
+
+  }
+
+
+  updateBankForTest();
+
+}
+
+
+/* =========================================
+   TIMING
 ========================================= */
 
 function toggleSubjectTiming(){
 
-  const enabled =
-  document
-  .getElementById(
-    "subjectTiming"
-  )
-  .checked;
+  const enabled=
+    document
+      .getElementById(
+        "subjectTiming"
+      ).checked;
 
 
   document
-  .getElementById(
-    "sectionSettings"
-  )
-  .classList.toggle(
-    "hidden",
-    !enabled
-  );
+    .getElementById(
+      "sectionSettings"
+    )
+    .classList.toggle(
+      "hidden",
+      !enabled
+    );
 
 
-  if(enabled &&
-     sections.length === 0){
+  if(
+    enabled &&
+    sections.length===0
+  ){
 
     addSection();
 
@@ -870,6 +1149,8 @@ function toggleSubjectTiming(){
 
 
   updateTotalTime();
+
+  updateSectionAssignment();
 
 }
 
@@ -889,7 +1170,7 @@ function addSection(
       subjectId,
 
     duration_minutes:
-      duration
+      Number(duration)||15
 
   });
 
@@ -905,51 +1186,54 @@ function addSection(
 
 function renderSections(){
 
-  const box =
-  document.getElementById(
-    "sections"
-  );
+  const box=
+    document.getElementById(
+      "sections"
+    );
 
-  box.innerHTML = "";
+  box.innerHTML="";
 
 
   sections.forEach(
     (section,index)=>{
 
-      const div =
-      document.createElement(
-        "div"
-      );
+      const div=
+        document.createElement(
+          "div"
+        );
 
-      div.className =
+      div.className=
         "section-card";
 
 
-      div.innerHTML = `
+      div.innerHTML=`
 
         <div class="section-head">
 
           <div class="section-number">
-            Subject ${index + 1}
+            Subject ${index+1}
           </div>
 
           <div class="section-controls">
 
             <button
+            type="button"
             class="small-btn"
             onclick="moveSection(${index},-1)"
-            ${index===0 ? "disabled":""}>
+            ${index===0?"disabled":""}>
               ↑
             </button>
 
             <button
+            type="button"
             class="small-btn"
             onclick="moveSection(${index},1)"
-            ${index===sections.length-1 ? "disabled":""}>
+            ${index===sections.length-1?"disabled":""}>
               ↓
             </button>
 
             <button
+            type="button"
             class="small-btn remove-btn"
             onclick="removeSection(${index})">
               ×
@@ -973,9 +1257,9 @@ function renderSections(){
 
             <option
             value="${s.id}"
-            ${String(s.id)===String(section.subject_id)
-              ? "selected"
-              : ""}>
+            ${String(s.id)===
+              String(section.subject_id)
+              ?"selected":""}>
 
               ${escapeHtml(
                 s.name ||
@@ -996,8 +1280,7 @@ function renderSections(){
         type="number"
         min="1"
         value="${section.duration_minutes}"
-        onchange="changeSectionTime(${index},this.value)"
-        >
+        onchange="changeSectionTime(${index},this.value)">
 
       `;
 
@@ -1009,12 +1292,13 @@ function renderSections(){
 
 
   updateTotalTime();
+  updateSectionAssignment();
 
 }
 
 
 /* =========================================
-   CHANGE SUBJECT
+   SECTION CHANGES
 ========================================= */
 
 function changeSectionSubject(
@@ -1022,23 +1306,21 @@ function changeSectionSubject(
   value
 ){
 
-  sections[index].subject_id =
+  sections[index].subject_id=
     value;
+
+  updateSectionAssignment();
 
 }
 
-
-/* =========================================
-   CHANGE TIME
-========================================= */
 
 function changeSectionTime(
   index,
   value
 ){
 
-  sections[index].duration_minutes =
-    Number(value) || 1;
+  sections[index].duration_minutes=
+    Number(value)||1;
 
   updateTotalTime();
 
@@ -1046,7 +1328,7 @@ function changeSectionTime(
 
 
 /* =========================================
-   MOVE SECTION
+   MOVE
 ========================================= */
 
 function moveSection(
@@ -1054,95 +1336,174 @@ function moveSection(
   direction
 ){
 
-  const newIndex =
-    index + direction;
+  const newIndex=
+    index+direction;
 
 
   if(
-    newIndex < 0 ||
-    newIndex >= sections.length
+    newIndex<0 ||
+    newIndex>=sections.length
+  ) return;
+
+
+  [
+    sections[index],
+    sections[newIndex]
+  ]=[
+    sections[newIndex],
+    sections[index]
+  ];
+
+
+  renderSections();
+
+}
+
+
+/* =========================================
+   REMOVE
+========================================= */
+
+function removeSection(index){
+
+  sections.splice(index,1);
+
+  renderSections();
+
+}
+
+
+/* =========================================
+   TOTAL TIME
+========================================= */
+
+function updateTotalTime(){
+
+  const total=
+    sections.reduce(
+      (sum,s)=>
+        sum+
+        (Number(
+          s.duration_minutes
+        )||0),
+      0
+    );
+
+
+  document
+    .getElementById(
+      "totalSectionTime"
+    )
+    .textContent=
+      "Total Section Time: "+
+      total+
+      " minutes";
+
+
+  if(
+    document
+      .getElementById(
+        "subjectTiming"
+      ).checked
   ){
+
+    document
+      .getElementById(
+        "duration"
+      ).value=
+        total||"";
+
+  }
+
+}
+
+
+/* =========================================
+   SECTION ASSIGNMENT
+========================================= */
+
+function updateSectionAssignment(){
+
+  const box=
+    document.getElementById(
+      "sectionAssignmentBox"
+    );
+
+  const select=
+    document.getElementById(
+      "assignmentSection"
+    );
+
+
+  const type=
+    document.getElementById(
+      "testType"
+    ).value;
+
+
+  if(
+    type!=="FULL" ||
+    !document
+      .getElementById(
+        "subjectTiming"
+      ).checked
+  ){
+
+    box.classList.add("hidden");
 
     return;
 
   }
 
 
-  const temp =
-    sections[index];
-
-  sections[index] =
-    sections[newIndex];
-
-  sections[newIndex] =
-    temp;
+  box.classList.remove("hidden");
 
 
-  renderSections();
-
-}
-
-
-/* =========================================
-   REMOVE SECTION
-========================================= */
-
-function removeSection(index){
-
-  sections.splice(
-    index,
-    1
-  );
-
-  renderSections();
-
-}
+  select.innerHTML=
+    '<option value="">Select Section</option>';
 
 
-/* =========================================
-   TOTAL SECTION TIME
-========================================= */
+  sections.forEach(
+    (section,index)=>{
 
-function updateTotalTime(){
+      if(!section.subject_id)
+        return;
 
-  const total =
-    sections.reduce(
-      (sum,section)=>
-        sum +
+
+      const subject=
+        subjects.find(
+          s=>String(s.id)===
+             String(section.subject_id)
+        );
+
+
+      const option=
+        document.createElement(
+          "option"
+        );
+
+      option.value=
+        section._savedId ||
+        "new-"+index;
+
+      option.textContent=
+        "Section "+
+        (index+1)+
+        " • "+
         (
-          Number(
-            section.duration_minutes
-          ) || 0
-        ),
-      0
-    );
+          subject?.name ||
+          subject?.title ||
+          "Subject"
+        )+
+        " • "+
+        section.duration_minutes+
+        " min";
 
 
-  document
-  .getElementById(
-    "totalSectionTime"
-  )
-  .textContent =
-  "Total Section Time: " +
-  total +
-  " minutes";
+      select.appendChild(option);
 
-
-  if(
-    document
-    .getElementById(
-      "subjectTiming"
-    ).checked
-  ){
-
-    document
-    .getElementById(
-      "duration"
-    )
-    .value =
-    total || "";
-
-  }
+    }
+  );
 
 }
 
@@ -1153,93 +1514,85 @@ function updateTotalTime(){
 
 async function saveTest(){
 
-  const editId =
-    document
-    .getElementById("editId")
-    .value;
+  const editId=
+    document.getElementById(
+      "editId"
+    ).value;
 
 
-  const title =
-    document
-    .getElementById("title")
-    .value
-    .trim();
+  const title=
+    document.getElementById(
+      "title"
+    ).value.trim();
 
 
-  const description =
-    document
-    .getElementById("description")
-    .value
-    .trim();
+  const description=
+    document.getElementById(
+      "description"
+    ).value.trim();
 
 
-  const examId =
-    document
-    .getElementById("exam")
-    .value;
+  const examId=
+    document.getElementById(
+      "exam"
+    ).value;
 
 
-  const type =
-    document
-    .getElementById("testType")
-    .value;
+  const type=
+    document.getElementById(
+      "testType"
+    ).value;
 
 
-  const duration =
+  const duration=
     Number(
-      document
-      .getElementById("duration")
-      .value
+      document.getElementById(
+        "duration"
+      ).value
     );
 
 
-  const subjectId =
-    document
-    .getElementById("subject")
-    .value;
+  const subjectId=
+    document.getElementById(
+      "subject"
+    ).value;
 
 
-  const chapterId =
-    document
-    .getElementById("chapter")
-    .value;
+  const chapterId=
+    document.getElementById(
+      "chapter"
+    ).value;
 
 
-  const totalQuestions =
+  const totalQuestions=
     Number(
-      document
-      .getElementById("totalQuestions")
-      .value
+      document.getElementById(
+        "totalQuestions"
+      ).value
     );
 
 
-  const marks =
+  const marks=
     Number(
-      document
-      .getElementById("marks")
-      .value
+      document.getElementById(
+        "marks"
+      ).value
     );
 
 
-  const negative =
+  const negative=
     Number(
-      document
-      .getElementById("negative")
-      .value
+      document.getElementById(
+        "negative"
+      ).value
     );
 
 
-  const timingEnabled =
-    document
-    .getElementById(
+  const timingEnabled=
+    document.getElementById(
       "subjectTiming"
-    )
-    .checked;
+    ).checked;
 
-
-  /* =======================================
-     BASIC VALIDATION
-  ======================================= */
 
   if(!title){
 
@@ -1263,7 +1616,7 @@ async function saveTest(){
   }
 
 
-  if(!duration || duration <= 0){
+  if(!duration || duration<=0){
 
     showMessage(
       "Enter valid duration."
@@ -1274,8 +1627,10 @@ async function saveTest(){
   }
 
 
-  if(!totalQuestions ||
-     totalQuestions <= 0){
+  if(
+    !totalQuestions ||
+    totalQuestions<=0
+  ){
 
     showMessage(
       "Enter total questions."
@@ -1286,19 +1641,43 @@ async function saveTest(){
   }
 
 
-  /* =======================================
-     FULL TIMING VALIDATION
-  ======================================= */
+  if(
+    type!=="FULL" &&
+    !subjectId
+  ){
+
+    showMessage(
+      "Select a subject."
+    );
+
+    return;
+
+  }
+
 
   if(
-    type === "FULL" &&
+    type==="CHAPTER_WISE" &&
+    !chapterId
+  ){
+
+    showMessage(
+      "Select a chapter."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    type==="FULL" &&
     timingEnabled
   ){
 
-    if(sections.length === 0){
+    if(!sections.length){
 
       showMessage(
-        "Add at least one subject section."
+        "Add at least one section."
       );
 
       return;
@@ -1306,19 +1685,16 @@ async function saveTest(){
     }
 
 
-    const invalid =
+    if(
       sections.some(
-        s =>
-        !s.subject_id ||
-        !Number(s.duration_minutes) ||
-        Number(s.duration_minutes) <= 0
-      );
-
-
-    if(invalid){
+        s=>
+          !s.subject_id ||
+          Number(s.duration_minutes)<=0
+      )
+    ){
 
       showMessage(
-        "Select subject and timing for every section."
+        "Select subject and duration for every section."
       );
 
       return;
@@ -1326,15 +1702,14 @@ async function saveTest(){
     }
 
 
-    const subjectIds =
+    const ids=
       sections.map(
         s=>String(s.subject_id)
       );
 
 
     if(
-      new Set(subjectIds).size !==
-      subjectIds.length
+      new Set(ids).size!==ids.length
     ){
 
       showMessage(
@@ -1348,81 +1723,424 @@ async function saveTest(){
   }
 
 
-  /* =======================================
-     DATA
-  ======================================= */
+  const payload={
 
-  const payload = {
+    exam_id:examId,
 
-    exam_id:
-      examId,
+    title:title,
 
-    title:
-      title,
-
-    test_type:
-      type,
+    test_type:type,
 
     subject_id:
-      (
-        type === "FULL"
-        ? null
-        : subjectId || null
-      ),
+      type==="FULL"
+      ?null
+      :(subjectId||null),
 
-    duration_minutes:
-      duration,
+    duration_minutes:duration,
 
-    total_questions:
-      totalQuestions,
+    total_questions:totalQuestions,
 
-    is_active:
-      true,
+    is_active:true,
 
     description:
-      description || null,
+      description||null,
 
-    marks_per_question:
-      marks,
+    marks_per_question:marks,
 
-    negative_marks:
-      negative,
+    negative_marks:negative,
 
     subject_wise_timing:
-      type === "FULL"
-      ? timingEnabled
-      : false
+      type==="FULL"
+      ?timingEnabled
+      :false
 
   };
 
 
-  /* =======================================
-     INSERT / UPDATE
-  ======================================= */
+  const oldTestId=
+    editId||null;
+
 
   let result;
 
 
   if(editId){
 
-    result =
+    result=
       await db
-      .from("mock_tests")
-      .update(payload)
-      .eq("id",editId)
-      .select()
-      .single();
+        .from("mock_tests")
+        .update(payload)
+        .eq("id",editId)
+        .select()
+        .single();
 
   }else{
 
-    result =
+    result=
       await db
-      .from("mock_tests")
-      .insert(payload)
-      .select()
-      .single();
+        .from("mock_tests")
+        .insert(payload)
+        .select()
+        .single();
 
   }
+
+
+  if(result.error){
+
+    showMessage(
+      result.error.message
+    );
+
+    return;
+
+  }
+
+
+  const savedTest=
+    result.data;
+
+
+  /* =======================================
+     SAVE SECTIONS
+  ======================================= */
+
+  if(type==="FULL"){
+
+    /*
+      Preserve existing question assignments
+      before replacing section records.
+    */
+
+    let oldAssignments=[];
+
+
+    if(editId){
+
+      const oldResult=
+        await db
+          .from("mock_test_questions")
+          .select(`
+            question_id,
+            section_id,
+            questions(subject_id)
+          `)
+          .eq(
+            "mock_test_id",
+            savedTest.id
+          );
+
+
+      if(!oldResult.error){
+
+        oldAssignments=
+          oldResult.data||[];
+
+      }
+
+    }
+
+
+    await db
+      .from("mock_test_sections")
+      .delete()
+      .eq(
+        "mock_test_id",
+        savedTest.id
+      );
+
+
+    if(
+      timingEnabled &&
+      sections.length
+    ){
+
+      const rows=
+        sections.map(
+          (s,index)=>({
+
+            mock_test_id:
+              savedTest.id,
+
+            subject_id:
+              Number(s.subject_id),
+
+            section_order:
+              index+1,
+
+            duration_minutes:
+              Number(
+                s.duration_minutes
+              )
+
+          })
+        );
+
+
+      const sectionResult=
+        await db
+          .from("mock_test_sections")
+          .insert(rows)
+          .select();
+
+
+      if(sectionResult.error){
+
+        showMessage(
+          sectionResult.error.message
+        );
+
+        return;
+
+      }
+
+
+      sections=
+        sectionResult.data.map(
+          s=>({
+
+            subject_id:
+              s.subject_id,
+
+            duration_minutes:
+              s.duration_minutes,
+
+            _savedId:
+              s.id
+
+          })
+        );
+
+
+      /*
+        Reconnect old questions to their
+        new section using subject.
+      */
+
+      for(
+        const assignment of oldAssignments
+      ){
+
+        const subjectId=
+          assignment.questions?.subject_id;
+
+
+        const newSection=
+          sections.find(
+            s=>
+              String(s.subject_id)===
+              String(subjectId)
+          );
+
+
+        if(
+          newSection &&
+          assignment.question_id
+        ){
+
+          await db
+            .from(
+              "mock_test_questions"
+            )
+            .update({
+              section_id:
+                newSection._savedId
+            })
+            .eq(
+              "mock_test_id",
+              savedTest.id
+            )
+            .eq(
+              "question_id",
+              assignment.question_id
+            );
+
+        }
+
+      }
+
+    }
+
+  }
+
+
+  document
+    .getElementById(
+      "editId"
+    ).value=
+      savedTest.id;
+
+
+  showMessage(
+    editId
+      ?"Test updated successfully."
+      :"Test created successfully."
+  );
+
+
+  await loadTests();
+
+
+  await openQuestionManager(
+    savedTest.id
+  );
+
+}
+
+
+/* =========================================
+   OPEN QUESTION MANAGER
+========================================= */
+
+async function openQuestionManager(
+  testId
+){
+
+  const test=
+    tests.find(
+      t=>String(t.id)===
+         String(testId)
+    ) ||
+    (
+      String(
+        document
+          .getElementById("editId")
+          .value
+      )===String(testId)
+      ?null
+      :null
+    );
+
+
+  /*
+    If newly created test is not yet in
+    the old array, load it directly.
+  */
+
+  let currentTest=test;
+
+
+  if(!currentTest){
+
+    const result=
+      await db
+        .from("mock_tests")
+        .select("*")
+        .eq("id",testId)
+        .single();
+
+
+    if(result.error){
+
+      showMessage(
+        result.error.message
+      );
+
+      return;
+
+    }
+
+
+    currentTest=result.data;
+
+  }
+
+
+  document
+    .getElementById(
+      "questionManager"
+    )
+    .classList
+    .remove("hidden");
+
+
+  await loadBankQuestions(
+    currentTest
+  );
+
+
+  await loadAssignedQuestions(
+    testId
+  );
+
+
+  updateSectionAssignment();
+
+}
+
+
+/* =========================================
+   LOAD QUESTION BANK
+========================================= */
+
+async function loadBankQuestions(
+  test
+){
+
+  let query=
+    db
+      .from("questions")
+      .select(`
+        id,
+        subject_id,
+        chapter_id,
+        question_text,
+        marks,
+        negative_marks,
+        subjects(name)
+      `)
+      .is(
+        "mock_test_id",
+        null
+      )
+      .order(
+        "created_at",
+        {ascending:true}
+      );
+
+
+  /*
+    For SECTIONAL / SUBJECT_WISE,
+    automatically focus the selected subject.
+  */
+
+  if(
+    test.test_type==="SECTIONAL" ||
+    test.test_type==="SUBJECT_WISE"
+  ){
+
+    if(test.subject_id){
+
+      query=
+        query.eq(
+          "subject_id",
+          test.subject_id
+        );
+
+    }
+
+  }
+
+
+  if(
+    test.test_type==="CHAPTER_WISE"
+  ){
+
+    if(test.chapter_id){
+
+      query=
+        query.eq(
+          "chapter_id",
+          test.chapter_id
+        );
+
+    }
+
+  }
+
+
+  const result=
+    await query;
 
 
   if(result.error){
@@ -1440,90 +2158,667 @@ async function saveTest(){
   }
 
 
-  const savedTest =
-    result.data;
+  bankQuestions=
+    result.data||[];
 
 
-  /* =======================================
-     SAVE FULL SECTIONS
-  ======================================= */
+  selectedQuestionIds=
+    new Set();
 
-  if(type === "FULL"){
 
-    await db
-    .from("mock_test_sections")
-    .delete()
-    .eq(
-      "mock_test_id",
-      savedTest.id
+  renderBank();
+
+}
+
+
+/* =========================================
+   RENDER BANK
+========================================= */
+
+function renderBank(){
+
+  const list=
+    document.getElementById(
+      "bankList"
     );
 
 
-    if(
-      timingEnabled &&
-      sections.length
-    ){
-
-      const sectionRows =
-        sections.map(
-          (section,index)=>({
-
-            mock_test_id:
-              savedTest.id,
-
-            subject_id:
-              section.subject_id,
-
-            section_order:
-              index + 1,
-
-            duration_minutes:
-              Number(
-                section.duration_minutes
-              )
-
-          })
-        );
+  const subjectId=
+    document.getElementById(
+      "bankSubject"
+    ).value;
 
 
-      const sectionResult =
-        await db
-        .from("mock_test_sections")
-        .insert(
-          sectionRows
-        );
+  const chapterId=
+    document.getElementById(
+      "bankChapter"
+    ).value;
 
 
-      if(sectionResult.error){
+  const search=
+    document.getElementById(
+      "bankSearch"
+    ).value
+    .trim()
+    .toLowerCase();
 
-        showMessage(
-          "Test created, but sections could not be saved: " +
-          sectionResult.error.message
-        );
 
-        return;
+  const filtered=
+    bankQuestions.filter(q=>{
+
+      if(
+        subjectId &&
+        String(q.subject_id)!==
+        String(subjectId)
+      ){
+
+        return false;
 
       }
 
-    }
+
+      if(
+        chapterId &&
+        String(q.chapter_id)!==
+        String(chapterId)
+      ){
+
+        return false;
+
+      }
+
+
+      if(
+        search &&
+        !String(
+          q.question_text||""
+        )
+        .toLowerCase()
+        .includes(search)
+      ){
+
+        return false;
+
+      }
+
+
+      return true;
+
+    });
+
+
+  document
+    .getElementById(
+      "bankCount"
+    )
+    .textContent=
+      filtered.length+
+      " available";
+
+
+  if(!filtered.length){
+
+    list.innerHTML=
+      '<div class="message">'+
+      'No questions available in the Question Bank.'+
+      '</div>';
+
+    updateSelectedCount();
+
+    return;
 
   }
 
 
-  /* =======================================
-     RESET
-  ======================================= */
+  list.innerHTML="";
 
-  resetForm();
+
+  filtered.forEach(q=>{
+
+    const row=
+      document.createElement(
+        "label"
+      );
+
+    row.className=
+      "bank-question";
+
+
+    const checkbox=
+      document.createElement(
+        "input"
+      );
+
+    checkbox.type="checkbox";
+
+    checkbox.checked=
+      selectedQuestionIds.has(
+        String(q.id)
+      );
+
+
+    checkbox.onchange=()=>{
+
+      const id=
+        String(q.id);
+
+
+      if(
+        checkbox.checked
+      ){
+
+        selectedQuestionIds.add(id);
+
+      }else{
+
+        selectedQuestionIds.delete(id);
+
+      }
+
+
+      updateSelectedCount();
+
+    };
+
+
+    const content=
+      document.createElement(
+        "div"
+      );
+
+
+    content.className=
+      "bank-question-text";
+
+
+    content.textContent=
+      q.question_text||"";
+
+
+    const meta=
+      document.createElement(
+        "div"
+      );
+
+
+    meta.className=
+      "bank-meta";
+
+
+    const subject=
+      q.subjects?.name ||
+      getSubjectName(
+        q.subject_id
+      );
+
+
+    meta.textContent=
+      subject+
+      " • Marks: "+
+      (q.marks??0)+
+      " • Negative: "+
+      (q.negative_marks??0);
+
+
+    content.appendChild(meta);
+
+    row.appendChild(checkbox);
+
+    row.appendChild(content);
+
+    list.appendChild(row);
+
+  });
+
+
+  updateSelectedCount();
+
+}
+
+
+/* =========================================
+   SELECTED COUNT
+========================================= */
+
+function updateSelectedCount(){
+
+  document
+    .getElementById(
+      "selectedCount"
+    )
+    .textContent=
+      selectedQuestionIds.size;
+
+}
+
+
+/* =========================================
+   ASSIGN SELECTED
+========================================= */
+
+async function assignSelectedQuestions(){
+
+  const testId=
+    document
+      .getElementById(
+        "editId"
+      ).value;
+
+
+  if(!testId){
+
+    showMessage(
+      "Save the mock test first."
+    );
+
+    return;
+
+  }
+
+
+  if(!selectedQuestionIds.size){
+
+    showMessage(
+      "Select at least one question."
+    );
+
+    return;
+
+  }
+
+
+  const type=
+    document
+      .getElementById(
+        "testType"
+      ).value;
+
+
+  let sectionId=null;
+
+
+  if(
+    type==="FULL" &&
+    document
+      .getElementById(
+        "subjectTiming"
+      ).checked
+  ){
+
+    const selected=
+      document
+        .getElementById(
+          "assignmentSection"
+        ).value;
+
+
+    if(!selected){
+
+      showMessage(
+        "Select the section for these questions."
+      );
+
+      return;
+
+    }
+
+
+    /*
+      Existing section ID or new section
+      currently displayed.
+    */
+
+    sectionId=
+      selected.startsWith("new-")
+      ?null
+      :Number(selected);
+
+  }
+
+
+  /*
+    Find the highest current order.
+  */
+
+  const existing=
+    await db
+      .from("mock_test_questions")
+      .select(
+        "question_id,question_order"
+      )
+      .eq(
+        "mock_test_id",
+        testId
+      );
+
+
+  if(existing.error){
+
+    showMessage(
+      existing.error.message
+    );
+
+    return;
+
+  }
+
+
+  const existingIds=
+    new Set(
+      (existing.data||[])
+      .map(
+        x=>String(
+          x.question_id
+        )
+      )
+    );
+
+
+  let nextOrder=
+    (
+      existing.data||[]
+    )
+    .reduce(
+      (max,x)=>
+        Math.max(
+          max,
+          Number(
+            x.question_order
+          )||0
+        ),
+      0
+    )+1;
+
+
+  const rows=[];
+
+
+  for(
+    const id of selectedQuestionIds
+  ){
+
+    if(
+      existingIds.has(
+        String(id)
+      )
+    ){
+
+      continue;
+
+    }
+
+
+    rows.push({
+
+      mock_test_id:
+        Number(testId),
+
+      question_id:
+        Number(id),
+
+      section_id:
+        sectionId,
+
+      question_order:
+        nextOrder++
+
+    });
+
+  }
+
+
+  if(!rows.length){
+
+    showMessage(
+      "All selected questions are already in this test."
+    );
+
+    return;
+
+  }
+
+
+  const result=
+    await db
+      .from(
+        "mock_test_questions"
+      )
+      .insert(rows);
+
+
+  if(result.error){
+
+    showMessage(
+      result.error.message
+    );
+
+    return;
+
+  }
+
+
+  selectedQuestionIds=
+    new Set();
+
 
   showMessage(
-    editId
-    ? "Test updated successfully."
-    : "Test created successfully."
+    rows.length+
+    " question(s) added to the test."
   );
 
 
-  await loadTests();
+  await loadAssignedQuestions(
+    testId
+  );
+
+
+  renderBank();
+
+}
+
+
+/* =========================================
+   ASSIGNED QUESTIONS
+========================================= */
+
+async function loadAssignedQuestions(
+  testId
+){
+
+  const result=
+    await db
+      .from(
+        "mock_test_questions"
+      )
+      .select(`
+        id,
+        question_id,
+        question_order,
+        section_id,
+        questions(
+          question_text,
+          subject_id,
+          chapter_id
+        ),
+        mock_test_sections(
+          section_order,
+          subject_id,
+          duration_minutes
+        )
+      `)
+      .eq(
+        "mock_test_id",
+        testId
+      )
+      .order(
+        "question_order"
+      );
+
+
+  if(result.error){
+
+    console.error(
+      result.error
+    );
+
+    return;
+
+  }
+
+
+  assignedQuestions=
+    result.data||[];
+
+
+  renderAssignedQuestions();
+
+}
+
+
+/* =========================================
+   RENDER ASSIGNED
+========================================= */
+
+function renderAssignedQuestions(){
+
+  const box=
+    document.getElementById(
+      "assignedList"
+    );
+
+
+  if(!assignedQuestions.length){
+
+    box.innerHTML=
+      '<div class="message">'+
+      'No questions assigned yet.'+
+      '</div>';
+
+    return;
+
+  }
+
+
+  box.innerHTML="";
+
+
+  assignedQuestions.forEach(
+    (item,index)=>{
+
+      const row=
+        document.createElement(
+          "div"
+        );
+
+      row.className=
+        "assigned-item";
+
+
+      const left=
+        document.createElement(
+          "div"
+        );
+
+
+      left.style.flex="1";
+
+
+      left.textContent=
+        (index+1)+
+        ". "+
+        (
+          item.questions?.question_text||
+          "Question"
+        );
+
+
+      const right=
+        document.createElement(
+          "div"
+        );
+
+
+      const remove=
+        document.createElement(
+          "button"
+        );
+
+
+      remove.className=
+        "small-btn remove-btn";
+
+      remove.textContent=
+        "Remove";
+
+
+      remove.onclick=
+        ()=>removeAssigned(
+          item.id
+        );
+
+
+      right.appendChild(
+        remove
+      );
+
+
+      row.appendChild(left);
+      row.appendChild(right);
+
+      box.appendChild(row);
+
+    }
+  );
+
+}
+
+
+/* =========================================
+   REMOVE ASSIGNED
+========================================= */
+
+async function removeAssigned(id){
+
+  if(
+    !confirm(
+      "Remove this question from the test?"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  const result=
+    await db
+      .from(
+        "mock_test_questions"
+      )
+      .delete()
+      .eq(
+        "id",
+        id
+      );
+
+
+  if(result.error){
+
+    showMessage(
+      result.error.message
+    );
+
+    return;
+
+  }
+
+
+  await loadAssignedQuestions(
+    document
+      .getElementById(
+        "editId"
+      ).value
+  );
 
 }
 
@@ -1534,34 +2829,36 @@ async function saveTest(){
 
 async function loadTests(){
 
-  const result =
-  await db
-  .from("mock_tests")
-  .select(`
-    *,
-    exams(*),
-    subjects(*)
-  `)
-  .order(
-    "created_at",
-    {ascending:false}
-  );
+  const result=
+    await db
+      .from("mock_tests")
+      .select(`
+        *,
+        exams(*),
+        subjects(*)
+      `)
+      .order(
+        "created_at",
+        {ascending:false}
+      );
 
 
   if(result.error){
 
     document
-    .getElementById("tests")
-    .textContent =
-    result.error.message;
+      .getElementById(
+        "tests"
+      )
+      .textContent=
+        result.error.message;
 
     return;
 
   }
 
 
-  tests =
-  result.data || [];
+  tests=
+    result.data||[];
 
 
   renderTests();
@@ -1575,50 +2872,52 @@ async function loadTests(){
 
 function renderTests(){
 
-  const box =
-  document.getElementById(
-    "tests"
-  );
+  const box=
+    document.getElementById(
+      "tests"
+    );
 
 
   if(!tests.length){
 
-    box.innerHTML =
-    '<div class="message">No mock tests created yet.</div>';
+    box.innerHTML=
+      '<div class="message">'+
+      'No mock tests created yet.'+
+      '</div>';
 
     return;
 
   }
 
 
-  box.innerHTML = "";
+  box.innerHTML="";
 
 
   tests.forEach(test=>{
 
-    const examName =
-      test.exams?.name ||
-      test.exams?.title ||
-      test.exams?.exam_name ||
+    const examName=
+      test.exams?.name||
+      test.exams?.title||
+      test.exams?.exam_name||
       "Exam";
 
 
-    const subjectName =
-      test.subjects?.name ||
-      test.subjects?.title ||
+    const subjectName=
+      test.subjects?.name||
+      test.subjects?.title||
       "";
 
 
-    const card =
+    const card=
       document.createElement(
         "div"
       );
 
-    card.className =
+    card.className=
       "test-card";
 
 
-    card.innerHTML = `
+    card.innerHTML=`
 
       <div class="test-title">
         ${escapeHtml(test.title)}
@@ -1626,17 +2925,18 @@ function renderTests(){
 
       <span class="status ${
         test.is_active
-        ? "active-status"
-        : "inactive-status"
+        ?"active-status"
+        :"inactive-status"
       }">
 
         ${
           test.is_active
-          ? "ACTIVE"
-          : "INACTIVE"
+          ?"ACTIVE"
+          :"INACTIVE"
         }
 
       </span>
+
 
       <div class="test-info">
 
@@ -1653,8 +2953,7 @@ function renderTests(){
           ?
           "<br>Subject: "+
           escapeHtml(subjectName)
-          :
-          ""
+          :""
         }
 
         <br>
@@ -1670,27 +2969,27 @@ function renderTests(){
         <br>
 
         Marks:
-        ${test.marks_per_question ?? 2}
+        ${test.marks_per_question??2}
 
         &nbsp; | &nbsp;
 
         Negative:
-        ${test.negative_marks ?? 0}
+        ${test.negative_marks??0}
 
         ${
-          test.test_type === "FULL"
+          test.test_type==="FULL"
           ?
           "<br>Subject-wise Timing: "+
           (
             test.subject_wise_timing
-            ? "ON"
-            : "OFF"
+            ?"ON"
+            :"OFF"
           )
-          :
-          ""
+          :""
         }
 
       </div>
+
 
       <div class="test-actions">
 
@@ -1702,27 +3001,42 @@ function renderTests(){
 
         </button>
 
+
+        <button
+        class="secondary-btn"
+        onclick="openQuestionManager('${test.id}')">
+
+          Questions
+
+        </button>
+
+      </div>
+
+
+      <div class="test-actions">
+
         <button
         class="secondary-btn"
         onclick="toggleActive('${test.id}',${test.is_active})">
 
           ${
             test.is_active
-            ? "Deactivate"
-            : "Activate"
+            ?"Deactivate"
+            :"Activate"
           }
 
         </button>
 
+
+        <button
+        class="danger-btn"
+        onclick="deleteTest('${test.id}')">
+
+          Delete
+
+        </button>
+
       </div>
-
-      <button
-      class="danger-btn"
-      onclick="deleteTest('${test.id}')">
-
-        Delete
-
-      </button>
 
     `;
 
@@ -1740,140 +3054,125 @@ function renderTests(){
 
 async function editTest(id){
 
-  const test =
-  tests.find(
-    t =>
-    String(t.id) ===
-    String(id)
-  );
+  const test=
+    tests.find(
+      t=>String(t.id)===
+         String(id)
+    );
 
 
   if(!test) return;
 
 
   document
-  .getElementById("editId")
-  .value =
-  test.id;
+    .getElementById("editId")
+    .value=test.id;
 
 
   document
-  .getElementById("title")
-  .value =
-  test.title || "";
+    .getElementById("title")
+    .value=test.title||"";
 
 
   document
-  .getElementById("description")
-  .value =
-  test.description || "";
+    .getElementById("description")
+    .value=test.description||"";
 
 
   document
-  .getElementById("exam")
-  .value =
-  test.exam_id || "";
+    .getElementById("exam")
+    .value=test.exam_id||"";
 
 
   document
-  .getElementById("testType")
-  .value =
-  test.test_type || "FULL";
+    .getElementById("testType")
+    .value=test.test_type||"FULL";
 
 
   document
-  .getElementById("duration")
-  .value =
-  test.duration_minutes || 60;
+    .getElementById("duration")
+    .value=test.duration_minutes||60;
 
 
   document
-  .getElementById("totalQuestions")
-  .value =
-  test.total_questions || 25;
+    .getElementById("totalQuestions")
+    .value=test.total_questions||25;
 
 
   document
-  .getElementById("marks")
-  .value =
-  test.marks_per_question ?? 2;
+    .getElementById("marks")
+    .value=test.marks_per_question??2;
 
 
   document
-  .getElementById("negative")
-  .value =
-  test.negative_marks ?? 0;
+    .getElementById("negative")
+    .value=test.negative_marks??0;
 
 
   document
-  .getElementById("subject")
-  .value =
-  test.subject_id || "";
+    .getElementById("subject")
+    .value=test.subject_id||"";
 
 
   fillChapters();
 
-
   handleTestType();
 
 
-  sections = [];
+  sections=[];
 
 
   if(
-    test.test_type === "FULL" &&
+    test.test_type==="FULL" &&
     test.subject_wise_timing
   ){
 
-    const result =
+    const result=
       await db
-      .from("mock_test_sections")
-      .select("*")
-      .eq(
-        "mock_test_id",
-        test.id
-      )
-      .order(
-        "section_order"
-      );
+        .from(
+          "mock_test_sections"
+        )
+        .select("*")
+        .eq(
+          "mock_test_id",
+          test.id
+        )
+        .order(
+          "section_order"
+        );
 
 
     if(!result.error){
 
-      sections =
-      (result.data || [])
-      .map(s=>({
+      sections=
+        (result.data||[])
+        .map(s=>({
 
-        subject_id:
-          s.subject_id,
+          subject_id:
+            s.subject_id,
 
-        duration_minutes:
-          s.duration_minutes
+          duration_minutes:
+            s.duration_minutes,
 
-      }));
+          _savedId:
+            s.id
+
+        }));
 
     }
 
 
     document
-    .getElementById(
-      "subjectTiming"
-    )
-    .checked =
-    true;
-
-
-    renderSections();
-
+      .getElementById(
+        "subjectTiming"
+      ).checked=true;
 
   }else{
 
     document
-    .getElementById(
-      "subjectTiming"
-    )
-    .checked =
-    false;
+      .getElementById(
+        "subjectTiming"
+      ).checked=false;
 
   }
 
@@ -1882,19 +3181,24 @@ async function editTest(id){
 
 
   document
-  .getElementById(
-    "saveBtn"
-  )
-  .textContent =
-  "Update Test";
+    .getElementById(
+      "saveBtn"
+    )
+    .textContent=
+      "Update Test";
 
 
   document
-  .getElementById(
-    "cancelBtn"
-  )
-  .classList
-  .remove("hidden");
+    .getElementById(
+      "cancelBtn"
+    )
+    .classList
+    .remove("hidden");
+
+
+  await openQuestionManager(
+    test.id
+  );
 
 
   window.scrollTo({
@@ -1906,7 +3210,45 @@ async function editTest(id){
 
 
 /* =========================================
-   CANCEL EDIT
+   UPDATE BANK FOR TEST
+========================================= */
+
+async function updateBankForTest(){
+
+  const editId=
+    document
+      .getElementById(
+        "editId"
+      ).value;
+
+
+  if(!editId) return;
+
+
+  const test=
+    tests.find(
+      t=>String(t.id)===
+         String(editId)
+    );
+
+
+  if(test){
+
+    await loadBankQuestions(
+      test
+    );
+
+    await loadAssignedQuestions(
+      test.id
+    );
+
+  }
+
+}
+
+
+/* =========================================
+   RESET
 ========================================= */
 
 function cancelEdit(){
@@ -1916,121 +3258,105 @@ function cancelEdit(){
 }
 
 
-/* =========================================
-   RESET FORM
-========================================= */
-
 function resetForm(){
 
   document
-  .getElementById(
-    "editId"
-  )
-  .value = "";
+    .getElementById("editId")
+    .value="";
 
 
   document
-  .getElementById(
-    "title"
-  )
-  .value = "";
+    .getElementById("title")
+    .value="";
 
 
   document
-  .getElementById(
-    "description"
-  )
-  .value = "";
+    .getElementById("description")
+    .value="";
 
 
   document
-  .getElementById(
-    "exam"
-  )
-  .value = "";
+    .getElementById("exam")
+    .value="";
 
 
   document
-  .getElementById(
-    "testType"
-  )
-  .value = "FULL";
+    .getElementById("testType")
+    .value="FULL";
 
 
   document
-  .getElementById(
-    "duration"
-  )
-  .value = 60;
+    .getElementById("duration")
+    .value=60;
 
 
   document
-  .getElementById(
-    "subject"
-  )
-  .value = "";
+    .getElementById("subject")
+    .value="";
 
 
   document
-  .getElementById(
-    "chapter"
-  )
-  .innerHTML =
-  '<option value="">Select Chapter</option>';
+    .getElementById("chapter")
+    .innerHTML=
+      '<option value="">Select Chapter</option>';
 
 
   document
-  .getElementById(
-    "totalQuestions"
-  )
-  .value = 25;
+    .getElementById("totalQuestions")
+    .value=25;
 
 
   document
-  .getElementById(
-    "marks"
-  )
-  .value = 2;
+    .getElementById("marks")
+    .value=2;
 
 
   document
-  .getElementById(
-    "negative"
-  )
-  .value = 0;
+    .getElementById("negative")
+    .value=0;
 
 
   document
-  .getElementById(
-    "subjectTiming"
-  )
-  .checked = false;
+    .getElementById("subjectTiming")
+    .checked=false;
 
 
-  sections = [];
+  sections=[];
 
+  bankQuestions=[];
+  assignedQuestions=[];
 
-  document
-  .getElementById(
-    "sections"
-  )
-  .innerHTML = "";
+  selectedQuestionIds=
+    new Set();
 
 
   document
-  .getElementById(
-    "saveBtn"
-  )
-  .textContent =
-  "Create Test";
+    .getElementById(
+      "sections"
+    ).innerHTML="";
 
 
   document
-  .getElementById(
-    "cancelBtn"
-  )
-  .classList
-  .add("hidden");
+    .getElementById(
+      "questionManager"
+    ).classList.add(
+      "hidden"
+    );
+
+
+  document
+    .getElementById(
+      "saveBtn"
+    ).textContent=
+      "Create Test";
+
+
+  document
+    .getElementById(
+      "cancelBtn"
+    ).classList.add(
+      "hidden"
+    );
 
 
   handleTestType();
@@ -2039,7 +3365,7 @@ function resetForm(){
 
 
 /* =========================================
-   ACTIVATE / DEACTIVATE
+   ACTIVATE
 ========================================= */
 
 async function toggleActive(
@@ -2047,16 +3373,16 @@ async function toggleActive(
   current
 ){
 
-  const result =
-  await db
-  .from("mock_tests")
-  .update({
-    is_active:!current
-  })
-  .eq(
-    "id",
-    id
-  );
+  const result=
+    await db
+      .from("mock_tests")
+      .update({
+        is_active:!current
+      })
+      .eq(
+        "id",
+        id
+      );
 
 
   if(result.error){
@@ -2076,7 +3402,7 @@ async function toggleActive(
 
 
 /* =========================================
-   DELETE
+   DELETE TEST
 ========================================= */
 
 async function deleteTest(id){
@@ -2085,21 +3411,17 @@ async function deleteTest(id){
     !confirm(
       "Delete this mock test?"
     )
-  ){
-
-    return;
-
-  }
+  ) return;
 
 
-  const result =
-  await db
-  .from("mock_tests")
-  .delete()
-  .eq(
-    "id",
-    id
-  );
+  const result=
+    await db
+      .from("mock_tests")
+      .delete()
+      .eq(
+        "id",
+        id
+      );
 
 
   if(result.error){
@@ -2119,29 +3441,42 @@ async function deleteTest(id){
 
 
 /* =========================================
-   MESSAGE
+   HELPERS
 ========================================= */
+
+function getSubjectName(id){
+
+  const subject=
+    subjects.find(
+      s=>String(s.id)===
+         String(id)
+    );
+
+
+  return subject?.name||
+    subject?.title||
+    "Subject";
+
+}
+
 
 function showMessage(text){
 
-  const box =
-  document.getElementById(
-    "message"
-  );
-
-
-  box.innerHTML = `
-
-    <div class="message">
-      ${escapeHtml(text)}
-    </div>
-
-  `;
+  document
+    .getElementById(
+      "message"
+    ).innerHTML=
+      '<div class="message">'+
+      escapeHtml(text)+
+      '</div>';
 
 
   setTimeout(
     ()=>{
-      box.innerHTML="";
+      document
+        .getElementById(
+          "message"
+        ).innerHTML="";
     },
     4000
   );
@@ -2149,14 +3484,10 @@ function showMessage(text){
 }
 
 
-/* =========================================
-   ESCAPE
-========================================= */
-
 function escapeHtml(value){
 
   return String(
-    value ?? ""
+    value??""
   )
   .replace(/&/g,"&amp;")
   .replace(/</g,"&lt;")
@@ -2176,4 +3507,4 @@ loadData();
 </script>
 
 </body>
-</html>
+  </html>
