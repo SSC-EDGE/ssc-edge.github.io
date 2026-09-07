@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>SSC EDGE Chapters</title>
+
+<script>
+document.documentElement.dataset.theme =
+localStorage.getItem("ssc-edge-theme") || "dark";
+</script>
+
+<link rel="stylesheet" href="css/style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+.page{
+  min-height:100vh;
+  padding:22px 16px 100px;
+  max-width:900px;
+  margin:auto;
+}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.header h1{
+  margin:0;
+  font-size:25px;
+}
+
+.back{
+  color:var(--purple2);
+  text-decoration:none;
+  font-weight:bold;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:16px;
+}
+
+label{
+  display:block;
+  margin:10px 0 6px;
+  color:var(--muted);
+  font-size:14px;
+}
+
+input,
+select{
+  width:100%;
+  box-sizing:border-box;
+  padding:12px;
+  border-radius:9px;
+  border:1px solid var(--border);
+  background:var(--bg);
+  color:var(--text);
+}
+
+button{
+  border:0;
+  border-radius:9px;
+  padding:11px 15px;
+  background:var(--purple);
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+button.secondary{
+  background:var(--card2);
+}
+
+button.danger{
+  background:#b42318;
+}
+
+.actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:14px;
+}
+
+.chapter{
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px;
+  margin-top:10px;
+}
+
+.chapter-title{
+  font-weight:bold;
+  font-size:16px;
+}
+
+.chapter-subject{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:5px;
+}
+
+.status{
+  background:var(--card2);
+  border-radius:10px;
+  padding:12px;
+  margin-bottom:15px;
+}
+
+.empty{
+  text-align:center;
+  color:var(--muted);
+  padding:25px 10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="page">
+
+  <div class="header">
+
+    <h1>📖 Chapters</h1>
+
+    <a
+      class="back"
+      href="admin.html"
+    >
+      ← Admin
+    </a>
+
+  </div>
+
+
+  <div
+    id="status"
+    class="status"
+  >
+    Checking admin access...
+  </div>
+
+
+  <div id="app" style="display:none;">
+
+
+    <!-- ADD CHAPTER -->
+
+    <div class="card">
+
+      <h2 id="formTitle">
+        Add Chapter
+      </h2>
+
+      <label>Subject</label>
+
+      <select id="subject">
+
+        <option value="">
+          Select Subject
+        </option>
+
+      </select>
+
+
+      <label>Chapter Name</label>
+
+      <input
+        id="chapterName"
+        placeholder="Enter chapter name"
+      >
+
+
+      <div class="actions">
+
+        <button
+          onclick="saveChapter()"
+        >
+          Save Chapter
+        </button>
+
+        <button
+          class="secondary"
+          onclick="resetForm()"
+        >
+          Clear
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- FILTER -->
+
+    <div class="card">
+
+      <h2>Chapter List</h2>
+
+      <label>
+        Filter Subject
+      </label>
+
+      <select
+        id="filterSubject"
+        onchange="renderChapters()"
+      >
+
+        <option value="">
+          All Subjects
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div id="chapterList"></div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+const SUPABASE_URL =
+"https://dvvyoygahzzbnpqrfhen.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
+const db =
+supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+let subjects = [];
+let chapters = [];
+
+let editingId = null;
+
+
+/* STATUS */
+
+function status(text){
+
+  document.getElementById(
+    "status"
+  ).textContent = text;
+
+}
+
+
+/* ADMIN CHECK */
+
+async function checkAdmin(){
+
+  const {
+    data:{user}
+  } =
+    await db.auth.getUser();
+
+
+  if(!user){
+
+    status(
+      "Admin access required."
+    );
+
+    return false;
+  }
+
+
+  const {
+    data,
+    error
+  } =
+    await db
+      .from("admin_users")
+      .select("user_id")
+      .eq(
+        "user_id",
+        user.id
+      )
+      .maybeSingle();
+
+
+  if(error){
+
+    console.error(error);
+
+    status(
+      "Unable to verify admin access."
+    );
+
+    return false;
+  }
+
+
+  if(!data){
+
+    await db.auth.signOut();
+
+    status(
+      "Access denied. Admin account required."
+    );
+
+    return false;
+  }
+
+
+  document.getElementById(
+    "status"
+  ).style.display =
+    "none";
+
+  document.getElementById(
+    "app"
+  ).style.display =
+    "block";
+
+  return true;
+
+}
+
+
+/* LOAD SUBJECTS */
+
+async function loadSubjects(){
+
+  const {
+    data,
+    error
+  } =
+    await db
+      .from("subjects")
+      .select("*")
+      .order("name");
+
+
+  if(error){
+
+    alert(
+      "Could not load subjects:\n" +
+      error.message
+    );
+
+    return;
+  }
+
+
+  subjects =
+    data || [];
+
+
+  const subject =
+    document.getElementById(
+      "subject"
+    );
+
+  const filter =
+    document.getElementById(
+      "filterSubject"
+    );
+
+
+  subject.innerHTML =
+    `<option value="">
+      Select Subject
+    </option>`;
+
+
+  filter.innerHTML =
+    `<option value="">
+      All Subjects
+    </option>`;
+
+
+  subjects.forEach(s => {
+
+    subject.innerHTML +=
+      `<option value="${s.id}">
+        ${escapeHtml(s.name)}
+      </option>`;
+
+
+    filter.innerHTML +=
+      `<option value="${s.id}">
+        ${escapeHtml(s.name)}
+      </option>`;
+
+  });
+
+}
+
+
+/* LOAD CHAPTERS */
+
+async function loadChapters(){
+
+  const {
+    data,
+    error
+  } =
+    await db
+      .from("chapters")
+      .select(`
+        *,
+        subjects(name)
+      `)
+      .order("id",{
+        ascending:false
+      });
+
+
+  if(error){
+
+    console.error(error);
+
+    alert(
+      "Could not load chapters:\n" +
+      error.message
+    );
+
+    return;
+  }
+
+
+  chapters =
+    data || [];
+
+  renderChapters();
+
+}
+
+
+/* RENDER */
+
+function renderChapters(){
+
+  const list =
+    document.getElementById(
+      "chapterList"
+    );
+
+  const filter =
+    document.getElementById(
+      "filterSubject"
+    ).value;
+
+
+  const filtered =
+    chapters.filter(c => {
+
+      if(!filter){
+        return true;
+      }
+
+      return String(c.subject_id) ===
+        String(filter);
+
+    });
+
+
+  if(!filtered.length){
+
+    list.innerHTML =
+      `<div class="card empty">
+        No chapters found.
+      </div>`;
+
+    return;
+  }
+
+
+  list.innerHTML = "";
+
+
+  filtered.forEach(c => {
+
+    list.innerHTML +=
+
+      `<div class="chapter">
+
+        <div class="chapter-title">
+          ${escapeHtml(c.name)}
+        </div>
+
+        <div class="chapter-subject">
+          Subject:
+          ${escapeHtml(
+            c.subjects?.name ||
+            "Unknown"
+          )}
+        </div>
+
+        <div class="actions">
+
+          <button
+            class="secondary"
+            onclick="editChapter(${c.id})"
+          >
+            Edit
+          </button>
+
+          <button
+            class="danger"
+            onclick="deleteChapter(${c.id})"
+          >
+            Delete
+          </button>
+
+        </div>
+
+      </div>`;
+
+  });
+
+}
+
+
+/* SAVE */
+
+async function saveChapter(){
+
+  const subjectId =
+    document.getElementById(
+      "subject"
+    ).value;
+
+  const name =
+    document.getElementById(
+      "chapterName"
+    ).value.trim();
+
+
+  if(!subjectId){
+
+    alert(
+      "Please select a subject."
+    );
+
+    return;
+  }
+
+
+  if(!name){
+
+    alert(
+      "Please enter chapter name."
+    );
+
+    return;
+  }
+
+
+  try{
+
+    if(editingId){
+
+      const {
+        error
+      } =
+        await db
+          .from("chapters")
+          .update({
+
+            subject_id:subjectId,
+            name:name
+
+          })
+          .eq(
+            "id",
+            editingId
+          );
+
+
+      if(error){
+        throw error;
+      }
+
+
+      alert(
+        "Chapter updated successfully."
+      );
+
+    }else{
+
+      const {
+        error
+      } =
+        await db
+          .from("chapters")
+          .insert({
+
+            subject_id:subjectId,
+            name:name
+
+          });
+
+
+      if(error){
+        throw error;
+      }
+
+
+      alert(
+        "Chapter added successfully."
+      );
+
+    }
+
+
+    resetForm();
+
+    await loadChapters();
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "Could not save chapter:\n" +
+      error.message
+    );
+
+  }
+
+}
+
+
+/* EDIT */
+
+function editChapter(id){
+
+  const chapter =
+    chapters.find(
+      c =>
+        String(c.id) ===
+        String(id)
+    );
+
+
+  if(!chapter){
+    return;
+  }
+
+
+  editingId =
+    chapter.id;
+
+
+  document.getElementById(
+    "formTitle"
+  ).textContent =
+    "Edit Chapter";
+
+
+  document.getElementById(
+    "subject"
+  ).value =
+    chapter.subject_id || "";
+
+
+  document.getElementById(
+    "chapterName"
+  ).value =
+    chapter.name || "";
+
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+/* DELETE */
+
+async function deleteChapter(id){
+
+  if(
+    !confirm(
+      "Delete this chapter?"
+    )
+  ){
+    return;
+  }
+
+
+  const {
+    error
+  } =
+    await db
+      .from("chapters")
+      .delete()
+      .eq(
+        "id",
+        id
+      );
+
+
+  if(error){
+
+    alert(
+      "Could not delete chapter:\n" +
+      error.message
+    );
+
+    return;
+  }
+
+
+  alert(
+    "Chapter deleted."
+  );
+
+
+  await loadChapters();
+
+}
+
+
+/* RESET */
+
+function resetForm(){
+
+  editingId = null;
+
+  document.getElementById(
+    "formTitle"
+  ).textContent =
+    "Add Chapter";
+
+  document.getElementById(
+    "subject"
+  ).value =
+    "";
+
+  document.getElementById(
+    "chapterName"
+  ).value =
+    "";
+
+}
+
+
+/* ESCAPE */
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* START */
+
+(async function(){
+
+  const admin =
+    await checkAdmin();
+
+  if(!admin){
+    return;
+  }
+
+  await loadSubjects();
+
+  await loadChapters();
+
+})();
+
+</script>
+
+</body>
+</html>
