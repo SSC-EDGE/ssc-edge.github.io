@@ -6,949 +6,610 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<title>SSC EDGE - Practice</title>
-
-<link rel="stylesheet" href="css/style.css">
+<title>Practice - SSC EDGE</title>
 
 <script>
 document.documentElement.dataset.theme =
 localStorage.getItem("ssc-edge-theme") || "dark";
 </script>
 
+<link rel="stylesheet" href="css/style.css">
+
 <style>
 
-/* =========================
-   PRACTICE PAGE
-========================= */
-
-.practice-page{
-  padding-bottom:100px;
+.container{
+max-width:700px;
+margin:auto;
+padding:20px;
+padding-bottom:90px;
 }
 
-.practice-title{
-  font-size:30px;
-  font-weight:800;
-  margin:20px 0 6px;
+h1{
+margin-bottom:5px;
 }
 
-.practice-subtitle{
-  color:var(--muted);
-  font-size:14px;
-  margin-bottom:28px;
+.subtitle{
+color:var(--muted);
+margin-bottom:25px;
 }
 
-
-/* =========================
-   SECTION TITLE
-========================= */
-
-.practice-section-title{
-  font-size:18px;
-  font-weight:800;
-  margin:28px 0 15px;
+.section-title{
+font-size:18px;
+font-weight:bold;
+margin:25px 0 12px;
 }
 
-
-/* =========================
-   MAIN MOCK OPTIONS
-========================= */
-
-.mock-main-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:16px;
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
 }
 
-.mock-main-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:25px 15px;
-  text-align:center;
-  cursor:pointer;
-  transition:.2s;
+.box{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:14px;
+padding:20px;
+text-align:center;
+cursor:pointer;
+font-weight:bold;
 }
 
-.mock-main-card:active{
-  transform:scale(.97);
+.box:hover{
+border-color:var(--purple);
 }
 
-.mock-main-icon{
-  width:58px;
-  height:58px;
-  margin:0 auto 12px;
-  border-radius:16px;
-  background:var(--card2);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:28px;
+.test-card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:14px;
+padding:15px;
+margin-bottom:12px;
 }
 
-.mock-main-card strong{
-  display:block;
-  font-size:17px;
+.test-title{
+font-size:17px;
+font-weight:bold;
+margin-bottom:7px;
 }
 
-.mock-main-card span{
-  display:block;
-  margin-top:5px;
-  font-size:12px;
-  color:var(--muted);
+.meta{
+font-size:13px;
+color:var(--muted);
+line-height:1.7;
 }
 
-
-/* =========================
-   CHAPTER WISE PRACTICE
-========================= */
-
-.chapter-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:14px;
+.test-btn{
+display:inline-block;
+margin-top:12px;
+padding:10px 14px;
+border-radius:9px;
+background:var(--purple);
+color:white;
+text-decoration:none;
+font-weight:bold;
 }
 
-.chapter-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:17px;
-  padding:22px 12px;
-  text-align:center;
-  cursor:pointer;
-  transition:.2s;
+.back{
+display:inline-block;
+margin-bottom:15px;
+color:var(--purple2);
+cursor:pointer;
+font-weight:bold;
 }
 
-.chapter-card:active{
-  transform:scale(.97);
+.hidden{
+display:none;
 }
 
-.chapter-icon{
-  width:52px;
-  height:52px;
-  margin:0 auto 10px;
-  border-radius:15px;
-  background:var(--card2);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:25px;
+.empty{
+text-align:center;
+padding:25px;
+color:var(--muted);
 }
 
-.chapter-card strong{
-  display:block;
-  font-size:15px;
+.loading{
+text-align:center;
+padding:25px;
+color:var(--muted);
 }
 
-
-/* =========================
-   MOCK SCREENS
-========================= */
-
-.mock-screen{
-  display:none;
+.tabs{
+display:flex;
+gap:8px;
+margin-bottom:15px;
 }
 
-.mock-screen.active{
-  display:block;
+.tab{
+flex:1;
+padding:11px;
+border-radius:10px;
+border:1px solid var(--border);
+background:var(--card);
+color:var(--text);
+text-align:center;
+font-weight:bold;
+cursor:pointer;
 }
 
-.mock-heading{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin:20px 0;
+.tab.active{
+background:var(--purple);
+color:white;
+border-color:var(--purple);
 }
 
-.back-btn{
-  width:38px;
-  height:38px;
-  border:1px solid var(--border);
-  border-radius:12px;
-  background:var(--card);
-  color:var(--text);
-  font-size:20px;
-  cursor:pointer;
+.bottom-nav{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:var(--header);
+border-top:1px solid var(--border);
+display:flex;
+justify-content:space-around;
+padding:10px 5px;
+z-index:100;
 }
 
-.mock-heading h2{
-  margin:0;
-  font-size:22px;
-}
-
-
-/* =========================
-   EXAM LIST
-========================= */
-
-.exam-list{
-  display:grid;
-  gap:12px;
-}
-
-.exam-card{
-  width:100%;
-  box-sizing:border-box;
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:18px;
-  color:var(--text);
-  text-align:left;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-.exam-card:active{
-  transform:scale(.98);
-}
-
-.exam-card strong{
-  font-size:15px;
-}
-
-.exam-arrow{
-  font-size:20px;
-  color:var(--purple2);
-}
-
-
-/* =========================
-   MOCK TABS
-========================= */
-
-.mock-tabs{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  background:var(--card);
-  padding:6px;
-  border:1px solid var(--border);
-  border-radius:14px;
-  margin-bottom:20px;
-}
-
-.mock-tab{
-  border:0;
-  border-radius:10px;
-  padding:12px 8px;
-  background:transparent;
-  color:var(--muted);
-  font-weight:700;
-  font-size:13px;
-  cursor:pointer;
-}
-
-.mock-tab.active{
-  background:var(--purple);
-  color:#fff;
-}
-
-
-/* =========================
-   MOCK CONTENT
-========================= */
-
-.mock-content{
-  display:none;
-}
-
-.mock-content.active{
-  display:block;
-}
-
-.empty-mock{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:35px 20px;
-  text-align:center;
-  color:var(--muted);
-}
-
-.empty-mock-icon{
-  font-size:38px;
-  margin-bottom:10px;
-}
-
-.empty-mock strong{
-  display:block;
-  color:var(--text);
-  margin-bottom:5px;
-}
-
-
-/* =========================
-   CHAPTER SUBJECT SCREEN
-========================= */
-
-.chapter-subject-screen{
-  display:none;
-}
-
-.chapter-subject-screen.active{
-  display:block;
-}
-
-
-/* =========================
-   MOBILE
-========================= */
-
-@media(max-width:500px){
-
-  .practice-title{
-    font-size:27px;
-  }
-
-  .mock-main-grid,
-  .chapter-grid{
-    gap:12px;
-  }
-
-  .mock-main-card{
-    padding:22px 10px;
-  }
-
-  .chapter-card{
-    padding:20px 10px;
-  }
-
+.bottom-nav a{
+color:var(--muted);
+text-decoration:none;
+font-size:12px;
+text-align:center;
 }
 
 </style>
 
 </head>
 
-
 <body>
 
+<div class="container">
 
-<!-- =========================
-     HEADER
-========================= -->
+<h1>Practice</h1>
 
-<header class="simple-header">
-
-  <div class="header-brand">
-    SSC EDGE
-  </div>
-
-</header>
-
-
-
-<main class="page-container practice-page">
+<div class="subtitle">
+Practice smarter. Improve faster.
+</div>
 
 
 <!-- =========================
-     MAIN PRACTICE SCREEN
+     MAIN PRACTICE
 ========================= -->
 
-<div id="practiceHome" class="mock-screen active">
+<div id="mainScreen">
 
-  <h1 class="practice-title">
-    Practice
-  </h1>
+<div class="section-title">
+MOCK TEST
+</div>
 
-  <p class="practice-subtitle">
-    Test your preparation and improve your score
-  </p>
+<div class="grid">
 
+<div class="box" onclick="openSSC()">
+📝<br><br>
+SSC
+</div>
 
-  <!-- =========================
-       MOCK TEST
-  ========================== -->
-
-  <h2 class="practice-section-title">
-    MOCK TEST
-  </h2>
-
-
-  <div class="mock-main-grid">
-
-    <!-- SSC -->
-
-    <div
-      class="mock-main-card"
-      onclick="openSSC()">
-
-      <div class="mock-main-icon">
-        📝
-      </div>
-
-      <strong>
-        SSC
-      </strong>
-
-      <span>
-        Staff Selection Commission
-      </span>
-
-    </div>
-
-
-    <!-- RRB -->
-
-    <div
-      class="mock-main-card"
-      onclick="openRRB()">
-
-      <div class="mock-main-icon">
-        🚆
-      </div>
-
-      <strong>
-        RRB (Railway)
-      </strong>
-
-      <span>
-        Railway Recruitment Board
-      </span>
-
-    </div>
-
-  </div>
-
-
-
-  <!-- =========================
-       CHAPTER WISE PRACTICE
-  ========================== -->
-
-  <h2 class="practice-section-title">
-    CHAPTER WISE PRACTICE
-  </h2>
-
-
-  <div class="chapter-grid">
-
-
-    <!-- QUANT -->
-
-    <div
-      class="chapter-card"
-      onclick="openChapter('Quant')">
-
-      <div class="chapter-icon">
-        🔢
-      </div>
-
-      <strong>
-        Quant
-      </strong>
-
-    </div>
-
-
-    <!-- GK -->
-
-    <div
-      class="chapter-card"
-      onclick="openChapter('GK')">
-
-      <div class="chapter-icon">
-        🌐
-      </div>
-
-      <strong>
-        GK
-      </strong>
-
-    </div>
-
-
-    <!-- ENGLISH -->
-
-    <div
-      class="chapter-card"
-      onclick="openChapter('English')">
-
-      <div class="chapter-icon">
-        📖
-      </div>
-
-      <strong>
-        English
-      </strong>
-
-    </div>
-
-
-    <!-- REASONING -->
-
-    <div
-      class="chapter-card"
-      onclick="openChapter('Reasoning')">
-
-      <div class="chapter-icon">
-        🧩
-      </div>
-
-      <strong>
-        Reasoning
-      </strong>
-
-    </div>
-
-
-  </div>
+<div class="box" onclick="openRRB()">
+🚆<br><br>
+RRB
+</div>
 
 </div>
 
+
+<div class="section-title">
+CHAPTER WISE PRACTICE
+</div>
+
+<div class="grid">
+
+<div class="box" onclick="openChapter('Quant')">
+➗<br><br>
+Quant
+</div>
+
+<div class="box" onclick="openChapter('GK')">
+🌍<br><br>
+GK
+</div>
+
+<div class="box" onclick="openChapter('English')">
+📖<br><br>
+English
+</div>
+
+<div class="box" onclick="openChapter('Reasoning')">
+🧠<br><br>
+Reasoning
+</div>
+
+</div>
+
+</div>
 
 
 <!-- =========================
      SSC EXAMS
 ========================= -->
 
-<div id="sscScreen" class="mock-screen">
+<div id="sscScreen" class="hidden">
 
-  <div class="mock-heading">
-
-    <button
-      class="back-btn"
-      onclick="goHome()">
-      ‹
-    </button>
-
-    <h2>
-      SSC
-    </h2>
-
-  </div>
-
-
-  <div class="exam-list">
-
-
-    <div
-      class="exam-card"
-      onclick="openExam('SSC CGL','ssc')">
-
-      <strong>
-        SSC CGL
-      </strong>
-
-      <span class="exam-arrow">
-        ›
-      </span>
-
-    </div>
-
-
-    <div
-      class="exam-card"
-      onclick="openExam('SSC CHSL','ssc')">
-
-      <strong>
-        SSC CHSL
-      </strong>
-
-      <span class="exam-arrow">
-        ›
-      </span>
-
-    </div>
-
-
-    <div
-      class="exam-card"
-      onclick="openExam('SSC MTS','ssc')">
-
-      <strong>
-        SSC MTS
-      </strong>
-
-      <span class="exam-arrow">
-        ›
-      </span>
-
-    </div>
-
-
-    <div
-      class="exam-card"
-      onclick="openExam('SSC CPO','ssc')">
-
-      <strong>
-        SSC CPO
-      </strong>
-
-      <span class="exam-arrow">
-        ›
-      </span>
-
-    </div>
-
-
-    <div
-      class="exam-card"
-      onclick="openExam('SSC STENO','ssc')">
-
-      <strong>
-        SSC STENO
-      </strong>
-
-      <span class="exam-arrow">
-        ›
-      </span>
-
-    </div>
-
-
-  </div>
-
+<div class="back" onclick="showMain()">
+← Back
 </div>
 
+<h2>SSC Mock Tests</h2>
+
+<div id="sscList" class="loading">
+Loading...
+</div>
+
+</div>
 
 
 <!-- =========================
      RRB EXAMS
 ========================= -->
 
-<div id="rrbScreen" class="mock-screen">
+<div id="rrbScreen" class="hidden">
 
-  <div class="mock-heading">
+<div class="back" onclick="showMain()">
+← Back
+</div>
 
-    <button
-      class="back-btn"
-      onclick="goHome()">
-      ‹
-    </button>
+<h2>RRB Mock Tests</h2>
 
-    <h2>
-      RRB (Railway)
-    </h2>
-
-  </div>
-
-
-  <div class="exam-list">
-
-
-    <div
-      class="exam-card"
-      onclick="openExam('NTPC - Graduate Level','rrb')">
-
-      <strong>
-        NTPC - Graduate Level
-      </strong>
-
-      <span class="exam-arrow">
-        ›
-      </span>
-
-    </div>
-
-
-    <div
-      class="exam-card"
-      onclick="openExam('NTPC - Under Graduate Level','rrb')">
-
-      <strong>
-        NTPC - Under Graduate Level
-      </strong>
-
-      <span class="exam-arrow">
-        ›
-      </span>
-
-    </div>
-
-
-    <div
-      class="exam-card"
-      onclick="openExam('NTPC GROUP D','rrb')">
-
-      <strong>
-        NTPC GROUP D
-      </strong>
-
-      <span class="exam-arrow">
-        ›
-      </span>
-
-    </div>
-
-
-  </div>
+<div id="rrbList" class="loading">
+Loading...
+</div>
 
 </div>
 
 
-
 <!-- =========================
-     EXAM MOCK SCREEN
+     EXAM TESTS
 ========================= -->
 
-<div id="examScreen" class="mock-screen">
+<div id="testScreen" class="hidden">
 
-  <div class="mock-heading">
-
-    <button
-      class="back-btn"
-      onclick="goBackToExams()">
-      ‹
-    </button>
-
-    <h2 id="examTitle">
-      SSC CGL
-    </h2>
-
-  </div>
-
-
-  <!-- TABS -->
-
-  <div class="mock-tabs">
-
-    <button
-      id="fullTab"
-      class="mock-tab active"
-      onclick="showMockType('full')">
-
-      FULL MOCKS
-
-    </button>
-
-
-    <button
-      id="sectionTab"
-      class="mock-tab"
-      onclick="showMockType('section')">
-
-      SECTIONAL MOCKS
-
-    </button>
-
-  </div>
-
-
-  <!-- FULL MOCKS -->
-
-  <div
-    id="fullMocks"
-    class="mock-content active">
-
-    <div class="empty-mock">
-
-      <div class="empty-mock-icon">
-        📝
-      </div>
-
-      <strong>
-        Full Mock Tests
-      </strong>
-
-      <span>
-        Mock tests will be available here.
-      </span>
-
-    </div>
-
-  </div>
-
-
-  <!-- SECTIONAL / SUBJECT -->
-
-  <div
-    id="sectionMocks"
-    class="mock-content">
-
-    <div class="empty-mock">
-
-      <div class="empty-mock-icon">
-        📚
-      </div>
-
-      <strong id="sectionHeading">
-        Sectional Mock Tests
-      </strong>
-
-      <span>
-        Tests will be available here.
-      </span>
-
-    </div>
-
-  </div>
-
+<div class="back" onclick="backToGateway()">
+← Back
 </div>
 
+<h2 id="examTitle"></h2>
 
-
-<!-- =========================
-     CHAPTER SUBJECT SCREEN
-========================= -->
+<div class="tabs">
 
 <div
-  id="chapterScreen"
-  class="chapter-subject-screen">
+id="tab1"
+class="tab active"
+onclick="showTestType(0)">
+FULL MOCKS
+</div>
 
+<div
+id="tab2"
+class="tab"
+onclick="showTestType(1)">
+SECTIONAL / SUBJECT WISE
+</div>
 
-  <div class="mock-heading">
+</div>
 
-    <button
-      class="back-btn"
-      onclick="goBackFromChapter()">
-      ‹
-    </button>
-
-    <h2 id="chapterTitle">
-      Quant
-    </h2>
-
-  </div>
-
-
-  <div class="empty-mock">
-
-    <div class="empty-mock-icon">
-      📚
-    </div>
-
-    <strong>
-      Chapter Wise Practice
-    </strong>
-
-    <span>
-      Chapter wise practice tests will be available here.
-    </span>
-
-  </div>
-
+<div id="testList" class="loading">
+Loading...
+</div>
 
 </div>
 
 
-</main>
+<!-- =========================
+     CHAPTER SCREEN
+========================= -->
 
+<div id="chapterScreen" class="hidden">
+
+<div class="back" onclick="showMain()">
+← Back
+</div>
+
+<h2 id="chapterTitle">
+Chapter Wise Practice
+</h2>
+
+<div id="chapterList" class="loading">
+Loading...
+</div>
+
+</div>
+
+</div>
 
 
 <!-- =========================
-     BOTTOM NAVIGATION
+     BOTTOM NAV
 ========================= -->
 
-<nav class="bottom-nav">
+<div class="bottom-nav">
+
+<a href="home.html">
+🏠<br>Home
+</a>
+
+<a href="study.html">
+📚<br>Study
+</a>
+
+<a href="practice.html">
+📝<br>Practice
+</a>
+
+<a href="profile.html">
+👤<br>Profile
+</a>
+
+</div>
 
 
-  <a href="home.html">
-
-    <span class="nav-icon">
-      ⌂
-    </span>
-
-    <small>
-      Home
-    </small>
-
-  </a>
-
-
-  <a href="study.html">
-
-    <span class="nav-icon">
-      ▣
-    </span>
-
-    <small>
-      Study Material
-    </small>
-
-  </a>
-
-
-  <a
-    href="practice.html"
-    class="active">
-
-    <span class="nav-icon">
-      ✓
-    </span>
-
-    <small>
-      Practice
-    </small>
-
-  </a>
-
-
-  <a href="profile.html">
-
-    <span class="nav-icon">
-      ○
-    </span>
-
-    <small>
-      Profile
-    </small>
-
-  </a>
-
-
-</nav>
-
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
 /* =========================
-   VARIABLES
+   SUPABASE
 ========================= */
 
-let currentBoard = "";
-let currentExam = "";
+const SUPABASE_URL =
+"https://dvvyoygahzzbnpqrfhen.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
+const supabaseClient =
+supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
 
 
 /* =========================
-   HIDE ALL MOCK SCREENS
+   DATA
 ========================= */
 
-function hideAllScreens(){
+let exams=[];
+let subjects=[];
+let tests=[];
 
-  document
-    .querySelectorAll(".mock-screen")
-    .forEach(screen => {
+let currentGateway="";
+let currentExam=null;
+let currentType=0;
 
-      screen.classList.remove("active");
 
-    });
+/* =========================
+   ESCAPE
+========================= */
 
-  document
-    .getElementById("chapterScreen")
-    .classList.remove("active");
+function escapeHtml(value){
+
+return String(value ?? "")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 
 }
 
 
 /* =========================
-   OPEN SSC
+   LOAD DATA
+========================= */
+
+async function loadData(){
+
+const examResult =
+await supabaseClient
+.from("exams")
+.select("id,name")
+.order("name");
+
+if(examResult.error){
+
+console.error(examResult.error);
+return;
+
+}
+
+exams=examResult.data || [];
+
+
+const subjectResult =
+await supabaseClient
+.from("subjects")
+.select("id,name")
+.order("name");
+
+if(subjectResult.error){
+
+console.error(subjectResult.error);
+return;
+
+}
+
+subjects=subjectResult.data || [];
+
+
+const testResult =
+await supabaseClient
+.from("mock_tests")
+.select("*")
+.eq("is_active",true)
+.order("created_at",{ascending:false});
+
+if(testResult.error){
+
+console.error(testResult.error);
+
+return;
+
+}
+
+tests=testResult.data || [];
+
+}
+
+
+/* =========================
+   SHOW MAIN
+========================= */
+
+function showMain(){
+
+hideAll();
+
+document
+.getElementById("mainScreen")
+.classList
+.remove("hidden");
+
+}
+
+
+/* =========================
+   HIDE ALL
+========================= */
+
+function hideAll(){
+
+[
+"mainScreen",
+"sscScreen",
+"rrbScreen",
+"testScreen",
+"chapterScreen"
+].forEach(id=>{
+
+document
+.getElementById(id)
+.classList
+.add("hidden");
+
+});
+
+}
+
+
+/* =========================
+   SSC
 ========================= */
 
 function openSSC(){
 
-  hideAllScreens();
+currentGateway="SSC";
 
-  document
-    .getElementById("sscScreen")
-    .classList.add("active");
+hideAll();
+
+document
+.getElementById("sscScreen")
+.classList
+.remove("hidden");
+
+renderExams("SSC");
 
 }
 
 
 /* =========================
-   OPEN RRB
+   RRB
 ========================= */
 
 function openRRB(){
 
-  hideAllScreens();
+currentGateway="RRB";
 
-  document
-    .getElementById("rrbScreen")
-    .classList.add("active");
+hideAll();
+
+document
+.getElementById("rrbScreen")
+.classList
+.remove("hidden");
+
+renderExams("RRB");
+
+}
+
+
+/* =========================
+   RENDER EXAMS
+========================= */
+
+function renderExams(type){
+
+const list=
+type==="SSC"
+?document.getElementById("sscList")
+:document.getElementById("rrbList");
+
+
+let filtered=[];
+
+if(type==="SSC"){
+
+filtered=
+exams.filter(e=>
+[
+"SSC CGL",
+"SSC CHSL",
+"SSC MTS",
+"SSC CPO",
+"SSC STENO"
+]
+.includes(e.name)
+);
+
+}else{
+
+filtered=
+exams.filter(e=>
+[
+"NTPC - Graduate Level",
+"NTPC - Under Graduate Level",
+"NTPC GROUP D"
+]
+.includes(e.name)
+);
+
+}
+
+
+if(filtered.length===0){
+
+list.innerHTML=
+`
+<div class="empty">
+No ${type} exams available.
+</div>
+`;
+
+return;
+
+}
+
+
+list.innerHTML=
+filtered.map(exam=>`
+
+<div
+class="box"
+style="margin-bottom:12px"
+onclick="openExam(${exam.id})">
+
+${escapeHtml(exam.name)}
+
+</div>
+
+`).join("");
 
 }
 
@@ -957,190 +618,301 @@ function openRRB(){
    OPEN EXAM
 ========================= */
 
-function openExam(exam,board){
+function openExam(id){
 
-  currentExam = exam;
-  currentBoard = board;
+currentExam=
+exams.find(e=>e.id==id);
 
+if(!currentExam){
+return;
+}
 
-  document
-    .getElementById("examTitle")
-    .textContent = exam;
+currentType=0;
 
+hideAll();
 
-  /* RRB */
+document
+.getElementById("testScreen")
+.classList
+.remove("hidden");
 
-  if(board === "rrb"){
+document
+.getElementById("examTitle")
+.textContent=
+currentExam.name;
 
-    document
-      .getElementById("sectionTab")
-      .textContent = "SUBJECT WISE MOCKS";
-
-
-    document
-      .getElementById("sectionHeading")
-      .textContent = "Subject Wise Mock Tests";
-
-  }
-
-
-  /* SSC */
-
-  else{
-
-    document
-      .getElementById("sectionTab")
-      .textContent = "SECTIONAL MOCKS";
-
-
-    document
-      .getElementById("sectionHeading")
-      .textContent = "Sectional Mock Tests";
-
-  }
-
-
-  hideAllScreens();
-
-
-  document
-    .getElementById("examScreen")
-    .classList.add("active");
-
-
-  showMockType("full");
+showTestType(0);
 
 }
 
 
 /* =========================
-   MOCK TYPE SWITCH
+   BACK
 ========================= */
 
-function showMockType(type){
+function backToGateway(){
 
-  const fullTab =
-    document.getElementById("fullTab");
+if(currentGateway==="SSC"){
 
-  const sectionTab =
-    document.getElementById("sectionTab");
+openSSC();
 
-  const fullMocks =
-    document.getElementById("fullMocks");
+}else{
 
-  const sectionMocks =
-    document.getElementById("sectionMocks");
+openRRB();
 
-
-  if(type === "full"){
-
-    fullTab.classList.add("active");
-
-    sectionTab.classList.remove("active");
-
-    fullMocks.classList.add("active");
-
-    sectionMocks.classList.remove("active");
-
-  }
-
-  else{
-
-    sectionTab.classList.add("active");
-
-    fullTab.classList.remove("active");
-
-    sectionMocks.classList.add("active");
-
-    fullMocks.classList.remove("active");
-
-  }
+}
 
 }
 
 
 /* =========================
-   OPEN CHAPTER
+   TEST TYPE
 ========================= */
 
-function openChapter(subject){
+function showTestType(type){
 
-  document
-    .getElementById("chapterTitle")
-    .textContent = subject;
+currentType=type;
+
+document
+.getElementById("tab1")
+.classList
+.toggle("active",type===0);
+
+document
+.getElementById("tab2")
+.classList
+.toggle("active",type===1);
 
 
-  hideAllScreens();
+let filtered=[];
 
 
-  document
-    .getElementById("chapterScreen")
-    .classList.add("active");
+if(type===0){
+
+filtered=
+tests.filter(t=>
+t.exam_id==currentExam.id &&
+t.test_type==="FULL"
+);
+
+}else{
+
+filtered=
+tests.filter(t=>
+t.exam_id==currentExam.id &&
+(
+t.test_type==="SECTIONAL" ||
+t.test_type==="SUBJECT_WISE"
+)
+);
+
+}
+
+
+renderTests(filtered);
 
 }
 
 
 /* =========================
-   BACK FROM CHAPTER
+   RENDER TESTS
 ========================= */
 
-function goBackFromChapter(){
+function renderTests(list){
 
-  hideAllScreens();
+const box=
+document.getElementById("testList");
 
 
-  document
-    .getElementById("practiceHome")
-    .classList.add("active");
+if(list.length===0){
+
+box.innerHTML=
+`
+<div class="empty">
+No tests available yet.
+</div>
+`;
+
+return;
+
+}
+
+
+box.innerHTML=
+list.map(test=>{
+
+let subjectName="";
+
+if(test.subject_id){
+
+const subject=
+subjects.find(s=>s.id==test.subject_id);
+
+subjectName=
+subject
+?subject.name
+:"";
+
+}
+
+
+return `
+
+<div class="test-card">
+
+<div class="test-title">
+${escapeHtml(test.title)}
+</div>
+
+<div class="meta">
+
+${escapeHtml(test.test_type)}
+
+${subjectName
+?` • ${escapeHtml(subjectName)}`
+:""}
+
+<br>
+
+⏱ ${test.duration_minutes} minutes
+
+<br>
+
+📝 ${test.total_questions} questions
+
+</div>
+
+<a
+class="test-btn"
+href="test.html?id=${test.id}">
+
+Start Test →
+
+</a>
+
+</div>
+
+`;
+
+}).join("");
 
 }
 
 
 /* =========================
-   BACK TO MAIN
+   CHAPTER PRACTICE
 ========================= */
 
-function goHome(){
+function openChapter(subjectName){
 
-  hideAllScreens();
+hideAll();
+
+document
+.getElementById("chapterScreen")
+.classList
+.remove("hidden");
+
+document
+.getElementById("chapterTitle")
+textContent=
+subjectName+" Practice";
 
 
-  document
-    .getElementById("practiceHome")
-    .classList.add("active");
+const subject=
+subjects.find(s=>
+s.name.toLowerCase()===
+subjectName.toLowerCase()
+);
+
+
+if(!subject){
+
+document
+.getElementById("chapterList")
+.innerHTML=
+`
+<div class="empty">
+No ${escapeHtml(subjectName)}
+practice available yet.
+</div>
+`;
+
+return;
+
+}
+
+
+const list=
+tests.filter(t=>
+t.test_type==="CHAPTER_WISE" &&
+t.subject_id==subject.id
+);
+
+
+if(list.length===0){
+
+document
+.getElementById("chapterList")
+.innerHTML=
+`
+<div class="empty">
+No chapter-wise tests available yet.
+</div>
+`;
+
+return;
+
+}
+
+
+document
+.getElementById("chapterList")
+.innerHTML=
+list.map(test=>`
+
+<div class="test-card">
+
+<div class="test-title">
+${escapeHtml(test.title)}
+</div>
+
+<div class="meta">
+
+⏱ ${test.duration_minutes} minutes
+<br>
+📝 ${test.total_questions} questions
+
+</div>
+
+<a
+class="test-btn"
+href="test.html?id=${test.id}">
+
+Start Practice →
+
+</a>
+
+</div>
+
+`).join("");
 
 }
 
 
 /* =========================
-   BACK TO SSC / RRB
+   START
 ========================= */
 
-function goBackToExams(){
+async function start(){
 
-  hideAllScreens();
-
-
-  if(currentBoard === "ssc"){
-
-    document
-      .getElementById("sscScreen")
-      .classList.add("active");
-
-  }
-
-  else{
-
-    document
-      .getElementById("rrbScreen")
-      .classList.add("active");
-
-  }
+await loadData();
 
 }
+
+start();
 
 </script>
 
-
 </body>
+
 </html>
