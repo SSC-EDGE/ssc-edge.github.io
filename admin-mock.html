@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Admin Mock Tests - SSC EDGE</title>
+
+<script>
+document.documentElement.dataset.theme =
+localStorage.getItem("ssc-edge-theme") || "dark";
+</script>
+
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+
+.container{
+max-width:700px;
+margin:auto;
+padding:20px;
+padding-bottom:80px;
+}
+
+h1{
+font-size:25px;
+margin-bottom:5px;
+}
+
+.subtitle{
+color:var(--muted);
+margin-bottom:20px;
+}
+
+.card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:14px;
+padding:16px;
+margin-bottom:16px;
+}
+
+label{
+display:block;
+font-weight:bold;
+margin:12px 0 6px;
+}
+
+input,
+select,
+textarea{
+width:100%;
+box-sizing:border-box;
+padding:12px;
+border-radius:10px;
+border:1px solid var(--border);
+background:var(--bg);
+color:var(--text);
+font-size:15px;
+}
+
+textarea{
+min-height:80px;
+resize:vertical;
+}
+
+button{
+border:0;
+border-radius:10px;
+padding:11px 15px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.primary{
+background:var(--purple);
+color:white;
+width:100%;
+margin-top:16px;
+}
+
+.secondary{
+background:var(--card2);
+color:var(--text);
+border:1px solid var(--border);
+}
+
+.danger{
+background:#b91c1c;
+color:white;
+}
+
+.test-card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:14px;
+padding:16px;
+margin-bottom:12px;
+}
+
+.test-title{
+font-size:18px;
+font-weight:bold;
+margin-bottom:7px;
+}
+
+.meta{
+color:var(--muted);
+font-size:13px;
+line-height:1.7;
+}
+
+.actions{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+margin-top:12px;
+}
+
+.status{
+display:inline-block;
+padding:4px 8px;
+border-radius:7px;
+font-size:12px;
+font-weight:bold;
+}
+
+.active{
+background:#166534;
+color:white;
+}
+
+.inactive{
+background:#7f1d1d;
+color:white;
+}
+
+.hidden{
+display:none;
+}
+
+.message{
+margin-top:12px;
+text-align:center;
+font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Admin Mock Tests</h1>
+
+<div class="subtitle">
+Create and manage SSC EDGE mock tests
+</div>
+
+
+<!-- =========================
+     CREATE / EDIT TEST
+========================= -->
+
+<div class="card">
+
+<label>Test Title</label>
+
+<input
+id="title"
+type="text"
+placeholder="Example: SSC CHSL Full Mock Test 1">
+
+
+<label>Description</label>
+
+<textarea
+id="description"
+placeholder="Optional description"></textarea>
+
+
+<label>Exam</label>
+
+<select id="exam">
+
+<option value="">
+Select Exam
+</option>
+
+</select>
+
+
+<label>Test Type</label>
+
+<select id="testType" onchange="updateFields()">
+
+<option value="">
+Select Test Type
+</option>
+
+<option value="FULL">
+Full Mock
+</option>
+
+<option value="SECTIONAL">
+Sectional Mock
+</option>
+
+<option value="SUBJECT_WISE">
+Subject Wise Mock
+</option>
+
+<option value="CHAPTER_WISE">
+Chapter Wise Practice
+</option>
+
+</select>
+
+
+<div id="subjectBox" class="hidden">
+
+<label>Subject</label>
+
+<select id="subject" onchange="loadChapters()">
+
+<option value="">
+Select Subject
+</option>
+
+</select>
+
+</div>
+
+
+<div id="chapterBox" class="hidden">
+
+<label>Chapter</label>
+
+<select id="chapter">
+
+<option value="">
+Select Chapter
+</option>
+
+</select>
+
+</div>
+
+
+<label>Duration (Minutes)</label>
+
+<input
+id="duration"
+type="number"
+value="60"
+min="1">
+
+
+<label>Total Questions</label>
+
+<input
+id="totalQuestions"
+type="number"
+value="0"
+min="0">
+
+
+<label>Marks Per Question</label>
+
+<input
+id="marks"
+type="number"
+value="2"
+step="0.01"
+min="0">
+
+
+<label>Negative Marks</label>
+
+<input
+id="negativeMarks"
+type="number"
+value="0"
+step="0.01"
+min="0">
+
+
+<label>Active</label>
+
+<select id="isActive">
+
+<option value="true">
+Yes
+</option>
+
+<option value="false">
+No
+</option>
+
+</select>
+
+
+<button
+id="saveButton"
+class="primary"
+onclick="saveTest()">
+
+➕ Create Mock Test
+
+</button>
+
+
+<button
+id="cancelButton"
+class="secondary hidden"
+style="width:100%;margin-top:10px"
+onclick="cancelEdit()">
+
+Cancel Edit
+
+</button>
+
+
+<div
+id="message"
+class="message">
+</div>
+
+</div>
+
+
+<!-- =========================
+     EXISTING TESTS
+========================= -->
+
+<div class="card">
+
+<h2>Existing Mock Tests</h2>
+
+<div
+id="testList"
+style="margin-top:15px">
+
+Loading...
+
+</div>
+
+</div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+/* =========================
+   SUPABASE
+========================= */
+
+const SUPABASE_URL =
+"https://dvvyoygahzzbnpqrfhen.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
+const supabaseClient =
+supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
+
+/* =========================
+   VARIABLES
+========================= */
+
+let exams = [];
+let subjects = [];
+let editingId = null;
+
+
+/* =========================
+   ESCAPE
+========================= */
+
+function escapeHtml(value){
+
+return String(value ?? "")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================
+   ADMIN CHECK
+========================= */
+
+async function checkAdmin(){
+
+const {
+data:{
+session
+}
+} =
+await supabaseClient
+.auth
+.getSession();
+
+
+if(!session){
+
+location.href="admin.html";
+return false;
+
+}
+
+
+const {
+data:admin,
+error
+} =
+await supabaseClient
+
+.from("admin_users")
+
+.select("user_id")
+
+.eq("user_id",session.user.id)
+
+.maybeSingle();
+
+
+if(error || !admin){
+
+document.body.innerHTML = `
+<div style="padding:30px;text-align:center">
+<h2>Access Denied</h2>
+<p>You are not an admin.</p>
+</div>
+`;
+
+return false;
+
+}
+
+return true;
+
+}
+
+
+/* =========================
+   LOAD EXAMS
+========================= */
+
+async function loadExams(){
+
+const {
+data,
+error
+} =
+await supabaseClient
+
+.from("exams")
+
+.select("id,name")
+
+.order("name");
+
+
+if(error){
+
+console.error(error);
+return;
+
+}
+
+exams = data || [];
+
+const select =
+document.getElementById("exam");
+
+select.innerHTML =
+`
+<option value="">
+Select Exam
+</option>
+`;
+
+exams.forEach(exam => {
+
+select.innerHTML += `
+<option value="${exam.id}">
+${escapeHtml(exam.name)}
+</option>
+`;
+
+});
+
+}
+
+
+/* =========================
+   LOAD SUBJECTS
+========================= */
+
+async function loadSubjects(){
+
+const {
+data,
+error
+} =
+await supabaseClient
+
+.from("subjects")
+
+.select("id,name")
+
+.order("name");
+
+
+if(error){
+
+console.error(error);
+return;
+
+}
+
+subjects = data || [];
+
+const select =
+document.getElementById("subject");
+
+select.innerHTML =
+`
+<option value="">
+Select Subject
+</option>
+`;
+
+subjects.forEach(subject => {
+
+select.innerHTML += `
+<option value="${subject.id}">
+${escapeHtml(subject.name)}
+</option>
+`;
+
+});
+
+}
+
+
+/* =========================
+   UPDATE FIELDS
+========================= */
+
+function updateFields(){
+
+const type =
+document.getElementById("testType").value;
+
+const subjectBox =
+document.getElementById("subjectBox");
+
+const chapterBox =
+document.getElementById("chapterBox");
+
+
+subjectBox.classList.add("hidden");
+chapterBox.classList.add("hidden");
+
+
+if(
+type === "SECTIONAL" ||
+type === "SUBJECT_WISE" ||
+type === "CHAPTER_WISE"
+){
+
+subjectBox.classList.remove("hidden");
+
+}
+
+
+if(type === "CHAPTER_WISE"){
+
+chapterBox.classList.remove("hidden");
+
+}
+
+}
+
+
+/* =========================
+   LOAD CHAPTERS
+========================= */
+
+async function loadChapters(){
+
+const subjectId =
+document.getElementById("subject").value;
+
+const chapter =
+document.getElementById("chapter");
+
+
+chapter.innerHTML =
+`
+<option value="">
+Select Chapter
+</option>
+`;
+
+if(!subjectId){
+return;
+}
+
+
+const {
+data,
+error
+} =
+await supabaseClient
+
+.from("chapters")
+
+.select("id,name")
+
+.eq("subject_id",subjectId)
+
+.order("name");
+
+
+if(error){
+
+console.error(error);
+return;
+
+}
+
+
+(data || []).forEach(item => {
+
+chapter.innerHTML += `
+<option value="${item.id}">
+${escapeHtml(item.name)}
+</option>
+`;
+
+});
+
+}
+
+
+/* =========================
+   SAVE TEST
+========================= */
+
+async function saveTest(){
+
+const title =
+document.getElementById("title").value.trim();
+
+const description =
+document.getElementById("description").value.trim();
+
+const examId =
+document.getElementById("exam").value;
+
+const type =
+document.getElementById("testType").value;
+
+const subjectId =
+document.getElementById("subject").value || null;
+
+const chapterId =
+document.getElementById("chapter").value || null;
+
+const duration =
+Number(document.getElementById("duration").value);
+
+const totalQuestions =
+Number(document.getElementById("totalQuestions").value);
+
+const marks =
+Number(document.getElementById("marks").value);
+
+const negativeMarks =
+Number(document.getElementById("negativeMarks").value);
+
+const isActive =
+document.getElementById("isActive").value === "true";
+
+
+const message =
+document.getElementById("message");
+
+
+if(!title){
+
+message.textContent =
+"Please enter a test title.";
+
+return;
+
+}
+
+if(!examId){
+
+message.textContent =
+"Please select an exam.";
+
+return;
+
+}
+
+if(!type){
+
+message.textContent =
+"Please select test type.";
+
+return;
+
+}
+
+if(
+(type === "SECTIONAL" ||
+type === "SUBJECT_WISE" ||
+type === "CHAPTER_WISE")
+&&
+!subjectId
+){
+
+message.textContent =
+"Please select a subject.";
+
+return;
+
+}
+
+if(
+type === "CHAPTER_WISE"
+&&
+!chapterId
+){
+
+message.textContent =
+"Please select a chapter.";
+
+return;
+
+}
+
+
+const payload = {
+
+exam_id:examId,
+
+title:title,
+
+description:
+description || null,
+
+test_type:type,
+
+subject_id:
+subjectId,
+
+duration_minutes:
+duration,
+
+total_questions:
+totalQuestions,
+
+is_active:
+isActive
+
+};
+
+
+let result;
+
+
+if(editingId){
+
+result =
+await supabaseClient
+
+.from("mock_tests")
+
+.update(payload)
+
+.eq("id",editingId);
+
+}else{
+
+result =
+await supabaseClient
+
+.from("mock_tests")
+
+.insert(payload);
+
+}
+
+
+if(result.error){
+
+console.error(result.error);
+
+message.textContent =
+"Error: " + result.error.message;
+
+return;
+
+}
+
+
+message.textContent =
+editingId
+? "Mock Test updated successfully."
+: "Mock Test created successfully.";
+
+
+clearForm();
+
+await loadTests();
+
+}
+
+
+/* =========================
+   CLEAR FORM
+========================= */
+
+function clearForm(){
+
+editingId = null;
+
+document.getElementById("title").value="";
+document.getElementById("description").value="";
+document.getElementById("exam").value="";
+document.getElementById("testType").value="";
+document.getElementById("subject").value="";
+document.getElementById("chapter").innerHTML =
+`<option value="">Select Chapter</option>`;
+
+document.getElementById("duration").value=60;
+document.getElementById("totalQuestions").value=0;
+document.getElementById("marks").value=2;
+document.getElementById("negativeMarks").value=0;
+document.getElementById("isActive").value="true";
+
+updateFields();
+
+document.getElementById("saveButton").textContent =
+"➕ Create Mock Test";
+
+document
+.getElementById("cancelButton")
+.classList
+.add("hidden");
+
+}
+
+
+/* =========================
+   EDIT TEST
+========================= */
+
+async function editTest(id){
+
+const {
+data:test,
+error
+} =
+await supabaseClient
+
+.from("mock_tests")
+
+.select("*")
+
+.eq("id",id)
+
+.single();
+
+
+if(error){
+
+alert(error.message);
+return;
+
+}
+
+
+editingId = id;
+
+document.getElementById("title").value =
+test.title || "";
+
+document.getElementById("description").value =
+test.description || "";
+
+document.getElementById("exam").value =
+test.exam_id || "";
+
+document.getElementById("testType").value =
+test.test_type || "";
+
+document.getElementById("duration").value =
+test.duration_minutes || 60;
+
+document.getElementById("totalQuestions").value =
+test.total_questions || 0;
+
+document.getElementById("marks").value =
+test.marks_per_question || 2;
+
+document.getElementById("negativeMarks").value =
+test.negative_marks || 0;
+
+document.getElementById("isActive").value =
+test.is_active ? "true" : "false";
+
+
+updateFields();
+
+
+if(test.subject_id){
+
+document.getElementById("subject").value =
+test.subject_id;
+
+await loadChapters();
+
+}
+
+
+if(test.chapter_id){
+
+document.getElementById("chapter").value =
+test.chapter_id;
+
+}
+
+
+document.getElementById("saveButton").textContent =
+"💾 Update Mock Test";
+
+document
+.getElementById("cancelButton")
+.classList
+.remove("hidden");
+
+
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
+
+}
+
+
+/* =========================
+   CANCEL EDIT
+========================= */
+
+function cancelEdit(){
+
+clearForm();
+
+document.getElementById("message").textContent="";
+
+}
+
+
+/* =========================
+   DELETE TEST
+========================= */
+
+async function deleteTest(id){
+
+if(
+!confirm(
+"Delete this Mock Test?\n\nIts questions will also be affected if database cascade is configured."
+)
+){
+
+return;
+
+}
+
+
+const {
+error
+} =
+await supabaseClient
+
+.from("mock_tests")
+
+.delete()
+
+.eq("id",id);
+
+
+if(error){
+
+alert(error.message);
+return;
+
+}
+
+
+await loadTests();
+
+}
+
+
+/* =========================
+   TOGGLE ACTIVE
+========================= */
+
+async function toggleTest(id,current){
+
+const {
+error
+} =
+await supabaseClient
+
+.from("mock_tests")
+
+.update({
+is_active:!current
+})
+
+.eq("id",id);
+
+
+if(error){
+
+alert(error.message);
+return;
+
+}
+
+await loadTests();
+
+}
+
+
+/* =========================
+   LOAD TESTS
+========================= */
+
+async function loadTests(){
+
+const list =
+document.getElementById("testList");
+
+
+list.innerHTML =
+"Loading...";
+
+
+const {
+data,
+error
+} =
+await supabaseClient
+
+.from("mock_tests")
+
+.select(`
+*,
+exams(name),
+subjects(name)
+`)
+
+.order(
+"created_at",
+{ascending:false}
+);
+
+
+if(error){
+
+console.error(error);
+
+list.innerHTML =
+`
+<div style="color:#f87171">
+Unable to load mock tests.
+</div>
+`;
+
+return;
+
+}
+
+
+if(!data || data.length === 0){
+
+list.innerHTML =
+`
+<div style="color:var(--muted)">
+No mock tests created yet.
+</div>
+`;
+
+return;
+
+}
+
+
+list.innerHTML =
+data.map(test => {
+
+const examName =
+test.exams?.name || "Unknown Exam";
+
+const subjectName =
+test.subjects?.name || "";
+
+return `
+
+<div class="test-card">
+
+<div class="test-title">
+
+${escapeHtml(test.title)}
+
+</div>
+
+
+<div class="meta">
+
+Exam:
+${escapeHtml(examName)}
+
+<br>
+
+Type:
+${escapeHtml(test.test_type)}
+
+${subjectName
+? `<br>Subject: ${escapeHtml(subjectName)}`
+: ""}
+
+<br>
+
+Duration:
+${test.duration_minutes} minutes
+
+<br>
+
+Questions:
+${test.total_questions}
+
+<br>
+
+Status:
+
+<span class="status ${
+test.is_active
+? "active"
+: "inactive"
+}">
+
+${test.is_active
+? "ACTIVE"
+: "INACTIVE"}
+
+</span>
+
+</div>
+
+
+<div class="actions">
+
+<button
+class="secondary"
+onclick="editTest(${test.id})">
+
+✏️ Edit
+
+</button>
+
+
+<button
+class="secondary"
+onclick="toggleTest(
+${test.id},
+${test.is_active}
+)">
+
+${
+test.is_active
+? "⏸️ Disable"
+: "▶️ Activate"
+}
+
+</button>
+
+
+<button
+class="danger"
+onclick="deleteTest(${test.id})">
+
+🗑️ Delete
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+async function start(){
+
+const allowed =
+await checkAdmin();
+
+if(!allowed){
+return;
+}
+
+await loadExams();
+
+await loadSubjects();
+
+await loadTests();
+
+}
+
+start();
+
+</script>
+
+</body>
+
+  </html>
