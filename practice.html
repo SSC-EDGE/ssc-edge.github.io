@@ -162,7 +162,6 @@ text-align:center;
 
 </head>
 
-
 <body>
 
 <div class="container">
@@ -355,7 +354,6 @@ Loading...
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-
 <script>
 
 /* =========================
@@ -379,17 +377,17 @@ SUPABASE_KEY
    DATA
 ========================= */
 
-let exams = [];
-let subjects = [];
-let tests = [];
+let exams=[];
+let subjects=[];
+let tests=[];
 
-let currentGateway = "";
-let currentExam = null;
-let currentType = 0;
+let currentGateway="";
+let currentExam=null;
+let currentType=0;
 
 
 /* =========================
-   ESCAPE HTML
+   ESCAPE
 ========================= */
 
 function escapeHtml(value){
@@ -410,8 +408,6 @@ return String(value ?? "")
 
 async function loadData(){
 
-/* ---------- EXAMS ---------- */
-
 const examResult =
 await supabaseClient
 .from("exams")
@@ -422,19 +418,16 @@ await supabaseClient
 if(examResult.error){
 
 console.error(
-"Exams error:",
+"Exam loading error:",
 examResult.error
 );
 
-return false;
+return;
 
 }
 
-exams =
-examResult.data || [];
+exams=examResult.data || [];
 
-
-/* ---------- SUBJECTS ---------- */
 
 const subjectResult =
 await supabaseClient
@@ -446,24 +439,31 @@ await supabaseClient
 if(subjectResult.error){
 
 console.error(
-"Subjects error:",
+"Subject loading error:",
 subjectResult.error
 );
 
-return false;
+return;
 
 }
 
-subjects =
-subjectResult.data || [];
+subjects=subjectResult.data || [];
 
-
-/* ---------- MOCK TESTS ---------- */
 
 const testResult =
 await supabaseClient
 .from("mock_tests")
-.select("*")
+.select(`
+id,
+exam_id,
+title,
+test_type,
+subject_id,
+duration_minutes,
+total_questions,
+is_active,
+created_at
+`)
 .eq("is_active",true)
 .order("created_at",{ascending:false});
 
@@ -471,29 +471,15 @@ await supabaseClient
 if(testResult.error){
 
 console.error(
-"Mock tests error:",
+"Mock test loading error:",
 testResult.error
 );
 
-return false;
+return;
 
 }
 
-tests =
-testResult.data || [];
-
-
-console.log(
-"Loaded exams:",
-exams
-);
-
-console.log(
-"Loaded tests:",
-tests
-);
-
-return true;
+tests=testResult.data || [];
 
 }
 
@@ -544,7 +530,7 @@ document
 
 function openSSC(){
 
-currentGateway = "SSC";
+currentGateway="SSC";
 
 hideAll();
 
@@ -564,7 +550,7 @@ renderExams("SSC");
 
 function openRRB(){
 
-currentGateway = "RRB";
+currentGateway="RRB";
 
 hideAll();
 
@@ -585,62 +571,66 @@ renderExams("RRB");
 function renderExams(type){
 
 const list =
-type === "SSC"
+type==="SSC"
 ?
 document.getElementById("sscList")
 :
 document.getElementById("rrbList");
 
 
-let filtered = [];
+let filtered=[];
 
 
-if(type === "SSC"){
+if(type==="SSC"){
 
 filtered =
-exams.filter(exam => {
+exams.filter(e=>{
 
 const name =
-String(exam.name || "")
+String(e.name || "")
 .trim()
-.toLowerCase();
+.toUpperCase();
 
 return [
-"ssc cgl",
-"ssc chsl",
-"ssc mts",
-"ssc cpo",
-"ssc steno"
+"SSC CGL",
+"SSC CHSL",
+"SSC MTS",
+"SSC CPO",
+"SSC STENO"
 ]
-.includes(name);
+.some(x =>
+x.toUpperCase()===name
+);
 
 });
 
 }else{
 
 filtered =
-exams.filter(exam => {
+exams.filter(e=>{
 
 const name =
-String(exam.name || "")
+String(e.name || "")
 .trim()
-.toLowerCase();
+.toUpperCase();
 
 return [
-"ntpc - graduate level",
-"ntpc - under graduate level",
-"ntpc group d"
+"NTPC - Graduate Level",
+"NTPC - Under Graduate Level",
+"NTPC GROUP D"
 ]
-.includes(name);
+.some(x =>
+x.toUpperCase()===name
+);
 
 });
 
 }
 
 
-if(filtered.length === 0){
+if(filtered.length===0){
 
-list.innerHTML = `
+list.innerHTML=`
 <div class="empty">
 No ${type} exams available.
 </div>
@@ -652,7 +642,7 @@ return;
 
 
 list.innerHTML =
-filtered.map(exam => `
+filtered.map(exam=>`
 
 <div
 class="box"
@@ -675,24 +665,19 @@ ${escapeHtml(exam.name)}
 function openExam(id){
 
 currentExam =
-exams.find(exam =>
-String(exam.id) === String(id)
+exams.find(e =>
+String(e.id) === String(id)
 );
 
 
 if(!currentExam){
-
-console.error(
-"Exam not found:",
-id
-);
 
 return;
 
 }
 
 
-currentType = 0;
+currentType=0;
 
 hideAll();
 
@@ -719,7 +704,7 @@ showTestType(0);
 
 function backToGateway(){
 
-if(currentGateway === "SSC"){
+if(currentGateway==="SSC"){
 
 openSSC();
 
@@ -738,7 +723,7 @@ openRRB();
 
 function showTestType(type){
 
-currentType = type;
+currentType=type;
 
 
 document
@@ -746,7 +731,7 @@ document
 .classList
 .toggle(
 "active",
-type === 0
+type===0
 );
 
 
@@ -755,39 +740,28 @@ document
 .classList
 .toggle(
 "active",
-type === 1
+type===1
 );
 
 
 if(!currentExam){
-
-document
-.getElementById("testList")
-.innerHTML =
-`
-<div class="empty">
-Please select an exam.
-</div>
-`;
 
 return;
 
 }
 
 
-const examId =
+const currentExamId =
 String(currentExam.id);
 
 
-let filtered = [];
+let filtered=[];
 
 
-/* ---------- FULL MOCKS ---------- */
-
-if(type === 0){
+if(type===0){
 
 filtered =
-tests.filter(test => {
+tests.filter(test=>{
 
 const testExamId =
 String(test.exam_id);
@@ -798,19 +772,16 @@ String(test.test_type || "")
 .toUpperCase();
 
 return (
-testExamId === examId &&
+testExamId === currentExamId &&
 testType === "FULL"
 );
 
 });
 
-
-/* ---------- SECTIONAL / SUBJECT WISE ---------- */
-
 }else{
 
 filtered =
-tests.filter(test => {
+tests.filter(test=>{
 
 const testExamId =
 String(test.exam_id);
@@ -821,7 +792,7 @@ String(test.test_type || "")
 .toUpperCase();
 
 return (
-testExamId === examId &&
+testExamId === currentExamId &&
 (
 testType === "SECTIONAL" ||
 testType === "SUBJECT_WISE"
@@ -848,9 +819,9 @@ const box =
 document.getElementById("testList");
 
 
-if(list.length === 0){
+if(list.length===0){
 
-box.innerHTML = `
+box.innerHTML=`
 <div class="empty">
 No tests available yet.
 </div>
@@ -862,16 +833,16 @@ return;
 
 
 box.innerHTML =
-list.map(test => {
+list.map(test=>{
 
-let subjectName = "";
+let subjectName="";
 
 
 if(test.subject_id){
 
 const subject =
-subjects.find(item =>
-String(item.id) ===
+subjects.find(s =>
+String(s.id) ===
 String(test.subject_id)
 );
 
@@ -958,11 +929,10 @@ subjectName + " Practice";
 
 
 const subject =
-subjects.find(item =>
-String(item.name || "")
+subjects.find(s =>
+String(s.name || "")
 .trim()
-.toLowerCase()
-===
+.toLowerCase() ===
 subjectName.trim().toLowerCase()
 );
 
@@ -971,7 +941,7 @@ if(!subject){
 
 document
 .getElementById("chapterList")
-.innerHTML = `
+.innerHTML=`
 <div class="empty">
 No ${escapeHtml(subjectName)}
 practice available yet.
@@ -984,7 +954,7 @@ return;
 
 
 const list =
-tests.filter(test => {
+tests.filter(test=>{
 
 const testType =
 String(test.test_type || "")
@@ -1000,11 +970,11 @@ String(subject.id)
 });
 
 
-if(list.length === 0){
+if(list.length===0){
 
 document
 .getElementById("chapterList")
-.innerHTML = `
+.innerHTML=`
 <div class="empty">
 No chapter-wise tests available yet.
 </div>
@@ -1018,7 +988,7 @@ return;
 document
 .getElementById("chapterList")
 .innerHTML =
-list.map(test => `
+list.map(test=>`
 
 <div class="test-card">
 
@@ -1071,4 +1041,4 @@ start();
 
 </body>
 
-</html>
+     </html>
