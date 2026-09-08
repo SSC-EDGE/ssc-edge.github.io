@@ -303,6 +303,119 @@ body{
 
 
 /* ==================================================
+   START SCREEN / SECTION SUMMARY
+   ================================================== */
+
+.start-screen{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:18px 15px;
+}
+
+.start-title{
+  margin:0;
+  color:var(--text);
+  font-size:19px;
+  font-weight:900;
+}
+
+.start-subtitle{
+  margin:5px 0 15px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.section-table-wrap{
+  overflow-x:auto;
+  border:1px solid var(--border);
+  border-radius:12px;
+}
+
+.section-table{
+  width:100%;
+  min-width:430px;
+  border-collapse:collapse;
+  color:var(--text);
+  font-size:12px;
+}
+
+.section-table th,
+.section-table td{
+  padding:11px 9px;
+  text-align:left;
+  border-bottom:1px solid var(--border);
+}
+
+.section-table th{
+  background:var(--card2);
+  font-weight:900;
+}
+
+.section-table tr:last-child td{
+  border-bottom:0;
+}
+
+.start-action{
+  width:100%;
+  margin-top:15px;
+  min-height:45px;
+  border:0;
+  border-radius:11px;
+  background:var(--purple);
+  color:#fff;
+  font-size:13px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.resume-note{
+  margin-top:9px;
+  text-align:center;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.result-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:8px;
+  margin-top:15px;
+}
+
+.result-action{
+  min-height:42px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--card2);
+  color:var(--text);
+  text-decoration:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:11px;
+  font-weight:900;
+}
+
+.result-action.primary{
+  background:var(--purple);
+  border-color:var(--purple);
+  color:#fff;
+}
+
+@media(max-width:500px){
+  .navigation-row{
+    grid-template-columns:1fr 1fr 1.15fr;
+  }
+  .nav-btn{
+    font-size:10px;
+  }
+  .result-actions{
+    grid-template-columns:1fr;
+  }
+}
+
+/* ==================================================
    MAIN CONTAINER
    ================================================== */
 
@@ -488,7 +601,7 @@ body{
 
   display:grid;
 
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:1fr 1fr 1.15fr;
 
   gap:8px;
 
@@ -551,21 +664,27 @@ body{
 
 .grid-btn{
 
-  width:100%;
+  width:46px;
 
-  margin-top:8px;
+  height:40px;
 
-  min-height:42px;
+  margin:8px 0 0 auto;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
 
   border-radius:10px;
 
-  background:var(--card2);
+  background:#fff;
 
-  color:var(--purple2);
+  color:#24152f;
 
   border:1px solid var(--border);
 
-  font-size:12px;
+  font-size:20px;
 
   font-weight:900;
 
@@ -578,9 +697,9 @@ body{
 
   width:100%;
 
-  margin-top:8px;
+  margin-top:0;
 
-  min-height:45px;
+  min-height:44px;
 
   border:0;
 
@@ -1371,6 +1490,53 @@ body{
 
 
   <div
+    id="startScreen"
+    class="start-screen hidden"
+  >
+
+    <h2 id="startTitle" class="start-title">
+      Ready to Start?
+    </h2>
+
+    <p id="startSubtitle" class="start-subtitle">
+      Check your section details before starting.
+    </p>
+
+    <div class="section-table-wrap">
+
+      <table class="section-table">
+
+        <thead>
+          <tr>
+            <th>Section</th>
+            <th>Subject</th>
+            <th>No. of Questions</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+
+        <tbody id="sectionSummaryBody"></tbody>
+
+      </table>
+
+    </div>
+
+    <button
+      id="startTestBtn"
+      class="start-action"
+      type="button"
+    >
+      Start Test
+    </button>
+
+    <div id="resumeNote" class="resume-note hidden">
+      Your previous progress is saved. You can continue from where you stopped.
+    </div>
+
+  </div>
+
+
+  <div
     id="testArea"
     class="hidden"
   >
@@ -1591,6 +1757,9 @@ let submitted = false;
 let paused = false;
 let currentSectionIndex = -1;
 let sectionRemainingTimes = {};
+let progressKey = "";
+let hasSavedProgress = false;
+let progressStarted = false;
 
 
 const params =
@@ -1600,6 +1769,9 @@ new URLSearchParams(
 
 const testId =
 params.get("id");
+
+const reattempt =
+params.get("reattempt") === "1";
 
 
 loadTest();
@@ -1652,6 +1824,8 @@ async function loadTest(){
   test =
     testResult.data;
 
+  progressKey =
+    "ssc-edge-progress-" + String(test.id);
 
   await loadSections();
   await loadQuestions();
@@ -1930,18 +2104,10 @@ function beginTest(){
     .classList
     .add("hidden");
 
-
-  document
-    .getElementById("testArea")
-    .classList
-    .remove("hidden");
-
-
   document
     .getElementById("testName")
     .textContent =
       test.title || "SSC EDGE Test";
-
 
   document
     .getElementById("testNumber")
@@ -1953,12 +2119,395 @@ function beginTest(){
         "01"
       );
 
-
   renderSections();
 
-  showQuestion();
+  loadProgress();
 
+  document
+    .getElementById("testArea")
+    .classList
+    .add("hidden");
+
+  document
+    .getElementById("result")
+    .classList
+    .add("hidden");
+
+  document
+    .getElementById("startScreen")
+    .classList
+    .remove("hidden");
+
+  renderStartScreen();
+
+  document
+    .getElementById("startTestBtn")
+    .onclick =
+      function(){
+        startOrResumeTest();
+      };
+
+}
+
+
+function getActiveQuestionList(){
+
+  if(
+    sections.length &&
+    currentSectionIndex >= 0 &&
+    sections[currentSectionIndex]
+  ){
+
+    return getSectionQuestions(
+      sections[currentSectionIndex].id
+    );
+
+  }
+
+  return questions.map(
+    (q,index) => ({q,i:index})
+  );
+
+}
+
+
+function saveProgress(){
+
+  if(
+    !test ||
+    submitted
+  ){
+    return;
+  }
+
+  saveCurrentAnswer();
+  saveCurrentSectionTime();
+
+  const data = {
+
+    currentIndex:
+      currentIndex,
+
+    currentSectionIndex:
+      currentSectionIndex,
+
+    answers:
+      answers,
+
+    review:
+      Array.from(review),
+
+    visited:
+      Array.from(visitedQuestions),
+
+    sectionRemainingTimes:
+      sectionRemainingTimes,
+
+    progressStarted:
+      progressStarted,
+
+    savedAt:
+      Date.now()
+
+  };
+
+  try{
+
+    localStorage.setItem(
+      progressKey,
+      JSON.stringify(data)
+    );
+
+    hasSavedProgress = true;
+
+  }catch(error){
+
+    console.warn(
+      "Progress could not be saved:",
+      error
+    );
+
+  }
+
+}
+
+
+function loadProgress(){
+
+  hasSavedProgress = false;
+  progressStarted = false;
+
+  if(
+    !progressKey ||
+    reattempt
+  ){
+    return;
+  }
+
+  try{
+
+    const raw =
+      localStorage.getItem(progressKey);
+
+    if(!raw){
+      return;
+    }
+
+    const data =
+      JSON.parse(raw);
+
+    if(!data || !data.progressStarted){
+      return;
+    }
+
+    progressStarted = true;
+    hasSavedProgress = true;
+
+    answers =
+      data.answers || {};
+
+    review =
+      new Set(
+        data.review || []
+      );
+
+    visitedQuestions =
+      new Set(
+        data.visited || []
+      );
+
+    if(
+      data.sectionRemainingTimes &&
+      typeof data.sectionRemainingTimes === "object"
+    ){
+
+      Object.keys(
+        data.sectionRemainingTimes
+      ).forEach(key => {
+
+        const value =
+          Number(
+            data.sectionRemainingTimes[key]
+          );
+
+        if(Number.isFinite(value)){
+          sectionRemainingTimes[key] = value;
+        }
+
+      });
+
+    }
+
+    if(
+      Number.isInteger(
+        data.currentIndex
+      ) &&
+      data.currentIndex >= 0 &&
+      data.currentIndex < questions.length
+    ){
+
+      currentIndex =
+        data.currentIndex;
+
+    }
+
+    if(
+      Number.isInteger(
+        data.currentSectionIndex
+      ) &&
+      data.currentSectionIndex >= 0 &&
+      data.currentSectionIndex < sections.length
+    ){
+
+      currentSectionIndex =
+        data.currentSectionIndex;
+
+    }
+
+  }catch(error){
+
+    console.warn(
+      "Saved progress could not be loaded:",
+      error
+    );
+
+  }
+
+}
+
+
+function clearProgress(){
+
+  if(!progressKey){
+    return;
+  }
+
+  try{
+    localStorage.removeItem(progressKey);
+  }catch(error){}
+
+  hasSavedProgress = false;
+  progressStarted = false;
+
+}
+
+
+function renderStartScreen(){
+
+  const body =
+    document.getElementById(
+      "sectionSummaryBody"
+    );
+
+  if(!sections.length){
+
+    body.innerHTML = `
+      <tr>
+        <td>Full Test</td>
+        <td>All Subjects</td>
+        <td>${questions.length}</td>
+        <td>${escapeHtml(test.duration_minutes || 0)} min</td>
+      </tr>
+    `;
+
+  }else{
+
+    body.innerHTML =
+      sections.map(
+        (section,index) => {
+
+          const list =
+            getSectionQuestions(
+              section.id
+            );
+
+          const subject =
+            getSectionName(
+              section,
+              index
+            );
+
+          return `
+            <tr>
+              <td>Section ${index + 1}</td>
+              <td>${escapeHtml(subject)}</td>
+              <td>${list.length}</td>
+              <td>${escapeHtml(section.duration_minutes || 0)} min</td>
+            </tr>
+          `;
+
+        }
+      ).join("");
+
+  }
+
+  const button =
+    document.getElementById(
+      "startTestBtn"
+    );
+
+  const title =
+    document.getElementById(
+      "startTitle"
+    );
+
+  const subtitle =
+    document.getElementById(
+      "startSubtitle"
+    );
+
+  const note =
+    document.getElementById(
+      "resumeNote"
+    );
+
+  if(hasSavedProgress){
+
+    title.textContent =
+      "Resume Test";
+
+    subtitle.textContent =
+      "Your previous test progress is saved.";
+
+    button.textContent =
+      "Resume Test";
+
+    note.classList.remove("hidden");
+
+  }else{
+
+    title.textContent =
+      "Ready to Start?";
+
+    subtitle.textContent =
+      "Check your section details before starting.";
+
+    button.textContent =
+      "Start Test";
+
+    note.classList.add("hidden");
+
+  }
+
+}
+
+
+function startOrResumeTest(){
+
+  if(reattempt){
+    clearProgress();
+    currentIndex = 0;
+    currentSectionIndex = -1;
+    answers = {};
+    review = new Set();
+    visitedQuestions = new Set();
+    sectionRemainingTimes = {};
+    sections.forEach(section => {
+      sectionRemainingTimes[String(section.id)] =
+        Number(section.duration_minutes || 0) * 60;
+    });
+  }
+
+  progressStarted = true;
+
+  document
+    .getElementById("startScreen")
+    .classList
+    .add("hidden");
+
+  document
+    .getElementById("testArea")
+    .classList
+    .remove("hidden");
+
+  if(
+    sections.length &&
+    currentSectionIndex < 0
+  ){
+
+    const first =
+      sections.findIndex(
+        section =>
+          getSectionQuestions(section.id).length
+      );
+
+    currentSectionIndex =
+      first >= 0 ? first : 0;
+
+    const list =
+      getSectionQuestions(
+        sections[currentSectionIndex]?.id
+      );
+
+    if(list.length){
+      currentIndex = list[0].i;
+    }
+
+  }
+
+  showQuestion();
   startTimer();
+  saveProgress();
 
 }
 
@@ -2160,6 +2709,7 @@ function jumpToSection(sectionIndex){
   showQuestion();
 
   startSectionInterval();
+  saveProgress();
 
 }
 
@@ -2248,6 +2798,9 @@ function showQuestion(){
   visitedQuestions.add(
     currentIndex
   );
+
+  progressStarted = true;
+  saveProgress();
 
 
   const sectionIndex =
@@ -2475,8 +3028,16 @@ function showQuestion(){
     "← Previous Question";
 
 
+  const activeList =
+    getActiveQuestionList();
+
+  const activePos =
+    activeList.findIndex(
+      item => item.i === currentIndex
+    );
+
   previous.disabled =
-    currentIndex === 0;
+    activePos <= 0;
 
 
   previous.onclick =
@@ -2485,9 +3046,18 @@ function showQuestion(){
       saveCurrentAnswer();
 
 
-      if(currentIndex > 0){
+      const list =
+        getActiveQuestionList();
 
-        currentIndex--;
+      const pos =
+        list.findIndex(
+          item => item.i === currentIndex
+        );
+
+      if(pos > 0){
+
+        currentIndex =
+          list[pos - 1].i;
 
         showQuestion();
 
@@ -2547,7 +3117,6 @@ function showQuestion(){
 
   navigationRow.appendChild(previous);
   navigationRow.appendChild(reviewButton);
-  navigation.appendChild(navigationRow);
 
 
   const gridButton =
@@ -2555,28 +3124,21 @@ function showQuestion(){
       "button"
     );
 
-
   gridButton.type =
     "button";
-
 
   gridButton.className =
     "grid-btn";
 
-
   gridButton.innerHTML =
-    "▦ &nbsp; Question Grid";
-
+    "▦";
+  gridButton.title = "Question Grid";
+  gridButton.setAttribute("aria-label","Question Grid");
 
   gridButton.onclick =
     function(){
-
       openGrid();
-
     };
-
-
-  navigation.appendChild(gridButton);
 
 
   const nextButton =
@@ -2584,44 +3146,49 @@ function showQuestion(){
       "button"
     );
 
-
   nextButton.type =
     "button";
 
-
   nextButton.className =
-    "save-next-btn";
+    "nav-btn save-next-btn";
 
-
+  nextButton.style.marginTop = "8px";
   nextButton.textContent =
     "Save & Next →";
-
 
   nextButton.onclick =
     function(){
 
       saveCurrentAnswer();
 
+      saveProgress();
 
-      if(
-        currentIndex <
-        questions.length - 1
-      ){
+      const list =
+        getActiveQuestionList();
 
-        currentIndex++;
+      const pos =
+        list.findIndex(
+          item => item.i === currentIndex
+        );
+
+      if(pos >= 0 && pos < list.length - 1){
+
+        currentIndex =
+          list[pos + 1].i;
 
         showQuestion();
 
       }else{
 
-        confirmSubmit();
+        submitCurrentSection();
 
       }
 
     };
 
-
-  navigation.appendChild(nextButton);
+  navigationRow.appendChild(gridButton);
+  navigationRow.appendChild(nextButton);
+  navigation.appendChild(navigationRow);
 
   card.appendChild(navigation);
 
@@ -2708,8 +3275,7 @@ function renderQuestionGrid(){
   }
 
 
-  list =
-    list.slice(0,25);
+  /* Show the complete current section palette. */
 
 
   list.forEach(
@@ -2789,6 +3355,9 @@ function renderQuestionGrid(){
           currentIndex =
             index;
 
+          progressStarted = true;
+          saveProgress();
+
           closeGrid();
 
           showQuestion();
@@ -2862,7 +3431,6 @@ function startTimer(){
 
   clearInterval(timerInterval);
 
-
   if(
     test.test_type === "FULL" &&
     test.subject_wise_timing &&
@@ -2871,7 +3439,6 @@ function startTimer(){
 
     const current =
       getCurrentSectionIndex();
-
 
     if(current >= 0){
 
@@ -2888,17 +3455,21 @@ function startTimer(){
 
   }
 
+  if(
+    !progressStarted ||
+    remainingSeconds <= 0
+  ){
 
-  remainingSeconds =
-    Number(
-      test.duration_minutes || 0
-    ) * 60;
+    remainingSeconds =
+      Number(
+        test.duration_minutes || 0
+      ) * 60;
 
+  }
 
   startGeneralTimer();
 
 }
-
 
 function startGeneralTimer(){
 
@@ -2998,6 +3569,7 @@ function sectionTimeUp(){
 
 
   saveCurrentSectionTime();
+  saveProgress();
 
 
   const next =
@@ -3450,6 +4022,8 @@ async function submitTest(automatic=false){
 
   await calculateResult(automatic);
 
+  clearProgress();
+
 }
 
 
@@ -3634,26 +4208,44 @@ async function calculateResult(automatic){
         <div class="result-info">
 
           Correct: ${correct}<br>
-
           Wrong: ${wrong}<br>
-
           Skipped: ${skipped}<br>
-
-          Total Questions:
-          ${questions.length}<br>
-
-          Maximum Marks:
-          ${maxMarks}
+          Total Questions: ${questions.length}<br>
+          Maximum Marks: ${maxMarks}
 
         </div>
 
+        <div class="result-actions">
 
-        <button
+          <a
+            class="result-action"
+            href="analysis.html?id=${encodeURIComponent(test.id)}"
+          >
+            Analysis
+          </a>
+
+          <a
+            class="result-action"
+            href="solutions.html?id=${encodeURIComponent(test.id)}"
+          >
+            Solutions
+          </a>
+
+          <a
+            class="result-action primary"
+            href="test.html?id=${encodeURIComponent(test.id)}&reattempt=1"
+          >
+            Re-attempt
+          </a>
+
+        </div>
+
+        <a
           class="result-back"
-          onclick="location.href='practice.html'"
+          href="practice.html"
         >
           Back to Practice
-        </button>
+        </a>
 
       </div>
 
@@ -3772,6 +4364,26 @@ async function saveAttempt(
   }
 
 }
+
+
+
+document.addEventListener(
+  "visibilitychange",
+  function(){
+    if(document.visibilityState === "hidden" && progressStarted && !submitted){
+      saveProgress();
+    }
+  }
+);
+
+window.addEventListener(
+  "pagehide",
+  function(){
+    if(progressStarted && !submitted){
+      saveProgress();
+    }
+  }
+);
 
 
 function showError(text){
