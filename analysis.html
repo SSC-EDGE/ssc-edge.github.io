@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SSC EDGE</title>
+<link rel="stylesheet" href="css/style.css">
+<script>
+document.documentElement.dataset.theme =
+localStorage.getItem("ssc-edge-theme") || "dark";
+</script>
+<style>
+body{margin:0;padding-bottom:30px}
+.edge-page{max-width:850px;margin:auto;padding:18px 14px}
+.edge-back{display:inline-block;margin-bottom:16px;color:var(--purple2);font-weight:800;font-size:13px;text-decoration:none}
+.edge-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:17px;margin-bottom:12px}
+.edge-title{margin:0;color:var(--text);font-size:20px;font-weight:900}
+.edge-sub{margin:5px 0 16px;color:var(--muted);font-size:12px}
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.stat{background:var(--card2);border:1px solid var(--border);border-radius:11px;padding:13px;text-align:center}
+.stat b{display:block;color:var(--text);font-size:20px}.stat span{color:var(--muted);font-size:11px}
+.row{padding:12px 0;border-bottom:1px solid var(--border);color:var(--text);font-size:13px}.row:last-child{border-bottom:0}
+.correct{color:#2fbf71;font-weight:900}.wrong{color:#ff5f5f;font-weight:900}
+.btn{display:block;text-align:center;margin-top:12px;padding:11px;border-radius:10px;background:var(--purple);color:#fff;text-decoration:none;font-weight:900;font-size:12px}
+</style>
+</head>
+<body>
+<main class="edge-page">
+<a class="edge-back" href="practice.html">← Back to Practice</a>
+<div id="app"></div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+const db=supabase.createClient(
+"https://dvvyoygahzzbnpqrfhen.supabase.co",
+"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s"
+);
+const id=new URLSearchParams(location.search).get("id");
+const app=document.getElementById("app");
+async function run(){
+ if(!id){app.innerHTML='<div class="edge-card">Test ID missing.</div>';return;}
+ const {data:{user}}=await db.auth.getUser();
+ if(!user){app.innerHTML='<div class="edge-card"><h1 class="edge-title">Analysis</h1><p class="edge-sub">Please sign in to view your attempt analysis.</p></div>';return;}
+ const r=await db.from("test_attempts").select("*").eq("mock_test_id",id).eq("user_id",user.id).order("created_at",{ascending:false}).limit(1).maybeSingle();
+ if(r.error||!r.data){app.innerHTML='<div class="edge-card"><h1 class="edge-title">Analysis</h1><p class="edge-sub">No completed attempt found.</p></div>';return;}
+ const a=r.data;
+ app.innerHTML=`
+ <div class="edge-card"><h1 class="edge-title">Test Analysis</h1><p class="edge-sub">Your latest attempt</p>
+ <div class="stat-grid">
+ <div class="stat"><b>${a.score??0}</b><span>Score</span></div>
+ <div class="stat"><b>${a.total_questions??0}</b><span>Total</span></div>
+ <div class="stat"><b>${a.correct_answers??0}</b><span>Correct</span></div>
+ <div class="stat"><b>${a.wrong_answers??0}</b><span>Wrong</span></div>
+ </div></div>
+ <div class="edge-card">
+ <div class="row">Unanswered: <b>${a.unanswered??0}</b></div>
+ <div class="row">Attempted: <b>${(Number(a.correct_answers||0)+Number(a.wrong_answers||0))}</b></div>
+ </div>
+ <a class="btn" href="test.html?id=${encodeURIComponent(id)}&reattempt=1">Re-attempt Test</a>`;
+}
+run();
+</script>
+</body></html>
