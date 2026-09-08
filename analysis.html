@@ -3,61 +3,87 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>SSC EDGE</title>
+<title>SSC EDGE - Analysis</title>
 <link rel="stylesheet" href="css/style.css">
-<script>
-document.documentElement.dataset.theme =
-localStorage.getItem("ssc-edge-theme") || "dark";
-</script>
+<script>document.documentElement.dataset.theme=localStorage.getItem("ssc-edge-theme")||"dark";</script>
 <style>
+*{box-sizing:border-box}
 body{margin:0;padding-bottom:30px}
-.edge-page{max-width:850px;margin:auto;padding:18px 14px}
-.edge-back{display:inline-block;margin-bottom:16px;color:var(--purple2);font-weight:800;font-size:13px;text-decoration:none}
-.edge-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:17px;margin-bottom:12px}
-.edge-title{margin:0;color:var(--text);font-size:20px;font-weight:900}
-.edge-sub{margin:5px 0 16px;color:var(--muted);font-size:12px}
-.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
-.stat{background:var(--card2);border:1px solid var(--border);border-radius:11px;padding:13px;text-align:center}
-.stat b{display:block;color:var(--text);font-size:20px}.stat span{color:var(--muted);font-size:11px}
-.row{padding:12px 0;border-bottom:1px solid var(--border);color:var(--text);font-size:13px}.row:last-child{border-bottom:0}
-.correct{color:#2fbf71;font-weight:900}.wrong{color:#ff5f5f;font-weight:900}
-.btn{display:block;text-align:center;margin-top:12px;padding:11px;border-radius:10px;background:var(--purple);color:#fff;text-decoration:none;font-weight:900;font-size:12px}
+.edge-page{max-width:850px;margin:auto;padding:16px 14px 35px}
+.back{display:inline-block;margin-bottom:14px;color:var(--purple2);text-decoration:none;font-size:13px;font-weight:900}
+.card{background:var(--card);border:1px solid var(--border);border-radius:17px;padding:16px;margin-bottom:12px;overflow:hidden}
+h1{margin:0;color:var(--text);font-size:21px;line-height:1.25} .sub{margin:5px 0 0;color:var(--muted);font-size:12px;line-height:1.5}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:15px}
+.stat{min-width:0;background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:12px 7px;text-align:center}
+.stat strong{display:block;color:var(--text);font-size:20px;line-height:1.2}.stat span{display:block;color:var(--muted);font-size:10px;margin-top:3px}
+.section-title{color:var(--text);font-size:15px;font-weight:900;margin:0 0 10px}
+.table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px}.table{width:100%;min-width:500px;border-collapse:collapse;color:var(--text);font-size:11px}.table th,.table td{padding:10px 8px;border-bottom:1px solid var(--border);text-align:left}.table th{background:var(--card2);font-weight:900}.table tr:last-child td{border-bottom:0}
+.good{color:#2fbf71;font-weight:900}.bad{color:#ff5f5f;font-weight:900}.muted{color:var(--muted)}
+.question-row{padding:12px 0;border-bottom:1px solid var(--border)}.question-row:last-child{border-bottom:0}.qtop{display:flex;justify-content:space-between;gap:8px;align-items:center}.qno{color:var(--text);font-weight:900;font-size:13px}.status{font-size:10px;font-weight:900}.qtext{margin-top:7px;color:var(--text);font-size:13px;line-height:1.55;overflow-wrap:anywhere}.answer{margin-top:6px;font-size:11px;line-height:1.5;overflow-wrap:anywhere}.btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px}.btn{display:flex;align-items:center;justify-content:center;min-height:42px;padding:8px;border-radius:10px;background:var(--card2);border:1px solid var(--border);color:var(--text);text-decoration:none;font-size:11px;font-weight:900;text-align:center}.btn.primary{background:var(--purple);border-color:var(--purple);color:#fff}.empty{text-align:center;color:var(--muted);padding:25px 8px;font-size:13px}
+@media(max-width:500px){.btns{grid-template-columns:1fr}.table{min-width:460px}}
 </style>
 </head>
 <body>
 <main class="edge-page">
-<a class="edge-back" href="practice.html">← Back to Practice</a>
-<div id="app"></div>
+<a class="back" href="practice.html">← Back to Practice</a>
+<div id="app"><div class="card empty">Loading analysis...</div></div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-const db=supabase.createClient(
-"https://dvvyoygahzzbnpqrfhen.supabase.co",
-"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s"
-);
-const id=new URLSearchParams(location.search).get("id");
+<script>
+const db=supabase.createClient("https://dvvyoygahzzbnpqrfhen.supabase.co","sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s");
+const testId=new URLSearchParams(location.search).get("id");
 const app=document.getElementById("app");
+function esc(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;").replace(/'/g,"&#039;")}
+function msg(t){app.innerHTML='<div class="card empty">'+esc(t)+'</div>'}
 async function run(){
- if(!id){app.innerHTML='<div class="edge-card">Test ID missing.</div>';return;}
- const {data:{user}}=await db.auth.getUser();
- if(!user){app.innerHTML='<div class="edge-card"><h1 class="edge-title">Analysis</h1><p class="edge-sub">Please sign in to view your attempt analysis.</p></div>';return;}
- const r=await db.from("test_attempts").select("*").eq("mock_test_id",id).eq("user_id",user.id).order("created_at",{ascending:false}).limit(1).maybeSingle();
- if(r.error||!r.data){app.innerHTML='<div class="edge-card"><h1 class="edge-title">Analysis</h1><p class="edge-sub">No completed attempt found.</p></div>';return;}
- const a=r.data;
+ if(!testId){msg("Test ID is missing.");return}
+ const ur=await db.auth.getUser(); const user=ur?.data?.user;
+ if(!user){msg("Please sign in to view your test analysis.");return}
+ const ar=await db.from("test_attempts").select("*").eq("user_id",user.id).eq("mock_test_id",testId).order("created_at",{ascending:false}).limit(1).maybeSingle();
+ if(ar.error||!ar.data){msg("No completed attempt was found for this test.");return}
+ const attempt=ar.data;
+ const tr=await db.from("mock_tests").select("id,title,marks_per_question,negative_marks").eq("id",testId).maybeSingle();
+ const title=tr.data?.title||"SSC EDGE Test";
+ const qr=await db.from("mock_test_questions").select("question_id,question_order,section_id").eq("mock_test_id",testId).order("question_order");
+ const assignments=qr.data||[];
+ const ids=assignments.map(x=>x.question_id);
+ let questions=[];
+ if(ids.length){
+  const r=await db.from("questions").select("id,question_text,marks,negative_marks,subject_id").in("id",ids);questions=r.data||[];
+ }
+ const ua=await db.from("user_answers").select("question_id,selected_option_id").eq("attempt_id",attempt.id);
+ const selected=new Map((ua.data||[]).map(x=>[String(x.question_id),x.selected_option_id==null?null:String(x.selected_option_id)]));
+ let options=[];
+ if(ids.length){const r=await db.from("question_options").select("id,question_id,option_label,option_text,is_correct").in("question_id",ids).order("id");options=r.data||[]}
+ const correct=new Map(); options.forEach(o=>{if(o.is_correct)correct.set(String(o.question_id),String(o.id))});
+ const qm=new Map(questions.map(q=>[String(q.id),q]));
+ const answered=assignments.filter(a=>selected.get(String(a.question_id))).length;
+ const accuracy=answered?Math.round((Number(attempt.correct_answers||0)/answered)*100):0;
  app.innerHTML=`
- <div class="edge-card"><h1 class="edge-title">Test Analysis</h1><p class="edge-sub">Your latest attempt</p>
- <div class="stat-grid">
- <div class="stat"><b>${a.score??0}</b><span>Score</span></div>
- <div class="stat"><b>${a.total_questions??0}</b><span>Total</span></div>
- <div class="stat"><b>${a.correct_answers??0}</b><span>Correct</span></div>
- <div class="stat"><b>${a.wrong_answers??0}</b><span>Wrong</span></div>
- </div></div>
- <div class="edge-card">
- <div class="row">Unanswered: <b>${a.unanswered??0}</b></div>
- <div class="row">Attempted: <b>${(Number(a.correct_answers||0)+Number(a.wrong_answers||0))}</b></div>
+ <div class="card"><h1>${esc(title)} — Analysis</h1><p class="sub">Latest submitted attempt</p>
+  <div class="stats">
+   <div class="stat"><strong>${esc(attempt.score??0)}</strong><span>Score</span></div>
+   <div class="stat"><strong>${esc(attempt.correct_answers??0)}</strong><span>Correct</span></div>
+   <div class="stat"><strong>${esc(attempt.wrong_answers??0)}</strong><span>Wrong</span></div>
+   <div class="stat"><strong>${esc(attempt.unanswered??0)}</strong><span>Unanswered</span></div>
+  </div>
+  <div class="sub" style="margin-top:12px">Attempted: ${answered} &nbsp;•&nbsp; Accuracy: ${accuracy}%</div>
+  <div class="btns"><a class="btn primary" href="test.html?id=${encodeURIComponent(testId)}&reattempt=1">Re-attempt</a><a class="btn" href="solutions.html?id=${encodeURIComponent(testId)}">Solutions</a><a class="btn" href="practice.html">Practice</a></div>
  </div>
- <a class="btn" href="test.html?id=${encodeURIComponent(id)}&reattempt=1">Re-attempt Test</a>`;
+ <div class="card"><h2 class="section-title">Question-wise Performance</h2><div id="questions"></div></div>`;
+ const box=document.getElementById("questions");
+ if(!assignments.length){box.innerHTML='<div class="empty">No question data available.</div>';return}
+ box.innerHTML=assignments.map((a,i)=>{
+  const q=qm.get(String(a.question_id));if(!q)return"";
+  const sel=selected.get(String(q.id)); const cor=correct.get(String(q.id));
+  const status=!sel?'Unanswered':String(sel)===String(cor)?'Correct':'Wrong';
+  const cls=status==='Correct'?'good':status==='Wrong'?'bad':'muted';
+  const opts=options.filter(o=>String(o.question_id)===String(q.id));
+  const selectedOpt=opts.find(o=>String(o.id)===String(sel)); const correctOpt=opts.find(o=>o.is_correct);
+  return `<div class="question-row"><div class="qtop"><span class="qno">Question ${i+1}</span><span class="status ${cls}">${status}</span></div><div class="qtext">${esc(q.question_text)}</div><div class="answer muted">Your answer: ${sel&&selectedOpt?esc((selectedOpt.option_label||"")+" "+selectedOpt.option_text):"Not answered"}</div><div class="answer">Correct: ${correctOpt?esc((correctOpt.option_label||"")+" "+correctOpt.option_text):"—"}</div></div>`;
+ }).join("");
 }
-run();
+run().catch(e=>{console.error(e);msg("Could not load analysis. Please try again.")});
 </script>
-</body></html>
+</body>
+</html>
