@@ -1,0 +1,2068 @@
+<!DOCTYPE html><html lang="en">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0"><title>SSC EDGE - PDF Import</title><link rel="stylesheet" href="css/style.css"><script>
+document.documentElement.dataset.theme =
+localStorage.getItem("ssc-edge-theme") || "dark";
+</script><style>
+
+body{
+  margin:0;
+}
+
+.admin-container{
+  max-width:850px;
+  margin:auto;
+  padding:20px 16px 60px;
+}
+
+.simple-header{
+  display:flex;
+  align-items:center;
+  padding:16px;
+  background:var(--header);
+  border-bottom:1px solid var(--border);
+}
+
+.header-brand{
+  font-size:19px;
+  font-weight:900;
+}
+
+.page-title{
+  margin:8px 0 4px;
+}
+
+.page-subtitle{
+  color:var(--muted);
+  margin-bottom:22px;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:16px;
+}
+
+.card-title{
+  margin:0 0 5px;
+  font-size:17px;
+  font-weight:900;
+}
+
+.card-subtitle{
+  margin:0 0 16px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.5;
+}
+
+label{
+  display:block;
+  font-size:12px;
+  font-weight:800;
+  margin:14px 0 6px;
+}
+
+input,
+select,
+textarea{
+  width:100%;
+  box-sizing:border-box;
+  border:1px solid var(--border);
+  background:var(--bg);
+  color:var(--text);
+  border-radius:10px;
+  padding:11px;
+  font-size:14px;
+  outline:none;
+}
+
+textarea{
+  min-height:80px;
+  resize:vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:var(--purple);
+}
+
+.grid2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.file-box{
+  border:2px dashed var(--border);
+  border-radius:14px;
+  padding:22px 14px;
+  text-align:center;
+  cursor:pointer;
+  background:var(--bg);
+}
+
+.file-box:hover{
+  border-color:var(--purple);
+}
+
+.file-icon{
+  font-size:34px;
+  margin-bottom:8px;
+}
+
+.file-title{
+  font-size:14px;
+  font-weight:900;
+}
+
+.file-subtitle{
+  margin-top:5px;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.file-name{
+  margin-top:12px;
+  padding:10px;
+  background:var(--card2);
+  border-radius:9px;
+  font-size:12px;
+  word-break:break-word;
+}
+
+.hidden{
+  display:none!important;
+}
+
+.primary-btn,
+.secondary-btn,
+.danger-btn{
+  width:100%;
+  border-radius:11px;
+  padding:12px;
+  font-size:14px;
+  font-weight:800;
+  cursor:pointer;
+  margin-top:10px;
+}
+
+.primary-btn{
+  border:0;
+  background:var(--purple);
+  color:white;
+}
+
+.secondary-btn{
+  background:var(--card2);
+  color:var(--text);
+  border:1px solid var(--border);
+}
+
+.danger-btn{
+  background:#8f2525;
+  color:white;
+  border:0;
+}
+
+button:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+.message{
+  padding:12px;
+  border-radius:10px;
+  background:var(--card2);
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:14px;
+}
+
+.progress-box{
+  margin-top:15px;
+  padding:12px;
+  border-radius:10px;
+  background:var(--card2);
+}
+
+.progress-text{
+  font-size:12px;
+  font-weight:800;
+  margin-bottom:8px;
+}
+
+.progress-track{
+  height:8px;
+  background:var(--bg);
+  border-radius:10px;
+  overflow:hidden;
+}
+
+.progress-bar{
+  height:100%;
+  width:0%;
+  background:var(--purple);
+  transition:width .25s ease;
+}
+
+.status{
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:7px;
+  font-size:10px;
+  font-weight:900;
+}
+
+.status-ready{
+  background:#174f2a;
+  color:#8cffae;
+}
+
+.status-warning{
+  background:#59440e;
+  color:#ffd86b;
+}
+
+.status-error{
+  background:#512020;
+  color:#ff9999;
+}
+
+.preview-summary{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-bottom:14px;
+}
+
+.summary-box{
+  padding:12px 8px;
+  background:var(--card2);
+  border-radius:10px;
+  text-align:center;
+}
+
+.summary-number{
+  font-size:19px;
+  font-weight:900;
+}
+
+.summary-label{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:3px;
+}
+
+.question-preview{
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:13px;
+  margin-bottom:10px;
+}
+
+.question-head{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  align-items:center;
+  margin-bottom:9px;
+}
+
+.question-number{
+  font-weight:900;
+  font-size:13px;
+}
+
+.question-section{
+  color:var(--muted);
+  font-size:10px;
+  font-weight:800;
+}
+
+.question-text{
+  font-size:13px;
+  line-height:1.55;
+  white-space:pre-wrap;
+}
+
+.option{
+  margin-top:7px;
+  padding:8px 9px;
+  border-radius:8px;
+  background:var(--card2);
+  font-size:12px;
+  line-height:1.4;
+}
+
+.option.correct{
+  border:1px solid #398653;
+}
+
+.option-label{
+  font-weight:900;
+}
+
+.preview-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.notice{
+  padding:11px;
+  border-radius:10px;
+  background:var(--card2);
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.55;
+  margin-top:12px;
+}
+
+.import-result{
+  padding:14px;
+  border-radius:11px;
+  background:var(--card2);
+  line-height:1.7;
+  font-size:13px;
+}
+
+@media(max-width:500px){
+
+  .grid2{
+    grid-template-columns:1fr;
+  }
+
+  .preview-summary{
+    grid-template-columns:1fr 1fr 1fr;
+  }
+
+  .preview-actions{
+    grid-template-columns:1fr;
+  }
+
+}
+
+</style></head><body><header class="simple-header">  <div class="header-brand">
+    SSC EDGE — Admin
+  </div></header><main class="admin-container"><h1 class="page-title">
+  PDF → Mock Test
+</h1><p class="page-subtitle">
+  Import an SSC question PDF into the SSC EDGE Mock Test system.
+</p><div id="message"></div><!-- =========================================
+     PDF UPLOAD
+========================================= --><div class="card">  <h2 class="card-title">
+    1. Upload Question PDF
+  </h2>  <p class="card-subtitle">
+    Upload the original question paper, response sheet,
+    or answer-key PDF containing the questions.
+  </p><label
+for="pdfInput"
+class="file-box"
+
+«»
+
+<div class="file-icon">
+  📄
+</div>
+
+<div class="file-title">
+  Choose PDF
+</div>
+
+<div class="file-subtitle">
+  Tap here to select your PDF
+</div>
+
+<div
+  id="fileName"
+  class="file-name hidden"
+></div>
+
+  </label><input
+id="pdfInput"
+type="file"
+accept="application/pdf"
+class="hidden"
+
+«»
+
+<button
+id="extractBtn"
+class="primary-btn"
+disabled
+onclick="startExtraction()"
+
+«»
+
+Extract Questions
+
+  </button>  <div
+    id="progressBox"
+    class="progress-box hidden"
+  ><div
+  id="progressText"
+  class="progress-text"
+>
+  Preparing PDF...
+</div>
+
+<div class="progress-track">
+
+  <div
+    id="progressBar"
+    class="progress-bar"
+  ></div>
+
+</div>
+
+  </div>  <div class="notice"><b>Important:</b>
+Questions will not be rewritten or generated.
+The importer is intended to preserve the question
+and option wording from the uploaded source.
+
+  </div></div><!-- =========================================
+     TEST DETAILS
+========================================= --><div
+  id="testDetails"
+  class="card hidden"
+>  <h2 class="card-title">
+    2. Mock Test Details
+  </h2>  <p class="card-subtitle">
+    These details will be used to create the SSC EDGE mock.
+  </p>  <label>
+    Test Title
+  </label><input
+id="testTitle"
+placeholder="Example: CHSL 2025 Mains Mock 1"
+
+«»
+
+  <label>
+    Description
+  </label>  <textarea
+    id="testDescription"
+    placeholder="Test description"></textarea>  <div class="grid2"><div>
+
+  <label>
+    Exam
+  </label>
+
+  <select id="exam">
+
+    <option value="">
+      Select Exam
+    </option>
+
+  </select>
+
+</div>
+
+
+<div>
+
+  <label>
+    Test Type
+  </label>
+
+  <select id="testType">
+
+    <option value="FULL">
+      FULL
+    </option>
+
+    <option value="SECTIONAL">
+      SECTIONAL
+    </option>
+
+  </select>
+
+</div>
+
+  </div>  <div class="grid2"><div>
+
+  <label>
+    Duration (minutes)
+  </label>
+
+  <input
+    id="duration"
+    type="number"
+    min="1"
+    value="60"
+  >
+
+</div>
+
+
+<div>
+
+  <label>
+    Marks per Question
+  </label>
+
+  <input
+    id="marks"
+    type="number"
+    step="0.01"
+    value="2"
+  >
+
+</div>
+
+  </div>  <div class="grid2"><div>
+
+  <label>
+    Negative Marks
+  </label>
+
+  <input
+    id="negative"
+    type="number"
+    step="0.01"
+    value="0"
+  >
+
+</div>
+
+
+<div>
+
+  <label>
+    Total Questions
+  </label>
+
+  <input
+    id="totalQuestions"
+    type="number"
+    min="1"
+    value="25"
+  >
+
+</div>
+
+  </div></div><!-- =========================================
+     EXTRACTION PREVIEW
+========================================= --><div
+  id="previewCard"
+  class="card hidden"
+>  <h2 class="card-title">
+    3. Extracted Questions
+  </h2>  <p class="card-subtitle">
+    Check the extracted questions before publishing.
+  </p>  <div class="preview-summary"><div class="summary-box">
+
+  <div
+    id="questionCount"
+    class="summary-number"
+  >
+    0
+  </div>
+
+  <div class="summary-label">
+    Questions
+  </div>
+
+</div>
+
+
+<div class="summary-box">
+
+  <div
+    id="optionCount"
+    class="summary-number"
+  >
+    0
+  </div>
+
+  <div class="summary-label">
+    Options
+  </div>
+
+</div>
+
+
+<div class="summary-box">
+
+  <div
+    id="answerCount"
+    class="summary-number"
+  >
+    0
+  </div>
+
+  <div class="summary-label">
+    Answers
+  </div>
+
+</div>
+
+  </div>  <div
+    id="extractionStatus"
+    class="message"
+  >
+    Waiting for extraction.
+  </div>  <div id="questionsPreview"></div>  <div class="preview-actions"><button
+  class="secondary-btn"
+  onclick="clearImport()"
+>
+  Clear
+</button>
+
+
+<button
+  id="publishBtn"
+  class="primary-btn"
+  onclick="publishTest()"
+  disabled
+>
+  Publish Mock Test
+</button>
+
+  </div></div><!-- =========================================
+     RESULT
+========================================= --><div
+  id="resultCard"
+  class="card hidden"
+>  <h2 class="card-title">
+    Import Complete
+  </h2>  <div
+    id="importResult"
+    class="import-result"
+  ></div></div></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><!-- PDF.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs"
+        type="module"
+        id="pdfjsModule">
+</script><script>
+
+/* =========================================
+   SUPABASE
+========================================= */
+
+const SUPABASE_URL =
+"https://dvvyoygahzzbnpqrfhen.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
+const db =
+supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+/* =========================================
+   DATA
+========================================= */
+
+let exams = [];
+
+let selectedFile = null;
+
+let extractedQuestions = [];
+
+let extractedRawText = "";
+
+
+/*
+  IMPORTANT:
+
+  This is the backend endpoint that will perform
+  OCR / AI parsing for difficult SSC PDFs.
+
+  We will connect this after the backend function
+  is created.
+
+  Do NOT put an AI API key in this HTML file.
+*/
+
+const IMPORT_API_URL =
+  "/api/pdf-import";
+
+
+/* =========================================
+   ADMIN CHECK
+========================================= */
+
+async function checkAdmin(){
+
+  const {
+    data:{user}
+  } =
+  await db.auth.getUser();
+
+
+  if(!user){
+
+    document.body.innerHTML =
+      "<div style='padding:30px;text-align:center'>"+
+      "Please login as admin."+
+      "</div>";
+
+    return false;
+
+  }
+
+
+  const {data,error} =
+    await db
+      .from("admin_users")
+      .select("user_id")
+      .eq("user_id",user.id)
+      .maybeSingle();
+
+
+  if(error || !data){
+
+    document.body.innerHTML =
+      "<div style='padding:30px;text-align:center'>"+
+      "Access denied."+
+      "</div>";
+
+    return false;
+
+  }
+
+
+  return true;
+
+}
+
+
+/* =========================================
+   LOAD EXAMS
+========================================= */
+
+async function loadExams(){
+
+  const result =
+    await db
+      .from("exams")
+      .select("*")
+      .order("id");
+
+
+  if(result.error){
+
+    showMessage(
+      result.error.message
+    );
+
+    return;
+
+  }
+
+
+  exams =
+    result.data || [];
+
+
+  const select =
+    document.getElementById("exam");
+
+
+  exams.forEach(exam=>{
+
+    const option =
+      document.createElement("option");
+
+
+    option.value =
+      exam.id;
+
+
+    option.textContent =
+      exam.name ||
+      exam.title ||
+      exam.exam_name ||
+      "Exam "+exam.id;
+
+
+    select.appendChild(option);
+
+  });
+
+}
+
+
+/* =========================================
+   FILE SELECT
+========================================= */
+
+document
+  .getElementById("pdfInput")
+  .addEventListener(
+    "change",
+    function(){
+
+      selectedFile =
+        this.files?.[0] || null;
+
+
+      const nameBox =
+        document.getElementById(
+          "fileName"
+        );
+
+
+      const extractBtn =
+        document.getElementById(
+          "extractBtn"
+        );
+
+
+      if(!selectedFile){
+
+        nameBox.classList.add(
+          "hidden"
+        );
+
+        extractBtn.disabled = true;
+
+        return;
+
+      }
+
+
+      if(
+        selectedFile.type !==
+        "application/pdf"
+      ){
+
+        showMessage(
+          "Please select a PDF file."
+        );
+
+        this.value = "";
+
+        selectedFile = null;
+
+        extractBtn.disabled = true;
+
+        return;
+
+      }
+
+
+      nameBox.textContent =
+        selectedFile.name+
+        " • "+
+        formatFileSize(
+          selectedFile.size
+        );
+
+
+      nameBox.classList.remove(
+        "hidden"
+      );
+
+
+      extractBtn.disabled = false;
+
+    }
+  );
+
+
+/* =========================================
+   START EXTRACTION
+========================================= */
+
+async function startExtraction(){
+
+  if(!selectedFile){
+
+    showMessage(
+      "Select a PDF first."
+    );
+
+    return;
+
+  }
+
+
+  setProgress(
+    5,
+    "Reading PDF..."
+  );
+
+
+  document
+    .getElementById(
+      "extractBtn"
+    )
+    .disabled = true;
+
+
+  try{
+
+    /*
+      Send the PDF to the secure backend.
+
+      The backend will:
+
+      1. Read PDF
+      2. Detect text/image pages
+      3. OCR scanned pages
+      4. Parse question numbers
+      5. Detect options
+      6. Detect answer key
+      7. Return structured JSON
+
+      The browser never receives or stores
+      an AI API key.
+    */
+
+    const formData =
+      new FormData();
+
+
+    formData.append(
+      "file",
+      selectedFile
+    );
+
+
+    setProgress(
+      15,
+      "Uploading PDF..."
+    );
+
+
+    const response =
+      await fetch(
+        IMPORT_API_URL,
+        {
+          method:"POST",
+          body:formData
+        }
+      );
+
+
+    if(!response.ok){
+
+      let message =
+        "PDF processing failed.";
+
+
+      try{
+
+        const error =
+          await response.json();
+
+        message =
+          error.message ||
+          message;
+
+      }catch(e){}
+
+
+      throw new Error(
+        message
+      );
+
+    }
+
+
+    setProgress(
+      75,
+      "Receiving extracted questions..."
+    );
+
+
+    const data =
+      await response.json();
+
+
+    if(
+      !data ||
+      !Array.isArray(
+        data.questions
+      )
+    ){
+
+      throw new Error(
+        "The importer returned an invalid question format."
+      );
+
+    }
+
+
+    extractedQuestions =
+      data.questions;
+
+
+    extractedRawText =
+      data.raw_text || "";
+
+
+    setProgress(
+      100,
+      "Extraction complete."
+    );
+
+
+    showExtractionResult(
+      data
+    );
+
+
+  }catch(error){
+
+    console.error(error);
+
+
+    setProgress(
+      0,
+      "Extraction failed."
+    );
+
+
+    showMessage(
+      error.message ||
+      "Unable to process PDF."
+    );
+
+
+  }finally{
+
+    document
+      .getElementById(
+        "extractBtn"
+      )
+      .disabled = false;
+
+  }
+
+}
+
+
+/* =========================================
+   SHOW EXTRACTION
+========================================= */
+
+function showExtractionResult(data){
+
+  const questions =
+    data.questions || [];
+
+
+  document
+    .getElementById(
+      "testDetails"
+    )
+    .classList
+    .remove("hidden");
+
+
+  document
+    .getElementById(
+      "previewCard"
+    )
+    .classList
+    .remove("hidden");
+
+
+  document
+    .getElementById(
+      "totalQuestions"
+    )
+    .value =
+      questions.length;
+
+
+  const optionTotal =
+    questions.reduce(
+      (sum,q)=>
+        sum+
+        (
+          Array.isArray(q.options)
+          ?q.options.length
+          :0
+        ),
+      0
+    );
+
+
+  const answerTotal =
+    questions.filter(
+      q =>
+        q.correct_option
+    ).length;
+
+
+  document
+    .getElementById(
+      "questionCount"
+    )
+    .textContent =
+      questions.length;
+
+
+  document
+    .getElementById(
+      "optionCount"
+    )
+    .textContent =
+      optionTotal;
+
+
+  document
+    .getElementById(
+      "answerCount"
+    )
+    .textContent =
+      answerTotal;
+
+
+  const status =
+    document
+      .getElementById(
+        "extractionStatus"
+      );
+
+
+  if(
+    !questions.length
+  ){
+
+    status.innerHTML =
+      '<span class="status status-error">'+
+      'NO QUESTIONS'+
+      '</span>';
+
+    document
+      .getElementById(
+        "publishBtn"
+      )
+      .disabled = true;
+
+    return;
+
+  }
+
+
+  const incomplete =
+    questions.filter(
+      q =>
+        !q.question_text ||
+        !Array.isArray(q.options) ||
+        q.options.length < 2
+    ).length;
+
+
+  if(incomplete){
+
+    status.innerHTML =
+      '<span class="status status-warning">'+
+      'REVIEW REQUIRED'+
+      '</span> '+
+      incomplete+
+      " question(s) need checking.";
+
+    document
+      .getElementById(
+        "publishBtn"
+      )
+      .disabled = true;
+
+  }else{
+
+    status.innerHTML =
+      '<span class="status status-ready">'+
+      'READY'+
+      '</span> '+
+      questions.length+
+      " questions extracted.";
+
+    document
+      .getElementById(
+        "publishBtn"
+      )
+      .disabled = false;
+
+  }
+
+
+  renderPreview();
+
+}
+
+
+/* =========================================
+   RENDER PREVIEW
+========================================= */
+
+function renderPreview(){
+
+  const box =
+    document.getElementById(
+      "questionsPreview"
+    );
+
+
+  box.innerHTML = "";
+
+
+  extractedQuestions.forEach(
+    (question,index)=>{
+
+      const card =
+        document.createElement(
+          "div"
+        );
+
+
+      card.className =
+        "question-preview";
+
+
+      const head =
+        document.createElement(
+          "div"
+        );
+
+
+      head.className =
+        "question-head";
+
+
+      const number =
+        document.createElement(
+          "div"
+        );
+
+
+      number.className =
+        "question-number";
+
+
+      number.textContent =
+        "Q. "+
+        (
+          question.question_no ??
+          index+1
+        );
+
+
+      const section =
+        document.createElement(
+          "div"
+        );
+
+
+      section.className =
+        "question-section";
+
+
+      section.textContent =
+        question.section ||
+        question.subject ||
+        "";
+
+
+      head.appendChild(
+        number
+      );
+
+
+      head.appendChild(
+        section
+      );
+
+
+      card.appendChild(
+        head
+      );
+
+
+      const text =
+        document.createElement(
+          "div"
+        );
+
+
+      text.className =
+        "question-text";
+
+
+      text.textContent =
+        question.question_text ||
+        "Question text missing";
+
+
+      card.appendChild(
+        text
+      );
+
+
+      const options =
+        Array.isArray(
+          question.options
+        )
+        ?question.options
+        :[];
+
+
+      options.forEach(
+        option=>{
+
+          const optionBox =
+            document.createElement(
+              "div"
+            );
+
+
+          optionBox.className =
+            "option";
+
+
+          if(
+            question.correct_option &&
+            String(
+              option.label
+            ).toUpperCase() ===
+            String(
+              question.correct_option
+            ).toUpperCase()
+          ){
+
+            optionBox.classList.add(
+              "correct"
+            );
+
+          }
+
+
+          const label =
+            document.createElement(
+              "span"
+            );
+
+
+          label.className =
+            "option-label";
+
+
+          label.textContent =
+            (
+              option.label ||
+              ""
+            )+
+            " ";
+
+
+          const value =
+            document.createElement(
+              "span"
+            );
+
+
+          value.textContent =
+            option.text ||
+            "";
+
+
+          optionBox.appendChild(
+            label
+          );
+
+
+          optionBox.appendChild(
+            value
+          );
+
+
+          card.appendChild(
+            optionBox
+          );
+
+        }
+      );
+
+
+      box.appendChild(
+        card
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================
+   PUBLISH TEST
+========================================= */
+
+async function publishTest(){
+
+  if(!extractedQuestions.length){
+
+    showMessage(
+      "No questions available."
+    );
+
+    return;
+
+  }
+
+
+  const title =
+    document
+      .getElementById(
+        "testTitle"
+      )
+      .value
+      .trim();
+
+
+  const description =
+    document
+      .getElementById(
+        "testDescription"
+      )
+      .value
+      .trim();
+
+
+  const examId =
+    document
+      .getElementById(
+        "exam"
+      )
+      .value;
+
+
+  const type =
+    document
+      .getElementById(
+        "testType"
+      )
+      .value;
+
+
+  const duration =
+    Number(
+      document
+        .getElementById(
+          "duration"
+        )
+        .value
+    );
+
+
+  const marks =
+    Number(
+      document
+        .getElementById(
+          "marks"
+        )
+        .value
+    );
+
+
+  const negative =
+    Number(
+      document
+        .getElementById(
+          "negative"
+        )
+        .value
+    );
+
+
+  if(!title){
+
+    showMessage(
+      "Enter test title."
+    );
+
+    return;
+
+  }
+
+
+  if(!examId){
+
+    showMessage(
+      "Select an exam."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    !duration ||
+    duration<=0
+  ){
+
+    showMessage(
+      "Enter valid duration."
+    );
+
+    return;
+
+  }
+
+
+  const publishBtn =
+    document
+      .getElementById(
+        "publishBtn"
+      );
+
+
+  publishBtn.disabled = true;
+
+
+  setProgress(
+    10,
+    "Creating mock test..."
+  );
+
+
+  try{
+
+    /*
+      1. Create mock_tests row
+    */
+
+    const testResult =
+      await db
+        .from("mock_tests")
+        .insert({
+
+          exam_id:examId,
+
+          title:title,
+
+          test_type:type,
+
+          subject_id:null,
+
+          duration_minutes:
+            duration,
+
+          total_questions:
+            extractedQuestions.length,
+
+          is_active:true,
+
+          description:
+            description || null,
+
+          marks_per_question:
+            marks,
+
+          negative_marks:
+            negative,
+
+          subject_wise_timing:false
+
+        })
+        .select()
+        .single();
+
+
+    if(testResult.error){
+
+      throw new Error(
+        testResult.error.message
+      );
+
+    }
+
+
+    const test =
+      testResult.data;
+
+
+    setProgress(
+      30,
+      "Saving questions..."
+    );
+
+
+    const questionIds = [];
+
+
+    /*
+      2. Insert questions
+    */
+
+    for(
+      let i=0;
+      i<extractedQuestions.length;
+      i++
+    ){
+
+      const source =
+        extractedQuestions[i];
+
+
+      const questionResult =
+        await db
+          .from("questions")
+          .insert({
+
+            question_text:
+              source.question_text,
+
+            explanation:
+              source.explanation ||
+              null,
+
+            marks:
+              source.marks ??
+              marks,
+
+            negative_marks:
+              source.negative_marks ??
+              negative,
+
+            subject_id:
+              source.subject_id ||
+              null,
+
+            chapter_id:
+              source.chapter_id ||
+              null
+
+          })
+          .select()
+          .single();
+
+
+      if(questionResult.error){
+
+        throw new Error(
+          "Question "+
+          (i+1)+
+          ": "+
+          questionResult.error.message
+        );
+
+      }
+
+
+      const question =
+        questionResult.data;
+
+
+      questionIds.push(
+        question.id
+      );
+
+
+      /*
+        3. Insert options
+      */
+
+      const options =
+        Array.isArray(
+          source.options
+        )
+        ?source.options
+        :[];
+
+
+      const optionRows =
+        options.map(
+          option=>({
+
+            question_id:
+              question.id,
+
+            option_label:
+              option.label,
+
+            option_text:
+              option.text,
+
+            is_correct:
+              String(
+                option.label
+              ).toUpperCase() ===
+              String(
+                source.correct_option || ""
+              ).toUpperCase()
+
+          })
+        );
+
+
+      if(optionRows.length){
+
+        const optionResult =
+          await db
+            .from(
+              "question_options"
+            )
+            .insert(
+              optionRows
+            );
+
+
+        if(optionResult.error){
+
+          throw new Error(
+            "Options for question "+
+            (i+1)+
+            ": "+
+            optionResult.error.message
+          );
+
+        }
+
+      }
+
+
+      setProgress(
+        30+
+        Math.round(
+          ((i+1)/
+          extractedQuestions.length)*
+          45
+        ),
+        "Saving question "+
+        (i+1)+
+        " of "+
+        extractedQuestions.length+
+        "..."
+      );
+
+    }
+
+
+    /*
+      4. Assign questions
+    */
+
+    setProgress(
+      80,
+      "Assigning questions to mock..."
+    );
+
+
+    const assignmentRows =
+      questionIds.map(
+        (questionId,index)=>({
+
+          mock_test_id:
+            test.id,
+
+          question_id:
+            questionId,
+
+          section_id:
+            null,
+
+          question_order:
+            index+1
+
+        })
+      );
+
+
+    const assignmentResult =
+      await db
+        .from(
+          "mock_test_questions"
+        )
+        .insert(
+          assignmentRows
+        );
+
+
+    if(assignmentResult.error){
+
+      throw new Error(
+        assignmentResult.error.message
+      );
+
+    }
+
+
+    setProgress(
+      100,
+      "Mock test created successfully."
+    );
+
+
+    document
+      .getElementById(
+        "resultCard"
+      )
+      .classList
+      .remove("hidden");
+
+
+    document
+      .getElementById(
+        "importResult"
+      )
+      .innerHTML =
+      "<b>"+
+      escapeHtml(title)+
+      "</b><br><br>"+
+      "Test ID: "+
+      escapeHtml(test.id)+
+      "<br>"+
+      "Questions imported: "+
+      questionIds.length+
+      "<br><br>"+
+      "The questions are now assigned to the mock test.";
+
+
+  }catch(error){
+
+    console.error(error);
+
+
+    showMessage(
+      error.message ||
+      "Unable to publish test."
+    );
+
+
+    publishBtn.disabled = false;
+
+  }
+
+}
+
+
+/* =========================================
+   CLEAR
+========================================= */
+
+function clearImport(){
+
+  selectedFile = null;
+
+  extractedQuestions = [];
+
+  extractedRawText = "";
+
+
+  document
+    .getElementById(
+      "pdfInput"
+    )
+    .value = "";
+
+
+  document
+    .getElementById(
+      "fileName"
+    )
+    .classList
+    .add("hidden");
+
+
+  document
+    .getElementById(
+      "testDetails"
+    )
+    .classList
+    .add("hidden");
+
+
+  document
+    .getElementById(
+      "previewCard"
+    )
+    .classList
+    .add("hidden");
+
+
+  document
+    .getElementById(
+      "resultCard"
+    )
+    .classList
+    .add("hidden");
+
+
+  document
+    .getElementById(
+      "questionsPreview"
+    )
+    .innerHTML = "";
+
+
+  document
+    .getElementById(
+      "extractBtn"
+    )
+    .disabled = true;
+
+
+  setProgress(
+    0,
+    "Preparing PDF..."
+  );
+
+}
+
+
+/* =========================================
+   PROGRESS
+========================================= */
+
+function setProgress(
+  percent,
+  text
+){
+
+  const box =
+    document.getElementById(
+      "progressBox"
+    );
+
+
+  const bar =
+    document.getElementById(
+      "progressBar"
+    );
+
+
+  const label =
+    document.getElementById(
+      "progressText"
+    );
+
+
+  box.classList.remove(
+    "hidden"
+  );
+
+
+  bar.style.width =
+    Math.max(
+      0,
+      Math.min(
+        100,
+        percent
+      )
+    )+
+    "%";
+
+
+  label.textContent =
+    text;
+
+}
+
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+function showMessage(text){
+
+  document
+    .getElementById(
+      "message"
+    )
+    .innerHTML =
+      '<div class="message">'+
+      escapeHtml(text)+
+      '</div>';
+
+
+  setTimeout(
+    ()=>{
+      document
+        .getElementById(
+          "message"
+        )
+        .innerHTML="";
+    },
+    5000
+  );
+
+}
+
+
+/* =========================================
+   HELPERS
+========================================= */
+
+function formatFileSize(bytes){
+
+  if(bytes < 1024)
+    return bytes+" B";
+
+
+  if(bytes < 1024*1024)
+    return (
+      bytes/1024
+    ).toFixed(1)+
+    " KB";
+
+
+  return (
+    bytes/
+    (1024*1024)
+  ).toFixed(1)+
+  " MB";
+
+}
+
+
+function escapeHtml(value){
+
+  return String(
+    value ?? ""
+  )
+  .replace(
+    /&/g,
+    "&amp;"
+  )
+  .replace(
+    /</g,
+    "&lt;"
+  )
+  .replace(
+    />/g,
+    "&gt;"
+  )
+  .replace(
+    /"/g,
+    "&quot;"
+  )
+  .replace(
+    /'/g,
+    "&#039;"
+  );
+
+}
+
+
+/* =========================================
+   START
+========================================= */
+
+(async function(){
+
+  if(
+    !await checkAdmin()
+  ){
+
+    return;
+
+  }
+
+
+  await loadExams();
+
+})();
+
+</script></body>
+    </html>
