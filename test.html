@@ -1177,26 +1177,97 @@ body{
    ================================================== */
 
 .result-card{
+  width:100%;
+  max-width:520px;
+  box-sizing:border-box;
+  margin:18px auto 0;
+  padding:28px 18px 24px;
   background:var(--card);
   border:1px solid var(--border);
   border-radius:18px;
-  padding:20px 15px;
-  margin-top:10px;
   text-align:center;
   overflow:hidden;
 }
-.result-card h2{margin:0;color:var(--text);font-size:20px;line-height:1.3;}
-.score{color:var(--purple2);font-size:38px;line-height:1.1;font-weight:900;margin:12px 0 2px;}
-.result-label{color:var(--muted);font-size:12px;}
-.result-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:16px;}
-.result-stat{min-width:0;background:var(--card2);border:1px solid var(--border);border-radius:11px;padding:11px 6px;}
-.result-stat strong{display:block;color:var(--text);font-size:17px;line-height:1.2;}
-.result-stat span{display:block;color:var(--muted);font-size:10px;margin-top:3px;}
-.result-max{margin-top:12px;color:var(--muted);font-size:11px;line-height:1.5;}
-.result-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:16px;}
-.result-action{min-width:0;min-height:42px;border-radius:10px;border:1px solid var(--border);background:var(--card2);color:var(--text);text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;padding:8px;}
-.result-action.primary{background:var(--purple);border-color:var(--purple);color:#fff;}
-.result-back{display:block;width:100%;margin-top:10px;padding:11px;border:1px solid var(--border);border-radius:10px;background:var(--card2);color:var(--text);font-weight:900;text-decoration:none;font-size:12px;}
+
+.result-brand{
+  margin:0;
+  color:var(--text);
+  font-size:24px;
+  line-height:1.2;
+  font-weight:950;
+}
+
+.result-brand .edge{
+  color:var(--purple);
+}
+
+.result-test-name{
+  margin:15px 0 3px;
+  color:var(--text);
+  font-size:17px;
+  line-height:1.4;
+  font-weight:900;
+  overflow-wrap:anywhere;
+}
+
+.result-test-number{
+  margin:0;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.4;
+  font-weight:700;
+}
+
+.result-thankyou{
+  margin:25px 0 22px;
+  color:var(--text);
+  font-size:15px;
+  line-height:1.6;
+  font-weight:800;
+}
+
+.result-actions{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  width:100%;
+}
+
+.result-action,
+.result-back{
+  width:100%;
+  min-height:44px;
+  box-sizing:border-box;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:10px 12px;
+  font-size:12px;
+  line-height:1.3;
+  font-weight:900;
+  text-decoration:none;
+  overflow-wrap:anywhere;
+}
+
+.result-action{
+  border:1px solid var(--border);
+  background:var(--card2);
+  color:var(--text);
+}
+
+.result-action.primary{
+  background:var(--purple);
+  border-color:var(--purple);
+  color:#fff;
+}
+
+.result-back{
+  margin-top:10px;
+  border:1px solid var(--border);
+  background:var(--card2);
+  color:var(--text);
+}
 
 
 /* ==================================================
@@ -4108,26 +4179,50 @@ async function calculateResult(automatic){
     .innerHTML = `
 
       <div class="result-card">
-        <h2>${automatic ? "Time Over" : "Test Submitted"}</h2>
-        <div class="score">${score}</div>
-        <div class="result-label">Score</div>
 
-        <div class="result-stats">
-          <div class="result-stat"><strong>${correct}</strong><span>Correct</span></div>
-          <div class="result-stat"><strong>${wrong}</strong><span>Wrong</span></div>
-          <div class="result-stat"><strong>${skipped}</strong><span>Unanswered</span></div>
-          <div class="result-stat"><strong>${questions.length}</strong><span>Total Questions</span></div>
+        <h1 class="result-brand">
+          SSC <span class="edge">EDGE</span>
+        </h1>
+
+        <div class="result-test-name">
+          ${escapeHtml(test.title || "Test")}
         </div>
 
-        <div class="result-max">Maximum Marks: ${maxMarks}</div>
+        <div class="result-test-number">
+          Test No. ${escapeHtml(
+            test.test_number ??
+            test.test_no ??
+            test.number ??
+            "#1"
+          )}
+        </div>
+
+        <div class="result-thankyou">
+          Thank You for attempting the Test.
+        </div>
 
         <div class="result-actions">
-          <a class="result-action" href="analysis.html?id=${encodeURIComponent(test.id)}">Analysis</a>
-          <a class="result-action" href="solutions.html?id=${encodeURIComponent(test.id)}">Solutions</a>
-          <a class="result-action primary" href="test.html?id=${encodeURIComponent(test.id)}&reattempt=1">Re-attempt</a>
+
+          <a
+            class="result-action primary"
+            href="analysis.html?id=${encodeURIComponent(test.id)}">
+            View Analysis
+          </a>
+
+          <a
+            class="result-action"
+            href="solutions.html?id=${encodeURIComponent(test.id)}">
+            View Solutions
+          </a>
+
+          <a
+            class="result-back"
+            href="practice.html">
+            Back to Practice
+          </a>
+
         </div>
 
-        <a class="result-back" href="practice.html">Back to Practice</a>
       </div>
 
     `;
