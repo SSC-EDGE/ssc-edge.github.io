@@ -11,6 +11,26 @@ document.documentElement.dataset.theme =
 localStorage.getItem("ssc-edge-theme") || "dark";
 </script>
 <style>
+.test-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:10px;
+}
+.test-actions .start-test{
+  margin-top:0;
+}
+.test-actions .secondary-test{
+  display:inline-block;
+  padding:8px 11px;
+  border-radius:9px;
+  background:var(--card2);
+  color:var(--purple2);
+  border:1px solid var(--border);
+  text-decoration:none;
+  font-size:12px;
+  font-weight:800;
+}
 .practice-options,.chapter-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .practice-card{text-decoration:none;color:var(--text);background:var(--card);border:1px solid var(--border);border-radius:18px;min-height:130px;padding:18px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:pointer;box-sizing:border-box}.practice-card:hover{border-color:var(--purple)}
 .practice-icon{width:48px;height:48px;border-radius:14px;background:var(--card2);display:flex;align-items:center;justify-content:center;margin-bottom:9px;font-size:34px}
@@ -90,28 +110,458 @@ function showTestType(type){
  const filtered=tests.filter(test=>String(test.exam_id)===examId&&(type===0?String(test.test_type||"").trim().toUpperCase()==="FULL":["SECTIONAL","SUBJECT_WISE"].includes(String(test.test_type||"").trim().toUpperCase())));
  renderTests(filtered);
 }
+async function getAttemptState(testId){
+
+  let completed = false;
+  let attempt = null;
+
+  try{
+
+    const raw =
+      localStorage.getItem(
+        "ssc-edge-progress-" + String(testId)
+      );
+
+    if(raw){
+
+      const saved =
+        JSON.parse(raw);
+
+      if(
+        saved &&
+        saved.progressStarted
+      ){
+        return {
+          state:"resume",
+          attempt:null
+        };
+      }
+
+    }
+
+  }catch(error){}
+
+
+  const {
+    data:{user}
+  } =
+    await supabaseClient.auth.getUser();
+
+  if(user){
+
+    const result =
+      await supabaseClient
+        .from("test_attempts")
+        .select("id,created_at,score")
+        .eq("user_id",user.id)
+        .eq("mock_test_id",testId)
+        .order(
+          "created_at",
+          {ascending:false}
+        )
+        .limit(1)
+        .maybeSingle();
+
+    if(
+      !result.error &&
+      result.data
+    ){
+
+      completed = true;
+      attempt = result.data;
+
+    }
+
+  }
+
+  return {
+    state:
+      completed
+      ? "completed"
+      : "new",
+    attempt
+  };
+
+}
+
+
 async function renderTests(list){
- const box=document.getElementById("testList");
- if(!list.length){box.innerHTML=`<div class="practice-empty">No tests available yet.</div>`;return}
- box.innerHTML=`<div class="practice-empty">Loading tests...</div>`;
- const cards=await Promise.all(list.map(async test=>{
-   let subjectName="";
-   if(test.subject_id){const subject=subjects.find(s=>String(s.id)===String(test.subject_id));if(subject)subjectName=subject.name}
-   const attempt=await attemptFor(test.id);
-   const progress=localStorage.getItem("ssc-edge-test-progress-"+test.id);
-   let primaryText=attempt?"Re-attempt →":(progress?"Resume Test →":"Start Test →");
-   return `<div class="test-card"><div class="test-title">${escapeHtml(test.title)}</div><div class="test-info">${escapeHtml(test.test_type)}${subjectName?` • ${escapeHtml(subjectName)}`:""}<br>⏱ ${escapeHtml(test.duration_minutes)} minutes<br>📝 ${escapeHtml(test.total_questions)} questions</div><div class="test-actions"><a class="start-test" href="test.html?id=${encodeURIComponent(test.id)}">${primaryText}</a>${attempt?`<a class="start-test test-action-secondary" href="analysis.html?id=${encodeURIComponent(test.id)}&attempt=${encodeURIComponent(attempt.id)}">Analysis</a><a class="start-test test-action-secondary" href="solution.html?id=${encodeURIComponent(test.id)}&attempt=${encodeURIComponent(attempt.id)}">Solutions</a>`:""}</div></div>`;
- })).then(x=>x.join(""));
- box.innerHTML=cards;
+
+  const box =
+    document.getElementById("testList");
+
+
+  if(list.length === 0){
+
+    box.innerHTML = `
+
+      <div class="practice-empty">
+        No tests available yet.
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  box.innerHTML = `
+
+    <div class="practice-empty">
+      Loading test status...
+    </div>
+
+  `;
+
+
+  const cards = [];
+
+
+  for(const test of list){
+
+    let subjectName = "";
+
+
+    if(test.subject_id){
+
+      const subject =
+        subjects.find(
+          s =>
+          String(s.id) ===
+          String(test.subject_id)
+        );
+
+
+      if(subject){
+        subjectName = subject.name;
+      }
+
+    }
+
+
+    const status =
+      await getAttemptState(
+        test.id
+      );
+
+
+    let actions = "";
+
+
+    if(status.state === "resume"){
+
+      actions = `
+
+        <a
+          class="start-test"
+          href="test.html?id=${encodeURIComponent(test.id)}"
+        >
+          Resume Test →
+        </a>
+
+      `;
+
+    }else if(status.state === "completed"){
+
+      actions = `
+
+        <a
+          class="start-test"
+          href="test.html?id=${encodeURIComponent(test.id)}&reattempt=1"
+        >
+          Re-attempt
+        </a>
+
+        <a
+          class="secondary-test"
+          href="analysis.html?id=${encodeURIComponent(test.id)}"
+        >
+          Analysis
+        </a>
+
+        <a
+          class="secondary-test"
+          href="solutions.html?id=${encodeURIComponent(test.id)}"
+        >
+          Solutions
+        </a>
+
+      `;
+
+    }else{
+
+      actions = `
+
+        <a
+          class="start-test"
+          href="test.html?id=${encodeURIComponent(test.id)}"
+        >
+          Start Test →
+        </a>
+
+      `;
+
+    }
+
+
+    cards.push(`
+
+      <div class="test-card">
+
+        <div class="test-title">
+          ${escapeHtml(test.title)}
+        </div>
+
+        <div class="test-info">
+
+          ${escapeHtml(test.test_type)}
+
+          ${
+            subjectName
+            ?
+            ` • ${escapeHtml(subjectName)}`
+            :
+            ""
+          }
+
+          <br>
+
+          ⏱ ${escapeHtml(
+            test.duration_minutes
+          )} minutes
+
+          <br>
+
+          📝 ${escapeHtml(
+            test.total_questions
+          )} questions
+
+        </div>
+
+        <div class="test-actions">
+          ${actions}
+        </div>
+
+      </div>
+
+    `);
+
+  }
+
+
+  box.innerHTML =
+    cards.join("");
+
+
 }
-function openChapter(subjectName){
- hideAll();document.getElementById("chapterScreen").classList.remove("hidden");document.getElementById("chapterTitle").textContent=subjectName+" Practice";
- const subject=subjects.find(s=>String(s.name||"").trim().toLowerCase()===subjectName.trim().toLowerCase());
- if(!subject){document.getElementById("chapterList").innerHTML=`<div class="practice-empty">No ${escapeHtml(subjectName)} practice available yet.</div>`;return}
- const list=tests.filter(test=>String(test.test_type||"").trim().toUpperCase()==="CHAPTER_WISE"&&String(test.subject_id)===String(subject.id));
- renderTests(list);
+
+/* =========================================
+   CHAPTER WISE
+   ========================================= */
+
+async function openChapter(subjectName){
+
+  hideAll();
+
+  document
+    .getElementById("chapterScreen")
+    .classList
+    .remove("hidden");
+
+
+  document
+    .getElementById("chapterTitle")
+    .textContent =
+    subjectName + " Practice";
+
+
+  const subject =
+    subjects.find(s =>
+
+      String(s.name || "")
+      .trim()
+      .toLowerCase() ===
+
+      subjectName
+      .trim()
+      .toLowerCase()
+
+    );
+
+
+  if(!subject){
+
+    document
+      .getElementById("chapterList")
+      .innerHTML = `
+
+        <div class="practice-empty">
+
+          No ${escapeHtml(subjectName)}
+          practice available yet.
+
+        </div>
+
+      `;
+
+    return;
+
+  }
+
+
+  const list =
+    tests.filter(test=>{
+
+      return (
+
+        String(test.test_type || "")
+        .trim()
+        .toUpperCase() ===
+        "CHAPTER_WISE"
+
+        &&
+
+        String(test.subject_id) ===
+        String(subject.id)
+
+      );
+
+    });
+
+
+  if(list.length === 0){
+
+    document
+      .getElementById("chapterList")
+      .innerHTML = `
+
+        <div class="practice-empty">
+
+          No chapter-wise tests available yet.
+
+        </div>
+
+      `;
+
+    return;
+
+  }
+
+
+  const chapterBox =
+    document.getElementById("chapterList");
+
+  chapterBox.innerHTML = `
+    <div class="practice-empty">
+      Loading test status...
+    </div>
+  `;
+
+  const cards = [];
+
+  for(const test of list){
+
+    const status =
+      await getAttemptState(test.id);
+
+    let actions = "";
+
+    if(status.state === "resume"){
+
+      actions = `
+        <a
+          class="start-test"
+          href="test.html?id=${encodeURIComponent(test.id)}"
+        >
+          Resume Practice →
+        </a>
+      `;
+
+    }else if(status.state === "completed"){
+
+      actions = `
+        <a
+          class="start-test"
+          href="test.html?id=${encodeURIComponent(test.id)}&reattempt=1"
+        >
+          Re-attempt
+        </a>
+
+        <a
+          class="secondary-test"
+          href="analysis.html?id=${encodeURIComponent(test.id)}"
+        >
+          Analysis
+        </a>
+
+        <a
+          class="secondary-test"
+          href="solutions.html?id=${encodeURIComponent(test.id)}"
+        >
+          Solutions
+        </a>
+      `;
+
+    }else{
+
+      actions = `
+        <a
+          class="start-test"
+          href="test.html?id=${encodeURIComponent(test.id)}"
+        >
+          Start Practice →
+        </a>
+      `;
+
+    }
+
+    cards.push(`
+
+      <div class="test-card">
+
+        <div class="test-title">
+          ${escapeHtml(test.title)}
+        </div>
+
+        <div class="test-info">
+
+          ⏱ ${escapeHtml(
+            test.duration_minutes
+          )} minutes
+
+          <br>
+
+          📝 ${escapeHtml(
+            test.total_questions
+          )} questions
+
+        </div>
+
+        <div class="test-actions">
+          ${actions}
+        </div>
+
+      </div>
+
+    `);
+
+  }
+
+  chapterBox.innerHTML =
+    cards.join("");
+
 }
+
+
+/* =========================================
+   LOAD
+   ========================================= */
+
 loadData();
+
 </script>
+
+
 </body>
 </html>
