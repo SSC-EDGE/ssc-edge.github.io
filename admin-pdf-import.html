@@ -382,13 +382,28 @@ class="file-box"
   class="file-name hidden"
 ></div>
 
-  </label><input
-id="pdfInput"
-type="file"
-accept="application/pdf"
-class="hidden"
+  <div
+  class="file-box"
+  onclick="document.getElementById('pdfInput').click()"
+>
+  <div class="file-icon">📄</div>
+  <div class="file-title">Choose PDF</div>
+  <div class="file-subtitle">
+    Tap here to select your PDF
+  </div>
 
-«»
+  <div
+    id="fileName"
+    class="file-name hidden"
+  ></div>
+</div>
+
+<input
+  id="pdfInput"
+  type="file"
+  accept=".pdf,application/pdf"
+  style="display:none;"
+>
 
 <button
 id="extractBtn"
