@@ -484,11 +484,11 @@ body{
 }
 
 
- .navigation-row{
+.navigation-row{
 
   display:grid;
 
-  grid-template-columns:1fr 1fr 1fr;
+  grid-template-columns:1fr 1fr;
 
   gap:8px;
 
@@ -527,7 +527,7 @@ body{
 
   width:100%;
 
-  margin-top:0;
+  margin-top:8px;
 
   background:var(--card2);
 
@@ -551,23 +551,21 @@ body{
 
 .grid-btn{
 
-  display:block;
+  width:100%;
 
-  width:150px;
+  margin-top:8px;
 
-  min-height:40px;
-
-  margin:10px auto;
+  min-height:42px;
 
   border-radius:10px;
 
   background:var(--card2);
 
-  color:var(--text);
+  color:var(--purple2);
 
-  border:1px solid var(--text);
+  border:1px solid var(--border);
 
-  font-size:11px;
+  font-size:12px;
 
   font-weight:900;
 
@@ -576,137 +574,13 @@ body{
 }
 
 
-.grid-btn:active{
-  transform:scale(.97);
-}
-
-
-/* ==================================================
-   TEST START / RESUME
-   ================================================== */
-
-.start-overlay{
-
-  position:fixed;
-
-  inset:0;
-
-  z-index:150;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  padding:18px;
-
-  background:var(--bg);
-
-  overflow-y:auto;
-
-}
-
-.start-overlay.hidden{
-  display:none;
-}
-
-.start-card{
+.save-next-btn{
 
   width:100%;
 
-  max-width:650px;
+  margin-top:8px;
 
-  background:var(--card);
-
-  border:1px solid var(--border);
-
-  border-radius:18px;
-
-  padding:20px;
-
-}
-
-.start-title{
-
-  margin:0;
-
-  color:var(--text);
-
-  font-size:21px;
-
-  font-weight:900;
-
-}
-
-.start-subtitle{
-
-  margin:5px 0 16px;
-
-  color:var(--muted);
-
-  font-size:12px;
-
-  font-weight:700;
-
-}
-
-.section-summary{
-
-  width:100%;
-
-  border-collapse:collapse;
-
-  overflow:hidden;
-
-  border:1px solid var(--border);
-
-  border-radius:12px;
-
-  color:var(--text);
-
-  font-size:11px;
-
-}
-
-.section-summary th,
-.section-summary td{
-
-  padding:10px 8px;
-
-  border-bottom:1px solid var(--border);
-
-  text-align:left;
-
-}
-
-.section-summary th{
-
-  background:var(--card2);
-
-  font-weight:900;
-
-}
-
-.section-summary tr:last-child td{
-  border-bottom:0;
-}
-
-.start-actions{
-
-  display:flex;
-
-  gap:8px;
-
-  margin-top:16px;
-
-}
-
-.start-action{
-
-  flex:1;
-
-  min-height:44px;
+  min-height:45px;
 
   border:0;
 
@@ -714,7 +588,7 @@ body{
 
   background:var(--purple);
 
-  color:#fff;
+  color:white;
 
   font-size:12px;
 
@@ -724,32 +598,6 @@ body{
 
 }
 
-.start-action.secondary{
-
-  background:var(--card2);
-
-  color:var(--text);
-
-  border:1px solid var(--border);
-
-}
-
-@media(max-width:500px){
-
-  .section-summary{
-    font-size:10px;
-  }
-
-  .section-summary th,
-  .section-summary td{
-    padding:9px 6px;
-  }
-
-  .start-card{
-    padding:16px;
-  }
-
-}
 
 /* ==================================================
    QUESTION GRID OVERLAY
@@ -1265,7 +1113,7 @@ body{
 
   width:100%;
 
-  margin-top:8px;
+  margin-top:18px;
 
   padding:12px;
 
@@ -1395,24 +1243,6 @@ body{
 
 }
 
-
-.navigation-row .nav-btn{
-  min-width:0;
-}
-
-@media(max-width:500px){
-
-  .navigation-row{
-    grid-template-columns:1fr 1fr 1fr;
-    gap:6px;
-  }
-
-  .navigation-row .nav-btn{
-    padding:8px 4px;
-    font-size:10px;
-  }
-
-}
 
 /* ==================================================
    VERY SMALL SCREEN
@@ -2088,7 +1918,7 @@ async function loadQuestions(){
   }
 
 
-  prepareStartScreen();
+  beginTest();
 
 }
 
@@ -2100,15 +1930,18 @@ function beginTest(){
     .classList
     .add("hidden");
 
+
   document
     .getElementById("testArea")
     .classList
     .remove("hidden");
 
+
   document
     .getElementById("testName")
     .textContent =
       test.title || "SSC EDGE Test";
+
 
   document
     .getElementById("testNumber")
@@ -2120,13 +1953,12 @@ function beginTest(){
         "01"
       );
 
+
   renderSections();
 
   showQuestion();
 
   startTimer();
-
-  saveTestState();
 
 }
 
@@ -2553,7 +2385,6 @@ function showQuestion(){
           answers[q.id] =
             String(option.id);
 
-          saveTestState();
 
           showQuestion();
 
@@ -2658,7 +2489,6 @@ function showQuestion(){
 
         currentIndex--;
 
-        saveTestState();
         showQuestion();
 
       }
@@ -2708,7 +2538,6 @@ function showQuestion(){
 
       }
 
-      saveTestState();
 
       showQuestion();
       renderQuestionGrid();
@@ -2718,6 +2547,7 @@ function showQuestion(){
 
   navigationRow.appendChild(previous);
   navigationRow.appendChild(reviewButton);
+  navigation.appendChild(navigationRow);
 
 
   const gridButton =
@@ -2780,7 +2610,6 @@ function showQuestion(){
 
         currentIndex++;
 
-        saveTestState();
         showQuestion();
 
       }else{
@@ -2792,9 +2621,7 @@ function showQuestion(){
     };
 
 
-  navigationRow.appendChild(nextButton);
-
-  navigation.appendChild(navigationRow);
+  navigation.appendChild(nextButton);
 
   card.appendChild(navigation);
 
@@ -2962,8 +2789,6 @@ function renderQuestionGrid(){
           currentIndex =
             index;
 
-          saveTestState();
-
           closeGrid();
 
           showQuestion();
@@ -3099,7 +2924,6 @@ function startGeneralTimer(){
         remainingSeconds--;
 
         updateTimerDisplay();
-        saveTestState();
 
 
         if(
@@ -3147,7 +2971,6 @@ function startSectionInterval(){
 
         updateTimerDisplay();
         updateGridTimer();
-        saveTestState();
 
 
         if(
@@ -3377,7 +3200,6 @@ document
       paused = true;
 
       saveCurrentSectionTime();
-      saveTestState();
 
 
       document
@@ -3626,18 +3448,6 @@ async function submitTest(automatic=false){
   clearInterval(timerInterval);
 
 
-  clearSavedTestState();
-
-  try{
-    localStorage.setItem(
-      "ssc-edge-test-completed-" + String(testId || ""),
-      JSON.stringify({
-        completed:true,
-        completedAt:Date.now()
-      })
-    );
-  }catch(error){}
-
   await calculateResult(automatic);
 
 }
@@ -3837,20 +3647,6 @@ async function calculateResult(automatic){
 
         </div>
 
-
-        <button
-          class="result-back"
-          onclick="location.href='practice.html'"
-        >
-          Analysis
-        </button>
-
-        <button
-          class="result-back"
-          onclick="location.href='practice.html'"
-        >
-          Solutions
-        </button>
 
         <button
           class="result-back"
