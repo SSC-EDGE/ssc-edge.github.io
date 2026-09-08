@@ -3,68 +3,42 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>SSC EDGE</title>
+<title>SSC EDGE - Solutions</title>
 <link rel="stylesheet" href="css/style.css">
-<script>
-document.documentElement.dataset.theme =
-localStorage.getItem("ssc-edge-theme") || "dark";
-</script>
+<script>document.documentElement.dataset.theme=localStorage.getItem("ssc-edge-theme")||"dark";</script>
 <style>
-body{margin:0;padding-bottom:30px}
-.edge-page{max-width:850px;margin:auto;padding:18px 14px}
-.edge-back{display:inline-block;margin-bottom:16px;color:var(--purple2);font-weight:800;font-size:13px;text-decoration:none}
-.edge-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:17px;margin-bottom:12px}
-.edge-title{margin:0;color:var(--text);font-size:20px;font-weight:900}
-.edge-sub{margin:5px 0 16px;color:var(--muted);font-size:12px}
-.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
-.stat{background:var(--card2);border:1px solid var(--border);border-radius:11px;padding:13px;text-align:center}
-.stat b{display:block;color:var(--text);font-size:20px}.stat span{color:var(--muted);font-size:11px}
-.row{padding:12px 0;border-bottom:1px solid var(--border);color:var(--text);font-size:13px}.row:last-child{border-bottom:0}
-.correct{color:#2fbf71;font-weight:900}.wrong{color:#ff5f5f;font-weight:900}
-.btn{display:block;text-align:center;margin-top:12px;padding:11px;border-radius:10px;background:var(--purple);color:#fff;text-decoration:none;font-weight:900;font-size:12px}
+*{box-sizing:border-box}body{margin:0;padding-bottom:30px}.page{max-width:850px;margin:auto;padding:16px 14px 35px}.back{display:inline-block;margin-bottom:14px;color:var(--purple2);text-decoration:none;font-size:13px;font-weight:900}.head,.solution{background:var(--card);border:1px solid var(--border);border-radius:17px;padding:16px;margin-bottom:12px;overflow:hidden}.head h1{margin:0;color:var(--text);font-size:21px;line-height:1.25}.sub{margin:5px 0 0;color:var(--muted);font-size:12px;line-height:1.5}.qhead{display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px solid var(--border);padding-bottom:10px}.qno{color:var(--text);font-size:14px;font-weight:900}.subject{color:var(--purple2);font-size:11px;font-weight:900;text-align:right}.qtext{color:var(--text);font-size:14px;font-weight:700;line-height:1.55;margin:12px 0;overflow-wrap:anywhere}.option{padding:9px 10px;margin-top:7px;border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:12px;line-height:1.45;overflow-wrap:anywhere}.option.correct{border-color:#2fbf71;background:rgba(47,191,113,.10)}.answer{margin-top:11px;padding:10px;border-radius:10px;background:var(--card2);color:var(--text);font-size:12px;line-height:1.5;overflow-wrap:anywhere}.answer b{color:#2fbf71}.explanation{margin-top:9px;color:var(--muted);font-size:12px;line-height:1.6;overflow-wrap:anywhere}.actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px}.btn{display:flex;align-items:center;justify-content:center;min-height:42px;padding:8px;border-radius:10px;background:var(--card2);border:1px solid var(--border);color:var(--text);text-decoration:none;font-size:11px;font-weight:900;text-align:center}.btn.primary{background:var(--purple);border-color:var(--purple);color:#fff}.empty{text-align:center;color:var(--muted);padding:25px 8px;font-size:13px}
+@media(max-width:500px){.actions{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<main class="edge-page">
-<a class="edge-back" href="practice.html">← Back to Practice</a>
-<div id="app"></div>
-</main>
+<main class="page"><a class="back" href="practice.html">← Back to Practice</a><div id="app"><div class="head empty">Loading solutions...</div></div></main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-const db=supabase.createClient(
-"https://dvvyoygahzzbnpqrfhen.supabase.co",
-"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s"
-);
-const id=new URLSearchParams(location.search).get("id");
-const app=document.getElementById("app");
-function esc(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+<script>
+const db=supabase.createClient("https://dvvyoygahzzbnpqrfhen.supabase.co","sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s");
+const testId=new URLSearchParams(location.search).get("id");const app=document.getElementById("app");
+function esc(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;").replace(/'/g,"&#039;")}
+function show(t){app.innerHTML='<div class="head empty">'+esc(t)+'</div>'}
 async function run(){
- if(!id){app.innerHTML='<div class="edge-card">Test ID missing.</div>';return;}
- const qr=await db.from("mock_test_questions").select("question_id,question_order").eq("mock_test_id",id).order("question_order");
- if(qr.error){app.innerHTML='<div class="edge-card">Could not load solutions.</div>';return;}
- const ids=(qr.data||[]).map(x=>x.question_id);
- if(!ids.length){app.innerHTML='<div class="edge-card">No questions found.</div>';return;}
- const [qs,ops]=await Promise.all([
-  db.from("questions").select("id,question_text,explanation").in("id",ids),
-  db.from("question_options").select("id,question_id,option_text,option_label,is_correct").in("question_id",ids).order("id")
+ if(!testId){show("Test ID is missing.");return}
+ const tr=await db.from("mock_tests").select("id,title").eq("id",testId).maybeSingle();
+ const title=tr.data?.title||"SSC EDGE Test";
+ const qr=await db.from("mock_test_questions").select("question_id,question_order,section_id").eq("mock_test_id",testId).order("question_order");
+ if(qr.error){show("Could not load questions.");return}
+ const assignments=qr.data||[];const ids=assignments.map(x=>x.question_id);if(!ids.length){show("No questions found for this test.");return}
+ const [qres,ores,sres]=await Promise.all([
+  db.from("questions").select("id,question_text,explanation,subject_id").in("id",ids),
+  db.from("question_options").select("id,question_id,option_label,option_text,is_correct").in("question_id",ids).order("id"),
+  db.from("mock_test_sections").select("*").eq("mock_test_id",testId).order("section_order")
  ]);
- const qm=new Map((qs.data||[]).map(q=>[String(q.id),q]));
- const om=new Map();
- (ops.data||[]).forEach(o=>{if(!om.has(String(o.question_id)))om.set(String(o.question_id),[]);om.get(String(o.question_id)).push(o);});
- let html='<div class="edge-card"><h1 class="edge-title">Solutions</h1><p class="edge-sub">Answer and explanation</p></div>';
- (qr.data||[]).forEach((x,i)=>{
-  const q=qm.get(String(x.question_id)); if(!q)return;
-  const options=om.get(String(q.id))||[];
-  const correct=options.find(o=>o.is_correct);
-  html+=`<div class="edge-card"><div class="row"><b>Question ${i+1}</b></div>
-  <div class="row">${esc(q.question_text)}</div>
-  <div class="row"><span class="correct">Correct Answer: ${esc(correct?.option_label||"")} ${esc(correct?.option_text||"")}</span></div>
-  ${q.explanation?`<div class="row">Explanation: ${esc(q.explanation)}</div>`:""}
-  </div>`;
- });
- html+=`<a class="btn" href="test.html?id=${encodeURIComponent(id)}&reattempt=1">Re-attempt Test</a>`;
- app.innerHTML=html;
+ const qm=new Map((qres.data||[]).map(q=>[String(q.id),q]));const om=new Map();(ores.data||[]).forEach(o=>{const k=String(o.question_id);if(!om.has(k))om.set(k,[]);om.get(k).push(o)});
+ const sm=new Map((sres.data||[]).map((s,i)=>[String(s.id),s]));
+ const sectionName=s=>s?.subject_name||s?.subjectName||s?.subject||s?.name||s?.title||"";
+ let html=`<div class="head"><h1>${esc(title)} — Solutions</h1><p class="sub">Correct answers and explanations</p></div>`;
+ assignments.forEach((a,i)=>{const q=qm.get(String(a.question_id));if(!q)return;const opts=om.get(String(q.id))||[];const correct=opts.find(o=>o.is_correct);const sec=sm.get(String(a.section_id));const sub=sectionName(sec);html+=`<article class="solution"><div class="qhead"><span class="qno">Question ${i+1}</span>${sub?`<span class="subject">${esc(sub)}</span>`:""}</div><div class="qtext">${esc(q.question_text)}</div>${opts.map(o=>`<div class="option ${o.is_correct?'correct':''}">${esc(o.option_label||"")} ${esc(o.option_text||"")}${o.is_correct?' ✓':''}</div>`).join("")}<div class="answer"><b>Correct Answer:</b> ${correct?esc((correct.option_label||"")+" "+correct.option_text):"Not available"}</div>${q.explanation?`<div class="explanation"><b>Explanation:</b> ${esc(q.explanation)}</div>`:`<div class="explanation">No explanation has been added for this question yet.</div>`}</article>`});
+ html+=`<div class="actions"><a class="btn" href="analysis.html?id=${encodeURIComponent(testId)}">Analysis</a><a class="btn" href="practice.html">Practice</a><a class="btn primary" href="test.html?id=${encodeURIComponent(testId)}&reattempt=1">Re-attempt</a></div>`;app.innerHTML=html;
 }
-run();
+run().catch(e=>{console.error(e);show("Could not load solutions. Please try again.")});
 </script>
-</body></html>
+</body>
+</html>
