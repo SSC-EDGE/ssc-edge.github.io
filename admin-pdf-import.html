@@ -632,7 +632,7 @@ window.supabase.createClient(
 ========================================== */
 
 const IMPORT_API_URL =
-    "https://dvvyoygahzzbnpqrfhen.supabase.co/functions/v1/clever-service";
+  "https://dvvyoygahzzbnpqrfhen.supabase.co/functions/v1/clever-service";
 
 
 /* ==========================================
@@ -939,10 +939,8 @@ extractBtn.addEventListener(
 async function startExtraction(){
 
     if(!currentFile){
-
         alert("Please select a PDF first.");
         return;
-
     }
 
     extractBtn.disabled = true;
@@ -957,11 +955,10 @@ async function startExtraction(){
 
         const formData = new FormData();
 
-        formData.append("file", currentFile, currentFile.name);
-
-        setStatus(
-            "Connecting to PDF import server...",
-            "loading"
+        formData.append(
+            "file",
+            currentFile,
+            currentFile.name
         );
 
         const response = await fetch(
@@ -972,35 +969,40 @@ async function startExtraction(){
             }
         );
 
-        const responseText = await response.text();
+        const responseText =
+            await response.text();
 
         let result = null;
 
         try{
             result = JSON.parse(responseText);
-        }
-        catch{
+        }catch{
             result = null;
         }
 
-        console.log("PDF IMPORT URL:", IMPORT_API_URL);
-        console.log("PDF IMPORT STATUS:", response.status);
-        console.log("PDF IMPORT RESPONSE:", responseText);
+        console.log(
+            "PDF IMPORT URL:",
+            IMPORT_API_URL
+        );
+
+        console.log(
+            "PDF IMPORT STATUS:",
+            response.status
+        );
+
+        console.log(
+            "PDF IMPORT RESPONSE:",
+            responseText
+        );
 
         if(!response.ok){
 
-            const serverError =
+            throw new Error(
                 result?.error ||
                 result?.message ||
                 result?.details ||
                 responseText ||
-                ("HTTP " + response.status);
-
-            throw new Error(
-                "PDF import server error (" +
-                response.status +
-                "): " +
-                serverError
+                ("HTTP " + response.status)
             );
 
         }
@@ -1011,14 +1013,17 @@ async function startExtraction(){
         ){
 
             throw new Error(
-                "Server response did not contain a questions array."
+                "Server response did not contain questions."
             );
 
         }
 
-        extractedQuestions = result.questions;
+        extractedQuestions =
+            result.questions;
 
-        if(extractedQuestions.length === 0){
+        if(
+            extractedQuestions.length === 0
+        ){
 
             throw new Error(
                 "No questions were detected in this PDF."
@@ -1027,11 +1032,13 @@ async function startExtraction(){
         }
 
         updateStats();
+
         renderPreview();
 
         document.getElementById(
             "totalQuestions"
-        ).value = extractedQuestions.length;
+        ).value =
+            extractedQuestions.length;
 
         publishBtn.disabled = false;
 
@@ -1062,7 +1069,8 @@ async function startExtraction(){
     }
     finally{
 
-        extractBtn.disabled = !currentFile;
+        extractBtn.disabled =
+            !currentFile;
 
     }
 
