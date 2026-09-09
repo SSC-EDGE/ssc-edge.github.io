@@ -1,21 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width,initial-scale=1.0">
 
-<title>SSC EDGE Test</title>
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1.0"
+>
+
+<meta
+  name="theme-color"
+  content="#160b26"
+>
+
+<title>SSC EDGE - Test</title>
+
+<link
+  rel="stylesheet"
+  href="css/style.css"
+>
 
 <script>
 document.documentElement.dataset.theme =
-localStorage.getItem("ssc-edge-theme") || "dark";
+  localStorage.getItem("ssc-edge-theme") || "dark";
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+
+/* ==================================================
+   SSC EDGE TEST UI
+   ================================================== */
 
 *{
   box-sizing:border-box;
@@ -23,430 +40,1371 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 
 body{
   margin:0;
-  font-family:Arial,sans-serif;
-  background:var(--bg);
-  color:var(--text);
+  padding:0 0 30px;
 }
 
-:root{
-  --bg:#08050e;
-  --header:#160b26;
-  --card:#171025;
-  --card2:#251344;
-  --purple:#7c3aed;
-  --purple2:#a66bff;
-  --text:#fff;
-  --muted:#aaa2b9;
-  --border:#302044;
-  --green:#22c55e;
-  --red:#ef4444;
-  --yellow:#f59e0b;
-}
 
-:root[data-theme="light"]{
-  --bg:#f6f3fb;
-  --header:#eee7fa;
-  --card:#fff;
-  --card2:#eee6fa;
-  --purple:#6d35d4;
-  --purple2:#8149e8;
-  --text:#17121e;
-  --muted:#706879;
-  --border:#ddd4e9;
-}
+/* ==================================================
+   HEADER
+   ================================================== */
 
-.header{
-  height:58px;
-  background:var(--header);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:21px;
-  font-weight:700;
-  border-bottom:1px solid var(--border);
+.test-header{
+
   position:sticky;
   top:0;
-  z-index:20;
+  z-index:50;
+
+  background:var(--header);
+
+  border-bottom:1px solid var(--border);
+
+  padding:11px 14px 10px;
+
+  backdrop-filter:blur(14px);
+
 }
 
-.test-wrap{
-  max-width:850px;
-  margin:auto;
-  padding:16px;
-  padding-bottom:40px;
-}
 
-.test-info{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:14px;
-  margin-bottom:12px;
-}
+.test-header-top{
 
-.test-name{
-  font-size:18px;
-  font-weight:700;
-}
-
-.test-number{
-  color:var(--muted);
-  font-size:13px;
-  margin-top:5px;
-}
-
-.timer-box{
-  margin-top:12px;
-  background:var(--card2);
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:12px;
   display:flex;
   align-items:center;
   justify-content:space-between;
+
   gap:10px;
+
 }
+
+
+.brand{
+
+  font-size:20px;
+  font-weight:900;
+
+  letter-spacing:-.5px;
+
+  white-space:nowrap;
+
+}
+
+
+.brand-ssc{
+  color:var(--text);
+}
+
+
+.brand-edge{
+  color:var(--purple);
+}
+
+
+.header-actions{
+
+  display:flex;
+  align-items:center;
+
+  gap:7px;
+
+}
+
 
 .timer{
-  font-size:22px;
-  font-weight:700;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  min-width:76px;
+
+  padding:8px 9px;
+
+  border-radius:10px;
+
+  background:var(--card2);
+
+  border:1px solid var(--border);
+
+  color:var(--text);
+
+  font-size:13px;
+  font-weight:900;
+
 }
+
 
 .timer.warning{
-  color:var(--yellow);
+  color:#ff6868;
 }
 
-.timer.danger{
-  color:var(--red);
-}
-
-.timer-label{
-  font-size:12px;
-  color:var(--muted);
-}
 
 .pause-btn{
+
   border:1px solid var(--border);
-  background:var(--card);
+
+  background:var(--card2);
+
   color:var(--text);
-  border-radius:9px;
-  padding:8px 12px;
+
+  padding:8px 11px;
+
+  border-radius:10px;
+
+  font-size:12px;
+  font-weight:900;
+
   cursor:pointer;
+
 }
+
+
+.pause-btn:active{
+  transform:scale(.97);
+}
+
+
+/* ==================================================
+   TEST INFORMATION
+   ================================================== */
+
+.test-info{
+
+  display:flex;
+
+  align-items:center;
+  justify-content:space-between;
+
+  gap:10px;
+
+  margin-top:10px;
+
+}
+
+
+.test-info-left{
+  min-width:0;
+}
+
+
+.test-name{
+
+  color:var(--text);
+
+  font-size:15px;
+  font-weight:900;
+
+  line-height:1.3;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+
+}
+
+
+.test-number{
+
+  display:block;
+
+  margin-top:3px;
+
+  color:var(--muted);
+
+  font-size:11px;
+  font-weight:700;
+
+}
+
+
+.submit-section{
+
+  flex-shrink:0;
+
+  border:0;
+
+  background:var(--purple);
+
+  color:white;
+
+  padding:9px 11px;
+
+  border-radius:10px;
+
+  font-size:11px;
+  font-weight:900;
+
+  cursor:pointer;
+
+}
+
+
+/* ==================================================
+   SECTION BAR
+   ================================================== */
 
 .section-bar{
+
   display:flex;
-  gap:8px;
+
+  gap:7px;
+
   overflow-x:auto;
-  margin-bottom:12px;
+
+  scrollbar-width:none;
+
+  margin-top:11px;
+
+  padding-bottom:1px;
+
 }
+
+
+.section-bar::-webkit-scrollbar{
+  display:none;
+}
+
 
 .section-btn{
+
   flex:0 0 auto;
+
   border:1px solid var(--border);
-  background:var(--card);
-  color:var(--text);
-  border-radius:9px;
+
+  background:#fff;
+
+  color:#24152f;
+
   padding:8px 12px;
+
+  border-radius:9px;
+
+  font-size:11px;
+
+  font-weight:900;
+
   cursor:pointer;
-  font-size:13px;
+
 }
 
-.section-btn.active{
+
+.section-btn.current{
+
   background:var(--purple);
+
   border-color:var(--purple);
+
+  color:#fff;
+
 }
 
-.section-btn.locked{
-  opacity:.45;
+
+.section-btn:active{
+  transform:scale(.97);
 }
+
+
+/* ==================================================
+   START SCREEN / SECTION SUMMARY
+   ================================================== */
 
 .start-screen{
   background:var(--card);
   border:1px solid var(--border);
   border-radius:16px;
-  padding:28px 18px;
-  text-align:center;
+  padding:18px 15px;
 }
 
-.start-screen h2{
-  margin-top:0;
+.start-title{
+  margin:0;
+  color:var(--text);
+  font-size:19px;
+  font-weight:900;
 }
 
-.start-screen p{
+.start-subtitle{
+  margin:5px 0 15px;
   color:var(--muted);
-  line-height:1.6;
+  font-size:12px;
 }
 
-.primary-btn{
+.section-table-wrap{
+  overflow-x:auto;
+  border:1px solid var(--border);
+  border-radius:12px;
+}
+
+.section-table{
+  width:100%;
+  min-width:430px;
+  border-collapse:collapse;
+  color:var(--text);
+  font-size:12px;
+}
+
+.section-table th,
+.section-table td{
+  padding:11px 9px;
+  text-align:left;
+  border-bottom:1px solid var(--border);
+}
+
+.section-table th{
+  background:var(--card2);
+  font-weight:900;
+}
+
+.section-table tr:last-child td{
+  border-bottom:0;
+}
+
+.start-action{
+  width:100%;
+  margin-top:15px;
+  min-height:45px;
   border:0;
+  border-radius:11px;
   background:var(--purple);
   color:#fff;
-  border-radius:10px;
-  padding:12px 20px;
-  font-weight:700;
+  font-size:13px;
+  font-weight:900;
   cursor:pointer;
 }
 
-.secondary-btn{
+.resume-note{
+  margin-top:9px;
+  text-align:center;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.result-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:8px;
+  margin-top:15px;
+}
+
+.result-action{
+  min-height:42px;
+  border-radius:10px;
   border:1px solid var(--border);
   background:var(--card2);
   color:var(--text);
-  border-radius:10px;
-  padding:11px 18px;
-  cursor:pointer;
-}
-
-.question-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:16px;
-}
-
-.question-top{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  margin-bottom:14px;
-}
-
-.question-count{
-  font-weight:700;
-}
-
-.question-right{
-  display:flex;
-  align-items:center;
-  gap:9px;
-}
-
-.question-section{
-  color:var(--muted);
-  font-size:13px;
-}
-
-.save-question-btn{
-  width:34px;
-  height:34px;
-  border:1px solid var(--border);
-  border-radius:9px;
-  background:var(--card2);
-  color:var(--muted);
-  font-size:20px;
+  text-decoration:none;
   display:flex;
   align-items:center;
   justify-content:center;
-  cursor:pointer;
-  padding:0;
+  font-size:11px;
+  font-weight:900;
 }
 
-.save-question-btn.saved{
-  color:var(--purple2);
+.result-action.primary{
+  background:var(--purple);
+  border-color:var(--purple);
+  color:#fff;
 }
+
+@media(max-width:500px){
+  .navigation-row{
+    grid-template-columns:1fr 1fr 1.15fr;
+  }
+  .nav-btn{
+    font-size:10px;
+  }
+  .result-actions{
+    grid-template-columns:1fr 1fr 1fr;
+  }
+}
+
+/* ==================================================
+   MAIN CONTAINER
+   ================================================== */
+
+.test-container{
+
+  max-width:850px;
+
+  margin:auto;
+
+  padding:15px 14px 30px;
+
+}
+
+
+/* ==================================================
+   QUESTION TOP
+   ================================================== */
+
+.question-top{
+
+  display:flex;
+
+  align-items:center;
+  justify-content:space-between;
+
+  margin-bottom:10px;
+
+}
+
+
+.question-count{
+
+  color:var(--text);
+
+  font-size:13px;
+
+  font-weight:900;
+
+}
+
+
+.question-section{
+
+  color:var(--purple2);
+
+  font-size:11px;
+
+  font-weight:900;
+
+}
+
+
+/* ==================================================
+   QUESTION CARD
+   ================================================== */
+
+.question-card{
+
+  background:var(--card);
+
+  border:1px solid var(--border);
+
+  border-radius:16px;
+
+  padding:17px;
+
+}
+
 
 .question-text{
-  font-size:17px;
-  line-height:1.6;
-  margin-bottom:18px;
+
+  color:var(--text);
+
+  font-size:16px;
+
+  line-height:1.55;
+
+  font-weight:700;
+
+  white-space:pre-wrap;
+
 }
+
+
+/* ==================================================
+   OPTIONS
+   ================================================== */
+
+.options{
+
+  margin-top:18px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:9px;
+
+}
+
 
 .option{
-  width:100%;
-  text-align:left;
-  border:1px solid var(--border);
-  background:var(--card2);
-  color:var(--text);
-  border-radius:11px;
-  padding:13px;
-  margin-bottom:10px;
-  cursor:pointer;
+
   display:flex;
-  gap:10px;
+
   align-items:flex-start;
+
+  gap:10px;
+
+  padding:12px;
+
+  border:1px solid var(--border);
+
+  border-radius:11px;
+
+  background:var(--bg);
+
+  color:var(--text);
+
+  cursor:pointer;
+
+  transition:.15s ease;
+
 }
 
-.option:hover{
-  border-color:var(--purple);
-}
 
 .option.selected{
+
   border-color:var(--purple);
-  background:rgba(124,58,237,.18);
+
+  background:var(--card2);
+
 }
+
+
+.option input{
+
+  width:auto;
+
+  margin-top:3px;
+
+  accent-color:var(--purple);
+
+}
+
 
 .option-label{
-  font-weight:700;
-  min-width:24px;
+
+  min-width:22px;
+
+  color:var(--purple2);
+
+  font-size:13px;
+
+  font-weight:900;
+
 }
+
+
+.option-text{
+
+  color:var(--text);
+
+  font-size:14px;
+
+  line-height:1.45;
+
+}
+
+
+/* ==================================================
+   NAVIGATION
+   ================================================== */
 
 .navigation{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  margin-top:14px;
+
+  margin-top:13px;
+
 }
 
-.navigation button{
-  flex:1;
+
+.navigation-row{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:8px;
+  margin-top:8px;
 }
+
+.grid-button-row{
+  display:flex;
+  justify-content:flex-end;
+  margin-bottom:0;
+}
+
+
+.nav-btn{
+
+  min-height:44px;
+
+  border-radius:10px;
+
+  padding:9px;
+
+  font-size:11px;
+
+  font-weight:900;
+
+  cursor:pointer;
+
+}
+
+
+.previous-btn{
+
+  background:var(--card2);
+
+  color:var(--text);
+
+  border:1px solid var(--border);
+
+}
+
+
+.review-btn{
+  width:100%;
+  margin-top:0;
+
+  background:var(--card2);
+
+  color:var(--purple2);
+
+  border:1px solid var(--border);
+
+}
+
+
+.review-btn.marked{
+
+  background:var(--purple);
+
+  color:white;
+
+  border-color:var(--purple);
+
+}
+
 
 .grid-btn{
-  width:100%;
-  margin-top:12px;
-}
+  width:46px;
+  height:38px;
+  margin:0;
 
-.question-grid{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:8px;
-  margin-top:14px;
-}
+  display:flex;
 
-.grid-item{
-  min-height:40px;
+  align-items:center;
+
+  justify-content:center;
+
+  border-radius:10px;
+
+  background:#fff;
+
+  color:#24152f;
+
   border:1px solid var(--border);
-  background:var(--card2);
-  color:var(--text);
-  border-radius:8px;
+
+  font-size:20px;
+
+  font-weight:900;
+
   cursor:pointer;
-  position:relative;
+
 }
 
-.grid-item.current{
-  border-color:var(--purple);
+
+.save-next-btn{
+  width:100%;
+  margin-top:0;
+
+  min-height:44px;
+
+  border:0;
+
+  border-radius:10px;
+
+  background:var(--purple);
+
+  color:white;
+
+  font-size:12px;
+
+  font-weight:900;
+
+  cursor:pointer;
+
 }
 
-.grid-item.answered{
-  background:rgba(34,197,94,.2);
+
+/* ==================================================
+   QUESTION GRID OVERLAY
+   ================================================== */
+
+.grid-overlay{
+
+  position:fixed;
+
+  inset:0;
+
+  z-index:200;
+
+  display:none;
+
+  align-items:flex-end;
+
+  justify-content:center;
+
+  background:rgba(0,0,0,.68);
+
 }
 
-.grid-item.review{
-  box-shadow:inset 0 0 0 2px var(--yellow);
+
+.grid-overlay.show{
+
+  display:flex;
+
 }
 
-.grid-item.visited{
-  border-color:var(--purple2);
+
+.grid-popup{
+
+  width:100%;
+
+  max-width:650px;
+
+  max-height:88vh;
+
+  overflow-y:auto;
+
+  background:var(--bg);
+
+  border:1px solid var(--border);
+
+  border-bottom:0;
+
+  border-radius:20px 20px 0 0;
+
+  padding:17px;
+
 }
+
+
+/* ==================================================
+   GRID HEADER
+   ================================================== */
+
+.grid-header{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+  padding-bottom:13px;
+
+  border-bottom:1px solid var(--border);
+
+}
+
+
+.grid-subject-area{
+
+  flex:1;
+
+  min-width:0;
+
+}
+
+
+.grid-subject{
+
+  color:var(--text);
+
+  font-size:17px;
+
+  font-weight:900;
+
+  margin:0;
+
+}
+
+
+.grid-subtitle{
+
+  display:block;
+
+  margin-top:3px;
+
+  color:var(--muted);
+
+  font-size:10px;
+
+  font-weight:700;
+
+}
+
 
 .grid-timer{
-  font-size:8px;
-  color:var(--muted);
-  position:absolute;
-  bottom:2px;
-  left:0;
-  right:0;
-  text-align:center;
+
+  padding:8px 9px;
+
+  border-radius:9px;
+
+  background:var(--card2);
+
+  border:1px solid var(--border);
+
+  color:var(--purple2);
+
+  font-size:12px;
+
+  font-weight:900;
+
+  white-space:nowrap;
+
 }
 
-.result{
+
+.grid-close{
+
+  width:34px;
+  height:34px;
+
+  border:0;
+
+  border-radius:9px;
+
+  background:var(--card2);
+
+  color:var(--text);
+
+  font-size:22px;
+
+  line-height:1;
+
+  cursor:pointer;
+
+}
+
+
+/* ==================================================
+   QUESTION NUMBERS
+   ================================================== */
+
+.question-grid{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(5,1fr);
+
+  gap:8px;
+
+  padding:16px 0;
+
+}
+
+
+.grid-question{
+
+  position:relative;
+
+  min-height:44px;
+
+  border:1px solid var(--border);
+
+  border-radius:9px;
+
+  background:#fff;
+
+  color:#24152f;
+
+  font-size:12px;
+
+  font-weight:900;
+
+  cursor:pointer;
+
+}
+
+
+/* NOT VISITED */
+
+.grid-question.not-visited{
+
+  background:#fff;
+
+  color:#24152f;
+
+}
+
+
+/* NOT ATTEMPTED */
+
+.grid-question.not-attempted{
+
+  background:#ef4444;
+
+  border-color:#ef4444;
+
+  color:#fff;
+
+}
+
+
+/* ATTEMPTED */
+
+.grid-question.attempted{
+
+  background:#22c55e;
+
+  border-color:#22c55e;
+
+  color:#fff;
+
+}
+
+
+/* CURRENT */
+
+.grid-question.current{
+
+  outline:3px solid rgba(168,85,247,.40);
+
+}
+
+
+/* REVIEW */
+
+.grid-question.review::after{
+
+  content:"★";
+
+  position:absolute;
+
+  top:-7px;
+
+  right:-5px;
+
+  width:18px;
+
+  height:18px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  border-radius:50%;
+
+  background:var(--purple);
+
+  color:#fff;
+
+  font-size:9px;
+
+}
+
+
+/* ==================================================
+   GRID LEGEND
+   ================================================== */
+
+.grid-legend{
+
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:9px;
+
+  padding-top:13px;
+
+  border-top:1px solid var(--border);
+
+}
+
+
+.legend-item{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:7px;
+
+  color:var(--muted);
+
+  font-size:10px;
+
+  font-weight:700;
+
+}
+
+
+.legend-box{
+
+  width:16px;
+
+  height:16px;
+
+  border-radius:4px;
+
+  flex-shrink:0;
+
+}
+
+
+.legend-attempted{
+  background:#22c55e;
+}
+
+
+.legend-not-visited{
+
+  background:#fff;
+
+  border:1px solid #bbb;
+
+}
+
+
+.legend-not-attempted{
+  background:#ef4444;
+}
+
+
+.legend-star{
+
+  color:var(--purple);
+
+  font-size:15px;
+
+  width:16px;
+
+  text-align:center;
+
+}
+
+
+/* ==================================================
+   PAUSE POPUP
+   ================================================== */
+
+.pause-overlay{
+
+  position:fixed;
+
+  inset:0;
+
+  z-index:300;
+
+  display:none;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:20px;
+
+  background:rgba(0,0,0,.70);
+
+}
+
+
+.pause-overlay.show{
+
+  display:flex;
+
+}
+
+
+.pause-popup{
+
+  width:100%;
+
+  max-width:350px;
+
+  padding:25px 20px;
+
+  border-radius:18px;
+
+  background:var(--bg);
+
+  border:1px solid var(--border);
+
+  text-align:center;
+
+}
+
+
+.pause-symbol{
+
+  color:var(--purple);
+
+  font-size:27px;
+
+  font-weight:900;
+
+}
+
+
+.pause-popup h2{
+
+  margin:10px 0 5px;
+
+  color:var(--text);
+
+  font-size:20px;
+
+}
+
+
+.pause-popup p{
+
+  margin:0 0 18px;
+
+  color:var(--muted);
+
+  font-size:12px;
+
+}
+
+
+.resume-btn{
+
+  width:100%;
+
+  padding:12px;
+
+  border:0;
+
+  border-radius:10px;
+
+  background:var(--purple);
+
+  color:#fff;
+
+  font-weight:900;
+
+  cursor:pointer;
+
+}
+
+
+/* ==================================================
+   RESULT
+   ================================================== */
+
+.result-card{
+  width:100%;
+  max-width:520px;
+  box-sizing:border-box;
+  margin:18px auto 0;
+  padding:28px 18px 24px;
   background:var(--card);
   border:1px solid var(--border);
-  border-radius:16px;
-  padding:22px 16px;
+  border-radius:18px;
   text-align:center;
+  overflow:hidden;
 }
 
-.result-score{
-  font-size:34px;
-  font-weight:700;
-  margin:12px 0;
+.result-brand{
+  margin:0;
+  color:var(--text);
+  font-size:24px;
+  line-height:1.2;
+  font-weight:950;
 }
 
-.result-stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:8px;
-  margin:18px 0;
+.result-brand .edge{
+  color:var(--purple);
 }
 
-.result-stat{
-  background:var(--card2);
-  border-radius:10px;
-  padding:12px 5px;
+.result-test-name{
+  margin:15px 0 3px;
+  color:var(--text);
+  font-size:17px;
+  line-height:1.4;
+  font-weight:900;
+  overflow-wrap:anywhere;
 }
 
-.result-stat strong{
-  display:block;
-  font-size:20px;
-}
-
-.result-stat span{
+.result-test-number{
+  margin:0;
   color:var(--muted);
-  font-size:11px;
+  font-size:12px;
+  line-height:1.4;
+  font-weight:700;
+}
+
+.result-thankyou{
+  margin:25px 0 22px;
+  color:var(--text);
+  font-size:15px;
+  line-height:1.6;
+  font-weight:800;
 }
 
 .result-actions{
   display:flex;
   flex-direction:column;
   gap:10px;
+  width:100%;
 }
 
-.state{
-  text-align:center;
-  padding:40px 15px;
-  color:var(--muted);
-}
-
-.error{
-  color:var(--red);
-}
-
-.pause-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.72);
-  display:none;
+.result-action,
+.result-back{
+  width:100%;
+  min-height:44px;
+  box-sizing:border-box;
+  border-radius:10px;
+  display:flex;
   align-items:center;
   justify-content:center;
-  z-index:100;
-  padding:20px;
+  padding:10px 12px;
+  font-size:12px;
+  line-height:1.3;
+  font-weight:900;
+  text-decoration:none;
+  overflow-wrap:anywhere;
 }
 
-.pause-popup{
-  width:100%;
-  max-width:380px;
-  background:var(--card);
+.result-action{
   border:1px solid var(--border);
-  border-radius:16px;
-  padding:22px;
-  text-align:center;
+  background:var(--card2);
+  color:var(--text);
 }
 
-.pause-popup h3{
-  margin-top:0;
+.result-action.primary{
+  background:var(--purple);
+  border-color:var(--purple);
+  color:#fff;
 }
 
-.pause-popup p{
-  color:var(--muted);
-}
-
-.pause-popup button{
-  width:100%;
+.result-back{
   margin-top:10px;
+  border:1px solid var(--border);
+  background:var(--card2);
+  color:var(--text);
 }
+
+
+/* ==================================================
+   STATES
+   ================================================== */
 
 .hidden{
   display:none!important;
 }
 
+
+.loading{
+
+  text-align:center;
+
+  padding:55px 10px;
+
+  color:var(--muted);
+
+  font-size:13px;
+
+}
+
+
+.error{
+
+  background:#512020;
+
+  color:#ffaaaa;
+
+  padding:15px;
+
+  border-radius:12px;
+
+  margin-top:20px;
+
+  font-size:13px;
+
+}
+
+
+/* ==================================================
+   LIGHT THEME
+   ================================================== */
+
+[data-theme="light"] .section-btn{
+  background:#fff;
+  color:#24152f;
+}
+
+
+[data-theme="light"] .section-btn.current{
+  background:var(--purple);
+  color:#fff;
+}
+
+
+[data-theme="light"] .question-card,
+[data-theme="light"] .grid-popup,
+[data-theme="light"] .pause-popup,
+[data-theme="light"] .result-card{
+  background:var(--card);
+}
+
+
+[data-theme="light"] .question-text,
+[data-theme="light"] .question-count,
+[data-theme="light"] .question-section,
+[data-theme="light"] .test-name,
+[data-theme="light"] .grid-subject,
+[data-theme="light"] .pause-popup h2{
+  color:var(--text);
+}
+
+
+/* ==================================================
+   MOBILE
+   ================================================== */
+
 @media(max-width:500px){
 
-  .test-wrap{
-    padding:12px;
+  .brand{
+    font-size:19px;
+  }
+
+  .timer{
+    min-width:70px;
+    font-size:12px;
+  }
+
+  .pause-btn{
+    padding:8px 9px;
+    font-size:11px;
+  }
+
+  .test-name{
+    font-size:14px;
+  }
+
+  .submit-section{
+    padding:8px 9px;
+    font-size:10px;
   }
 
   .question-text{
-    font-size:16px;
-  }
-
-  .result-stats{
-    grid-template-columns:1fr 1fr 1fr;
+    font-size:15px;
   }
 
   .question-grid{
-    grid-template-columns:repeat(5,1fr);
+    grid-template-columns:
+      repeat(5,1fr);
+  }
+
+}
+
+
+/* ==================================================
+   VERY SMALL SCREEN
+   ================================================== */
+
+@media(max-width:350px){
+
+  .header-actions{
+    gap:4px;
+  }
+
+  .timer{
+    min-width:64px;
+    padding:7px 5px;
+  }
+
+  .pause-btn{
+    padding:7px 7px;
+  }
+
+  .question-grid{
+    gap:6px;
   }
 
 }
@@ -455,188 +1413,353 @@ body{
 
 </head>
 
+
 <body>
 
-<div class="header">
-  SSC EDGE
-</div>
 
-<div class="test-wrap">
+<header class="test-header">
 
-  <div id="loadingState" class="state">
-    Loading Test...
-  </div>
+  <div class="test-header-top">
 
-  <div id="errorState" class="state error hidden"></div>
+    <div class="brand">
 
-  <div id="mainContent" class="hidden">
+      <span class="brand-ssc">
+        SSC
+      </span>
 
-    <div class="test-info">
-
-      <div id="testName" class="test-name">
-        Test
-      </div>
-
-      <div id="testNumber" class="test-number">
-        Test No. —
-      </div>
-
-      <div class="timer-box">
-
-        <div>
-          <div class="timer-label" id="timerLabel">
-            Time Remaining
-          </div>
-
-          <div id="timer" class="timer">
-            00:00
-          </div>
-        </div>
-
-        <button
-          id="pauseBtn"
-          class="pause-btn"
-          type="button">
-          Pause
-        </button>
-
-      </div>
+      <span class="brand-edge">
+        EDGE
+      </span>
 
     </div>
 
-    <div id="sectionBar" class="section-bar hidden"></div>
 
-    <div id="startScreen" class="start-screen hidden">
-
-      <h2>Ready to Start?</h2>
-
-      <p id="startDescription">
-        Start the test when you are ready.
-      </p>
-
-      <button
-        id="startBtn"
-        class="primary-btn"
-        type="button">
-        Start Test
-      </button>
-
-    </div>
-
-    <div id="questionArea" class="hidden">
-
-      <div class="question-card">
-
-        <div class="question-top">
-
-          <span
-            id="questionCount"
-            class="question-count">
-            Question 1
-          </span>
-
-          <div class="question-right">
-
-            <button
-              id="saveQuestionBtn"
-              class="save-question-btn"
-              type="button"
-              title="Save Question"
-              aria-label="Save Question">
-              ☆
-            </button>
-
-            <span
-              id="questionSection"
-              class="question-section">
-              English
-            </span>
-
-          </div>
-
-        </div>
-
-        <div
-          id="questionText"
-          class="question-text">
-        </div>
-
-        <div id="options"></div>
-
-        <div class="navigation">
-
-          <button
-            id="prevBtn"
-            class="secondary-btn"
-            type="button">
-            Previous
-          </button>
-
-          <button
-            id="nextBtn"
-            class="primary-btn"
-            type="button">
-            Next
-          </button>
-
-        </div>
-
-      </div>
-
-      <button
-        id="gridBtn"
-        class="secondary-btn grid-btn"
-        type="button">
-        Question Palette
-      </button>
+    <div class="header-actions">
 
       <div
-        id="questionGrid"
-        class="question-grid hidden">
+        id="timer"
+        class="timer"
+      >
+        --:--
       </div>
 
+
       <button
-        id="submitBtn"
-        class="secondary-btn grid-btn"
-        type="button">
-        Submit Test
+        id="pauseBtn"
+        class="pause-btn"
+        type="button"
+      >
+        Pause
       </button>
 
     </div>
 
-    <div id="resultArea" class="hidden"></div>
+  </div>
+
+
+  <div class="test-info">
+
+    <div class="test-info-left">
+
+      <div
+        id="testName"
+        class="test-name"
+      >
+        Loading Test...
+      </div>
+
+      <span
+        id="testNumber"
+        class="test-number"
+      >
+        Test
+      </span>
+
+    </div>
+
+
+    <button
+      id="submitSectionBtn"
+      class="submit-section"
+      type="button"
+    >
+      Submit Section
+    </button>
+
+  </div>
+
+
+  <div
+    id="sectionBar"
+    class="section-bar hidden"
+  >
+  </div>
+
+</header>
+
+
+
+<main class="test-container">
+
+
+  <div
+    id="loading"
+    class="loading"
+  >
+    Loading test...
+  </div>
+
+
+  <div
+    id="startScreen"
+    class="start-screen hidden"
+  >
+
+    <h2 id="startTitle" class="start-title">
+      Ready to Start?
+    </h2>
+
+    <p id="startSubtitle" class="start-subtitle">
+      Check your section details before starting.
+    </p>
+
+    <div class="section-table-wrap">
+
+      <table class="section-table">
+
+        <thead>
+          <tr>
+            <th>Section</th>
+            <th>Subject</th>
+            <th>No. of Questions</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+
+        <tbody id="sectionSummaryBody"></tbody>
+
+      </table>
+
+    </div>
+
+    <button
+      id="startTestBtn"
+      class="start-action"
+      type="button"
+    >
+      Start Test
+    </button>
+
+    <div id="resumeNote" class="resume-note hidden">
+      Your previous progress is saved. You can continue from where you stopped.
+    </div>
+
+  </div>
+
+
+  <div
+    id="testArea"
+    class="hidden"
+  >
+
+
+    <div class="question-top">
+
+      <span
+        id="questionCount"
+        class="question-count"
+      >
+        Question 1
+      </span>
+
+      <div style="display:flex;align-items:center;gap:10px;">
+
+        <button
+          id="saveQuestionBtn"
+          type="button"
+          title="Save Question"
+          aria-label="Save Question"
+          style="width:34px;height:34px;border:1px solid var(--border);border-radius:9px;background:var(--card2);color:var(--muted);font-size:19px;display:flex;align-items:center;justify-content:center;cursor:pointer;"
+        >
+          ☆
+        </button>
+
+        <span
+          id="questionSection"
+          class="question-section"
+        >
+          English
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div
+      id="questionCard"
+      class="question-card"
+    >
+    </div>
+
+
+  </div>
+
+
+  <div
+    id="result"
+    class="hidden"
+  >
+  </div>
+
+
+</main>
+
+
+
+<div
+  id="gridOverlay"
+  class="grid-overlay"
+>
+
+  <div class="grid-popup">
+
+
+    <div class="grid-header">
+
+
+      <div class="grid-subject-area">
+
+        <h2
+          id="gridSubject"
+          class="grid-subject"
+        >
+          English
+        </h2>
+
+        <span class="grid-subtitle">
+          Question Palette
+        </span>
+
+      </div>
+
+
+      <div class="grid-timer">
+
+        ⏱
+        <span id="gridTimer">
+          --:--
+        </span>
+
+      </div>
+
+
+      <button
+        id="gridClose"
+        class="grid-close"
+        type="button"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div
+      id="questionGrid"
+      class="question-grid"
+    >
+    </div>
+
+
+    <div class="grid-legend">
+
+      <div class="legend-item">
+
+        <span
+          class="legend-box legend-attempted"
+        ></span>
+
+        Attempted
+
+      </div>
+
+
+      <div class="legend-item">
+
+        <span
+          class="legend-box legend-not-visited"
+        ></span>
+
+        Not Visited
+
+      </div>
+
+
+      <div class="legend-item">
+
+        <span
+          class="legend-box legend-not-attempted"
+        ></span>
+
+        Not Attempted
+
+      </div>
+
+
+      <div class="legend-item">
+
+        <span class="legend-star">
+          ★
+        </span>
+
+        Mark for Review
+
+      </div>
+
+    </div>
+
 
   </div>
 
 </div>
 
-<div id="pauseOverlay" class="pause-overlay">
+
+
+<div
+  id="pauseOverlay"
+  class="pause-overlay"
+>
 
   <div class="pause-popup">
 
-    <h3>Test Paused</h3>
+    <div class="pause-symbol">
+      Ⅱ
+    </div>
+
+    <h2>
+      Test Paused
+    </h2>
 
     <p>
-      Your test is paused. Resume when you are ready.
+      Your test timer is paused.
     </p>
 
     <button
       id="resumeBtn"
-      class="primary-btn"
-      type="button">
+      class="resume-btn"
+      type="button"
+    >
       Resume Test
-    </button>
-
-    <button
-      id="pauseSubmitBtn"
-      class="secondary-btn"
-      type="button">
-      Submit Test
     </button>
 
   </div>
 
 </div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
 <script>
@@ -647,6 +1770,7 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
 
+
 const db =
 supabase.createClient(
   SUPABASE_URL,
@@ -654,971 +1778,470 @@ supabase.createClient(
 );
 
 
-/* =========================
-   GLOBAL STATE
-========================= */
-
 let test = null;
-
 let questions = [];
-
 let sections = [];
-
 let subjects = [];
-
 let currentIndex = 0;
-
 let answers = {};
-
 let review = new Set();
-
 let visitedQuestions = new Set();
-
-let savedQuestions = new Set();
-
 let remainingSeconds = 0;
-
 let timerInterval = null;
-
 let submitted = false;
-
 let paused = false;
-
 let currentSectionIndex = -1;
-
 let sectionRemainingTimes = {};
-
 let progressKey = "";
-
+let hasSavedProgress = false;
+let progressStarted = false;
+let savedQuestions = new Set();
 let savedQuestionsKey = "";
 
-let hasSavedProgress = false;
 
-let progressStarted = false;
-
-let progressSavedAt = null;
-
-
-/* =========================
-   ELEMENTS
-========================= */
-
-const loadingState =
-document.getElementById("loadingState");
-
-const errorState =
-document.getElementById("errorState");
-
-const mainContent =
-document.getElementById("mainContent");
-
-const testName =
-document.getElementById("testName");
-
-const testNumber =
-document.getElementById("testNumber");
-
-const timer =
-document.getElementById("timer");
-
-const timerLabel =
-document.getElementById("timerLabel");
-
-const pauseBtn =
-document.getElementById("pauseBtn");
-
-const sectionBar =
-document.getElementById("sectionBar");
-
-const startScreen =
-document.getElementById("startScreen");
-
-const startDescription =
-document.getElementById("startDescription");
-
-const startBtn =
-document.getElementById("startBtn");
-
-const questionArea =
-document.getElementById("questionArea");
-
-const questionCount =
-document.getElementById("questionCount");
-
-const questionSection =
-document.getElementById("questionSection");
-
-const saveQuestionBtn =
-document.getElementById("saveQuestionBtn");
-
-const questionText =
-document.getElementById("questionText");
-
-const options =
-document.getElementById("options");
-
-const prevBtn =
-document.getElementById("prevBtn");
-
-const nextBtn =
-document.getElementById("nextBtn");
-
-const gridBtn =
-document.getElementById("gridBtn");
-
-const questionGrid =
-document.getElementById("questionGrid");
-
-const submitBtn =
-document.getElementById("submitBtn");
-
-const resultArea =
-document.getElementById("resultArea");
-
-const pauseOverlay =
-document.getElementById("pauseOverlay");
-
-const resumeBtn =
-document.getElementById("resumeBtn");
-
-const pauseSubmitBtn =
-document.getElementById("pauseSubmitBtn");
-
-
-/* =========================
-   START
-========================= */
-
-window.addEventListener(
-"DOMContentLoaded",
-loadTest
+const params =
+new URLSearchParams(
+  location.search
 );
 
+const testId =
+params.get("id");
 
-/* =========================
-   LOAD TEST
-========================= */
+const reattempt =
+params.get("reattempt") === "1";
+
+
+loadTest();
+
 
 async function loadTest(){
 
-  try{
-
-    const params =
-    new URLSearchParams(
-      window.location.search
-    );
-
-    const id =
-    params.get("id");
-
-    if(!id){
-      throw new Error(
-        "Test ID is missing."
-      );
-    }
-
-    const {data,error} =
-    await db
-    .from("mock_tests")
-    .select("*")
-    .eq("id",id)
-    .eq("is_active",true)
-    .maybeSingle();
-
-    if(error)
-      throw error;
-
-    if(!data){
-      throw new Error(
-        "Test not found or inactive."
-      );
-    }
-
-    test = data;
-
-    progressKey =
-      "ssc-edge-progress-" +
-      String(test.id);
-
-    savedQuestionsKey =
-      "ssc-edge-saved-questions-" +
-      String(test.id);
-
-    loadSavedQuestions();
-
-    testName.textContent =
-      test.title || "SSC EDGE Test";
-
-    testNumber.textContent =
-      "Test No. " +
-      (test.id || "—");
-
-    await loadSections();
-
-    await loadQuestions();
-
-  }catch(error){
-
-    console.error(error);
+  if(!testId){
 
     showError(
-      error.message ||
-      "Unable to load test."
+      "No test ID was provided."
     );
+
+    return;
 
   }
 
+
+  const testResult =
+    await db
+      .from("mock_tests")
+      .select("*")
+      .eq("id",testId)
+      .eq("is_active",true)
+      .maybeSingle();
+
+
+  if(testResult.error){
+
+    showError(
+      testResult.error.message
+    );
+
+    return;
+
+  }
+
+
+  if(!testResult.data){
+
+    showError(
+      "Test not found or inactive."
+    );
+
+    return;
+
+  }
+
+
+  test =
+    testResult.data;
+
+  progressKey =
+    "ssc-edge-progress-" + String(test.id);
+
+  savedQuestionsKey =
+    "ssc-edge-saved-questions-" + String(test.id);
+
+  loadSavedQuestions();
+
+  await loadSections();
+  await loadQuestions();
+
 }
 
-
-/* =========================
-   LOAD SECTIONS
-========================= */
 
 async function loadSections(){
 
-  sections = [];
-
   if(
-    test.test_type === "FULL" &&
-    test.subject_wise_timing === true
+    test.test_type !== "FULL" ||
+    !test.subject_wise_timing
   ){
-
-    const {data,error} =
-    await db
-    .from("mock_test_sections")
-    .select("*")
-    .eq("mock_test_id",test.id)
-    .order(
-      "section_order",
-      {ascending:true}
-    );
-
-    if(error)
-      throw error;
-
-    sections = data || [];
-
-    if(sections.length){
-
-      const subjectIds =
-      sections.map(
-        s => s.subject_id
-      );
-
-      const {data:subjectData} =
-      await db
-      .from("subjects")
-      .select("*")
-      .in("id",subjectIds);
-
-      subjects =
-      subjectData || [];
-
-      sectionRemainingTimes = {};
-
-      sections.forEach(section=>{
-
-        sectionRemainingTimes[
-          String(section.id)
-        ] =
-        getSectionDurationMinutes(
-          section
-        ) * 60;
-
-      });
-
-    }
-
+    sections = [];
+    return;
   }
 
+  const result =
+    await db
+      .from("mock_test_sections")
+      .select("*")
+      .eq("mock_test_id", test.id)
+      .order("section_order");
+
+  if(result.error){
+    showError(result.error.message);
+    return;
+  }
+
+  sections = result.data || [];
+
+  // Load subjects so section buttons/table show real subject names.
+  const subjectResult =
+    await db
+      .from("subjects")
+      .select("id,name")
+      .order("name");
+
+  if(!subjectResult.error){
+    subjects = subjectResult.data || [];
+  }
+
+  sectionRemainingTimes = {};
+
+  sections.forEach((section,index) => {
+    sectionRemainingTimes[String(section.id)] =
+      getSectionDurationMinutes(section,index) * 60;
+  });
 }
 
 
-/* =========================
-   LOAD QUESTIONS
-========================= */
-
 async function loadQuestions(){
 
-  let rawQuestions = [];
+  const result =
+    await db
+      .from("mock_test_questions")
+      .select(`
+        id,
+        question_id,
+        question_order,
+        section_id
+      `)
+      .eq(
+        "mock_test_id",
+        test.id
+      )
+      .order(
+        "question_order"
+      );
 
-  const {data:assignments,error} =
-  await db
-  .from("mock_test_questions")
-  .select(`
-    id,
-    mock_test_id,
-    question_id,
-    section_id,
-    question_order
-  `)
-  .eq("mock_test_id",test.id)
-  .order(
-    "question_order",
-    {ascending:true}
-  );
 
-  if(error)
-    throw error;
+  if(result.error){
 
-  if(assignments && assignments.length){
-
-    const questionIds =
-    assignments.map(
-      a => a.question_id
+    showError(
+      result.error.message
     );
 
-    const {data:qData,qError} =
+    return;
+
+  }
+
+
+  const assignments =
+    result.data || [];
+
+
+  if(!assignments.length){
+
+    showError(
+      "No questions have been assigned to this test yet."
+    );
+
+    return;
+
+  }
+
+
+  const ids =
+    assignments.map(
+      x => x.question_id
+    );
+
+
+  const questionResult =
     await db
-    .from("questions")
-    .select(`
-      id,
-      subject_id,
-      chapter_id,
-      question_text,
-      explanation,
-      marks,
-      negative_marks
-    `)
-    .in("id",questionIds);
+      .from("questions")
+      .select(`
+        id,
+        question_text,
+        explanation,
+        marks,
+        negative_marks,
+        subject_id,
+        chapter_id
+      `)
+      .in(
+        "id",
+        ids
+      );
 
-    if(qError)
-      throw qError;
 
-    const {data:oData,oError} =
+  if(questionResult.error){
+
+    showError(
+      questionResult.error.message
+    );
+
+    return;
+
+  }
+
+
+  const optionResult =
     await db
-    .from("question_options")
-    .select(`
-      id,
-      question_id,
-      option_text,
-      option_label,
-      is_correct
-    `)
-    .in("question_id",questionIds)
-    .order("id");
-
-    if(oError)
-      throw oError;
-
-    const qMap = {};
-
-    (qData || []).forEach(q=>{
-
-      qMap[String(q.id)] = {
-        ...q,
-        options:[]
-      };
-
-    });
-
-    (oData || []).forEach(o=>{
-
-      if(qMap[String(o.question_id)]){
-
-        qMap[
-          String(o.question_id)
-        ].options.push(o);
-
-      }
-
-    });
-
-    rawQuestions =
-    assignments
-    .map(a=>{
-
-      const q =
-      qMap[String(a.question_id)];
-
-      if(!q)
-        return null;
-
-      return {
-        ...q,
-        assignment_id:a.id,
-        section_id:a.section_id,
-        question_order:a.question_order
-      };
-
-    })
-    .filter(Boolean);
-
-  }else{
-
-    /*
-      Fallback for old tests which may still
-      have questions connected through mock_test_id.
-    */
-
-    const {data:qData,error:qError} =
-    await db
-    .from("questions")
-    .select(`
-      id,
-      subject_id,
-      chapter_id,
-      question_text,
-      explanation,
-      marks,
-      negative_marks
-    `)
-    .eq("mock_test_id",test.id)
-    .order("id");
-
-    if(qError)
-      throw qError;
-
-    const ids =
-    (qData || []).map(q=>q.id);
-
-    let oData = [];
-
-    if(ids.length){
-
-      const {data,error:oError} =
-      await db
       .from("question_options")
       .select(`
         id,
         question_id,
         option_text,
-        option_label,
-        is_correct
+        option_label
       `)
-      .in("question_id",ids)
-      .order("id");
+      .in(
+        "question_id",
+        ids
+      )
+      .order(
+        "id"
+      );
 
-      if(oError)
-        throw oError;
 
-      oData =
-      errorSafeArray(error,oData);
+  if(optionResult.error){
 
-    }
+    showError(
+      optionResult.error.message
+    );
 
-    const map = {};
-
-    (qData || []).forEach(q=>{
-
-      map[String(q.id)] = {
-        ...q,
-        options:[]
-      };
-
-    });
-
-    (oData || []).forEach(o=>{
-
-      if(map[String(o.question_id)]){
-
-        map[
-          String(o.question_id)
-        ].options.push(o);
-
-      }
-
-    });
-
-    rawQuestions =
-    (qData || []).map(q=>map[String(q.id)]);
+    return;
 
   }
 
-  questions = rawQuestions;
+
+  const questionMap =
+    new Map();
+
+
+  (questionResult.data || [])
+    .forEach(
+      q => {
+
+        questionMap.set(
+          String(q.id),
+          {
+            ...q,
+            options:[]
+          }
+        );
+
+      }
+    );
+
+
+  (optionResult.data || [])
+    .forEach(
+      option => {
+
+        const q =
+          questionMap.get(
+            String(option.question_id)
+          );
+
+
+        if(q){
+
+          q.options.push(
+            option
+          );
+
+        }
+
+      }
+    );
+
+
+  questions =
+    assignments
+      .map(
+        assignment => {
+
+          const q =
+            questionMap.get(
+              String(
+                assignment.question_id
+              )
+            );
+
+
+          if(!q){
+            return null;
+          }
+
+
+          return {
+
+            ...q,
+
+            assignment_id:
+              assignment.id,
+
+            section_id:
+              assignment.section_id,
+
+            question_order:
+              assignment.question_order
+
+          };
+
+        }
+      )
+      .filter(Boolean);
+
 
   if(!questions.length){
 
-    throw new Error(
-      "No questions have been assigned to this test."
+    showError(
+      "Assigned questions could not be loaded."
     );
 
+    return;
+
   }
+
 
   beginTest();
 
 }
 
 
-/* =========================
-   SAFE ARRAY
-========================= */
-
-function errorSafeArray(error,data){
-
-  return data || [];
-
-}
-
-
-/* =========================
-   BEGIN TEST
-========================= */
-
 function beginTest(){
 
-  loadingState.classList.add("hidden");
+  document
+    .getElementById("loading")
+    .classList
+    .add("hidden");
 
-  mainContent.classList.remove("hidden");
+  document
+    .getElementById("testName")
+    .textContent =
+      test.title || "SSC EDGE Test";
+
+  document
+    .getElementById("testNumber")
+    .textContent =
+      "Test " +
+      (
+        test.test_number ||
+        test.test_no ||
+        "01"
+      );
 
   renderSections();
 
   loadProgress();
 
+  document
+    .getElementById("testArea")
+    .classList
+    .add("hidden");
+
+  document
+    .getElementById("result")
+    .classList
+    .add("hidden");
+
+  document
+    .getElementById("startScreen")
+    .classList
+    .remove("hidden");
+
   renderStartScreen();
 
-}
-
-
-/* =========================
-   START SCREEN
-========================= */
-
-function renderStartScreen(){
-
-  startScreen.classList.remove("hidden");
-
-  questionArea.classList.add("hidden");
-
-  resultArea.classList.add("hidden");
-
-  pauseBtn.classList.add("hidden");
-
-  timer.textContent =
-  formatTime(
-    getInitialDisplayTime()
-  );
-
-  if(hasSavedProgress){
-
-    startDescription.textContent =
-      "A saved test session was found. Continue from where you left off.";
-
-    startBtn.textContent =
-      "Resume Test";
-
-  }else{
-
-    startDescription.textContent =
-      "Start the test when you are ready.";
-
-    startBtn.textContent =
-      "Start Test";
-
-  }
+  document
+    .getElementById("startTestBtn")
+    .onclick =
+      function(){
+        startOrResumeTest();
+      };
 
 }
 
 
-/* =========================
-   INITIAL DISPLAY TIME
-========================= */
-
-function getInitialDisplayTime(){
+function getActiveQuestionList(){
 
   if(
-    test.test_type === "FULL" &&
-    test.subject_wise_timing === true &&
-    sections.length
+    sections.length &&
+    currentSectionIndex >= 0 &&
+    sections[currentSectionIndex]
   ){
 
-    if(
-      sectionRemainingTimes &&
-      Object.keys(
-        sectionRemainingTimes
-      ).length
-    ){
-
-      const first =
-      sections[0];
-
-      const value =
-      sectionRemainingTimes[
-        String(first.id)
-      ];
-
-      if(
-        Number.isFinite(value)
-      ){
-        return value;
-      }
-
-    }
-
-    return (
-      getSectionDurationMinutes(
-        sections[0]
-      ) * 60
+    return getSectionQuestions(
+      sections[currentSectionIndex].id
     );
 
   }
 
-  return (
-    Number(test.duration_minutes || 0)
-    * 60
+  return questions.map(
+    (q,index) => ({q,i:index})
   );
 
 }
 
-
-/* =========================
-   START / RESUME
-========================= */
-
-function startOrResumeTest(){
-
-  if(submitted)
-    return;
-
-  startScreen.classList.add("hidden");
-
-  questionArea.classList.remove("hidden");
-
-  pauseBtn.classList.remove("hidden");
-
-  progressStarted = true;
-
-  paused = false;
-
-  if(
-    hasSavedProgress &&
-    progressSavedAt
-  ){
-
-    applyElapsedTimeSinceSave();
-
-  }
-
-  startTimer();
-
-  showQuestion();
-
-  saveProgress();
-
-}
-
-
-/* =========================
-   START BUTTON
-========================= */
-
-startBtn.addEventListener(
-"click",
-startOrResumeTest
-);
-
-
-/* =========================
-   PROGRESS KEY
-========================= */
-
-function getProgressData(){
-
-  try{
-
-    const raw =
-    localStorage.getItem(
-      progressKey
-    );
-
-    if(!raw)
-      return null;
-
-    return JSON.parse(raw);
-
-  }catch(error){
-
-    console.error(
-      "Progress read error:",
-      error
-    );
-
-    return null;
-
-  }
-
-}
-
-
-/* =========================
-   LOAD PROGRESS
-========================= */
-
-function loadProgress(){
-
-  const saved =
-  getProgressData();
-
-  if(!saved){
-
-    hasSavedProgress = false;
-
-    return;
-
-  }
-
-  hasSavedProgress = true;
-
-  currentIndex =
-  Math.max(
-    0,
-    Math.min(
-      Number(saved.currentIndex || 0),
-      questions.length - 1
-    )
-  );
-
-  answers =
-  saved.answers || {};
-
-  review =
-  new Set(
-    saved.review || []
-  );
-
-  visitedQuestions =
-  new Set(
-    saved.visited || []
-  );
-
-  sectionRemainingTimes =
-  saved.sectionRemainingTimes ||
-  sectionRemainingTimes ||
-  {};
-
-  progressStarted =
-  saved.progressStarted === true;
-
-  progressSavedAt =
-  Number(saved.savedAt || 0) || null;
-
-  if(
-    Number.isFinite(
-      Number(saved.remainingSeconds)
-    )
-  ){
-
-    remainingSeconds =
-    Number(saved.remainingSeconds);
-
-  }
-
-  currentSectionIndex =
-  Number.isInteger(
-    saved.currentSectionIndex
-  )
-    ? saved.currentSectionIndex
-    : -1;
-
-  /*
-    Make sure newly added sections still
-    receive their correct initial time.
-  */
-
-  if(sections.length){
-
-    sections.forEach(section=>{
-
-      const key =
-      String(section.id);
-
-      if(
-        !Number.isFinite(
-          Number(
-            sectionRemainingTimes[key]
-          )
-        )
-      ){
-
-        sectionRemainingTimes[key] =
-        getSectionDurationMinutes(
-          section
-        ) * 60;
-
-      }
-
-    });
-
-  }
-
-}
-
-
-/* =========================
-   APPLY ELAPSED TIME
-========================= */
-
-function applyElapsedTimeSinceSave(){
-
-  if(
-    !progressSavedAt ||
-    paused
-  ){
-    return;
-  }
-
-  const now =
-  Date.now();
-
-  let elapsed =
-  Math.floor(
-    (now - progressSavedAt) / 1000
-  );
-
-  if(elapsed <= 0)
-    return;
-
-  /*
-    Prevent absurd values caused by
-    corrupted localStorage.
-  */
-
-  elapsed =
-  Math.min(
-    elapsed,
-    86400
-  );
-
-  if(
-    test.test_type === "FULL" &&
-    test.subject_wise_timing === true &&
-    sections.length
-  ){
-
-    applySectionElapsedTime(elapsed);
-
-  }else{
-
-    remainingSeconds =
-    Math.max(
-      0,
-      remainingSeconds - elapsed
-    );
-
-  }
-
-  progressSavedAt = Date.now();
-
-}
-
-
-/* =========================
-   APPLY SECTION ELAPSED
-========================= */
-
-function applySectionElapsedTime(elapsed){
-
-  let index =
-  currentSectionIndex;
-
-  if(index < 0)
-    index = 0;
-
-  while(
-    elapsed > 0 &&
-    index < sections.length
-  ){
-
-    const section =
-    sections[index];
-
-    const key =
-    String(section.id);
-
-    let remaining =
-    Number(
-      sectionRemainingTimes[key]
-    );
-
-    if(
-      !Number.isFinite(remaining)
-    ){
-
-      remaining =
-      getSectionDurationMinutes(
-        section
-      ) * 60;
-
-    }
-
-    if(remaining > elapsed){
-
-      remaining -= elapsed;
-
-      sectionRemainingTimes[key] =
-      remaining;
-
-      elapsed = 0;
-
-      break;
-
-    }
-
-    elapsed -= remaining;
-
-    sectionRemainingTimes[key] = 0;
-
-    index++;
-
-    if(index < sections.length){
-
-      currentSectionIndex = index;
-
-    }
-
-  }
-
-  if(
-    index >= sections.length
-  ){
-
-    currentSectionIndex =
-    sections.length - 1;
-
-  }
-
-}
-
-
-/* =========================
-   SAVE PROGRESS
-========================= */
 
 function saveProgress(){
 
-  if(!test || submitted)
+  if(
+    !test ||
+    submitted
+  ){
     return;
+  }
 
   saveCurrentAnswer();
-
   saveCurrentSectionTime();
 
   const data = {
 
-    currentIndex,
+    currentIndex:
+      currentIndex,
 
-    currentSectionIndex,
+    currentSectionIndex:
+      currentSectionIndex,
 
-    answers,
+    answers:
+      answers,
 
-    review:[
-      ...review
-    ],
+    review:
+      Array.from(review),
 
-    visited:[
-      ...visitedQuestions
-    ],
+    visited:
+      Array.from(visitedQuestions),
 
-    sectionRemainingTimes,
+    sectionRemainingTimes:
+      sectionRemainingTimes,
 
-    remainingSeconds,
+    remainingSeconds:
+      remainingSeconds,
 
-    progressStarted,
+    progressStarted:
+      progressStarted,
 
-    paused,
+    paused:
+      paused,
 
-    savedAt:Date.now()
+    savedAt:
+      Date.now()
 
   };
 
@@ -1629,13 +2252,12 @@ function saveProgress(){
       JSON.stringify(data)
     );
 
-    progressSavedAt =
-    data.savedAt;
+    hasSavedProgress = true;
 
   }catch(error){
 
-    console.error(
-      "Progress save error:",
+    console.warn(
+      "Progress could not be saved:",
       error
     );
 
@@ -1644,68 +2266,162 @@ function saveProgress(){
 }
 
 
-/* =========================
-   CLEAR PROGRESS
-========================= */
-
-function clearProgress(){
-
-  try{
-
-    localStorage.removeItem(
-      progressKey
-    );
-
-  }catch(error){
-
-    console.error(error);
-
-  }
+function loadProgress(){
 
   hasSavedProgress = false;
+  progressStarted = false;
 
-  progressSavedAt = null;
-
-}
-
-
-/* =========================
-   SAVED QUESTIONS
-========================= */
-
-function loadSavedQuestions(){
-
-  savedQuestions =
-  new Set();
+  if(
+    !progressKey ||
+    reattempt
+  ){
+    return;
+  }
 
   try{
 
     const raw =
-    localStorage.getItem(
-      savedQuestionsKey
-    );
+      localStorage.getItem(progressKey);
 
-    if(!raw)
+    if(!raw){
       return;
+    }
 
-    const parsed =
-    JSON.parse(raw);
+    const data =
+      JSON.parse(raw);
 
-    if(Array.isArray(parsed)){
+    if(!data || !data.progressStarted){
+      return;
+    }
 
-      savedQuestions =
+    progressStarted = true;
+    hasSavedProgress = true;
+
+    const savedAt = Number(data.savedAt);
+    const wasPaused = data.paused === true;
+
+    if(
+      !wasPaused &&
+      Number.isFinite(savedAt) &&
+      savedAt > 0
+    ){
+
+      const elapsed =
+        Math.max(
+          0,
+          Math.floor((Date.now() - savedAt) / 1000)
+        );
+
+      if(elapsed > 0){
+
+        if(
+          sections.length &&
+          Number.isInteger(data.currentSectionIndex) &&
+          data.currentSectionIndex >= 0 &&
+          sections[data.currentSectionIndex]
+        ){
+
+          const sectionId =
+            String(sections[data.currentSectionIndex].id);
+
+          if(
+            data.sectionRemainingTimes &&
+            typeof data.sectionRemainingTimes === "object" &&
+            Number.isFinite(Number(data.sectionRemainingTimes[sectionId]))
+          ){
+
+            data.sectionRemainingTimes[sectionId] =
+              Math.max(
+                0,
+                Number(data.sectionRemainingTimes[sectionId]) - elapsed
+              );
+
+          }
+
+        }else{
+
+          const savedRemaining = Number(data.remainingSeconds);
+
+          if(Number.isFinite(savedRemaining)){
+            data.remainingSeconds =
+              Math.max(0, savedRemaining - elapsed);
+          }
+
+        }
+
+      }
+
+    }
+
+    if(Number.isFinite(Number(data.remainingSeconds))){
+      remainingSeconds = Math.max(0, Number(data.remainingSeconds));
+    }
+
+    answers =
+      data.answers || {};
+
+    review =
       new Set(
-        parsed.map(
-          id => String(id)
-        )
+        data.review || []
       );
+
+    visitedQuestions =
+      new Set(
+        data.visited || []
+      );
+
+    if(
+      data.sectionRemainingTimes &&
+      typeof data.sectionRemainingTimes === "object"
+    ){
+
+      Object.keys(
+        data.sectionRemainingTimes
+      ).forEach(key => {
+
+        const value =
+          Number(
+            data.sectionRemainingTimes[key]
+          );
+
+        if(Number.isFinite(value)){
+          sectionRemainingTimes[key] = value;
+        }
+
+      });
+
+    }
+
+    if(
+      Number.isInteger(
+        data.currentIndex
+      ) &&
+      data.currentIndex >= 0 &&
+      data.currentIndex < questions.length
+    ){
+
+      currentIndex =
+        data.currentIndex;
+
+    }
+
+    if(
+      Number.isInteger(
+        data.currentSectionIndex
+      ) &&
+      data.currentSectionIndex >= 0 &&
+      data.currentSectionIndex < sections.length
+    ){
+
+      currentSectionIndex =
+        data.currentSectionIndex;
 
     }
 
   }catch(error){
 
-    console.error(
-      "Saved question load error:",
+    console.warn(
+      "Saved progress could not be loaded:",
       error
     );
 
@@ -1714,293 +2430,456 @@ function loadSavedQuestions(){
 }
 
 
-/* =========================
-   SAVE SAVED QUESTIONS
-========================= */
+function clearProgress(){
 
-function saveSavedQuestions(){
+  if(!progressKey){
+    return;
+  }
 
   try{
+    localStorage.removeItem(progressKey);
+  }catch(error){}
 
-    localStorage.setItem(
-      savedQuestionsKey,
-      JSON.stringify(
-        [...savedQuestions]
-      )
-    );
-
-  }catch(error){
-
-    console.error(
-      "Saved question save error:",
-      error
-    );
-
-  }
+  hasSavedProgress = false;
+  progressStarted = false;
 
 }
 
 
-/* =========================
-   TOGGLE SAVED QUESTION
-========================= */
+function renderStartScreen(){
 
-function toggleSavedQuestion(){
+  const body =
+    document.getElementById(
+      "sectionSummaryBody"
+    );
 
-  if(!questions[currentIndex])
-    return;
+  if(!sections.length){
 
-  const id =
-  String(
-    questions[currentIndex].id
-  );
-
-  if(
-    savedQuestions.has(id)
-  ){
-
-    savedQuestions.delete(id);
+    body.innerHTML = `
+      <tr>
+        <td>Full Test</td>
+        <td>All Subjects</td>
+        <td>${questions.length}</td>
+        <td>${escapeHtml(test.duration_minutes || 0)} min</td>
+      </tr>
+    `;
 
   }else{
 
-    savedQuestions.add(id);
+    body.innerHTML =
+      sections.map(
+        (section,index) => {
+
+          const list =
+            getSectionQuestions(
+              section.id
+            );
+
+          const subject =
+            getSectionName(
+              section,
+              index
+            );
+
+          return `
+            <tr>
+              <td>Section ${index + 1}</td>
+              <td>${escapeHtml(subject)}</td>
+              <td>${list.length}</td>
+              <td>${escapeHtml(getSectionDurationMinutes(section,index))} min</td>
+            </tr>
+          `;
+
+        }
+      ).join("");
 
   }
 
-  saveSavedQuestions();
+  const button =
+    document.getElementById(
+      "startTestBtn"
+    );
 
-  updateSaveQuestionButton();
+  const title =
+    document.getElementById(
+      "startTitle"
+    );
+
+  const subtitle =
+    document.getElementById(
+      "startSubtitle"
+    );
+
+  const note =
+    document.getElementById(
+      "resumeNote"
+    );
+
+  if(hasSavedProgress){
+
+    title.textContent =
+      "Resume Test";
+
+    subtitle.textContent =
+      "Your previous test progress is saved.";
+
+    button.textContent =
+      "Resume Test";
+
+    note.classList.remove("hidden");
+
+  }else{
+
+    title.textContent =
+      "Ready to Start?";
+
+    subtitle.textContent =
+      "Check your section details before starting.";
+
+    button.textContent =
+      "Start Test";
+
+    note.classList.add("hidden");
+
+  }
 
 }
 
 
-/* =========================
-   UPDATE SAVE ICON
-========================= */
+function startOrResumeTest(){
 
-function updateSaveQuestionButton(){
+  if(reattempt){
+    clearProgress();
+    currentIndex = 0;
+    currentSectionIndex = -1;
+    answers = {};
+    review = new Set();
+    visitedQuestions = new Set();
+    sectionRemainingTimes = {};
+    sections.forEach(section => {
+      sectionRemainingTimes[String(section.id)] =
+        Number(section.duration_minutes || 0) * 60;
+    });
+  }
 
-  if(!questions[currentIndex])
-    return;
+  progressStarted = true;
+  paused = false;
 
-  const id =
-  String(
-    questions[currentIndex].id
-  );
+  document
+    .getElementById("startScreen")
+    .classList
+    .add("hidden");
 
-  const saved =
-  savedQuestions.has(id);
+  document
+    .getElementById("testArea")
+    .classList
+    .remove("hidden");
 
-  saveQuestionBtn.textContent =
-    saved ? "★" : "☆";
+  if(
+    sections.length &&
+    currentSectionIndex < 0
+  ){
 
-  saveQuestionBtn.classList.toggle(
-    "saved",
-    saved
-  );
+    const first =
+      sections.findIndex(
+        section =>
+          getSectionQuestions(section.id).length
+      );
 
-  saveQuestionBtn.title =
-    saved
-      ? "Remove Saved Question"
-      : "Save Question";
+    currentSectionIndex =
+      first >= 0 ? first : 0;
 
-  saveQuestionBtn.setAttribute(
-    "aria-label",
-    saved
-      ? "Remove Saved Question"
-      : "Save Question"
-  );
+    const list =
+      getSectionQuestions(
+        sections[currentSectionIndex]?.id
+      );
+
+    if(list.length){
+      currentIndex = list[0].i;
+    }
+
+  }
+
+  startTimer();
+  showQuestion();
+  saveProgress();
 
 }
 
 
-/* =========================
-   SAVE ICON EVENT
-========================= */
+function getSectionDurationMinutes(section,index=0){
 
-saveQuestionBtn.addEventListener(
-"click",
-toggleSavedQuestion
-);
+  const possible = [
+    section?.duration_minutes,
+    section?.time_minutes,
+    section?.duration,
+    section?.time_limit,
+    section?.time,
+    section?.minutes,
+    section?.section_duration
+  ];
 
+  for(const value of possible){
+    const n = Number(value);
+    if(Number.isFinite(n) && n > 0){
+      return n;
+    }
+  }
 
-/* =========================
-   RENDER SECTIONS
-========================= */
+  // Some installations keep subject-wise timing in the test row.
+  const timing = test?.subject_wise_timing;
+  if(timing && typeof timing === "object" && !Array.isArray(timing)){
+    const subjectName = getSectionSubjectName(section,index);
+    const keys = [
+      section?.subject_id,
+      section?.id,
+      subjectName,
+      String(subjectName || "").toLowerCase(),
+      String(subjectName || "").toUpperCase(),
+      index + 1,
+      String(index + 1)
+    ];
+    for(const key of keys){
+      if(key !== undefined && timing[key] !== undefined){
+        const n = Number(timing[key]);
+        if(Number.isFinite(n) && n > 0) return n;
+      }
+    }
+  }
+
+  // Final safe fallback: divide total test time between sections.
+  const total = Number(test?.duration_minutes || 0);
+  if(total > 0 && sections.length){
+    return total / sections.length;
+  }
+
+  return 0;
+}
+
+function getSectionSubjectName(section,index=0){
+
+  const direct = [
+    section?.subject_name,
+    section?.subjectName,
+    section?.subject,
+    section?.name,
+    section?.title,
+    section?.section_name
+  ];
+
+  for(const value of direct){
+    if(String(value || "").trim() && !/^section\s*\d+$/i.test(String(value).trim())){
+      return String(value).trim();
+    }
+  }
+
+  if(section?.subject_id){
+    const subject = subjects.find(
+      x => String(x.id) === String(section.subject_id)
+    );
+    if(subject?.name) return subject.name;
+  }
+
+  // Most reliable fallback: the questions assigned to this section
+  // already contain subject_id.
+  const first = questions.find(
+    q => String(q.section_id) === String(section?.id)
+  );
+
+  if(first?.subject_id){
+    const subject = subjects.find(
+      x => String(x.id) === String(first.subject_id)
+    );
+    if(subject?.name) return subject.name;
+  }
+
+  return "Section " + (index + 1);
+}
+
+function getSectionName(section,index=0){
+  return getSectionSubjectName(section,index);
+}
+
 
 function renderSections(){
 
+  const bar =
+    document.getElementById(
+      "sectionBar"
+    );
+
+
   if(
-    test.test_type !== "FULL" ||
-    test.subject_wise_timing !== true ||
-    !sections.length
+    !(
+      test.test_type === "FULL" &&
+      test.subject_wise_timing &&
+      sections.length
+    )
   ){
 
-    sectionBar.classList.add("hidden");
-
-    currentSectionIndex = -1;
+    bar.classList.add(
+      "hidden"
+    );
 
     return;
 
   }
 
-  sectionBar.classList.remove("hidden");
 
-  sectionBar.innerHTML = "";
+  bar.classList.remove(
+    "hidden"
+  );
+
+
+  bar.innerHTML = "";
+
 
   sections.forEach(
-    (section,index)=>{
+    (section,index) => {
 
-      const btn =
-      document.createElement("button");
+      const button =
+        document.createElement(
+          "button"
+        );
 
-      btn.type = "button";
 
-      btn.className =
-      "section-btn";
+      button.type =
+        "button";
 
-      btn.dataset.index =
-      String(index);
 
-      const subject =
-      subjects.find(
-        s =>
-        String(s.id) ===
-        String(section.subject_id)
+      button.className =
+        "section-btn";
+
+
+      button.textContent =
+        getSectionName(
+          section,
+          index
+        );
+
+
+      button.onclick =
+        function(){
+
+          jumpToSection(
+            index
+          );
+
+        };
+
+
+      bar.appendChild(
+        button
       );
-
-      btn.textContent =
-        subject?.name ||
-        "Section " + (index + 1);
-
-      btn.addEventListener(
-        "click",
-        ()=>jumpToSection(index)
-      );
-
-      sectionBar.appendChild(btn);
 
     }
   );
+
 
   updateSectionButtons();
 
 }
 
 
-/* =========================
-   GET SECTION QUESTIONS
-========================= */
-
-function getSectionQuestions(index){
-
-  if(
-    !sections[index]
-  ){
-    return [];
-  }
-
-  const sectionId =
-  String(
-    sections[index].id
-  );
+function getSectionQuestions(sectionId){
 
   return questions
     .map(
-      (q,i)=>({
+      (q,index) => ({
         q,
-        index:i
+        i:index
       })
     )
     .filter(
       item =>
-      String(
-        item.q.section_id
-      ) === sectionId
+        String(
+          item.q.section_id
+        ) ===
+        String(sectionId)
     );
 
 }
 
 
-/* =========================
-   GET CURRENT SECTION
-========================= */
-
 function getCurrentSectionIndex(){
 
-  if(
-    test.test_type !== "FULL" ||
-    test.subject_wise_timing !== true
-  ){
+  if(!sections.length){
 
     return -1;
 
   }
 
-  const q =
-  questions[currentIndex];
-
-  if(!q)
-    return -1;
 
   const sectionId =
-  String(q.section_id || "");
+    questions[
+      currentIndex
+    ]?.section_id;
 
-  const index =
-  sections.findIndex(
-    s =>
-    String(s.id) === sectionId
+
+  return sections.findIndex(
+    section =>
+      String(section.id) ===
+      String(sectionId)
   );
-
-  return index;
 
 }
 
 
-/* =========================
-   JUMP TO SECTION
-========================= */
-
-function jumpToSection(index){
+function jumpToSection(sectionIndex){
 
   if(
-    index < 0 ||
-    index >= sections.length
+    submitted ||
+    paused ||
+    !sections[sectionIndex]
   ){
+
     return;
+
   }
 
-  if(
-    sectionRemainingTimes[
-      String(
-        sections[index].id
-      )
-    ] <= 0
-  ){
-    return;
-  }
+
+  saveCurrentSectionTime();
+
+
+  const section =
+    sections[
+      sectionIndex
+    ];
+
 
   const list =
-  getSectionQuestions(index);
+    getSectionQuestions(
+      section.id
+    );
 
-  if(!list.length)
+
+  if(!list.length){
+
     return;
 
-  currentSectionIndex = index;
+  }
+
+
+  currentSectionIndex =
+    sectionIndex;
+
 
   currentIndex =
-  list[0].index;
+    list[0].i;
+
+
+  loadSectionTime(
+    sectionIndex
+  );
+
 
   showQuestion();
 
+  startSectionInterval();
   saveProgress();
 
 }
 
-
-/* =========================
-   SAVE CURRENT SECTION TIME
-========================= */
 
 function saveCurrentSectionTime(){
 
@@ -2008,379 +2887,1124 @@ function saveCurrentSectionTime(){
     currentSectionIndex < 0 ||
     !sections[currentSectionIndex]
   ){
+
     return;
+
   }
 
-  const section =
-  sections[currentSectionIndex];
 
   sectionRemainingTimes[
-    String(section.id)
-  ] =
-  Math.max(
-    0,
-    Number(
-      sectionRemainingTimes[
-        String(section.id)
-      ] || 0
+    String(
+      sections[
+        currentSectionIndex
+      ].id
     )
-  );
+  ] =
+    remainingSeconds;
 
 }
 
 
-/* =========================
-   LOAD SECTION TIME
-========================= */
-
-function loadSectionTime(){
-
-  if(
-    currentSectionIndex < 0 ||
-    !sections[currentSectionIndex]
-  ){
-    return 0;
-  }
+function loadSectionTime(sectionIndex){
 
   const section =
-  sections[currentSectionIndex];
+    sections[
+      sectionIndex
+    ];
 
-  const key =
-  String(section.id);
 
-  let savedTime =
-  Number(
-    sectionRemainingTimes[key]
-  );
+  if(!section){
 
-  if(
-    !Number.isFinite(savedTime) ||
-    savedTime < 0
-  ){
-
-    savedTime =
-    getSectionDurationMinutes(
-      section
-    ) * 60;
-
-    sectionRemainingTimes[key] =
-    savedTime;
+    return;
 
   }
 
-  return savedTime;
+
+  const key =
+    String(section.id);
+
+
+  if(
+    typeof sectionRemainingTimes[key] === "number" &&
+    sectionRemainingTimes[key] > 0
+  ){
+    remainingSeconds = sectionRemainingTimes[key];
+  }else{
+    remainingSeconds =
+      getSectionDurationMinutes(section,sectionIndex) * 60;
+    sectionRemainingTimes[key] = remainingSeconds;
+  }
 
 }
 
-
-/* =========================
-   SHOW QUESTION
-========================= */
 
 function showQuestion(){
 
   if(
-    !questions.length ||
-    submitted
+    submitted ||
+    !questions.length
   ){
+
     return;
+
   }
 
-  if(
-    currentIndex < 0
-  ){
-    currentIndex = 0;
-  }
-
-  if(
-    currentIndex >= questions.length
-  ){
-    currentIndex =
-    questions.length - 1;
-  }
 
   const q =
-  questions[currentIndex];
+    questions[
+      currentIndex
+    ];
+
 
   visitedQuestions.add(
-    String(q.id)
+    currentIndex
   );
 
-  questionCount.textContent =
-    "Question " +
-    (currentIndex + 1) +
-    " out of " +
-    questions.length;
+  progressStarted = true;
 
-  const subject =
-  subjects.find(
-    s =>
-    String(s.id) ===
-    String(q.subject_id)
+
+  const sectionIndex =
+    getCurrentSectionIndex();
+
+
+  currentSectionIndex =
+    sectionIndex;
+
+
+  const sectionName =
+    sectionIndex >= 0
+    ? getSectionName(
+        sections[
+          sectionIndex
+        ],
+        sectionIndex
+      )
+    : "";
+
+
+  const questionList = getActiveQuestionList();
+  const activePosition = Math.max(
+    0,
+    questionList.findIndex(item => item.i === currentIndex)
   );
 
-  questionSection.textContent =
-    subject?.name ||
-    getQuestionSectionName(q);
+  document
+    .getElementById("questionCount")
+    .textContent =
+      "Question " +
+      (activePosition + 1) +
+      " of " +
+      questionList.length;
 
-  questionText.innerHTML =
-    escapeHtml(
-      q.question_text || ""
-    ).replace(
-      /\n/g,
-      "<br>"
+  updateSaveQuestionButton();
+
+
+  document
+    .getElementById(
+      "questionSection"
+    )
+    .textContent =
+      sectionName;
+
+
+  document
+    .getElementById(
+      "gridSubject"
+    )
+    .textContent =
+      sectionName ||
+      "Question Palette";
+
+
+  const card =
+    document.getElementById(
+      "questionCard"
     );
 
-  options.innerHTML = "";
 
-  const currentAnswer =
-  answers[String(q.id)];
+  card.innerHTML = "";
 
-  (q.options || []).forEach(
-    option=>{
 
-      const button =
-      document.createElement("button");
+  const text =
+    document.createElement(
+      "div"
+    );
 
-      button.type = "button";
 
-      button.className =
-      "option";
+  text.className =
+    "question-text";
+
+
+  text.textContent =
+    q.question_text || "";
+
+
+  const options =
+    document.createElement(
+      "div"
+    );
+
+
+  options.className =
+    "options";
+
+
+  q.options.forEach(
+    (option,index) => {
+
+      const row =
+        document.createElement(
+          "label"
+        );
+
+
+      row.className =
+        "option";
+
 
       if(
-        currentAnswer ===
+        answers[q.id] ===
         String(option.id)
       ){
 
-        button.classList.add(
+        row.classList.add(
           "selected"
         );
 
       }
 
+
+      const radio =
+        document.createElement(
+          "input"
+        );
+
+
+      radio.type =
+        "radio";
+
+
+      radio.name =
+        "question-" +
+        q.id;
+
+
+      radio.value =
+        option.id;
+
+
+      radio.checked =
+        answers[q.id] ===
+        String(option.id);
+
+
+      radio.onchange =
+        function(){
+
+          answers[q.id] =
+            String(option.id);
+
+
+          showQuestion();
+
+          renderQuestionGrid();
+
+        };
+
+
       const label =
-      document.createElement("span");
+        document.createElement(
+          "span"
+        );
+
 
       label.className =
-      "option-label";
+        "option-label";
+
 
       label.textContent =
-      option.option_label ||
-      "";
+        option.option_label ||
+        String.fromCharCode(
+          65 + index
+        );
 
-      const text =
-      document.createElement("span");
 
-      text.innerHTML =
-      escapeHtml(
-        option.option_text || ""
-      ).replace(
-        /\n/g,
-        "<br>"
-      );
+      const optionText =
+        document.createElement(
+          "span"
+        );
 
-      button.appendChild(label);
 
-      button.appendChild(text);
+      optionText.className =
+        "option-text";
 
-      button.addEventListener(
-        "click",
-        ()=>selectAnswer(
-          q,
-          option
-        )
-      );
 
-      options.appendChild(button);
+      optionText.textContent =
+        option.option_text || "";
+
+
+      row.appendChild(radio);
+      row.appendChild(label);
+      row.appendChild(optionText);
+      options.appendChild(row);
 
     }
   );
 
-  updateSaveQuestionButton();
 
-  prevBtn.disabled =
-    currentIndex === 0;
+  card.appendChild(text);
+  card.appendChild(options);
 
-  nextBtn.textContent =
-    currentIndex ===
-    questions.length - 1
-      ? "Finish"
-      : "Next";
 
-  const newSection =
-  getCurrentSectionIndex();
+  const navigation =
+    document.createElement(
+      "div"
+    );
 
-  if(
-    newSection >= 0 &&
-    newSection !== currentSectionIndex
-  ){
 
-    currentSectionIndex =
-    newSection;
+  navigation.className =
+    "navigation";
+
+
+  const navigationRow =
+    document.createElement(
+      "div"
+    );
+
+
+  navigationRow.className =
+    "navigation-row";
+
+
+  const previous =
+    document.createElement(
+      "button"
+    );
+
+
+  previous.type =
+    "button";
+
+
+  previous.className =
+    "nav-btn previous-btn";
+
+
+  previous.textContent =
+    "← Previous Question";
+
+
+  const activeList =
+    getActiveQuestionList();
+
+  const activePos =
+    activeList.findIndex(
+      item => item.i === currentIndex
+    );
+
+  previous.disabled =
+    activePos <= 0;
+
+
+  previous.onclick =
+    function(){
+
+      saveCurrentAnswer();
+
+
+      const list =
+        getActiveQuestionList();
+
+      const pos =
+        list.findIndex(
+          item => item.i === currentIndex
+        );
+
+      if(pos > 0){
+
+        currentIndex =
+          list[pos - 1].i;
+
+        showQuestion();
+
+      }
+
+    };
+
+
+  const reviewButton =
+    document.createElement(
+      "button"
+    );
+
+
+  reviewButton.type =
+    "button";
+
+
+  reviewButton.className =
+    "nav-btn review-btn";
+
+
+  if(review.has(q.id)){
+
+    reviewButton.classList.add("marked");
+
+    reviewButton.textContent =
+      "★ Marked for Review";
+
+  }else{
+
+    reviewButton.textContent =
+      "☆ Mark for Review";
 
   }
 
-  updateSectionButtons();
+
+  reviewButton.onclick =
+    function(){
+
+      if(review.has(q.id)){
+
+        review.delete(q.id);
+
+      }else{
+
+        review.add(q.id);
+
+      }
+
+
+      showQuestion();
+      renderQuestionGrid();
+
+    };
+
+
+  navigationRow.appendChild(previous);
+  navigationRow.appendChild(reviewButton);
+
+
+  const gridButton =
+    document.createElement(
+      "button"
+    );
+
+  gridButton.type =
+    "button";
+
+  gridButton.className =
+    "grid-btn";
+
+  gridButton.innerHTML =
+    "▦";
+  gridButton.title = "Question Grid";
+  gridButton.setAttribute("aria-label","Question Grid");
+
+  gridButton.onclick =
+    function(){
+      openGrid();
+    };
+
+
+  const nextButton =
+    document.createElement(
+      "button"
+    );
+
+  nextButton.type =
+    "button";
+
+  nextButton.className =
+    "nav-btn save-next-btn";
+
+  nextButton.style.marginTop = "8px";
+  nextButton.textContent =
+    "Save & Next →";
+
+  nextButton.onclick =
+    function(){
+
+      saveCurrentAnswer();
+
+      saveProgress();
+
+      const list =
+        getActiveQuestionList();
+
+      const pos =
+        list.findIndex(
+          item => item.i === currentIndex
+        );
+
+      if(pos >= 0 && pos < list.length - 1){
+
+        currentIndex =
+          list[pos + 1].i;
+
+        showQuestion();
+
+      }else{
+
+        submitCurrentSection();
+
+      }
+
+    };
+
+  // Small grid button sits above the three navigation controls.
+  const gridRow = document.createElement("div");
+  gridRow.className = "grid-button-row";
+  gridRow.appendChild(gridButton);
+
+  const actionRow = document.createElement("div");
+  actionRow.className = "navigation-row three-actions";
+  actionRow.appendChild(previous);
+  actionRow.appendChild(reviewButton);
+  actionRow.appendChild(nextButton);
+
+  navigation.innerHTML = "";
+  navigation.appendChild(gridRow);
+  navigation.appendChild(actionRow);
+
+  card.appendChild(navigation);
 
   renderQuestionGrid();
-
+  updateSectionButtons();
   updateGridTimer();
 
 }
 
 
-/* =========================
-   QUESTION SECTION NAME
-========================= */
+function saveCurrentAnswer(){
 
-function getQuestionSectionName(q){
+  const q =
+    questions[
+      currentIndex
+    ];
 
-  if(q.subject_id){
 
-    const s =
-    subjects.find(
-      x =>
-      String(x.id) ===
-      String(q.subject_id)
+  if(!q){
+    return;
+  }
+
+
+  const selected =
+    document.querySelector(
+      'input[name="question-' +
+      q.id +
+      '"]:checked'
     );
 
-    if(s?.name)
-      return s.name;
+
+  if(selected){
+
+    answers[q.id] =
+      String(
+        selected.value
+      );
 
   }
 
-  return "Question";
-
 }
 
 
-/* =========================
-   SELECT ANSWER
-========================= */
+function renderQuestionGrid(){
 
-function selectAnswer(
-  question,
-  option
-){
+  const grid = document.getElementById("questionGrid");
+  grid.innerHTML = "";
 
-  if(submitted || paused)
-    return;
+  const list = getActiveQuestionList();
 
-  answers[
-    String(question.id)
-  ] =
-  String(option.id);
+  list.forEach((item,position) => {
+    const q = item.q;
+    const index = item.i;
 
-  renderQuestionOptions();
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "grid-question";
+
+    button.innerHTML = review.has(q.id)
+      ? "<span class=\"grid-star\">★</span>" + (position + 1)
+      : String(position + 1);
+
+    if(answers[q.id]){
+      button.classList.add("attempted");
+    }else if(visitedQuestions.has(index)){
+      button.classList.add("not-attempted");
+    }else{
+      button.classList.add("not-visited");
+    }
+
+    if(review.has(q.id)) button.classList.add("review");
+    if(index === currentIndex) button.classList.add("current");
+
+    button.onclick = function(){
+      saveCurrentAnswer();
+      currentIndex = index;
+      progressStarted = true;
+      saveProgress();
+      closeGrid();
+      showQuestion();
+    };
+
+    grid.appendChild(button);
+  });
+
+  updateGridTimer();
+}
+
+
+function openGrid(){
+
+  saveCurrentAnswer();
 
   renderQuestionGrid();
 
-  saveProgress();
+  updateGridTimer();
+
+  document
+    .getElementById("gridOverlay")
+    .classList.add("show");
 
 }
 
 
-/* =========================
-   RENDER OPTIONS
-========================= */
+function closeGrid(){
 
-function renderQuestionOptions(){
+  document
+    .getElementById("gridOverlay")
+    .classList.remove("show");
 
-  const q =
-  questions[currentIndex];
+}
 
-  const answer =
-  answers[String(q.id)];
 
-  [...options.children].forEach(
-    button=>{
+document
+  .getElementById("gridClose")
+  .addEventListener(
+    "click",
+    closeGrid
+  );
 
-      const optionId =
-      button
-      .querySelector(".option-label");
 
-      const option =
-      (q.options || []).find(
-        o =>
-        String(o.option_label) ===
-        String(
-          optionId?.textContent
-        )
+document
+  .getElementById("gridOverlay")
+  .addEventListener(
+    "click",
+    function(event){
+
+      if(
+        event.target ===
+        document.getElementById("gridOverlay")
+      ){
+
+        closeGrid();
+
+      }
+
+    }
+  );
+
+
+function loadSavedQuestions(){
+
+  savedQuestions = new Set();
+
+  if(!savedQuestionsKey){
+    return;
+  }
+
+  try{
+    const raw = localStorage.getItem(savedQuestionsKey);
+    if(!raw) return;
+    const parsed = JSON.parse(raw);
+    if(Array.isArray(parsed)){
+      savedQuestions = new Set(parsed.map(id => String(id)));
+    }
+  }catch(error){
+    console.warn("Saved questions could not be loaded:", error);
+  }
+
+}
+
+function saveSavedQuestions(){
+
+  if(!savedQuestionsKey) return;
+
+  try{
+    localStorage.setItem(
+      savedQuestionsKey,
+      JSON.stringify(Array.from(savedQuestions))
+    );
+  }catch(error){
+    console.warn("Saved questions could not be saved:", error);
+  }
+
+}
+
+function updateSaveQuestionButton(){
+
+  const button = document.getElementById("saveQuestionBtn");
+  const q = questions[currentIndex];
+
+  if(!button || !q) return;
+
+  const saved = savedQuestions.has(String(q.id));
+
+  button.textContent = saved ? "★" : "☆";
+  button.title = saved ? "Remove Saved Question" : "Save Question";
+  button.setAttribute(
+    "aria-label",
+    saved ? "Remove Saved Question" : "Save Question"
+  );
+  button.style.color = saved ? "var(--purple)" : "var(--muted)";
+
+}
+
+function toggleSavedQuestion(){
+
+  const q = questions[currentIndex];
+  if(!q) return;
+
+  const id = String(q.id);
+
+  if(savedQuestions.has(id)){
+    savedQuestions.delete(id);
+  }else{
+    savedQuestions.add(id);
+  }
+
+  saveSavedQuestions();
+  updateSaveQuestionButton();
+
+}
+
+document
+  .getElementById("saveQuestionBtn")
+  .addEventListener("click", toggleSavedQuestion);
+
+
+function startTimer(){
+
+  clearInterval(timerInterval);
+
+  if(
+    test.test_type === "FULL" &&
+    test.subject_wise_timing &&
+    sections.length
+  ){
+
+    const current =
+      getCurrentSectionIndex();
+
+    if(current >= 0){
+
+      currentSectionIndex =
+        current;
+
+      loadSectionTime(current);
+
+      startSectionInterval();
+
+      return;
+
+    }
+
+  }
+
+  if(!progressStarted){
+
+    remainingSeconds =
+      Number(
+        test.duration_minutes || 0
+      ) * 60;
+
+  }else if(remainingSeconds <= 0){
+
+    remainingSeconds = 0;
+    updateTimerDisplay();
+    submitTest(true);
+    return;
+
+  }
+
+  startGeneralTimer();
+
+}
+
+function startGeneralTimer(){
+
+  clearInterval(timerInterval);
+
+  updateTimerDisplay();
+
+
+  timerInterval =
+    setInterval(
+      function(){
+
+        if(
+          submitted ||
+          paused
+        ){
+
+          return;
+
+        }
+
+
+        remainingSeconds--;
+
+        updateTimerDisplay();
+        saveProgress();
+
+
+        if(
+          remainingSeconds <= 0
+        ){
+
+          clearInterval(timerInterval);
+
+          submitTest(true);
+
+        }
+
+      },
+      1000
+    );
+
+}
+
+
+function startSectionInterval(){
+
+  clearInterval(timerInterval);
+
+  updateTimerDisplay();
+  updateGridTimer();
+
+
+  timerInterval =
+    setInterval(
+      function(){
+
+        if(
+          submitted ||
+          paused
+        ){
+
+          return;
+
+        }
+
+
+        remainingSeconds--;
+
+        saveCurrentSectionTime();
+        saveProgress();
+
+        updateTimerDisplay();
+        updateGridTimer();
+
+
+        if(
+          remainingSeconds <= 0
+        ){
+
+          clearInterval(timerInterval);
+
+          sectionTimeUp();
+
+        }
+
+      },
+      1000
+    );
+
+}
+
+
+function sectionTimeUp(){
+
+  if(submitted){
+    return;
+  }
+
+
+  saveCurrentSectionTime();
+  saveProgress();
+
+
+  const next =
+    currentSectionIndex + 1;
+
+
+  if(
+    next >= sections.length
+  ){
+
+    submitTest(true);
+
+    return;
+
+  }
+
+
+  const nextQuestions =
+    getSectionQuestions(
+      sections[next].id
+    );
+
+
+  if(
+    !nextQuestions.length
+  ){
+
+    currentSectionIndex =
+      next;
+
+    sectionTimeUp();
+
+    return;
+
+  }
+
+
+  alert(
+    getSectionName(
+      sections[
+        currentSectionIndex
+      ],
+      currentSectionIndex
+    ) +
+    " section time is over. Moving to " +
+    getSectionName(
+      sections[next],
+      next
+    ) +
+    "."
+  );
+
+
+  currentSectionIndex =
+    next;
+
+
+  currentIndex =
+    nextQuestions[0].i;
+
+
+  loadSectionTime(next);
+
+  showQuestion();
+
+  startSectionInterval();
+
+}
+
+
+function formatTime(seconds){
+
+  seconds =
+    Math.max(
+      0,
+      Number(seconds) || 0
+    );
+
+
+  const minutes =
+    Math.floor(
+      seconds / 60
+    );
+
+
+  const secs =
+    seconds % 60;
+
+
+  return (
+    String(minutes)
+      .padStart(2,"0")
+    +
+    ":"
+    +
+    String(secs)
+      .padStart(2,"0")
+  );
+
+}
+
+
+function updateTimerDisplay(){
+
+  const timer =
+    document.getElementById(
+      "timer"
+    );
+
+
+  timer.textContent =
+    formatTime(
+      remainingSeconds
+    );
+
+
+  timer.classList.toggle(
+    "warning",
+    remainingSeconds <= 60
+  );
+
+}
+
+
+function updateGridTimer(){
+
+  const timer =
+    document.getElementById(
+      "gridTimer"
+    );
+
+
+  if(timer){
+
+    timer.textContent =
+      formatTime(
+        remainingSeconds
       );
 
+  }
+
+}
+
+
+function updateSectionButtons(){
+
+  const buttons =
+    document.querySelectorAll(
+      ".section-btn"
+    );
+
+
+  const current =
+    getCurrentSectionIndex();
+
+
+  buttons.forEach(
+    (button,index) => {
+
       button.classList.toggle(
-        "selected",
-        option &&
-        answer ===
-        String(option.id)
+        "current",
+        index === current
       );
 
     }
   );
 
-}
 
+  if(
+    current >= 0 &&
+    sections[current]
+  ){
 
-/* =========================
-   SAVE CURRENT ANSWER
-========================= */
-
-function saveCurrentAnswer(){
-
-  if(!questions[currentIndex])
-    return;
-
-  const q =
-  questions[currentIndex];
-
-  const selected =
-  [...options.children]
-  .find(
-    button =>
-    button.classList.contains(
-      "selected"
-    )
-  );
-
-  if(!selected)
-    return;
-
-  const label =
-  selected
-  .querySelector(
-    ".option-label"
-  );
-
-  const option =
-  (q.options || []).find(
-    o =>
-    String(o.option_label) ===
-    String(label?.textContent)
-  );
-
-  if(option){
-
-    answers[
-      String(q.id)
-    ] =
-    String(option.id);
+    document
+      .getElementById(
+        "gridSubject"
+      )
+      .textContent =
+        getSectionName(
+          sections[current],
+          current
+        );
 
   }
 
 }
 
 
-/* =========================
-   NEXT
-========================= */
+document
+  .getElementById("pauseBtn")
+  .addEventListener(
+    "click",
+    function(){
 
-nextBtn.addEventListener(
-"click",
-()=>{
+      if(submitted){
+        return;
+      }
+
+
+      paused = true;
+
+      saveCurrentSectionTime();
+      saveProgress();
+
+
+      document
+        .getElementById("pauseOverlay")
+        .classList.add("show");
+
+    }
+  );
+
+
+document
+  .getElementById("resumeBtn")
+  .addEventListener(
+    "click",
+    function(){
+
+      paused = false;
+
+
+      document
+        .getElementById("pauseOverlay")
+        .classList.remove("show");
+
+
+      if(
+        test.test_type === "FULL" &&
+        test.subject_wise_timing &&
+        sections.length
+      ){
+
+        startSectionInterval();
+
+      }else{
+
+        startGeneralTimer();
+
+      }
+
+    }
+  );
+
+
+document
+  .getElementById("submitSectionBtn")
+  .addEventListener(
+    "click",
+    function(){
+
+      submitCurrentSection();
+
+    }
+  );
+
+
+function submitCurrentSection(){
 
   if(
-    currentIndex ===
-    questions.length - 1
+    submitted ||
+    paused
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    !sections.length ||
+    currentSectionIndex < 0
   ){
 
     confirmSubmit();
@@ -2389,1139 +4013,555 @@ nextBtn.addEventListener(
 
   }
 
-  currentIndex++;
 
-  showQuestion();
-
-  saveProgress();
-
-}
-);
+  const section =
+    sections[
+      currentSectionIndex
+    ];
 
 
-/* =========================
-   PREVIOUS
-========================= */
-
-prevBtn.addEventListener(
-"click",
-()=>{
-
-  if(currentIndex <= 0)
-    return;
-
-  currentIndex--;
-
-  showQuestion();
-
-  saveProgress();
-
-}
-);
+  const sectionQuestions =
+    getSectionQuestions(
+      section.id
+    );
 
 
-/* =========================
-   QUESTION GRID
-========================= */
-
-function renderQuestionGrid(){
-
-  questionGrid.innerHTML = "";
-
-  questions.forEach(
-    (q,index)=>{
-
-      const button =
-      document.createElement("button");
-
-      button.type = "button";
-
-      button.className =
-      "grid-item";
-
-      if(index === currentIndex)
-        button.classList.add("current");
-
-      if(
-        answers[String(q.id)]
-      )
-        button.classList.add("answered");
-
-      if(
-        review.has(String(q.id))
-      )
-        button.classList.add("review");
-
-      if(
-        visitedQuestions.has(
-          String(q.id)
-        )
-      )
-        button.classList.add("visited");
-
-      button.textContent =
-      String(index + 1);
-
-      button.addEventListener(
-        "click",
-        ()=>{
-
-          currentIndex = index;
-
-          showQuestion();
-
-          saveProgress();
-
-          closeGrid();
-
-        }
-      );
-
-      questionGrid.appendChild(button);
-
-    }
-  );
-
-}
+  const unanswered =
+    sectionQuestions.filter(
+      item =>
+        !answers[
+          item.q.id
+        ]
+    ).length;
 
 
-/* =========================
-   OPEN GRID
-========================= */
-
-gridBtn.addEventListener(
-"click",
-()=>{
-
-  questionGrid.classList.toggle(
-    "hidden"
-  );
-
-}
-);
+  let message =
+    "Submit " +
+    getSectionName(
+      section,
+      currentSectionIndex
+    ) +
+    " section?";
 
 
-/* =========================
-   CLOSE GRID
-========================= */
+  if(unanswered){
 
-function closeGrid(){
+    message +=
+      "\n\nUnanswered questions: " +
+      unanswered;
 
-  questionGrid.classList.add(
-    "hidden"
-  );
-
-}
+  }
 
 
-/* =========================
-   TIMER
-========================= */
+  const next =
+    currentSectionIndex + 1;
 
-function startTimer(){
-
-  clearInterval(
-    timerInterval
-  );
-
-  if(submitted || paused)
-    return;
 
   if(
-    test.test_type === "FULL" &&
-    test.subject_wise_timing === true &&
-    sections.length
+    next < sections.length
   ){
 
-    currentSectionIndex =
-    getCurrentSectionIndex();
-
-    if(
-      currentSectionIndex < 0
-    ){
-      currentSectionIndex = 0;
-    }
-
-    remainingSeconds =
-    loadSectionTime();
-
-    timerLabel.textContent =
-    "Section Time Remaining";
-
-    updateTimerDisplay();
-
-    startSectionInterval();
+    message +=
+      "\n\nYou will move to " +
+      getSectionName(
+        sections[next],
+        next
+      ) +
+      ".";
 
   }else{
 
-    /*
-      IMPORTANT:
-      Never reset remainingSeconds merely
-      because the test is being resumed.
-    */
-
-    if(
-      !progressStarted ||
-      !Number.isFinite(
-        remainingSeconds
-      ) ||
-      remainingSeconds <= 0
-    ){
-
-      remainingSeconds =
-      Number(
-        test.duration_minutes || 0
-      ) * 60;
-
-    }
-
-    timerLabel.textContent =
-    "Time Remaining";
-
-    updateTimerDisplay();
-
-    startGeneralTimer();
+    message +=
+      "\n\nThis is the last section. " +
+      "The test will be submitted.";
 
   }
 
-}
 
+  if(!confirm(message)){
+    return;
+  }
 
-/* =========================
-   GENERAL TIMER
-========================= */
-
-function startGeneralTimer(){
-
-  clearInterval(
-    timerInterval
-  );
-
-  timerInterval =
-  setInterval(
-    ()=>{
-
-      if(
-        submitted ||
-        paused
-      ){
-        return;
-      }
-
-      remainingSeconds =
-      Math.max(
-        0,
-        remainingSeconds - 1
-      );
-
-      updateTimerDisplay();
-
-      saveProgress();
-
-      if(
-        remainingSeconds <= 0
-      ){
-
-        clearInterval(
-          timerInterval
-        );
-
-        autoSubmit();
-
-      }
-
-    },
-    1000
-  );
-
-}
-
-
-/* =========================
-   SECTION TIMER
-========================= */
-
-function startSectionInterval(){
-
-  clearInterval(
-    timerInterval
-  );
-
-  timerInterval =
-  setInterval(
-    ()=>{
-
-      if(
-        submitted ||
-        paused
-      ){
-        return;
-      }
-
-      if(
-        currentSectionIndex < 0 ||
-        !sections[currentSectionIndex]
-      ){
-
-        return;
-
-      }
-
-      const section =
-      sections[currentSectionIndex];
-
-      const key =
-      String(section.id);
-
-      let value =
-      Number(
-        sectionRemainingTimes[key]
-      );
-
-      if(
-        !Number.isFinite(value)
-      ){
-
-        value =
-        getSectionDurationMinutes(
-          section
-        ) * 60;
-
-      }
-
-      value =
-      Math.max(
-        0,
-        value - 1
-      );
-
-      sectionRemainingTimes[key] =
-      value;
-
-      remainingSeconds =
-      value;
-
-      updateTimerDisplay();
-
-      updateGridTimer();
-
-      updateSectionButtons();
-
-      saveProgress();
-
-      if(value <= 0){
-
-        clearInterval(
-          timerInterval
-        );
-
-        sectionTimeUp();
-
-      }
-
-    },
-    1000
-  );
-
-}
-
-
-/* =========================
-   SECTION TIME UP
-========================= */
-
-function sectionTimeUp(){
 
   saveCurrentSectionTime();
 
-  saveProgress();
 
   if(
-    currentSectionIndex <
-    sections.length - 1
+    next >= sections.length
   ){
 
-    currentSectionIndex++;
+    submitTest(false);
 
-    const nextList =
+    return;
+
+  }
+
+
+  const nextQuestions =
     getSectionQuestions(
-      currentSectionIndex
+      sections[next].id
     );
 
-    if(nextList.length){
 
-      currentIndex =
-      nextList[0].index;
+  if(
+    !nextQuestions.length
+  ){
 
-      alert(
-        "Section time is over. Moving to the next section."
-      );
+    currentSectionIndex =
+      next;
 
-      showQuestion();
+    submitCurrentSection();
 
-      startTimer();
-
-      saveProgress();
-
-      return;
-
-    }
+    return;
 
   }
 
-  autoSubmit();
+
+  currentSectionIndex =
+    next;
+
+
+  currentIndex =
+    nextQuestions[0].i;
+
+
+  loadSectionTime(next);
+
+  showQuestion();
+
+  startSectionInterval();
 
 }
 
-
-/* =========================
-   TIMER FORMAT
-========================= */
-
-function formatTime(seconds){
-
-  seconds =
-  Math.max(
-    0,
-    Math.floor(
-      Number(seconds) || 0
-    )
-  );
-
-  const minutes =
-  Math.floor(
-    seconds / 60
-  );
-
-  const secs =
-  seconds % 60;
-
-  return (
-    String(minutes).padStart(2,"0") +
-    ":" +
-    String(secs).padStart(2,"0")
-  );
-
-}
-
-
-/* =========================
-   TIMER DISPLAY
-========================= */
-
-function updateTimerDisplay(){
-
-  timer.textContent =
-  formatTime(
-    remainingSeconds
-  );
-
-  timer.classList.remove(
-    "warning",
-    "danger"
-  );
-
-  if(
-    remainingSeconds <= 30
-  ){
-
-    timer.classList.add(
-      "danger"
-    );
-
-  }else if(
-    remainingSeconds <= 120
-  ){
-
-    timer.classList.add(
-      "warning"
-    );
-
-  }
-
-}
-
-
-/* =========================
-   GRID TIMER
-========================= */
-
-function updateGridTimer(){
-
-  if(
-    !sections.length ||
-    currentSectionIndex < 0
-  ){
-    return;
-  }
-
-  [...questionGrid.children]
-  .forEach(
-    (button,index)=>{
-
-      const q =
-      questions[index];
-
-      if(!q)
-        return;
-
-      const sectionIndex =
-      sections.findIndex(
-        s =>
-        String(s.id) ===
-        String(q.section_id)
-      );
-
-      if(
-        sectionIndex < 0
-      )
-        return;
-
-      const section =
-      sections[sectionIndex];
-
-      const time =
-      sectionRemainingTimes[
-        String(section.id)
-      ];
-
-      let existing =
-      button.querySelector(
-        ".grid-timer"
-      );
-
-      if(!existing){
-
-        existing =
-        document.createElement(
-          "span"
-        );
-
-        existing.className =
-        "grid-timer";
-
-        button.appendChild(
-          existing
-        );
-
-      }
-
-      existing.textContent =
-      formatTime(time);
-
-    }
-  );
-
-}
-
-
-/* =========================
-   SECTION BUTTONS
-========================= */
-
-function updateSectionButtons(){
-
-  if(!sections.length)
-    return;
-
-  [...sectionBar.children]
-  .forEach(
-    (button,index)=>{
-
-      button.classList.toggle(
-        "active",
-        index ===
-        currentSectionIndex
-      );
-
-      const section =
-      sections[index];
-
-      const time =
-      sectionRemainingTimes[
-        String(section.id)
-      ];
-
-      button.classList.toggle(
-        "locked",
-        Number(time) <= 0
-      );
-
-      const subject =
-      subjects.find(
-        s =>
-        String(s.id) ===
-        String(section.subject_id)
-      );
-
-      button.textContent =
-        (subject?.name ||
-        "Section " + (index + 1)) +
-        " • " +
-        formatTime(time);
-
-    }
-  );
-
-}
-
-
-/* =========================
-   PAUSE
-========================= */
-
-pauseBtn.addEventListener(
-"click",
-()=>{
-
-  if(
-    submitted ||
-    !progressStarted
-  )
-    return;
-
-  paused = true;
-
-  clearInterval(
-    timerInterval
-  );
-
-  saveProgress();
-
-  pauseOverlay.style.display =
-  "flex";
-
-}
-);
-
-
-/* =========================
-   RESUME
-========================= */
-
-resumeBtn.addEventListener(
-"click",
-()=>{
-
-  pauseOverlay.style.display =
-  "none";
-
-  paused = false;
-
-  progressSavedAt =
-  Date.now();
-
-  startTimer();
-
-  saveProgress();
-
-}
-);
-
-
-/* =========================
-   PAUSE SUBMIT
-========================= */
-
-pauseSubmitBtn.addEventListener(
-"click",
-()=>{
-
-  pauseOverlay.style.display =
-  "none";
-
-  paused = false;
-
-  confirmSubmit();
-
-}
-);
-
-
-/* =========================
-   SUBMIT BUTTON
-========================= */
-
-submitBtn.addEventListener(
-"click",
-confirmSubmit
-);
-
-
-/* =========================
-   CONFIRM SUBMIT
-========================= */
 
 function confirmSubmit(){
 
-  if(submitted)
+  if(submitted){
     return;
+  }
+
 
   const unanswered =
-  questions.filter(
-    q =>
-    !answers[String(q.id)]
-  ).length;
+    questions.filter(
+      q =>
+        !answers[q.id]
+    ).length;
 
-  const message =
-    unanswered > 0
-      ? "You have " +
-        unanswered +
-        " unanswered question(s). Submit test?"
-      : "Are you sure you want to submit the test?";
 
-  if(
-    confirm(message)
-  ){
+  let message =
+    "Submit this test?";
 
-    submitTest();
+
+  if(unanswered){
+
+    message +=
+      "\n\nUnanswered questions: " +
+      unanswered;
+
+  }
+
+
+  if(confirm(message)){
+
+    submitTest(false);
 
   }
 
 }
 
 
-/* =========================
-   AUTO SUBMIT
-========================= */
+async function submitTest(automatic=false){
 
-function autoSubmit(){
-
-  if(submitted)
+  if(submitted){
     return;
+  }
 
-  submitTest();
-
-}
-
-
-/* =========================
-   SUBMIT TEST
-========================= */
-
-async function submitTest(){
-
-  if(submitted)
-    return;
 
   submitted = true;
+  paused = false;
 
-  clearInterval(
-    timerInterval
-  );
 
-  saveCurrentAnswer();
+  clearInterval(timerInterval);
 
-  saveCurrentSectionTime();
+
+  await calculateResult(automatic);
 
   clearProgress();
 
-  pauseBtn.classList.add(
-    "hidden"
-  );
-
-  questionArea.classList.add(
-    "hidden"
-  );
-
-  sectionBar.classList.add(
-    "hidden"
-  );
-
-  startScreen.classList.add(
-    "hidden"
-  );
-
-  const result =
-  calculateResult();
-
-  await saveAttempt(result);
-
-  renderResult(result);
-
 }
 
 
-/* =========================
-   CALCULATE RESULT
-========================= */
+async function calculateResult(automatic){
 
-function calculateResult(){
+  const ids =
+    questions.map(
+      q => q.id
+    );
 
-  let correct = 0;
 
-  let wrong = 0;
-
-  let unanswered = 0;
-
-  let score = 0;
-
-  questions.forEach(
-    q=>{
-
-      const answer =
-      answers[String(q.id)];
-
-      if(!answer){
-
-        unanswered++;
-
-        return;
-
-      }
-
-      const selected =
-      (q.options || []).find(
-        o =>
-        String(o.id) ===
-        String(answer)
+  const correctResult =
+    await db
+      .from("question_options")
+      .select(
+        "id,question_id,is_correct"
+      )
+      .in(
+        "question_id",
+        ids
       );
 
-      if(
-        selected &&
-        selected.is_correct
-      ){
 
-        correct++;
+  if(correctResult.error){
 
-        score +=
+    showError(
+      correctResult.error.message
+    );
+
+    return;
+
+  }
+
+
+  const correctMap =
+    new Map();
+
+
+  (correctResult.data || [])
+    .forEach(
+      option => {
+
+        if(option.is_correct){
+
+          correctMap.set(
+            String(
+              option.question_id
+            ),
+            String(
+              option.id
+            )
+          );
+
+        }
+
+      }
+    );
+
+
+  let correct = 0;
+  let wrong = 0;
+  let skipped = 0;
+  let score = 0;
+
+
+  questions.forEach(
+    q => {
+
+      const selected =
+        answers[q.id];
+
+
+      const marks =
         Number(
           q.marks ??
           test.marks_per_question ??
-          0
+          2
         );
 
-      }else{
 
-        wrong++;
-
-        score -=
+      const negative =
         Number(
           q.negative_marks ??
           test.negative_marks ??
           0
         );
 
+
+      if(!selected){
+
+        skipped++;
+
+        return;
+
+      }
+
+
+      if(
+        String(selected) ===
+        String(
+          correctMap.get(
+            String(q.id)
+          )
+        )
+      ){
+
+        correct++;
+
+        score += marks;
+
+      }else{
+
+        wrong++;
+
+        score -= negative;
+
       }
 
     }
   );
 
-  return {
-    correct,
-    wrong,
-    unanswered,
-    score
-  };
 
-}
+  score =
+    Math.round(
+      score * 100
+    ) / 100;
 
 
-/* =========================
-   SAVE ATTEMPT
-========================= */
-
-async function saveAttempt(result){
-
-  try{
-
-    const {
-      data:{
-        user
-      }
-    } =
-    await db.auth.getUser();
-
-    if(!user){
-
-      console.log(
-        "Guest attempt - not saved."
-      );
-
-      return;
-
-    }
-
-    const payload = {
-
-      user_id:user.id,
-
-      mock_test_id:test.id,
-
-      started_at:
-      new Date(
-        Date.now() -
-        (
-          Number(
-            test.duration_minutes || 0
-          ) * 60000
-        )
-      ).toISOString(),
-
-      completed_at:
-      new Date().toISOString(),
-
-      score:
-      result.score,
-
-      correct_answers:
-      result.correct,
-
-      wrong_answers:
-      result.wrong,
-
-      unanswered:
-      result.unanswered
-
-    };
-
-    const {error} =
-    await db
-    .from("test_attempts")
-    .insert(payload);
-
-    if(error){
-
-      console.warn(
-        "Attempt save warning:",
-        error
-      );
-
-    }
-
-  }catch(error){
-
-    console.warn(
-      "Attempt save warning:",
-      error
+  const maxMarks =
+    questions.reduce(
+      (sum,q) =>
+        sum +
+        Number(
+          q.marks ??
+          test.marks_per_question ??
+          2
+        ),
+      0
     );
 
-  }
 
-}
-
-
-/* =========================
-   RESULT
-========================= */
-
-function renderResult(result){
-
-  resultArea.classList.remove(
-    "hidden"
+  await saveAttempt(
+    correct,
+    wrong,
+    skipped,
+    score
   );
 
-  resultArea.innerHTML = `
 
-    <div class="result">
+  document
+    .getElementById("testArea")
+    .classList.add("hidden");
 
-      <h2>Test Submitted</h2>
 
-      <div class="result-score">
-        ${escapeHtml(
-          String(result.score)
-        )}
-      </div>
+  document
+    .getElementById("result")
+    .classList.remove("hidden");
 
-      <div class="result-stats">
 
-        <div class="result-stat">
-          <strong>
-            ${result.correct}
-          </strong>
-          <span>Correct</span>
+  document
+    .getElementById("result")
+    .innerHTML = `
+
+      <div class="result-card">
+
+        <h1 class="result-brand">
+          SSC <span class="edge">EDGE</span>
+        </h1>
+
+        <div class="result-test-name">
+          ${escapeHtml(test.title || "Test")}
         </div>
 
-        <div class="result-stat">
-          <strong>
-            ${result.wrong}
-          </strong>
-          <span>Wrong</span>
+        <div class="result-test-number">
+          Test No. ${escapeHtml(
+            test.test_number ??
+            test.test_no ??
+            test.number ??
+            "#1"
+          )}
         </div>
 
-        <div class="result-stat">
-          <strong>
-            ${result.unanswered}
-          </strong>
-          <span>Unanswered</span>
+        <div class="result-thankyou">
+          Thank You for attempting the Test.
         </div>
 
-      </div>
+        <div class="result-actions">
 
-      <div class="result-actions">
+          <a
+            class="result-action primary"
+            href="analysis.html?id=${encodeURIComponent(test.id)}">
+            View Analysis
+          </a>
 
-        <button
-          class="primary-btn"
-          type="button"
-          onclick="
-            location.href='analysis.html?id=${encodeURIComponent(
-              test.id
-            )}'
-          ">
-          View Analysis
-        </button>
+          <a
+            class="result-action"
+            href="solutions.html?id=${encodeURIComponent(test.id)}">
+            View Solutions
+          </a>
 
-        <button
-          class="secondary-btn"
-          type="button"
-          onclick="
-            location.href='solutions.html?test_id=${encodeURIComponent(
-              test.id
-            )}'
-          ">
-          View Solutions
-        </button>
+          <a
+            class="result-back"
+            href="practice.html">
+            Back to Practice
+          </a>
 
-        <button
-          class="secondary-btn"
-          type="button"
-          onclick="
-            location.href='practice.html'
-          ">
-          Back to Practice
-        </button>
+        </div>
 
       </div>
 
-    </div>
-
-  `;
+    `;
 
 }
 
 
-/* =========================
-   VISIBILITY CHANGE
-========================= */
+async function saveAttempt(
+  correct,
+  wrong,
+  skipped,
+  score
+){
 
-document.addEventListener(
-"visibilitychange",
-()=>{
+  const {
+    data:{user}
+  } =
+    await db.auth.getUser();
+
+
+  if(!user){
+    return;
+  }
+
+
+  const attempt =
+    await db
+      .from("test_attempts")
+      .insert({
+
+        user_id:
+          user.id,
+
+        mock_test_id:
+          test.id,
+
+        score:
+          score,
+
+        correct_answers:
+          correct,
+
+        wrong_answers:
+          wrong,
+
+        unanswered:
+          skipped,
+
+        total_questions:
+          questions.length
+
+      })
+      .select()
+      .maybeSingle();
+
 
   if(
-    document.visibilityState ===
-    "hidden"
+    attempt.error
   ){
 
-    saveProgress();
+    console.warn(
+      "Attempt history was not saved:",
+      attempt.error.message
+    );
+
+    return;
+
+  }
+
+
+  if(
+    attempt.data?.id
+  ){
+
+    const rows =
+      questions.map(
+        q => ({
+
+          attempt_id:
+            attempt.data.id,
+
+          question_id:
+            q.id,
+
+          selected_option_id:
+            answers[q.id]
+            ? Number(
+                answers[q.id]
+              )
+            : null
+
+        })
+      );
+
+
+    if(rows.length){
+
+      const result =
+        await db
+          .from("user_answers")
+          .insert(rows);
+
+
+      if(result.error){
+
+        console.warn(
+          "User answers were not saved:",
+          result.error.message
+        );
+
+      }
+
+    }
 
   }
 
 }
+
+
+
+document.addEventListener(
+  "visibilitychange",
+  function(){
+    if(document.visibilityState === "hidden" && progressStarted && !submitted){
+      saveProgress();
+    }
+  }
 );
-
-
-/* =========================
-   PAGE HIDE
-========================= */
 
 window.addEventListener(
-"pagehide",
-()=>{
-
-  saveProgress();
-
-}
+  "pagehide",
+  function(){
+    if(progressStarted && !submitted){
+      saveProgress();
+    }
+  }
 );
 
 
-/* =========================
-   BEFORE UNLOAD
-========================= */
+function showError(text){
 
-window.addEventListener(
-"beforeunload",
-()=>{
-
-  saveProgress();
-
-}
-);
-
-
-/* =========================
-   ERROR
-========================= */
-
-function showError(message){
-
-  loadingState.classList.add(
-    "hidden"
-  );
-
-  mainContent.classList.add(
-    "hidden"
-  );
-
-  errorState.classList.remove(
-    "hidden"
-  );
-
-  errorState.textContent =
-  message ||
-  "Something went wrong.";
+  document
+    .getElementById("loading")
+    .innerHTML =
+      '<div class="error">' +
+      escapeHtml(text) +
+      '</div>';
 
 }
 
-
-/* =========================
-   ESCAPE HTML
-========================= */
 
 function escapeHtml(value){
 
-  return String(value)
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
-}
-
-
-/* =========================
-   SECTION DURATION
-========================= */
-
-function getSectionDurationMinutes(
-  section
-){
-
-  const value =
-  Number(
-    section?.duration_minutes
-  );
-
-  if(
-    Number.isFinite(value) &&
-    value > 0
-  ){
-
-    return value;
-
-  }
-
-  return 15;
+  return String(
+    value ?? ""
+  )
+  .replace(/&/g,"&amp;")
+  .replace(/</g,"&lt;")
+  .replace(/>/g,"&gt;")
+  .replace(/"/g,"&quot;")
+  .replace(/'/g,"&#039;");
 
 }
 
 </script>
 
+
 </body>
-  </html>
+</html>
