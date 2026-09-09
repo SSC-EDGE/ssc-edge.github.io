@@ -192,12 +192,45 @@ localStorage.getItem("ssc-edge-theme") || "dark";
    LOGOUT
 ========================= */
 
-.logout-row{
-  color:#ff7777;
-}
+async function logout(){
 
-.logout-row .profile-row-icon{
-  color:#ff7777;
+  const isGuest =
+    localStorage.getItem("ssc-edge-guest") === "true";
+
+  /* =========================
+     GUEST LOGOUT
+  ========================= */
+
+  if(isGuest){
+
+    localStorage.removeItem("ssc-edge-guest");
+    localStorage.removeItem("ssc-edge-user-id");
+    localStorage.removeItem("ssc-edge-name");
+
+    window.location.replace("index.html");
+
+    return;
+  }
+
+
+  /* =========================
+     LOGGED-IN LOGOUT
+  ========================= */
+
+  const { error } =
+    await supabaseClient.auth.signOut();
+
+  if(error){
+
+    alert("Logout failed. Please try again.");
+    return;
+  }
+
+  localStorage.removeItem("ssc-edge-user-id");
+  localStorage.removeItem("ssc-edge-guest");
+  localStorage.removeItem("ssc-edge-name");
+
+  window.location.replace("index.html");
 }
 
 
