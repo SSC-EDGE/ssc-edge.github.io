@@ -1,21 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>SSC EDGE</title>
+<title>SSC EDGE - Login</title>
 
 <script>
 document.documentElement.dataset.theme =
   localStorage.getItem("ssc-edge-theme") || "dark";
 </script>
 
-<link rel="stylesheet" href="css/style.css">
-
 <style>
+:root{
+  --bg:#08050e;
+  --card:#171025;
+  --card2:#251344;
+  --purple:#7c3aed;
+  --purple2:#a66bff;
+  --text:#fff;
+  --muted:#aaa2b9;
+  --border:#302044;
+}
+
+:root[data-theme="light"]{
+  --bg:#f6f3fb;
+  --card:#fff;
+  --card2:#eee6fa;
+  --purple:#6d35d4;
+  --purple2:#8149e8;
+  --text:#17121e;
+  --muted:#706879;
+  --border:#ddd4e9;
+}
 
 *{
   box-sizing:border-box;
@@ -26,18 +43,14 @@ body{
   min-height:100vh;
   background:var(--bg);
   color:var(--text);
-  font-family:Arial,sans-serif;
-}
-
-.login-page{
-  min-height:100vh;
+  font-family:Arial,Helvetica,sans-serif;
   display:flex;
-  align-items:center;
   justify-content:center;
+  align-items:center;
   padding:20px;
 }
 
-.login-box{
+.container{
   width:100%;
   max-width:420px;
 }
@@ -45,468 +58,479 @@ body{
 .logo{
   text-align:center;
   font-size:30px;
-  font-weight:700;
+  font-weight:800;
   margin-bottom:8px;
 }
 
 .subtitle{
   text-align:center;
   color:var(--muted);
-  font-size:14px;
   margin-bottom:28px;
 }
 
-.auth-card{
+.card{
   background:var(--card);
   border:1px solid var(--border);
   border-radius:18px;
   padding:22px;
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
 }
 
-.auth-card h2{
+h2{
   margin:0 0 18px;
-  font-size:20px;
+  font-size:21px;
 }
 
-.field{
-  margin-bottom:14px;
-}
-
-.field label{
+label{
   display:block;
-  font-size:13px;
+  margin:13px 0 7px;
   color:var(--muted);
-  margin-bottom:6px;
+  font-size:14px;
 }
 
-.field input{
+input{
   width:100%;
-  padding:13px;
-  border-radius:10px;
+  padding:13px 14px;
+  border-radius:11px;
   border:1px solid var(--border);
   background:var(--bg);
   color:var(--text);
   outline:none;
+  font-size:15px;
 }
 
-.field input:focus{
+input:focus{
   border-color:var(--purple);
 }
 
-.primary-btn{
+button{
   width:100%;
   border:0;
-  border-radius:10px;
+  border-radius:11px;
   padding:13px;
-  background:var(--purple);
-  color:white;
+  margin-top:14px;
   font-size:15px;
+  font-weight:700;
   cursor:pointer;
-  margin-top:5px;
 }
 
-.google-btn{
-  width:100%;
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:12px;
+.primary{
+  background:var(--purple);
+  color:#fff;
+}
+
+.google{
+  background:#fff;
+  color:#222;
+}
+
+.guest{
   background:var(--card2);
   color:var(--text);
-  font-size:15px;
-  cursor:pointer;
-  margin-top:10px;
-}
-
-.guest-btn{
-  width:100%;
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:12px;
-  background:transparent;
-  color:var(--text);
-  font-size:14px;
-  cursor:pointer;
-  margin-top:10px;
 }
 
 .divider{
   display:flex;
   align-items:center;
   gap:10px;
-  margin:18px 0;
+  margin:20px 0;
   color:var(--muted);
-  font-size:12px;
+  font-size:13px;
 }
 
-.divider::before,
-.divider::after{
+.divider:before,
+.divider:after{
   content:"";
   flex:1;
   height:1px;
   background:var(--border);
 }
 
-.switch{
+.link{
   text-align:center;
   margin-top:18px;
-  color:var(--muted);
-  font-size:13px;
-}
-
-.switch button{
-  border:0;
-  background:none;
   color:var(--purple2);
   cursor:pointer;
-  font-size:13px;
+  font-size:14px;
 }
 
 .message{
-  display:none;
-  padding:11px;
-  border-radius:9px;
-  margin-bottom:14px;
-  background:var(--card2);
-  color:var(--text);
-  font-size:13px;
-  line-height:1.4;
-}
-
-.back-btn{
-  border:0;
-  background:none;
+  margin-top:15px;
+  text-align:center;
+  font-size:14px;
   color:var(--muted);
-  cursor:pointer;
-  padding:0;
-  margin-bottom:16px;
-  font-size:13px;
+  min-height:20px;
 }
 
-</style>
+.hidden{
+  display:none;
+}
 
+.small{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:10px;
+  line-height:1.5;
+}
+</style>
 </head>
 
 <body>
 
-<div class="login-page">
+<div class="container">
 
-<div class="login-box">
+  <div class="logo">SSC EDGE</div>
 
-<div class="logo">
-SSC EDGE
-</div>
+  <div class="subtitle">
+    Smart Preparation for SSC Exams
+  </div>
 
-<div class="subtitle">
-Your Complete SSC Preparation Platform
-</div>
+  <!-- LOGIN -->
+  <div class="card" id="loginBox">
 
+    <h2>Login</h2>
 
-<div class="auth-card">
+    <label>Email</label>
+    <input
+      type="email"
+      id="loginEmail"
+      placeholder="Enter your email"
+      autocomplete="email"
+    >
 
-<div id="message"
-     class="message">
-</div>
+    <label>Password</label>
+    <input
+      type="password"
+      id="loginPassword"
+      placeholder="Enter your password"
+      autocomplete="current-password"
+    >
 
+    <button
+      class="primary"
+      onclick="loginEmailPassword()">
+      Login
+    </button>
 
-<!-- =========================
-     LOGIN
-========================= -->
+    <div class="divider">OR</div>
 
-<div id="loginSection">
+    <button
+      class="google"
+      onclick="loginWithGoogle()">
+      Continue with Google
+    </button>
 
-<h2>Welcome Back</h2>
+    <button
+      class="guest"
+      onclick="continueAsGuest()">
+      Continue as Guest
+    </button>
 
+    <div
+      class="link"
+      onclick="showSignup()">
+      Create a new account
+    </div>
 
-<div class="field">
+    <div
+      class="message"
+      id="loginMessage">
+    </div>
 
-<label>Email</label>
-
-<input
-  id="loginEmail"
-  type="email"
-  placeholder="Enter your email"
-  autocomplete="email">
-
-</div>
-
-
-<div class="field">
-
-<label>Password</label>
-
-<input
-  id="loginPassword"
-  type="password"
-  placeholder="Enter your password"
-  autocomplete="current-password">
-
-</div>
-
-
-<button
-  class="primary-btn"
-  onclick="loginEmailPassword()">
-
-Login
-
-</button>
-
-
-<button
-  class="google-btn"
-  onclick="loginWithGoogle()">
-
-🌐 Continue with Google
-
-</button>
+  </div>
 
 
-<div class="divider">
-OR
-</div>
+  <!-- SIGNUP -->
+  <div class="card hidden" id="signupBox">
 
+    <h2>Create Account</h2>
 
-<button
-  class="guest-btn"
-  onclick="continueAsGuest()">
+    <label>Name</label>
+    <input
+      type="text"
+      id="signupName"
+      placeholder="Enter your name"
+      autocomplete="name"
+    >
 
-Continue as Guest
+    <label>Email</label>
+    <input
+      type="email"
+      id="signupEmail"
+      placeholder="Enter your email"
+      autocomplete="email"
+    >
 
-</button>
+    <label>Password</label>
+    <input
+      type="password"
+      id="signupPassword"
+      placeholder="Create a password"
+      autocomplete="new-password"
+    >
 
+    <button
+      class="primary"
+      onclick="createAccount()">
+      Create Account
+    </button>
 
-<div class="switch">
+    <div class="divider">OR</div>
 
-Don't have an account?
+    <button
+      class="google"
+      onclick="loginWithGoogle()">
+      Continue with Google
+    </button>
 
-<button onclick="showSignup()">
-Create Account
-</button>
+    <button
+      class="guest"
+      onclick="continueAsGuest()">
+      Continue as Guest
+    </button>
 
-</div>
+    <div
+      class="link"
+      onclick="showLogin()">
+      Already have an account? Login
+    </div>
 
-</div>
+    <div
+      class="message"
+      id="signupMessage">
+    </div>
 
+    <div class="small">
+      You can add your phone number later from your Profile.
+    </div>
 
-<!-- =========================
-     SIGNUP
-========================= -->
-
-<div id="signupSection"
-     style="display:none;">
-
-<button
-  class="back-btn"
-  onclick="showLogin()">
-
-← Back to Login
-
-</button>
-
-
-<h2>Create Account</h2>
-
-
-<div class="field">
-
-<label>Name</label>
-
-<input
-  id="signupName"
-  type="text"
-  placeholder="Enter your name"
-  autocomplete="name">
-
-</div>
-
-
-<div class="field">
-
-<label>Email</label>
-
-<input
-  id="signupEmail"
-  type="email"
-  placeholder="Enter your email"
-  autocomplete="email">
+  </div>
 
 </div>
 
 
-<div class="field">
-
-<label>Password</label>
-
-<input
-  id="signupPassword"
-  type="password"
-  placeholder="Create a password"
-  autocomplete="new-password">
-
-</div>
-
-
-<button
-  class="primary-btn"
-  onclick="createAccount()">
-
-Create Account
-
-</button>
-
-
-<button
-  class="google-btn"
-  onclick="loginWithGoogle()">
-
-🌐 Continue with Google
-
-</button>
-
-
-<div class="switch">
-
-Already have an account?
-
-<button onclick="showLogin()">
-Login
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-
+<!-- SUPABASE -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
-
-/* =========================
-   SUPABASE
-========================= */
-
 const SUPABASE_URL =
-"https://dvvyoygahzzbnpqrfhen.supabase.co";
+  "https://dvvyoygahzzbnpqrfhen.supabase.co";
 
 const SUPABASE_KEY =
-"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+  "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
 
 const supabaseClient =
-supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    {
+      auth:{
+        autoRefreshToken:true,
+        persistSession:true,
+        detectSessionInUrl:true
+      }
+    }
+  );
 
 
-/* =========================
-   MESSAGE
-========================= */
+/* =========================================
+   SAVE USER INFORMATION
+========================================= */
 
-function showMessage(text){
+async function saveUser(user){
 
-  const box =
-    document.getElementById("message");
-
-  box.textContent=text;
-  box.style.display="block";
-
-}
-
-
-function hideMessage(){
-
-  const box =
-    document.getElementById("message");
-
-  box.textContent="";
-  box.style.display="none";
-
-}
-
-
-/* =========================
-   LOGIN / SIGNUP SWITCH
-========================= */
-
-function showSignup(){
-
-  hideMessage();
-
-  document.getElementById(
-    "loginSection"
-  ).style.display="none";
-
-  document.getElementById(
-    "signupSection"
-  ).style.display="block";
-
-}
-
-
-function showLogin(){
-
-  hideMessage();
-
-  document.getElementById(
-    "signupSection"
-  ).style.display="none";
-
-  document.getElementById(
-    "loginSection"
-  ).style.display="block";
-
-}
-
-
-/* =========================
-   SAVE USER
-========================= */
-
-function saveUser(user){
-
-  if(!user)return;
+  if(!user) return;
 
   localStorage.setItem(
     "ssc-edge-user-id",
     user.id
   );
 
-  localStorage.removeItem(
-    "ssc-edge-guest"
+  localStorage.setItem(
+    "ssc-edge-user-email",
+    user.email || ""
   );
 
   const name =
     user.user_metadata?.name ||
     user.user_metadata?.full_name ||
-    user.user_metadata?.name ||
-    "";
+    user.email?.split("@")[0] ||
+    "Candidate";
 
-  if(name){
+  localStorage.setItem(
+    "ssc-edge-user-name",
+    name
+  );
 
-    localStorage.setItem(
-      "ssc-edge-name",
-      name
-    );
+  localStorage.removeItem("ssc-edge-guest");
+}
 
-  }
+
+/* =========================================
+   GO HOME
+========================================= */
+
+function goHome(){
+
+  window.location.replace(
+    "home.html"
+  );
 
 }
 
 
-/* =========================
+/* =========================================
+   OAUTH CALLBACK / RETURN HANDLING
+========================================= */
+
+async function handleAuthReturn(){
+
+  /*
+    Supabase automatically detects the OAuth
+    session from the URL when detectSessionInUrl
+    is enabled.
+
+    We wait for the client to finish processing
+    the returned session before checking it.
+  */
+
+  const hash =
+    window.location.hash;
+
+  const search =
+    window.location.search;
+
+
+  const looksLikeAuthReturn =
+    hash.includes("access_token") ||
+    hash.includes("refresh_token") ||
+    search.includes("code=");
+
+
+  if(!looksLikeAuthReturn){
+
+    const {
+      data:{
+        session
+      }
+    } =
+      await supabaseClient.auth.getSession();
+
+    if(session){
+
+      await saveUser(session.user);
+      goHome();
+
+    }
+
+    return;
+  }
+
+
+  /*
+    Give Supabase a moment to process the
+    OAuth response and store the session.
+  */
+
+  let session = null;
+
+  for(let i=0;i<20;i++){
+
+    const {
+      data:{
+        session:currentSession
+      }
+    } =
+      await supabaseClient.auth.getSession();
+
+    if(currentSession){
+
+      session = currentSession;
+      break;
+
+    }
+
+    await new Promise(
+      resolve => setTimeout(resolve,250)
+    );
+
+  }
+
+
+  if(session){
+
+    await saveUser(session.user);
+
+    /*
+      Remove OAuth tokens/code from the
+      visible browser URL.
+    */
+
+    window.history.replaceState(
+      {},
+      document.title,
+      window.location.pathname
+    );
+
+    goHome();
+
+    return;
+
+  }
+
+
+  document.getElementById("loginMessage")
+    .textContent =
+    "Google login could not be completed. Please try again.";
+
+}
+
+
+/* =========================================
+   AUTH STATE LISTENER
+========================================= */
+
+supabaseClient.auth.onAuthStateChange(
+  async (event, session) => {
+
+    if(
+      session &&
+      (
+        event === "SIGNED_IN" ||
+        event === "INITIAL_SESSION"
+      )
+    ){
+
+      await saveUser(session.user);
+
+      /*
+        Don't redirect repeatedly while the
+        page is already moving to Home.
+      */
+
+      if(
+        !window.location.pathname.endsWith(
+          "home.html"
+        )
+      ){
+
+        goHome();
+
+      }
+
+    }
+
+  }
+);
+
+
+/* =========================================
    EMAIL LOGIN
-========================= */
+========================================= */
 
 async function loginEmailPassword(){
-
-  hideMessage();
 
   const email =
     document.getElementById(
@@ -519,11 +543,20 @@ async function loginEmailPassword(){
     ).value;
 
 
+  const msg =
+    document.getElementById(
+      "loginMessage"
+    );
+
+
+  msg.textContent =
+    "Logging in...";
+
+
   if(!email || !password){
 
-    showMessage(
-      "Please enter your email and password."
-    );
+    msg.textContent =
+      "Please enter email and password.";
 
     return;
   }
@@ -534,40 +567,52 @@ async function loginEmailPassword(){
     error
   } =
   await supabaseClient.auth.signInWithPassword({
-
-    email:email,
-    password:password
-
+    email,
+    password
   });
 
 
   if(error){
 
-    showMessage(error.message);
+    msg.textContent =
+      error.message;
 
     return;
   }
 
 
-  saveUser(data.user);
+  if(data.session){
 
-  window.location.replace(
-    "home.html"
-  );
+    await saveUser(
+      data.session.user
+    );
+
+    goHome();
+
+  }
 
 }
 
 
-/* =========================
+/* =========================================
    GOOGLE LOGIN
-========================= */
+========================================= */
 
 async function loginWithGoogle(){
 
-  hideMessage();
+  const msg =
+    document.getElementById(
+      "loginMessage"
+    );
+
+  if(msg){
+    msg.textContent =
+      "Opening Google...";
+  }
 
 
   const {
+    data,
     error
   } =
   await supabaseClient.auth.signInWithOAuth({
@@ -577,7 +622,12 @@ async function loginWithGoogle(){
     options:{
 
       redirectTo:
-        "https://ssc-edge.github.io/"
+        "https://ssc-edge.github.io/",
+
+      queryParams:{
+        access_type:"offline",
+        prompt:"select_account"
+      }
 
     }
 
@@ -586,21 +636,22 @@ async function loginWithGoogle(){
 
   if(error){
 
-    showMessage(error.message);
+    if(msg){
+      msg.textContent =
+        error.message;
+    }
 
+    return;
   }
 
 }
 
 
-/* =========================
+/* =========================================
    CREATE ACCOUNT
-========================= */
+========================================= */
 
 async function createAccount(){
-
-  hideMessage();
-
 
   const name =
     document.getElementById(
@@ -618,21 +669,16 @@ async function createAccount(){
     ).value;
 
 
-  if(!name){
-
-    showMessage(
-      "Please enter your name."
+  const msg =
+    document.getElementById(
+      "signupMessage"
     );
 
-    return;
-  }
 
+  if(!name || !email || !password){
 
-  if(!email){
-
-    showMessage(
-      "Please enter your email."
-    );
+    msg.textContent =
+      "Please fill all fields.";
 
     return;
   }
@@ -640,12 +686,15 @@ async function createAccount(){
 
   if(password.length < 6){
 
-    showMessage(
-      "Password must be at least 6 characters."
-    );
+    msg.textContent =
+      "Password must be at least 6 characters.";
 
     return;
   }
+
+
+  msg.textContent =
+    "Creating account...";
 
 
   const {
@@ -654,9 +703,9 @@ async function createAccount(){
   } =
   await supabaseClient.auth.signUp({
 
-    email:email,
+    email,
 
-    password:password,
+    password,
 
     options:{
 
@@ -674,44 +723,39 @@ async function createAccount(){
 
   if(error){
 
-    showMessage(error.message);
+    msg.textContent =
+      error.message;
 
     return;
   }
 
 
   /*
-     If Supabase immediately creates a session,
-     login directly.
+    If email confirmation is disabled,
+    Supabase returns a session immediately.
   */
 
-  if(data.session && data.user){
+  if(data.session){
 
-    saveUser(data.user);
-
-    window.location.replace(
-      "home.html"
+    await saveUser(
+      data.session.user
     );
 
+    goHome();
+
     return;
   }
 
 
-  /*
-     If email confirmation is enabled,
-     show the user a clear message.
-  */
-
-  showMessage(
-    "Account created. Please check your email if Supabase asks you to confirm your account."
-  );
+  msg.textContent =
+    "Account created. Please check your email if confirmation is required.";
 
 }
 
 
-/* =========================
-   GUEST
-========================= */
+/* =========================================
+   GUEST MODE
+========================================= */
 
 function continueAsGuest(){
 
@@ -725,82 +769,59 @@ function continueAsGuest(){
   );
 
   localStorage.setItem(
-    "ssc-edge-name",
+    "ssc-edge-user-name",
     "Guest"
   );
 
-  window.location.replace(
-    "home.html"
+  localStorage.removeItem(
+    "ssc-edge-user-email"
   );
 
-}
 
-
-/* =========================
-   GOOGLE REDIRECT SESSION
-========================= */
-
-async function checkGoogleLogin(){
-
-  const {
-    data:{session}
-  } =
-  await supabaseClient.auth.getSession();
-
-
-  if(!session || !session.user){
-
-    return;
-  }
-
-
-  /*
-     If a Google login has just returned,
-     save the user and go home.
-  */
-
-  const provider =
-    session.user.app_metadata?.provider;
-
-
-  if(provider === "google"){
-
-    saveUser(session.user);
-
-    window.location.replace(
-      "home.html"
-    );
-
-  }
+  goHome();
 
 }
 
 
-/* =========================
-   AUTH STATE
-========================= */
+/* =========================================
+   SHOW LOGIN
+========================================= */
 
-supabaseClient.auth.onAuthStateChange(
-  (event, session)=>{
+function showLogin(){
 
-    if(
-      event === "SIGNED_IN" &&
-      session?.user
-    ){
+  document.getElementById(
+    "loginBox"
+  ).classList.remove("hidden");
 
-      saveUser(session.user);
+  document.getElementById(
+    "signupBox"
+  ).classList.add("hidden");
 
-    }
-
-  }
-);
+}
 
 
-/* =========================
-   START
-========================= */
+/* =========================================
+   SHOW SIGNUP
+========================================= */
 
-checkGoogleLogin();
+function showSignup(){
+
+  document.getElementById(
+    "loginBox"
+  ).classList.add("hidden");
+
+  document.getElementById(
+    "signupBox"
+  ).classList.remove("hidden");
+
+}
+
+
+/* =========================================
+   START AUTH CHECK
+========================================= */
+
+handleAuthReturn();
 
 </script>
 
