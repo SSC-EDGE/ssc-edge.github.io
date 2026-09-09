@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>SSC EDGE - Login</title>
 
+
+<!-- THEME -->
+
 <script>
 document.documentElement.dataset.theme =
-  localStorage.getItem("ssc-edge-theme") || "dark";
+localStorage.getItem("ssc-edge-theme") || "dark";
 </script>
 
+
 <style>
+
 :root{
   --bg:#08050e;
   --card:#171025;
@@ -44,9 +53,11 @@ body{
   background:var(--bg);
   color:var(--text);
   font-family:Arial,Helvetica,sans-serif;
+
   display:flex;
   justify-content:center;
   align-items:center;
+
   padding:20px;
 }
 
@@ -72,8 +83,11 @@ body{
   background:var(--card);
   border:1px solid var(--border);
   border-radius:18px;
+
   padding:22px;
-  box-shadow:0 10px 30px rgba(0,0,0,.25);
+
+  box-shadow:
+  0 10px 30px rgba(0,0,0,.25);
 }
 
 h2{
@@ -83,19 +97,30 @@ h2{
 
 label{
   display:block;
-  margin:13px 0 7px;
+
+  margin:
+  13px 0 7px;
+
   color:var(--muted);
+
   font-size:14px;
 }
 
 input{
   width:100%;
+
   padding:13px 14px;
+
   border-radius:11px;
+
   border:1px solid var(--border);
+
   background:var(--bg);
+
   color:var(--text);
+
   outline:none;
+
   font-size:15px;
 }
 
@@ -105,12 +130,19 @@ input:focus{
 
 button{
   width:100%;
+
   border:0;
+
   border-radius:11px;
+
   padding:13px;
+
   margin-top:14px;
+
   font-size:15px;
+
   font-weight:700;
+
   cursor:pointer;
 }
 
@@ -131,34 +163,50 @@ button{
 
 .divider{
   display:flex;
+
   align-items:center;
+
   gap:10px;
+
   margin:20px 0;
+
   color:var(--muted);
+
   font-size:13px;
 }
 
 .divider:before,
 .divider:after{
   content:"";
+
   flex:1;
+
   height:1px;
+
   background:var(--border);
 }
 
 .link{
   text-align:center;
+
   margin-top:18px;
+
   color:var(--purple2);
+
   cursor:pointer;
+
   font-size:14px;
 }
 
 .message{
   margin-top:15px;
+
   text-align:center;
+
   font-size:14px;
+
   color:var(--muted);
+
   min-height:20px;
 }
 
@@ -168,29 +216,49 @@ button{
 
 .small{
   font-size:12px;
+
   color:var(--muted);
+
   margin-top:10px;
+
   line-height:1.5;
 }
+
 </style>
+
 </head>
+
 
 <body>
 
+
 <div class="container">
 
-  <div class="logo">SSC EDGE</div>
+
+  <!-- =========================
+       LOGIN
+  ========================== -->
+
+  <div class="logo">
+    SSC EDGE
+  </div>
 
   <div class="subtitle">
     Smart Preparation for SSC Exams
   </div>
 
-  <!-- LOGIN -->
+
   <div class="card" id="loginBox">
 
-    <h2>Login</h2>
+    <h2>
+      Login
+    </h2>
 
-    <label>Email</label>
+
+    <label>
+      Email
+    </label>
+
     <input
       type="email"
       id="loginEmail"
@@ -198,7 +266,11 @@ button{
       autocomplete="email"
     >
 
-    <label>Password</label>
+
+    <label>
+      Password
+    </label>
+
     <input
       type="password"
       id="loginPassword"
@@ -206,31 +278,47 @@ button{
       autocomplete="current-password"
     >
 
+
     <button
       class="primary"
       onclick="loginEmailPassword()">
+
       Login
+
     </button>
 
-    <div class="divider">OR</div>
+
+    <div class="divider">
+      OR
+    </div>
+
 
     <button
       class="google"
       onclick="loginWithGoogle()">
+
       Continue with Google
+
     </button>
+
 
     <button
       class="guest"
       onclick="continueAsGuest()">
+
       Continue as Guest
+
     </button>
+
 
     <div
       class="link"
       onclick="showSignup()">
+
       Create a new account
+
     </div>
+
 
     <div
       class="message"
@@ -240,12 +328,25 @@ button{
   </div>
 
 
-  <!-- SIGNUP -->
-  <div class="card hidden" id="signupBox">
 
-    <h2>Create Account</h2>
+  <!-- =========================
+       CREATE ACCOUNT
+  ========================== -->
 
-    <label>Name</label>
+  <div
+    class="card hidden"
+    id="signupBox">
+
+
+    <h2>
+      Create Account
+    </h2>
+
+
+    <label>
+      Name
+    </label>
+
     <input
       type="text"
       id="signupName"
@@ -253,7 +354,11 @@ button{
       autocomplete="name"
     >
 
-    <label>Email</label>
+
+    <label>
+      Email
+    </label>
+
     <input
       type="email"
       id="signupEmail"
@@ -261,7 +366,11 @@ button{
       autocomplete="email"
     >
 
-    <label>Password</label>
+
+    <label>
+      Password
+    </label>
+
     <input
       type="password"
       id="signupPassword"
@@ -269,89 +378,130 @@ button{
       autocomplete="new-password"
     >
 
+
     <button
       class="primary"
       onclick="createAccount()">
+
       Create Account
+
     </button>
 
-    <div class="divider">OR</div>
+
+    <div class="divider">
+      OR
+    </div>
+
 
     <button
       class="google"
       onclick="loginWithGoogle()">
+
       Continue with Google
+
     </button>
+
 
     <button
       class="guest"
       onclick="continueAsGuest()">
+
       Continue as Guest
+
     </button>
+
 
     <div
       class="link"
       onclick="showLogin()">
+
       Already have an account? Login
+
     </div>
+
 
     <div
       class="message"
       id="signupMessage">
     </div>
 
+
     <div class="small">
-      You can add your phone number later from your Profile.
+
+      You can add your phone number later
+      from your Profile.
+
     </div>
 
   </div>
 
+
 </div>
 
 
-<!-- SUPABASE -->
+
+<!-- =========================
+     SUPABASE
+========================== -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
 <script>
 
+
+/* =========================================
+   SUPABASE CONFIG
+========================================= */
+
 const SUPABASE_URL =
-  "https://dvvyoygahzzbnpqrfhen.supabase.co";
+"https://dvvyoygahzzbnpqrfhen.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
 
 
 const supabaseClient =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY,
-    {
-      auth:{
-        autoRefreshToken:true,
-        persistSession:true,
-        detectSessionInUrl:true
-      }
+window.supabase.createClient(
+
+  SUPABASE_URL,
+
+  SUPABASE_KEY,
+
+  {
+    auth:{
+      autoRefreshToken:true,
+      persistSession:true,
+      detectSessionInUrl:true
     }
-  );
+  }
+
+);
+
 
 
 /* =========================================
-   SAVE USER INFORMATION
+   SAVE USER
 ========================================= */
 
 async function saveUser(user){
 
-  if(!user) return;
+  if(!user){
+    return;
+  }
+
 
   localStorage.setItem(
     "ssc-edge-user-id",
     user.id
   );
 
+
   localStorage.setItem(
     "ssc-edge-user-email",
     user.email || ""
   );
+
 
   const name =
     user.user_metadata?.name ||
@@ -359,13 +509,19 @@ async function saveUser(user){
     user.email?.split("@")[0] ||
     "Candidate";
 
+
   localStorage.setItem(
     "ssc-edge-user-name",
     name
   );
 
-  localStorage.removeItem("ssc-edge-guest");
+
+  localStorage.removeItem(
+    "ssc-edge-guest"
+  );
+
 }
+
 
 
 /* =========================================
@@ -381,150 +537,6 @@ function goHome(){
 }
 
 
-/* =========================================
-   OAUTH CALLBACK / RETURN HANDLING
-========================================= */
-
-async function handleAuthReturn(){
-
-  /*
-    Supabase automatically detects the OAuth
-    session from the URL when detectSessionInUrl
-    is enabled.
-
-    We wait for the client to finish processing
-    the returned session before checking it.
-  */
-
-  const hash =
-    window.location.hash;
-
-  const search =
-    window.location.search;
-
-
-  const looksLikeAuthReturn =
-    hash.includes("access_token") ||
-    hash.includes("refresh_token") ||
-    search.includes("code=");
-
-
-  if(!looksLikeAuthReturn){
-
-    const {
-      data:{
-        session
-      }
-    } =
-      await supabaseClient.auth.getSession();
-
-    if(session){
-
-      await saveUser(session.user);
-      goHome();
-
-    }
-
-    return;
-  }
-
-
-  /*
-    Give Supabase a moment to process the
-    OAuth response and store the session.
-  */
-
-  let session = null;
-
-  for(let i=0;i<20;i++){
-
-    const {
-      data:{
-        session:currentSession
-      }
-    } =
-      await supabaseClient.auth.getSession();
-
-    if(currentSession){
-
-      session = currentSession;
-      break;
-
-    }
-
-    await new Promise(
-      resolve => setTimeout(resolve,250)
-    );
-
-  }
-
-
-  if(session){
-
-    await saveUser(session.user);
-
-    /*
-      Remove OAuth tokens/code from the
-      visible browser URL.
-    */
-
-    window.history.replaceState(
-      {},
-      document.title,
-      window.location.pathname
-    );
-
-    goHome();
-
-    return;
-
-  }
-
-
-  document.getElementById("loginMessage")
-    .textContent =
-    "Google login could not be completed. Please try again.";
-
-}
-
-
-/* =========================================
-   AUTH STATE LISTENER
-========================================= */
-
-supabaseClient.auth.onAuthStateChange(
-  async (event, session) => {
-
-    if(
-      session &&
-      (
-        event === "SIGNED_IN" ||
-        event === "INITIAL_SESSION"
-      )
-    ){
-
-      await saveUser(session.user);
-
-      /*
-        Don't redirect repeatedly while the
-        page is already moving to Home.
-      */
-
-      if(
-        !window.location.pathname.endsWith(
-          "home.html"
-        )
-      ){
-
-        goHome();
-
-      }
-
-    }
-
-  }
-);
-
 
 /* =========================================
    EMAIL LOGIN
@@ -536,6 +548,7 @@ async function loginEmailPassword(){
     document.getElementById(
       "loginEmail"
     ).value.trim();
+
 
   const password =
     document.getElementById(
@@ -549,10 +562,6 @@ async function loginEmailPassword(){
     );
 
 
-  msg.textContent =
-    "Logging in...";
-
-
   if(!email || !password){
 
     msg.textContent =
@@ -562,13 +571,20 @@ async function loginEmailPassword(){
   }
 
 
+  msg.textContent =
+    "Logging in...";
+
+
   const {
     data,
     error
   } =
   await supabaseClient.auth.signInWithPassword({
-    email,
-    password
+
+    email:email,
+
+    password:password
+
   });
 
 
@@ -594,6 +610,7 @@ async function loginEmailPassword(){
 }
 
 
+
 /* =========================================
    GOOGLE LOGIN
 ========================================= */
@@ -605,14 +622,16 @@ async function loginWithGoogle(){
       "loginMessage"
     );
 
+
   if(msg){
+
     msg.textContent =
       "Opening Google...";
+
   }
 
 
   const {
-    data,
     error
   } =
   await supabaseClient.auth.signInWithOAuth({
@@ -625,8 +644,10 @@ async function loginWithGoogle(){
         "https://ssc-edge.github.io/",
 
       queryParams:{
-        access_type:"offline",
-        prompt:"select_account"
+
+        prompt:
+          "select_account"
+
       }
 
     }
@@ -634,17 +655,15 @@ async function loginWithGoogle(){
   });
 
 
-  if(error){
+  if(error && msg){
 
-    if(msg){
-      msg.textContent =
-        error.message;
-    }
+    msg.textContent =
+      error.message;
 
-    return;
   }
 
 }
+
 
 
 /* =========================================
@@ -658,10 +677,12 @@ async function createAccount(){
       "signupName"
     ).value.trim();
 
+
   const email =
     document.getElementById(
       "signupEmail"
     ).value.trim();
+
 
   const password =
     document.getElementById(
@@ -703,9 +724,9 @@ async function createAccount(){
   } =
   await supabaseClient.auth.signUp({
 
-    email,
+    email:email,
 
-    password,
+    password:password,
 
     options:{
 
@@ -730,11 +751,6 @@ async function createAccount(){
   }
 
 
-  /*
-    If email confirmation is disabled,
-    Supabase returns a session immediately.
-  */
-
   if(data.session){
 
     await saveUser(
@@ -753,6 +769,7 @@ async function createAccount(){
 }
 
 
+
 /* =========================================
    GUEST MODE
 ========================================= */
@@ -764,14 +781,17 @@ function continueAsGuest(){
     "true"
   );
 
+
   localStorage.removeItem(
     "ssc-edge-user-id"
   );
+
 
   localStorage.setItem(
     "ssc-edge-user-name",
     "Guest"
   );
+
 
   localStorage.removeItem(
     "ssc-edge-user-email"
@@ -781,6 +801,7 @@ function continueAsGuest(){
   goHome();
 
 }
+
 
 
 /* =========================================
@@ -793,11 +814,13 @@ function showLogin(){
     "loginBox"
   ).classList.remove("hidden");
 
+
   document.getElementById(
     "signupBox"
   ).classList.add("hidden");
 
 }
+
 
 
 /* =========================================
@@ -810,6 +833,7 @@ function showSignup(){
     "loginBox"
   ).classList.add("hidden");
 
+
   document.getElementById(
     "signupBox"
   ).classList.remove("hidden");
@@ -817,11 +841,179 @@ function showSignup(){
 }
 
 
+
 /* =========================================
-   START AUTH CHECK
+   GOOGLE RETURN HANDLING
 ========================================= */
 
-handleAuthReturn();
+async function handleGoogleReturn(){
+
+  /*
+    Check whether this page is returning
+    from Google OAuth.
+  */
+
+  const hash =
+    window.location.hash;
+
+
+  const search =
+    window.location.search;
+
+
+  const oauthReturn =
+    hash.includes("access_token") ||
+    hash.includes("refresh_token") ||
+    search.includes("code=");
+
+
+  if(!oauthReturn){
+
+    /*
+      Normal page load.
+      Check if an existing session already exists.
+    */
+
+    const {
+      data:{
+        session
+      }
+    } =
+    await supabaseClient.auth.getSession();
+
+
+    if(session){
+
+      await saveUser(
+        session.user
+      );
+
+      goHome();
+
+    }
+
+    return;
+  }
+
+
+  /*
+    OAuth returned.
+    Wait for Supabase to finish processing
+    the URL and storing the session.
+  */
+
+  for(let i=0; i<40; i++){
+
+    const {
+      data:{
+        session
+      }
+    } =
+    await supabaseClient.auth.getSession();
+
+
+    if(session){
+
+      await saveUser(
+        session.user
+      );
+
+
+      /*
+        Remove OAuth data from URL.
+      */
+
+      window.history.replaceState(
+        {},
+        document.title,
+        window.location.pathname
+      );
+
+
+      goHome();
+
+      return;
+
+    }
+
+
+    await new Promise(
+      resolve =>
+      setTimeout(resolve,250)
+    );
+
+  }
+
+
+  const msg =
+    document.getElementById(
+      "loginMessage"
+    );
+
+
+  if(msg){
+
+    msg.textContent =
+      "Google login could not be completed. Please try again.";
+
+  }
+
+}
+
+
+
+/* =========================================
+   AUTH STATE LISTENER
+========================================= */
+
+supabaseClient.auth.onAuthStateChange(
+
+  async (event, session) => {
+
+    /*
+      IMPORTANT:
+      We do NOT redirect on INITIAL_SESSION.
+
+      This prevents the first Google callback
+      from being interrupted before Supabase
+      finishes restoring the session.
+    */
+
+    if(
+      event === "SIGNED_IN" &&
+      session
+    ){
+
+      await saveUser(
+        session.user
+      );
+
+
+      /*
+        If this is a normal email login,
+        redirect immediately.
+
+        If Google is returning, the callback
+        handler also sees the same session,
+        but replace() prevents duplicate pages.
+      */
+
+      goHome();
+
+    }
+
+  }
+
+);
+
+
+
+/* =========================================
+   START SESSION / GOOGLE CALLBACK CHECK
+========================================= */
+
+handleGoogleReturn();
+
 
 </script>
 
