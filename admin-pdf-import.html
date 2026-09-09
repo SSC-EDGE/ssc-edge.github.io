@@ -632,11 +632,7 @@ window.supabase.createClient(
 ========================================== */
 
 const IMPORT_API_URL =
-  "https://dvvyoygahzzbnpqrfhen.supabase.co/functions/v1/clever-service";
-
-const IMPORT_ENDPOINTS = [
-    IMPORT_API_URL
-];
+    "https://dvvyoygahzzbnpqrfhen.supabase.co/functions/v1/clever-service";
 
 
 /* ==========================================
@@ -944,17 +940,12 @@ async function startExtraction(){
 
     if(!currentFile){
 
-        alert(
-            "Please select a PDF first."
-        );
-
+        alert("Please select a PDF first.");
         return;
 
     }
 
-
     extractBtn.disabled = true;
-
     publishBtn.disabled = true;
 
     setStatus(
@@ -962,179 +953,91 @@ async function startExtraction(){
         "loading"
     );
 
-
-    let lastError =
-    "Requested function was not found";
-
-
     try{
 
-        for(
-            let i = 0;
-            i < IMPORT_ENDPOINTS.length;
-            i++
-        ){
+        const formData = new FormData();
 
-            const endpoint =
-            IMPORT_ENDPOINTS[i];
+        formData.append("file", currentFile, currentFile.name);
 
+        setStatus(
+            "Connecting to PDF import server...",
+            "loading"
+        );
 
-            try{
-
-                setStatus(
-                    "Connecting to PDF import server...",
-                    "loading"
-                );
-
-
-                const formData =
-                new FormData();
-
-
-                formData.append(
-                    "file",
-                    currentFile
-                );
-
-
-                const response =
-                await fetch(
-                    endpoint,
-                    {
-                        method:"POST",
-                        body:formData
-                    }
-                );
-
-
-                const responseText =
-                await response.text();
-
-
-                let result = null;
-
-
-                try{
-
-                    result =
-                    JSON.parse(
-                        responseText
-                    );
-
-                }
-                catch{
-
-                    result = null;
-
-                }
-
-
-                if(
-                    response.status === 404
-                    ||
-                    (
-                        result &&
-                        String(
-                            result.error || ""
-                        )
-                        .toLowerCase()
-                        .includes(
-                            "function was not found"
-                        )
-                    )
-                ){
-
-                    lastError =
-                    "Endpoint not found";
-
-                    continue;
-
-                }
-
-
-                if(!response.ok){
-
-                    throw new Error(
-                        result?.error ||
-                        result?.message ||
-                        responseText ||
-                        "PDF extraction failed"
-                    );
-
-                }
-
-
-                if(
-                    !result ||
-                    !Array.isArray(
-                        result.questions
-                    )
-                ){
-
-                    throw new Error(
-                        "Server response did not contain questions."
-                    );
-
-                }
-
-
-                extractedQuestions =
-                result.questions;
-
-
-                if(
-                    extractedQuestions.length === 0
-                ){
-
-                    throw new Error(
-                        "No questions were detected in this PDF."
-                    );
-
-                }
-
-
-                updateStats();
-
-                renderPreview();
-
-
-                document.getElementById(
-                    "totalQuestions"
-                ).value =
-                extractedQuestions.length;
-
-
-                publishBtn.disabled = false;
-
-
-                setStatus(
-                    "Extraction completed successfully. Review the questions below.",
-                    "success"
-                );
-
-
-                return;
-
+        const response = await fetch(
+            IMPORT_API_URL,
+            {
+                method: "POST",
+                body: formData
             }
-            catch(error){
+        );
 
-                console.error(
-                    "Endpoint error:",
-                    endpoint,
-                    error
-                );
+        const responseText = await response.text();
 
-                lastError =
-                error.message;
+        let result = null;
 
-            }
+        try{
+            result = JSON.parse(responseText);
+        }
+        catch{
+            result = null;
+        }
+
+        console.log("PDF IMPORT URL:", IMPORT_API_URL);
+        console.log("PDF IMPORT STATUS:", response.status);
+        console.log("PDF IMPORT RESPONSE:", responseText);
+
+        if(!response.ok){
+
+            const serverError =
+                result?.error ||
+                result?.message ||
+                result?.details ||
+                responseText ||
+                ("HTTP " + response.status);
+
+            throw new Error(
+                "PDF import server error (" +
+                response.status +
+                "): " +
+                serverError
+            );
 
         }
 
+        if(
+            !result ||
+            !Array.isArray(result.questions)
+        ){
 
-        throw new Error(
-            lastError ||
-            "PDF import function could not be reached."
+            throw new Error(
+                "Server response did not contain a questions array."
+            );
+
+        }
+
+        extractedQuestions = result.questions;
+
+        if(extractedQuestions.length === 0){
+
+            throw new Error(
+                "No questions were detected in this PDF."
+            );
+
+        }
+
+        updateStats();
+        renderPreview();
+
+        document.getElementById(
+            "totalQuestions"
+        ).value = extractedQuestions.length;
+
+        publishBtn.disabled = false;
+
+        setStatus(
+            "Extraction completed successfully. Review the questions below.",
+            "success"
         );
 
     }
@@ -1145,22 +1048,21 @@ async function startExtraction(){
             error
         );
 
+        const message =
+            error?.message ||
+            "PDF extraction failed.";
 
         setStatus(
-            error.message,
+            message,
             "error"
         );
 
-
-        alert(
-            error.message
-        );
+        alert(message);
 
     }
     finally{
 
-        extractBtn.disabled =
-        !currentFile;
+        extractBtn.disabled = !currentFile;
 
     }
 
