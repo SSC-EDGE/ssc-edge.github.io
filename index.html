@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
 <title>SSC EDGE</title>
 
 <link rel="stylesheet" href="css/style.css">
@@ -13,6 +16,7 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 </script>
 
 <style>
+
 .auth-screen{
   min-height:100vh;
   display:flex;
@@ -76,6 +80,7 @@ localStorage.getItem("ssc-edge-theme") || "dark";
   color:white;
   font-size:15px;
   font-weight:700;
+  cursor:pointer;
 }
 
 .secondary{
@@ -97,6 +102,7 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 .switch span{
   color:var(--purple2);
   font-weight:700;
+  cursor:pointer;
 }
 
 .message{
@@ -108,8 +114,11 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 .hidden{
   display:none;
 }
+
 </style>
+
 </head>
+
 
 <body>
 
@@ -117,147 +126,249 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 
 <div class="auth-card">
 
+
+<!-- =========================
+     SSC EDGE HEADER
+========================= -->
+
 <div class="auth-logo">
-  SSC <span>EDGE</span>
+SSC <span>EDGE</span>
 </div>
 
 
-<!-- LOGIN -->
+<!-- =========================
+     LOGIN
+========================= -->
 
 <div id="loginBox">
 
-<h1 class="auth-title">Welcome Back</h1>
+<h1 class="auth-title">
+Welcome Back
+</h1>
 
 <p class="auth-subtitle">
 Login to continue your SSC preparation.
 </p>
 
-<input
- id="loginEmail"
- class="auth-input"
- type="email"
- placeholder="Email">
 
 <input
- id="loginPassword"
- class="auth-input"
- type="password"
- placeholder="Password">
+id="loginEmail"
+class="auth-input"
+type="email"
+placeholder="Email"
+autocomplete="email"
+>
 
-<button class="auth-button" onclick="login()">
+
+<input
+id="loginPassword"
+class="auth-input"
+type="password"
+placeholder="Password"
+autocomplete="current-password"
+>
+
+
+<button
+class="auth-button"
+onclick="login()">
+
 Login
+
 </button>
 
-<button class="auth-button guest" onclick="guest()">
+
+<button
+class="auth-button guest"
+onclick="guest()">
+
 Continue as Guest
+
 </button>
 
-<div id="loginMsg" class="message"></div>
+
+<div
+id="loginMsg"
+class="message">
+</div>
+
 
 <div class="switch">
+
 Don't have an account?
-<span onclick="showSignup()">Create Account</span>
+
+<span onclick="showSignup()">
+Create Account
+</span>
+
 </div>
+
 
 <div class="switch">
-<span onclick="showPhone()">Login with Phone OTP</span>
-</div>
+
+<span onclick="showPhone()">
+Login with Phone OTP
+</span>
 
 </div>
 
+</div>
 
-<!-- SIGNUP -->
+
+
+<!-- =========================
+     CREATE ACCOUNT
+========================= -->
 
 <div id="signupBox" class="hidden">
 
-<h1 class="auth-title">Create Account</h1>
+<h1 class="auth-title">
+Create Account
+</h1>
 
 <p class="auth-subtitle">
-Create your SSC EDGE account.
+Create your SSC EDGE account using email.
 </p>
 
-<input
- id="signupName"
- class="auth-input"
- type="text"
- maxlength="40"
- placeholder="Your Name">
 
 <input
- id="signupEmail"
- class="auth-input"
- type="email"
- placeholder="Email">
+id="signupName"
+class="auth-input"
+type="text"
+maxlength="40"
+placeholder="Your Name"
+autocomplete="name"
+>
+
 
 <input
- id="signupPassword"
- class="auth-input"
- type="password"
- placeholder="Password">
+id="signupEmail"
+class="auth-input"
+type="email"
+placeholder="Email"
+autocomplete="email"
+>
 
-<button class="auth-button" onclick="signup()">
+
+<input
+id="signupPassword"
+class="auth-input"
+type="password"
+placeholder="Password"
+autocomplete="new-password"
+>
+
+
+<button
+class="auth-button"
+onclick="signup()">
+
 Create Account
+
 </button>
 
-<div id="signupMsg" class="message"></div>
+
+<div
+id="signupMsg"
+class="message">
+</div>
+
 
 <div class="switch">
+
 Already have an account?
-<span onclick="showLogin()">Login</span>
-</div>
+
+<span onclick="showLogin()">
+Login
+</span>
 
 </div>
 
+</div>
 
-<!-- PHONE -->
+
+
+<!-- =========================
+     PHONE OTP LOGIN ONLY
+========================= -->
 
 <div id="phoneBox" class="hidden">
 
-<h1 class="auth-title">Phone Login</h1>
+<h1 class="auth-title">
+Phone Login
+</h1>
 
 <p class="auth-subtitle">
-Login using your phone number.
+Login using a verified phone number linked to your account.
 </p>
 
+
 <input
- id="phone"
- class="auth-input"
- type="tel"
- placeholder="+91XXXXXXXXXX">
+id="phone"
+class="auth-input"
+type="tel"
+placeholder="+91XXXXXXXXXX"
+autocomplete="tel"
+>
+
 
 <button
- id="sendOtp"
- class="auth-button"
- onclick="sendOTP()">
+id="sendOtp"
+class="auth-button"
+onclick="sendOTP()">
+
 Send OTP
+
 </button>
+
 
 <input
- id="otp"
- class="auth-input hidden"
- type="text"
- inputmode="numeric"
- maxlength="6"
- placeholder="Enter OTP">
+id="otp"
+class="auth-input hidden"
+type="text"
+inputmode="numeric"
+maxlength="6"
+placeholder="Enter OTP"
+autocomplete="one-time-code"
+>
+
 
 <button
- id="verifyOtp"
- class="auth-button secondary hidden"
- onclick="verifyOTP()">
+id="verifyOtp"
+class="auth-button secondary hidden"
+onclick="verifyOTP()">
+
 Verify OTP
+
 </button>
 
-<div id="phoneMsg" class="message"></div>
+
+<div
+id="phoneMsg"
+class="message">
+</div>
+
 
 <div class="switch">
-<span onclick="showLogin()">Back to Login</span>
-</div>
+
+<span onclick="showLogin()">
+Back to Login
+</span>
 
 </div>
 
 </div>
+
+
 </div>
 
+</div>
+
+
+
+<!-- =========================
+     SUPABASE
+========================= -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -276,13 +387,14 @@ supabase.createClient(
 );
 
 
+
 /* =========================
-   IMPORTANT:
-   INDEX NEVER AUTO-SKIPS
-   LOGIN PAGE
+   CLEAR GUEST ONLY WHEN
+   USER ENTERS LOGIN PAGE
 ========================= */
 
 localStorage.removeItem("ssc-edge-guest");
+
 
 
 /* =========================
@@ -291,13 +403,16 @@ localStorage.removeItem("ssc-edge-guest");
 
 function hideAll(){
 
-  document.getElementById("loginBox")
+  document
+    .getElementById("loginBox")
     .classList.add("hidden");
 
-  document.getElementById("signupBox")
+  document
+    .getElementById("signupBox")
     .classList.add("hidden");
 
-  document.getElementById("phoneBox")
+  document
+    .getElementById("phoneBox")
     .classList.add("hidden");
 }
 
@@ -306,7 +421,8 @@ function showLogin(){
 
   hideAll();
 
-  document.getElementById("loginBox")
+  document
+    .getElementById("loginBox")
     .classList.remove("hidden");
 }
 
@@ -315,7 +431,8 @@ function showSignup(){
 
   hideAll();
 
-  document.getElementById("signupBox")
+  document
+    .getElementById("signupBox")
     .classList.remove("hidden");
 }
 
@@ -324,9 +441,11 @@ function showPhone(){
 
   hideAll();
 
-  document.getElementById("phoneBox")
+  document
+    .getElementById("phoneBox")
     .classList.remove("hidden");
 }
+
 
 
 /* =========================
@@ -336,127 +455,179 @@ function showPhone(){
 async function login(){
 
   const email =
-    document.getElementById("loginEmail")
-    .value.trim();
+    document
+      .getElementById("loginEmail")
+      .value
+      .trim();
 
   const password =
-    document.getElementById("loginPassword")
-    .value;
+    document
+      .getElementById("loginPassword")
+      .value;
 
   const msg =
-    document.getElementById("loginMsg");
+    document
+      .getElementById("loginMsg");
 
   msg.textContent="";
   msg.style.color="#ff7777";
 
+
   if(!email || !password){
 
-    msg.textContent=
+    msg.textContent =
       "Please enter email and password.";
 
     return;
   }
 
-  const {data,error} =
-    await supabaseClient.auth
-    .signInWithPassword({
-      email,
-      password
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient.auth.signInWithPassword({
+
+      email:email,
+
+      password:password
+
     });
+
 
   if(error){
 
-    msg.textContent=error.message;
+    msg.textContent =
+      error.message;
 
     return;
   }
 
-  localStorage.removeItem("ssc-edge-guest");
+
+  localStorage.removeItem(
+    "ssc-edge-guest"
+  );
+
 
   localStorage.setItem(
     "ssc-edge-user-id",
     data.user.id
   );
 
+
   localStorage.setItem(
     "ssc-edge-name",
+
     data.user.user_metadata?.name ||
-    data.user.email?.split("@")[0] ||
+
+    data.user.email
+      ?.split("@")[0] ||
+
     "SSC EDGE User"
   );
 
-  window.location.href="home.html";
+
+  window.location.replace(
+    "home.html"
+  );
 }
 
 
+
 /* =========================
-   SIGN UP
+   CREATE ACCOUNT
+   EMAIL ONLY
 ========================= */
 
 async function signup(){
 
   const name =
-    document.getElementById("signupName")
-    .value.trim();
+    document
+      .getElementById("signupName")
+      .value
+      .trim();
 
   const email =
-    document.getElementById("signupEmail")
-    .value.trim();
+    document
+      .getElementById("signupEmail")
+      .value
+      .trim();
 
   const password =
-    document.getElementById("signupPassword")
-    .value;
+    document
+      .getElementById("signupPassword")
+      .value;
 
   const msg =
-    document.getElementById("signupMsg");
+    document
+      .getElementById("signupMsg");
 
   msg.textContent="";
   msg.style.color="#ff7777";
 
+
   if(!name){
 
-    msg.textContent="Enter your name.";
+    msg.textContent =
+      "Please enter your name.";
+
     return;
   }
+
 
   if(!email){
 
-    msg.textContent="Enter your email.";
+    msg.textContent =
+      "Please enter your email.";
+
     return;
   }
 
-  if(password.length<6){
 
-    msg.textContent=
+  if(password.length < 6){
+
+    msg.textContent =
       "Password must be at least 6 characters.";
 
     return;
   }
 
-  const {data,error} =
+
+  const {
+    data,
+    error
+  } =
     await supabaseClient.auth.signUp({
 
-      email,
-      password,
+      email:email,
+
+      password:password,
 
       options:{
+
         data:{
           name:name
         }
+
       }
 
     });
 
+
   if(error){
 
-    msg.textContent=error.message;
+    msg.textContent =
+      error.message;
+
     return;
   }
+
 
   localStorage.setItem(
     "ssc-edge-name",
     name
   );
+
 
   if(data.session){
 
@@ -465,33 +636,47 @@ async function signup(){
       data.user.id
     );
 
-    window.location.href="home.html";
+    localStorage.removeItem(
+      "ssc-edge-guest"
+    );
 
-  }else{
+    window.location.replace(
+      "home.html"
+    );
 
-    msg.style.color="var(--purple2)";
-
-    msg.textContent=
-      "Account created. Check your email to verify your account.";
-
+    return;
   }
+
+
+  msg.style.color =
+    "var(--purple2)";
+
+  msg.textContent =
+    "Account created. Please check your email to verify your account.";
+
 }
 
 
+
 /* =========================
-   GUEST
+   GUEST MODE
 ========================= */
 
 function guest(){
 
-  localStorage.removeItem("ssc-edge-user-id");
+  localStorage.removeItem(
+    "ssc-edge-user-id"
+  );
 
   localStorage.setItem(
     "ssc-edge-guest",
     "true"
   );
 
-  if(!localStorage.getItem("ssc-edge-theme")){
+
+  if(!localStorage.getItem(
+    "ssc-edge-theme"
+  )){
 
     localStorage.setItem(
       "ssc-edge-theme",
@@ -499,111 +684,197 @@ function guest(){
     );
   }
 
-  window.location.href="home.html";
+
+  window.location.replace(
+    "home.html"
+  );
 }
 
 
+
 /* =========================
-   SEND OTP
+   SEND PHONE OTP
+   LOGIN ONLY
 ========================= */
 
 async function sendOTP(){
 
   const phone =
-    document.getElementById("phone")
-    .value.trim();
+    document
+      .getElementById("phone")
+      .value
+      .trim();
 
   const msg =
-    document.getElementById("phoneMsg");
+    document
+      .getElementById("phoneMsg");
 
   msg.textContent="";
   msg.style.color="#ff7777";
 
+
   if(!phone){
 
-    msg.textContent=
-      "Enter your phone number.";
+    msg.textContent =
+      "Please enter your phone number.";
 
     return;
   }
 
-  const {error} =
-    await supabaseClient.auth
-    .signInWithOtp({
-      phone:phone
+
+  /*
+    IMPORTANT:
+    shouldCreateUser:false
+
+    This prevents Supabase from
+    creating a new account through
+    the Phone Login screen.
+
+    The phone must already belong
+    to an existing verified account.
+  */
+
+  const {
+    error
+  } =
+    await supabaseClient.auth.signInWithOtp({
+
+      phone:phone,
+
+      options:{
+        shouldCreateUser:false
+      }
+
     });
+
 
   if(error){
 
-    msg.textContent=error.message;
+    msg.textContent =
+      error.message;
+
     return;
   }
 
-  document.getElementById("otp")
-    .classList.remove("hidden");
 
-  document.getElementById("verifyOtp")
-    .classList.remove("hidden");
+  document
+    .getElementById("otp")
+    .classList
+    .remove("hidden");
 
-  document.getElementById("sendOtp")
-    .textContent="OTP Sent";
 
-  msg.style.color="var(--purple2)";
-  msg.textContent="OTP sent.";
+  document
+    .getElementById("verifyOtp")
+    .classList
+    .remove("hidden");
+
+
+  document
+    .getElementById("sendOtp")
+    .textContent =
+      "OTP Sent";
+
+
+  msg.style.color =
+    "var(--purple2)";
+
+  msg.textContent =
+    "OTP sent. Enter the OTP to continue.";
 }
 
 
+
 /* =========================
-   VERIFY OTP
+   VERIFY PHONE OTP
 ========================= */
 
 async function verifyOTP(){
 
   const phone =
-    document.getElementById("phone")
-    .value.trim();
+    document
+      .getElementById("phone")
+      .value
+      .trim();
 
   const token =
-    document.getElementById("otp")
-    .value.trim();
+    document
+      .getElementById("otp")
+      .value
+      .trim();
 
   const msg =
-    document.getElementById("phoneMsg");
+    document
+      .getElementById("phoneMsg");
+
+  msg.textContent="";
+  msg.style.color="#ff7777";
+
+
+  if(!phone){
+
+    msg.textContent =
+      "Please enter your phone number.";
+
+    return;
+  }
+
 
   if(!token){
 
-    msg.textContent="Enter OTP.";
+    msg.textContent =
+      "Please enter the OTP.";
+
     return;
   }
 
-  const {data,error} =
-    await supabaseClient.auth
-    .verifyOtp({
-      phone,
-      token,
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient.auth.verifyOtp({
+
+      phone:phone,
+
+      token:token,
+
       type:"sms"
+
     });
+
 
   if(error){
 
-    msg.textContent=error.message;
+    msg.textContent =
+      error.message;
+
     return;
   }
 
-  localStorage.removeItem("ssc-edge-guest");
+
+  localStorage.removeItem(
+    "ssc-edge-guest"
+  );
+
 
   localStorage.setItem(
     "ssc-edge-user-id",
     data.user.id
   );
 
+
   localStorage.setItem(
     "ssc-edge-name",
+
     data.user.user_metadata?.name ||
+
     "SSC EDGE User"
   );
 
-  window.location.href="home.html";
+
+  window.location.replace(
+    "home.html"
+  );
 }
 
 </script>
