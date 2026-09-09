@@ -1,22 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>SSC EDGE - PDF Import</title>
 
 <link rel="stylesheet" href="css/style.css">
 
-<script>
-document.documentElement.dataset.theme =
-localStorage.getItem("ssc-edge-theme") || "light";
-</script>
-
 <style>
-
 *{
     box-sizing:border-box;
 }
@@ -49,8 +41,8 @@ body{
     margin-bottom:20px;
     padding:20px;
     border-radius:14px;
-    background:var(--card-bg,#fff);
-    border:1px solid rgba(128,128,128,.2);
+    background:#fff;
+    border:1px solid #ddd;
 }
 
 .card h2{
@@ -74,43 +66,38 @@ body{
     text-align:center;
     padding:25px;
     cursor:pointer;
-    transition:.2s;
-}
-
-.file-box:hover{
-    border-color:#555;
 }
 
 .file-icon{
-    font-size:42px;
+    font-size:45px;
     margin-bottom:10px;
 }
 
 .file-title{
-    font-size:18px;
+    font-size:19px;
     font-weight:700;
 }
 
 .file-subtitle{
-    margin-top:6px;
+    margin-top:7px;
     opacity:.7;
 }
 
 .file-name{
     margin-top:14px;
-    padding:8px 12px;
+    padding:9px 12px;
     border-radius:8px;
-    background:rgba(128,128,128,.12);
+    background:#eee;
     word-break:break-word;
 }
 
 .hidden{
-    display:none !important;
+    display:none!important;
 }
 
 .grid{
     display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr));
+    grid-template-columns:repeat(2,1fr);
     gap:15px;
 }
 
@@ -133,10 +120,8 @@ body{
 .field textarea{
     width:100%;
     padding:12px;
-    border-radius:9px;
     border:1px solid #aaa;
-    background:transparent;
-    color:inherit;
+    border-radius:9px;
     font-size:15px;
 }
 
@@ -169,7 +154,7 @@ body{
 }
 
 .secondary-btn{
-    background:#e8e8e8;
+    background:#e5e5e5;
     color:#111;
 }
 
@@ -191,7 +176,7 @@ button:disabled{
 }
 
 .stat{
-    border:1px solid rgba(128,128,128,.25);
+    border:1px solid #ddd;
     border-radius:12px;
     padding:15px;
 }
@@ -209,28 +194,24 @@ button:disabled{
 .status{
     padding:12px;
     border-radius:9px;
-    background:rgba(128,128,128,.1);
+    background:#eee;
     margin-top:10px;
 }
 
 .status.success{
-    background:rgba(46,125,50,.12);
+    background:#e8f5e9;
 }
 
 .status.error{
-    background:rgba(211,47,47,.12);
+    background:#ffebee;
 }
 
 .status.loading{
-    background:rgba(25,118,210,.12);
-}
-
-.preview{
-    margin-top:15px;
+    background:#e3f2fd;
 }
 
 .question-card{
-    border:1px solid rgba(128,128,128,.25);
+    border:1px solid #ddd;
     border-radius:12px;
     padding:16px;
     margin-bottom:12px;
@@ -253,30 +234,18 @@ button:disabled{
     padding:8px 10px;
     margin-top:6px;
     border-radius:7px;
-    background:rgba(128,128,128,.08);
+    background:#f4f4f4;
 }
 
 .option.correct{
-    outline:2px solid rgba(46,125,50,.45);
+    outline:2px solid #4caf50;
 }
 
 .review{
     margin-top:10px;
     padding:8px 10px;
     border-radius:7px;
-    background:rgba(255,152,0,.14);
-}
-
-.topbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:15px;
-    margin-bottom:20px;
-}
-
-.back-btn{
-    text-decoration:none;
+    background:#fff3cd;
 }
 
 .error-text{
@@ -301,53 +270,32 @@ button:disabled{
     .stats{
         grid-template-columns:1fr;
     }
-
-    .topbar{
-        align-items:flex-start;
-        flex-direction:column;
-    }
-
 }
-
 </style>
-
 </head>
 
 <body>
 
 <div class="container">
 
-    <div class="topbar">
-
-        <div class="header">
-            <h1>SSC EDGE — Admin</h1>
-            <p>PDF → Mock Test</p>
-        </div>
-
-        <a
-            href="admin-mock-tests.html"
-            class="secondary-btn back-btn"
-        >
-            ← Mock Tests
-        </a>
-
+    <div class="header">
+        <h1>SSC EDGE - PDF Import</h1>
+        <p>Import SSC questions from PDF and create a mock test.</p>
     </div>
 
 
-    <!-- ==========================================
-         1. PDF UPLOAD
-    =========================================== -->
+    <!-- =========================
+         PDF UPLOAD
+    ========================== -->
 
     <div class="card">
 
         <h2>1. Upload Question PDF</h2>
 
         <p class="muted">
-            Upload the original question paper, response sheet,
-            or answer-key PDF containing the questions.
+            Upload the original SSC question paper, response sheet,
+            or answer-key PDF.
         </p>
-
-        <!-- ONLY ONE PDF PICKER -->
 
         <div
             id="pdfDropZone"
@@ -388,23 +336,19 @@ button:disabled{
     </div>
 
 
-    <!-- ==========================================
-         2. MOCK DETAILS
-    =========================================== -->
+    <!-- =========================
+         TEST DETAILS
+    ========================== -->
 
     <div class="card">
 
         <h2>2. Mock Test Details</h2>
 
-        <p class="muted">
-            These details will be used to create the SSC EDGE mock.
-        </p>
-
         <div class="grid">
 
             <div class="field full">
 
-                <label for="testTitle">
+                <label>
                     Test Title
                 </label>
 
@@ -419,13 +363,13 @@ button:disabled{
 
             <div class="field full">
 
-                <label for="description">
+                <label>
                     Description
                 </label>
 
                 <textarea
                     id="description"
-                    placeholder="Optional test description"
+                    placeholder="Optional description"
                 ></textarea>
 
             </div>
@@ -433,7 +377,7 @@ button:disabled{
 
             <div class="field">
 
-                <label for="examSelect">
+                <label>
                     Exam
                 </label>
 
@@ -450,7 +394,7 @@ button:disabled{
 
             <div class="field">
 
-                <label for="testType">
+                <label>
                     Test Type
                 </label>
 
@@ -479,15 +423,15 @@ button:disabled{
 
             <div class="field">
 
-                <label for="duration">
+                <label>
                     Duration (minutes)
                 </label>
 
                 <input
                     id="duration"
                     type="number"
-                    min="1"
                     value="60"
+                    min="1"
                 >
 
             </div>
@@ -495,15 +439,15 @@ button:disabled{
 
             <div class="field">
 
-                <label for="marks">
+                <label>
                     Marks per Question
                 </label>
 
                 <input
                     id="marks"
                     type="number"
-                    step="0.01"
                     value="2"
+                    step="0.01"
                 >
 
             </div>
@@ -511,15 +455,15 @@ button:disabled{
 
             <div class="field">
 
-                <label for="negativeMarks">
+                <label>
                     Negative Marks
                 </label>
 
                 <input
                     id="negativeMarks"
                     type="number"
-                    step="0.01"
                     value="0.50"
+                    step="0.01"
                 >
 
             </div>
@@ -527,15 +471,15 @@ button:disabled{
 
             <div class="field">
 
-                <label for="totalQuestions">
+                <label>
                     Total Questions
                 </label>
 
                 <input
                     id="totalQuestions"
                     type="number"
-                    min="1"
                     value="0"
+                    readonly
                 >
 
             </div>
@@ -545,16 +489,16 @@ button:disabled{
     </div>
 
 
-    <!-- ==========================================
-         3. EXTRACTION
-    =========================================== -->
+    <!-- =========================
+         EXTRACTION
+    ========================== -->
 
     <div class="card">
 
         <h2>3. Extracted Questions</h2>
 
         <p class="muted">
-            Check the extracted questions before publishing.
+            Review extracted questions before publishing.
         </p>
 
 
@@ -614,7 +558,7 @@ button:disabled{
             id="status"
             class="status"
         >
-            Waiting for PDF selection.
+            Select a PDF to begin.
         </div>
 
 
@@ -623,11 +567,12 @@ button:disabled{
             <button
                 id="extractBtn"
                 class="primary-btn"
-                disabled
                 type="button"
+                disabled
             >
                 Extract Questions
             </button>
+
 
             <button
                 id="clearBtn"
@@ -636,6 +581,7 @@ button:disabled{
             >
                 Clear
             </button>
+
 
             <button
                 id="publishBtn"
@@ -649,10 +595,7 @@ button:disabled{
         </div>
 
 
-        <div
-            id="preview"
-            class="preview"
-        ></div>
+        <div id="preview"></div>
 
     </div>
 
@@ -666,108 +609,194 @@ button:disabled{
 "use strict";
 
 
-/* =================================================
+/* ==========================================
    SUPABASE
-================================================= */
+========================================== */
 
 const SUPABASE_URL =
-    "https://dvvyoygahzzbnpqrfhen.supabase.co";
+"https://dvvyoygahzzbnpqrfhen.supabase.co";
 
 const SUPABASE_KEY =
-    "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
 
 
 const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 
 
-/* =================================================
-   PDF IMPORT EDGE FUNCTION
-================================================= */
+/* ==========================================
+   EDGE FUNCTION URLS
+========================================== */
 
-const IMPORT_API_URL =
-    "https://dvvyoygahzzbnpqrfhen.supabase.co/functions/v1/service";
+const IMPORT_ENDPOINTS = [
+
+    "https://dvvyoygahzzbnpqrfhen.supabase.co/functions/v1/pdf-import",
+
+    "https://dvvyoygahzzbnpqrfhen.supabase.co/functions/v1/service"
+
+];
 
 
-/* =================================================
+/* ==========================================
    ELEMENTS
-================================================= */
+========================================== */
 
 const pdfInput =
-    document.getElementById("pdfInput");
+document.getElementById("pdfInput");
 
 const pdfDropZone =
-    document.getElementById("pdfDropZone");
+document.getElementById("pdfDropZone");
 
 const fileName =
-    document.getElementById("fileName");
+document.getElementById("fileName");
 
 const fileError =
-    document.getElementById("fileError");
+document.getElementById("fileError");
 
 const extractBtn =
-    document.getElementById("extractBtn");
+document.getElementById("extractBtn");
 
 const clearBtn =
-    document.getElementById("clearBtn");
+document.getElementById("clearBtn");
 
 const publishBtn =
-    document.getElementById("publishBtn");
+document.getElementById("publishBtn");
 
 const statusBox =
-    document.getElementById("status");
+document.getElementById("status");
 
 const preview =
-    document.getElementById("preview");
+document.getElementById("preview");
 
 const questionCount =
-    document.getElementById("questionCount");
+document.getElementById("questionCount");
 
 const optionCount =
-    document.getElementById("optionCount");
+document.getElementById("optionCount");
 
 const answerCount =
-    document.getElementById("answerCount");
+document.getElementById("answerCount");
 
 const examSelect =
-    document.getElementById("examSelect");
+document.getElementById("examSelect");
 
-
-let extractedQuestions = [];
 
 let currentFile = null;
 
-let currentAdminId = null;
+let extractedQuestions = [];
 
 
-/* =================================================
+/* ==========================================
    STATUS
-================================================= */
+========================================== */
 
-function setStatus(
-    message,
-    type = ""
-){
+function setStatus(message,type=""){
 
-    statusBox.textContent = message;
+    statusBox.textContent =
+    message;
 
     statusBox.className =
-        "status " + type;
+    "status " + type;
 
 }
 
 
-/* =================================================
+/* ==========================================
+   FILE PICKER
+========================================== */
+
+pdfDropZone.addEventListener(
+    "click",
+    function(){
+
+        pdfInput.click();
+
+    }
+);
+
+
+pdfInput.addEventListener(
+    "change",
+    function(){
+
+        hideError();
+
+        const file =
+        this.files[0];
+
+        if(!file){
+
+            currentFile = null;
+
+            extractBtn.disabled = true;
+
+            fileName.classList.add("hidden");
+
+            setStatus(
+                "Select a PDF to begin."
+            );
+
+            return;
+
+        }
+
+
+        const validPDF =
+        file.type === "application/pdf"
+        ||
+        file.name
+        .toLowerCase()
+        .endsWith(".pdf");
+
+
+        if(!validPDF){
+
+            this.value = "";
+
+            currentFile = null;
+
+            extractBtn.disabled = true;
+
+            showError(
+                "Please select a PDF file."
+            );
+
+            return;
+
+        }
+
+
+        currentFile = file;
+
+        fileName.textContent =
+        file.name;
+
+        fileName.classList.remove(
+            "hidden"
+        );
+
+        extractBtn.disabled = false;
+
+        setStatus(
+            "PDF selected. Ready for extraction.",
+            "success"
+        );
+
+    }
+);
+
+
+/* ==========================================
    ERROR
-================================================= */
+========================================== */
 
 function showError(message){
 
     fileError.textContent =
-        message;
+    message;
 
     fileError.classList.remove(
         "hidden"
@@ -787,317 +816,124 @@ function hideError(){
 }
 
 
-/* =================================================
-   ADMIN CHECK
-================================================= */
+/* ==========================================
+   LOAD EXAMS
+========================================== */
 
-async function checkAdmin(){
+async function loadExams(){
 
     try{
-
-        const {
-            data: {
-                session
-            }
-        } =
-            await supabaseClient.auth.getSession();
-
-
-        if(!session){
-
-            alert(
-                "Please login as admin first."
-            );
-
-            window.location.href =
-                "admin-login.html";
-
-            return false;
-
-        }
-
-
-        const userId =
-            session.user.id;
 
         const {
             data,
             error
         } =
-            await supabaseClient
-                .from("admin_users")
-                .select("user_id")
-                .eq(
-                    "user_id",
-                    userId
-                )
-                .maybeSingle();
+        await supabaseClient
+        .from("exams")
+        .select("*")
+        .order("id");
 
 
         if(error){
 
-            console.error(error);
-
-            alert(
-                "Unable to verify admin."
-            );
-
-            return false;
+            throw error;
 
         }
 
 
-        if(!data){
-
-            alert(
-                "Access denied. Admin only."
-            );
-
-            window.location.href =
-                "index.html";
-
-            return false;
-
-        }
+        examSelect.innerHTML =
+        '<option value="">Select Exam</option>';
 
 
-        currentAdminId =
-            userId;
+        (data || []).forEach(
+            exam => {
 
-        return true;
+                const option =
+                document.createElement(
+                    "option"
+                );
+
+                option.value =
+                exam.id;
+
+                option.textContent =
+                exam.name ||
+                exam.title ||
+                exam.exam_name ||
+                "Exam " + exam.id;
+
+                examSelect.appendChild(
+                    option
+                );
+
+            }
+        );
 
     }
     catch(error){
 
         console.error(error);
 
-        alert(
-            "Admin verification failed."
-        );
-
-        return false;
-
-    }
-
-}
-
-
-/* =================================================
-   LOAD EXAMS
-================================================= */
-
-async function loadExams(){
-
-    examSelect.innerHTML =
-        '<option value="">Loading exams...</option>';
-
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("exams")
-            .select("*")
-            .order("id");
-
-
-    if(error){
-
-        console.error(error);
-
         examSelect.innerHTML =
-            '<option value="">Unable to load exams</option>';
-
-        return;
+        '<option value="">Unable to load exams</option>';
 
     }
-
-
-    examSelect.innerHTML =
-        '<option value="">Select Exam</option>';
-
-
-    (data || []).forEach(
-        exam => {
-
-            const option =
-                document.createElement(
-                    "option"
-                );
-
-            option.value =
-                exam.id;
-
-            option.textContent =
-                exam.name ||
-                exam.title ||
-                exam.exam_name ||
-                `Exam ${exam.id}`;
-
-            examSelect.appendChild(
-                option
-            );
-
-        }
-    );
 
 }
 
 
-/* =================================================
-   PDF PICKER
-================================================= */
-
-pdfDropZone.addEventListener(
-    "click",
-    function(){
-
-        pdfInput.click();
-
-    }
-);
-
-
-pdfInput.addEventListener(
-    "change",
-    function(){
-
-        hideError();
-
-        const file =
-            this.files &&
-            this.files[0];
-
-
-        if(!file){
-
-            currentFile = null;
-
-            fileName.textContent = "";
-
-            fileName.classList.add(
-                "hidden"
-            );
-
-            extractBtn.disabled = true;
-
-            setStatus(
-                "Waiting for PDF selection."
-            );
-
-            return;
-
-        }
-
-
-        const isPDF =
-            file.type ===
-                "application/pdf"
-            ||
-            file.name
-                .toLowerCase()
-                .endsWith(".pdf");
-
-
-        if(!isPDF){
-
-            this.value = "";
-
-            currentFile = null;
-
-            extractBtn.disabled = true;
-
-            showError(
-                "Please select a PDF file."
-            );
-
-            return;
-
-        }
-
-
-        currentFile = file;
-
-
-        fileName.textContent =
-            file.name;
-
-
-        fileName.classList.remove(
-            "hidden"
-        );
-
-
-        extractBtn.disabled = false;
-
-
-        setStatus(
-            "PDF selected. Ready for extraction.",
-            "success"
-        );
-
-    }
-);
-
-
-/* =================================================
+/* ==========================================
    CLEAR
-================================================= */
+========================================== */
 
 clearBtn.addEventListener(
     "click",
-    clearAll
+    function(){
+
+        pdfInput.value = "";
+
+        currentFile = null;
+
+        extractedQuestions = [];
+
+        fileName.textContent = "";
+
+        fileName.classList.add(
+            "hidden"
+        );
+
+        questionCount.textContent =
+        "0";
+
+        optionCount.textContent =
+        "0";
+
+        answerCount.textContent =
+        "0";
+
+        document.getElementById(
+            "totalQuestions"
+        ).value = "0";
+
+        preview.innerHTML = "";
+
+        extractBtn.disabled = true;
+
+        publishBtn.disabled = true;
+
+        hideError();
+
+        setStatus(
+            "Select a PDF to begin."
+        );
+
+    }
 );
 
 
-function clearAll(){
-
-    pdfInput.value = "";
-
-    currentFile = null;
-
-    extractedQuestions = [];
-
-
-    fileName.textContent = "";
-
-    fileName.classList.add(
-        "hidden"
-    );
-
-
-    questionCount.textContent =
-        "0";
-
-    optionCount.textContent =
-        "0";
-
-    answerCount.textContent =
-        "0";
-
-
-    preview.innerHTML = "";
-
-
-    extractBtn.disabled = true;
-
-    publishBtn.disabled = true;
-
-
-    hideError();
-
-
-    setStatus(
-        "Waiting for PDF selection."
-    );
-
-}
-
-
-/* =================================================
+/* ==========================================
    EXTRACT
-================================================= */
+========================================== */
 
 extractBtn.addEventListener(
     "click",
@@ -1122,107 +958,184 @@ async function startExtraction(){
 
     publishBtn.disabled = true;
 
-
     setStatus(
         "Uploading PDF and extracting questions...",
         "loading"
     );
 
 
-    preview.innerHTML = "";
+    let lastError =
+    "Requested function was not found";
 
 
     try{
 
-        const formData =
-            new FormData();
+        for(
+            let i = 0;
+            i < IMPORT_ENDPOINTS.length;
+            i++
+        ){
+
+            const endpoint =
+            IMPORT_ENDPOINTS[i];
 
 
-        formData.append(
-            "file",
-            currentFile
-        );
+            try{
+
+                setStatus(
+                    "Connecting to PDF import server...",
+                    "loading"
+                );
 
 
-        const response =
-            await fetch(
-                IMPORT_API_URL,
-                {
-                    method:"POST",
-                    body:formData
+                const formData =
+                new FormData();
+
+
+                formData.append(
+                    "file",
+                    currentFile
+                );
+
+
+                const response =
+                await fetch(
+                    endpoint,
+                    {
+                        method:"POST",
+                        body:formData
+                    }
+                );
+
+
+                const responseText =
+                await response.text();
+
+
+                let result = null;
+
+
+                try{
+
+                    result =
+                    JSON.parse(
+                        responseText
+                    );
+
                 }
-            );
+                catch{
+
+                    result = null;
+
+                }
 
 
-        const text =
-            await response.text();
+                if(
+                    response.status === 404
+                    ||
+                    (
+                        result &&
+                        String(
+                            result.error || ""
+                        )
+                        .toLowerCase()
+                        .includes(
+                            "function was not found"
+                        )
+                    )
+                ){
+
+                    lastError =
+                    "Endpoint not found";
+
+                    continue;
+
+                }
 
 
-        let result;
+                if(!response.ok){
+
+                    throw new Error(
+                        result?.error ||
+                        result?.message ||
+                        responseText ||
+                        "PDF extraction failed"
+                    );
+
+                }
 
 
-        try{
+                if(
+                    !result ||
+                    !Array.isArray(
+                        result.questions
+                    )
+                ){
 
-            result =
-                JSON.parse(text);
+                    throw new Error(
+                        "Server response did not contain questions."
+                    );
+
+                }
+
+
+                extractedQuestions =
+                result.questions;
+
+
+                if(
+                    extractedQuestions.length === 0
+                ){
+
+                    throw new Error(
+                        "No questions were detected in this PDF."
+                    );
+
+                }
+
+
+                updateStats();
+
+                renderPreview();
+
+
+                document.getElementById(
+                    "totalQuestions"
+                ).value =
+                extractedQuestions.length;
+
+
+                publishBtn.disabled = false;
+
+
+                setStatus(
+                    "Extraction completed successfully. Review the questions below.",
+                    "success"
+                );
+
+
+                return;
+
+            }
+            catch(error){
+
+                console.error(
+                    "Endpoint error:",
+                    endpoint,
+                    error
+                );
+
+                lastError =
+                error.message;
+
+            }
 
         }
-        catch{
-
-            throw new Error(
-                "Server returned an invalid response: " +
-                text.substring(0,500)
-            );
-
-        }
 
 
-        if(!response.ok){
-
-            throw new Error(
-                result.error ||
-                result.message ||
-                `Extraction failed (${response.status})`
-            );
-
-        }
-
-
-        extractedQuestions =
-            Array.isArray(
-                result.questions
-            )
-            ? result.questions
-            : [];
-
-
-        if(!extractedQuestions.length){
-
-            throw new Error(
-                "No questions were detected in this PDF."
-            );
-
-        }
-
-
-        updateStats();
-
-
-        renderPreview();
-
-
-        document.getElementById(
-            "totalQuestions"
-        ).value =
-            extractedQuestions.length;
-
-
-        publishBtn.disabled = false;
-
-
-        setStatus(
-            "Extraction completed. Review the questions before publishing.",
-            "success"
+        throw new Error(
+            lastError ||
+            "PDF import function could not be reached."
         );
 
     }
@@ -1235,162 +1148,147 @@ async function startExtraction(){
 
 
         setStatus(
-            error.message ||
-            "PDF extraction failed.",
+            error.message,
             "error"
         );
 
 
         alert(
-            error.message ||
-            "PDF extraction failed."
+            error.message
         );
 
     }
     finally{
 
         extractBtn.disabled =
-            !currentFile;
+        !currentFile;
 
     }
 
 }
 
 
-/* =================================================
-   NORMALIZE QUESTION
-================================================= */
+/* ==========================================
+   NORMALIZE
+========================================== */
 
 function normalizeQuestion(q,index){
 
-    const questionText =
-        q.question_text ||
-        q.question ||
-        q.text ||
-        "";
-
-
     let options =
-        Array.isArray(q.options)
-            ? q.options
-            : [];
+    Array.isArray(q.options)
+    ? q.options
+    : [];
 
 
     options =
-        options.map(
-            (option,optionIndex) => {
+    options.map(
+        (option,optionIndex) => {
 
-                if(
-                    typeof option ===
-                    "string"
-                ){
-
-                    return {
-                        label:
-                            String.fromCharCode(
-                                65 + optionIndex
-                            ),
-                        text:option
-                    };
-
-                }
-
+            if(
+                typeof option === "string"
+            ){
 
                 return {
 
                     label:
-                        option.label ||
-                        option.option_label ||
-                        String.fromCharCode(
-                            65 + optionIndex
-                        ),
+                    String.fromCharCode(
+                        65 + optionIndex
+                    ),
 
                     text:
-                        option.text ||
-                        option.option_text ||
-                        ""
+                    option
 
                 };
 
             }
-        );
+
+
+            return {
+
+                label:
+                option.label ||
+                option.option_label ||
+                String.fromCharCode(
+                    65 + optionIndex
+                ),
+
+                text:
+                option.text ||
+                option.option_text ||
+                ""
+
+            };
+
+        }
+    );
 
 
     return {
 
         question_no:
-            q.question_no ||
-            q.question_number ||
-            index + 1,
-
-        section:
-            q.section ||
-            null,
-
-        subject:
-            q.subject ||
-            null,
-
-        chapter:
-            q.chapter ||
-            null,
+        q.question_no ||
+        q.question_number ||
+        index + 1,
 
         question_text:
-            questionText,
+        q.question_text ||
+        q.question ||
+        q.text ||
+        "",
 
-        options:options,
+        options:
+
+        options,
 
         correct_option:
-            q.correct_option ||
-            q.answer ||
-            null,
+        q.correct_option ||
+        q.answer ||
+        null,
 
         explanation:
-            q.explanation ||
-            null,
+        q.explanation ||
+        null,
 
         needs_review:
-            !!q.needs_review,
+        !!q.needs_review,
 
         review_reason:
-            q.review_reason ||
-            null
+        q.review_reason ||
+        null
 
     };
 
 }
 
 
-/* =================================================
+/* ==========================================
    STATS
-================================================= */
+========================================== */
 
 function updateStats(){
 
-    let optionTotal = 0;
+    let options = 0;
 
-    let answerTotal = 0;
+    let answers = 0;
 
 
     extractedQuestions.forEach(
         (q,index) => {
 
-            const normalized =
-                normalizeQuestion(
-                    q,
-                    index
-                );
+            const item =
+            normalizeQuestion(
+                q,
+                index
+            );
 
 
-            optionTotal +=
-                normalized.options.length;
+            options +=
+            item.options.length;
 
 
-            if(
-                normalized.correct_option
-            ){
+            if(item.correct_option){
 
-                answerTotal++;
+                answers++;
 
             }
 
@@ -1399,224 +1297,185 @@ function updateStats(){
 
 
     questionCount.textContent =
-        extractedQuestions.length;
-
+    extractedQuestions.length;
 
     optionCount.textContent =
-        optionTotal;
-
+    options;
 
     answerCount.textContent =
-        answerTotal;
+    answers;
 
 }
 
 
-/* =================================================
+/* ==========================================
    PREVIEW
-================================================= */
+========================================== */
 
 function renderPreview(){
 
     preview.innerHTML = "";
 
 
-    const limit =
-        Math.min(
-            extractedQuestions.length,
-            100
-        );
+    extractedQuestions.forEach(
+        (raw,index) => {
 
-
-    for(
-        let i = 0;
-        i < limit;
-        i++
-    ){
-
-        const q =
+            const q =
             normalizeQuestion(
-                extractedQuestions[i],
-                i
+                raw,
+                index
             );
 
 
-        const card =
+            const card =
             document.createElement(
                 "div"
             );
 
-        card.className =
+            card.className =
             "question-card";
 
 
-        const head =
+            const head =
             document.createElement(
                 "div"
             );
 
-        head.className =
+            head.className =
             "question-head";
 
 
-        const number =
+            const number =
             document.createElement(
                 "span"
             );
 
-        number.textContent =
-            "Q. " + q.question_no;
+            number.textContent =
+            "Q. " +
+            q.question_no;
 
 
-        const answer =
+            const answer =
             document.createElement(
                 "span"
             );
 
-        answer.textContent =
+            answer.textContent =
             q.correct_option
-                ? "Answer: " +
-                  q.correct_option
-                : "Answer: Not detected";
+            ?
+            "Answer: " +
+            q.correct_option
+            :
+            "Answer: Not detected";
 
 
-        head.appendChild(
-            number
-        );
+            head.appendChild(number);
 
-        head.appendChild(
-            answer
-        );
+            head.appendChild(answer);
 
 
-        const question =
+            const text =
             document.createElement(
                 "div"
             );
 
-        question.className =
+            text.className =
             "question-text";
 
-        question.textContent =
+            text.textContent =
             q.question_text;
 
 
-        card.appendChild(
-            head
-        );
+            card.appendChild(head);
 
-        card.appendChild(
-            question
-        );
+            card.appendChild(text);
 
 
-        q.options.forEach(
-            option => {
+            q.options.forEach(
+                option => {
 
-                const div =
+                    const div =
                     document.createElement(
                         "div"
                     );
 
-                div.className =
+                    div.className =
                     "option";
 
 
-                if(
-                    q.correct_option &&
-                    String(
+                    if(
                         q.correct_option
-                    ).toUpperCase()
-                    ===
-                    String(
-                        option.label
-                    ).toUpperCase()
-                ){
+                        &&
+                        String(
+                            q.correct_option
+                        ).toUpperCase()
+                        ===
+                        String(
+                            option.label
+                        ).toUpperCase()
+                    ){
 
-                    div.classList.add(
-                        "correct"
-                    );
+                        div.classList.add(
+                            "correct"
+                        );
+
+                    }
+
+
+                    div.textContent =
+                    "(" +
+                    option.label +
+                    ") " +
+                    option.text;
+
+
+                    card.appendChild(div);
 
                 }
+            );
 
 
-                div.textContent =
-                    `(${option.label}) ${option.text}`;
+            if(q.needs_review){
 
-
-                card.appendChild(
-                    div
-                );
-
-            }
-        );
-
-
-        if(q.needs_review){
-
-            const review =
+                const review =
                 document.createElement(
                     "div"
                 );
 
-            review.className =
+                review.className =
                 "review";
 
-
-            review.textContent =
+                review.textContent =
                 "⚠ Needs review" +
                 (
                     q.review_reason
-                    ? ": " +
-                      q.review_reason
-                    : ""
+                    ?
+                    ": " +
+                    q.review_reason
+                    :
+                    ""
                 );
 
+                card.appendChild(
+                    review
+                );
 
-            card.appendChild(
-                review
+            }
+
+
+            preview.appendChild(
+                card
             );
 
         }
-
-
-        preview.appendChild(
-            card
-        );
-
-    }
-
-
-    if(
-        extractedQuestions.length >
-        limit
-    ){
-
-        const more =
-            document.createElement(
-                "div"
-            );
-
-        more.className =
-            "status";
-
-
-        more.textContent =
-            `Showing first ${limit} questions. ${extractedQuestions.length - limit} more questions detected.`;
-
-
-        preview.appendChild(
-            more
-        );
-
-    }
+    );
 
 }
 
 
-/* =================================================
+/* ==========================================
    PUBLISH
-================================================= */
+========================================== */
 
 publishBtn.addEventListener(
     "click",
@@ -1626,9 +1485,7 @@ publishBtn.addEventListener(
 
 async function publishMock(){
 
-    if(
-        !extractedQuestions.length
-    ){
+    if(!extractedQuestions.length){
 
         alert(
             "No extracted questions available."
@@ -1640,63 +1497,49 @@ async function publishMock(){
 
 
     const title =
-        document
-            .getElementById(
-                "testTitle"
-            )
-            .value
-            .trim();
+    document.getElementById(
+        "testTitle"
+    ).value.trim();
 
 
     const description =
-        document
-            .getElementById(
-                "description"
-            )
-            .value
-            .trim();
+    document.getElementById(
+        "description"
+    ).value.trim();
 
 
     const examId =
-        examSelect.value;
+    examSelect.value;
 
 
     const testType =
-        document
-            .getElementById(
-                "testType"
-            )
-            .value;
+    document.getElementById(
+        "testType"
+    ).value;
 
 
     const duration =
-        Number(
-            document
-                .getElementById(
-                    "duration"
-                )
-                .value
-        );
+    Number(
+        document.getElementById(
+            "duration"
+        ).value
+    );
 
 
     const marks =
-        Number(
-            document
-                .getElementById(
-                    "marks"
-                )
-                .value
-        );
+    Number(
+        document.getElementById(
+            "marks"
+        ).value
+    );
 
 
     const negativeMarks =
-        Number(
-            document
-                .getElementById(
-                    "negativeMarks"
-                )
-                .value
-        );
+    Number(
+        document.getElementById(
+            "negativeMarks"
+        ).value
+    );
 
 
     if(!title){
@@ -1721,20 +1564,6 @@ async function publishMock(){
     }
 
 
-    if(
-        !duration ||
-        duration < 1
-    ){
-
-        alert(
-            "Enter valid duration."
-        );
-
-        return;
-
-    }
-
-
     publishBtn.disabled = true;
 
 
@@ -1746,51 +1575,38 @@ async function publishMock(){
 
     try{
 
-        /* ==========================================
-           CREATE MOCK TEST
-        =========================================== */
-
         const {
             data:test,
             error:testError
         } =
-            await supabaseClient
-                .from("mock_tests")
-                .insert({
+        await supabaseClient
+        .from("mock_tests")
+        .insert({
 
-                    exam_id:
-                        examId,
+            exam_id:examId,
 
-                    title:
-                        title,
+            title:title,
 
-                    test_type:
-                        testType,
+            test_type:testType,
 
-                    duration_minutes:
-                        duration,
+            duration_minutes:duration,
 
-                    total_questions:
-                        extractedQuestions.length,
+            total_questions:
+            extractedQuestions.length,
 
-                    is_active:
-                        true,
+            is_active:true,
 
-                    description:
-                        description,
+            description:description,
 
-                    marks_per_question:
-                        marks,
+            marks_per_question:marks,
 
-                    negative_marks:
-                        negativeMarks,
+            negative_marks:negativeMarks,
 
-                    subject_wise_timing:
-                        false
+            subject_wise_timing:false
 
-                })
-                .select()
-                .single();
+        })
+        .select()
+        .single();
 
 
         if(testError){
@@ -1800,13 +1616,6 @@ async function publishMock(){
         }
 
 
-        /* ==========================================
-           INSERT QUESTIONS
-        =========================================== */
-
-        let insertedCount = 0;
-
-
         for(
             let i = 0;
             i < extractedQuestions.length;
@@ -1814,32 +1623,32 @@ async function publishMock(){
         ){
 
             const q =
-                normalizeQuestion(
-                    extractedQuestions[i],
-                    i
-                );
+            normalizeQuestion(
+                extractedQuestions[i],
+                i
+            );
 
 
             const {
                 data:question,
                 error:questionError
             } =
-                await supabaseClient
-                    .from("questions")
-                    .insert({
+            await supabaseClient
+            .from("questions")
+            .insert({
 
-                        question_text:
-                            q.question_text,
+                question_text:
+                q.question_text,
 
-                        explanation:
-                            q.explanation,
+                explanation:
+                q.explanation,
 
-                        mock_test_id:
-                            test.id
+                mock_test_id:
+                test.id
 
-                    })
-                    .select()
-                    .single();
+            })
+            .select()
+            .single();
 
 
             if(questionError){
@@ -1849,36 +1658,34 @@ async function publishMock(){
             }
 
 
-            /* ======================================
-               OPTIONS
-            ======================================= */
-
             const optionRows =
-                q.options.map(
-                    option => ({
+            q.options.map(
+                option => ({
 
-                        question_id:
-                            question.id,
+                    question_id:
+                    question.id,
 
-                        option_label:
-                            option.label,
+                    option_label:
+                    option.label,
 
-                        option_text:
-                            option.text,
+                    option_text:
+                    option.text,
 
-                        is_correct:
-                            q.correct_option
-                                ? String(
-                                    q.correct_option
-                                  ).toUpperCase()
-                                  ===
-                                  String(
-                                    option.label
-                                  ).toUpperCase()
-                                : false
+                    is_correct:
+                    q.correct_option
+                    ?
+                    String(
+                        q.correct_option
+                    ).toUpperCase()
+                    ===
+                    String(
+                        option.label
+                    ).toUpperCase()
+                    :
+                    false
 
-                    })
-                );
+                })
+            );
 
 
             if(optionRows.length){
@@ -1886,11 +1693,11 @@ async function publishMock(){
                 const {
                     error:optionError
                 } =
-                    await supabaseClient
-                        .from("question_options")
-                        .insert(
-                            optionRows
-                        );
+                await supabaseClient
+                .from("question_options")
+                .insert(
+                    optionRows
+                );
 
 
                 if(optionError){
@@ -1902,27 +1709,23 @@ async function publishMock(){
             }
 
 
-            /* ======================================
-               ASSIGN QUESTION TO MOCK
-            ======================================= */
-
             const {
                 error:assignmentError
             } =
-                await supabaseClient
-                    .from("mock_test_questions")
-                    .insert({
+            await supabaseClient
+            .from("mock_test_questions")
+            .insert({
 
-                        mock_test_id:
-                            test.id,
+                mock_test_id:
+                test.id,
 
-                        question_id:
-                            question.id,
+                question_id:
+                question.id,
 
-                        question_order:
-                            i + 1
+                question_order:
+                i + 1
 
-                    });
+            });
 
 
             if(assignmentError){
@@ -1931,14 +1734,11 @@ async function publishMock(){
 
             }
 
-
-            insertedCount++;
-
         }
 
 
         setStatus(
-            `Mock published successfully. ${insertedCount} questions added.`,
+            "Mock Test published successfully.",
             "success"
         );
 
@@ -1949,7 +1749,7 @@ async function publishMock(){
 
 
         window.location.href =
-            "admin-mock-tests.html";
+        "admin-mock-tests.html";
 
     }
     catch(error){
@@ -1962,7 +1762,7 @@ async function publishMock(){
 
         setStatus(
             error.message ||
-            "Unable to publish mock test.",
+            "Publish failed.",
             "error"
         );
 
@@ -1983,28 +1783,13 @@ async function publishMock(){
 }
 
 
-/* =================================================
+/* ==========================================
    START
-================================================= */
+========================================== */
 
-(async function(){
-
-    const isAdmin =
-        await checkAdmin();
-
-
-    if(!isAdmin){
-
-        return;
-
-    }
-
-
-    await loadExams();
-
-})();
+loadExams();
 
 </script>
 
 </body>
-          </html>
+</html>
