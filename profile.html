@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
@@ -20,13 +21,15 @@ localStorage.getItem("ssc-edge-theme") || "dark";
    PROFILE
 ========================= */
 
-.profile-page{
-  padding-bottom:100px;
+.profile-container{
+  max-width:700px;
+  margin:auto;
+  padding:20px 16px 100px;
 }
 
-.profile-user{
+.profile-top{
   text-align:center;
-  padding:22px 0 25px;
+  padding:20px 0 25px;
 }
 
 .profile-avatar{
@@ -34,146 +37,154 @@ localStorage.getItem("ssc-edge-theme") || "dark";
   height:76px;
   margin:auto;
   border-radius:50%;
-  background:var(--card2);
+  background:var(--purple);
   display:flex;
   align-items:center;
   justify-content:center;
+  font-size:32px;
+  font-weight:800;
+  color:white;
 }
 
-.profile-avatar svg{
-  width:46px;
-  height:46px;
-  fill:none;
-  stroke:var(--purple2);
-  stroke-width:3;
-  stroke-linecap:round;
-  stroke-linejoin:round;
+.profile-name{
+  font-size:22px;
+  font-weight:700;
+  margin-top:12px;
 }
 
-.profile-user h1{
-  margin:12px 0 4px;
-  font-size:23px;
-}
-
-.profile-user p{
-  margin:0;
+.profile-status{
   color:var(--muted);
-  font-size:14px;
+  font-size:13px;
+  margin-top:4px;
 }
 
 
 /* =========================
-   PROFILE CARDS
+   SECTION
+========================= */
+
+.profile-section-title{
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:1px;
+  color:var(--muted);
+  margin:22px 4px 9px;
+}
+
+
+/* =========================
+   CARDS
 ========================= */
 
 .profile-card{
-  width:100%;
-  box-sizing:border-box;
-  display:flex;
-  align-items:center;
-  gap:14px;
-  padding:17px;
-  margin-bottom:12px;
-
   background:var(--card);
   border:1px solid var(--border);
-  border-radius:15px;
+  border-radius:14px;
+  margin-bottom:10px;
+  overflow:hidden;
+}
 
-  color:var(--text);
-  text-decoration:none;
-
+.profile-row{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  padding:16px;
   cursor:pointer;
 }
 
-.profile-card:active{
-  transform:scale(.99);
-}
-
-.profile-card-icon{
-  width:42px;
-  height:42px;
-  flex-shrink:0;
-
-  border-radius:12px;
+.profile-row-icon{
+  width:40px;
+  height:40px;
+  border-radius:10px;
   background:var(--card2);
-
   display:flex;
   align-items:center;
   justify-content:center;
-
-  font-size:21px;
+  font-size:20px;
+  flex-shrink:0;
 }
 
-.profile-card-content{
+.profile-row-content{
   flex:1;
 }
 
-.profile-card-content b{
-  display:block;
-  font-size:16px;
+.profile-row-title{
+  font-size:15px;
+  font-weight:700;
 }
 
-.profile-card-content small{
-  display:block;
-  margin-top:4px;
+.profile-row-sub{
   color:var(--muted);
   font-size:12px;
+  margin-top:3px;
 }
 
 .profile-arrow{
-  font-size:25px;
   color:var(--muted);
+  font-size:20px;
 }
 
 
 /* =========================
-   BOTTOM OPTIONS
+   THEME ROW
 ========================= */
 
-.profile-bottom{
-  margin-top:25px;
-  border-top:1px solid var(--border);
-  padding-top:8px;
-}
-
-.profile-option{
-  width:100%;
-  border:0;
-  background:transparent;
-
-  color:var(--text);
-
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-
-  padding:16px 4px;
-
-  font-size:15px;
-  text-align:left;
-  cursor:pointer;
-}
-
-.profile-option + .profile-option{
-  border-top:1px solid var(--border);
-}
-
-.theme-switch{
-  display:flex;
-  gap:5px;
-}
-
-.theme-switch button{
-  border:0;
-  background:transparent;
-  color:var(--muted);
-  padding:5px 7px;
-  cursor:pointer;
-}
-
-.theme-switch button.active{
+.theme-value{
   color:var(--purple2);
-  font-weight:bold;
+  font-size:13px;
+  font-weight:700;
+}
+
+
+/* =========================
+   POPUP
+========================= */
+
+.popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.65);
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  z-index:1000;
+}
+
+.popup-box{
+  width:100%;
+  max-width:500px;
+  background:var(--card);
+  border-radius:20px 20px 0 0;
+  padding:22px;
+  box-sizing:border-box;
+}
+
+.popup-title{
+  font-size:19px;
+  font-weight:800;
+  margin-bottom:15px;
+}
+
+.popup-button{
+  width:100%;
+  padding:13px;
+  margin-top:9px;
+  border:0;
+  border-radius:10px;
+  background:var(--card2);
+  color:var(--text);
+  font-size:14px;
+  font-weight:700;
+}
+
+.popup-button.active{
+  background:var(--purple);
+  color:white;
+}
+
+.close-button{
+  background:transparent;
+  border:1px solid var(--border);
 }
 
 
@@ -181,90 +192,27 @@ localStorage.getItem("ssc-edge-theme") || "dark";
    LOGOUT
 ========================= */
 
-.logout-option{
-  color:#e85b5b;
+.logout-row{
+  color:#ff7777;
+}
+
+.logout-row .profile-row-icon{
+  color:#ff7777;
 }
 
 
 /* =========================
-   POPUPS
+   HIDDEN
 ========================= */
 
-.popup-bg{
-  position:fixed;
-  inset:0;
-
-  background:rgba(0,0,0,.65);
-
+.hidden{
   display:none;
-  align-items:center;
-  justify-content:center;
-
-  z-index:1000;
-}
-
-.popup-bg.show{
-  display:flex;
-}
-
-.popup{
-  width:calc(100% - 40px);
-  max-width:380px;
-
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:18px;
-
-  padding:22px;
-  box-sizing:border-box;
-
-  color:var(--text);
-}
-
-.popup h3{
-  margin-top:0;
-}
-
-.popup p{
-  color:var(--muted);
-  line-height:1.6;
-  font-size:14px;
-}
-
-.popup input{
-  width:100%;
-  box-sizing:border-box;
-
-  padding:13px;
-
-  border:1px solid var(--border);
-  border-radius:10px;
-
-  background:var(--bg);
-  color:var(--text);
-
-  outline:none;
-}
-
-.popup-button{
-  width:100%;
-  margin-top:15px;
-
-  padding:12px;
-
-  border:0;
-  border-radius:10px;
-
-  background:var(--purple);
-  color:white;
-
-  font-weight:bold;
-  cursor:pointer;
 }
 
 </style>
 
 </head>
+
 
 <body>
 
@@ -274,136 +222,183 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 ========================= -->
 
 <header class="simple-header">
-  <div class="header-brand">SSC EDGE</div>
+  <div class="header-logo">
+    SSC <span>EDGE</span>
+  </div>
 </header>
 
 
-<main class="page-container profile-page">
+<!-- =========================
+     PROFILE
+========================= -->
+
+<main class="profile-container">
 
 
-  <!-- =========================
-       PROFILE
-  ========================= -->
+  <!-- PROFILE TOP -->
 
-  <section class="profile-user">
+  <div class="profile-top">
 
-    <div class="profile-avatar">
-
-      <svg viewBox="0 0 64 64">
-
-        <circle cx="32" cy="22" r="11"/>
-
-        <path d="M12 56c2-13 10-19 20-19s18 6 20 19"/>
-
-      </svg>
-
+    <div class="profile-avatar" id="avatar">
+      S
     </div>
 
-    <h1 id="profileName">Your Name</h1>
+    <div class="profile-name" id="profileName">
+      SSC EDGE
+    </div>
 
-    <p>SSC EDGE Candidate</p>
+    <div class="profile-status" id="profileStatus">
+      Loading...
+    </div>
 
-  </section>
+  </div>
 
 
   <!-- =========================
        PERFORMANCE
   ========================= -->
 
-  <button class="profile-card" onclick="openPerformance()">
+  <div class="profile-section-title">
+    PERFORMANCE
+  </div>
 
-    <div class="profile-card-icon">📊</div>
+  <div class="profile-card">
 
-    <div class="profile-card-content">
+    <div class="profile-row" onclick="openPerformance()">
 
-      <b>Performance</b>
+      <div class="profile-row-icon">
+        📊
+      </div>
 
-      <small>
-        View your test performance
-      </small>
+      <div class="profile-row-content">
 
-    </div>
+        <div class="profile-row-title">
+          Performance
+        </div>
 
-    <span class="profile-arrow">›</span>
+        <div class="profile-row-sub">
+          View your test performance
+        </div>
 
-  </button>
+      </div>
 
-
-  <!-- =========================
-       SAVED QUESTIONS
-  ========================= -->
-
-  <a class="profile-card" href="saved-questions.html">
-
-    <div class="profile-card-icon">🔖</div>
-
-    <div class="profile-card-content">
-
-      <b>Saved Questions</b>
-
-      <small>
-        View questions saved from mocks
-      </small>
+      <div class="profile-arrow">
+        ›
+      </div>
 
     </div>
 
-    <span class="profile-arrow">›</span>
-
-  </a>
+  </div>
 
 
   <!-- =========================
-       TEST HISTORY
+       PERSONAL
   ========================= -->
 
-  <a class="profile-card" href="history.html">
+  <div class="profile-section-title">
+    PERSONAL
+  </div>
 
-    <div class="profile-card-icon">📝</div>
+  <div class="profile-card">
 
-    <div class="profile-card-content">
 
-      <b>Test History</b>
+    <!-- SAVED QUESTIONS -->
 
-      <small>
-        View your previous test attempts
-      </small>
+    <div
+      class="profile-row"
+      onclick="openPage('saved-questions.html')">
+
+      <div class="profile-row-icon">
+        🔖
+      </div>
+
+      <div class="profile-row-content">
+
+        <div class="profile-row-title">
+          Saved Questions
+        </div>
+
+        <div class="profile-row-sub">
+          Questions you saved for later
+        </div>
+
+      </div>
+
+      <div class="profile-arrow">
+        ›
+      </div>
 
     </div>
 
-    <span class="profile-arrow">›</span>
 
-  </a>
+    <!-- TEST HISTORY -->
+
+    <div
+      class="profile-row"
+      onclick="openPage('history.html')">
+
+      <div class="profile-row-icon">
+        📝
+      </div>
+
+      <div class="profile-row-content">
+
+        <div class="profile-row-title">
+          Test History
+        </div>
+
+        <div class="profile-row-sub">
+          View your attempted tests
+        </div>
+
+      </div>
+
+      <div class="profile-arrow">
+        ›
+      </div>
+
+    </div>
+
+  </div>
 
 
   <!-- =========================
-       BOTTOM
+       OPTIONS
   ========================= -->
 
-  <section class="profile-bottom">
+  <div class="profile-section-title">
+    OPTIONS
+  </div>
+
+  <div class="profile-card">
 
 
     <!-- THEME -->
 
-    <div class="profile-option">
+    <div
+      class="profile-row"
+      onclick="openTheme()">
 
-      <span>Theme</span>
+      <div class="profile-row-icon">
+        🎨
+      </div>
 
-      <div class="theme-switch">
+      <div class="profile-row-content">
 
-        <button
-          id="darkThemeBtn"
-          onclick="setTheme('dark')">
-          Dark
-        </button>
+        <div class="profile-row-title">
+          Theme
+        </div>
 
-        <span>|</span>
+        <div class="profile-row-sub">
+          Choose your appearance
+        </div>
 
-        <button
-          id="lightThemeBtn"
-          onclick="setTheme('light')">
-          Light
-        </button>
+      </div>
 
+      <div
+        class="theme-value"
+        id="themeText">
+        Dark
       </div>
 
     </div>
@@ -411,34 +406,106 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 
     <!-- ABOUT -->
 
-    <button
-      class="profile-option"
+    <div
+      class="profile-row"
       onclick="openAbout()">
 
-      <span>About SSC EDGE</span>
+      <div class="profile-row-icon">
+        ℹ️
+      </div>
 
-      <span>›</span>
+      <div class="profile-row-content">
 
-    </button>
+        <div class="profile-row-title">
+          About SSC EDGE
+        </div>
+
+        <div class="profile-row-sub">
+          About the platform
+        </div>
+
+      </div>
+
+      <div class="profile-arrow">
+        ›
+      </div>
+
+    </div>
 
 
     <!-- LOGOUT -->
 
-    <button
-      class="profile-option logout-option"
-      onclick="logoutUser()">
+    <div
+      class="profile-row logout-row"
+      onclick="logout()">
 
-      <span>Logout</span>
+      <div class="profile-row-icon">
+        🚪
+      </div>
 
-      <span>›</span>
+      <div class="profile-row-content">
 
-    </button>
+        <div class="profile-row-title">
+          Logout
+        </div>
 
+        <div class="profile-row-sub">
+          Sign out of your account
+        </div>
 
-  </section>
+      </div>
 
+      <div class="profile-arrow">
+        ›
+      </div>
+
+    </div>
+
+  </div>
 
 </main>
+
+
+<!-- =========================
+     THEME POPUP
+========================= -->
+
+<div
+  class="popup"
+  id="themePopup"
+  onclick="closePopup(event,'themePopup')">
+
+  <div
+    class="popup-box"
+    onclick="event.stopPropagation()">
+
+    <div class="popup-title">
+      Choose Theme
+    </div>
+
+    <button
+      class="popup-button"
+      id="darkButton"
+      onclick="setTheme('dark')">
+      🌙 Dark
+    </button>
+
+    <button
+      class="popup-button"
+      id="lightButton"
+      onclick="setTheme('light')">
+      ☀️ Light
+    </button>
+
+    <button
+      class="popup-button close-button"
+      onclick="closeTheme()">
+      Cancel
+    </button>
+
+  </div>
+
+</div>
 
 
 <!-- =========================
@@ -446,31 +513,27 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 ========================= -->
 
 <div
+  class="popup"
   id="aboutPopup"
-  class="popup-bg"
-  onclick="closeAbout(event)">
+  onclick="closePopup(event,'aboutPopup')">
 
   <div
-    class="popup"
+    class="popup-box"
     onclick="event.stopPropagation()">
 
-    <h3>About SSC EDGE</h3>
+    <div class="popup-title">
+      SSC EDGE
+    </div>
 
-    <p>
-      SSC EDGE is a dedicated preparation platform created
-      to help SSC aspirants learn, practice and improve their
-      performance through study material, practice tests,
-      notes and useful preparation resources.
+    <p style="color:var(--muted);font-size:14px;line-height:1.6;">
+      SSC EDGE is a smart preparation platform
+      designed for SSC exam preparation.
     </p>
 
-    <strong>Learn • Practice • Improve</strong>
-
     <button
-      class="popup-button"
+      class="popup-button close-button"
       onclick="closeAbout()">
-
       Close
-
     </button>
 
   </div>
@@ -483,26 +546,29 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 ========================= -->
 
 <div
+  class="popup"
   id="performancePopup"
-  class="popup-bg"
-  onclick="closePerformance(event)">
+  onclick="closePopup(event,'performancePopup')">
 
   <div
-    class="popup"
+    class="popup-box"
     onclick="event.stopPropagation()">
 
-    <h3>Performance</h3>
+    <div class="popup-title">
+      Performance
+    </div>
 
-    <p>
-      Your complete performance analysis will appear here.
+    <p
+      id="performanceText"
+      style="color:var(--muted);font-size:14px;line-height:1.6;">
+      Your performance data will appear here
+      after you attempt tests.
     </p>
 
     <button
-      class="popup-button"
+      class="popup-button close-button"
       onclick="closePerformance()">
-
       Close
-
     </button>
 
   </div>
@@ -517,61 +583,164 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 <nav class="bottom-nav">
 
   <a href="home.html">
-
-    <span class="nav-icon">⌂</span>
-
+    <span>🏠</span>
     <small>Home</small>
-
   </a>
-
 
   <a href="study.html">
-
-    <span class="nav-icon">▣</span>
-
-    <small>Study Material</small>
-
+    <span>📚</span>
+    <small>Study</small>
   </a>
-
 
   <a href="practice.html">
-
-    <span class="nav-icon">✓</span>
-
+    <span>📝</span>
     <small>Practice</small>
-
   </a>
 
-
-  <a
-    href="profile.html"
-    class="active">
-
-    <span class="nav-icon">○</span>
-
+  <a href="profile.html" class="active">
+    <span>👤</span>
     <small>Profile</small>
-
   </a>
 
 </nav>
 
 
+<!-- =========================
+     SUPABASE
+========================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
 
+const SUPABASE_URL =
+"https://dvvyoygahzzbnpqrfhen.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
+const supabaseClient =
+supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
 /* =========================
-   PROFILE NAME
+   LOAD PROFILE
 ========================= */
 
-const savedName =
-localStorage.getItem("ssc-edge-name") || "Your Name";
+async function loadProfile(){
 
-document.getElementById("profileName").textContent =
-savedName;
+  const {
+    data:{session}
+  } = await supabaseClient.auth.getSession();
+
+
+  /* =========================
+     LOGGED-IN USER
+  ========================= */
+
+  if(session){
+
+    localStorage.removeItem(
+      "ssc-edge-guest"
+    );
+
+    localStorage.setItem(
+      "ssc-edge-user-id",
+      session.user.id
+    );
+
+    const name =
+      session.user.user_metadata?.name ||
+      session.user.email?.split("@")[0] ||
+      "SSC EDGE User";
+
+    document.getElementById(
+      "profileName"
+    ).textContent=name;
+
+    document.getElementById(
+      "avatar"
+    ).textContent=
+      name.charAt(0).toUpperCase();
+
+    document.getElementById(
+      "profileStatus"
+    ).textContent=
+      session.user.email ||
+      "Logged in";
+
+    return;
+  }
+
+
+  /* =========================
+     GUEST
+  ========================= */
+
+  if(
+    localStorage.getItem("ssc-edge-guest")
+    ==="true"
+  ){
+
+    document.getElementById(
+      "profileName"
+    ).textContent="Guest";
+
+    document.getElementById(
+      "avatar"
+    ).textContent="G";
+
+    document.getElementById(
+      "profileStatus"
+    ).textContent=
+      "Guest Mode";
+
+    return;
+  }
+
+
+  /* =========================
+     NO LOGIN
+  ========================= */
+
+  window.location.href="index.html";
+}
 
 
 /* =========================
    THEME
 ========================= */
+
+function updateThemeText(){
+
+  const theme =
+    localStorage.getItem(
+      "ssc-edge-theme"
+    ) || "dark";
+
+  document.getElementById(
+    "themeText"
+  ).textContent =
+    theme==="light" ? "Light" : "Dark";
+
+  document.getElementById(
+    "darkButton"
+  ).classList.toggle(
+    "active",
+    theme==="dark"
+  );
+
+  document.getElementById(
+    "lightButton"
+  ).classList.toggle(
+    "active",
+    theme==="light"
+  );
+}
+
 
 function setTheme(theme){
 
@@ -580,33 +749,39 @@ function setTheme(theme){
     theme
   );
 
-  document.documentElement.dataset.theme =
+  document.documentElement.dataset.theme=
     theme;
 
-  updateThemeButtons();
+  updateThemeText();
 
+  setTimeout(function(){
+
+    closeTheme();
+
+  },150);
 }
 
-function updateThemeButtons(){
 
-  const theme =
-    localStorage.getItem("ssc-edge-theme") || "dark";
+/* =========================
+   THEME POPUP
+========================= */
 
-  document.getElementById("darkThemeBtn")
-    .classList.toggle(
-      "active",
-      theme === "dark"
-    );
+function openTheme(){
 
-  document.getElementById("lightThemeBtn")
-    .classList.toggle(
-      "active",
-      theme === "light"
-    );
+  updateThemeText();
 
+  document.getElementById(
+    "themePopup"
+  ).style.display="flex";
 }
 
-updateThemeButtons();
+
+function closeTheme(){
+
+  document.getElementById(
+    "themePopup"
+  ).style.display="none";
+}
 
 
 /* =========================
@@ -615,25 +790,17 @@ updateThemeButtons();
 
 function openAbout(){
 
-  document
-    .getElementById("aboutPopup")
-    .classList.add("show");
-
+  document.getElementById(
+    "aboutPopup"
+  ).style.display="flex";
 }
 
-function closeAbout(e){
 
-  if(
-    !e ||
-    e.target.id === "aboutPopup"
-  ){
+function closeAbout(){
 
-    document
-      .getElementById("aboutPopup")
-      .classList.remove("show");
-
-  }
-
+  document.getElementById(
+    "aboutPopup"
+  ).style.display="none";
 }
 
 
@@ -643,25 +810,41 @@ function closeAbout(e){
 
 function openPerformance(){
 
-  document
-    .getElementById("performancePopup")
-    .classList.add("show");
-
+  document.getElementById(
+    "performancePopup"
+  ).style.display="flex";
 }
 
-function closePerformance(e){
 
-  if(
-    !e ||
-    e.target.id === "performancePopup"
-  ){
+function closePerformance(){
 
-    document
-      .getElementById("performancePopup")
-      .classList.remove("show");
+  document.getElementById(
+    "performancePopup"
+  ).style.display="none";
+}
 
+
+/* =========================
+   CLOSE POPUP
+========================= */
+
+function closePopup(event,id){
+
+  if(event.target.id===id){
+
+    document.getElementById(id)
+      .style.display="none";
   }
+}
 
+
+/* =========================
+   OPEN PAGE
+========================= */
+
+function openPage(page){
+
+  window.location.href=page;
 }
 
 
@@ -669,25 +852,52 @@ function closePerformance(e){
    LOGOUT
 ========================= */
 
-function logoutUser(){
+async function logout(){
 
-  if(
-    confirm(
-      "Are you sure you want to logout?"
-    )
-  ){
+  const confirmLogout =
+    confirm("Are you sure you want to logout?");
 
-    /*
-      Supabase logout will be connected
-      when authentication is added.
-    */
-
-    window.location.href =
-      "index.html";
-
+  if(!confirmLogout){
+    return;
   }
 
+
+  /* SIGN OUT FROM SUPABASE */
+
+  const {error} =
+    await supabaseClient.auth.signOut();
+
+
+  /* CLEAR LOCAL LOGIN DATA */
+
+  localStorage.removeItem(
+    "ssc-edge-user-id"
+  );
+
+  localStorage.removeItem(
+    "ssc-edge-guest"
+  );
+
+  localStorage.removeItem(
+    "ssc-edge-name"
+  );
+
+
+  /* GO TO LOGIN */
+
+  window.location.replace(
+    "index.html"
+  );
 }
+
+
+/* =========================
+   START
+========================= */
+
+updateThemeText();
+
+loadProfile();
 
 </script>
 
