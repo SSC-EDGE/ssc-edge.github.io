@@ -1438,13 +1438,46 @@ body{
 <script>
 const db=supabase.createClient("https://dvvyoygahzzbnpqrfhen.supabase.co","sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s");
 const testId=new URLSearchParams(location.search).get("id");
-let test=null,sections=[],questions=[],attempt=null,answers={},questionTimes={},avgTimes={},correctRates={};
+let test=null,sections=[],questions=[],attempt=null,answers={},questionTimes={},avgTimes={},correctRates={},subjects=[];
 let currentSectionIndex=0,currentIndex=0;
 const $=id=>document.getElementById(id);
 function esc(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
 function fmtTime(v){v=Math.max(0,Math.floor(Number(v)||0));return String(Math.floor(v/60)).padStart(2,"0")+":"+String(v%60).padStart(2,"0")}
 function showError(t){$("loading").className="loading error";$("loading").textContent=t}
-function sectionName(s,i){const direct=[s?.subject_name,s?.subjectName,s?.subject,s?.name,s?.title,s?.section_name];for(const x of direct)if(String(x||"").trim()&&!/^section\s*\d+$/i.test(String(x).trim()))return String(x).trim();return "Section "+(i+1)}
+function sectionName(s,i){
+ const direct=[
+  s?.subject_name,
+  s?.subjectName,
+  s?.subject,
+  s?.name,
+  s?.title,
+  s?.section_name
+ ];
+ for(const x of direct){
+  if(
+   String(x||"").trim() &&
+   !/^section\s*\d+$/i.test(String(x).trim())
+  ){
+   return String(x).trim();
+  }
+ }
+ if(s?.subject_id){
+  const subject=subjects.find(
+   x=>String(x.id)===String(s.subject_id)
+  );
+  if(subject?.name)return subject.name;
+ }
+ const first=questions.find(
+  q=>String(q.section_id)===String(s?.id)
+ );
+ if(first?.subject_id){
+  const subject=subjects.find(
+   x=>String(x.id)===String(first.subject_id)
+  );
+  if(subject?.name)return subject.name;
+ }
+ return "Section "+(i+1);
+}
 function activeList(){return sections.length?questions.map((q,i)=>({q,i})).filter(x=>String(x.q.section_id)===String(sections[currentSectionIndex]?.id)):questions.map((q,i)=>({q,i}))}
 function renderSections(){const bar=$("sectionBar");if(!sections.length){bar.classList.add("hidden");return}bar.classList.remove("hidden");bar.innerHTML="";sections.forEach((s,i)=>{const b=document.createElement("button");b.type="button";b.className="section-btn"+(i===currentSectionIndex?" current":"");b.textContent=sectionName(s,i);b.onclick=()=>{currentSectionIndex=i;const l=activeList();currentIndex=l.length?l[0].i:currentIndex;render()};bar.appendChild(b)})}
 function renderGrid(){const g=$("questionGrid");g.innerHTML="";activeList().forEach((item,pos)=>{const b=document.createElement("button");b.type="button";b.className="grid-question not-visited";b.textContent=pos+1;if(item.i===currentIndex)b.classList.add("current");b.onclick=()=>{currentIndex=item.i;closeGrid();render()};g.appendChild(b)})}
@@ -1455,7 +1488,7 @@ function render(){
  $("questionCount").textContent="Question "+(pos+1)+" of "+list.length;$("questionSection").textContent=sections.length?sectionName(sections[currentSectionIndex],currentSectionIndex):"";$("gridSubject").textContent=sections.length?sectionName(sections[currentSectionIndex],currentSectionIndex):"Solutions";renderSections();
  const card=$("questionCard");card.innerHTML="";
  const text=document.createElement("div");text.className="question-text";text.textContent=q.question_text||"";card.appendChild(text);
- const meta=document.createElement("div");meta.className="solution-meta";const your=questionTimes[String(q.id)]??0,avg=avgTimes[String(q.id)];meta.innerHTML='<div class="solution-meta-box"><div class="solution-meta-label">Your Time</div><div class="solution-meta-value">'+fmtTime(your)+'</div></div><div class="solution-meta-box"><div class="solution-meta-label">Avg Time</div><div class="solution-meta-value">'+(avg==null?"—":fmtTime(avg))+'</div></div><div class="solution-meta-box"><div class="solution-meta-label">Answered Correctly</div><div class="solution-meta-value good">'+(correctRates[String(q.id)]==null?"—":Number(correctRates[String(q.id)]).toFixed(0)+"%")+'</div></div>';card.appendChild(meta);
+ const meta=document.createElement("div");meta.className="solution-meta";const your=questionTimes[String(q.id)]??0,avg=avgTimes[String(q.id)];meta.innerHTML='<div class="solution-meta-box"><div class="solution-meta-label">Your Time</div><div class="solution-meta-value">'+fmtTime(your)+'</div></div><div class="solution-meta-box"><div class="solution-meta-label">Avg Time</div><div class="solution-meta-value">'+(avg==null?"—":fmtTime(avg))+'</div></div><div class="solution-meta-box"><div class="solution-meta-label">Correct %</div><div class="solution-meta-value good">'+(correctRates[String(q.id)]==null?"—":Number(correctRates[String(q.id)]).toFixed(0)+"%")+'</div></div>';card.appendChild(meta);
  const options=document.createElement("div");options.className="options";(q.options||[]).forEach((o,i)=>{const row=document.createElement("div");row.className="option solution-option";if(o.is_correct)row.classList.add("correct-option");if(String(answers[String(q.id)]??"")===String(o.id))row.classList.add("your-option");const lab=o.option_label||String.fromCharCode(65+i);row.innerHTML='<span class="option-label">'+esc(lab)+'</span><span class="option-text">'+esc(o.option_text||"")+'</span>';options.appendChild(row)});card.appendChild(options);
  const correct=(q.options||[]).find(o=>o.is_correct);const ans=document.createElement("div");ans.className="solution-answer";ans.innerHTML='<b>Correct Answer:</b> '+(correct?esc((correct.option_label||"")+" "+(correct.option_text||"")):"Not available");card.appendChild(ans);
  const ex=document.createElement("div");ex.className="solution-explanation";ex.innerHTML='<div class="solution-explanation-title">Explanation</div><div>'+esc(q.explanation||"No explanation has been added for this question yet.")+'</div>';card.appendChild(ex);
@@ -1467,6 +1500,8 @@ async function run(){
   if(!testId){showError("Test ID is missing.");return}
   const tr=await db.from("mock_tests").select("*").eq("id",testId).maybeSingle();if(tr.error)throw tr.error;if(!tr.data){showError("Test not found.");return}test=tr.data;
   const sr=await db.from("mock_test_sections").select("*").eq("mock_test_id",testId).order("section_order");if(sr.error)throw sr.error;sections=sr.data||[];
+  const subjectIds=[...new Set(sections.map(s=>s.subject_id).filter(x=>x!==null&&x!==undefined&&x!==""))];
+  if(subjectIds.length){const subr=await db.from("subjects").select("id,name").in("id",subjectIds);if(!subr.error)subjects=subr.data||[];}
   const ar=await db.from("mock_test_questions").select("question_id,question_order,section_id").eq("mock_test_id",testId).order("question_order");if(ar.error)throw ar.error;const assignments=ar.data||[];const ids=assignments.map(a=>a.question_id);if(!ids.length){showError("No questions found for this test.");return}
   const [qr,or]=await Promise.all([db.from("questions").select("id,question_text,explanation,subject_id").in("id",ids),db.from("question_options").select("id,question_id,option_label,option_text,is_correct").in("question_id",ids).order("id")]);if(qr.error)throw qr.error;if(or.error)throw or.error;
   const qm=new Map((qr.data||[]).map(q=>[String(q.id),{...q,options:[]}]));(or.data||[]).forEach(o=>{const q=qm.get(String(o.question_id));if(q)q.options.push(o)});questions=assignments.map(a=>{const q=qm.get(String(a.question_id));return q?{...q,section_id:a.section_id,question_order:a.question_order}:null}).filter(Boolean);
