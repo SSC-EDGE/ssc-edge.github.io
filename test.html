@@ -2224,6 +2224,7 @@ function saveProgress(){
   }
 
   syncSectionClock();
+  saveCurrentQuestionTime();
   saveCurrentSectionTime();
 
   const data = {
@@ -2290,7 +2291,8 @@ function loadProgress(){
   progressStarted = false;
 
   if(
-    !progressKey
+    !progressKey ||
+    reattempt
   ){
     return;
   }
@@ -2583,14 +2585,8 @@ function renderStartScreen(){
 function startOrResumeTest(){
 
   if(reattempt){
-    const reattemptKey = "ssc-edge-reattempt-started-" + String(test.id);
-    let alreadyStarted = false;
-    try{ alreadyStarted = sessionStorage.getItem(reattemptKey) === "1"; }catch(error){}
-
-    if(!alreadyStarted){
-      clearProgress();
-      try{ sessionStorage.setItem(reattemptKey,"1"); }catch(error){}
-      currentIndex = 0;
+    clearProgress();
+    currentIndex = 0;
     currentSectionIndex = -1;
     answers = {};
     review = new Set();
@@ -2601,11 +2597,10 @@ function startOrResumeTest(){
     clearInterval(questionTimeInterval);
     questionTimeInterval = null;
     sectionRemainingTimes = {};
-      sections.forEach(section => {
-        sectionRemainingTimes[String(section.id)] =
-          getSectionDurationMinutes(section,sections.indexOf(section)) * 60;
-      });
-    }
+    sections.forEach(section => {
+      sectionRemainingTimes[String(section.id)] =
+        Number(section.duration_minutes || 0) * 60;
+    });
   }
 
   progressStarted = true;
@@ -3751,11 +3746,7 @@ function startTimer(){
       currentSectionIndex =
         current;
 
-      if(sectionTimerEndAt <= 0){
-        loadSectionTime(current);
-      }else{
-        syncSectionClock();
-      }
+      loadSectionTime(current);
 
       startSectionInterval();
 
@@ -4579,8 +4570,11 @@ async function saveAttempt(
 ){
 
   const {data:{user}} = await db.auth.getUser();
+
   if(!user){
-    return;
+    console.error("SSC EDGE: No authenticated user while saving attempt.");
+    alert("Your login session is missing. Please login again and submit the test.");
+    return null;
   }
 
   const completedAt = new Date().toISOString();
@@ -4597,31 +4591,56 @@ async function saveAttempt(
       total_questions:questions.length,
       completed_at:completedAt
     })
-    .select("*")
-    .maybeSingle();
+    .select("id")
+    .single();
 
-  if(attempt.error){
-    console.warn("Attempt history was not saved:",attempt.error.message);
-    return;
-  }
-
-  if(!attempt.data?.id){
-    return;
+  if(attempt.error || !attempt.data?.id){
+    const message = attempt.error?.message || "Test attempt could not be created.";
+    console.error("SSC EDGE: Attempt save failed:",attempt.error || message);
+    alert("TEST ATTEMPT SAVE ERROR:\n\n" + message);
+    return null;
   }
 
   const attemptId = attempt.data.id;
 
+  try{
+    localStorage.setItem(
+      "ssc-edge-last-attempt-" + String(test.id),
+      String(attemptId)
+    );
+  }catch(error){}
+
   const rows = questions.map(q => ({
     attempt_id:attemptId,
     question_id:q.id,
-    selected_option_id:answers[q.id] ? Number(answers[q.id]) : null,
-    time_spent_seconds:Math.max(0,Math.floor(Number(questionTimes?.[q.id] || 0)))
+    selected_option_id:(answers[q.id] !== undefined && answers[q.id] !== null && answers[q.id] !== "")
+      ? Number(answers[q.id])
+      : null,
+    time_spent_seconds:Math.max(
+      0,
+      Math.floor(Number(questionTimes?.[q.id] || 0))
+    )
   }));
 
   if(rows.length){
-    const result = await db.from("user_answers").insert(rows);
+    const result = await db
+      .from("user_answers")
+      .insert(rows);
+
     if(result.error){
-      console.warn("User answers were not saved:",result.error.message);
+      console.error("SSC EDGE: user_answers INSERT FAILED:",result.error);
+      alert(
+        "USER ANSWERS SAVE ERROR:\n\n" +
+        (result.error.message || "Unknown Supabase error") +
+        "\n\nCode: " + (result.error.code || "N/A")
+      );
+    }else{
+      console.log(
+        "SSC EDGE: user_answers saved successfully:",
+        rows.length,
+        "rows for attempt",
+        attemptId
+      );
     }
   }
 
@@ -4703,13 +4722,13 @@ async function saveAttempt(
     await db.from("test_attempts").update({sectional_data:sectionalData}).eq("id",attemptId);
   }
 
+  return attemptId;
 }
 
 document.addEventListener(
   "visibilitychange",
   function(){
     if(document.visibilityState === "hidden" && progressStarted && !submitted){
-      saveCurrentQuestionTime();
       saveProgress();
     }
   }
@@ -4719,7 +4738,6 @@ window.addEventListener(
   "pagehide",
   function(){
     if(progressStarted && !submitted){
-      saveCurrentQuestionTime();
       saveProgress();
     }
   }
