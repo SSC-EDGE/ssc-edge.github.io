@@ -7,6 +7,12 @@
 <title>SSC EDGE - Analysis</title>
 
 <script>
+function escapeHtml(value){
+  return String(value ?? '').replace(/[&<>'"]/g, function(ch){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[ch];
+  });
+}
+
 document.documentElement.dataset.theme =
 localStorage.getItem("ssc-edge-theme") || "dark";
 </script>
