@@ -8,7 +8,7 @@
 
 <script>
 document.documentElement.dataset.theme =
-  localStorage.getItem("ssc-edge-theme") || "dark";
+localStorage.getItem("ssc-edge-theme") || "dark";
 </script>
 
 <style>
@@ -70,8 +70,6 @@ body{
   padding:18px 14px 35px;
 }
 
-/* TEST HEADER */
-
 .test-head{
   display:flex;
   justify-content:space-between;
@@ -106,8 +104,6 @@ body{
   font-weight:700;
   cursor:pointer;
 }
-
-/* CARDS */
 
 .card{
   background:var(--card);
@@ -164,8 +160,6 @@ body{
   color:var(--red);
 }
 
-/* SECTIONAL */
-
 .breakdown{
   margin-top:18px;
 }
@@ -201,8 +195,6 @@ body{
   word-break:break-word;
 }
 
-/* SLIDEABLE SUBJECT TABS */
-
 .tabs-wrap{
   overflow-x:auto;
   -webkit-overflow-scrolling:touch;
@@ -237,8 +229,6 @@ body{
   border-color:var(--purple);
   color:#fff;
 }
-
-/* SECTION DETAILS */
 
 .section-details{
   display:grid;
@@ -334,8 +324,6 @@ body{
 
   <div id="content" style="display:none">
 
-    <!-- TEST NAME + SOLUTIONS -->
-
     <div class="test-head">
 
       <div class="test-title">
@@ -358,8 +346,6 @@ body{
 
     </div>
 
-
-    <!-- OVERALL SUMMARY -->
 
     <section class="card">
 
@@ -462,16 +448,12 @@ body{
     </section>
 
 
-    <!-- SECTIONAL BREAKDOWN -->
-
     <div class="subheading breakdown">
       SECTIONAL BREAKDOWN
     </div>
 
 
     <section class="card section-card">
-
-      <!-- SCORE | SECTIONAL SUBJECT -->
 
       <div class="section-top">
 
@@ -507,16 +489,10 @@ body{
       </div>
 
 
-      <!-- SLIDEABLE SUBJECTS -->
-
       <div id="tabsWrap" class="tabs-wrap">
-
         <div id="tabs" class="tabs"></div>
-
       </div>
 
-
-      <!-- SELECTED SUBJECT DETAILS -->
 
       <div id="sectionDetails" class="section-details">
 
@@ -602,53 +578,37 @@ body{
 
 <script>
 
-/* =========================================================
-   SUPABASE
-========================================================= */
-
 const SUPABASE_URL =
-  "https://dvvyoygahzzbnpqrfhen.supabase.co";
+"https://dvvyoygahzzbnpqrfhen.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
 
 const supabaseClient =
-  supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
+supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
-
-/* =========================================================
-   TEST ID
-========================================================= */
 
 const params =
-  new URLSearchParams(location.search);
+new URLSearchParams(location.search);
 
 const mockTestId =
-  params.get("id");
+params.get("id");
 
-
-/* =========================================================
-   GLOBAL DATA
-========================================================= */
 
 let currentTest = null;
 let currentUser = null;
 let currentAttempt = null;
 
 let sectionStats = [];
-
 let selectedSectionIndex = 0;
 
 let overallRank = null;
+let totalAttemptedUsers = null;
 let overallPercentile = null;
 
-
-/* =========================================================
-   SHORT HELPERS
-========================================================= */
 
 function $(id){
   return document.getElementById(id);
@@ -673,9 +633,7 @@ function formatScore(value){
     return "—";
   }
 
-  return Number(
-    n.toFixed(2)
-  ).toString();
+  return Number(n.toFixed(2)).toString();
 }
 
 
@@ -698,10 +656,6 @@ function formatPercent(value){
 }
 
 
-/* =========================================================
-   ERROR
-========================================================= */
-
 function showError(message){
 
   $("loading").className =
@@ -711,10 +665,6 @@ function showError(message){
     message;
 }
 
-
-/* =========================================================
-   SOLUTIONS
-========================================================= */
 
 function openSolutions(){
 
@@ -729,7 +679,7 @@ function openSolutions(){
 
 
 /* =========================================================
-   LOAD TEST
+   TEST
 ========================================================= */
 
 async function loadTest(){
@@ -741,16 +691,14 @@ async function loadTest(){
       .eq("id",mockTestId)
       .single();
 
-  if(error){
-    throw error;
-  }
+  if(error) throw error;
 
   return data;
 }
 
 
 /* =========================================================
-   LOAD LATEST COMPLETED ATTEMPT
+   CURRENT ATTEMPT
 ========================================================= */
 
 async function loadLatestAttempt(userId){
@@ -758,27 +706,24 @@ async function loadLatestAttempt(userId){
   const {data,error} =
     await supabaseClient
       .from("test_attempts")
-      .select("*")
+      .select(
+        "id,user_id,mock_test_id,started_at,completed_at,score,correct_answers,wrong_answers,unanswered"
+      )
       .eq("mock_test_id",mockTestId)
       .eq("user_id",userId)
       .not("completed_at","is",null)
-      .order(
-        "completed_at",
-        {ascending:false}
-      )
+      .order("completed_at",{ascending:false})
       .limit(1)
       .maybeSingle();
 
-  if(error){
-    throw error;
-  }
+  if(error) throw error;
 
   return data;
 }
 
 
 /* =========================================================
-   LOAD ASSIGNED QUESTIONS
+   ASSIGNMENTS
 ========================================================= */
 
 async function loadAssignedQuestions(){
@@ -787,27 +732,19 @@ async function loadAssignedQuestions(){
     await supabaseClient
       .from("mock_test_questions")
       .select(
-        "id,question_id,question_order,section_id"
+        "id,mock_test_id,question_id,section_id,question_order"
       )
-      .eq(
-        "mock_test_id",
-        mockTestId
-      )
-      .order(
-        "question_order",
-        {ascending:true}
-      );
+      .eq("mock_test_id",mockTestId)
+      .order("question_order",{ascending:true});
 
-  if(error){
-    throw error;
-  }
+  if(error) throw error;
 
   return data || [];
 }
 
 
 /* =========================================================
-   LOAD QUESTIONS
+   QUESTIONS
 ========================================================= */
 
 async function loadQuestions(ids){
@@ -824,16 +761,14 @@ async function loadQuestions(ids){
       )
       .in("id",ids);
 
-  if(error){
-    throw error;
-  }
+  if(error) throw error;
 
   return data || [];
 }
 
 
 /* =========================================================
-   LOAD OPTIONS
+   OPTIONS
 ========================================================= */
 
 async function loadOptions(ids){
@@ -846,20 +781,18 @@ async function loadOptions(ids){
     await supabaseClient
       .from("question_options")
       .select(
-        "id,question_id,is_correct"
+        "id,question_id,option_label,is_correct"
       )
       .in("question_id",ids);
 
-  if(error){
-    throw error;
-  }
+  if(error) throw error;
 
   return data || [];
 }
 
 
 /* =========================================================
-   LOAD USER ANSWERS
+   ANSWERS
 ========================================================= */
 
 async function loadAnswers(attemptId){
@@ -868,23 +801,18 @@ async function loadAnswers(attemptId){
     await supabaseClient
       .from("user_answers")
       .select(
-        "question_id,selected_option_id"
+        "attempt_id,question_id,selected_option_id"
       )
-      .eq(
-        "attempt_id",
-        attemptId
-      );
+      .eq("attempt_id",attemptId);
 
-  if(error){
-    throw error;
-  }
+  if(error) throw error;
 
   return data || [];
 }
 
 
 /* =========================================================
-   LOAD SECTIONS
+   SECTIONS
 ========================================================= */
 
 async function loadSections(){
@@ -893,34 +821,33 @@ async function loadSections(){
     await supabaseClient
       .from("mock_test_sections")
       .select(
-        "id,subject_id,section_order,duration_minutes"
+        "id,mock_test_id,subject_id,section_order,duration_minutes"
       )
-      .eq(
-        "mock_test_id",
-        mockTestId
-      )
-      .order(
-        "section_order",
-        {ascending:true}
-      );
+      .eq("mock_test_id",mockTestId)
+      .order("section_order",{ascending:true});
 
-  if(error){
-    throw error;
-  }
+  if(error) throw error;
 
   return data || [];
 }
 
 
 /* =========================================================
-   LOAD SUBJECTS
+   SUBJECTS
 ========================================================= */
 
 async function loadSubjects(ids){
 
   const uniqueIds =
     [...new Set(
-      ids.filter(Boolean)
+      ids
+        .filter(
+          x =>
+            x !== null &&
+            x !== undefined &&
+            x !== ""
+        )
+        .map(x => String(x))
     )];
 
   if(!uniqueIds.length){
@@ -933,16 +860,29 @@ async function loadSubjects(ids){
       .select("id,name")
       .in("id",uniqueIds);
 
-  if(error){
-    throw error;
-  }
+  if(error) throw error;
 
   return data || [];
 }
 
 
 /* =========================================================
-   CALCULATE QUESTION RESULT
+   CORRECT VALUE
+========================================================= */
+
+function isCorrectOption(option){
+
+  return (
+    option.is_correct === true ||
+    option.is_correct === "true" ||
+    option.is_correct === 1 ||
+    option.is_correct === "1"
+  );
+}
+
+
+/* =========================================================
+   CALCULATE QUESTIONS
 ========================================================= */
 
 function calculateResults(
@@ -954,30 +894,35 @@ function calculateResults(
 ){
 
   const questionMap =
-    new Map(
-      questions.map(q => [
-        String(q.id),
-        q
-      ])
+    new Map();
+
+  questions.forEach(q=>{
+    questionMap.set(
+      String(q.id),
+      q
     );
+  });
 
 
   const answerMap =
-    new Map(
-      answers.map(a => [
-        String(a.question_id),
-        a.selected_option_id
-      ])
+    new Map();
+
+  answers.forEach(a=>{
+
+    answerMap.set(
+      String(a.question_id),
+      a.selected_option_id
     );
+
+  });
 
 
   const correctMap =
     new Map();
 
+  options.forEach(option=>{
 
-  for(const option of options){
-
-    if(option.is_correct){
+    if(isCorrectOption(option)){
 
       correctMap.set(
         String(option.question_id),
@@ -986,31 +931,34 @@ function calculateResults(
 
     }
 
-  }
+  });
 
 
   const sectionMap =
-    new Map(
-      sections.map(s => [
-        String(s.id),
-        s
-      ])
+    new Map();
+
+  sections.forEach(section=>{
+
+    sectionMap.set(
+      String(section.id),
+      section
     );
+
+  });
 
 
   const results = [];
 
 
-  for(const assignment of assignments){
+  assignments.forEach(assignment=>{
 
     const question =
       questionMap.get(
         String(assignment.question_id)
       );
 
-
     if(!question){
-      continue;
+      return;
     }
 
 
@@ -1031,7 +979,7 @@ function calculateResults(
         question.marks,
         num(
           currentTest.marks_per_question,
-          2
+          0
         )
       );
 
@@ -1049,53 +997,50 @@ function calculateResults(
     let status =
       "unanswered";
 
-    let earned =
-      0;
+    let earned = 0;
 
 
-    if(
+    const hasAnswer =
       selected !== null &&
       selected !== undefined &&
-      selected !== ""
-    ){
+      String(selected) !== "";
+
+
+    if(hasAnswer){
 
       if(
         correctOption !== undefined &&
         String(selected) === correctOption
       ){
 
-        status =
-          "correct";
-
-        earned =
-          marks;
+        status = "correct";
+        earned = marks;
 
       }else{
 
-        status =
-          "wrong";
-
-        earned =
-          -negative;
+        status = "wrong";
+        earned = -negative;
 
       }
 
     }
 
 
-    const section =
-      sectionMap.get(
-        String(
-          assignment.section_id
-        )
-      );
+    let section =
+      null;
 
+    if(
+      assignment.section_id !== null &&
+      assignment.section_id !== undefined
+    ){
 
-    /*
-      IMPORTANT:
-      Question subject_id is used first.
-      If missing, section subject_id is used.
-    */
+      section =
+        sectionMap.get(
+          String(assignment.section_id)
+        );
+
+    }
+
 
     const subjectId =
       question.subject_id ??
@@ -1109,16 +1054,14 @@ function calculateResults(
       assignment,
       section,
       subjectId,
-
       marks,
       negative,
-
       status,
       earned
 
     });
 
-  }
+  });
 
 
   return results;
@@ -1126,7 +1069,7 @@ function calculateResults(
 
 
 /* =========================================================
-   BUILD SUBJECT STATS
+   SECTION STATS
 ========================================================= */
 
 function buildSectionStats(
@@ -1136,41 +1079,33 @@ function buildSectionStats(
 ){
 
   const subjectMap =
-    new Map(
-      subjects.map(s => [
-        String(s.id),
-        s
-      ])
+    new Map();
+
+  subjects.forEach(subject=>{
+
+    subjectMap.set(
+      String(subject.id),
+      subject
     );
+
+  });
 
 
   const statsMap =
     new Map();
 
 
-  for(const result of results){
+  results.forEach(result=>{
 
     let key =
       result.subjectId;
 
 
     if(
-      !key &&
-      result.section
+      key === null ||
+      key === undefined ||
+      key === ""
     ){
-
-      key =
-        result.section.subject_id;
-
-    }
-
-
-    /*
-      Fallback for a question that has
-      neither subject nor section subject.
-    */
-
-    if(!key){
 
       key =
         "__section__" +
@@ -1182,34 +1117,30 @@ function buildSectionStats(
     }
 
 
-    if(
-      !statsMap.has(
-        String(key)
-      )
-    ){
+    key =
+      String(key);
+
+
+    if(!statsMap.has(key)){
 
       const subject =
-        subjectMap.get(
-          String(result.subjectId)
-        );
+        result.subjectId !== null &&
+        result.subjectId !== undefined
+          ? subjectMap.get(
+              String(result.subjectId)
+            )
+          : null;
 
 
       const section =
-        result.section ||
-        sections.find(
-          s =>
-            String(s.id) ===
-            String(
-              result.assignment.section_id
-            )
-        );
+        result.section;
 
 
       statsMap.set(
-        String(key),
+        key,
         {
 
-          key:String(key),
+          key,
 
           subjectId:
             result.subjectId,
@@ -1219,7 +1150,7 @@ function buildSectionStats(
             (
               section
                 ? "Section " +
-                  (section.section_order ?? "")
+                  section.section_order
                 : "Section"
             ),
 
@@ -1235,7 +1166,10 @@ function buildSectionStats(
 
           unanswered:0,
 
-          percentile:null
+          percentile:null,
+
+          order:
+            section?.section_order ?? 9999
 
         }
       );
@@ -1244,9 +1178,7 @@ function buildSectionStats(
 
 
     const stat =
-      statsMap.get(
-        String(key)
-      );
+      statsMap.get(key);
 
 
     stat.maxMarks +=
@@ -1257,17 +1189,13 @@ function buildSectionStats(
       result.earned;
 
 
-    if(
-      result.status === "correct"
-    ){
+    if(result.status === "correct"){
 
       stat.correct++;
       stat.attempted++;
 
     }
-    else if(
-      result.status === "wrong"
-    ){
+    else if(result.status === "wrong"){
 
       stat.incorrect++;
       stat.attempted++;
@@ -1279,282 +1207,221 @@ function buildSectionStats(
 
     }
 
-  }
-
-
-  /*
-    Preserve admin section order.
-  */
-
-  const orderMap =
-    new Map();
-
-
-  sections.forEach(
-    (section,index) => {
-
-      if(
-        section.subject_id !== null &&
-        section.subject_id !== undefined
-      ){
-
-        orderMap.set(
-          String(section.subject_id),
-          index
-        );
-
-      }
-
-    }
-  );
+  });
 
 
   return [...statsMap.values()]
-    .sort((a,b)=>{
-
-      const ai =
-        orderMap.has(
-          String(a.subjectId)
-        )
-          ? orderMap.get(
-              String(a.subjectId)
-            )
-          : 9999;
-
-
-      const bi =
-        orderMap.has(
-          String(b.subjectId)
-        )
-          ? orderMap.get(
-              String(b.subjectId)
-            )
-          : 9999;
-
-
-      return ai - bi;
-
-    });
+    .sort(
+      (a,b)=>
+        a.order - b.order
+    );
 }
 
 
 /* =========================================================
-   OVERALL RANK + PERCENTILE
+   FETCH ALL ATTEMPTS
 ========================================================= */
 
-async function calculateOverallRank(){
+async function loadAllCompletedAttempts(){
 
-  if(!currentAttempt){
+  let all = [];
+  let from = 0;
+  const pageSize = 1000;
 
-    return {
-      rank:null,
-      percentile:null
-    };
-
-  }
-
-
-  try{
+  while(true){
 
     const {data,error} =
       await supabaseClient
         .from("test_attempts")
         .select(
-          "user_id,score,completed_at"
+          "id,user_id,score,completed_at"
         )
-        .eq(
-          "mock_test_id",
-          mockTestId
-        )
-        .not(
-          "completed_at",
-          "is",
-          null
+        .eq("mock_test_id",mockTestId)
+        .not("completed_at","is",null)
+        .range(
+          from,
+          from + pageSize - 1
         );
 
-
-    /*
-      RLS may prevent access to other users.
-    */
-
-    if(
-      error ||
-      !data ||
-      !data.length
-    ){
-
-      return {
-        rank:null,
-        percentile:null
-      };
-
+    if(error){
+      throw error;
     }
 
-
-    /*
-      Best score of every user.
-    */
-
-    const bestByUser =
-      new Map();
-
-
-    for(
-      const row of data
-    ){
-
-      const uid =
-        String(row.user_id);
-
-
-      const score =
-        num(row.score,0);
-
-
-      if(
-        !bestByUser.has(uid) ||
-        score >
-        bestByUser.get(uid)
-      ){
-
-        bestByUser.set(
-          uid,
-          score
-        );
-
-      }
-
+    if(!data || !data.length){
+      break;
     }
 
+    all =
+      all.concat(data);
 
-    const scores =
-      [...bestByUser.values()];
+    if(data.length < pageSize){
+      break;
+    }
 
-
-    const myScore =
-      num(
-        currentAttempt.score,
-        0
-      );
-
-
-    const higher =
-      scores.filter(
-        score =>
-          score > myScore
-      ).length;
-
-
-    const lower =
-      scores.filter(
-        score =>
-          score < myScore
-      ).length;
-
-
-    /*
-      Competition rank:
-      1 + number of users
-      scoring higher.
-    */
-
-    const rank =
-      higher + 1;
-
-
-    /*
-      Percentile:
-      percentage of users
-      scoring lower.
-    */
-
-    const percentile =
-      scores.length
-        ? (
-            lower /
-            scores.length
-          ) * 100
-        : null;
-
-
-    return {
-      rank,
-      percentile
-    };
-
-
-  }catch(error){
-
-    console.error(
-      "Rank error:",
-      error
-    );
-
-
-    return {
-      rank:null,
-      percentile:null
-    };
+    from += pageSize;
 
   }
+
+  return all;
 }
 
 
 /* =========================================================
-   SECTION PERCENTILE
+   OVERALL RANK
+========================================================= */
+
+async function calculateOverallRank(){
+
+  const attempts =
+    await loadAllCompletedAttempts();
+
+
+  if(!attempts.length){
+
+    return {
+      rank:null,
+      totalUsers:null,
+      percentile:null
+    };
+
+  }
+
+
+  /*
+    One best score per unique user.
+  */
+
+  const bestByUser =
+    new Map();
+
+
+  attempts.forEach(row=>{
+
+    if(
+      row.user_id === null ||
+      row.user_id === undefined
+    ){
+      return;
+    }
+
+
+    const uid =
+      String(row.user_id);
+
+
+    const score =
+      num(row.score,0);
+
+
+    if(
+      !bestByUser.has(uid) ||
+      score >
+      bestByUser.get(uid)
+    ){
+
+      bestByUser.set(
+        uid,
+        score
+      );
+
+    }
+
+  });
+
+
+  const scores =
+    [...bestByUser.values()];
+
+
+  const totalUsers =
+    scores.length;
+
+
+  if(!totalUsers){
+
+    return {
+      rank:null,
+      totalUsers:null,
+      percentile:null
+    };
+
+  }
+
+
+  const myScore =
+    num(
+      currentAttempt.score,
+      0
+    );
+
+
+  const higher =
+    scores.filter(
+      score =>
+        score > myScore
+    ).length;
+
+
+  const lower =
+    scores.filter(
+      score =>
+        score < myScore
+    ).length;
+
+
+  /*
+    Competition rank.
+  */
+
+  const rank =
+    higher + 1;
+
+
+  /*
+    Percentile.
+  */
+
+  const percentile =
+    totalUsers > 1
+      ? (
+          lower /
+          (totalUsers - 1)
+        ) * 100
+      : 100;
+
+
+  return {
+
+    rank,
+    totalUsers,
+    percentile
+
+  };
+}
+
+
+/* =========================================================
+   SECTION PERCENTILES
 ========================================================= */
 
 async function calculateSectionPercentiles(){
 
   if(
-    !currentAttempt ||
-    !sectionStats.length
+    !sectionStats.length ||
+    !currentAttempt
   ){
-
     return;
-
   }
 
 
   try{
 
-    /*
-      First try to read all completed attempts.
-    */
-
-    const {
-      data:attempts,
-      error:attemptError
-    } =
-      await supabaseClient
-        .from("test_attempts")
-        .select(
-          "id,user_id"
-        )
-        .eq(
-          "mock_test_id",
-          mockTestId
-        )
-        .not(
-          "completed_at",
-          "is",
-          null
-        );
+    const attempts =
+      await loadAllCompletedAttempts();
 
 
-    /*
-      If RLS blocks this,
-      simply keep percentile as —.
-    */
-
-    if(
-      attemptError ||
-      !attempts ||
-      !attempts.length
-    ){
-
+    if(!attempts.length){
       return;
-
     }
 
 
@@ -1564,34 +1431,54 @@ async function calculateSectionPercentiles(){
       );
 
 
-    const {
-      data:allAnswers,
-      error:answerError
-    } =
-      await supabaseClient
-        .from("user_answers")
-        .select(
-          "attempt_id,question_id,selected_option_id"
-        )
-        .in(
-          "attempt_id",
-          attemptIds
+    /*
+      Supabase .in() can become too large,
+      so load answers in chunks.
+    */
+
+    let allAnswers = [];
+
+
+    for(
+      let i=0;
+      i<attemptIds.length;
+      i+=500
+    ){
+
+      const batch =
+        attemptIds.slice(
+          i,
+          i+500
         );
 
 
-    if(
-      answerError ||
-      !allAnswers
-    ){
+      const {
+        data,
+        error
+      } =
+        await supabaseClient
+          .from("user_answers")
+          .select(
+            "attempt_id,question_id,selected_option_id"
+          )
+          .in(
+            "attempt_id",
+            batch
+          );
 
-      return;
+
+      if(error){
+        return;
+      }
+
+
+      if(data){
+        allAnswers =
+          allAnswers.concat(data);
+      }
 
     }
 
-
-    /*
-      Load common test data once.
-    */
 
     const assignments =
       await loadAssignedQuestions();
@@ -1610,13 +1497,9 @@ async function calculateSectionPercentiles(){
     ] =
       await Promise.all([
 
-        loadQuestions(
-          questionIds
-        ),
+        loadQuestions(questionIds),
 
-        loadOptions(
-          questionIds
-        ),
+        loadOptions(questionIds),
 
         loadSections()
 
@@ -1624,32 +1507,24 @@ async function calculateSectionPercentiles(){
 
 
     const subjects =
-      await loadSubjects(
-        [
-          ...questions.map(
-            q => q.subject_id
-          ),
+      await loadSubjects([
 
-          ...sections.map(
-            s => s.subject_id
-          )
+        ...questions.map(
+          q => q.subject_id
+        ),
 
-        ]
-      );
+        ...sections.map(
+          s => s.subject_id
+        )
+
+      ]);
 
 
-    /*
-      Calculate sectional score
-      for every completed attempt.
-    */
-
-    const allStats =
+    const scoreLists =
       new Map();
 
 
-    for(
-      const attempt of attempts
-    ){
+    attempts.forEach(attempt=>{
 
       const answers =
         allAnswers.filter(
@@ -1681,95 +1556,66 @@ async function calculateSectionPercentiles(){
         );
 
 
-      allStats.set(
-        String(attempt.id),
-        stats
-      );
+      stats.forEach(stat=>{
 
-    }
-
-
-    /*
-      Calculate percentile
-      subject by subject.
-    */
-
-    for(
-      const current of sectionStats
-    ){
-
-      const scores = [];
+        const key =
+          stat.subjectId !== null &&
+          stat.subjectId !== undefined
+            ? String(stat.subjectId)
+            : String(stat.key);
 
 
-      for(
-        const stats of
-        allStats.values()
-      ){
-
-        const found =
-          stats.find(
-            stat =>
-
-              (
-                stat.subjectId &&
-                current.subjectId &&
-                String(
-                  stat.subjectId
-                ) ===
-                String(
-                  current.subjectId
-                )
-              )
-
-              ||
-
-              String(stat.key) ===
-              String(current.key)
-          );
-
-
-        if(found){
-
-          scores.push(
-            found.score
-          );
-
+        if(!scoreLists.has(key)){
+          scoreLists.set(key,[]);
         }
 
-      }
+
+        scoreLists
+          .get(key)
+          .push(stat.score);
+
+      });
+
+    });
 
 
-      if(!scores.length){
+    sectionStats.forEach(current=>{
 
-        continue;
+      const key =
+        current.subjectId !== null &&
+        current.subjectId !== undefined
+          ? String(current.subjectId)
+          : String(current.key);
 
+
+      const scores =
+        scoreLists.get(key);
+
+
+      if(!scores || !scores.length){
+        return;
       }
 
 
       const lower =
         scores.filter(
           score =>
-            score <
-            current.score
+            score < current.score
         ).length;
 
 
       current.percentile =
-        (
-          lower /
-          scores.length
-        ) * 100;
+        scores.length > 1
+          ? (
+              lower /
+              (scores.length - 1)
+            ) * 100
+          : 100;
 
-    }
+    });
 
 
   }catch(error){
-
-    /*
-      Section percentile stays —
-      if Supabase RLS does not allow
-      reading other users' answers.
-    */
 
     console.log(
       "Section percentile unavailable:",
@@ -1786,6 +1632,10 @@ async function calculateSectionPercentiles(){
 
 function renderOverall(){
 
+  /*
+    Use actual saved attempt values.
+  */
+
   const correct =
     num(
       currentAttempt.correct_answers,
@@ -1796,6 +1646,13 @@ function renderOverall(){
   const wrong =
     num(
       currentAttempt.wrong_answers,
+      0
+    );
+
+
+  const unanswered =
+    num(
+      currentAttempt.unanswered,
       0
     );
 
@@ -1814,10 +1671,27 @@ function renderOverall(){
       : null;
 
 
-  $("rank").textContent =
-    overallRank === null
-      ? "—"
-      : overallRank;
+  /*
+    IMPORTANT:
+    Rank is displayed as Rank / Total Users.
+  */
+
+  if(
+    overallRank !== null &&
+    totalAttemptedUsers !== null
+  ){
+
+    $("rank").textContent =
+      overallRank +
+      " / " +
+      totalAttemptedUsers;
+
+  }else{
+
+    $("rank").textContent =
+      "—";
+
+  }
 
 
   $("marks").textContent =
@@ -1849,11 +1723,12 @@ function renderOverall(){
     formatPercent(
       overallPercentile
     );
+
 }
 
 
 /* =========================================================
-   RENDER SUBJECT TABS
+   TABS
 ========================================================= */
 
 function renderTabs(){
@@ -1862,7 +1737,8 @@ function renderTabs(){
     $("tabs");
 
 
-  tabs.innerHTML = "";
+  tabs.innerHTML =
+    "";
 
 
   sectionStats.forEach(
@@ -1912,7 +1788,7 @@ function renderTabs(){
 
 
 /* =========================================================
-   RENDER SELECTED SUBJECT
+   SELECTED SECTION
 ========================================================= */
 
 function renderSelectedSection(){
@@ -1936,10 +1812,8 @@ function renderSelectedSection(){
   $("sectionDetails").style.display =
     "grid";
 
-
   $("tabsWrap").style.display =
     "block";
-
 
   $("noSections").style.display =
     "none";
@@ -1961,23 +1835,15 @@ function renderSelectedSection(){
 
 
   $("sectionScoreTop").textContent =
-    formatScore(
-      stat.score
-    ) +
+    formatScore(stat.score) +
     " / " +
-    formatScore(
-      stat.maxMarks
-    );
+    formatScore(stat.maxMarks);
 
 
   $("sectionScore").textContent =
-    formatScore(
-      stat.score
-    ) +
+    formatScore(stat.score) +
     " / " +
-    formatScore(
-      stat.maxMarks
-    );
+    formatScore(stat.maxMarks);
 
 
   $("sectionPercentile").textContent =
@@ -1992,11 +1858,12 @@ function renderSelectedSection(){
 
   $("sectionIncorrect").textContent =
     stat.incorrect;
+
 }
 
 
 /* =========================================================
-   FINAL RENDER
+   RENDER
 ========================================================= */
 
 function render(){
@@ -2005,12 +1872,6 @@ function render(){
     currentTest.title ||
     "SSC EDGE Test";
 
-
-  /*
-    Supports whichever test-number
-    field exists in your mock_tests
-    table.
-  */
 
   const testNumber =
     currentTest.test_number ??
@@ -2037,11 +1898,12 @@ function render(){
 
   $("content").style.display =
     "block";
+
 }
 
 
 /* =========================================================
-   INITIALIZE
+   INIT
 ========================================================= */
 
 async function init(){
@@ -2058,10 +1920,6 @@ async function init(){
 
     }
 
-
-    /*
-      LOGIN CHECK
-    */
 
     const {
       data,
@@ -2091,17 +1949,9 @@ async function init(){
       data.user;
 
 
-    /*
-      TEST
-    */
-
     currentTest =
       await loadTest();
 
-
-    /*
-      LATEST COMPLETED ATTEMPT
-    */
 
     currentAttempt =
       await loadLatestAttempt(
@@ -2120,10 +1970,6 @@ async function init(){
     }
 
 
-    /*
-      ASSIGNMENTS
-    */
-
     const assignments =
       await loadAssignedQuestions();
 
@@ -2134,10 +1980,6 @@ async function init(){
       );
 
 
-    /*
-      Load all basic analysis data.
-    */
-
     const [
       questions,
       options,
@@ -2146,13 +1988,9 @@ async function init(){
     ] =
       await Promise.all([
 
-        loadQuestions(
-          questionIds
-        ),
+        loadQuestions(questionIds),
 
-        loadOptions(
-          questionIds
-        ),
+        loadOptions(questionIds),
 
         loadAnswers(
           currentAttempt.id
@@ -2163,33 +2001,19 @@ async function init(){
       ]);
 
 
-    /*
-      Subjects needed by questions
-      and sections.
-    */
-
-    const subjectIds = [
-
-      ...questions.map(
-        q => q.subject_id
-      ),
-
-      ...sections.map(
-        s => s.subject_id
-      )
-
-    ].filter(Boolean);
-
-
     const subjects =
-      await loadSubjects(
-        subjectIds
-      );
+      await loadSubjects([
 
+        ...questions.map(
+          q => q.subject_id
+        ),
 
-    /*
-      Calculate every question.
-    */
+        ...sections.map(
+          s => s.subject_id
+        )
+
+      ]);
+
 
     const results =
       calculateResults(
@@ -2201,10 +2025,6 @@ async function init(){
       );
 
 
-    /*
-      Calculate real subject-wise data.
-    */
-
     sectionStats =
       buildSectionStats(
         results,
@@ -2214,7 +2034,7 @@ async function init(){
 
 
     /*
-      Overall rank + percentile.
+      Calculate rank.
     */
 
     const rankInfo =
@@ -2225,22 +2045,20 @@ async function init(){
       rankInfo.rank;
 
 
+    totalAttemptedUsers =
+      rankInfo.totalUsers;
+
+
     overallPercentile =
       rankInfo.percentile;
 
 
     /*
-      Section percentile.
-      Best effort because RLS may
-      prevent access to other users.
+      Calculate sectional percentiles.
     */
 
     await calculateSectionPercentiles();
 
-
-    /*
-      Display page.
-    */
 
     render();
 
@@ -2262,13 +2080,9 @@ async function init(){
 }
 
 
-/* =========================================================
-   START
-========================================================= */
-
 init();
 
 </script>
 
 </body>
- </html>
+</html>
