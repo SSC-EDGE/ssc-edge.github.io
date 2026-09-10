@@ -1812,6 +1812,7 @@ let questionTimeInterval = null;
 let sectionTimerStartedAt = 0;
 let sectionTimerBaseRemaining = 0;
 let sectionTimerEndAt = 0;
+let lastProgressSaveAt = 0;
 
 
 const params =
@@ -2247,6 +2248,9 @@ function saveProgress(){
     sectionRemainingTimes:
       sectionRemainingTimes,
 
+    sectionTimerEndAt:
+      sectionTimerEndAt,
+
     remainingSeconds:
       remainingSeconds,
 
@@ -2290,24 +2294,19 @@ function loadProgress(){
   hasSavedProgress = false;
   progressStarted = false;
 
-  if(
-    !progressKey ||
-    reattempt
-  ){
+  if(!progressKey){
     return;
   }
 
   try{
 
-    const raw =
-      localStorage.getItem(progressKey);
+    const raw = localStorage.getItem(progressKey);
 
     if(!raw){
       return;
     }
 
-    const data =
-      JSON.parse(raw);
+    const data = JSON.parse(raw);
 
     if(!data || !data.progressStarted){
       return;
@@ -2316,8 +2315,61 @@ function loadProgress(){
     progressStarted = true;
     hasSavedProgress = true;
 
-    const savedAt = Number(data.savedAt);
     const wasPaused = data.paused === true;
+
+    answers = data.answers || {};
+
+    review = new Set(data.review || []);
+    visitedQuestions = new Set(data.visited || []);
+
+    questionTimeSpent =
+      data.questionTimeSpent &&
+      typeof data.questionTimeSpent === "object"
+        ? data.questionTimeSpent
+        : {};
+
+    if(data.sectionRemainingTimes &&
+       typeof data.sectionRemainingTimes === "object"){
+
+      Object.keys(data.sectionRemainingTimes).forEach(key => {
+        const value = Number(data.sectionRemainingTimes[key]);
+        if(Number.isFinite(value)){
+          sectionRemainingTimes[key] = Math.max(0,value);
+        }
+      });
+
+    }
+
+    if(Number.isFinite(Number(data.remainingSeconds))){
+      remainingSeconds = Math.max(0,Number(data.remainingSeconds));
+    }
+
+    if(Number.isInteger(data.currentIndex) &&
+       data.currentIndex >= 0 &&
+       data.currentIndex < questions.length){
+
+      currentIndex = data.currentIndex;
+
+    }
+
+    if(Number.isInteger(data.currentSectionIndex) &&
+       data.currentSectionIndex >= 0 &&
+       data.currentSectionIndex < sections.length){
+
+      currentSectionIndex = data.currentSectionIndex;
+
+    }
+
+    paused = wasPaused;
+
+    /*
+      TIMER RESTORE:
+      - Subject-wise timer uses an absolute deadline. Refreshing the page
+        must NOT restart the section timer from its old remaining value.
+      - General timer uses savedAt to account for time elapsed while the
+        page was away.
+    */
+    const savedAt = Number(data.savedAt);
 
     if(
       !wasPaused &&
@@ -2326,133 +2378,88 @@ function loadProgress(){
     ){
 
       const elapsed =
-        Math.max(
-          0,
-          Math.floor((Date.now() - savedAt) / 1000)
-        );
+        Math.max(0,Math.floor((Date.now()-savedAt)/1000));
 
-      if(elapsed > 0){
+      if(
+        !(test?.test_type === "FULL" &&
+          test?.subject_wise_timing &&
+          sections.length)
+      ){
 
-        if(
-          data.questionTimeSpent &&
-          typeof data.questionTimeSpent === "object" &&
-          data.currentIndex !== undefined &&
-          questions[data.currentIndex]
-        ){
-          const currentQuestionId = String(questions[data.currentIndex].id);
-          data.questionTimeSpent[currentQuestionId] =
-            Number(data.questionTimeSpent[currentQuestionId] || 0) + elapsed;
-        }
-
-        if(
-          sections.length &&
-          Number.isInteger(data.currentSectionIndex) &&
-          data.currentSectionIndex >= 0 &&
-          sections[data.currentSectionIndex]
-        ){
-
-          const sectionId =
-            String(sections[data.currentSectionIndex].id);
-
-          if(
-            data.sectionRemainingTimes &&
-            typeof data.sectionRemainingTimes === "object" &&
-            Number.isFinite(Number(data.sectionRemainingTimes[sectionId]))
-          ){
-
-            data.sectionRemainingTimes[sectionId] =
-              Math.max(
-                0,
-                Number(data.sectionRemainingTimes[sectionId]) - elapsed
-              );
-
-          }
-
-        }else{
-
-          const savedRemaining = Number(data.remainingSeconds);
-
-          if(Number.isFinite(savedRemaining)){
-            data.remainingSeconds =
-              Math.max(0, savedRemaining - elapsed);
-          }
-
+        if(elapsed > 0){
+          remainingSeconds =
+            Math.max(0,remainingSeconds-elapsed);
         }
 
       }
 
     }
 
-    if(Number.isFinite(Number(data.remainingSeconds))){
-      remainingSeconds = Math.max(0, Number(data.remainingSeconds));
-    }
-
-    answers =
-      data.answers || {};
-
-    review =
-      new Set(
-        data.review || []
-      );
-
-    visitedQuestions =
-      new Set(
-        data.visited || []
-      );
-
-    questionTimeSpent =
-      data.questionTimeSpent &&
-      typeof data.questionTimeSpent === "object"
-        ? data.questionTimeSpent
-        : {};
-
     if(
-      data.sectionRemainingTimes &&
-      typeof data.sectionRemainingTimes === "object"
+      test?.test_type === "FULL" &&
+      test?.subject_wise_timing &&
+      sections.length &&
+      currentSectionIndex >= 0 &&
+      sections[currentSectionIndex]
     ){
 
-      Object.keys(
-        data.sectionRemainingTimes
-      ).forEach(key => {
+      const savedDeadline = Number(data.sectionTimerEndAt);
 
-        const value =
-          Number(
-            data.sectionRemainingTimes[key]
+      if(!wasPaused && Number.isFinite(savedDeadline) && savedDeadline > 0){
+
+        sectionTimerEndAt = savedDeadline;
+
+        sectionTimerStartedAt =
+          Date.now() -
+          Math.max(
+            0,
+            (Number(data.sectionRemainingTimes?.[
+              String(sections[currentSectionIndex].id)
+            ]) || 0)
+          ) * 1000;
+
+        syncSectionClock();
+
+      }else{
+
+        sectionTimerStartedAt = 0;
+        sectionTimerEndAt = 0;
+
+        const key = String(sections[currentSectionIndex].id);
+        remainingSeconds =
+          Math.max(
+            0,
+            Number(sectionRemainingTimes[key] || 0)
           );
 
-        if(Number.isFinite(value)){
-          sectionRemainingTimes[key] = value;
-        }
-
-      });
+      }
 
     }
 
-    if(
-      Number.isInteger(
-        data.currentIndex
-      ) &&
-      data.currentIndex >= 0 &&
-      data.currentIndex < questions.length
-    ){
+    if(!wasPaused &&
+       Number.isFinite(savedAt) &&
+       savedAt > 0 &&
+       questions[currentIndex]){
 
-      currentIndex =
-        data.currentIndex;
+      const currentId = String(questions[currentIndex].id);
 
-    }
+      /*
+        The saved question timer represents time up to savedAt.
+        Count only the time since that save, then start a fresh live
+        timer when showQuestion() runs.
+      */
+      const elapsed =
+        Math.max(0,Math.floor((Date.now()-savedAt)/1000));
 
-    if(
-      Number.isInteger(
-        data.currentSectionIndex
-      ) &&
-      data.currentSectionIndex >= 0 &&
-      data.currentSectionIndex < sections.length
-    ){
-
-      currentSectionIndex =
-        data.currentSectionIndex;
+      if(elapsed > 0){
+        questionTimeSpent[currentId] =
+          Number(questionTimeSpent[currentId] || 0) + elapsed;
+      }
 
     }
+
+    questionTimeQuestionId = null;
+    questionTimeStartedAt = 0;
 
   }catch(error){
 
@@ -2584,8 +2591,15 @@ function renderStartScreen(){
 
 function startOrResumeTest(){
 
+  /*
+    "reattempt=1" is a one-time command from Practice.
+    Consume it immediately, then remove it from the URL so a browser
+    refresh resumes the newly-started test instead of resetting it again.
+  */
   if(reattempt){
+
     clearProgress();
+
     currentIndex = 0;
     currentSectionIndex = -1;
     answers = {};
@@ -2594,13 +2608,32 @@ function startOrResumeTest(){
     questionTimeSpent = {};
     questionTimeQuestionId = null;
     questionTimeStartedAt = 0;
+
     clearInterval(questionTimeInterval);
     questionTimeInterval = null;
+
     sectionRemainingTimes = {};
+
     sections.forEach(section => {
       sectionRemainingTimes[String(section.id)] =
-        Number(section.duration_minutes || 0) * 60;
+        Number(getSectionDurationMinutes(section,0)) * 60;
     });
+
+    sectionTimerStartedAt = 0;
+    sectionTimerBaseRemaining = 0;
+    sectionTimerEndAt = 0;
+
+    try{
+      const cleanUrl =
+        window.location.pathname +
+        window.location.search
+          .replace(/([?&])reattempt=1(&|$)/,'$1')
+          .replace(/[?&]$/,'') +
+        window.location.hash;
+
+      window.history.replaceState({},document.title,cleanUrl);
+    }catch(error){}
+
   }
 
   progressStarted = true;
@@ -2908,6 +2941,9 @@ function jumpToSection(sectionIndex){
   currentIndex =
     list[0].i;
 
+  sectionTimerStartedAt = 0;
+  sectionTimerEndAt = 0;
+
 
   loadSectionTime(
     sectionIndex
@@ -2968,14 +3004,14 @@ function saveCurrentSectionTime(){
 
   const key = String(sections[currentSectionIndex].id);
 
-  sectionRemainingTimes[key] = Math.max(
-    0,
-    Math.floor(Number(remainingSeconds) || 0)
-  );
+  sectionRemainingTimes[key] =
+    Math.max(0,Math.floor(Number(remainingSeconds)||0));
 
-  sectionTimerBaseRemaining = sectionRemainingTimes[key];
+  sectionTimerBaseRemaining =
+    sectionRemainingTimes[key];
 
 }
+
 
 function loadSectionTime(sectionIndex){
 
@@ -2986,25 +3022,51 @@ function loadSectionTime(sectionIndex){
   }
 
   const key = String(section.id);
+
   let value = Number(sectionRemainingTimes[key]);
 
   if(!(Number.isFinite(value) && value > 0)){
-    value = getSectionDurationMinutes(section,sectionIndex) * 60;
+
+    value =
+      getSectionDurationMinutes(section,sectionIndex) * 60;
+
     sectionRemainingTimes[key] = value;
+
   }
 
-  remainingSeconds = Math.max(0, Math.floor(value));
-  sectionTimerBaseRemaining = remainingSeconds;
+  remainingSeconds =
+    Math.max(0,Math.floor(value));
+
+  sectionTimerBaseRemaining =
+    remainingSeconds;
 
   if(paused){
+
     sectionTimerStartedAt = 0;
     sectionTimerEndAt = 0;
+
   }else{
-    sectionTimerStartedAt = Date.now();
-    sectionTimerEndAt = Date.now() + remainingSeconds * 1000;
+
+    /*
+      Starting a section creates its deadline once.
+      If this section is already running, NEVER recreate the deadline,
+      otherwise refresh/navigation can accidentally give extra time.
+    */
+    if(sectionTimerEndAt <= 0){
+
+      sectionTimerStartedAt = Date.now();
+
+      sectionTimerEndAt =
+        Date.now() + remainingSeconds * 1000;
+
+    }
+
+    syncSectionClock();
+
   }
 
 }
+
 
 function formatQuestionTime(seconds){
 
@@ -3738,18 +3800,23 @@ function startTimer(){
     sections.length
   ){
 
-    const current =
-      getCurrentSectionIndex();
+    const current = getCurrentSectionIndex();
 
     if(current >= 0){
 
-      currentSectionIndex =
-        current;
+      currentSectionIndex = current;
 
-      loadSectionTime(current);
+      /*
+        Only create a section deadline when there isn't one.
+        A restored deadline survives refresh.
+      */
+      if(sectionTimerEndAt <= 0){
+        loadSectionTime(current);
+      }else{
+        syncSectionClock();
+      }
 
       startSectionInterval();
-
       return;
 
     }
@@ -3759,9 +3826,7 @@ function startTimer(){
   if(!progressStarted){
 
     remainingSeconds =
-      Number(
-        test.duration_minutes || 0
-      ) * 60;
+      Number(test.duration_minutes || 0) * 60;
 
   }else if(remainingSeconds <= 0){
 
@@ -3775,6 +3840,7 @@ function startTimer(){
   startGeneralTimer();
 
 }
+
 
 function startGeneralTimer(){
 
@@ -3825,8 +3891,13 @@ function startSectionInterval(){
   clearInterval(timerInterval);
 
   if(!paused && sectionTimerEndAt <= 0){
+
     sectionTimerStartedAt = Date.now();
-    sectionTimerEndAt = Date.now() + Math.max(0,Number(remainingSeconds)||0) * 1000;
+
+    sectionTimerEndAt =
+      Date.now() +
+      Math.max(0,Number(remainingSeconds)||0) * 1000;
+
   }
 
   updateTimerDisplay();
@@ -3843,18 +3914,29 @@ function startSectionInterval(){
     updateGridTimer();
 
     if(remainingSeconds <= 0){
+
       clearInterval(timerInterval);
       sectionTimeUp();
       return;
+
     }
 
-    if(Date.now() % 1000 < 300){
+    /*
+      Save once per second without changing the live question timer.
+      The absolute section deadline is stored, so refresh cannot reset
+      the timer.
+    */
+    if(Date.now() - lastProgressSaveAt >= 1000){
+
+      lastProgressSaveAt = Date.now();
       saveProgress();
+
     }
 
   },250);
 
 }
+
 
 function sectionTimeUp(){
 
@@ -3924,6 +4006,9 @@ function sectionTimeUp(){
 
   currentIndex =
     nextQuestions[0].i;
+
+  sectionTimerStartedAt = 0;
+  sectionTimerEndAt = 0;
 
 
   loadSectionTime(next);
@@ -4059,21 +4144,32 @@ document
     "click",
     function(){
 
-      if(submitted){
+      if(submitted || paused){
         return;
       }
 
-
+      /*
+        Capture elapsed time BEFORE stopping the clocks.
+      */
+      syncSectionClock();
       saveCurrentQuestionTime();
       saveCurrentSectionTime();
 
       paused = true;
+
       sectionTimerStartedAt = 0;
       sectionTimerEndAt = 0;
+
+      clearInterval(timerInterval);
+      clearInterval(questionTimeInterval);
+
+      timerInterval = null;
+      questionTimeInterval = null;
+      questionTimeStartedAt = 0;
+
       saveProgress();
-
+      updateTimerDisplay();
       updateQuestionTime();
-
 
       document
         .getElementById("pauseOverlay")
@@ -4089,25 +4185,67 @@ document
     "click",
     function(){
 
+      if(submitted || !paused){
+        return;
+      }
+
       paused = false;
 
-      sectionTimerStartedAt =
-        Date.now();
-      sectionTimerBaseRemaining =
-        remainingSeconds;
-      sectionTimerEndAt =
-        Date.now() + Math.max(0,Number(remainingSeconds)||0) * 1000;
+      /*
+        Resume from the exact remaining time saved at pause.
+      */
+      if(
+        test.test_type === "FULL" &&
+        test.subject_wise_timing &&
+        sections.length
+      ){
 
-      questionTimeStartedAt =
-        Date.now();
+        const section = sections[currentSectionIndex];
 
+        if(section){
+
+          const key = String(section.id);
+
+          remainingSeconds =
+            Math.max(
+              0,
+              Math.floor(
+                Number(sectionRemainingTimes[key]) || 0
+              )
+            );
+
+          sectionTimerBaseRemaining = remainingSeconds;
+
+          sectionTimerStartedAt = Date.now();
+
+          sectionTimerEndAt =
+            Date.now() +
+            remainingSeconds * 1000;
+
+        }
+
+      }
+
+      if(questions[currentIndex]){
+
+        questionTimeQuestionId =
+          String(questions[currentIndex].id);
+
+        questionTimeStartedAt = Date.now();
+
+        clearInterval(questionTimeInterval);
+
+        questionTimeInterval =
+          setInterval(updateQuestionTime,250);
+
+      }
+
+      updateTimerDisplay();
       updateQuestionTime();
-
 
       document
         .getElementById("pauseOverlay")
         .classList.remove("show");
-
 
       if(
         test.test_type === "FULL" &&
@@ -4122,6 +4260,8 @@ document
         startGeneralTimer();
 
       }
+
+      saveProgress();
 
     }
   );
@@ -4272,6 +4412,9 @@ function submitCurrentSection(){
 
   currentIndex =
     nextQuestions[0].i;
+
+  sectionTimerStartedAt = 0;
+  sectionTimerEndAt = 0;
 
 
   loadSectionTime(next);
@@ -4570,11 +4713,8 @@ async function saveAttempt(
 ){
 
   const {data:{user}} = await db.auth.getUser();
-
   if(!user){
-    console.error("SSC EDGE: No authenticated user while saving attempt.");
-    alert("Your login session is missing. Please login again and submit the test.");
-    return null;
+    return;
   }
 
   const completedAt = new Date().toISOString();
@@ -4588,58 +4728,43 @@ async function saveAttempt(
       correct_answers:correct,
       wrong_answers:wrong,
       unanswered:skipped,
-      total_questions:questions.length,
       completed_at:completedAt
     })
     .select("id")
     .single();
 
-  if(attempt.error || !attempt.data?.id){
-    const message = attempt.error?.message || "Test attempt could not be created.";
-    console.error("SSC EDGE: Attempt save failed:",attempt.error || message);
-    alert("TEST ATTEMPT SAVE ERROR:\n\n" + message);
-    return null;
+  if(attempt.error){
+    console.warn("Attempt history was not saved:",attempt.error.message);
+    return;
+  }
+
+  if(!attempt.data?.id){
+    return;
   }
 
   const attemptId = attempt.data.id;
 
-  try{
-    localStorage.setItem(
-      "ssc-edge-last-attempt-" + String(test.id),
-      String(attemptId)
-    );
-  }catch(error){}
-
   const rows = questions.map(q => ({
     attempt_id:attemptId,
     question_id:q.id,
-    selected_option_id:(answers[q.id] !== undefined && answers[q.id] !== null && answers[q.id] !== "")
-      ? Number(answers[q.id])
-      : null,
-    time_spent_seconds:Math.max(
-      0,
-      Math.floor(Number(questionTimes?.[q.id] || 0))
-    )
+    selected_option_id:answers[q.id] ? Number(answers[q.id]) : null,
+    time_spent_seconds:Math.max(0,Math.floor(Number(questionTimes?.[q.id] || 0)))
   }));
 
   if(rows.length){
-    const result = await db
-      .from("user_answers")
-      .insert(rows);
-
+    const result = await db.from("user_answers").insert(rows);
     if(result.error){
       console.error("SSC EDGE: user_answers INSERT FAILED:",result.error);
       alert(
         "USER ANSWERS SAVE ERROR:\n\n" +
-        (result.error.message || "Unknown Supabase error") +
-        "\n\nCode: " + (result.error.code || "N/A")
+        result.error.message +
+        "\n\nCode: " +
+        (result.error.code || "unknown")
       );
     }else{
       console.log(
-        "SSC EDGE: user_answers saved successfully:",
-        rows.length,
-        "rows for attempt",
-        attemptId
+        "SSC EDGE: user_answers saved:",
+        rows.length
       );
     }
   }
@@ -4722,7 +4847,6 @@ async function saveAttempt(
     await db.from("test_attempts").update({sectional_data:sectionalData}).eq("id",attemptId);
   }
 
-  return attemptId;
 }
 
 document.addEventListener(
