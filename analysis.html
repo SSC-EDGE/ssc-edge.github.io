@@ -230,6 +230,48 @@ body{
   color:#fff;
 }
 
+.score-details{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:4px;
+}
+
+.score-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  background:var(--card2);
+  border:1px solid var(--border);
+  border-radius:11px;
+  padding:13px 14px;
+}
+
+.score-row-label{
+  color:var(--text);
+  font-size:14px;
+  font-weight:800;
+}
+
+.score-row-value{
+  color:var(--text);
+  font-size:16px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+.score-row.total{
+  margin-top:2px;
+  background:var(--card);
+  border-color:var(--purple);
+}
+
+.score-row.total .score-row-label,
+.score-row.total .score-row-value{
+  color:var(--purple2);
+}
+
 .section-details{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -453,45 +495,12 @@ body{
     </div>
 
 
-    <section class="card section-card">
-
-      <div class="section-top">
-
-        <div class="section-top-box">
-
-          <div class="section-top-label">
-            Score
-          </div>
-
-          <div
-            id="sectionScoreTop"
-            class="section-top-value">
-            —
-          </div>
-
-        </div>
-
-
-        <div class="section-top-box">
-
-          <div class="section-top-label">
-            Sectional
-          </div>
-
-          <div
-            id="sectionNameTop"
-            class="section-top-value">
-            —
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div id="tabsWrap" class="tabs-wrap">
+    <div id="tabsWrap" class="tabs-wrap">
         <div id="tabs" class="tabs"></div>
       </div>
+
+
+      <div id="scoreDetails" class="score-details"></div>
 
 
       <div id="sectionDetails" class="section-details">
@@ -558,7 +567,7 @@ body{
       </div>
 
 
-      <div
+<div
         id="noSections"
         class="status"
         style="display:none">
@@ -603,7 +612,7 @@ let currentUser = null;
 let currentAttempt = null;
 
 let sectionStats = [];
-let selectedSectionIndex = 0;
+let selectedSectionIndex = -1;
 
 let overallRank = null;
 let totalAttemptedUsers = null;
@@ -707,7 +716,7 @@ async function loadLatestAttempt(userId){
     await supabaseClient
       .from("test_attempts")
       .select(
-        "id,user_id,mock_test_id,started_at,completed_at,score,correct_answers,wrong_answers,unanswered,rank,percentile,sectional_data"
+        "id,user_id,mock_test_id,started_at,completed_at,score,correct_answers,wrong_answers,unanswered"
       )
       .eq("mock_test_id",mockTestId)
       .eq("user_id",userId)
@@ -821,7 +830,7 @@ async function loadSections(){
     await supabaseClient
       .from("mock_test_sections")
       .select(
-        "*"
+        "id,mock_test_id,subject_id,section_order,duration_minutes"
       )
       .eq("mock_test_id",mockTestId)
       .order("section_order",{ascending:true});
@@ -1082,19 +1091,24 @@ function buildSectionStats(
     new Map();
 
   subjects.forEach(subject=>{
+
     subjectMap.set(
       String(subject.id),
       subject
     );
+
   });
+
 
   const statsMap =
     new Map();
+
 
   results.forEach(result=>{
 
     let key =
       result.subjectId;
+
 
     if(
       key === null ||
@@ -1111,8 +1125,10 @@ function buildSectionStats(
 
     }
 
+
     key =
       String(key);
+
 
     if(!statsMap.has(key)){
 
@@ -1124,17 +1140,10 @@ function buildSectionStats(
             )
           : null;
 
+
       const section =
         result.section;
 
-      const directName =
-        section?.subject_name ||
-        section?.subjectName ||
-        section?.subject ||
-        section?.name ||
-        section?.title ||
-        section?.section_name ||
-        "";
 
       statsMap.set(
         key,
@@ -1145,27 +1154,14 @@ function buildSectionStats(
           subjectId:
             result.subjectId,
 
-          sectionId:
-            result.assignment.section_id ??
-            section?.id ??
-            null,
-
           name:
+            subject?.name ||
             (
-              String(directName).trim() &&
-              !/^section\s*\d+$/i.test(
-                String(directName).trim()
-              )
-            )
-              ? String(directName).trim()
-              : (
-                  subject?.name ||
-                  "Section " +
-                  (
-                    section?.section_order ??
-                    1
-                  )
-                ),
+              section
+                ? "Section " +
+                  section.section_order
+                : "Section"
+            ),
 
           score:0,
 
@@ -1189,14 +1185,18 @@ function buildSectionStats(
 
     }
 
+
     const stat =
       statsMap.get(key);
+
 
     stat.maxMarks +=
       result.marks;
 
+
     stat.score +=
       result.earned;
+
 
     if(result.status === "correct"){
 
@@ -1217,6 +1217,7 @@ function buildSectionStats(
     }
 
   });
+
 
   return [...statsMap.values()]
     .sort(
@@ -1749,6 +1750,35 @@ function renderTabs(){
     "";
 
 
+  /*
+    First tab is always the overall sectional Score.
+    Remaining tabs are the actual section/subject names.
+  */
+
+  const scoreButton =
+    document.createElement("button");
+
+  scoreButton.className =
+    "tab" +
+    (
+      selectedSectionIndex === -1
+        ? " active"
+        : ""
+    );
+
+  scoreButton.textContent =
+    "Score";
+
+  scoreButton.onclick =
+    ()=>{
+      selectedSectionIndex = -1;
+      renderTabs();
+      renderSelectedSection();
+    };
+
+  tabs.appendChild(scoreButton);
+
+
   sectionStats.forEach(
     (stat,index)=>{
 
@@ -1799,11 +1829,15 @@ function renderTabs(){
    SELECTED SECTION
 ========================================================= */
 
+
 function renderSelectedSection(){
 
   if(!sectionStats.length){
 
     $("sectionDetails").style.display =
+      "none";
+
+    $("scoreDetails").style.display =
       "none";
 
     $("tabsWrap").style.display =
@@ -1817,14 +1851,83 @@ function renderSelectedSection(){
   }
 
 
-  $("sectionDetails").style.display =
-    "grid";
-
   $("tabsWrap").style.display =
     "block";
 
   $("noSections").style.display =
     "none";
+
+
+  /*
+    SCORE TAB
+    Shows every section score in the same
+    scrollable/tab system. Nothing is shown
+    above the tabs.
+  */
+
+  if(selectedSectionIndex === -1){
+
+    $("sectionDetails").style.display =
+      "none";
+
+    $("scoreDetails").style.display =
+      "flex";
+
+    const totalScore =
+      num(currentAttempt.score,0);
+
+    const rows =
+      sectionStats.map(
+        stat => `
+          <div class="score-row">
+            <div class="score-row-label">
+              ${escapeHtml(stat.name)}
+            </div>
+            <div class="score-row-value">
+              ${formatScore(stat.score)}
+              /
+              ${formatScore(stat.maxMarks)}
+            </div>
+          </div>
+        `
+      ).join("");
+
+
+    $("scoreDetails").innerHTML =
+      rows +
+      `
+        <div class="score-row total">
+          <div class="score-row-label">
+            Total Score
+          </div>
+          <div class="score-row-value">
+            ${formatScore(totalScore)}
+            /
+            ${formatScore(
+              sectionStats.reduce(
+                (sum,stat)=>
+                  sum + num(stat.maxMarks,0),
+                0
+              )
+            )}
+          </div>
+        </div>
+      `;
+
+    return;
+
+  }
+
+
+  /*
+    INDIVIDUAL SECTION TAB
+  */
+
+  $("scoreDetails").style.display =
+    "none";
+
+  $("sectionDetails").style.display =
+    "grid";
 
 
   const stat =
@@ -1836,18 +1939,6 @@ function renderSelectedSection(){
   if(!stat){
     return;
   }
-
-
-  $("sectionNameTop").textContent =
-    stat.name;
-
-
-  $("sectionScoreTop").textContent =
-    stat.name +
-    " — " +
-    formatScore(stat.score) +
-    " / " +
-    formatScore(stat.maxMarks);
 
 
   $("sectionScore").textContent =
@@ -1874,7 +1965,9 @@ function renderSelectedSection(){
 
 /* =========================================================
    RENDER
-========================================================= */
+=========================================================
+
+*/
 
 function render(){
 
@@ -2052,9 +2145,7 @@ async function init(){
 
 
     overallRank =
-      Number.isFinite(Number(currentAttempt.rank))
-        ? Number(currentAttempt.rank)
-        : rankInfo.rank;
+      rankInfo.rank;
 
 
     totalAttemptedUsers =
@@ -2062,9 +2153,7 @@ async function init(){
 
 
     overallPercentile =
-      Number.isFinite(Number(currentAttempt.percentile))
-        ? Number(currentAttempt.percentile)
-        : rankInfo.percentile;
+      rankInfo.percentile;
 
 
     /*
