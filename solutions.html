@@ -3,423 +3,1494 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#160b26">
 <title>SSC EDGE - Solutions</title>
 <link rel="stylesheet" href="css/style.css">
 <script>document.documentElement.dataset.theme=localStorage.getItem("ssc-edge-theme")||"dark";</script>
 <style>
-*{box-sizing:border-box}body{margin:0;padding-bottom:30px}.page{max-width:850px;margin:auto;padding:16px 14px 35px}.back{display:inline-block;margin-bottom:14px;color:var(--purple2);text-decoration:none;font-size:13px;font-weight:900}.head,.solution{background:var(--card);border:1px solid var(--border);border-radius:17px;padding:16px;margin-bottom:12px;overflow:hidden}.head h1{margin:0;color:var(--text);font-size:21px;line-height:1.25}.sub{margin:5px 0 0;color:var(--muted);font-size:12px;line-height:1.5}.qhead{display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px solid var(--border);padding-bottom:10px}.qno{color:var(--text);font-size:14px;font-weight:900}.subject{color:var(--purple2);font-size:11px;font-weight:900;text-align:right}.qtext{color:var(--text);font-size:14px;font-weight:700;line-height:1.55;margin:12px 0;overflow-wrap:anywhere}.option{padding:9px 10px;margin-top:7px;border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:12px;line-height:1.45;overflow-wrap:anywhere}.option.correct{border-color:#2fbf71;background:rgba(47,191,113,.10)}.answer{margin-top:11px;padding:10px;border-radius:10px;background:var(--card2);color:var(--text);font-size:12px;line-height:1.5;overflow-wrap:anywhere}.answer b{color:#2fbf71}.explanation{margin-top:9px;color:var(--muted);font-size:12px;line-height:1.6;overflow-wrap:anywhere}.actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px}.btn{display:flex;align-items:center;justify-content:center;min-height:42px;padding:8px;border-radius:10px;background:var(--card2);border:1px solid var(--border);color:var(--text);text-decoration:none;font-size:11px;font-weight:900;text-align:center}.btn.primary{background:var(--purple);border-color:var(--purple);color:#fff}.empty{text-align:center;color:var(--muted);padding:25px 8px;font-size:13px}
-.question-metrics{
-  display:grid;
-  grid-template-columns:1fr 1fr 1.35fr;
-  gap:7px;
-  margin-top:11px;
+
+
+/* ==================================================
+   SSC EDGE TEST UI
+   ================================================== */
+
+*{
+  box-sizing:border-box;
 }
 
-.metric{
-  background:var(--card2);
-  border:1px solid var(--border);
-  border-radius:9px;
-  padding:8px 7px;
-  text-align:center;
+body{
+  margin:0;
+  padding:0 0 30px;
 }
 
-.metric-label{
-  color:var(--muted);
-  font-size:9px;
-  font-weight:700;
+
+/* ==================================================
+   HEADER
+   ================================================== */
+
+.test-header{
+
+  position:sticky;
+  top:0;
+  z-index:50;
+
+  background:var(--header);
+
+  border-bottom:1px solid var(--border);
+
+  padding:11px 14px 10px;
+
+  backdrop-filter:blur(14px);
+
 }
 
-.metric-value{
-  margin-top:3px;
+
+.test-header-top{
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:10px;
+
+}
+
+
+.brand{
+
+  font-size:20px;
+  font-weight:900;
+
+  letter-spacing:-.5px;
+
+  white-space:nowrap;
+
+}
+
+
+.brand-ssc{
   color:var(--text);
+}
+
+
+.brand-edge{
+  color:var(--purple);
+}
+
+
+.header-actions{
+
+  display:flex;
+  align-items:center;
+
+  gap:7px;
+
+}
+
+
+.timer{
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  min-width:76px;
+
+  padding:8px 9px;
+
+  border-radius:10px;
+
+  background:var(--card2);
+
+  border:1px solid var(--border);
+
+  color:var(--text);
+
+  font-size:13px;
+  font-weight:900;
+
+}
+
+
+.timer.warning{
+  color:#ff6868;
+}
+
+
+.pause-btn{
+
+  border:1px solid var(--border);
+
+  background:var(--card2);
+
+  color:var(--text);
+
+  padding:8px 11px;
+
+  border-radius:10px;
+
+  font-size:12px;
+  font-weight:900;
+
+  cursor:pointer;
+
+}
+
+
+.pause-btn:active{
+  transform:scale(.97);
+}
+
+
+/* ==================================================
+   TEST INFORMATION
+   ================================================== */
+
+.test-info{
+
+  display:flex;
+
+  align-items:center;
+  justify-content:space-between;
+
+  gap:10px;
+
+  margin-top:10px;
+
+}
+
+
+.test-info-left{
+  min-width:0;
+}
+
+
+.test-name{
+
+  color:var(--text);
+
+  font-size:15px;
+  font-weight:900;
+
+  line-height:1.3;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+
+}
+
+
+.test-number{
+
+  display:block;
+
+  margin-top:3px;
+
+  color:var(--muted);
+
+  font-size:11px;
+  font-weight:700;
+
+}
+
+
+.submit-section{
+
+  flex-shrink:0;
+
+  border:0;
+
+  background:var(--purple);
+
+  color:white;
+
+  padding:9px 11px;
+
+  border-radius:10px;
+
+  font-size:11px;
+  font-weight:900;
+
+  cursor:pointer;
+
+}
+
+
+/* ==================================================
+   SECTION BAR
+   ================================================== */
+
+.section-bar{
+
+  display:flex;
+
+  gap:7px;
+
+  overflow-x:auto;
+
+  scrollbar-width:none;
+
+  margin-top:11px;
+
+  padding-bottom:1px;
+
+}
+
+
+.section-bar::-webkit-scrollbar{
+  display:none;
+}
+
+
+.section-btn{
+
+  flex:0 0 auto;
+
+  border:1px solid var(--border);
+
+  background:#fff;
+
+  color:#24152f;
+
+  padding:8px 12px;
+
+  border-radius:9px;
+
+  font-size:11px;
+
+  font-weight:900;
+
+  cursor:pointer;
+
+}
+
+
+.section-btn.current{
+
+  background:var(--purple);
+
+  border-color:var(--purple);
+
+  color:#fff;
+
+}
+
+
+.section-btn:active{
+  transform:scale(.97);
+}
+
+
+/* ==================================================
+   START SCREEN / SECTION SUMMARY
+   ================================================== */
+
+.start-screen{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:18px 15px;
+}
+
+.start-title{
+  margin:0;
+  color:var(--text);
+  font-size:19px;
+  font-weight:900;
+}
+
+.start-subtitle{
+  margin:5px 0 15px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.section-table-wrap{
+  overflow-x:auto;
+  border:1px solid var(--border);
+  border-radius:12px;
+}
+
+.section-table{
+  width:100%;
+  min-width:430px;
+  border-collapse:collapse;
+  color:var(--text);
+  font-size:12px;
+}
+
+.section-table th,
+.section-table td{
+  padding:11px 9px;
+  text-align:left;
+  border-bottom:1px solid var(--border);
+}
+
+.section-table th{
+  background:var(--card2);
+  font-weight:900;
+}
+
+.section-table tr:last-child td{
+  border-bottom:0;
+}
+
+.start-action{
+  width:100%;
+  margin-top:15px;
+  min-height:45px;
+  border:0;
+  border-radius:11px;
+  background:var(--purple);
+  color:#fff;
+  font-size:13px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.resume-note{
+  margin-top:9px;
+  text-align:center;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.result-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:8px;
+  margin-top:15px;
+}
+
+.result-action{
+  min-height:42px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--card2);
+  color:var(--text);
+  text-decoration:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   font-size:11px;
   font-weight:900;
 }
 
-@media(max-width:500px){
-  .actions{grid-template-columns:1fr}
-  .question-metrics{grid-template-columns:1fr 1fr}
-  .question-metrics .metric:last-child{grid-column:1 / -1}
+.result-action.primary{
+  background:var(--purple);
+  border-color:var(--purple);
+  color:#fff;
 }
+
+@media(max-width:500px){
+  .navigation-row{
+    grid-template-columns:1fr 1fr 1.15fr;
+  }
+  .nav-btn{
+    font-size:10px;
+  }
+  .result-actions{
+    grid-template-columns:1fr 1fr 1fr;
+  }
+}
+
+/* ==================================================
+   MAIN CONTAINER
+   ================================================== */
+
+.test-container{
+
+  max-width:850px;
+
+  margin:auto;
+
+  padding:15px 14px 30px;
+
+}
+
+
+/* ==================================================
+   QUESTION TOP
+   ================================================== */
+
+.question-top{
+
+  display:flex;
+
+  align-items:center;
+  justify-content:space-between;
+
+  margin-bottom:10px;
+
+}
+
+
+.question-count{
+
+  color:var(--text);
+
+  font-size:13px;
+
+  font-weight:900;
+
+}
+
+
+.question-section{
+
+  color:var(--purple2);
+
+  font-size:11px;
+
+  font-weight:900;
+
+}
+
+
+/* ==================================================
+   QUESTION CARD
+   ================================================== */
+
+.question-card{
+
+  background:var(--card);
+
+  border:1px solid var(--border);
+
+  border-radius:16px;
+
+  padding:17px;
+
+}
+
+
+.question-text{
+
+  color:var(--text);
+
+  font-size:16px;
+
+  line-height:1.55;
+
+  font-weight:700;
+
+  white-space:pre-wrap;
+
+}
+
+
+/* ==================================================
+   OPTIONS
+   ================================================== */
+
+.options{
+
+  margin-top:18px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:9px;
+
+}
+
+
+.option{
+
+  display:flex;
+
+  align-items:flex-start;
+
+  gap:10px;
+
+  padding:12px;
+
+  border:1px solid var(--border);
+
+  border-radius:11px;
+
+  background:var(--bg);
+
+  color:var(--text);
+
+  cursor:pointer;
+
+  transition:.15s ease;
+
+}
+
+
+.option.selected{
+
+  border-color:var(--purple);
+
+  background:var(--card2);
+
+}
+
+
+.option input{
+
+  width:auto;
+
+  margin-top:3px;
+
+  accent-color:var(--purple);
+
+}
+
+
+.option-label{
+
+  min-width:22px;
+
+  color:var(--purple2);
+
+  font-size:13px;
+
+  font-weight:900;
+
+}
+
+
+.option-text{
+
+  color:var(--text);
+
+  font-size:14px;
+
+  line-height:1.45;
+
+}
+
+
+/* ==================================================
+   NAVIGATION
+   ================================================== */
+
+.navigation{
+
+  margin-top:13px;
+
+}
+
+
+.navigation-row{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:8px;
+  margin-top:8px;
+}
+
+.grid-button-row{
+  display:flex;
+  justify-content:flex-end;
+  margin-bottom:0;
+}
+
+
+.nav-btn{
+
+  min-height:44px;
+
+  border-radius:10px;
+
+  padding:9px;
+
+  font-size:11px;
+
+  font-weight:900;
+
+  cursor:pointer;
+
+}
+
+
+.previous-btn{
+
+  background:var(--card2);
+
+  color:var(--text);
+
+  border:1px solid var(--border);
+
+}
+
+
+.review-btn{
+  width:100%;
+  margin-top:0;
+
+  background:var(--card2);
+
+  color:var(--purple2);
+
+  border:1px solid var(--border);
+
+}
+
+
+.review-btn.marked{
+
+  background:var(--purple);
+
+  color:white;
+
+  border-color:var(--purple);
+
+}
+
+
+.grid-btn{
+  width:46px;
+  height:38px;
+  margin:0;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  border-radius:10px;
+
+  background:#fff;
+
+  color:#24152f;
+
+  border:1px solid var(--border);
+
+  font-size:20px;
+
+  font-weight:900;
+
+  cursor:pointer;
+
+}
+
+
+.save-next-btn{
+  width:100%;
+  margin-top:0;
+
+  min-height:44px;
+
+  border:0;
+
+  border-radius:10px;
+
+  background:var(--purple);
+
+  color:white;
+
+  font-size:12px;
+
+  font-weight:900;
+
+  cursor:pointer;
+
+}
+
+
+/* ==================================================
+   QUESTION GRID OVERLAY
+   ================================================== */
+
+.grid-overlay{
+
+  position:fixed;
+
+  inset:0;
+
+  z-index:200;
+
+  display:none;
+
+  align-items:flex-end;
+
+  justify-content:center;
+
+  background:rgba(0,0,0,.68);
+
+}
+
+
+.grid-overlay.show{
+
+  display:flex;
+
+}
+
+
+.grid-popup{
+
+  width:100%;
+
+  max-width:650px;
+
+  max-height:88vh;
+
+  overflow-y:auto;
+
+  background:var(--bg);
+
+  border:1px solid var(--border);
+
+  border-bottom:0;
+
+  border-radius:20px 20px 0 0;
+
+  padding:17px;
+
+}
+
+
+/* ==================================================
+   GRID HEADER
+   ================================================== */
+
+.grid-header{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+  padding-bottom:13px;
+
+  border-bottom:1px solid var(--border);
+
+}
+
+
+.grid-subject-area{
+
+  flex:1;
+
+  min-width:0;
+
+}
+
+
+.grid-subject{
+
+  color:var(--text);
+
+  font-size:17px;
+
+  font-weight:900;
+
+  margin:0;
+
+}
+
+
+.grid-subtitle{
+
+  display:block;
+
+  margin-top:3px;
+
+  color:var(--muted);
+
+  font-size:10px;
+
+  font-weight:700;
+
+}
+
+
+.grid-timer{
+
+  padding:8px 9px;
+
+  border-radius:9px;
+
+  background:var(--card2);
+
+  border:1px solid var(--border);
+
+  color:var(--purple2);
+
+  font-size:12px;
+
+  font-weight:900;
+
+  white-space:nowrap;
+
+}
+
+
+.grid-close{
+
+  width:34px;
+  height:34px;
+
+  border:0;
+
+  border-radius:9px;
+
+  background:var(--card2);
+
+  color:var(--text);
+
+  font-size:22px;
+
+  line-height:1;
+
+  cursor:pointer;
+
+}
+
+
+/* ==================================================
+   QUESTION NUMBERS
+   ================================================== */
+
+.question-grid{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(5,1fr);
+
+  gap:8px;
+
+  padding:16px 0;
+
+}
+
+
+.grid-question{
+
+  position:relative;
+
+  min-height:44px;
+
+  border:1px solid var(--border);
+
+  border-radius:9px;
+
+  background:#fff;
+
+  color:#24152f;
+
+  font-size:12px;
+
+  font-weight:900;
+
+  cursor:pointer;
+
+}
+
+
+/* NOT VISITED */
+
+.grid-question.not-visited{
+
+  background:#fff;
+
+  color:#24152f;
+
+}
+
+
+/* NOT ATTEMPTED */
+
+.grid-question.not-attempted{
+
+  background:#ef4444;
+
+  border-color:#ef4444;
+
+  color:#fff;
+
+}
+
+
+/* ATTEMPTED */
+
+.grid-question.attempted{
+
+  background:#22c55e;
+
+  border-color:#22c55e;
+
+  color:#fff;
+
+}
+
+
+/* CURRENT */
+
+.grid-question.current{
+
+  outline:3px solid rgba(168,85,247,.40);
+
+}
+
+
+/* REVIEW */
+
+.grid-question.review::after{
+
+  content:"★";
+
+  position:absolute;
+
+  top:-7px;
+
+  right:-5px;
+
+  width:18px;
+
+  height:18px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  border-radius:50%;
+
+  background:var(--purple);
+
+  color:#fff;
+
+  font-size:9px;
+
+}
+
+
+/* ==================================================
+   GRID LEGEND
+   ================================================== */
+
+.grid-legend{
+
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:9px;
+
+  padding-top:13px;
+
+  border-top:1px solid var(--border);
+
+}
+
+
+.legend-item{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:7px;
+
+  color:var(--muted);
+
+  font-size:10px;
+
+  font-weight:700;
+
+}
+
+
+.legend-box{
+
+  width:16px;
+
+  height:16px;
+
+  border-radius:4px;
+
+  flex-shrink:0;
+
+}
+
+
+.legend-attempted{
+  background:#22c55e;
+}
+
+
+.legend-not-visited{
+
+  background:#fff;
+
+  border:1px solid #bbb;
+
+}
+
+
+.legend-not-attempted{
+  background:#ef4444;
+}
+
+
+.legend-star{
+
+  color:var(--purple);
+
+  font-size:15px;
+
+  width:16px;
+
+  text-align:center;
+
+}
+
+
+/* ==================================================
+   PAUSE POPUP
+   ================================================== */
+
+.pause-overlay{
+
+  position:fixed;
+
+  inset:0;
+
+  z-index:300;
+
+  display:none;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:20px;
+
+  background:rgba(0,0,0,.70);
+
+}
+
+
+.pause-overlay.show{
+
+  display:flex;
+
+}
+
+
+.pause-popup{
+
+  width:100%;
+
+  max-width:350px;
+
+  padding:25px 20px;
+
+  border-radius:18px;
+
+  background:var(--bg);
+
+  border:1px solid var(--border);
+
+  text-align:center;
+
+}
+
+
+.pause-symbol{
+
+  color:var(--purple);
+
+  font-size:27px;
+
+  font-weight:900;
+
+}
+
+
+.pause-popup h2{
+
+  margin:10px 0 5px;
+
+  color:var(--text);
+
+  font-size:20px;
+
+}
+
+
+.pause-popup p{
+
+  margin:0 0 18px;
+
+  color:var(--muted);
+
+  font-size:12px;
+
+}
+
+
+.resume-btn{
+
+  width:100%;
+
+  padding:12px;
+
+  border:0;
+
+  border-radius:10px;
+
+  background:var(--purple);
+
+  color:#fff;
+
+  font-weight:900;
+
+  cursor:pointer;
+
+}
+
+
+/* ==================================================
+   RESULT
+   ================================================== */
+
+.result-card{
+  width:100%;
+  max-width:520px;
+  box-sizing:border-box;
+  margin:18px auto 0;
+  padding:28px 18px 24px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  text-align:center;
+  overflow:hidden;
+}
+
+.result-brand{
+  margin:0;
+  color:var(--text);
+  font-size:24px;
+  line-height:1.2;
+  font-weight:950;
+}
+
+.result-brand .edge{
+  color:var(--purple);
+}
+
+.result-test-name{
+  margin:15px 0 3px;
+  color:var(--text);
+  font-size:17px;
+  line-height:1.4;
+  font-weight:900;
+  overflow-wrap:anywhere;
+}
+
+.result-test-number{
+  margin:0;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.4;
+  font-weight:700;
+}
+
+.result-thankyou{
+  margin:25px 0 22px;
+  color:var(--text);
+  font-size:15px;
+  line-height:1.6;
+  font-weight:800;
+}
+
+.result-actions{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  width:100%;
+}
+
+.result-action,
+.result-back{
+  width:100%;
+  min-height:44px;
+  box-sizing:border-box;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:10px 12px;
+  font-size:12px;
+  line-height:1.3;
+  font-weight:900;
+  text-decoration:none;
+  overflow-wrap:anywhere;
+}
+
+.result-action{
+  border:1px solid var(--border);
+  background:var(--card2);
+  color:var(--text);
+}
+
+.result-action.primary{
+  background:var(--purple);
+  border-color:var(--purple);
+  color:#fff;
+}
+
+.result-back{
+  margin-top:10px;
+  border:1px solid var(--border);
+  background:var(--card2);
+  color:var(--text);
+}
+
+
+/* ==================================================
+   STATES
+   ================================================== */
+
+.hidden{
+  display:none!important;
+}
+
+
+.loading{
+
+  text-align:center;
+
+  padding:55px 10px;
+
+  color:var(--muted);
+
+  font-size:13px;
+
+}
+
+
+.error{
+
+  background:#512020;
+
+  color:#ffaaaa;
+
+  padding:15px;
+
+  border-radius:12px;
+
+  margin-top:20px;
+
+  font-size:13px;
+
+}
+
+
+/* ==================================================
+   LIGHT THEME
+   ================================================== */
+
+[data-theme="light"] .section-btn{
+  background:#fff;
+  color:#24152f;
+}
+
+
+[data-theme="light"] .section-btn.current{
+  background:var(--purple);
+  color:#fff;
+}
+
+
+[data-theme="light"] .question-card,
+[data-theme="light"] .grid-popup,
+[data-theme="light"] .pause-popup,
+[data-theme="light"] .result-card{
+  background:var(--card);
+}
+
+
+[data-theme="light"] .question-text,
+[data-theme="light"] .question-count,
+[data-theme="light"] .question-section,
+[data-theme="light"] .test-name,
+[data-theme="light"] .grid-subject,
+[data-theme="light"] .pause-popup h2{
+  color:var(--text);
+}
+
+
+/* ==================================================
+   MOBILE
+   ================================================== */
+
+@media(max-width:500px){
+
+  .brand{
+    font-size:19px;
+  }
+
+  .timer{
+    min-width:70px;
+    font-size:12px;
+  }
+
+  .pause-btn{
+    padding:8px 9px;
+    font-size:11px;
+  }
+
+  .test-name{
+    font-size:14px;
+  }
+
+  .submit-section{
+    padding:8px 9px;
+    font-size:10px;
+  }
+
+  .question-text{
+    font-size:15px;
+  }
+
+  .question-grid{
+    grid-template-columns:
+      repeat(5,1fr);
+  }
+
+}
+
+
+/* ==================================================
+   VERY SMALL SCREEN
+   ================================================== */
+
+@media(max-width:350px){
+
+  .header-actions{
+    gap:4px;
+  }
+
+  .timer{
+    min-width:64px;
+    padding:7px 5px;
+  }
+
+  .pause-btn{
+    padding:7px 7px;
+  }
+
+  .question-grid{
+    gap:6px;
+  }
+
+}
+
+
+/* SOLUTIONS ONLY */
+.solution-page .solution-meta{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 13px;
+}
+.solution-page .solution-meta-box{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:9px 7px;text-align:center}
+.solution-page .solution-meta-label{color:var(--muted);font-size:9px;font-weight:800;margin-bottom:4px}
+.solution-page .solution-meta-value{color:var(--text);font-size:12px;font-weight:900}
+.solution-page .solution-meta-value.good{color:#25c27a}
+.solution-page .solution-option{cursor:default!important;display:flex;align-items:flex-start;gap:8px}
+.solution-page .solution-option.correct-option{border-color:#25c27a;background:rgba(37,194,122,.10)}
+.solution-page .solution-option.your-option{outline:2px solid rgba(124,58,237,.35)}
+.solution-page .solution-answer{margin-top:11px;padding:10px 11px;border:1px solid var(--border);border-radius:10px;background:var(--card2);color:var(--text);font-size:12px;font-weight:800;line-height:1.5}
+.solution-page .solution-explanation{margin-top:10px;padding:11px;border-left:3px solid var(--purple);border-radius:0 10px 10px 0;background:var(--card2);color:var(--text);font-size:12px;line-height:1.65}
+.solution-page .solution-explanation-title{color:var(--purple2);font-weight:900;margin-bottom:4px}
+@media(max-width:500px){.solution-page .solution-meta{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:350px){.solution-page .solution-meta-value{font-size:10px}.solution-page .solution-meta-label{font-size:8px}}
 </style>
 </head>
-<body>
-<main class="page"><a class="back" href="practice.html">← Back to Practice</a><div id="app"><div class="head empty">Loading solutions...</div></div></main>
+<body class="solution-page">
+<header class="test-header">
+  <div class="test-header-top">
+    <div class="brand"><span class="brand-ssc">SSC</span> <span class="brand-edge">EDGE</span></div>
+    <div class="header-actions"><a class="pause-btn" href="practice.html" style="text-decoration:none;">Back</a></div>
+  </div>
+  <div class="test-info">
+    <div class="test-info-left"><div id="testName" class="test-name">Loading Test...</div><span id="testNumber" class="test-number">Test</span></div>
+    <div class="submit-section" style="cursor:default;">Solutions</div>
+  </div>
+  <div id="sectionBar" class="section-bar hidden"></div>
+</header>
+<main class="test-container">
+  <div id="loading" class="loading">Loading solutions...</div>
+  <div id="solutionArea" class="hidden">
+    <div class="question-top"><span id="questionCount" class="question-count">Question 1</span><span id="questionSection" class="question-section"></span></div>
+    <div id="questionCard" class="question-card"></div>
+    <div id="navigation" class="navigation"></div>
+  </div>
+</main>
+<div id="gridOverlay" class="grid-overlay">
+  <div class="grid-popup">
+    <div class="grid-header"><div class="grid-subject-area"><h2 id="gridSubject" class="grid-subject">Solutions</h2><span class="grid-subtitle">Question Palette</span></div><button id="gridClose" class="grid-close" type="button">×</button></div>
+    <div id="questionGrid" class="question-grid"></div>
+  </div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const db=supabase.createClient("https://dvvyoygahzzbnpqrfhen.supabase.co","sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s");
 const testId=new URLSearchParams(location.search).get("id");
-const app=document.getElementById("app");
-
-function esc(v){
-  return String(v??"")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/\"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+let test=null,sections=[],questions=[],attempt=null,answers={},questionTimes={},avgTimes={},correctRates={};
+let currentSectionIndex=0,currentIndex=0;
+const $=id=>document.getElementById(id);
+function esc(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
+function fmtTime(v){v=Math.max(0,Math.floor(Number(v)||0));return String(Math.floor(v/60)).padStart(2,"0")+":"+String(v%60).padStart(2,"0")}
+function showError(t){$("loading").className="loading error";$("loading").textContent=t}
+function sectionName(s,i){const direct=[s?.subject_name,s?.subjectName,s?.subject,s?.name,s?.title,s?.section_name];for(const x of direct)if(String(x||"").trim()&&!/^section\s*\d+$/i.test(String(x).trim()))return String(x).trim();return "Section "+(i+1)}
+function activeList(){return sections.length?questions.map((q,i)=>({q,i})).filter(x=>String(x.q.section_id)===String(sections[currentSectionIndex]?.id)):questions.map((q,i)=>({q,i}))}
+function renderSections(){const bar=$("sectionBar");if(!sections.length){bar.classList.add("hidden");return}bar.classList.remove("hidden");bar.innerHTML="";sections.forEach((s,i)=>{const b=document.createElement("button");b.type="button";b.className="section-btn"+(i===currentSectionIndex?" current":"");b.textContent=sectionName(s,i);b.onclick=()=>{currentSectionIndex=i;const l=activeList();currentIndex=l.length?l[0].i:currentIndex;render()};bar.appendChild(b)})}
+function renderGrid(){const g=$("questionGrid");g.innerHTML="";activeList().forEach((item,pos)=>{const b=document.createElement("button");b.type="button";b.className="grid-question not-visited";b.textContent=pos+1;if(item.i===currentIndex)b.classList.add("current");b.onclick=()=>{currentIndex=item.i;closeGrid();render()};g.appendChild(b)})}
+function openGrid(){$("gridOverlay").classList.add("show");renderGrid()}
+function closeGrid(){$("gridOverlay").classList.remove("show")}
+function render(){
+ const q=questions[currentIndex];if(!q)return;const list=activeList(),pos=Math.max(0,list.findIndex(x=>x.i===currentIndex));
+ $("questionCount").textContent="Question "+(pos+1)+" of "+list.length;$("questionSection").textContent=sections.length?sectionName(sections[currentSectionIndex],currentSectionIndex):"";$("gridSubject").textContent=sections.length?sectionName(sections[currentSectionIndex],currentSectionIndex):"Solutions";renderSections();
+ const card=$("questionCard");card.innerHTML="";
+ const text=document.createElement("div");text.className="question-text";text.textContent=q.question_text||"";card.appendChild(text);
+ const meta=document.createElement("div");meta.className="solution-meta";const your=questionTimes[String(q.id)]??0,avg=avgTimes[String(q.id)];meta.innerHTML='<div class="solution-meta-box"><div class="solution-meta-label">Your Time</div><div class="solution-meta-value">'+fmtTime(your)+'</div></div><div class="solution-meta-box"><div class="solution-meta-label">Avg Time</div><div class="solution-meta-value">'+(avg==null?"—":fmtTime(avg))+'</div></div><div class="solution-meta-box"><div class="solution-meta-label">Answered Correctly</div><div class="solution-meta-value good">'+(correctRates[String(q.id)]==null?"—":Number(correctRates[String(q.id)]).toFixed(0)+"%")+'</div></div>';card.appendChild(meta);
+ const options=document.createElement("div");options.className="options";(q.options||[]).forEach((o,i)=>{const row=document.createElement("div");row.className="option solution-option";if(o.is_correct)row.classList.add("correct-option");if(String(answers[String(q.id)]??"")===String(o.id))row.classList.add("your-option");const lab=o.option_label||String.fromCharCode(65+i);row.innerHTML='<span class="option-label">'+esc(lab)+'</span><span class="option-text">'+esc(o.option_text||"")+'</span>';options.appendChild(row)});card.appendChild(options);
+ const correct=(q.options||[]).find(o=>o.is_correct);const ans=document.createElement("div");ans.className="solution-answer";ans.innerHTML='<b>Correct Answer:</b> '+(correct?esc((correct.option_label||"")+" "+(correct.option_text||"")):"Not available");card.appendChild(ans);
+ const ex=document.createElement("div");ex.className="solution-explanation";ex.innerHTML='<div class="solution-explanation-title">Explanation</div><div>'+esc(q.explanation||"No explanation has been added for this question yet.")+'</div>';card.appendChild(ex);
+ const nav=$("navigation");nav.innerHTML="";const gridRow=document.createElement("div");gridRow.className="grid-button-row";const gb=document.createElement("button");gb.type="button";gb.className="grid-btn";gb.textContent="▦";gb.onclick=openGrid;gridRow.appendChild(gb);nav.appendChild(gridRow);
+ const row=document.createElement("div");row.className="navigation-row";const prev=document.createElement("button");prev.type="button";prev.className="nav-btn previous-btn";prev.textContent="← Previous";prev.disabled=pos<=0;prev.onclick=()=>{if(pos>0){currentIndex=list[pos-1].i;render()}};const middle=document.createElement("div");middle.className="nav-btn previous-btn";middle.style.display="flex";middle.style.alignItems="center";middle.style.justifyContent="center";middle.textContent="Solutions";const next=document.createElement("button");next.type="button";next.className="nav-btn save-next-btn";next.style.marginTop="0";next.textContent=pos<list.length-1?"Next →":(currentSectionIndex<sections.length-1?"Next Section →":"End");next.onclick=()=>{if(pos<list.length-1){currentIndex=list[pos+1].i;render()}else if(currentSectionIndex<sections.length-1){currentSectionIndex++;const l=activeList();currentIndex=l.length?l[0].i:currentIndex;render()}};row.appendChild(prev);row.appendChild(middle);row.appendChild(next);nav.appendChild(row);renderGrid();
 }
-
-function show(t){
-  app.innerHTML='<div class="head empty">'+esc(t)+'</div>';
-}
-
-function formatSeconds(value){
-  const n=Math.max(0,Math.floor(Number(value)||0));
-  const m=Math.floor(n/60);
-  const s=n%60;
-  return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
-}
-
-function isCorrect(o){
-  return o?.is_correct===true ||
-    o?.is_correct==="true" ||
-    o?.is_correct===1 ||
-    o?.is_correct==="1";
-}
-
-function sectionName(s,index){
-  const direct=[
-    s?.subject_name,
-    s?.subjectName,
-    s?.subject,
-    s?.name,
-    s?.title,
-    s?.section_name
-  ];
-  for(const value of direct){
-    const text=String(value||"").trim();
-    if(text && !/^section\s*\d+$/i.test(text)) return text;
-  }
-  return "Section "+(index+1);
-}
-
 async function run(){
-
-  if(!testId){
-    show("Test ID is missing.");
-    return;
-  }
-
-  const tr=await db
-    .from("mock_tests")
-    .select("id,title")
-    .eq("id",testId)
-    .maybeSingle();
-
-  if(tr.error){
-    show("Could not load test.");
-    return;
-  }
-
-  const title=tr.data?.title||"SSC EDGE Test";
-
-  const qr=await db
-    .from("mock_test_questions")
-    .select("question_id,question_order,section_id")
-    .eq("mock_test_id",testId)
-    .order("question_order");
-
-  if(qr.error){
-    show("Could not load questions.");
-    return;
-  }
-
-  const assignments=qr.data||[];
-  const ids=assignments.map(x=>x.question_id);
-
-  if(!ids.length){
-    show("No questions found for this test.");
-    return;
-  }
-
-  const [qres,ores,sres,attemptsRes]=await Promise.all([
-    db.from("questions")
-      .select("id,question_text,explanation,subject_id")
-      .in("id",ids),
-
-    db.from("question_options")
-      .select("id,question_id,option_label,option_text,is_correct")
-      .in("question_id",ids)
-      .order("id"),
-
-    db.from("mock_test_sections")
-      .select("*")
-      .eq("mock_test_id",testId)
-      .order("section_order"),
-
-    db.from("test_attempts")
-      .select("id")
-      .eq("mock_test_id",testId)
-      .not("completed_at","is",null)
-  ]);
-
-  const qm=new Map(
-    (qres.data||[]).map(q=>[String(q.id),q])
-  );
-
-  const om=new Map();
-
-  (ores.data||[]).forEach(o=>{
-    const k=String(o.question_id);
-    if(!om.has(k))om.set(k,[]);
-    om.get(k).push(o);
-  });
-
-  const sm=new Map(
-    (sres.data||[]).map(s=>[String(s.id),s])
-  );
-
-  /*
-    Load all completed users' answers so each question can show:
-    - average time
-    - percentage who answered correctly
-  */
-
-  let allAnswers=[];
-  const attemptIds=(attemptsRes.data||[]).map(a=>a.id);
-
-  for(let i=0;i<attemptIds.length;i+=500){
-
-    const batch=attemptIds.slice(i,i+500);
-
-    if(!batch.length) continue;
-
-    const ar=await db
-      .from("user_answers")
-      .select(
-        "attempt_id,question_id,selected_option_id,time_spent_seconds"
-      )
-      .in("attempt_id",batch);
-
-    if(!ar.error && ar.data){
-      allAnswers=allAnswers.concat(ar.data);
+ try{
+  if(!testId){showError("Test ID is missing.");return}
+  const tr=await db.from("mock_tests").select("*").eq("id",testId).maybeSingle();if(tr.error)throw tr.error;if(!tr.data){showError("Test not found.");return}test=tr.data;
+  const sr=await db.from("mock_test_sections").select("*").eq("mock_test_id",testId).order("section_order");if(sr.error)throw sr.error;sections=sr.data||[];
+  const ar=await db.from("mock_test_questions").select("question_id,question_order,section_id").eq("mock_test_id",testId).order("question_order");if(ar.error)throw ar.error;const assignments=ar.data||[];const ids=assignments.map(a=>a.question_id);if(!ids.length){showError("No questions found for this test.");return}
+  const [qr,or]=await Promise.all([db.from("questions").select("id,question_text,explanation,subject_id").in("id",ids),db.from("question_options").select("id,question_id,option_label,option_text,is_correct").in("question_id",ids).order("id")]);if(qr.error)throw qr.error;if(or.error)throw or.error;
+  const qm=new Map((qr.data||[]).map(q=>[String(q.id),{...q,options:[]}]));(or.data||[]).forEach(o=>{const q=qm.get(String(o.question_id));if(q)q.options.push(o)});questions=assignments.map(a=>{const q=qm.get(String(a.question_id));return q?{...q,section_id:a.section_id,question_order:a.question_order}:null}).filter(Boolean);
+  const ur=await db.auth.getUser();const user=ur.data?.user;
+  if(user){
+   const ta=await db.from("test_attempts").select("id,user_id,completed_at").eq("mock_test_id",testId).not("completed_at","is",null).order("completed_at",{ascending:false});
+   if(!ta.error){
+    const attempts=ta.data||[];attempt=attempts.find(a=>String(a.user_id)===String(user.id))||null;
+    const latestByUser=new Map();attempts.forEach(a=>{if(!latestByUser.has(String(a.user_id)))latestByUser.set(String(a.user_id),a)});const idsA=[...latestByUser.values()].map(a=>a.id);
+    if(idsA.length){
+     const ua=await db.from("user_answers").select("attempt_id,question_id,selected_option_id,time_spent_seconds").in("attempt_id",idsA);
+     if(!ua.error){
+      const rows=ua.data||[];const correctMap=new Map(questions.map(q=>[String(q.id),String((q.options||[]).find(o=>o.is_correct)?.id||"")]));const times=new Map(),right=new Map(),answered=new Map();
+      rows.forEach(r=>{const k=String(r.question_id);const t=Number(r.time_spent_seconds||0);if(t>0){if(!times.has(k))times.set(k,[]);times.get(k).push(t)}if(r.selected_option_id!=null){answered.set(k,(answered.get(k)||0)+1);if(String(r.selected_option_id)===correctMap.get(k))right.set(k,(right.get(k)||0)+1)}});
+      times.forEach((v,k)=>avgTimes[k]=v.reduce((a,b)=>a+b,0)/v.length);answered.forEach((v,k)=>correctRates[k]=v?((right.get(k)||0)/v)*100:null);
+      if(attempt){rows.filter(r=>r.attempt_id===attempt.id).forEach(r=>{questionTimes[String(r.question_id)]=Number(r.time_spent_seconds||0);answers[String(r.question_id)]=r.selected_option_id})}
+     }
     }
+   }
   }
-
-  const questionAnalytics=new Map();
-
-  ids.forEach(id=>{
-    questionAnalytics.set(String(id),{
-      times:[],
-      answered:0,
-      correct:0
-    });
-  });
-
-  allAnswers.forEach(row=>{
-
-    const key=String(row.question_id);
-    const stat=questionAnalytics.get(key);
-
-    if(!stat) return;
-
-    const selected=row.selected_option_id;
-
-    if(
-      selected!==null &&
-      selected!==undefined &&
-      String(selected)!==""
-    ){
-
-      stat.answered++;
-
-      const opts=om.get(key)||[];
-      const correct=opts.find(isCorrect);
-
-      if(
-        correct &&
-        String(selected)===String(correct.id)
-      ){
-        stat.correct++;
-      }
-    }
-
-    const time=Number(row.time_spent_seconds);
-
-    if(Number.isFinite(time) && time>0){
-      stat.times.push(time);
-    }
-
-  });
-
-  /*
-    Current user's latest completed attempt, if available.
-    Solutions therefore shows YOUR time rather than a global time.
-  */
-
-  let currentUser=null;
-  let latestAttempt=null;
-  let currentAnswers=[];
-
-  try{
-
-    const ur=await db.auth.getUser();
-
-    currentUser=ur.data?.user||null;
-
-    if(currentUser){
-
-      const ar=await db
-        .from("test_attempts")
-        .select("id,completed_at")
-        .eq("mock_test_id",testId)
-        .eq("user_id",currentUser.id)
-        .not("completed_at","is",null)
-        .order("completed_at",{ascending:false})
-        .limit(1)
-        .maybeSingle();
-
-      if(!ar.error && ar.data){
-        latestAttempt=ar.data;
-      }
-
-      if(latestAttempt){
-
-        const cur=await db
-          .from("user_answers")
-          .select(
-            "question_id,selected_option_id,time_spent_seconds"
-          )
-          .eq("attempt_id",latestAttempt.id);
-
-        if(!cur.error){
-          currentAnswers=cur.data||[];
-        }
-      }
-
-    }
-
-  }catch(error){
-    console.log("Current-user solution data unavailable:",error);
-  }
-
-  const currentAnswerMap=new Map(
-    currentAnswers.map(a=>[
-      String(a.question_id),
-      a
-    ])
-  );
-
-  let html=
-    `<div class="head">
-      <h1>${esc(title)} — Solutions</h1>
-      <p class="sub">Correct answers and explanations</p>
-    </div>`;
-
-  assignments.forEach((a,i)=>{
-
-    const q=qm.get(String(a.question_id));
-    if(!q)return;
-
-    const key=String(q.id);
-    const opts=om.get(key)||[];
-    const correct=opts.find(isCorrect);
-    const sec=sm.get(String(a.section_id));
-    const sub=sectionName(sec,i);
-
-    const analytics=
-      questionAnalytics.get(key)||{
-        times:[],
-        answered:0,
-        correct:0
-      };
-
-    const avgTime=
-      analytics.times.length
-        ? analytics.times.reduce((x,y)=>x+y,0)/
-          analytics.times.length
-        : null;
-
-    const correctPercent=
-      analytics.answered
-        ? (analytics.correct/analytics.answered)*100
-        : null;
-
-    const mine=currentAnswerMap.get(key);
-    const myTime=
-      mine &&
-      Number.isFinite(Number(mine.time_spent_seconds))
-        ? Number(mine.time_spent_seconds)
-        : null;
-
-    html+=`
-      <article class="solution">
-
-        <div class="qhead">
-          <span class="qno">Question ${i+1}</span>
-          ${sub?`<span class="subject">${esc(sub)}</span>`:""}
-        </div>
-
-        <div class="qtext">${esc(q.question_text)}</div>
-
-        ${opts.map(o=>`
-          <div class="option ${isCorrect(o)?"correct":""}">
-            ${esc(o.option_label||"")}
-            ${esc(o.option_text||"")}
-            ${isCorrect(o)?" ✓":""}
-          </div>
-        `).join("")}
-
-        <div class="question-metrics">
-
-          <div class="metric">
-            <div class="metric-label">Your time</div>
-            <div class="metric-value">
-              ${myTime===null?"—":formatSeconds(myTime)}
-            </div>
-          </div>
-
-          <div class="metric">
-            <div class="metric-label">Avg time</div>
-            <div class="metric-value">
-              ${avgTime===null?"—":formatSeconds(avgTime)}
-            </div>
-          </div>
-
-          <div class="metric">
-            <div class="metric-label">Answered correctly</div>
-            <div class="metric-value">
-              ${correctPercent===null?"—":
-                Number(correctPercent.toFixed(1)).toString()+"%"}
-            </div>
-          </div>
-
-        </div>
-
-        <div class="answer">
-          <b>Correct Answer:</b>
-          ${correct
-            ? esc((correct.option_label||"")+" "+(correct.option_text||""))
-            : "Not available"}
-        </div>
-
-        ${q.explanation
-          ? `<div class="explanation">
-              <b>Explanation:</b> ${esc(q.explanation)}
-             </div>`
-          : `<div class="explanation">
-              No explanation has been added for this question yet.
-             </div>`}
-
-      </article>`;
-  });
-
-  html+=`
-    <div class="actions">
-      <a class="btn" href="analysis.html?id=${encodeURIComponent(testId)}">Analysis</a>
-      <a class="btn" href="practice.html">Practice</a>
-      <a class="btn primary" href="test.html?id=${encodeURIComponent(testId)}&reattempt=1">Re-attempt</a>
-    </div>`;
-
-  app.innerHTML=html;
+  $("testName").textContent=test.title||"SSC EDGE Test";$("testNumber").textContent="Test "+(test.test_number||test.test_no||"01");$("loading").classList.add("hidden");$("solutionArea").classList.remove("hidden");const first=sections.findIndex(s=>questions.some(q=>String(q.section_id)===String(s.id)));currentSectionIndex=first>=0?first:0;const l=activeList();currentIndex=l.length?l[0].i:0;render();
+ }catch(e){console.error(e);showError("Could not load solutions. Please try again.")}
 }
-
-run().catch(e=>{
-  console.error(e);
-  show("Could not load solutions. Please try again.");
-});
-</script>
+$("gridClose").onclick=closeGrid;$("gridOverlay").onclick=e=>{if(e.target===$("gridOverlay"))closeGrid()};run();
 </script>
 </body>
 </html>
