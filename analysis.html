@@ -230,46 +230,28 @@ body{
   color:#fff;
 }
 
-.score-details{
-  display:flex;
-  flex-direction:column;
+.score-breakdown{
+  display:grid;
+  grid-template-columns:1fr;
   gap:10px;
   margin-top:4px;
 }
 
-.score-row{
+.score-breakdown .detail{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:12px;
-  background:var(--card2);
-  border:1px solid var(--border);
-  border-radius:11px;
-  padding:13px 14px;
+  gap:15px;
 }
 
-.score-row-label{
-  color:var(--text);
-  font-size:14px;
-  font-weight:800;
+.score-breakdown .detail-label{
+  margin-bottom:0;
 }
 
-.score-row-value{
-  color:var(--text);
-  font-size:16px;
-  font-weight:900;
-  white-space:nowrap;
-}
-
-.score-row.total{
+.total-score-row{
+  border-top:1px solid var(--border);
   margin-top:2px;
-  background:var(--card);
-  border-color:var(--purple);
-}
-
-.score-row.total .score-row-label,
-.score-row.total .score-row-value{
-  color:var(--purple2);
+  padding-top:14px;
 }
 
 .section-details{
@@ -495,12 +477,11 @@ body{
     </div>
 
 
-    <div id="tabsWrap" class="tabs-wrap">
+    <section class="card section-card">
+
+      <div id="tabsWrap" class="tabs-wrap">
         <div id="tabs" class="tabs"></div>
       </div>
-
-
-      <div id="scoreDetails" class="score-details"></div>
 
 
       <div id="sectionDetails" class="section-details">
@@ -567,13 +548,8 @@ body{
       </div>
 
 
-<div
-        id="noSections"
-        class="status"
-        style="display:none">
-
+      <div id="noSections" class="status" style="display:none">
         No sectional data available.
-
       </div>
 
     </section>
@@ -716,7 +692,7 @@ async function loadLatestAttempt(userId){
     await supabaseClient
       .from("test_attempts")
       .select(
-        "id,user_id,mock_test_id,started_at,completed_at,score,correct_answers,wrong_answers,unanswered"
+        "id,user_id,mock_test_id,started_at,completed_at,score,correct_answers,wrong_answers,unanswered,rank,percentile,sectional_data"
       )
       .eq("mock_test_id",mockTestId)
       .eq("user_id",userId)
@@ -1742,17 +1718,13 @@ function renderOverall(){
 
 function renderTabs(){
 
-  const tabs =
-    $("tabs");
+  const tabs = $("tabs");
 
-
-  tabs.innerHTML =
-    "";
-
+  tabs.innerHTML = "";
 
   /*
-    First tab is always the overall sectional Score.
-    Remaining tabs are the actual section/subject names.
+    Score is always the first tab.
+    Each real subject/section follows it.
   */
 
   const scoreButton =
@@ -1770,74 +1742,57 @@ function renderTabs(){
     "Score";
 
   scoreButton.onclick =
-    ()=>{
+    () => {
+
       selectedSectionIndex = -1;
+
       renderTabs();
       renderSelectedSection();
+
     };
 
   tabs.appendChild(scoreButton);
 
-
   sectionStats.forEach(
-    (stat,index)=>{
+    (stat,index) => {
 
       const button =
-        document.createElement(
-          "button"
-        );
-
+        document.createElement("button");
 
       button.className =
         "tab" +
         (
-          index ===
-          selectedSectionIndex
+          index === selectedSectionIndex
             ? " active"
             : ""
         );
 
-
       button.textContent =
         stat.name;
 
-
       button.onclick =
-        ()=>{
+        () => {
 
           selectedSectionIndex =
             index;
 
-
           renderTabs();
-
           renderSelectedSection();
 
         };
 
-
-      tabs.appendChild(
-        button
-      );
+      tabs.appendChild(button);
 
     }
   );
+
 }
-
-
-/* =========================================================
-   SELECTED SECTION
-========================================================= */
-
 
 function renderSelectedSection(){
 
   if(!sectionStats.length){
 
     $("sectionDetails").style.display =
-      "none";
-
-    $("scoreDetails").style.display =
       "none";
 
     $("tabsWrap").style.display =
@@ -1850,124 +1805,168 @@ function renderSelectedSection(){
 
   }
 
-
   $("tabsWrap").style.display =
     "block";
 
   $("noSections").style.display =
     "none";
 
-
   /*
     SCORE TAB
-    Shows every section score in the same
-    scrollable/tab system. Nothing is shown
-    above the tabs.
+    Shows every section in exactly the same
+    score format, followed by Total Score.
   */
 
   if(selectedSectionIndex === -1){
 
-    $("sectionDetails").style.display =
-      "none";
+    const details =
+      $("sectionDetails");
 
-    $("scoreDetails").style.display =
-      "flex";
+    details.className =
+      "section-details score-breakdown";
+
+    details.innerHTML = "";
+
+    sectionStats.forEach(stat => {
+
+      const item =
+        document.createElement("div");
+
+      item.className =
+        "detail";
+
+      item.innerHTML =
+        '<div class="detail-label">' +
+        String(stat.name) +
+        '</div>' +
+        '<div class="detail-value">' +
+        formatScore(stat.score) +
+        ' / ' +
+        formatScore(stat.maxMarks) +
+        '</div>';
+
+      details.appendChild(item);
+
+    });
 
     const totalScore =
-      num(currentAttempt.score,0);
+      sectionStats.reduce(
+        (sum,stat) =>
+          sum + Number(stat.score || 0),
+        0
+      );
 
-    const rows =
-      sectionStats.map(
-        stat => `
-          <div class="score-row">
-            <div class="score-row-label">
-              ${escapeHtml(stat.name)}
-            </div>
-            <div class="score-row-value">
-              ${formatScore(stat.score)}
-              /
-              ${formatScore(stat.maxMarks)}
-            </div>
-          </div>
-        `
-      ).join("");
+    const totalMarks =
+      sectionStats.reduce(
+        (sum,stat) =>
+          sum + Number(stat.maxMarks || 0),
+        0
+      );
 
+    const total =
+      document.createElement("div");
 
-    $("scoreDetails").innerHTML =
-      rows +
-      `
-        <div class="score-row total">
-          <div class="score-row-label">
-            Total Score
-          </div>
-          <div class="score-row-value">
-            ${formatScore(totalScore)}
-            /
-            ${formatScore(
-              sectionStats.reduce(
-                (sum,stat)=>
-                  sum + num(stat.maxMarks,0),
-                0
-              )
-            )}
-          </div>
-        </div>
-      `;
+    total.className =
+      "detail total-score-row";
+
+    total.innerHTML =
+      '<div class="detail-label"><b>Total Score</b></div>' +
+      '<div class="detail-value">' +
+      formatScore(totalScore) +
+      ' / ' +
+      formatScore(totalMarks) +
+      '</div>';
+
+    details.appendChild(total);
 
     return;
 
   }
 
-
   /*
-    INDIVIDUAL SECTION TAB
+    Individual section tab.
   */
 
-  $("scoreDetails").style.display =
-    "none";
+  const details =
+    $("sectionDetails");
 
-  $("sectionDetails").style.display =
-    "grid";
-
+  details.className =
+    "section-details";
 
   const stat =
     sectionStats[
       selectedSectionIndex
     ];
 
-
   if(!stat){
     return;
   }
 
+  details.innerHTML = `
 
-  $("sectionScore").textContent =
-    formatScore(stat.score) +
-    " / " +
-    formatScore(stat.maxMarks);
+    <div class="detail">
+
+      <div class="detail-label">
+        Score
+      </div>
+
+      <div
+        id="sectionScore"
+        class="detail-value">
+        ${formatScore(stat.score)} /
+        ${formatScore(stat.maxMarks)}
+      </div>
+
+    </div>
 
 
-  $("sectionPercentile").textContent =
-    formatPercent(
-      stat.percentile
-    );
+    <div class="detail">
+
+      <div class="detail-label">
+        Section Percentile
+      </div>
+
+      <div
+        id="sectionPercentile"
+        class="detail-value">
+        ${formatPercent(stat.percentile)}
+      </div>
+
+    </div>
 
 
-  $("sectionCorrect").textContent =
-    stat.correct;
+    <div class="detail">
+
+      <div class="detail-label">
+        Correct
+      </div>
+
+      <div
+        id="sectionCorrect"
+        class="detail-value green">
+        ${stat.correct}
+      </div>
+
+    </div>
 
 
-  $("sectionIncorrect").textContent =
-    stat.incorrect;
+    <div class="detail">
+
+      <div class="detail-label">
+        Incorrect
+      </div>
+
+      <div
+        id="sectionIncorrect"
+        class="detail-value red">
+        ${stat.incorrect}
+      </div>
+
+    </div>
+
+  `;
 
 }
-
-
-/* =========================================================
-   RENDER
-=========================================================
-
-*/
 
 function render(){
 
