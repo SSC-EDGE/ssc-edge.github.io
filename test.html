@@ -1809,6 +1809,8 @@ let questionTimeSpent = {};
 let questionTimeStartedAt = 0;
 let questionTimeQuestionId = null;
 let questionTimeInterval = null;
+let sectionTimerStartedAt = 0;
+let sectionTimerBaseRemaining = 0;
 
 
 const params =
@@ -2220,9 +2222,9 @@ function saveProgress(){
     return;
   }
 
-  saveCurrentAnswer();
-  saveCurrentSectionTime();
+  syncSectionClock();
   saveCurrentQuestionTime();
+  saveCurrentSectionTime();
 
   const data = {
 
@@ -2329,6 +2331,17 @@ function loadProgress(){
         );
 
       if(elapsed > 0){
+
+        if(
+          data.questionTimeSpent &&
+          typeof data.questionTimeSpent === "object" &&
+          data.currentIndex !== undefined &&
+          questions[data.currentIndex]
+        ){
+          const currentQuestionId = String(questions[data.currentIndex].id);
+          data.questionTimeSpent[currentQuestionId] =
+            Number(data.questionTimeSpent[currentQuestionId] || 0) + elapsed;
+        }
 
         if(
           sections.length &&
@@ -2908,62 +2921,86 @@ function jumpToSection(sectionIndex){
 }
 
 
+function syncSectionClock(){
+
+  if(
+    paused ||
+    sectionTimerStartedAt <= 0 ||
+    currentSectionIndex < 0 ||
+    !sections[currentSectionIndex]
+  ){
+    return;
+  }
+
+  const elapsed = Math.max(
+    0,
+    Math.floor((Date.now() - sectionTimerStartedAt) / 1000)
+  );
+
+  remainingSeconds = Math.max(
+    0,
+    sectionTimerBaseRemaining - elapsed
+  );
+
+}
+
+function getCurrentSectionElapsed(){
+
+  if(sectionTimerStartedAt <= 0){
+    return 0;
+  }
+
+  return Math.max(
+    0,
+    Math.floor((Date.now() - sectionTimerStartedAt) / 1000)
+  );
+
+}
+
 function saveCurrentSectionTime(){
 
   if(
     currentSectionIndex < 0 ||
     !sections[currentSectionIndex]
   ){
-
     return;
-
   }
 
+  syncSectionClock();
 
-  sectionRemainingTimes[
-    String(
-      sections[
-        currentSectionIndex
-      ].id
-    )
-  ] =
-    remainingSeconds;
+  const key = String(sections[currentSectionIndex].id);
+
+  sectionRemainingTimes[key] = Math.max(
+    0,
+    Number(remainingSeconds) || 0
+  );
+
+  sectionTimerBaseRemaining = sectionRemainingTimes[key];
+  sectionTimerStartedAt = paused ? 0 : Date.now();
 
 }
-
 
 function loadSectionTime(sectionIndex){
 
-  const section =
-    sections[
-      sectionIndex
-    ];
-
+  const section = sections[sectionIndex];
 
   if(!section){
-
     return;
-
   }
 
+  const key = String(section.id);
+  let value = Number(sectionRemainingTimes[key]);
 
-  const key =
-    String(section.id);
-
-
-  if(
-    typeof sectionRemainingTimes[key] === "number" &&
-    sectionRemainingTimes[key] > 0
-  ){
-    remainingSeconds = sectionRemainingTimes[key];
-  }else{
-    remainingSeconds =
-      getSectionDurationMinutes(section,sectionIndex) * 60;
-    sectionRemainingTimes[key] = remainingSeconds;
+  if(!(Number.isFinite(value) && value > 0)){
+    value = getSectionDurationMinutes(section,sectionIndex) * 60;
+    sectionRemainingTimes[key] = value;
   }
+
+  remainingSeconds = Math.max(0, value);
+  sectionTimerBaseRemaining = remainingSeconds;
+  sectionTimerStartedAt = paused ? 0 : Date.now();
 
 }
-
 
 function formatQuestionTime(seconds){
 
@@ -2997,74 +3034,40 @@ function saveCurrentQuestionTime(){
     return;
   }
 
-  const elapsed =
-    Math.max(
-      0,
-      Math.floor(
-        (Date.now() - questionTimeStartedAt) / 1000
-      )
-    );
+  const elapsed = Math.max(
+    0,
+    Math.floor((Date.now() - questionTimeStartedAt) / 1000)
+  );
 
-  if(elapsed <= 0){
-    return;
+  if(elapsed > 0){
+    const id = String(questionTimeQuestionId);
+    questionTimeSpent[id] =
+      Number(questionTimeSpent[id] || 0) + elapsed;
+    questionTimeStartedAt = Date.now();
   }
 
-  const id =
-    String(questionTimeQuestionId);
-
-  questionTimeSpent[id] =
-    Number(
-      questionTimeSpent[id] || 0
-    ) + elapsed;
-
-  questionTimeStartedAt =
-    Date.now();
-
 }
-
 
 function updateQuestionTime(){
 
-  const element =
-    document.getElementById("questionTime");
-
-  if(
-    !element ||
-    !questions[currentIndex]
-  ){
+  const element = document.getElementById("questionTime");
+  if(!element || !questions[currentIndex]){
     return;
   }
 
-  const id =
-    String(questions[currentIndex].id);
+  const id = String(questions[currentIndex].id);
+  let seconds = Number(questionTimeSpent[id] || 0);
 
-  let seconds =
-    Number(
-      questionTimeSpent[id] || 0
+  if(questionTimeQuestionId === id && !paused){
+    seconds += Math.max(
+      0,
+      Math.floor((Date.now() - questionTimeStartedAt) / 1000)
     );
-
-  if(
-    questionTimeQuestionId === id &&
-    questionTimeStartedAt > 0 &&
-    !paused
-  ){
-
-    seconds +=
-      Math.max(
-        0,
-        Math.floor(
-          (Date.now() - questionTimeStartedAt) / 1000
-        )
-      );
-
   }
 
-  element.textContent =
-    "⏰️ " +
-    formatQuestionTime(seconds);
+  element.textContent = "⏰️ " + formatQuestionTime(seconds);
 
 }
-
 
 function switchQuestionTime(){
 
@@ -3072,39 +3075,19 @@ function switchQuestionTime(){
     return;
   }
 
-  const id =
-    String(
-      questions[currentIndex].id
-    );
+  const id = String(questions[currentIndex].id);
 
-  if(
-    questionTimeQuestionId !== id
-  ){
-
+  if(questionTimeQuestionId !== id){
     saveCurrentQuestionTime();
-
-    clearInterval(
-      questionTimeInterval
-    );
-
-    questionTimeQuestionId =
-      id;
-
-    questionTimeStartedAt =
-      Date.now();
-
-    questionTimeInterval =
-      setInterval(
-        updateQuestionTime,
-        1000
-      );
-
+    clearInterval(questionTimeInterval);
+    questionTimeQuestionId = id;
+    questionTimeStartedAt = paused ? 0 : Date.now();
+    questionTimeInterval = setInterval(updateQuestionTime,250);
   }
 
   updateQuestionTime();
 
 }
-
 
 function showQuestion(){
 
@@ -3266,36 +3249,30 @@ function showQuestion(){
         String(option.id);
 
 
-      radio.onclick =
+      row.onclick =
         function(event){
 
           event.preventDefault();
+          event.stopPropagation();
 
-          const optionId =
-            String(option.id);
+          const optionId = String(option.id);
 
-          if(
-            answers[q.id] ===
-            optionId
-          ){
-
+          if(answers[q.id] === optionId){
             delete answers[q.id];
-
           }else{
-
-            answers[q.id] =
-              optionId;
-
+            answers[q.id] = optionId;
           }
 
           progressStarted = true;
-
           saveProgress();
-
           showQuestion();
-
           renderQuestionGrid();
 
+        };
+
+      radio.onclick =
+        function(event){
+        event.preventDefault();
         };
 
 
@@ -3566,37 +3543,11 @@ function showQuestion(){
 
 
 function saveCurrentAnswer(){
-
-  const q =
-    questions[
-      currentIndex
-    ];
-
-
-  if(!q){
-    return;
-  }
-
-
-  const selected =
-    document.querySelector(
-      'input[name="question-' +
-      q.id +
-      '"]:checked'
-    );
-
-
-  if(selected){
-
-    answers[q.id] =
-      String(
-        selected.value
-      );
-
-  }
-
+  // The answers object is the single source of truth.
+  // Do not read the old radio DOM here, otherwise Clear Response
+  // would immediately restore the deleted answer.
+  return;
 }
-
 
 function renderQuestionGrid(){
 
@@ -3869,49 +3820,39 @@ function startSectionInterval(){
 
   clearInterval(timerInterval);
 
+  if(sectionTimerStartedAt <= 0 && !paused){
+    sectionTimerBaseRemaining = remainingSeconds;
+    sectionTimerStartedAt = Date.now();
+  }
+
   updateTimerDisplay();
   updateGridTimer();
 
+  timerInterval = setInterval(function(){
 
-  timerInterval =
-    setInterval(
-      function(){
+    if(submitted || paused){
+      return;
+    }
 
-        if(
-          submitted ||
-          paused
-        ){
+    syncSectionClock();
+    updateTimerDisplay();
+    updateGridTimer();
 
-          return;
+    if(remainingSeconds <= 0){
 
-        }
+      clearInterval(timerInterval);
+      saveCurrentQuestionTime();
+      saveCurrentSectionTime();
+      sectionTimeUp();
+      return;
 
+    }
 
-        remainingSeconds--;
+    saveProgress();
 
-        saveCurrentSectionTime();
-        saveProgress();
-
-        updateTimerDisplay();
-        updateGridTimer();
-
-
-        if(
-          remainingSeconds <= 0
-        ){
-
-          clearInterval(timerInterval);
-
-          sectionTimeUp();
-
-        }
-
-      },
-      1000
-    );
+  },1000);
 
 }
-
 
 function sectionTimeUp(){
 
@@ -4122,10 +4063,10 @@ document
 
 
       saveCurrentQuestionTime();
+      saveCurrentSectionTime();
 
       paused = true;
-
-      saveCurrentSectionTime();
+      sectionTimerStartedAt = 0;
       saveProgress();
 
       updateQuestionTime();
@@ -4146,6 +4087,11 @@ document
     function(){
 
       paused = false;
+
+      sectionTimerStartedAt =
+        Date.now();
+      sectionTimerBaseRemaining =
+        remainingSeconds;
 
       questionTimeStartedAt =
         Date.now();
@@ -4386,6 +4332,8 @@ async function submitTest(automatic=false){
   questionTimeInterval = null;
   questionTimeStartedAt = 0;
   questionTimeQuestionId = null;
+  sectionTimerStartedAt = 0;
+  sectionTimerBaseRemaining = 0;
 
 
   await calculateResult(automatic);
@@ -4396,8 +4344,6 @@ async function submitTest(automatic=false){
 
 
 async function calculateResult(automatic){
-
-  saveCurrentQuestionTime();
 
   const ids =
     questions.map(
@@ -4540,7 +4486,6 @@ async function calculateResult(automatic){
     wrong,
     skipped,
     score,
-    maxMarks,
     questionTimeSpent
   );
 
@@ -4616,486 +4561,49 @@ async function saveAttempt(
   wrong,
   skipped,
   score,
-  maxMarks,
-  timeSpent
+  questionTimes
 ){
 
-  const {
-    data:{user}
-  } =
-    await db.auth.getUser();
-
-
+  const {data:{user}} = await db.auth.getUser();
   if(!user){
     return;
   }
 
+  const attempt = await db
+    .from("test_attempts")
+    .insert({
+      user_id:user.id,
+      mock_test_id:test.id,
+      score:score,
+      correct_answers:correct,
+      wrong_answers:wrong,
+      unanswered:skipped,
+      total_questions:questions.length
+    })
+    .select()
+    .maybeSingle();
 
-  /*
-    First save the normal attempt fields exactly as before.
-    Optional analytics columns are written separately so an
-    older database does not break the test submission.
-  */
-
-  const attempt =
-    await db
-      .from("test_attempts")
-      .insert({
-
-        user_id:
-          user.id,
-
-        mock_test_id:
-          test.id,
-
-        score:
-          score,
-
-        correct_answers:
-          correct,
-
-        wrong_answers:
-          wrong,
-
-        unanswered:
-          skipped,
-
-        total_questions:
-          questions.length
-
-      })
-      .select()
-      .maybeSingle();
-
-
-  if(
-    attempt.error
-  ){
-
-    console.warn(
-      "Attempt history was not saved:",
-      attempt.error.message
-    );
-
+  if(attempt.error){
+    console.warn("Attempt history was not saved:",attempt.error.message);
     return;
-
   }
 
+  if(!attempt.data?.id){
+    return;
+  }
 
-  if(
-    attempt.data?.id
-  ){
+  const rows = questions.map(q => ({
+    attempt_id:attempt.data.id,
+    question_id:q.id,
+    selected_option_id:answers[q.id] ? Number(answers[q.id]) : null,
+    time_spent_seconds:Math.max(0,Math.floor(Number(questionTimes?.[q.id] || 0)))
+  }));
 
-    const attemptId =
-      attempt.data.id;
-
-
-    /*
-      Save every question, including unanswered questions.
-      time_spent_seconds is optional and is attempted in a
-      separate update so the existing answer system remains safe.
-    */
-
-    const rows =
-      questions.map(
-        q => ({
-
-          attempt_id:
-            attemptId,
-
-          question_id:
-            q.id,
-
-          selected_option_id:
-            answers[q.id]
-            ? Number(
-                answers[q.id]
-              )
-            : null
-
-        })
-      );
-
-
-    if(rows.length){
-
-      const result =
-        await db
-          .from("user_answers")
-          .insert(rows);
-
-
-      if(result.error){
-
-        console.warn(
-          "User answers were not saved:",
-          result.error.message
-        );
-
-      }else{
-
-        /*
-          Save per-question time when the new column exists.
-        */
-
-        for(const q of questions){
-
-          const seconds =
-            Math.max(
-              0,
-              Math.floor(
-                Number(
-                  timeSpent?.[String(q.id)] || 0
-                )
-              )
-            );
-
-
-          const timeResult =
-            await db
-              .from("user_answers")
-              .update({
-                time_spent_seconds:
-                  seconds
-              })
-              .eq(
-                "attempt_id",
-                attemptId
-              )
-              .eq(
-                "question_id",
-                q.id
-              );
-
-
-          if(timeResult.error){
-
-            /*
-              Do not repeatedly log the same schema error.
-              The SQL migration supplied with this update adds
-              this column.
-            */
-
-            if(
-              String(
-                timeResult.error.message || ""
-              ).toLowerCase().includes(
-                "time_spent_seconds"
-              )
-            ){
-
-              console.warn(
-                "Add time_spent_seconds to user_answers to enable question-time analytics."
-              );
-
-              break;
-
-            }
-
-          }
-
-        }
-
-      }
-
+  if(rows.length){
+    const result = await db.from("user_answers").insert(rows);
+    if(result.error){
+      console.warn("User answers were not saved:",result.error.message);
     }
-
-
-    /*
-      Calculate and save sectional data.
-      This is stored as JSON in test_attempts.sectional_data.
-      Rank/percentile are also saved when the optional columns exist.
-    */
-
-    const sectionData = {};
-
-    if(
-      sections.length
-    ){
-
-      sections.forEach(
-        (section,index)=>{
-
-          const list =
-            getSectionQuestions(
-              section.id
-            );
-
-          let sectionCorrect = 0;
-          let sectionWrong = 0;
-          let sectionUnanswered = 0;
-          let sectionScore = 0;
-          let sectionMax = 0;
-
-          list.forEach(
-            item=>{
-
-              const q = item.q;
-
-              const marks =
-                Number(
-                  q.marks ??
-                  test.marks_per_question ??
-                  2
-                );
-
-              const negative =
-                Number(
-                  q.negative_marks ??
-                  test.negative_marks ??
-                  0
-                );
-
-              sectionMax += marks;
-
-              const selected =
-                answers[q.id];
-
-              if(!selected){
-
-                sectionUnanswered++;
-
-                return;
-
-              }
-
-              /*
-                We use the already-loaded question options
-                from q.options to determine the answer.
-              */
-
-              const correctOption =
-                q.options?.find(
-                  option =>
-                    option.is_correct === true ||
-                    option.is_correct === "true" ||
-                    option.is_correct === 1 ||
-                    option.is_correct === "1"
-                );
-
-              if(
-                correctOption &&
-                String(selected) ===
-                String(correctOption.id)
-              ){
-
-                sectionCorrect++;
-                sectionScore += marks;
-
-              }else{
-
-                sectionWrong++;
-                sectionScore -= negative;
-
-              }
-
-            }
-          );
-
-          sectionData[String(section.id)] = {
-            section_id: section.id,
-            section_order:
-              section.section_order ??
-              index + 1,
-            subject_name:
-              getSectionName(
-                section,
-                index
-              ),
-            total_questions:
-              list.length,
-            correct:
-              sectionCorrect,
-            incorrect:
-              sectionWrong,
-            unanswered:
-              sectionUnanswered,
-            attempted:
-              sectionCorrect +
-              sectionWrong,
-            score:
-              Math.round(
-                sectionScore * 100
-              ) / 100,
-            max_marks:
-              Math.round(
-                sectionMax * 100
-              ) / 100,
-            percentile:
-              null
-          };
-
-        }
-      );
-
-    }
-
-
-    const sectionUpdate =
-      await db
-        .from("test_attempts")
-        .update({
-          sectional_data:
-            sectionData
-        })
-        .eq(
-          "id",
-          attemptId
-        );
-
-    if(sectionUpdate.error){
-      console.warn(
-        "Sectional analytics could not be saved:",
-        sectionUpdate.error.message
-      );
-    }
-
-
-    /*
-      Rank and percentile are calculated against the completed
-      attempts that exist at submission time.
-    */
-
-    try{
-
-      const allAttempts =
-        await db
-          .from("test_attempts")
-          .select(
-            "id,user_id,score"
-          )
-          .eq(
-            "mock_test_id",
-            test.id
-          )
-          .not(
-            "completed_at",
-            "is",
-            null
-          );
-
-      if(!allAttempts.error){
-
-        const bestByUser =
-          new Map();
-
-        (allAttempts.data || [])
-          .forEach(row=>{
-
-            if(
-              row.user_id === null ||
-              row.user_id === undefined
-            ){
-              return;
-            }
-
-            const uid =
-              String(row.user_id);
-
-            const value =
-              Number(row.score);
-
-            if(
-              !Number.isFinite(value)
-            ){
-              return;
-            }
-
-            if(
-              !bestByUser.has(uid) ||
-              value >
-              bestByUser.get(uid)
-            ){
-
-              bestByUser.set(
-                uid,
-                value
-              );
-
-            }
-
-          });
-
-
-        /*
-          Include the current attempt even if completed_at
-          is not populated by a database trigger yet.
-        */
-
-        if(
-          !bestByUser.has(String(user.id)) ||
-          score >
-          bestByUser.get(String(user.id))
-        ){
-
-          bestByUser.set(
-            String(user.id),
-            Number(score)
-          );
-
-        }
-
-
-        const scores =
-          [...bestByUser.values()];
-
-        const higher =
-          scores.filter(
-            value =>
-              value > Number(score)
-          ).length;
-
-        const lower =
-          scores.filter(
-            value =>
-              value < Number(score)
-          ).length;
-
-        const rank =
-          higher + 1;
-
-        const percentile =
-          scores.length > 1
-            ? (
-                lower /
-                (scores.length - 1)
-              ) * 100
-            : 100;
-
-
-        /*
-          Save optional rank/percentile fields.
-        */
-
-        const rankUpdate =
-          await db
-            .from("test_attempts")
-            .update({
-              rank: rank,
-              percentile: percentile
-            })
-            .eq(
-              "id",
-              attemptId
-            );
-
-        if(rankUpdate.error){
-          console.warn(
-            "Rank/percentile columns are not available yet. Run the supplied SQL migration."
-          );
-        }
-
-      }
-
-    }catch(error){
-
-      console.warn(
-        "Rank/percentile calculation failed:",
-        error
-      );
-
-    }
-
   }
 
 }
