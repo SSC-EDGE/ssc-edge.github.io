@@ -591,9 +591,10 @@ body{
    ================================================== */
 
 .navigation{
-
-  margin-top:13px;
-
+  width:100%;
+  margin-top:32px;
+  padding-bottom:12px;
+  box-sizing:border-box;
 }
 
 
@@ -601,13 +602,14 @@ body{
   display:grid;
   grid-template-columns:1fr 1fr 1fr;
   gap:8px;
-  margin-top:8px;
+  margin-top:0;
 }
 
 .grid-button-row{
+  width:100%;
   display:flex;
   justify-content:flex-end;
-  margin-bottom:0;
+  margin-bottom:18px;
 }
 
 
@@ -664,8 +666,8 @@ body{
 
 
 .grid-btn{
-  width:46px;
-  height:38px;
+  width:54px;
+  height:48px;
   margin:0;
 
   display:flex;
@@ -944,6 +946,26 @@ body{
 }
 
 
+/* SAVED QUESTION — bookmark icon */
+
+.saved-bookmark{
+  width:17px;
+  height:20px;
+  display:block;
+  flex:none;
+}
+
+.saved-bookmark path{
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linejoin:round;
+}
+
+.saved-bookmark.filled path{
+  fill:currentColor;
+}
+
 /* CURRENT */
 
 .grid-question.current{
@@ -953,36 +975,17 @@ body{
 }
 
 
-/* REVIEW */
-
+/* REVIEW — bookmark marker */
 .grid-question.review::after{
-
-  content:"★";
-
+  content:"";
   position:absolute;
-
   top:-7px;
-
   right:-5px;
-
-  width:18px;
-
-  height:18px;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  border-radius:50%;
-
+  width:15px;
+  height:19px;
   background:var(--purple);
-
-  color:#fff;
-
-  font-size:9px;
-
+  clip-path:polygon(0 0,100% 0,100% 100%,50% 72%,0 100%);
+  border-radius:2px 2px 1px 1px;
 }
 
 
@@ -1588,7 +1591,6 @@ body{
           aria-label="Save Question"
           style="width:34px;height:34px;border:1px solid var(--border);border-radius:9px;background:var(--card2);color:var(--muted);font-size:19px;display:flex;align-items:center;justify-content:center;cursor:pointer;"
         >
-          ☆
         </button>
 
         <span
@@ -2261,7 +2263,7 @@ function loadProgress(){
   hasSavedProgress = false;
   progressStarted = false;
 
-  if(!progressKey || reattempt){
+  if(!progressKey){
     return;
   }
 
@@ -2521,6 +2523,8 @@ function renderStartScreen(){
 function startOrResumeTest(){
 
   if(reattempt){
+    // Clear an old attempt only when entering from Practice with reattempt=1.
+    // Then remove the flag from the URL so a refresh resumes instead of resetting.
     clearProgress();
     currentIndex = 0;
     currentSectionIndex = -1;
@@ -2533,10 +2537,16 @@ function startOrResumeTest(){
     clearInterval(questionTimeInterval);
     questionTimeInterval = null;
     sectionRemainingTimes = {};
-    sections.forEach(section => {
+    sections.forEach((section,index) => {
       sectionRemainingTimes[String(section.id)] =
-        Number(section.duration_minutes || 0) * 60;
+        getSectionDurationMinutes(section,index) * 60;
     });
+
+    try{
+      const clean = new URL(location.href);
+      clean.searchParams.delete("reattempt");
+      history.replaceState(null, "", clean.pathname + (clean.search ? clean.search : "") + clean.hash);
+    }catch(error){}
   }
 
   progressStarted = true;
@@ -2809,54 +2819,38 @@ function jumpToSection(sectionIndex){
     paused ||
     !sections[sectionIndex]
   ){
-
     return;
-
   }
 
+  if(sectionIndex === currentSectionIndex){
+    return;
+  }
 
+  // Save the exact remaining time of the section we are leaving.
   saveCurrentSectionTime();
+  saveCurrentQuestionTime();
 
-
-  const section =
-    sections[
-      sectionIndex
-    ];
-
-
-  const list =
-    getSectionQuestions(
-      section.id
-    );
-
+  const section = sections[sectionIndex];
+  const list = getSectionQuestions(section.id);
 
   if(!list.length){
-
     return;
-
   }
 
+  currentSectionIndex = sectionIndex;
+  currentIndex = list[0].i;
 
-  currentSectionIndex =
-    sectionIndex;
-
-
-  currentIndex =
-    list[0].i;
-
-
-  loadSectionTime(
-    sectionIndex
-  );
-
+  // A deadline belongs to one section only. Never carry the previous
+  // section's deadline into the newly selected section.
+  sectionTimerEndAt = 0;
+  sectionTimerStartedAt = 0;
+  loadSectionTime(sectionIndex);
 
   showQuestion();
-
   startSectionInterval();
   saveProgress();
 
 }
-
 
 function syncSectionClock(){
 
@@ -2978,7 +2972,7 @@ function syncGeneralClock(){
   if(
     paused ||
     generalTimerEndAt <= 0 ||
-    sections.length && currentSectionIndex >= 0
+    (test && test.test_type === "FULL" && test.subject_wise_timing && sections.length && currentSectionIndex >= 0)
   ){
     return;
   }
@@ -3447,7 +3441,7 @@ function showQuestion(){
   nextButton.className =
     "nav-btn save-next-btn";
 
-  nextButton.style.marginTop = "8px";
+  nextButton.style.marginTop = "0";
   nextButton.textContent =
     "Save & Next →";
 
@@ -3530,7 +3524,7 @@ function renderQuestionGrid(){
     button.className = "grid-question";
 
     button.innerHTML = review.has(q.id)
-      ? "<span class=\"grid-star\">★</span>" + (position + 1)
+      ? bookmarkIcon(true) + (position + 1)
       : String(position + 1);
 
     if(answers[q.id]){
@@ -3611,6 +3605,12 @@ document
   );
 
 
+window.addEventListener("pagehide", function(){
+  if(!submitted && progressStarted){
+    try{ saveProgress(); }catch(error){}
+  }
+});
+
 function loadSavedQuestions(){
 
   savedQuestions = new Set();
@@ -3647,6 +3647,12 @@ function saveSavedQuestions(){
 
 }
 
+function bookmarkIcon(filled){
+  return `<svg class="saved-bookmark${filled ? " filled" : ""}" viewBox="0 0 18 22" aria-hidden="true" focusable="false">
+    <path d="M2.5 2.5A1.5 1.5 0 0 1 4 1h10a1.5 1.5 0 0 1 1.5 1.5V20l-6.5-4-6.5 4V2.5Z"></path>
+  </svg>`;
+}
+
 function updateSaveQuestionButton(){
 
   const button = document.getElementById("saveQuestionBtn");
@@ -3656,7 +3662,7 @@ function updateSaveQuestionButton(){
 
   const saved = savedQuestions.has(String(q.id));
 
-  button.textContent = saved ? "★" : "☆";
+  button.innerHTML = bookmarkIcon(saved);
   button.title = saved ? "Remove Saved Question" : "Save Question";
   button.setAttribute(
     "aria-label",
