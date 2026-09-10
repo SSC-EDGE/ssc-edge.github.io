@@ -707,7 +707,7 @@ async function loadLatestAttempt(userId){
     await supabaseClient
       .from("test_attempts")
       .select(
-        "id,user_id,mock_test_id,started_at,completed_at,score,correct_answers,wrong_answers,unanswered"
+        "id,user_id,mock_test_id,started_at,completed_at,score,correct_answers,wrong_answers,unanswered,rank,percentile,sectional_data"
       )
       .eq("mock_test_id",mockTestId)
       .eq("user_id",userId)
@@ -821,7 +821,7 @@ async function loadSections(){
     await supabaseClient
       .from("mock_test_sections")
       .select(
-        "id,mock_test_id,subject_id,section_order,duration_minutes"
+        "*"
       )
       .eq("mock_test_id",mockTestId)
       .order("section_order",{ascending:true});
@@ -1082,24 +1082,19 @@ function buildSectionStats(
     new Map();
 
   subjects.forEach(subject=>{
-
     subjectMap.set(
       String(subject.id),
       subject
     );
-
   });
-
 
   const statsMap =
     new Map();
-
 
   results.forEach(result=>{
 
     let key =
       result.subjectId;
-
 
     if(
       key === null ||
@@ -1116,10 +1111,8 @@ function buildSectionStats(
 
     }
 
-
     key =
       String(key);
-
 
     if(!statsMap.has(key)){
 
@@ -1131,10 +1124,17 @@ function buildSectionStats(
             )
           : null;
 
-
       const section =
         result.section;
 
+      const directName =
+        section?.subject_name ||
+        section?.subjectName ||
+        section?.subject ||
+        section?.name ||
+        section?.title ||
+        section?.section_name ||
+        "";
 
       statsMap.set(
         key,
@@ -1145,14 +1145,27 @@ function buildSectionStats(
           subjectId:
             result.subjectId,
 
+          sectionId:
+            result.assignment.section_id ??
+            section?.id ??
+            null,
+
           name:
-            subject?.name ||
             (
-              section
-                ? "Section " +
-                  section.section_order
-                : "Section"
-            ),
+              String(directName).trim() &&
+              !/^section\s*\d+$/i.test(
+                String(directName).trim()
+              )
+            )
+              ? String(directName).trim()
+              : (
+                  subject?.name ||
+                  "Section " +
+                  (
+                    section?.section_order ??
+                    1
+                  )
+                ),
 
           score:0,
 
@@ -1176,18 +1189,14 @@ function buildSectionStats(
 
     }
 
-
     const stat =
       statsMap.get(key);
-
 
     stat.maxMarks +=
       result.marks;
 
-
     stat.score +=
       result.earned;
-
 
     if(result.status === "correct"){
 
@@ -1208,7 +1217,6 @@ function buildSectionStats(
     }
 
   });
-
 
   return [...statsMap.values()]
     .sort(
@@ -1835,6 +1843,8 @@ function renderSelectedSection(){
 
 
   $("sectionScoreTop").textContent =
+    stat.name +
+    " — " +
     formatScore(stat.score) +
     " / " +
     formatScore(stat.maxMarks);
@@ -2042,7 +2052,9 @@ async function init(){
 
 
     overallRank =
-      rankInfo.rank;
+      Number.isFinite(Number(currentAttempt.rank))
+        ? Number(currentAttempt.rank)
+        : rankInfo.rank;
 
 
     totalAttemptedUsers =
@@ -2050,7 +2062,9 @@ async function init(){
 
 
     overallPercentile =
-      rankInfo.percentile;
+      Number.isFinite(Number(currentAttempt.percentile))
+        ? Number(currentAttempt.percentile)
+        : rankInfo.percentile;
 
 
     /*
