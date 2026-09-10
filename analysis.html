@@ -2,88 +2,2273 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>SSC EDGE - Analysis</title>
-<link rel="stylesheet" href="css/style.css">
-<script>document.documentElement.dataset.theme=localStorage.getItem("ssc-edge-theme")||"dark";</script>
+
+<script>
+document.documentElement.dataset.theme =
+  localStorage.getItem("ssc-edge-theme") || "dark";
+</script>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;padding-bottom:30px}
-.edge-page{max-width:850px;margin:auto;padding:16px 14px 35px}
-.back{display:inline-block;margin-bottom:14px;color:var(--purple2);text-decoration:none;font-size:13px;font-weight:900}
-.card{background:var(--card);border:1px solid var(--border);border-radius:17px;padding:16px;margin-bottom:12px;overflow:hidden}
-h1{margin:0;color:var(--text);font-size:21px;line-height:1.25} .sub{margin:5px 0 0;color:var(--muted);font-size:12px;line-height:1.5}
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:15px}
-.stat{min-width:0;background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:12px 7px;text-align:center}
-.stat strong{display:block;color:var(--text);font-size:20px;line-height:1.2}.stat span{display:block;color:var(--muted);font-size:10px;margin-top:3px}
-.section-title{color:var(--text);font-size:15px;font-weight:900;margin:0 0 10px}
-.table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px}.table{width:100%;min-width:500px;border-collapse:collapse;color:var(--text);font-size:11px}.table th,.table td{padding:10px 8px;border-bottom:1px solid var(--border);text-align:left}.table th{background:var(--card2);font-weight:900}.table tr:last-child td{border-bottom:0}
-.good{color:#2fbf71;font-weight:900}.bad{color:#ff5f5f;font-weight:900}.muted{color:var(--muted)}
-.question-row{padding:12px 0;border-bottom:1px solid var(--border)}.question-row:last-child{border-bottom:0}.qtop{display:flex;justify-content:space-between;gap:8px;align-items:center}.qno{color:var(--text);font-weight:900;font-size:13px}.status{font-size:10px;font-weight:900}.qtext{margin-top:7px;color:var(--text);font-size:13px;line-height:1.55;overflow-wrap:anywhere}.answer{margin-top:6px;font-size:11px;line-height:1.5;overflow-wrap:anywhere}.btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px}.btn{display:flex;align-items:center;justify-content:center;min-height:42px;padding:8px;border-radius:10px;background:var(--card2);border:1px solid var(--border);color:var(--text);text-decoration:none;font-size:11px;font-weight:900;text-align:center}.btn.primary{background:var(--purple);border-color:var(--purple);color:#fff}.empty{text-align:center;color:var(--muted);padding:25px 8px;font-size:13px}
-@media(max-width:500px){.btns{grid-template-columns:1fr}.table{min-width:460px}}
+:root{
+  --bg:#08050e;
+  --header:#160b26;
+  --card:#171025;
+  --card2:#251344;
+  --purple:#7c3aed;
+  --purple2:#a66bff;
+  --text:#fff;
+  --muted:#aaa2b9;
+  --border:#302044;
+  --green:#25c27a;
+  --red:#ef5b67;
+}
+
+:root[data-theme="light"]{
+  --bg:#f6f3fb;
+  --header:#eee7fa;
+  --card:#fff;
+  --card2:#eee6fa;
+  --purple:#6d35d4;
+  --purple2:#8149e8;
+  --text:#17121e;
+  --muted:#706879;
+  --border:#ddd4e9;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+.header{
+  height:58px;
+  background:var(--header);
+  display:flex;
+  align-items:center;
+  padding:0 18px;
+  border-bottom:1px solid var(--border);
+}
+
+.logo{
+  font-size:21px;
+  font-weight:800;
+  letter-spacing:.4px;
+}
+
+.container{
+  max-width:850px;
+  margin:auto;
+  padding:18px 14px 35px;
+}
+
+/* TEST HEADER */
+
+.test-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-bottom:16px;
+}
+
+.test-title{
+  min-width:0;
+}
+
+.test-name{
+  font-size:20px;
+  font-weight:800;
+  margin-bottom:5px;
+  word-break:break-word;
+}
+
+.test-no{
+  color:var(--muted);
+  font-size:13px;
+}
+
+.solution-btn{
+  flex-shrink:0;
+  border:1px solid var(--purple);
+  background:transparent;
+  color:var(--purple2);
+  padding:9px 14px;
+  border-radius:10px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+/* CARDS */
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:18px;
+}
+
+.card-title{
+  font-size:17px;
+  font-weight:800;
+  margin-bottom:18px;
+}
+
+.stat-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.stat{
+  background:var(--card2);
+  border:1px solid var(--border);
+  border-radius:11px;
+  padding:14px;
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:12px;
+  margin-bottom:7px;
+}
+
+.stat-value{
+  font-size:20px;
+  font-weight:800;
+}
+
+.small-value{
+  font-size:16px;
+}
+
+.subheading{
+  margin:20px 0 10px;
+  font-size:14px;
+  font-weight:800;
+}
+
+.green{
+  color:var(--green);
+}
+
+.red{
+  color:var(--red);
+}
+
+/* SECTIONAL */
+
+.breakdown{
+  margin-top:18px;
+}
+
+.section-card{
+  overflow:hidden;
+}
+
+.section-top{
+  display:grid;
+  grid-template-columns:1fr 1.25fr;
+  border-bottom:1px solid var(--border);
+  margin:-18px -18px 0;
+}
+
+.section-top-box{
+  padding:15px;
+}
+
+.section-top-box:first-child{
+  border-right:1px solid var(--border);
+}
+
+.section-top-label{
+  color:var(--muted);
+  font-size:12px;
+  margin-bottom:6px;
+}
+
+.section-top-value{
+  font-size:18px;
+  font-weight:800;
+  word-break:break-word;
+}
+
+/* SLIDEABLE SUBJECT TABS */
+
+.tabs-wrap{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+
+.tabs-wrap::-webkit-scrollbar{
+  display:none;
+}
+
+.tabs{
+  display:flex;
+  gap:8px;
+  padding:15px 0 12px;
+  width:max-content;
+}
+
+.tab{
+  border:1px solid var(--border);
+  background:var(--card2);
+  color:var(--muted);
+  padding:9px 14px;
+  border-radius:20px;
+  white-space:nowrap;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.tab.active{
+  background:var(--purple);
+  border-color:var(--purple);
+  color:#fff;
+}
+
+/* SECTION DETAILS */
+
+.section-details{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:4px;
+}
+
+.detail{
+  background:var(--card2);
+  border:1px solid var(--border);
+  border-radius:11px;
+  padding:14px;
+}
+
+.detail-label{
+  color:var(--muted);
+  font-size:12px;
+  margin-bottom:7px;
+}
+
+.detail-value{
+  font-size:18px;
+  font-weight:800;
+}
+
+.status{
+  text-align:center;
+  padding:35px 15px;
+  color:var(--muted);
+}
+
+.error{
+  color:var(--red);
+}
+
+.loading{
+  min-height:60vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--muted);
+}
+
+@media(max-width:520px){
+
+  .container{
+    padding:14px 11px 28px;
+  }
+
+  .test-name{
+    font-size:18px;
+  }
+
+  .solution-btn{
+    padding:8px 11px;
+    font-size:12px;
+  }
+
+  .card{
+    padding:15px;
+    border-radius:13px;
+  }
+
+  .section-top{
+    margin:-15px -15px 0;
+  }
+
+  .stat-grid,
+  .section-details{
+    gap:9px;
+  }
+
+  .stat,
+  .detail{
+    padding:12px;
+  }
+}
 </style>
 </head>
+
 <body>
-<main class="edge-page">
-<a class="back" href="practice.html">← Back to Practice</a>
-<div id="app"><div class="card empty">Loading analysis...</div></div>
-</main>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-const db=supabase.createClient("https://dvvyoygahzzbnpqrfhen.supabase.co","sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s");
-const testId=new URLSearchParams(location.search).get("id");
-const app=document.getElementById("app");
-function esc(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;").replace(/'/g,"&#039;")}
-function msg(t){app.innerHTML='<div class="card empty">'+esc(t)+'</div>'}
-async function run(){
- if(!testId){msg("Test ID is missing.");return}
- const ur=await db.auth.getUser(); const user=ur?.data?.user;
- if(!user){msg("Please sign in to view your test analysis.");return}
- const ar=await db.from("test_attempts").select("*").eq("user_id",user.id).eq("mock_test_id",testId).order("created_at",{ascending:false}).limit(1).maybeSingle();
- if(ar.error||!ar.data){msg("No completed attempt was found for this test.");return}
- const attempt=ar.data;
- const tr=await db.from("mock_tests").select("id,title,marks_per_question,negative_marks").eq("id",testId).maybeSingle();
- const title=tr.data?.title||"SSC EDGE Test";
- const qr=await db.from("mock_test_questions").select("question_id,question_order,section_id").eq("mock_test_id",testId).order("question_order");
- const assignments=qr.data||[];
- const ids=assignments.map(x=>x.question_id);
- let questions=[];
- if(ids.length){
-  const r=await db.from("questions").select("id,question_text,marks,negative_marks,subject_id").in("id",ids);questions=r.data||[];
- }
- const ua=await db.from("user_answers").select("question_id,selected_option_id").eq("attempt_id",attempt.id);
- const selected=new Map((ua.data||[]).map(x=>[String(x.question_id),x.selected_option_id==null?null:String(x.selected_option_id)]));
- let options=[];
- if(ids.length){const r=await db.from("question_options").select("id,question_id,option_label,option_text,is_correct").in("question_id",ids).order("id");options=r.data||[]}
- const correct=new Map(); options.forEach(o=>{if(o.is_correct)correct.set(String(o.question_id),String(o.id))});
- const qm=new Map(questions.map(q=>[String(q.id),q]));
- const answered=assignments.filter(a=>selected.get(String(a.question_id))).length;
- const accuracy=answered?Math.round((Number(attempt.correct_answers||0)/answered)*100):0;
- app.innerHTML=`
- <div class="card"><h1>${esc(title)} — Analysis</h1><p class="sub">Latest submitted attempt</p>
-  <div class="stats">
-   <div class="stat"><strong>${esc(attempt.score??0)}</strong><span>Score</span></div>
-   <div class="stat"><strong>${esc(attempt.correct_answers??0)}</strong><span>Correct</span></div>
-   <div class="stat"><strong>${esc(attempt.wrong_answers??0)}</strong><span>Wrong</span></div>
-   <div class="stat"><strong>${esc(attempt.unanswered??0)}</strong><span>Unanswered</span></div>
+
+<header class="header">
+  <div class="logo">SSC EDGE</div>
+</header>
+
+<main class="container">
+
+  <div id="loading" class="loading">
+    Loading analysis...
   </div>
-  <div class="sub" style="margin-top:12px">Attempted: ${answered} &nbsp;•&nbsp; Accuracy: ${accuracy}%</div>
-  <div class="btns"><a class="btn primary" href="test.html?id=${encodeURIComponent(testId)}&reattempt=1">Re-attempt</a><a class="btn" href="solutions.html?id=${encodeURIComponent(testId)}">Solutions</a><a class="btn" href="practice.html">Practice</a></div>
- </div>
- <div class="card"><h2 class="section-title">Question-wise Performance</h2><div id="questions"></div></div>`;
- const box=document.getElementById("questions");
- if(!assignments.length){box.innerHTML='<div class="empty">No question data available.</div>';return}
- box.innerHTML=assignments.map((a,i)=>{
-  const q=qm.get(String(a.question_id));if(!q)return"";
-  const sel=selected.get(String(q.id)); const cor=correct.get(String(q.id));
-  const status=!sel?'Unanswered':String(sel)===String(cor)?'Correct':'Wrong';
-  const cls=status==='Correct'?'good':status==='Wrong'?'bad':'muted';
-  const opts=options.filter(o=>String(o.question_id)===String(q.id));
-  const selectedOpt=opts.find(o=>String(o.id)===String(sel)); const correctOpt=opts.find(o=>o.is_correct);
-  return `<div class="question-row"><div class="qtop"><span class="qno">Question ${i+1}</span><span class="status ${cls}">${status}</span></div><div class="qtext">${esc(q.question_text)}</div><div class="answer muted">Your answer: ${sel&&selectedOpt?esc((selectedOpt.option_label||"")+" "+selectedOpt.option_text):"Not answered"}</div><div class="answer">Correct: ${correctOpt?esc((correctOpt.option_label||"")+" "+correctOpt.option_text):"—"}</div></div>`;
- }).join("");
+
+  <div id="content" style="display:none">
+
+    <!-- TEST NAME + SOLUTIONS -->
+
+    <div class="test-head">
+
+      <div class="test-title">
+
+        <div id="testName" class="test-name">
+          Test
+        </div>
+
+        <div id="testNo" class="test-no">
+          Test No. —
+        </div>
+
+      </div>
+
+      <button
+        class="solution-btn"
+        onclick="openSolutions()">
+        Solutions
+      </button>
+
+    </div>
+
+
+    <!-- OVERALL SUMMARY -->
+
+    <section class="card">
+
+      <div class="card-title">
+        Overall Summary
+      </div>
+
+      <div class="stat-grid">
+
+        <div class="stat">
+
+          <div class="stat-label">
+            Rank
+          </div>
+
+          <div id="rank" class="stat-value">
+            —
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div class="stat-label">
+            Marks
+          </div>
+
+          <div id="marks" class="stat-value">
+            —
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div class="stat-label">
+            Attempted
+          </div>
+
+          <div id="attempted" class="stat-value">
+            —
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div class="stat-label">
+            Correct / Wrong
+          </div>
+
+          <div
+            id="correctWrong"
+            class="stat-value small-value">
+            —
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="subheading">
+        Performance
+      </div>
+
+
+      <div class="stat-grid">
+
+        <div class="stat">
+
+          <div class="stat-label">
+            Accuracy
+          </div>
+
+          <div id="accuracy" class="stat-value">
+            —
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div class="stat-label">
+            Percentile
+          </div>
+
+          <div id="percentile" class="stat-value">
+            —
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- SECTIONAL BREAKDOWN -->
+
+    <div class="subheading breakdown">
+      SECTIONAL BREAKDOWN
+    </div>
+
+
+    <section class="card section-card">
+
+      <!-- SCORE | SECTIONAL SUBJECT -->
+
+      <div class="section-top">
+
+        <div class="section-top-box">
+
+          <div class="section-top-label">
+            Score
+          </div>
+
+          <div
+            id="sectionScoreTop"
+            class="section-top-value">
+            —
+          </div>
+
+        </div>
+
+
+        <div class="section-top-box">
+
+          <div class="section-top-label">
+            Sectional
+          </div>
+
+          <div
+            id="sectionNameTop"
+            class="section-top-value">
+            —
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- SLIDEABLE SUBJECTS -->
+
+      <div id="tabsWrap" class="tabs-wrap">
+
+        <div id="tabs" class="tabs"></div>
+
+      </div>
+
+
+      <!-- SELECTED SUBJECT DETAILS -->
+
+      <div id="sectionDetails" class="section-details">
+
+        <div class="detail">
+
+          <div class="detail-label">
+            Score
+          </div>
+
+          <div
+            id="sectionScore"
+            class="detail-value">
+            —
+          </div>
+
+        </div>
+
+
+        <div class="detail">
+
+          <div class="detail-label">
+            Section Percentile
+          </div>
+
+          <div
+            id="sectionPercentile"
+            class="detail-value">
+            —
+          </div>
+
+        </div>
+
+
+        <div class="detail">
+
+          <div class="detail-label">
+            Correct
+          </div>
+
+          <div
+            id="sectionCorrect"
+            class="detail-value green">
+            —
+          </div>
+
+        </div>
+
+
+        <div class="detail">
+
+          <div class="detail-label">
+            Incorrect
+          </div>
+
+          <div
+            id="sectionIncorrect"
+            class="detail-value red">
+            —
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div
+        id="noSections"
+        class="status"
+        style="display:none">
+
+        No sectional data available.
+
+      </div>
+
+    </section>
+
+  </div>
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+/* =========================================================
+   SUPABASE
+========================================================= */
+
+const SUPABASE_URL =
+  "https://dvvyoygahzzbnpqrfhen.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
+const supabaseClient =
+  supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+/* =========================================================
+   TEST ID
+========================================================= */
+
+const params =
+  new URLSearchParams(location.search);
+
+const mockTestId =
+  params.get("id");
+
+
+/* =========================================================
+   GLOBAL DATA
+========================================================= */
+
+let currentTest = null;
+let currentUser = null;
+let currentAttempt = null;
+
+let sectionStats = [];
+
+let selectedSectionIndex = 0;
+
+let overallRank = null;
+let overallPercentile = null;
+
+
+/* =========================================================
+   SHORT HELPERS
+========================================================= */
+
+function $(id){
+  return document.getElementById(id);
 }
-run().catch(e=>{console.error(e);msg("Could not load analysis. Please try again.")});
+
+
+function num(value,fallback=0){
+
+  const n = Number(value);
+
+  return Number.isFinite(n)
+    ? n
+    : fallback;
+}
+
+
+function formatScore(value){
+
+  const n = Number(value);
+
+  if(!Number.isFinite(n)){
+    return "—";
+  }
+
+  return Number(
+    n.toFixed(2)
+  ).toString();
+}
+
+
+function formatPercent(value){
+
+  if(
+    value === null ||
+    value === undefined ||
+    !Number.isFinite(Number(value))
+  ){
+    return "—";
+  }
+
+  return (
+    Number(value)
+      .toFixed(1)
+      .replace(/\.0$/,"")
+    + "%"
+  );
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+function showError(message){
+
+  $("loading").className =
+    "status error";
+
+  $("loading").textContent =
+    message;
+}
+
+
+/* =========================================================
+   SOLUTIONS
+========================================================= */
+
+function openSolutions(){
+
+  if(!mockTestId){
+    return;
+  }
+
+  location.href =
+    "solutions.html?id=" +
+    encodeURIComponent(mockTestId);
+}
+
+
+/* =========================================================
+   LOAD TEST
+========================================================= */
+
+async function loadTest(){
+
+  const {data,error} =
+    await supabaseClient
+      .from("mock_tests")
+      .select("*")
+      .eq("id",mockTestId)
+      .single();
+
+  if(error){
+    throw error;
+  }
+
+  return data;
+}
+
+
+/* =========================================================
+   LOAD LATEST COMPLETED ATTEMPT
+========================================================= */
+
+async function loadLatestAttempt(userId){
+
+  const {data,error} =
+    await supabaseClient
+      .from("test_attempts")
+      .select("*")
+      .eq("mock_test_id",mockTestId)
+      .eq("user_id",userId)
+      .not("completed_at","is",null)
+      .order(
+        "completed_at",
+        {ascending:false}
+      )
+      .limit(1)
+      .maybeSingle();
+
+  if(error){
+    throw error;
+  }
+
+  return data;
+}
+
+
+/* =========================================================
+   LOAD ASSIGNED QUESTIONS
+========================================================= */
+
+async function loadAssignedQuestions(){
+
+  const {data,error} =
+    await supabaseClient
+      .from("mock_test_questions")
+      .select(
+        "id,question_id,question_order,section_id"
+      )
+      .eq(
+        "mock_test_id",
+        mockTestId
+      )
+      .order(
+        "question_order",
+        {ascending:true}
+      );
+
+  if(error){
+    throw error;
+  }
+
+  return data || [];
+}
+
+
+/* =========================================================
+   LOAD QUESTIONS
+========================================================= */
+
+async function loadQuestions(ids){
+
+  if(!ids.length){
+    return [];
+  }
+
+  const {data,error} =
+    await supabaseClient
+      .from("questions")
+      .select(
+        "id,question_text,marks,negative_marks,subject_id,chapter_id,section_id"
+      )
+      .in("id",ids);
+
+  if(error){
+    throw error;
+  }
+
+  return data || [];
+}
+
+
+/* =========================================================
+   LOAD OPTIONS
+========================================================= */
+
+async function loadOptions(ids){
+
+  if(!ids.length){
+    return [];
+  }
+
+  const {data,error} =
+    await supabaseClient
+      .from("question_options")
+      .select(
+        "id,question_id,is_correct"
+      )
+      .in("question_id",ids);
+
+  if(error){
+    throw error;
+  }
+
+  return data || [];
+}
+
+
+/* =========================================================
+   LOAD USER ANSWERS
+========================================================= */
+
+async function loadAnswers(attemptId){
+
+  const {data,error} =
+    await supabaseClient
+      .from("user_answers")
+      .select(
+        "question_id,selected_option_id"
+      )
+      .eq(
+        "attempt_id",
+        attemptId
+      );
+
+  if(error){
+    throw error;
+  }
+
+  return data || [];
+}
+
+
+/* =========================================================
+   LOAD SECTIONS
+========================================================= */
+
+async function loadSections(){
+
+  const {data,error} =
+    await supabaseClient
+      .from("mock_test_sections")
+      .select(
+        "id,subject_id,section_order,duration_minutes"
+      )
+      .eq(
+        "mock_test_id",
+        mockTestId
+      )
+      .order(
+        "section_order",
+        {ascending:true}
+      );
+
+  if(error){
+    throw error;
+  }
+
+  return data || [];
+}
+
+
+/* =========================================================
+   LOAD SUBJECTS
+========================================================= */
+
+async function loadSubjects(ids){
+
+  const uniqueIds =
+    [...new Set(
+      ids.filter(Boolean)
+    )];
+
+  if(!uniqueIds.length){
+    return [];
+  }
+
+  const {data,error} =
+    await supabaseClient
+      .from("subjects")
+      .select("id,name")
+      .in("id",uniqueIds);
+
+  if(error){
+    throw error;
+  }
+
+  return data || [];
+}
+
+
+/* =========================================================
+   CALCULATE QUESTION RESULT
+========================================================= */
+
+function calculateResults(
+  assignments,
+  questions,
+  options,
+  answers,
+  sections
+){
+
+  const questionMap =
+    new Map(
+      questions.map(q => [
+        String(q.id),
+        q
+      ])
+    );
+
+
+  const answerMap =
+    new Map(
+      answers.map(a => [
+        String(a.question_id),
+        a.selected_option_id
+      ])
+    );
+
+
+  const correctMap =
+    new Map();
+
+
+  for(const option of options){
+
+    if(option.is_correct){
+
+      correctMap.set(
+        String(option.question_id),
+        String(option.id)
+      );
+
+    }
+
+  }
+
+
+  const sectionMap =
+    new Map(
+      sections.map(s => [
+        String(s.id),
+        s
+      ])
+    );
+
+
+  const results = [];
+
+
+  for(const assignment of assignments){
+
+    const question =
+      questionMap.get(
+        String(assignment.question_id)
+      );
+
+
+    if(!question){
+      continue;
+    }
+
+
+    const selected =
+      answerMap.get(
+        String(question.id)
+      );
+
+
+    const correctOption =
+      correctMap.get(
+        String(question.id)
+      );
+
+
+    const marks =
+      num(
+        question.marks,
+        num(
+          currentTest.marks_per_question,
+          2
+        )
+      );
+
+
+    const negative =
+      num(
+        question.negative_marks,
+        num(
+          currentTest.negative_marks,
+          0
+        )
+      );
+
+
+    let status =
+      "unanswered";
+
+    let earned =
+      0;
+
+
+    if(
+      selected !== null &&
+      selected !== undefined &&
+      selected !== ""
+    ){
+
+      if(
+        correctOption !== undefined &&
+        String(selected) === correctOption
+      ){
+
+        status =
+          "correct";
+
+        earned =
+          marks;
+
+      }else{
+
+        status =
+          "wrong";
+
+        earned =
+          -negative;
+
+      }
+
+    }
+
+
+    const section =
+      sectionMap.get(
+        String(
+          assignment.section_id
+        )
+      );
+
+
+    /*
+      IMPORTANT:
+      Question subject_id is used first.
+      If missing, section subject_id is used.
+    */
+
+    const subjectId =
+      question.subject_id ??
+      section?.subject_id ??
+      null;
+
+
+    results.push({
+
+      question,
+      assignment,
+      section,
+      subjectId,
+
+      marks,
+      negative,
+
+      status,
+      earned
+
+    });
+
+  }
+
+
+  return results;
+}
+
+
+/* =========================================================
+   BUILD SUBJECT STATS
+========================================================= */
+
+function buildSectionStats(
+  results,
+  subjects,
+  sections
+){
+
+  const subjectMap =
+    new Map(
+      subjects.map(s => [
+        String(s.id),
+        s
+      ])
+    );
+
+
+  const statsMap =
+    new Map();
+
+
+  for(const result of results){
+
+    let key =
+      result.subjectId;
+
+
+    if(
+      !key &&
+      result.section
+    ){
+
+      key =
+        result.section.subject_id;
+
+    }
+
+
+    /*
+      Fallback for a question that has
+      neither subject nor section subject.
+    */
+
+    if(!key){
+
+      key =
+        "__section__" +
+        String(
+          result.assignment.section_id ??
+          "other"
+        );
+
+    }
+
+
+    if(
+      !statsMap.has(
+        String(key)
+      )
+    ){
+
+      const subject =
+        subjectMap.get(
+          String(result.subjectId)
+        );
+
+
+      const section =
+        result.section ||
+        sections.find(
+          s =>
+            String(s.id) ===
+            String(
+              result.assignment.section_id
+            )
+        );
+
+
+      statsMap.set(
+        String(key),
+        {
+
+          key:String(key),
+
+          subjectId:
+            result.subjectId,
+
+          name:
+            subject?.name ||
+            (
+              section
+                ? "Section " +
+                  (section.section_order ?? "")
+                : "Section"
+            ),
+
+          score:0,
+
+          maxMarks:0,
+
+          correct:0,
+
+          incorrect:0,
+
+          attempted:0,
+
+          unanswered:0,
+
+          percentile:null
+
+        }
+      );
+
+    }
+
+
+    const stat =
+      statsMap.get(
+        String(key)
+      );
+
+
+    stat.maxMarks +=
+      result.marks;
+
+
+    stat.score +=
+      result.earned;
+
+
+    if(
+      result.status === "correct"
+    ){
+
+      stat.correct++;
+      stat.attempted++;
+
+    }
+    else if(
+      result.status === "wrong"
+    ){
+
+      stat.incorrect++;
+      stat.attempted++;
+
+    }
+    else{
+
+      stat.unanswered++;
+
+    }
+
+  }
+
+
+  /*
+    Preserve admin section order.
+  */
+
+  const orderMap =
+    new Map();
+
+
+  sections.forEach(
+    (section,index) => {
+
+      if(
+        section.subject_id !== null &&
+        section.subject_id !== undefined
+      ){
+
+        orderMap.set(
+          String(section.subject_id),
+          index
+        );
+
+      }
+
+    }
+  );
+
+
+  return [...statsMap.values()]
+    .sort((a,b)=>{
+
+      const ai =
+        orderMap.has(
+          String(a.subjectId)
+        )
+          ? orderMap.get(
+              String(a.subjectId)
+            )
+          : 9999;
+
+
+      const bi =
+        orderMap.has(
+          String(b.subjectId)
+        )
+          ? orderMap.get(
+              String(b.subjectId)
+            )
+          : 9999;
+
+
+      return ai - bi;
+
+    });
+}
+
+
+/* =========================================================
+   OVERALL RANK + PERCENTILE
+========================================================= */
+
+async function calculateOverallRank(){
+
+  if(!currentAttempt){
+
+    return {
+      rank:null,
+      percentile:null
+    };
+
+  }
+
+
+  try{
+
+    const {data,error} =
+      await supabaseClient
+        .from("test_attempts")
+        .select(
+          "user_id,score,completed_at"
+        )
+        .eq(
+          "mock_test_id",
+          mockTestId
+        )
+        .not(
+          "completed_at",
+          "is",
+          null
+        );
+
+
+    /*
+      RLS may prevent access to other users.
+    */
+
+    if(
+      error ||
+      !data ||
+      !data.length
+    ){
+
+      return {
+        rank:null,
+        percentile:null
+      };
+
+    }
+
+
+    /*
+      Best score of every user.
+    */
+
+    const bestByUser =
+      new Map();
+
+
+    for(
+      const row of data
+    ){
+
+      const uid =
+        String(row.user_id);
+
+
+      const score =
+        num(row.score,0);
+
+
+      if(
+        !bestByUser.has(uid) ||
+        score >
+        bestByUser.get(uid)
+      ){
+
+        bestByUser.set(
+          uid,
+          score
+        );
+
+      }
+
+    }
+
+
+    const scores =
+      [...bestByUser.values()];
+
+
+    const myScore =
+      num(
+        currentAttempt.score,
+        0
+      );
+
+
+    const higher =
+      scores.filter(
+        score =>
+          score > myScore
+      ).length;
+
+
+    const lower =
+      scores.filter(
+        score =>
+          score < myScore
+      ).length;
+
+
+    /*
+      Competition rank:
+      1 + number of users
+      scoring higher.
+    */
+
+    const rank =
+      higher + 1;
+
+
+    /*
+      Percentile:
+      percentage of users
+      scoring lower.
+    */
+
+    const percentile =
+      scores.length
+        ? (
+            lower /
+            scores.length
+          ) * 100
+        : null;
+
+
+    return {
+      rank,
+      percentile
+    };
+
+
+  }catch(error){
+
+    console.error(
+      "Rank error:",
+      error
+    );
+
+
+    return {
+      rank:null,
+      percentile:null
+    };
+
+  }
+}
+
+
+/* =========================================================
+   SECTION PERCENTILE
+========================================================= */
+
+async function calculateSectionPercentiles(){
+
+  if(
+    !currentAttempt ||
+    !sectionStats.length
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    /*
+      First try to read all completed attempts.
+    */
+
+    const {
+      data:attempts,
+      error:attemptError
+    } =
+      await supabaseClient
+        .from("test_attempts")
+        .select(
+          "id,user_id"
+        )
+        .eq(
+          "mock_test_id",
+          mockTestId
+        )
+        .not(
+          "completed_at",
+          "is",
+          null
+        );
+
+
+    /*
+      If RLS blocks this,
+      simply keep percentile as —.
+    */
+
+    if(
+      attemptError ||
+      !attempts ||
+      !attempts.length
+    ){
+
+      return;
+
+    }
+
+
+    const attemptIds =
+      attempts.map(
+        a => a.id
+      );
+
+
+    const {
+      data:allAnswers,
+      error:answerError
+    } =
+      await supabaseClient
+        .from("user_answers")
+        .select(
+          "attempt_id,question_id,selected_option_id"
+        )
+        .in(
+          "attempt_id",
+          attemptIds
+        );
+
+
+    if(
+      answerError ||
+      !allAnswers
+    ){
+
+      return;
+
+    }
+
+
+    /*
+      Load common test data once.
+    */
+
+    const assignments =
+      await loadAssignedQuestions();
+
+
+    const questionIds =
+      assignments.map(
+        a => a.question_id
+      );
+
+
+    const [
+      questions,
+      options,
+      sections
+    ] =
+      await Promise.all([
+
+        loadQuestions(
+          questionIds
+        ),
+
+        loadOptions(
+          questionIds
+        ),
+
+        loadSections()
+
+      ]);
+
+
+    const subjects =
+      await loadSubjects(
+        [
+          ...questions.map(
+            q => q.subject_id
+          ),
+
+          ...sections.map(
+            s => s.subject_id
+          )
+
+        ]
+      );
+
+
+    /*
+      Calculate sectional score
+      for every completed attempt.
+    */
+
+    const allStats =
+      new Map();
+
+
+    for(
+      const attempt of attempts
+    ){
+
+      const answers =
+        allAnswers.filter(
+          answer =>
+            String(
+              answer.attempt_id
+            ) ===
+            String(
+              attempt.id
+            )
+        );
+
+
+      const results =
+        calculateResults(
+          assignments,
+          questions,
+          options,
+          answers,
+          sections
+        );
+
+
+      const stats =
+        buildSectionStats(
+          results,
+          subjects,
+          sections
+        );
+
+
+      allStats.set(
+        String(attempt.id),
+        stats
+      );
+
+    }
+
+
+    /*
+      Calculate percentile
+      subject by subject.
+    */
+
+    for(
+      const current of sectionStats
+    ){
+
+      const scores = [];
+
+
+      for(
+        const stats of
+        allStats.values()
+      ){
+
+        const found =
+          stats.find(
+            stat =>
+
+              (
+                stat.subjectId &&
+                current.subjectId &&
+                String(
+                  stat.subjectId
+                ) ===
+                String(
+                  current.subjectId
+                )
+              )
+
+              ||
+
+              String(stat.key) ===
+              String(current.key)
+          );
+
+
+        if(found){
+
+          scores.push(
+            found.score
+          );
+
+        }
+
+      }
+
+
+      if(!scores.length){
+
+        continue;
+
+      }
+
+
+      const lower =
+        scores.filter(
+          score =>
+            score <
+            current.score
+        ).length;
+
+
+      current.percentile =
+        (
+          lower /
+          scores.length
+        ) * 100;
+
+    }
+
+
+  }catch(error){
+
+    /*
+      Section percentile stays —
+      if Supabase RLS does not allow
+      reading other users' answers.
+    */
+
+    console.log(
+      "Section percentile unavailable:",
+      error
+    );
+
+  }
+}
+
+
+/* =========================================================
+   RENDER OVERALL
+========================================================= */
+
+function renderOverall(){
+
+  const correct =
+    num(
+      currentAttempt.correct_answers,
+      0
+    );
+
+
+  const wrong =
+    num(
+      currentAttempt.wrong_answers,
+      0
+    );
+
+
+  const attempted =
+    correct +
+    wrong;
+
+
+  const accuracy =
+    attempted > 0
+      ? (
+          correct /
+          attempted
+        ) * 100
+      : null;
+
+
+  $("rank").textContent =
+    overallRank === null
+      ? "—"
+      : overallRank;
+
+
+  $("marks").textContent =
+    formatScore(
+      currentAttempt.score
+    );
+
+
+  $("attempted").textContent =
+    attempted;
+
+
+  $("correctWrong").innerHTML =
+    '<span class="green">' +
+    correct +
+    '</span> / ' +
+    '<span class="red">' +
+    wrong +
+    '</span>';
+
+
+  $("accuracy").textContent =
+    formatPercent(
+      accuracy
+    );
+
+
+  $("percentile").textContent =
+    formatPercent(
+      overallPercentile
+    );
+}
+
+
+/* =========================================================
+   RENDER SUBJECT TABS
+========================================================= */
+
+function renderTabs(){
+
+  const tabs =
+    $("tabs");
+
+
+  tabs.innerHTML = "";
+
+
+  sectionStats.forEach(
+    (stat,index)=>{
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+
+      button.className =
+        "tab" +
+        (
+          index ===
+          selectedSectionIndex
+            ? " active"
+            : ""
+        );
+
+
+      button.textContent =
+        stat.name;
+
+
+      button.onclick =
+        ()=>{
+
+          selectedSectionIndex =
+            index;
+
+
+          renderTabs();
+
+          renderSelectedSection();
+
+        };
+
+
+      tabs.appendChild(
+        button
+      );
+
+    }
+  );
+}
+
+
+/* =========================================================
+   RENDER SELECTED SUBJECT
+========================================================= */
+
+function renderSelectedSection(){
+
+  if(!sectionStats.length){
+
+    $("sectionDetails").style.display =
+      "none";
+
+    $("tabsWrap").style.display =
+      "none";
+
+    $("noSections").style.display =
+      "block";
+
+    return;
+
+  }
+
+
+  $("sectionDetails").style.display =
+    "grid";
+
+
+  $("tabsWrap").style.display =
+    "block";
+
+
+  $("noSections").style.display =
+    "none";
+
+
+  const stat =
+    sectionStats[
+      selectedSectionIndex
+    ];
+
+
+  if(!stat){
+    return;
+  }
+
+
+  $("sectionNameTop").textContent =
+    stat.name;
+
+
+  $("sectionScoreTop").textContent =
+    formatScore(
+      stat.score
+    ) +
+    " / " +
+    formatScore(
+      stat.maxMarks
+    );
+
+
+  $("sectionScore").textContent =
+    formatScore(
+      stat.score
+    ) +
+    " / " +
+    formatScore(
+      stat.maxMarks
+    );
+
+
+  $("sectionPercentile").textContent =
+    formatPercent(
+      stat.percentile
+    );
+
+
+  $("sectionCorrect").textContent =
+    stat.correct;
+
+
+  $("sectionIncorrect").textContent =
+    stat.incorrect;
+}
+
+
+/* =========================================================
+   FINAL RENDER
+========================================================= */
+
+function render(){
+
+  $("testName").textContent =
+    currentTest.title ||
+    "SSC EDGE Test";
+
+
+  /*
+    Supports whichever test-number
+    field exists in your mock_tests
+    table.
+  */
+
+  const testNumber =
+    currentTest.test_number ??
+    currentTest.test_no ??
+    currentTest.number ??
+    "—";
+
+
+  $("testNo").textContent =
+    "Test No. " +
+    testNumber;
+
+
+  renderOverall();
+
+  renderTabs();
+
+  renderSelectedSection();
+
+
+  $("loading").style.display =
+    "none";
+
+
+  $("content").style.display =
+    "block";
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+async function init(){
+
+  try{
+
+    if(!mockTestId){
+
+      showError(
+        "Invalid test. Test ID is missing."
+      );
+
+      return;
+
+    }
+
+
+    /*
+      LOGIN CHECK
+    */
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .auth
+        .getUser();
+
+
+    if(
+      error ||
+      !data ||
+      !data.user
+    ){
+
+      showError(
+        "Please login to view your analysis."
+      );
+
+      return;
+
+    }
+
+
+    currentUser =
+      data.user;
+
+
+    /*
+      TEST
+    */
+
+    currentTest =
+      await loadTest();
+
+
+    /*
+      LATEST COMPLETED ATTEMPT
+    */
+
+    currentAttempt =
+      await loadLatestAttempt(
+        currentUser.id
+      );
+
+
+    if(!currentAttempt){
+
+      showError(
+        "No completed attempt found for this test."
+      );
+
+      return;
+
+    }
+
+
+    /*
+      ASSIGNMENTS
+    */
+
+    const assignments =
+      await loadAssignedQuestions();
+
+
+    const questionIds =
+      assignments.map(
+        a => a.question_id
+      );
+
+
+    /*
+      Load all basic analysis data.
+    */
+
+    const [
+      questions,
+      options,
+      answers,
+      sections
+    ] =
+      await Promise.all([
+
+        loadQuestions(
+          questionIds
+        ),
+
+        loadOptions(
+          questionIds
+        ),
+
+        loadAnswers(
+          currentAttempt.id
+        ),
+
+        loadSections()
+
+      ]);
+
+
+    /*
+      Subjects needed by questions
+      and sections.
+    */
+
+    const subjectIds = [
+
+      ...questions.map(
+        q => q.subject_id
+      ),
+
+      ...sections.map(
+        s => s.subject_id
+      )
+
+    ].filter(Boolean);
+
+
+    const subjects =
+      await loadSubjects(
+        subjectIds
+      );
+
+
+    /*
+      Calculate every question.
+    */
+
+    const results =
+      calculateResults(
+        assignments,
+        questions,
+        options,
+        answers,
+        sections
+      );
+
+
+    /*
+      Calculate real subject-wise data.
+    */
+
+    sectionStats =
+      buildSectionStats(
+        results,
+        subjects,
+        sections
+      );
+
+
+    /*
+      Overall rank + percentile.
+    */
+
+    const rankInfo =
+      await calculateOverallRank();
+
+
+    overallRank =
+      rankInfo.rank;
+
+
+    overallPercentile =
+      rankInfo.percentile;
+
+
+    /*
+      Section percentile.
+      Best effort because RLS may
+      prevent access to other users.
+    */
+
+    await calculateSectionPercentiles();
+
+
+    /*
+      Display page.
+    */
+
+    render();
+
+
+  }catch(error){
+
+    console.error(
+      "Analysis error:",
+      error
+    );
+
+
+    showError(
+      "Unable to load analysis. Please try again."
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+init();
+
 </script>
+
 </body>
-</html>
+ </html>
