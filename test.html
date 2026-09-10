@@ -2975,8 +2975,19 @@ function saveCurrentSectionTime(){
     Number(remainingSeconds) || 0
   );
 
+  /*
+    IMPORTANT:
+    Do not restart the section clock every time progress is saved.
+    The section clock and question clock must run from the same active
+    timeline. It is only restarted when the test is actually resumed
+    or a new section is entered.
+  */
+
   sectionTimerBaseRemaining = sectionRemainingTimes[key];
-  sectionTimerStartedAt = paused ? 0 : Date.now();
+
+  if(paused){
+    sectionTimerStartedAt = 0;
+  }
 
 }
 
@@ -3081,7 +3092,24 @@ function switchQuestionTime(){
     saveCurrentQuestionTime();
     clearInterval(questionTimeInterval);
     questionTimeQuestionId = id;
-    questionTimeStartedAt = paused ? 0 : Date.now();
+
+    /*
+      For the first question of a running section, start question timing
+      from the exact same timestamp as the section clock. This removes
+      rendering/DOM delay from the two clocks.
+      For every later question, start at the exact moment we switch.
+    */
+    if(paused){
+      questionTimeStartedAt = 0;
+    }else if(
+      sectionTimerStartedAt > 0 &&
+      Object.keys(questionTimeSpent).length === 0
+    ){
+      questionTimeStartedAt = sectionTimerStartedAt;
+    }else{
+      questionTimeStartedAt = Date.now();
+    }
+
     questionTimeInterval = setInterval(updateQuestionTime,250);
   }
 
@@ -4564,50 +4592,466 @@ async function saveAttempt(
   questionTimes
 ){
 
-  const {data:{user}} = await db.auth.getUser();
+  const {data:{user}} =
+    await db.auth.getUser();
+
   if(!user){
     return;
   }
 
-  const attempt = await db
-    .from("test_attempts")
-    .insert({
-      user_id:user.id,
-      mock_test_id:test.id,
-      score:score,
-      correct_answers:correct,
-      wrong_answers:wrong,
-      unanswered:skipped,
-      total_questions:questions.length
-    })
-    .select()
-    .maybeSingle();
+  /*
+    Build section analytics from the exact submitted answers.
+    This is saved with the attempt so Analysis can read it directly.
+  */
+
+  const correctResult =
+    await db
+      .from("question_options")
+      .select("id,question_id,is_correct")
+      .in(
+        "question_id",
+        questions.map(q => q.id)
+      );
+
+  const correctMap = new Map();
+
+  (correctResult.data || []).forEach(option => {
+    if(option.is_correct){
+      correctMap.set(
+        String(option.question_id),
+        String(option.id)
+      );
+    }
+  });
+
+  const sectionalData = {};
+
+  sections.forEach((section, sectionIndex) => {
+
+    const sectionQuestions =
+      getSectionQuestions(section.id);
+
+    let sectionCorrect = 0;
+    let sectionIncorrect = 0;
+    let sectionUnanswered = 0;
+    let sectionScore = 0;
+    let sectionMaxMarks = 0;
+    let sectionAttempted = 0;
+
+    sectionQuestions.forEach(item => {
+
+      const q = item.q;
+
+      const selected =
+        answers[q.id];
+
+      const marks =
+        Number(
+          q.marks ??
+          test.marks_per_question ??
+          2
+        );
+
+      const negative =
+        Number(
+          q.negative_marks ??
+          test.negative_marks ??
+          0
+        );
+
+      sectionMaxMarks += marks;
+
+      if(!selected){
+
+        sectionUnanswered++;
+        return;
+
+      }
+
+      sectionAttempted++;
+
+      if(
+        String(selected) ===
+        String(correctMap.get(String(q.id)))
+      ){
+
+        sectionCorrect++;
+        sectionScore += marks;
+
+      }else{
+
+        sectionIncorrect++;
+        sectionScore -= negative;
+
+      }
+
+    });
+
+    sectionScore =
+      Math.round(sectionScore * 100) / 100;
+
+    sectionalData[String(section.id)] = {
+      section_id: section.id,
+      section_order:
+        section.section_order ??
+        sectionIndex + 1,
+      name:
+        getSectionName(
+          section,
+          sectionIndex
+        ),
+      score: sectionScore,
+      max_marks: sectionMaxMarks,
+      correct: sectionCorrect,
+      incorrect: sectionIncorrect,
+      unanswered: sectionUnanswered,
+      attempted: sectionAttempted,
+      percentile: null
+    };
+
+  });
+
+  const completedAt =
+    new Date().toISOString();
+
+  /*
+    Save the complete attempt first.
+  */
+  const attempt =
+    await db
+      .from("test_attempts")
+      .insert({
+        user_id: user.id,
+        mock_test_id: test.id,
+        score: score,
+        correct_answers: correct,
+        wrong_answers: wrong,
+        unanswered: skipped,
+        total_questions: questions.length,
+        started_at:
+          test.started_at ||
+          null,
+        completed_at: completedAt,
+        rank: null,
+        percentile: null,
+        sectional_data: sectionalData
+      })
+      .select()
+      .maybeSingle();
 
   if(attempt.error){
-    console.warn("Attempt history was not saved:",attempt.error.message);
-    return;
+
+    console.warn(
+      "Attempt history was not saved:",
+      attempt.error.message
+    );
+
+    /*
+      Fallback for databases where started_at is not writable/null.
+      Try the same insert without started_at.
+    */
+    const fallback =
+      await db
+        .from("test_attempts")
+        .insert({
+          user_id: user.id,
+          mock_test_id: test.id,
+          score: score,
+          correct_answers: correct,
+          wrong_answers: wrong,
+          unanswered: skipped,
+          total_questions: questions.length,
+          completed_at: completedAt,
+          rank: null,
+          percentile: null,
+          sectional_data: sectionalData
+        })
+        .select()
+        .maybeSingle();
+
+    if(fallback.error){
+
+      console.warn(
+        "Final attempt save failed:",
+        fallback.error.message
+      );
+
+      return;
+
+    }
+
+    attempt.data = fallback.data;
   }
 
   if(!attempt.data?.id){
     return;
   }
 
-  const rows = questions.map(q => ({
-    attempt_id:attempt.data.id,
-    question_id:q.id,
-    selected_option_id:answers[q.id] ? Number(answers[q.id]) : null,
-    time_spent_seconds:Math.max(0,Math.floor(Number(questionTimes?.[q.id] || 0)))
-  }));
+  /*
+    Save every question, including unanswered questions,
+    with its exact active time.
+  */
+  const rows =
+    questions.map(q => ({
+      attempt_id: attempt.data.id,
+      question_id: q.id,
+      selected_option_id:
+        answers[q.id]
+          ? Number(answers[q.id])
+          : null,
+      time_spent_seconds:
+        Math.max(
+          0,
+          Math.floor(
+            Number(
+              questionTimes?.[q.id] || 0
+            )
+          )
+        )
+    }));
 
   if(rows.length){
-    const result = await db.from("user_answers").insert(rows);
+
+    const result =
+      await db
+        .from("user_answers")
+        .insert(rows);
+
     if(result.error){
-      console.warn("User answers were not saved:",result.error.message);
+
+      console.warn(
+        "User answers were not saved:",
+        result.error.message
+      );
+
     }
+
+  }
+
+  /*
+    Calculate overall rank/percentile from the latest completed
+    attempt of each user, including the attempt just submitted.
+  */
+  try{
+
+    const allResult =
+      await db
+        .from("test_attempts")
+        .select(
+          "id,user_id,score,completed_at"
+        )
+        .eq(
+          "mock_test_id",
+          test.id
+        )
+        .not(
+          "completed_at",
+          "is",
+          null
+        );
+
+    if(!allResult.error){
+
+      const latestByUser = new Map();
+
+      (allResult.data || [])
+        .sort(
+          (a,b) =>
+            new Date(b.completed_at || 0) -
+            new Date(a.completed_at || 0)
+        )
+        .forEach(row => {
+
+          const uid =
+            String(row.user_id);
+
+          if(!latestByUser.has(uid)){
+            latestByUser.set(uid,row);
+          }
+
+        });
+
+      const scores =
+        [...latestByUser.values()]
+          .map(row =>
+            Number(row.score || 0)
+          );
+
+      const myScore =
+        Number(score || 0);
+
+      const higher =
+        scores.filter(
+          value => value > myScore
+        ).length;
+
+      const lower =
+        scores.filter(
+          value => value < myScore
+        ).length;
+
+      const rank =
+        higher + 1;
+
+      const percentile =
+        scores.length <= 1
+          ? 100
+          : (
+              lower /
+              (scores.length - 1)
+            ) * 100;
+
+      await db
+        .from("test_attempts")
+        .update({
+          rank: rank,
+          percentile:
+            Math.round(percentile * 100) / 100
+        })
+        .eq(
+          "id",
+          attempt.data.id
+        );
+
+    }
+
+  }catch(error){
+
+    console.warn(
+      "Rank/percentile calculation failed:",
+      error
+    );
+
+  }
+
+  /*
+    Calculate and save sectional percentile.
+    Older attempts without sectional_data are skipped here;
+    Analysis also calculates section percentiles dynamically from
+    their saved answers.
+  */
+  try{
+
+    const allResult =
+      await db
+        .from("test_attempts")
+        .select(
+          "id,user_id,score,completed_at,sectional_data"
+        )
+        .eq(
+          "mock_test_id",
+          test.id
+        )
+        .not(
+          "completed_at",
+          "is",
+          null
+        );
+
+    if(!allResult.error){
+
+      const latestByUser = new Map();
+
+      (allResult.data || [])
+        .sort(
+          (a,b) =>
+            new Date(b.completed_at || 0) -
+            new Date(a.completed_at || 0)
+        )
+        .forEach(row => {
+
+          const uid =
+            String(row.user_id);
+
+          if(!latestByUser.has(uid)){
+            latestByUser.set(uid,row);
+          }
+
+        });
+
+      const updatedSections =
+        JSON.parse(
+          JSON.stringify(sectionalData)
+        );
+
+      Object.keys(updatedSections)
+        .forEach(sectionId => {
+
+          const my =
+            Number(
+              updatedSections[sectionId].score || 0
+            );
+
+          const peerScores = [];
+
+          latestByUser.forEach(row => {
+
+            const data =
+              row.sectional_data;
+
+            if(
+              data &&
+              data[sectionId] &&
+              Number.isFinite(
+                Number(data[sectionId].score)
+              )
+            ){
+
+              peerScores.push(
+                Number(
+                  data[sectionId].score
+                )
+              );
+
+            }
+
+          });
+
+          if(peerScores.length <= 1){
+
+            updatedSections[sectionId].percentile = 100;
+
+          }else{
+
+            const lower =
+              peerScores.filter(
+                value => value < my
+              ).length;
+
+            updatedSections[sectionId].percentile =
+              Math.round(
+                (
+                  lower /
+                  (peerScores.length - 1)
+                ) * 10000
+              ) / 100;
+
+          }
+
+        });
+
+      await db
+        .from("test_attempts")
+        .update({
+          sectional_data: updatedSections
+        })
+        .eq(
+          "id",
+          attempt.data.id
+        );
+
+    }
+
+  }catch(error){
+
+    console.warn(
+      "Section percentile calculation failed:",
+      error
+    );
+
   }
 
 }
-
 
 document.addEventListener(
   "visibilitychange",
