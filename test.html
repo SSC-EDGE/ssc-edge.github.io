@@ -3266,12 +3266,31 @@ function showQuestion(){
         String(option.id);
 
 
-      radio.onchange =
-        function(){
+      radio.onclick =
+        function(event){
 
-          answers[q.id] =
+          event.preventDefault();
+
+          const optionId =
             String(option.id);
 
+          if(
+            answers[q.id] ===
+            optionId
+          ){
+
+            delete answers[q.id];
+
+          }else{
+
+            answers[q.id] =
+              optionId;
+
+          }
+
+          progressStarted = true;
+
+          saveProgress();
 
           showQuestion();
 
@@ -4378,6 +4397,8 @@ async function submitTest(automatic=false){
 
 async function calculateResult(automatic){
 
+  saveCurrentQuestionTime();
+
   const ids =
     questions.map(
       q => q.id
@@ -4518,7 +4539,9 @@ async function calculateResult(automatic){
     correct,
     wrong,
     skipped,
-    score
+    score,
+    maxMarks,
+    questionTimeSpent
   );
 
 
@@ -4592,7 +4615,9 @@ async function saveAttempt(
   correct,
   wrong,
   skipped,
-  score
+  score,
+  maxMarks,
+  timeSpent
 ){
 
   const {
@@ -4605,6 +4630,12 @@ async function saveAttempt(
     return;
   }
 
+
+  /*
+    First save the normal attempt fields exactly as before.
+    Optional analytics columns are written separately so an
+    older database does not break the test submission.
+  */
 
   const attempt =
     await db
@@ -4655,12 +4686,22 @@ async function saveAttempt(
     attempt.data?.id
   ){
 
+    const attemptId =
+      attempt.data.id;
+
+
+    /*
+      Save every question, including unanswered questions.
+      time_spent_seconds is optional and is attempted in a
+      separate update so the existing answer system remains safe.
+    */
+
     const rows =
       questions.map(
         q => ({
 
           attempt_id:
-            attempt.data.id,
+            attemptId,
 
           question_id:
             q.id,
@@ -4691,14 +4732,373 @@ async function saveAttempt(
           result.error.message
         );
 
+      }else{
+
+        /*
+          Save per-question time when the new column exists.
+        */
+
+        for(const q of questions){
+
+          const seconds =
+            Math.max(
+              0,
+              Math.floor(
+                Number(
+                  timeSpent?.[String(q.id)] || 0
+                )
+              )
+            );
+
+
+          const timeResult =
+            await db
+              .from("user_answers")
+              .update({
+                time_spent_seconds:
+                  seconds
+              })
+              .eq(
+                "attempt_id",
+                attemptId
+              )
+              .eq(
+                "question_id",
+                q.id
+              );
+
+
+          if(timeResult.error){
+
+            /*
+              Do not repeatedly log the same schema error.
+              The SQL migration supplied with this update adds
+              this column.
+            */
+
+            if(
+              String(
+                timeResult.error.message || ""
+              ).toLowerCase().includes(
+                "time_spent_seconds"
+              )
+            ){
+
+              console.warn(
+                "Add time_spent_seconds to user_answers to enable question-time analytics."
+              );
+
+              break;
+
+            }
+
+          }
+
+        }
+
       }
+
+    }
+
+
+    /*
+      Calculate and save sectional data.
+      This is stored as JSON in test_attempts.sectional_data.
+      Rank/percentile are also saved when the optional columns exist.
+    */
+
+    const sectionData = {};
+
+    if(
+      sections.length
+    ){
+
+      sections.forEach(
+        (section,index)=>{
+
+          const list =
+            getSectionQuestions(
+              section.id
+            );
+
+          let sectionCorrect = 0;
+          let sectionWrong = 0;
+          let sectionUnanswered = 0;
+          let sectionScore = 0;
+          let sectionMax = 0;
+
+          list.forEach(
+            item=>{
+
+              const q = item.q;
+
+              const marks =
+                Number(
+                  q.marks ??
+                  test.marks_per_question ??
+                  2
+                );
+
+              const negative =
+                Number(
+                  q.negative_marks ??
+                  test.negative_marks ??
+                  0
+                );
+
+              sectionMax += marks;
+
+              const selected =
+                answers[q.id];
+
+              if(!selected){
+
+                sectionUnanswered++;
+
+                return;
+
+              }
+
+              /*
+                We use the already-loaded question options
+                from q.options to determine the answer.
+              */
+
+              const correctOption =
+                q.options?.find(
+                  option =>
+                    option.is_correct === true ||
+                    option.is_correct === "true" ||
+                    option.is_correct === 1 ||
+                    option.is_correct === "1"
+                );
+
+              if(
+                correctOption &&
+                String(selected) ===
+                String(correctOption.id)
+              ){
+
+                sectionCorrect++;
+                sectionScore += marks;
+
+              }else{
+
+                sectionWrong++;
+                sectionScore -= negative;
+
+              }
+
+            }
+          );
+
+          sectionData[String(section.id)] = {
+            section_id: section.id,
+            section_order:
+              section.section_order ??
+              index + 1,
+            subject_name:
+              getSectionName(
+                section,
+                index
+              ),
+            total_questions:
+              list.length,
+            correct:
+              sectionCorrect,
+            incorrect:
+              sectionWrong,
+            unanswered:
+              sectionUnanswered,
+            attempted:
+              sectionCorrect +
+              sectionWrong,
+            score:
+              Math.round(
+                sectionScore * 100
+              ) / 100,
+            max_marks:
+              Math.round(
+                sectionMax * 100
+              ) / 100,
+            percentile:
+              null
+          };
+
+        }
+      );
+
+    }
+
+
+    const sectionUpdate =
+      await db
+        .from("test_attempts")
+        .update({
+          sectional_data:
+            sectionData
+        })
+        .eq(
+          "id",
+          attemptId
+        );
+
+    if(sectionUpdate.error){
+      console.warn(
+        "Sectional analytics could not be saved:",
+        sectionUpdate.error.message
+      );
+    }
+
+
+    /*
+      Rank and percentile are calculated against the completed
+      attempts that exist at submission time.
+    */
+
+    try{
+
+      const allAttempts =
+        await db
+          .from("test_attempts")
+          .select(
+            "id,user_id,score"
+          )
+          .eq(
+            "mock_test_id",
+            test.id
+          )
+          .not(
+            "completed_at",
+            "is",
+            null
+          );
+
+      if(!allAttempts.error){
+
+        const bestByUser =
+          new Map();
+
+        (allAttempts.data || [])
+          .forEach(row=>{
+
+            if(
+              row.user_id === null ||
+              row.user_id === undefined
+            ){
+              return;
+            }
+
+            const uid =
+              String(row.user_id);
+
+            const value =
+              Number(row.score);
+
+            if(
+              !Number.isFinite(value)
+            ){
+              return;
+            }
+
+            if(
+              !bestByUser.has(uid) ||
+              value >
+              bestByUser.get(uid)
+            ){
+
+              bestByUser.set(
+                uid,
+                value
+              );
+
+            }
+
+          });
+
+
+        /*
+          Include the current attempt even if completed_at
+          is not populated by a database trigger yet.
+        */
+
+        if(
+          !bestByUser.has(String(user.id)) ||
+          score >
+          bestByUser.get(String(user.id))
+        ){
+
+          bestByUser.set(
+            String(user.id),
+            Number(score)
+          );
+
+        }
+
+
+        const scores =
+          [...bestByUser.values()];
+
+        const higher =
+          scores.filter(
+            value =>
+              value > Number(score)
+          ).length;
+
+        const lower =
+          scores.filter(
+            value =>
+              value < Number(score)
+          ).length;
+
+        const rank =
+          higher + 1;
+
+        const percentile =
+          scores.length > 1
+            ? (
+                lower /
+                (scores.length - 1)
+              ) * 100
+            : 100;
+
+
+        /*
+          Save optional rank/percentile fields.
+        */
+
+        const rankUpdate =
+          await db
+            .from("test_attempts")
+            .update({
+              rank: rank,
+              percentile: percentile
+            })
+            .eq(
+              "id",
+              attemptId
+            );
+
+        if(rankUpdate.error){
+          console.warn(
+            "Rank/percentile columns are not available yet. Run the supplied SQL migration."
+          );
+        }
+
+      }
+
+    }catch(error){
+
+      console.warn(
+        "Rank/percentile calculation failed:",
+        error
+      );
 
     }
 
   }
 
 }
-
 
 
 document.addEventListener(
