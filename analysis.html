@@ -671,7 +671,7 @@ async function loadLatestAttempt(userId){
 
   const {data,error}=await supabaseClient
     .from("test_attempts")
-    .select("id,user_id,mock_test_id,started_at,completed_at,score,correct_answers,wrong_answers,unanswered,total_questions,rank,percentile,sectional_data")
+    .select("id,user_id,mock_test_id,started_at,completed_at,score,correct_answers,wrong_answers,unanswered,rank,percentile,sectional_data")
     .eq("mock_test_id",mockTestId)
     .eq("user_id",userId)
     .not("completed_at","is",null)
