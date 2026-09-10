@@ -230,30 +230,6 @@ body{
   color:#fff;
 }
 
-.score-breakdown{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:10px;
-  margin-top:4px;
-}
-
-.score-breakdown .detail{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:15px;
-}
-
-.score-breakdown .detail-label{
-  margin-bottom:0;
-}
-
-.total-score-row{
-  border-top:1px solid var(--border);
-  margin-top:2px;
-  padding-top:14px;
-}
-
 .section-details{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -548,8 +524,13 @@ body{
       </div>
 
 
-      <div id="noSections" class="status" style="display:none">
+      <div
+        id="noSections"
+        class="status"
+        style="display:none">
+
         No sectional data available.
+
       </div>
 
     </section>
@@ -588,7 +569,7 @@ let currentUser = null;
 let currentAttempt = null;
 
 let sectionStats = [];
-let selectedSectionIndex = -1;
+let selectedSectionIndex = 0;
 
 let overallRank = null;
 let totalAttemptedUsers = null;
@@ -688,22 +669,19 @@ async function loadTest(){
 
 async function loadLatestAttempt(userId){
 
-  const {data,error} =
-    await supabaseClient
-      .from("test_attempts")
-      .select(
-        "id,user_id,mock_test_id,started_at,completed_at,score,correct_answers,wrong_answers,unanswered,rank,percentile,sectional_data"
-      )
-      .eq("mock_test_id",mockTestId)
-      .eq("user_id",userId)
-      .not("completed_at","is",null)
-      .order("completed_at",{ascending:false})
-      .limit(1)
-      .maybeSingle();
+  const {data,error}=await supabaseClient
+    .from("test_attempts")
+    .select("id,user_id,mock_test_id,started_at,completed_at,created_at,score,correct_answers,wrong_answers,unanswered,total_questions,rank,percentile,sectional_data")
+    .eq("mock_test_id",mockTestId)
+    .eq("user_id",userId)
+    .not("completed_at","is",null)
+    .order("completed_at",{ascending:false})
+    .limit(1)
+    .maybeSingle();
 
   if(error) throw error;
-
   return data;
+
 }
 
 
@@ -1219,7 +1197,7 @@ async function loadAllCompletedAttempts(){
       await supabaseClient
         .from("test_attempts")
         .select(
-          "id,user_id,score,completed_at"
+          "id,user_id,score,completed_at,rank,percentile,sectional_data"
         )
         .eq("mock_test_id",mockTestId)
         .not("completed_at","is",null)
@@ -1718,255 +1696,74 @@ function renderOverall(){
 
 function renderTabs(){
 
-  const tabs = $("tabs");
+  const tabs=$("tabs");
+  tabs.innerHTML="";
 
-  tabs.innerHTML = "";
-
-  /*
-    Score is always the first tab.
-    Each real subject/section follows it.
-  */
-
-  const scoreButton =
-    document.createElement("button");
-
-  scoreButton.className =
-    "tab" +
-    (
-      selectedSectionIndex === -1
-        ? " active"
-        : ""
-    );
-
-  scoreButton.textContent =
-    "Score";
-
-  scoreButton.onclick =
-    () => {
-
-      selectedSectionIndex = -1;
-
-      renderTabs();
-      renderSelectedSection();
-
-    };
-
+  const scoreButton=document.createElement("button");
+  scoreButton.className="tab"+(selectedSectionIndex===0?" active":"");
+  scoreButton.textContent="Score";
+  scoreButton.onclick=()=>{selectedSectionIndex=0;renderTabs();renderSelectedSection()};
   tabs.appendChild(scoreButton);
 
-  sectionStats.forEach(
-    (stat,index) => {
-
-      const button =
-        document.createElement("button");
-
-      button.className =
-        "tab" +
-        (
-          index === selectedSectionIndex
-            ? " active"
-            : ""
-        );
-
-      button.textContent =
-        stat.name;
-
-      button.onclick =
-        () => {
-
-          selectedSectionIndex =
-            index;
-
-          renderTabs();
-          renderSelectedSection();
-
-        };
-
-      tabs.appendChild(button);
-
-    }
-  );
+  sectionStats.forEach((stat,index)=>{
+    const button=document.createElement("button");
+    button.className="tab"+(selectedSectionIndex===index+1?" active":"");
+    button.textContent=stat.name;
+    button.onclick=()=>{selectedSectionIndex=index+1;renderTabs();renderSelectedSection()};
+    tabs.appendChild(button);
+  });
 
 }
+
+
+
+/* =========================================================
+   SELECTED SECTION
+========================================================= */
 
 function renderSelectedSection(){
 
   if(!sectionStats.length){
-
-    $("sectionDetails").style.display =
-      "none";
-
-    $("tabsWrap").style.display =
-      "none";
-
-    $("noSections").style.display =
-      "block";
-
+    $("sectionDetails").style.display="none";
+    $("tabsWrap").style.display="none";
+    $("noSections").style.display="block";
     return;
-
   }
 
-  $("tabsWrap").style.display =
-    "block";
+  $("sectionDetails").style.display="grid";
+  $("tabsWrap").style.display="block";
+  $("noSections").style.display="none";
 
-  $("noSections").style.display =
-    "none";
+  const details=$("sectionDetails");
 
-  /*
-    SCORE TAB
-    Shows every section in exactly the same
-    score format, followed by Total Score.
-  */
-
-  if(selectedSectionIndex === -1){
-
-    const details =
-      $("sectionDetails");
-
-    details.className =
-      "section-details score-breakdown";
-
-    details.innerHTML = "";
-
-    sectionStats.forEach(stat => {
-
-      const item =
-        document.createElement("div");
-
-      item.className =
-        "detail";
-
-      item.innerHTML =
-        '<div class="detail-label">' +
-        String(stat.name) +
-        '</div>' +
-        '<div class="detail-value">' +
-        formatScore(stat.score) +
-        ' / ' +
-        formatScore(stat.maxMarks) +
-        '</div>';
-
-      details.appendChild(item);
-
+  if(selectedSectionIndex===0){
+    details.innerHTML="";
+    sectionStats.forEach(stat=>{
+      const d=document.createElement("div");d.className="detail";
+      d.innerHTML='<div class="detail-label">'+escapeHtml(stat.name)+' Score</div><div class="detail-value">'+formatScore(stat.score)+' / '+formatScore(stat.maxMarks)+'</div>';
+      details.appendChild(d);
     });
-
-    const totalScore =
-      sectionStats.reduce(
-        (sum,stat) =>
-          sum + Number(stat.score || 0),
-        0
-      );
-
-    const totalMarks =
-      sectionStats.reduce(
-        (sum,stat) =>
-          sum + Number(stat.maxMarks || 0),
-        0
-      );
-
-    const total =
-      document.createElement("div");
-
-    total.className =
-      "detail total-score-row";
-
-    total.innerHTML =
-      '<div class="detail-label"><b>Total Score</b></div>' +
-      '<div class="detail-value">' +
-      formatScore(totalScore) +
-      ' / ' +
-      formatScore(totalMarks) +
-      '</div>';
-
-    details.appendChild(total);
-
-    return;
-
-  }
-
-  /*
-    Individual section tab.
-  */
-
-  const details =
-    $("sectionDetails");
-
-  details.className =
-    "section-details";
-
-  const stat =
-    sectionStats[
-      selectedSectionIndex
-    ];
-
-  if(!stat){
+    const total=sectionStats.reduce((a,b)=>a+Number(b.score||0),0);
+    const max=sectionStats.reduce((a,b)=>a+Number(b.maxMarks||0),0);
+    const d=document.createElement("div");d.className="detail";d.innerHTML='<div class="detail-label">Total Score</div><div class="detail-value">'+formatScore(total)+' / '+formatScore(max)+'</div>';details.appendChild(d);
     return;
   }
 
-  details.innerHTML = `
-
-    <div class="detail">
-
-      <div class="detail-label">
-        Score
-      </div>
-
-      <div
-        id="sectionScore"
-        class="detail-value">
-        ${formatScore(stat.score)} /
-        ${formatScore(stat.maxMarks)}
-      </div>
-
-    </div>
-
-
-    <div class="detail">
-
-      <div class="detail-label">
-        Section Percentile
-      </div>
-
-      <div
-        id="sectionPercentile"
-        class="detail-value">
-        ${formatPercent(stat.percentile)}
-      </div>
-
-    </div>
-
-
-    <div class="detail">
-
-      <div class="detail-label">
-        Correct
-      </div>
-
-      <div
-        id="sectionCorrect"
-        class="detail-value green">
-        ${stat.correct}
-      </div>
-
-    </div>
-
-
-    <div class="detail">
-
-      <div class="detail-label">
-        Incorrect
-      </div>
-
-      <div
-        id="sectionIncorrect"
-        class="detail-value red">
-        ${stat.incorrect}
-      </div>
-
-    </div>
-
-  `;
+  const stat=sectionStats[selectedSectionIndex-1];
+  if(!stat) return;
+  details.innerHTML=''+
+    '<div class="detail"><div class="detail-label">Score</div><div class="detail-value">'+formatScore(stat.score)+' / '+formatScore(stat.maxMarks)+'</div></div>'+
+    '<div class="detail"><div class="detail-label">Section Percentile</div><div class="detail-value">'+formatPercent(stat.percentile)+'</div></div>'+
+    '<div class="detail"><div class="detail-label">Correct</div><div class="detail-value green">'+stat.correct+'</div></div>'+
+    '<div class="detail"><div class="detail-label">Incorrect</div><div class="detail-value red">'+stat.incorrect+'</div></div>';
 
 }
+
+
+
+/* =========================================================
+   RENDER
+========================================================= */
 
 function render(){
 

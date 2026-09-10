@@ -1400,7 +1400,9 @@ body{
 .solution-page .solution-meta-value.good{color:#25c27a}
 .solution-page .solution-option{cursor:default!important;display:flex;align-items:flex-start;gap:8px}
 .solution-page .solution-option.correct-option{border-color:#25c27a;background:rgba(37,194,122,.10)}
+.solution-page .solution-option.wrong-option{border-color:#ef4444;background:rgba(239,68,68,.10)}
 .solution-page .solution-option.your-option{outline:2px solid rgba(124,58,237,.35)}
+.solution-page .your-attempt{margin-left:6px;font-size:10px;font-weight:900;color:var(--purple2)}
 .solution-page .solution-answer{margin-top:11px;padding:10px 11px;border:1px solid var(--border);border-radius:10px;background:var(--card2);color:var(--text);font-size:12px;font-weight:800;line-height:1.5}
 .solution-page .solution-explanation{margin-top:10px;padding:11px;border-left:3px solid var(--purple);border-radius:0 10px 10px 0;background:var(--card2);color:var(--text);font-size:12px;line-height:1.65}
 .solution-page .solution-explanation-title{color:var(--purple2);font-weight:900;margin-bottom:4px}
@@ -1438,46 +1440,13 @@ body{
 <script>
 const db=supabase.createClient("https://dvvyoygahzzbnpqrfhen.supabase.co","sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s");
 const testId=new URLSearchParams(location.search).get("id");
-let test=null,sections=[],questions=[],attempt=null,answers={},questionTimes={},avgTimes={},correctRates={},subjects=[];
+let test=null,sections=[],questions=[],attempt=null,answers={},questionTimes={},avgTimes={},correctRates={};
 let currentSectionIndex=0,currentIndex=0;
 const $=id=>document.getElementById(id);
 function esc(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
 function fmtTime(v){v=Math.max(0,Math.floor(Number(v)||0));return String(Math.floor(v/60)).padStart(2,"0")+":"+String(v%60).padStart(2,"0")}
 function showError(t){$("loading").className="loading error";$("loading").textContent=t}
-function sectionName(s,i){
- const direct=[
-  s?.subject_name,
-  s?.subjectName,
-  s?.subject,
-  s?.name,
-  s?.title,
-  s?.section_name
- ];
- for(const x of direct){
-  if(
-   String(x||"").trim() &&
-   !/^section\s*\d+$/i.test(String(x).trim())
-  ){
-   return String(x).trim();
-  }
- }
- if(s?.subject_id){
-  const subject=subjects.find(
-   x=>String(x.id)===String(s.subject_id)
-  );
-  if(subject?.name)return subject.name;
- }
- const first=questions.find(
-  q=>String(q.section_id)===String(s?.id)
- );
- if(first?.subject_id){
-  const subject=subjects.find(
-   x=>String(x.id)===String(first.subject_id)
-  );
-  if(subject?.name)return subject.name;
- }
- return "Section "+(i+1);
-}
+function sectionName(s,i){const direct=[s?.subject_name,s?.subjectName,s?.subject,s?.name,s?.title,s?.section_name];for(const x of direct)if(String(x||"").trim()&&!/^section\s*\d+$/i.test(String(x).trim()))return String(x).trim();return "Section "+(i+1)}
 function activeList(){return sections.length?questions.map((q,i)=>({q,i})).filter(x=>String(x.q.section_id)===String(sections[currentSectionIndex]?.id)):questions.map((q,i)=>({q,i}))}
 function renderSections(){const bar=$("sectionBar");if(!sections.length){bar.classList.add("hidden");return}bar.classList.remove("hidden");bar.innerHTML="";sections.forEach((s,i)=>{const b=document.createElement("button");b.type="button";b.className="section-btn"+(i===currentSectionIndex?" current":"");b.textContent=sectionName(s,i);b.onclick=()=>{currentSectionIndex=i;const l=activeList();currentIndex=l.length?l[0].i:currentIndex;render()};bar.appendChild(b)})}
 function renderGrid(){const g=$("questionGrid");g.innerHTML="";activeList().forEach((item,pos)=>{const b=document.createElement("button");b.type="button";b.className="grid-question not-visited";b.textContent=pos+1;if(item.i===currentIndex)b.classList.add("current");b.onclick=()=>{currentIndex=item.i;closeGrid();render()};g.appendChild(b)})}
@@ -1489,7 +1458,7 @@ function render(){
  const card=$("questionCard");card.innerHTML="";
  const text=document.createElement("div");text.className="question-text";text.textContent=q.question_text||"";card.appendChild(text);
  const meta=document.createElement("div");meta.className="solution-meta";const your=questionTimes[String(q.id)]??0,avg=avgTimes[String(q.id)];meta.innerHTML='<div class="solution-meta-box"><div class="solution-meta-label">Your Time</div><div class="solution-meta-value">'+fmtTime(your)+'</div></div><div class="solution-meta-box"><div class="solution-meta-label">Avg Time</div><div class="solution-meta-value">'+(avg==null?"—":fmtTime(avg))+'</div></div><div class="solution-meta-box"><div class="solution-meta-label">Correct %</div><div class="solution-meta-value good">'+(correctRates[String(q.id)]==null?"—":Number(correctRates[String(q.id)]).toFixed(0)+"%")+'</div></div>';card.appendChild(meta);
- const options=document.createElement("div");options.className="options";(q.options||[]).forEach((o,i)=>{const row=document.createElement("div");row.className="option solution-option";if(o.is_correct)row.classList.add("correct-option");if(String(answers[String(q.id)]??"")===String(o.id))row.classList.add("your-option");const lab=o.option_label||String.fromCharCode(65+i);row.innerHTML='<span class="option-label">'+esc(lab)+'</span><span class="option-text">'+esc(o.option_text||"")+'</span>';options.appendChild(row)});card.appendChild(options);
+ const options=document.createElement("div");options.className="options";const selectedId=answers[String(q.id)]==null?null:String(answers[String(q.id)]);(q.options||[]).forEach((o,i)=>{const row=document.createElement("div");row.className="option solution-option";const isCorrect=!!o.is_correct;const isYour=selectedId!==null&&selectedId===String(o.id);if(isCorrect)row.classList.add("correct-option");if(isYour&&!isCorrect)row.classList.add("wrong-option");if(isYour)row.classList.add("your-option");const lab=o.option_label||String.fromCharCode(65+i);const tag=isYour?' <span class="your-attempt">[Your Attempt]</span>':'';row.innerHTML='<span class="option-label">'+esc(lab)+'</span><span class="option-text">'+esc(o.option_text||"")+tag+'</span>';options.appendChild(row)});card.appendChild(options);
  const correct=(q.options||[]).find(o=>o.is_correct);const ans=document.createElement("div");ans.className="solution-answer";ans.innerHTML='<b>Correct Answer:</b> '+(correct?esc((correct.option_label||"")+" "+(correct.option_text||"")):"Not available");card.appendChild(ans);
  const ex=document.createElement("div");ex.className="solution-explanation";ex.innerHTML='<div class="solution-explanation-title">Explanation</div><div>'+esc(q.explanation||"No explanation has been added for this question yet.")+'</div>';card.appendChild(ex);
  const nav=$("navigation");nav.innerHTML="";const gridRow=document.createElement("div");gridRow.className="grid-button-row";const gb=document.createElement("button");gb.type="button";gb.className="grid-btn";gb.textContent="▦";gb.onclick=openGrid;gridRow.appendChild(gb);nav.appendChild(gridRow);
@@ -1500,24 +1469,21 @@ async function run(){
   if(!testId){showError("Test ID is missing.");return}
   const tr=await db.from("mock_tests").select("*").eq("id",testId).maybeSingle();if(tr.error)throw tr.error;if(!tr.data){showError("Test not found.");return}test=tr.data;
   const sr=await db.from("mock_test_sections").select("*").eq("mock_test_id",testId).order("section_order");if(sr.error)throw sr.error;sections=sr.data||[];
-  const subjectIds=[...new Set(sections.map(s=>s.subject_id).filter(x=>x!==null&&x!==undefined&&x!==""))];
-  if(subjectIds.length){const subr=await db.from("subjects").select("id,name").in("id",subjectIds);if(!subr.error)subjects=subr.data||[];}
   const ar=await db.from("mock_test_questions").select("question_id,question_order,section_id").eq("mock_test_id",testId).order("question_order");if(ar.error)throw ar.error;const assignments=ar.data||[];const ids=assignments.map(a=>a.question_id);if(!ids.length){showError("No questions found for this test.");return}
   const [qr,or]=await Promise.all([db.from("questions").select("id,question_text,explanation,subject_id").in("id",ids),db.from("question_options").select("id,question_id,option_label,option_text,is_correct").in("question_id",ids).order("id")]);if(qr.error)throw qr.error;if(or.error)throw or.error;
   const qm=new Map((qr.data||[]).map(q=>[String(q.id),{...q,options:[]}]));(or.data||[]).forEach(o=>{const q=qm.get(String(o.question_id));if(q)q.options.push(o)});questions=assignments.map(a=>{const q=qm.get(String(a.question_id));return q?{...q,section_id:a.section_id,question_order:a.question_order}:null}).filter(Boolean);
   const ur=await db.auth.getUser();const user=ur.data?.user;
   if(user){
-   const ta=await db.from("test_attempts").select("id,user_id,completed_at").eq("mock_test_id",testId).not("completed_at","is",null).order("completed_at",{ascending:false});
+   const ta=await db.from("test_attempts").select("id,user_id,completed_at,created_at").eq("mock_test_id",testId).not("completed_at","is",null).order("completed_at",{ascending:false});
    if(!ta.error){
-    const attempts=ta.data||[];attempt=attempts.find(a=>String(a.user_id)===String(user.id))||null;
-    const latestByUser=new Map();attempts.forEach(a=>{if(!latestByUser.has(String(a.user_id)))latestByUser.set(String(a.user_id),a)});const idsA=[...latestByUser.values()].map(a=>a.id);
+    const attempts=ta.data||[];attempt=attempts.find(a=>String(a.user_id)===String(user.id))||null;const latestByUser=new Map();attempts.forEach(a=>{const uid=String(a.user_id);if(!latestByUser.has(uid))latestByUser.set(uid,a)});const idsA=[...latestByUser.values()].map(a=>a.id);
     if(idsA.length){
      const ua=await db.from("user_answers").select("attempt_id,question_id,selected_option_id,time_spent_seconds").in("attempt_id",idsA);
      if(!ua.error){
       const rows=ua.data||[];const correctMap=new Map(questions.map(q=>[String(q.id),String((q.options||[]).find(o=>o.is_correct)?.id||"")]));const times=new Map(),right=new Map(),answered=new Map();
       rows.forEach(r=>{const k=String(r.question_id);const t=Number(r.time_spent_seconds||0);if(t>0){if(!times.has(k))times.set(k,[]);times.get(k).push(t)}if(r.selected_option_id!=null){answered.set(k,(answered.get(k)||0)+1);if(String(r.selected_option_id)===correctMap.get(k))right.set(k,(right.get(k)||0)+1)}});
       times.forEach((v,k)=>avgTimes[k]=v.reduce((a,b)=>a+b,0)/v.length);answered.forEach((v,k)=>correctRates[k]=v?((right.get(k)||0)/v)*100:null);
-      if(attempt){rows.filter(r=>r.attempt_id===attempt.id).forEach(r=>{questionTimes[String(r.question_id)]=Number(r.time_spent_seconds||0);answers[String(r.question_id)]=r.selected_option_id})}
+      if(attempt){rows.filter(r=>String(r.attempt_id)===String(attempt.id)).forEach(r=>{questionTimes[String(r.question_id)]=Number(r.time_spent_seconds||0);answers[String(r.question_id)]=r.selected_option_id})}
      }
     }
    }
