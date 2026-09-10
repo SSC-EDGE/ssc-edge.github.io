@@ -1971,7 +1971,7 @@ async function init(){
 
 
     showError(
-      "Unable to load analysis. Please try again."
+      "Unable to load analysis: " + (error?.message || String(error))
     );
 
   }
