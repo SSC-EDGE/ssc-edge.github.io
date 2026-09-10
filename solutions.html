@@ -8,7 +8,39 @@
 <script>document.documentElement.dataset.theme=localStorage.getItem("ssc-edge-theme")||"dark";</script>
 <style>
 *{box-sizing:border-box}body{margin:0;padding-bottom:30px}.page{max-width:850px;margin:auto;padding:16px 14px 35px}.back{display:inline-block;margin-bottom:14px;color:var(--purple2);text-decoration:none;font-size:13px;font-weight:900}.head,.solution{background:var(--card);border:1px solid var(--border);border-radius:17px;padding:16px;margin-bottom:12px;overflow:hidden}.head h1{margin:0;color:var(--text);font-size:21px;line-height:1.25}.sub{margin:5px 0 0;color:var(--muted);font-size:12px;line-height:1.5}.qhead{display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px solid var(--border);padding-bottom:10px}.qno{color:var(--text);font-size:14px;font-weight:900}.subject{color:var(--purple2);font-size:11px;font-weight:900;text-align:right}.qtext{color:var(--text);font-size:14px;font-weight:700;line-height:1.55;margin:12px 0;overflow-wrap:anywhere}.option{padding:9px 10px;margin-top:7px;border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:12px;line-height:1.45;overflow-wrap:anywhere}.option.correct{border-color:#2fbf71;background:rgba(47,191,113,.10)}.answer{margin-top:11px;padding:10px;border-radius:10px;background:var(--card2);color:var(--text);font-size:12px;line-height:1.5;overflow-wrap:anywhere}.answer b{color:#2fbf71}.explanation{margin-top:9px;color:var(--muted);font-size:12px;line-height:1.6;overflow-wrap:anywhere}.actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px}.btn{display:flex;align-items:center;justify-content:center;min-height:42px;padding:8px;border-radius:10px;background:var(--card2);border:1px solid var(--border);color:var(--text);text-decoration:none;font-size:11px;font-weight:900;text-align:center}.btn.primary{background:var(--purple);border-color:var(--purple);color:#fff}.empty{text-align:center;color:var(--muted);padding:25px 8px;font-size:13px}
-@media(max-width:500px){.actions{grid-template-columns:1fr}}
+.question-metrics{
+  display:grid;
+  grid-template-columns:1fr 1fr 1.35fr;
+  gap:7px;
+  margin-top:11px;
+}
+
+.metric{
+  background:var(--card2);
+  border:1px solid var(--border);
+  border-radius:9px;
+  padding:8px 7px;
+  text-align:center;
+}
+
+.metric-label{
+  color:var(--muted);
+  font-size:9px;
+  font-weight:700;
+}
+
+.metric-value{
+  margin-top:3px;
+  color:var(--text);
+  font-size:11px;
+  font-weight:900;
+}
+
+@media(max-width:500px){
+  .actions{grid-template-columns:1fr}
+  .question-metrics{grid-template-columns:1fr 1fr}
+  .question-metrics .metric:last-child{grid-column:1 / -1}
+}
 </style>
 </head>
 <body>
@@ -16,29 +48,378 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const db=supabase.createClient("https://dvvyoygahzzbnpqrfhen.supabase.co","sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s");
-const testId=new URLSearchParams(location.search).get("id");const app=document.getElementById("app");
-function esc(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;").replace(/'/g,"&#039;")}
-function show(t){app.innerHTML='<div class="head empty">'+esc(t)+'</div>'}
-async function run(){
- if(!testId){show("Test ID is missing.");return}
- const tr=await db.from("mock_tests").select("id,title").eq("id",testId).maybeSingle();
- const title=tr.data?.title||"SSC EDGE Test";
- const qr=await db.from("mock_test_questions").select("question_id,question_order,section_id").eq("mock_test_id",testId).order("question_order");
- if(qr.error){show("Could not load questions.");return}
- const assignments=qr.data||[];const ids=assignments.map(x=>x.question_id);if(!ids.length){show("No questions found for this test.");return}
- const [qres,ores,sres]=await Promise.all([
-  db.from("questions").select("id,question_text,explanation,subject_id").in("id",ids),
-  db.from("question_options").select("id,question_id,option_label,option_text,is_correct").in("question_id",ids).order("id"),
-  db.from("mock_test_sections").select("*").eq("mock_test_id",testId).order("section_order")
- ]);
- const qm=new Map((qres.data||[]).map(q=>[String(q.id),q]));const om=new Map();(ores.data||[]).forEach(o=>{const k=String(o.question_id);if(!om.has(k))om.set(k,[]);om.get(k).push(o)});
- const sm=new Map((sres.data||[]).map((s,i)=>[String(s.id),s]));
- const sectionName=s=>s?.subject_name||s?.subjectName||s?.subject||s?.name||s?.title||"";
- let html=`<div class="head"><h1>${esc(title)} — Solutions</h1><p class="sub">Correct answers and explanations</p></div>`;
- assignments.forEach((a,i)=>{const q=qm.get(String(a.question_id));if(!q)return;const opts=om.get(String(q.id))||[];const correct=opts.find(o=>o.is_correct);const sec=sm.get(String(a.section_id));const sub=sectionName(sec);html+=`<article class="solution"><div class="qhead"><span class="qno">Question ${i+1}</span>${sub?`<span class="subject">${esc(sub)}</span>`:""}</div><div class="qtext">${esc(q.question_text)}</div>${opts.map(o=>`<div class="option ${o.is_correct?'correct':''}">${esc(o.option_label||"")} ${esc(o.option_text||"")}${o.is_correct?' ✓':''}</div>`).join("")}<div class="answer"><b>Correct Answer:</b> ${correct?esc((correct.option_label||"")+" "+correct.option_text):"Not available"}</div>${q.explanation?`<div class="explanation"><b>Explanation:</b> ${esc(q.explanation)}</div>`:`<div class="explanation">No explanation has been added for this question yet.</div>`}</article>`});
- html+=`<div class="actions"><a class="btn" href="analysis.html?id=${encodeURIComponent(testId)}">Analysis</a><a class="btn" href="practice.html">Practice</a><a class="btn primary" href="test.html?id=${encodeURIComponent(testId)}&reattempt=1">Re-attempt</a></div>`;app.innerHTML=html;
+const testId=new URLSearchParams(location.search).get("id");
+const app=document.getElementById("app");
+
+function esc(v){
+  return String(v??"")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/\"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
-run().catch(e=>{console.error(e);show("Could not load solutions. Please try again.")});
+
+function show(t){
+  app.innerHTML='<div class="head empty">'+esc(t)+'</div>';
+}
+
+function formatSeconds(value){
+  const n=Math.max(0,Math.floor(Number(value)||0));
+  const m=Math.floor(n/60);
+  const s=n%60;
+  return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+}
+
+function isCorrect(o){
+  return o?.is_correct===true ||
+    o?.is_correct==="true" ||
+    o?.is_correct===1 ||
+    o?.is_correct==="1";
+}
+
+function sectionName(s,index){
+  const direct=[
+    s?.subject_name,
+    s?.subjectName,
+    s?.subject,
+    s?.name,
+    s?.title,
+    s?.section_name
+  ];
+  for(const value of direct){
+    const text=String(value||"").trim();
+    if(text && !/^section\s*\d+$/i.test(text)) return text;
+  }
+  return "Section "+(index+1);
+}
+
+async function run(){
+
+  if(!testId){
+    show("Test ID is missing.");
+    return;
+  }
+
+  const tr=await db
+    .from("mock_tests")
+    .select("id,title")
+    .eq("id",testId)
+    .maybeSingle();
+
+  if(tr.error){
+    show("Could not load test.");
+    return;
+  }
+
+  const title=tr.data?.title||"SSC EDGE Test";
+
+  const qr=await db
+    .from("mock_test_questions")
+    .select("question_id,question_order,section_id")
+    .eq("mock_test_id",testId)
+    .order("question_order");
+
+  if(qr.error){
+    show("Could not load questions.");
+    return;
+  }
+
+  const assignments=qr.data||[];
+  const ids=assignments.map(x=>x.question_id);
+
+  if(!ids.length){
+    show("No questions found for this test.");
+    return;
+  }
+
+  const [qres,ores,sres,attemptsRes]=await Promise.all([
+    db.from("questions")
+      .select("id,question_text,explanation,subject_id")
+      .in("id",ids),
+
+    db.from("question_options")
+      .select("id,question_id,option_label,option_text,is_correct")
+      .in("question_id",ids)
+      .order("id"),
+
+    db.from("mock_test_sections")
+      .select("*")
+      .eq("mock_test_id",testId)
+      .order("section_order"),
+
+    db.from("test_attempts")
+      .select("id")
+      .eq("mock_test_id",testId)
+      .not("completed_at","is",null)
+  ]);
+
+  const qm=new Map(
+    (qres.data||[]).map(q=>[String(q.id),q])
+  );
+
+  const om=new Map();
+
+  (ores.data||[]).forEach(o=>{
+    const k=String(o.question_id);
+    if(!om.has(k))om.set(k,[]);
+    om.get(k).push(o);
+  });
+
+  const sm=new Map(
+    (sres.data||[]).map(s=>[String(s.id),s])
+  );
+
+  /*
+    Load all completed users' answers so each question can show:
+    - average time
+    - percentage who answered correctly
+  */
+
+  let allAnswers=[];
+  const attemptIds=(attemptsRes.data||[]).map(a=>a.id);
+
+  for(let i=0;i<attemptIds.length;i+=500){
+
+    const batch=attemptIds.slice(i,i+500);
+
+    if(!batch.length) continue;
+
+    const ar=await db
+      .from("user_answers")
+      .select(
+        "attempt_id,question_id,selected_option_id,time_spent_seconds"
+      )
+      .in("attempt_id",batch);
+
+    if(!ar.error && ar.data){
+      allAnswers=allAnswers.concat(ar.data);
+    }
+  }
+
+  const questionAnalytics=new Map();
+
+  ids.forEach(id=>{
+    questionAnalytics.set(String(id),{
+      times:[],
+      answered:0,
+      correct:0
+    });
+  });
+
+  allAnswers.forEach(row=>{
+
+    const key=String(row.question_id);
+    const stat=questionAnalytics.get(key);
+
+    if(!stat) return;
+
+    const selected=row.selected_option_id;
+
+    if(
+      selected!==null &&
+      selected!==undefined &&
+      String(selected)!==""
+    ){
+
+      stat.answered++;
+
+      const opts=om.get(key)||[];
+      const correct=opts.find(isCorrect);
+
+      if(
+        correct &&
+        String(selected)===String(correct.id)
+      ){
+        stat.correct++;
+      }
+    }
+
+    const time=Number(row.time_spent_seconds);
+
+    if(Number.isFinite(time) && time>0){
+      stat.times.push(time);
+    }
+
+  });
+
+  /*
+    Current user's latest completed attempt, if available.
+    Solutions therefore shows YOUR time rather than a global time.
+  */
+
+  let currentUser=null;
+  let latestAttempt=null;
+  let currentAnswers=[];
+
+  try{
+
+    const ur=await db.auth.getUser();
+
+    currentUser=ur.data?.user||null;
+
+    if(currentUser){
+
+      const ar=await db
+        .from("test_attempts")
+        .select("id,completed_at")
+        .eq("mock_test_id",testId)
+        .eq("user_id",currentUser.id)
+        .not("completed_at","is",null)
+        .order("completed_at",{ascending:false})
+        .limit(1)
+        .maybeSingle();
+
+      if(!ar.error && ar.data){
+        latestAttempt=ar.data;
+      }
+
+      if(latestAttempt){
+
+        const cur=await db
+          .from("user_answers")
+          .select(
+            "question_id,selected_option_id,time_spent_seconds"
+          )
+          .eq("attempt_id",latestAttempt.id);
+
+        if(!cur.error){
+          currentAnswers=cur.data||[];
+        }
+      }
+
+    }
+
+  }catch(error){
+    console.log("Current-user solution data unavailable:",error);
+  }
+
+  const currentAnswerMap=new Map(
+    currentAnswers.map(a=>[
+      String(a.question_id),
+      a
+    ])
+  );
+
+  let html=
+    `<div class="head">
+      <h1>${esc(title)} — Solutions</h1>
+      <p class="sub">Correct answers and explanations</p>
+    </div>`;
+
+  assignments.forEach((a,i)=>{
+
+    const q=qm.get(String(a.question_id));
+    if(!q)return;
+
+    const key=String(q.id);
+    const opts=om.get(key)||[];
+    const correct=opts.find(isCorrect);
+    const sec=sm.get(String(a.section_id));
+    const sub=sectionName(sec,i);
+
+    const analytics=
+      questionAnalytics.get(key)||{
+        times:[],
+        answered:0,
+        correct:0
+      };
+
+    const avgTime=
+      analytics.times.length
+        ? analytics.times.reduce((x,y)=>x+y,0)/
+          analytics.times.length
+        : null;
+
+    const correctPercent=
+      analytics.answered
+        ? (analytics.correct/analytics.answered)*100
+        : null;
+
+    const mine=currentAnswerMap.get(key);
+    const myTime=
+      mine &&
+      Number.isFinite(Number(mine.time_spent_seconds))
+        ? Number(mine.time_spent_seconds)
+        : null;
+
+    html+=`
+      <article class="solution">
+
+        <div class="qhead">
+          <span class="qno">Question ${i+1}</span>
+          ${sub?`<span class="subject">${esc(sub)}</span>`:""}
+        </div>
+
+        <div class="qtext">${esc(q.question_text)}</div>
+
+        ${opts.map(o=>`
+          <div class="option ${isCorrect(o)?"correct":""}">
+            ${esc(o.option_label||"")}
+            ${esc(o.option_text||"")}
+            ${isCorrect(o)?" ✓":""}
+          </div>
+        `).join("")}
+
+        <div class="question-metrics">
+
+          <div class="metric">
+            <div class="metric-label">Your time</div>
+            <div class="metric-value">
+              ${myTime===null?"—":formatSeconds(myTime)}
+            </div>
+          </div>
+
+          <div class="metric">
+            <div class="metric-label">Avg time</div>
+            <div class="metric-value">
+              ${avgTime===null?"—":formatSeconds(avgTime)}
+            </div>
+          </div>
+
+          <div class="metric">
+            <div class="metric-label">Answered correctly</div>
+            <div class="metric-value">
+              ${correctPercent===null?"—":
+                Number(correctPercent.toFixed(1)).toString()+"%"}
+            </div>
+          </div>
+
+        </div>
+
+        <div class="answer">
+          <b>Correct Answer:</b>
+          ${correct
+            ? esc((correct.option_label||"")+" "+(correct.option_text||""))
+            : "Not available"}
+        </div>
+
+        ${q.explanation
+          ? `<div class="explanation">
+              <b>Explanation:</b> ${esc(q.explanation)}
+             </div>`
+          : `<div class="explanation">
+              No explanation has been added for this question yet.
+             </div>`}
+
+      </article>`;
+  });
+
+  html+=`
+    <div class="actions">
+      <a class="btn" href="analysis.html?id=${encodeURIComponent(testId)}">Analysis</a>
+      <a class="btn" href="practice.html">Practice</a>
+      <a class="btn primary" href="test.html?id=${encodeURIComponent(testId)}&reattempt=1">Re-attempt</a>
+    </div>`;
+
+  app.innerHTML=html;
+}
+
+run().catch(e=>{
+  console.error(e);
+  show("Could not load solutions. Please try again.");
+});
+</script>
 </script>
 </body>
 </html>
