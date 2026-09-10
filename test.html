@@ -2224,7 +2224,6 @@ function saveProgress(){
   }
 
   syncSectionClock();
-  saveCurrentQuestionTime();
   saveCurrentSectionTime();
 
   const data = {
@@ -2259,15 +2258,6 @@ function saveProgress(){
     questionTimeSpent:
       questionTimeSpent,
 
-    sectionTimerEndAt:
-      sectionTimerEndAt,
-
-    sectionTimerStartedAt:
-      sectionTimerStartedAt,
-
-    questionTimeQuestionId:
-      questionTimeQuestionId,
-
     savedAt:
       Date.now()
 
@@ -2299,7 +2289,9 @@ function loadProgress(){
   hasSavedProgress = false;
   progressStarted = false;
 
-  if(!progressKey){
+  if(
+    !progressKey
+  ){
     return;
   }
 
@@ -2325,94 +2317,67 @@ function loadProgress(){
     const savedAt = Number(data.savedAt);
     const wasPaused = data.paused === true;
 
-    /*
-      Time spent on the currently open question must also survive
-      a refresh. Section time uses its absolute end timestamp below;
-      question time gets only the unsaved active interval added here.
-    */
     if(
       !wasPaused &&
       Number.isFinite(savedAt) &&
-      savedAt > 0 &&
-      data.currentIndex !== undefined &&
-      questions[data.currentIndex]
-    ){
-      const elapsedQuestion =
-        Math.max(
-          0,
-          Math.floor(
-            (Date.now() - savedAt) / 1000
-          )
-        );
-
-      if(elapsedQuestion > 0){
-        const qid =
-          String(questions[data.currentIndex].id);
-
-        if(!data.questionTimeSpent ||
-           typeof data.questionTimeSpent !== "object"){
-          data.questionTimeSpent = {};
-        }
-
-        data.questionTimeSpent[qid] =
-          Number(data.questionTimeSpent[qid] || 0) +
-          elapsedQuestion;
-      }
-    }
-
-    /*
-      Restore the exact absolute section end time when available.
-      This prevents the section countdown from being recalculated
-      from multiple independent clocks after refresh.
-    */
-    if(
-      !wasPaused &&
-      Number.isFinite(Number(data.sectionTimerEndAt)) &&
-      Number(data.sectionTimerEndAt) > 0 &&
-      Number.isInteger(data.currentSectionIndex) &&
-      data.currentSectionIndex >= 0 &&
-      sections[data.currentSectionIndex]
+      savedAt > 0
     ){
 
-      sectionTimerEndAt =
-        Number(data.sectionTimerEndAt);
-
-      sectionTimerStartedAt =
-        Number(data.sectionTimerStartedAt) > 0
-          ? Number(data.sectionTimerStartedAt)
-          : Date.now();
-
-      remainingSeconds =
-        Math.max(
-          0,
-          Math.ceil(
-            (sectionTimerEndAt - Date.now()) / 1000
-          )
-        );
-
-    }else if(
-      !wasPaused &&
-      Number.isFinite(savedAt) &&
-      savedAt > 0 &&
-      Number.isFinite(Number(data.remainingSeconds))
-    ){
-
-      /*
-        Legacy saved progress fallback.
-      */
       const elapsed =
         Math.max(
           0,
-          Math.floor(
-            (Date.now() - savedAt) / 1000
-          )
+          Math.floor((Date.now() - savedAt) / 1000)
         );
 
-      data.remainingSeconds =
-        Math.max(
-          0,
-          Number(data.remainingSeconds) - elapsed
-        );
+      if(elapsed > 0){
+
+        if(
+          data.questionTimeSpent &&
+          typeof data.questionTimeSpent === "object" &&
+          data.currentIndex !== undefined &&
+          questions[data.currentIndex]
+        ){
+          const currentQuestionId = String(questions[data.currentIndex].id);
+          data.questionTimeSpent[currentQuestionId] =
+            Number(data.questionTimeSpent[currentQuestionId] || 0) + elapsed;
+        }
+
+        if(
+          sections.length &&
+          Number.isInteger(data.currentSectionIndex) &&
+          data.currentSectionIndex >= 0 &&
+          sections[data.currentSectionIndex]
+        ){
+
+          const sectionId =
+            String(sections[data.currentSectionIndex].id);
+
+          if(
+            data.sectionRemainingTimes &&
+            typeof data.sectionRemainingTimes === "object" &&
+            Number.isFinite(Number(data.sectionRemainingTimes[sectionId]))
+          ){
+
+            data.sectionRemainingTimes[sectionId] =
+              Math.max(
+                0,
+                Number(data.sectionRemainingTimes[sectionId]) - elapsed
+              );
+
+          }
+
+        }else{
+
+          const savedRemaining = Number(data.remainingSeconds);
+
+          if(Number.isFinite(savedRemaining)){
+            data.remainingSeconds =
+              Math.max(0, savedRemaining - elapsed);
+          }
+
+        }
+
+      }
 
     }
 
@@ -2438,16 +2403,6 @@ function loadProgress(){
       typeof data.questionTimeSpent === "object"
         ? data.questionTimeSpent
         : {};
-
-    questionTimeQuestionId =
-      data.questionTimeQuestionId !== null &&
-      data.questionTimeQuestionId !== undefined
-        ? String(data.questionTimeQuestionId)
-        : null;
-
-    if(wasPaused){
-      questionTimeStartedAt = 0;
-    }
 
     if(
       data.sectionRemainingTimes &&
@@ -2627,9 +2582,15 @@ function renderStartScreen(){
 
 function startOrResumeTest(){
 
-  if(reattempt && !hasSavedProgress){
-    clearProgress();
-    currentIndex = 0;
+  if(reattempt){
+    const reattemptKey = "ssc-edge-reattempt-started-" + String(test.id);
+    let alreadyStarted = false;
+    try{ alreadyStarted = sessionStorage.getItem(reattemptKey) === "1"; }catch(error){}
+
+    if(!alreadyStarted){
+      clearProgress();
+      try{ sessionStorage.setItem(reattemptKey,"1"); }catch(error){}
+      currentIndex = 0;
     currentSectionIndex = -1;
     answers = {};
     review = new Set();
@@ -2640,10 +2601,11 @@ function startOrResumeTest(){
     clearInterval(questionTimeInterval);
     questionTimeInterval = null;
     sectionRemainingTimes = {};
-    sections.forEach(section => {
-      sectionRemainingTimes[String(section.id)] =
-        Number(section.duration_minutes || 0) * 60;
-    });
+      sections.forEach(section => {
+        sectionRemainingTimes[String(section.id)] =
+          getSectionDurationMinutes(section,sections.indexOf(section)) * 60;
+      });
+    }
   }
 
   progressStarted = true;
@@ -3786,31 +3748,17 @@ function startTimer(){
 
     if(current >= 0){
 
-      currentSectionIndex = current;
+      currentSectionIndex =
+        current;
 
-      /*
-        Only create a new end timestamp when there is no valid
-        clock already running for this section.
-      */
-      if(
-        paused
-      ){
-
+      if(sectionTimerEndAt <= 0){
         loadSectionTime(current);
-
-      }else if(
-        sectionTimerEndAt <= Date.now()
-      ){
-
-        loadSectionTime(current);
-
       }else{
-
         syncSectionClock();
-
       }
 
       startSectionInterval();
+
       return;
 
     }
@@ -3820,7 +3768,9 @@ function startTimer(){
   if(!progressStarted){
 
     remainingSeconds =
-      Number(test.duration_minutes || 0) * 60;
+      Number(
+        test.duration_minutes || 0
+      ) * 60;
 
   }else if(remainingSeconds <= 0){
 
@@ -3841,87 +3791,77 @@ function startGeneralTimer(){
 
   updateTimerDisplay();
 
+
   timerInterval =
-    setInterval(function(){
+    setInterval(
+      function(){
 
-      if(submitted || paused){
-        return;
-      }
+        if(
+          submitted ||
+          paused
+        ){
 
-      remainingSeconds =
-        Math.max(
-          0,
-          remainingSeconds - 1
-        );
+          return;
 
-      updateTimerDisplay();
-      saveProgress();
+        }
 
-      if(remainingSeconds <= 0){
 
-        clearInterval(timerInterval);
-        submitTest(true);
+        remainingSeconds--;
 
-      }
+        updateTimerDisplay();
+        saveProgress();
 
-    },1000);
+
+        if(
+          remainingSeconds <= 0
+        ){
+
+          clearInterval(timerInterval);
+
+          submitTest(true);
+
+        }
+
+      },
+      1000
+    );
 
 }
+
 
 function startSectionInterval(){
 
   clearInterval(timerInterval);
 
-  if(
-    !paused &&
-    (
-      sectionTimerEndAt <= 0 ||
-      sectionTimerEndAt <= Date.now()
-    )
-  ){
-
+  if(!paused && sectionTimerEndAt <= 0){
     sectionTimerStartedAt = Date.now();
-
-    sectionTimerEndAt =
-      Date.now() +
-      Math.max(
-        0,
-        Number(remainingSeconds) || 0
-      ) * 1000;
-
+    sectionTimerEndAt = Date.now() + Math.max(0,Number(remainingSeconds)||0) * 1000;
   }
 
   updateTimerDisplay();
   updateGridTimer();
 
-  timerInterval =
-    setInterval(function(){
+  timerInterval = setInterval(function(){
 
-      if(submitted || paused){
-        return;
-      }
+    if(submitted || paused){
+      return;
+    }
 
-      syncSectionClock();
+    syncSectionClock();
+    updateTimerDisplay();
+    updateGridTimer();
 
-      updateTimerDisplay();
-      updateGridTimer();
+    if(remainingSeconds <= 0){
+      clearInterval(timerInterval);
+      sectionTimeUp();
+      return;
+    }
 
-      if(remainingSeconds <= 0){
+    if(Date.now() % 1000 < 300){
+      saveProgress();
+    }
 
-        clearInterval(timerInterval);
-        sectionTimeUp();
-        return;
-
-      }
-
-      /*
-        Save progress periodically, but never alter the clock.
-      */
-      if(Date.now() % 1000 < 300){
-        saveProgress();
-      }
-
-    },250);
+  },250);
 
 }
 
@@ -4162,16 +4102,10 @@ document
 
       sectionTimerStartedAt =
         Date.now();
-
       sectionTimerBaseRemaining =
-        Math.max(
-          0,
-          Number(remainingSeconds) || 0
-        );
-
+        remainingSeconds;
       sectionTimerEndAt =
-        Date.now() +
-        sectionTimerBaseRemaining * 1000;
+        Date.now() + Math.max(0,Number(remainingSeconds)||0) * 1000;
 
       questionTimeStartedAt =
         Date.now();
@@ -4677,13 +4611,6 @@ async function saveAttempt(
 
   const attemptId = attempt.data.id;
 
-  try{
-    localStorage.setItem(
-      "ssc-edge-last-attempt-" + String(test.id),
-      String(attemptId)
-    );
-  }catch(error){}
-
   const rows = questions.map(q => ({
     attempt_id:attemptId,
     question_id:q.id,
@@ -4782,6 +4709,7 @@ document.addEventListener(
   "visibilitychange",
   function(){
     if(document.visibilityState === "hidden" && progressStarted && !submitted){
+      saveCurrentQuestionTime();
       saveProgress();
     }
   }
@@ -4791,6 +4719,7 @@ window.addEventListener(
   "pagehide",
   function(){
     if(progressStarted && !submitted){
+      saveCurrentQuestionTime();
       saveProgress();
     }
   }

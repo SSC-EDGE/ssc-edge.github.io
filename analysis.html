@@ -168,7 +168,32 @@ body{
   overflow:hidden;
 }
 
+.section-top{
+  display:grid;
+  grid-template-columns:1fr 1.25fr;
+  border-bottom:1px solid var(--border);
+  margin:-18px -18px 0;
+}
 
+.section-top-box{
+  padding:15px;
+}
+
+.section-top-box:first-child{
+  border-right:1px solid var(--border);
+}
+
+.section-top-label{
+  color:var(--muted);
+  font-size:12px;
+  margin-bottom:6px;
+}
+
+.section-top-value{
+  font-size:18px;
+  font-weight:800;
+  word-break:break-word;
+}
 
 .tabs-wrap{
   overflow-x:auto;
@@ -644,57 +669,19 @@ async function loadTest(){
 
 async function loadLatestAttempt(userId){
 
-  let lastId=null;
+  const {data,error}=await supabaseClient
+    .from("test_attempts")
+    .select("id,user_id,mock_test_id,started_at,completed_at,score,correct_answers,wrong_answers,unanswered,total_questions,rank,percentile,sectional_data")
+    .eq("mock_test_id",mockTestId)
+    .eq("user_id",userId)
+    .not("completed_at","is",null)
+    .order("completed_at",{ascending:false})
+    .limit(1)
+    .maybeSingle();
 
-  try{
-    lastId =
-      localStorage.getItem(
-        "ssc-edge-last-attempt-" +
-        String(mockTestId)
-      );
-  }catch(e){}
+  if(error) throw error;
+  return data;
 
-  if(lastId){
-
-    const byId =
-      await supabaseClient
-        .from("test_attempts")
-        .select("*")
-        .eq("id",lastId)
-        .maybeSingle();
-
-    if(
-      !byId.error &&
-      byId.data &&
-      String(byId.data.user_id) === String(userId)
-    ){
-      return byId.data;
-    }
-  }
-
-  /*
-    Do not request optional analytics columns by name.
-    select("*") keeps this page working even if one optional
-    column was not added yet.
-  */
-  const result =
-    await supabaseClient
-      .from("test_attempts")
-      .select("*")
-      .eq("mock_test_id",mockTestId)
-      .eq("user_id",userId)
-      .order("created_at",{ascending:false})
-      .limit(50);
-
-  if(result.error) throw result.error;
-
-  const rows=result.data||[];
-
-  return (
-    rows.find(x=>x.completed_at) ||
-    rows[0] ||
-    null
-  );
 }
 
 
@@ -796,7 +783,9 @@ async function loadSections(){
   const {data,error} =
     await supabaseClient
       .from("mock_test_sections")
-      .select("*")
+      .select(
+        "id,mock_test_id,subject_id,section_order,duration_minutes"
+      )
       .eq("mock_test_id",mockTestId)
       .order("section_order",{ascending:true});
 
@@ -1121,13 +1110,10 @@ function buildSectionStats(
 
           name:
             subject?.name ||
-            section?.subject_name ||
-            section?.subjectName ||
-            section?.name ||
-            section?.title ||
             (
               section
-                ? "Section " + section.section_order
+                ? "Section " +
+                  section.section_order
                 : "Section"
             ),
 
@@ -1201,38 +1187,45 @@ function buildSectionStats(
 
 async function loadAllCompletedAttempts(){
 
-  let all=[];
-  let from=0;
-  const pageSize=1000;
+  let all = [];
+  let from = 0;
+  const pageSize = 1000;
 
   while(true){
 
-    const result =
+    const {data,error} =
       await supabaseClient
         .from("test_attempts")
-        .select("*")
+        .select(
+          "id,user_id,score,completed_at,rank,percentile,sectional_data"
+        )
         .eq("mock_test_id",mockTestId)
-        .order("created_at",{ascending:true})
-        .range(from,from+pageSize-1);
+        .not("completed_at","is",null)
+        .range(
+          from,
+          from + pageSize - 1
+        );
 
-    if(result.error) throw result.error;
+    if(error){
+      throw error;
+    }
 
-    const rows=result.data||[];
+    if(!data || !data.length){
+      break;
+    }
 
-    if(!rows.length) break;
+    all =
+      all.concat(data);
 
-    all=all.concat(rows);
+    if(data.length < pageSize){
+      break;
+    }
 
-    if(rows.length<pageSize) break;
+    from += pageSize;
 
-    from+=pageSize;
   }
 
-  /*
-    completed_at is the authoritative completion marker.
-    If it is absent in an older row, do not treat it as completed.
-  */
-  return all.filter(row=>row.completed_at);
+  return all;
 }
 
 
