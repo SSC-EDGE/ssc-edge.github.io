@@ -6,7 +6,422 @@
 <meta name="theme-color" content="#160b26">
 <title>SSC EDGE - Solutions</title>
 <link rel="stylesheet" href="css/style.css">
-<script>document.documentElement.dataset.theme=localStorage.getItem("ssc-edge-theme")||"dark";</script>
+<script>
+const SUPABASE_URL="https://dvvyoygahzzbnpqrfhen.supabase.co";
+const SUPABASE_KEY="sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const params=new URLSearchParams(location.search);
+const testId=params.get("id");
+
+let test=null;
+let sections=[];
+let questions=[];
+let currentSectionIndex=0;
+let currentIndex=0;
+let attempt=null;
+let answers={};
+let questionTimes={};
+let avgTimes={};
+let correctRates={};
+
+function $(id){return document.getElementById(id)}
+function esc(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
+function fmtTime(v){
+  v=Math.max(0,Math.floor(Number(v)||0));
+  return String(Math.floor(v/60)).padStart(2,"0")+":"+String(v%60).padStart(2,"0");
+}
+function showError(t){
+  $("loading").className="loading error";
+  $("loading").textContent=t;
+}
+function sectionName(s,i){
+  const direct=[
+    s?.subject_name,s?.subjectName,s?.subject,s?.name,s?.title,s?.section_name
+  ];
+  for(const x of direct){
+    if(String(x||"").trim()&&!/^section\s*\d+$/i.test(String(x).trim()))
+      return String(x).trim();
+  }
+  return "Section "+(i+1);
+}
+function activeList(){
+  if(!sections.length)return questions.map((q,i)=>({q,i}));
+  const sid=sections[currentSectionIndex]?.id;
+  return questions.map((q,i)=>({q,i}))
+    .filter(x=>String(x.q.section_id)===String(sid));
+}
+function renderSections(){
+  const bar=$("sectionBar");
+  if(!sections.length){bar.classList.add("hidden");return}
+  bar.classList.remove("hidden");
+  bar.innerHTML="";
+  sections.forEach((s,i)=>{
+    const b=document.createElement("button");
+    b.type="button";
+    b.className="section-btn"+(i===currentSectionIndex?" current":"");
+    b.textContent=sectionName(s,i);
+    b.onclick=()=>{
+      currentSectionIndex=i;
+      const l=activeList();
+      currentIndex=l.length?l[0].i:currentIndex;
+      render();
+    };
+    bar.appendChild(b);
+  });
+}
+function renderGrid(){
+  const g=$("questionGrid");
+  g.innerHTML="";
+  activeList().forEach((item,pos)=>{
+    const b=document.createElement("button");
+    b.type="button";
+    b.className="grid-question not-visited";
+    b.textContent=pos+1;
+    if(item.i===currentIndex)b.classList.add("current");
+    b.onclick=()=>{
+      currentIndex=item.i;
+      closeGrid();
+      render();
+    };
+    g.appendChild(b);
+  });
+}
+function openGrid(){$("gridOverlay").classList.add("show");renderGrid()}
+function closeGrid(){$("gridOverlay").classList.remove("show")}
+
+function render(){
+  const list=activeList();
+  const pos=Math.max(0,list.findIndex(x=>x.i===currentIndex));
+  const q=questions[currentIndex];
+  if(!q)return;
+
+  $("questionCount").textContent="Question "+(pos+1)+" of "+list.length;
+  $("questionSection").textContent=sections.length?sectionName(sections[currentSectionIndex],currentSectionIndex):"";
+  $("gridSubject").textContent=sections.length?sectionName(sections[currentSectionIndex],currentSectionIndex):"Solutions";
+  renderSections();
+
+  const card=$("questionCard");
+  card.innerHTML="";
+
+  const text=document.createElement("div");
+  text.className="question-text";
+  text.textContent=q.question_text||"";
+  card.appendChild(text);
+
+  /* Required metrics ABOVE the options. */
+  const meta=document.createElement("div");
+  meta.className="solution-meta";
+  const your=questionTimes[String(q.id)];
+  const avg=avgTimes[String(q.id)];
+  const pct=correctRates[String(q.id)];
+  meta.innerHTML=
+    '<div class="solution-meta-box"><div class="solution-meta-label">Your Time</div><div class="solution-meta-value">'+
+      fmtTime(your||0)+
+    '</div></div>'+
+    '<div class="solution-meta-box"><div class="solution-meta-label">Avg Time</div><div class="solution-meta-value">'+
+      (avg==null?"—":fmtTime(avg))+
+    '</div></div>'+
+    '<div class="solution-meta-box"><div class="solution-meta-label">Correct %</div><div class="solution-meta-value good">'+
+      (pct==null?"—":Number(pct).toFixed(0)+"%")+
+    '</div></div>';
+  card.appendChild(meta);
+
+  const options=document.createElement("div");
+  options.className="options";
+  const selectedId=
+    answers[String(q.id)]==null
+      ? null
+      : String(answers[String(q.id)]);
+
+  (q.options||[]).forEach((o,i)=>{
+    const row=document.createElement("div");
+    row.className="option solution-option";
+
+    const isCorrect=!!o.is_correct;
+    const isYour=selectedId!==null&&selectedId===String(o.id);
+
+    if(isCorrect)row.classList.add("correct-option");
+    if(isYour&&!isCorrect)row.classList.add("wrong-option");
+    if(isYour)row.classList.add("your-option");
+
+    const lab=o.option_label||String.fromCharCode(65+i);
+    const tag=isYour?' <span class="your-attempt">[Your Attempt]</span>':'';
+
+    row.innerHTML=
+      '<span class="option-label">'+esc(lab)+'</span>'+
+      '<span class="option-text">'+esc(o.option_text||"")+tag+'</span>';
+
+    options.appendChild(row);
+  });
+
+  card.appendChild(options);
+
+  const correct=(q.options||[]).find(o=>o.is_correct);
+  const ans=document.createElement("div");
+  ans.className="solution-answer";
+  ans.innerHTML=
+    '<b>Correct Answer:</b> '+
+    (correct
+      ? esc((correct.option_label||"")+" "+(correct.option_text||""))
+      : "Not available");
+  card.appendChild(ans);
+
+  const exp=document.createElement("div");
+  exp.className="explanation";
+  exp.innerHTML=q.explanation
+    ? "<b>Explanation:</b> "+esc(q.explanation)
+    : "No explanation has been added for this question yet.";
+  card.appendChild(exp);
+
+  const nav=document.createElement("div");
+  nav.className="navigation";
+  const row=document.createElement("div");
+  row.className="navigation-row";
+
+  const prev=document.createElement("button");
+  prev.type="button";
+  prev.className="nav-btn previous-btn";
+  prev.textContent="← Previous";
+  prev.disabled=pos<=0;
+  prev.onclick=()=>{
+    if(pos>0){
+      currentIndex=list[pos-1].i;
+      render();
+    }
+  };
+
+  const middle=document.createElement("div");
+  middle.className="nav-btn previous-btn";
+  middle.style.display="flex";
+  middle.style.alignItems="center";
+  middle.style.justifyContent="center";
+  middle.textContent="Solutions";
+
+  const next=document.createElement("button");
+  next.type="button";
+  next.className="nav-btn save-next-btn";
+  next.style.marginTop="0";
+  next.textContent=
+    pos<list.length-1
+      ? "Next →"
+      : (currentSectionIndex<sections.length-1?"Next Section →":"End");
+  next.onclick=()=>{
+    if(pos<list.length-1){
+      currentIndex=list[pos+1].i;
+      render();
+    }else if(currentSectionIndex<sections.length-1){
+      currentSectionIndex++;
+      const l=activeList();
+      currentIndex=l.length?l[0].i:currentIndex;
+      render();
+    }
+  };
+
+  row.appendChild(prev);
+  row.appendChild(middle);
+  row.appendChild(next);
+  nav.appendChild(row);
+  card.appendChild(nav);
+  renderGrid();
+}
+
+async function getCurrentUser(){
+  const {data,error}=await db.auth.getUser();
+  if(error)throw error;
+  return data?.user||null;
+}
+
+async function loadCurrentAttempt(user){
+  /* Prefer the exact attempt saved by test.html. */
+  let lastId=null;
+  try{
+    lastId=localStorage.getItem("ssc-edge-last-attempt-"+String(testId));
+  }catch(e){}
+
+  if(lastId){
+    const r=await db.from("test_attempts").select("*").eq("id",lastId).maybeSingle();
+    if(!r.error&&r.data&&String(r.data.user_id)===String(user.id))return r.data;
+  }
+
+  const r=await db.from("test_attempts")
+    .select("*")
+    .eq("mock_test_id",testId)
+    .eq("user_id",user.id)
+    .order("completed_at",{ascending:false})
+    .limit(20);
+
+  if(r.error){
+    /* Fallback to created_at if completed_at ordering is unavailable. */
+    const r2=await db.from("test_attempts")
+      .select("*")
+      .eq("mock_test_id",testId)
+      .eq("user_id",user.id)
+      .order("created_at",{ascending:false})
+      .limit(20);
+    if(r2.error)throw r.error;
+    return (r2.data||[]).find(x=>x.completed_at)||r2.data?.[0]||null;
+  }
+
+  return (r.data||[]).find(x=>x.completed_at)||r.data?.[0]||null;
+}
+
+async function run(){
+  if(!testId){showError("Invalid test.");return}
+
+  const user=await getCurrentUser();
+  if(!user){showError("Please login to view solutions.");return}
+
+  const tr=await db.from("mock_tests").select("*").eq("id",testId).single();
+  if(tr.error)throw tr.error;
+  test=tr.data;
+
+  const sr=await db.from("mock_test_sections").select("*").eq("mock_test_id",testId).order("section_order");
+  if(sr.error)throw sr.error;
+  sections=sr.data||[];
+
+  const ar=await db.from("mock_test_questions")
+    .select("question_id,question_order,section_id")
+    .eq("mock_test_id",testId)
+    .order("question_order");
+  if(ar.error)throw ar.error;
+  const assignments=ar.data||[];
+  const ids=assignments.map(a=>a.question_id);
+
+  if(!ids.length){showError("No questions found for this test.");return}
+
+  const [qr,or]=await Promise.all([
+    db.from("questions")
+      .select("id,question_text,explanation,subject_id,marks,negative_marks")
+      .in("id",ids),
+    db.from("question_options")
+      .select("id,question_id,option_label,option_text,is_correct")
+      .in("question_id",ids)
+      .order("id")
+  ]);
+
+  if(qr.error)throw qr.error;
+  if(or.error)throw or.error;
+
+  const qm=new Map(
+    (qr.data||[]).map(q=>[String(q.id),{...q,options:[]}])
+  );
+  (or.data||[]).forEach(o=>{
+    const q=qm.get(String(o.question_id));
+    if(q)q.options.push(o);
+  });
+
+  questions=assignments.map(a=>{
+    const q=qm.get(String(a.question_id));
+    return q
+      ? {...q,section_id:a.section_id,question_order:a.question_order}
+      : null;
+  }).filter(Boolean);
+
+  attempt=await loadCurrentAttempt(user);
+  if(!attempt){
+    showError("No completed attempt found for this test.");
+    return;
+  }
+
+  /* Load current user's answers and times. */
+  let currentRows=[];
+  const cr=await db.from("user_answers")
+    .select("attempt_id,question_id,selected_option_id,time_spent_seconds")
+    .eq("attempt_id",attempt.id);
+
+  if(!cr.error){
+    currentRows=cr.data||[];
+    currentRows.forEach(r=>{
+      answers[String(r.question_id)]=r.selected_option_id;
+      questionTimes[String(r.question_id)]=Number(r.time_spent_seconds||0);
+    });
+  }
+
+  /*
+    Average and correct percentage are calculated from the latest
+    completed attempt of each user, so one user cannot be counted
+    multiple times.
+  */
+  const all=await db.from("test_attempts")
+    .select("*")
+    .eq("mock_test_id",testId);
+
+  if(!all.error){
+    const completed=(all.data||[]).filter(x=>x.completed_at);
+    const latestByUser=new Map();
+
+    completed.sort((x,y)=>
+      new Date(y.completed_at||y.created_at||0) -
+      new Date(x.completed_at||x.created_at||0)
+    ).forEach(x=>{
+      const uid=String(x.user_id||"");
+      if(uid&&!latestByUser.has(uid))latestByUser.set(uid,x);
+    });
+
+    const idsA=[...latestByUser.values()].map(x=>x.id);
+
+    for(let i=0;i<idsA.length;i+=500){
+      const batch=idsA.slice(i,i+500);
+      const ua=await db.from("user_answers")
+        .select("attempt_id,question_id,selected_option_id,time_spent_seconds")
+        .in("attempt_id",batch);
+
+      if(ua.error)continue;
+
+      const rows=ua.data||[];
+      const correctMap=new Map(
+        questions.map(q=>[
+          String(q.id),
+          String((q.options||[]).find(o=>o.is_correct)?.id||"")
+        ])
+      );
+
+      rows.forEach(r=>{
+        const k=String(r.question_id);
+        const t=Number(r.time_spent_seconds||0);
+        if(t>0){
+          if(!avgTimes[k])avgTimes[k]=[];
+          avgTimes[k].push(t);
+        }
+        if(r.selected_option_id!=null){
+          if(!correctRates[k])correctRates[k]=[0,0];
+          correctRates[k][1]++;
+          if(String(r.selected_option_id)===correctMap.get(k))
+            correctRates[k][0]++;
+        }
+      });
+    }
+
+    Object.keys(avgTimes).forEach(k=>{
+      const arr=avgTimes[k];
+      avgTimes[k]=arr.reduce((a,b)=>a+b,0)/arr.length;
+    });
+
+    Object.keys(correctRates).forEach(k=>{
+      const x=correctRates[k];
+      correctRates[k]=x[1]?x[0]/x[1]*100:null;
+    });
+  }
+
+  $("testName").textContent=test.title||"SSC EDGE Test";
+  $("testNumber").textContent="Test "+(test.test_number||test.test_no||"01");
+  $("loading").classList.add("hidden");
+  $("solutionArea").classList.remove("hidden");
+
+  const first=sections.findIndex(s=>
+    questions.some(q=>String(q.section_id)===String(s.id))
+  );
+  currentSectionIndex=first>=0?first:0;
+  const l=activeList();
+  currentIndex=l.length?l[0].i:0;
+  render();
+}
+
+run().catch(e=>{
+  console.error(e);
+  showError("Could not load solutions. Please try again.");
+});
+</script>
 <style>
 
 
