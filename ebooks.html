@@ -4,210 +4,254 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
 
 <title>E-Books - SSC EDGE</title>
 
+
 <script>
+
 document.documentElement.dataset.theme =
-localStorage.getItem("ssc-edge-theme") || "dark";
+localStorage.getItem(
+"ssc-edge-theme"
+) || "dark";
+
 </script>
 
-<link rel="stylesheet" href="css/style.css">
+
+<link
+rel="stylesheet"
+href="css/style.css"
+>
+
+
+<script
+src="js/downloads.js"
+></script>
+
 
 <style>
 
 .container{
+
 padding:20px;
+
 padding-bottom:90px;
+
 }
+
 
 .page-title{
+
 font-size:26px;
+
 font-weight:bold;
+
 margin-bottom:6px;
+
 }
+
 
 .page-subtitle{
+
 color:var(--muted);
+
 margin-bottom:20px;
+
 }
 
-/* =========================
-   TABS
-========================= */
-
-.tabs{
-display:flex;
-gap:10px;
-margin-bottom:20px;
-}
-
-.tab{
-flex:1;
-padding:12px;
-border-radius:10px;
-border:1px solid var(--border);
-background:var(--card);
-color:var(--text);
-font-weight:bold;
-text-align:center;
-cursor:pointer;
-}
-
-.tab.active{
-background:var(--purple);
-color:white;
-border-color:var(--purple);
-}
-
-/* =========================
-   MATERIAL LIST
-========================= */
 
 .material-list{
+
 display:flex;
+
 flex-direction:column;
+
 gap:14px;
+
 }
+
 
 .material-card{
+
 background:var(--card);
+
 border:1px solid var(--border);
+
 border-radius:14px;
+
 padding:16px;
+
 }
+
 
 .material-title{
+
 font-size:18px;
+
 font-weight:bold;
+
+line-height:1.35;
+
 margin-bottom:7px;
+
 }
+
 
 .material-subject{
+
 display:inline-block;
+
 font-size:13px;
+
 color:var(--muted);
+
 margin-bottom:8px;
+
 }
+
 
 .material-description{
+
 color:var(--muted);
+
 font-size:14px;
+
+line-height:1.5;
+
 margin-bottom:14px;
+
 }
 
-/* =========================
-   BUTTONS
-========================= */
 
 .material-actions{
+
 display:flex;
+
 gap:10px;
+
 flex-wrap:wrap;
+
 }
+
 
 .open,
 .download{
+
+flex:1;
+
+min-width:130px;
+
 display:inline-block;
+
 padding:11px 15px;
+
 border-radius:10px;
+
 text-decoration:none;
+
 font-weight:bold;
+
+text-align:center;
+
+box-sizing:border-box;
+
+cursor:pointer;
+
 }
+
 
 .open{
+
 background:var(--purple);
+
 color:white;
+
 }
+
 
 .download{
+
 background:var(--card2);
+
 color:var(--text);
+
 border:1px solid var(--border);
+
 }
 
-/* =========================
-   EMPTY / LOADING
-========================= */
 
 .empty{
+
 text-align:center;
+
 color:var(--muted);
+
 padding:30px 10px;
+
 }
 
 </style>
 
 </head>
 
+
 <body>
+
 
 <div class="container">
 
+
 <div class="page-title">
+
 E-Books
+
 </div>
+
 
 <div class="page-subtitle">
+
 SSC EDGE Study Material
-</div>
-
-
-<!-- =========================
-     TABS
-========================= -->
-
-<div class="tabs">
-
-<div
-id="ebookTab"
-class="tab active"
-onclick="showType('EBOOK')">
-📚 E-Books
-</div>
-
-<div
-id="pdfTab"
-class="tab"
-onclick="showType('PDF')">
-📄 All PDFs
-</div>
 
 </div>
 
-
-<!-- =========================
-     MATERIAL LIST
-========================= -->
 
 <div
 id="materialList"
-class="material-list">
+class="material-list"
+>
 
 <div class="empty">
+
 Loading...
-</div>
 
 </div>
 
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</div>
+
+
+<script
+src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
 
 
 <script>
 
-/* =========================
-   SUPABASE
-========================= */
 
 const SUPABASE_URL =
 "https://dvvyoygahzzbnpqrfhen.supabase.co";
 
+
 const SUPABASE_KEY =
 "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
 
 const supabaseClient =
 supabase.createClient(
@@ -217,23 +261,21 @@ SUPABASE_KEY
 
 
 /* =========================
-   CURRENT TYPE
-========================= */
-
-let currentType = "EBOOK";
-
-
-/* =========================
    ESCAPE HTML
 ========================= */
 
 function escapeHtml(value){
 
 return String(value || "")
+
 .replace(/&/g,"&amp;")
+
 .replace(/</g,"&lt;")
+
 .replace(/>/g,"&gt;")
+
 .replace(/"/g,"&quot;")
+
 .replace(/'/g,"&#039;");
 
 }
@@ -246,7 +288,9 @@ return String(value || "")
 function getDownloadUrl(url){
 
 if(!url){
+
 return "";
+
 }
 
 
@@ -259,8 +303,11 @@ url.includes(
 ){
 
 return url.replace(
+
 "/storage/v1/object/public/ssc-edge-ebooks/",
+
 "/storage/v1/object/download/ssc-edge-ebooks/"
+
 );
 
 }
@@ -275,8 +322,11 @@ url.includes(
 ){
 
 return url.replace(
+
 "/storage/v1/object/public/ssc-edge-pdfs/",
+
 "/storage/v1/object/download/ssc-edge-pdfs/"
+
 );
 
 }
@@ -288,28 +338,30 @@ return url;
 
 
 /* =========================
-   SHOW TYPE
+   RECORD DOWNLOAD
 ========================= */
 
-function showType(type){
+function recordEbookDownload(
+id,
+title,
+subject,
+url
+){
 
-currentType = type;
+window.SSCEdgeDownloads
+.recordDownload({
 
+id:id,
 
-/* TAB ACTIVE STATE */
+title:title,
 
-document
-.getElementById("ebookTab")
-.classList
-.toggle("active",type === "EBOOK");
+subject:subject,
 
-document
-.getElementById("pdfTab")
-.classList
-.toggle("active",type === "PDF");
+type:"EBOOK",
 
+url:url
 
-loadMaterials();
+});
 
 }
 
@@ -321,23 +373,17 @@ loadMaterials();
 async function loadMaterials(){
 
 const materialList =
-document.getElementById("materialList");
+document.getElementById(
+"materialList"
+);
 
-
-materialList.innerHTML =
-`<div class="empty">
-Loading...
-</div>`;
-
-
-/* =========================
-   FETCH MATERIALS
-========================= */
 
 const {
-data: materials,
+data:materials,
 error
-} = await supabaseClient
+} =
+
+await supabaseClient
 
 .from("study_material")
 
@@ -348,13 +394,21 @@ name
 )
 `)
 
-.eq("material_type",currentType)
+.eq(
+"material_type",
+"EBOOK"
+)
 
-.eq("is_active",true)
+.eq(
+"is_active",
+true
+)
 
 .order(
 "created_at",
-{ascending:false}
+{
+ascending:false
+}
 );
 
 
@@ -366,9 +420,10 @@ if(error){
 
 console.error(error);
 
-materialList.innerHTML =
+materialList.innerHTML=
+
 `<div class="empty">
-Unable to load study material.
+Unable to load E-Books.
 </div>`;
 
 return;
@@ -380,23 +435,16 @@ return;
    EMPTY
 ========================= */
 
-if(!materials || materials.length === 0){
+if(
+!materials ||
+materials.length === 0
+){
 
-if(currentType === "EBOOK"){
+materialList.innerHTML=
 
-materialList.innerHTML =
 `<div class="empty">
 No E-Books available yet.
 </div>`;
-
-}else{
-
-materialList.innerHTML =
-`<div class="empty">
-No PDFs available yet.
-</div>`;
-
-}
 
 return;
 
@@ -407,8 +455,17 @@ return;
    RENDER
 ========================= */
 
-materialList.innerHTML =
-materials.map(material => {
+materialList.innerHTML=
+
+materials.map(
+material=>{
+
+const id =
+escapeHtml(
+material.id ||
+material.file_url ||
+""
+);
 
 
 const title =
@@ -448,46 +505,53 @@ material.file_url ||
 );
 
 
-/* =========================
-   ICON / TEXT
-========================= */
-
-const openText =
-currentType === "EBOOK"
-? "📖 Open E-Book"
-: "📄 Open PDF";
-
-
 return `
 
 <div class="material-card">
 
+
 <div class="material-title">
+
 ${title}
+
 </div>
+
 
 <div class="material-subject">
-Subject: ${subject}
+
+📚 Subject: ${subject}
+
 </div>
 
-${description ? `
+
+${
+description
+?
+`
 
 <div class="material-description">
+
 ${description}
+
 </div>
 
-` : ""}
+`
+:
+""
+}
 
 
 <div class="material-actions">
+
 
 <a
 class="open"
 href="${openUrl}"
 target="_blank"
-rel="noopener">
+rel="noopener"
+>
 
-${openText}
+📖 Open E-Book
 
 </a>
 
@@ -495,19 +559,29 @@ ${openText}
 <a
 class="download"
 href="${downloadUrl}"
-download>
+download
+onclick="recordEbookDownload(
+'${id.replace(/'/g,"\\'")}',
+'${title.replace(/'/g,"\\'")}',
+'${subject.replace(/'/g,"\\'")}',
+'${downloadUrl.replace(/'/g,"\\'")}'
+)"
+>
 
 📥 Download
 
 </a>
 
+
 </div>
+
 
 </div>
 
 `;
 
-}).join("");
+}
+).join("");
 
 }
 
