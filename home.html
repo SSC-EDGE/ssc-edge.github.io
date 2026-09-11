@@ -1,1409 +1,3311 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+<script>
+document.documentElement.dataset.theme =
+  localStorage.getItem("ssc-edge-theme") || "dark";
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SSC EDGE — Home</title>
+<meta name="theme-color" content="#e9ddff">
+
+<title>SSC EDGE - Home</title>
 
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/home.css">
 
 <style>
-/* ============================================================
-   SSC EDGE — HOME
-   ============================================================ */
+
+/* ==================================================
+   BASIC
+   ================================================== */
 
 *{
-  box-sizing:border-box;
+box-sizing:border-box;
 }
 
 body{
-  margin:0;
-  font-family:Arial,Helvetica,sans-serif;
+margin:0;
 }
 
-/* ---------- HEADER ---------- */
+/* ==================================================
+   HEADER
+   ================================================== */
 
 .home-header{
-  position:sticky;
-  top:0;
-  z-index:1000;
+background:#ffffff;
+border-bottom:1px solid #e3ddec;
+position:relative;
+z-index:100;
 }
 
-.header-inner{
-  min-height:58px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:8px 14px;
+.home-header-content{
+height:70px;
+display:flex;
+align-items:center;
+padding:0 18px;
 }
 
 .header-left{
-  display:flex;
-  align-items:center;
-  gap:7px;
-  min-width:0;
+display:flex;
+align-items:center;
+gap:7px;
+height:100%;
 }
 
-.menu-btn{
-  width:38px;
-  height:38px;
-  min-width:38px;
-  border:0;
-  border-radius:12px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  gap:5px;
-  cursor:pointer;
+/* ==================================================
+   THREE LINE MENU
+   ================================================== */
+
+.menu-button{
+width:38px;
+height:38px;
+border:0;
+background:transparent;
+
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+
+gap:5px;
+padding:5px;
+cursor:pointer;
 }
 
-.menu-btn span{
-  width:24px;
-  height:3px;
-  border-radius:10px;
-  display:block;
+.menu-button span{
+display:block;
+width:24px;
+height:3px;
+border-radius:3px;
+background:#191525;
 }
+
+/* ==================================================
+   BRAND
+   ================================================== */
 
 .header-brand-wrap{
-  min-height:38px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  line-height:1;
+height:38px;
+display:flex;
+flex-direction:column;
+justify-content:center;
 }
 
 .header-brand{
-  font-size:22px;
-  font-weight:1000;
-  letter-spacing:.4px;
-  line-height:1;
-  white-space:nowrap;
+font-size:22px;
+font-weight:850;
+letter-spacing:-.4px;
+color:#191525;
+line-height:1;
+white-space:nowrap;
+}
+
+.header-brand .edge{
+color:#9b5cff;
 }
 
 .header-tagline{
-  margin-top:4px;
-  font-size:7px;
-  font-weight:800;
-  letter-spacing:.7px;
-  line-height:1;
-  white-space:nowrap;
+font-size:7px;
+font-weight:600;
+color:#817987;
+margin-top:4px;
+letter-spacing:.1px;
+line-height:1;
+white-space:nowrap;
 }
+
+/* ==================================================
+   RIGHT HEADER
+   ================================================== */
 
 .header-actions{
-  display:flex;
-  align-items:center;
-  gap:7px;
+margin-left:auto;
+display:flex;
+align-items:center;
+gap:3px;
 }
 
-.header-icon-btn{
-  width:38px;
-  height:38px;
-  border:0;
-  border-radius:12px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-  font-size:18px;
+.header-search,
+.update-bell{
+width:36px;
+height:36px;
+border:0;
+background:transparent;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+padding:0;
+cursor:pointer;
 }
 
-/* ---------- SIDE MENU ---------- */
+.header-search svg{
+width:22px;
+height:22px;
+fill:none;
+stroke:#191525;
+stroke-width:2;
+stroke-linecap:round;
+}
+
+.update-bell{
+position:relative;
+}
+
+.update-bell svg{
+width:20px;
+height:20px;
+fill:none;
+stroke:#191525;
+stroke-width:2;
+stroke-linecap:round;
+stroke-linejoin:round;
+}
+
+.update-dot{
+position:absolute;
+margin-left:17px;
+margin-top:-17px;
+
+width:7px;
+height:7px;
+background:#ff6b35;
+border-radius:50%;
+display:none;
+}
+
+/* ==================================================
+   SIDE MENU
+   ================================================== */
+
+.menu-overlay{
+position:fixed;
+inset:0;
+background:rgba(20,12,30,.45);
+z-index:300;
+display:none;
+}
+
+.menu-overlay.show{
+display:block;
+}
 
 .side-menu{
-  position:fixed;
-  top:0;
-  left:0;
-  width:min(330px,88vw);
-  height:100vh;
-  z-index:3000;
-  overflow-y:auto;
-  transform:translateX(-105%);
-  transition:transform:.25s ease;
-  padding:18px 14px 24px;
+position:absolute;
+left:0;
+top:0;
+bottom:0;
+
+width:285px;
+max-width:82vw;
+
+background:#ffffff;
+
+box-shadow:8px 0 30px rgba(20,10,30,.18);
+
+padding:16px;
+overflow-y:auto;
 }
 
-.side-menu.open{
-  transform:translateX(0);
+/* ==================================================
+   PROFILE TOP IN MENU
+   ================================================== */
+
+.side-profile{
+display:flex;
+align-items:center;
+gap:12px;
+
+padding:8px 5px 16px;
+
+border-bottom:1px solid #eee8f2;
 }
 
-.side-menu-overlay{
-  position:fixed;
-  inset:0;
-  z-index:2999;
-  background:rgba(0,0,0,.48);
-  opacity:0;
-  pointer-events:none;
-  transition:.25s ease;
+.side-profile-photo{
+width:48px;
+height:48px;
+
+border-radius:50%;
+
+background:#eadcff;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-size:23px;
+
+overflow:hidden;
+
+flex-shrink:0;
 }
 
-.side-menu-overlay.open{
-  opacity:1;
-  pointer-events:auto;
-}
-
-.side-menu-profile{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:12px 10px 15px;
-}
-
-.side-profile-avatar{
-  width:46px;
-  height:46px;
-  min-width:46px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:20px;
-  font-weight:900;
+.side-profile-photo img{
+width:100%;
+height:100%;
+object-fit:cover;
 }
 
 .side-profile-info{
-  min-width:0;
+min-width:0;
 }
 
 .side-profile-name{
-  font-size:15px;
-  font-weight:900;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+font-size:16px;
+font-weight:800;
+color:#191525;
+
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
 }
 
-.side-profile-sub{
-  margin-top:3px;
-  font-size:11px;
-  opacity:.7;
+.side-profile-link{
+display:inline-block;
+
+margin-top:3px;
+
+font-size:11px;
+font-weight:600;
+
+color:#8d4fdc;
+
+text-decoration:none;
 }
+
+/* ==================================================
+   MENU BRAND
+   ================================================== */
+
+.side-menu-header{
+display:flex;
+align-items:center;
+justify-content:space-between;
+
+padding:15px 5px 12px;
+}
+
+.side-menu-brand{
+font-size:22px;
+font-weight:850;
+color:#191525;
+}
+
+.side-menu-brand span{
+color:#9b5cff;
+}
+
+.menu-close{
+width:34px;
+height:34px;
+
+border:0;
+border-radius:50%;
+
+background:#f0e8ff;
+color:#7540c4;
+
+font-size:22px;
+cursor:pointer;
+}
+
+/* ==================================================
+   MENU LINKS
+   MATCH PROFILE MENU ITEM SIZE
+   ================================================== */
 
 .side-menu-links{
-  display:flex;
-  flex-direction:column;
+padding-top:4px;
 }
 
 .side-menu-links a{
-  min-height:55px;
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:11px 13px;
-  border-radius:13px;
-  text-decoration:none;
-  font-size:13px;
-  font-weight:900;
-  margin-bottom:2px;
+display:flex;
+align-items:center;
+gap:12px;
+
+min-height:55px;
+padding:11px 13px;
+
+border-radius:13px;
+
+text-decoration:none;
+
+color:#292332;
+
+font-size:13px;
+font-weight:900;
+
+margin-bottom:2px;
+}
+
+.side-menu-links a:hover,
+.side-menu-links a:active{
+background:#f3eaff;
+color:#8d4fdc;
 }
 
 .menu-link-icon{
-  width:34px;
-  height:34px;
-  min-width:34px;
-  border-radius:10px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:18px;
+width:34px;
+height:34px;
+
+border-radius:10px;
+
+background:#f0e5ff;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-size:18px;
+
+flex-shrink:0;
 }
+
+/* ==================================================
+   MENU DIVIDER
+   ================================================== */
 
 .menu-divider{
-  height:1px;
-  margin:8px 4px;
-  opacity:.2;
+height:1px;
+background:#eee8f2;
+margin:9px 4px;
 }
 
-/* ---------- THEME ---------- */
+/* ==================================================
+   MENU THEME
+   MORE VISIBLE + SAME ROW SIZE
+   ================================================== */
 
 .menu-theme{
-  min-height:55px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  padding:10px 13px;
-  border-radius:13px;
-  margin-top:2px;
-  margin-bottom:5px;
-  border:1px solid;
+min-height:55px;
+
+display:flex;
+align-items:center;
+justify-content:space-between;
+
+padding:10px 13px;
+
+border-radius:13px;
+
+background:#faf7ff;
+border:1px solid #e3d8ef;
+
+font-size:13px;
+font-weight:900;
+color:#292332;
+
+margin-top:2px;
+margin-bottom:3px;
 }
 
-.menu-theme-title{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-size:13px;
-  font-weight:900;
+.theme-title{
+display:flex;
+align-items:center;
+gap:10px;
 }
 
-.menu-theme-icon{
-  width:34px;
-  height:34px;
-  min-width:34px;
-  border-radius:10px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:17px;
+.theme-icon{
+width:34px;
+height:34px;
+
+border-radius:10px;
+
+background:#f0e5ff;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-size:17px;
 }
 
-.theme-buttons{
-  display:flex;
-  align-items:center;
-  gap:5px;
+.theme-options{
+display:flex;
+gap:5px;
 }
 
-.theme-buttons button{
-  border:1px solid;
-  border-radius:9px;
-  padding:6px 9px;
-  font-size:10px;
-  font-weight:900;
-  cursor:pointer;
+.theme-options button{
+border:1px solid #ded3eb;
+background:#f7f2fc;
+
+padding:6px 9px;
+
+border-radius:8px;
+
+font-size:10px;
+font-weight:800;
+
+color:#655b70;
+
+cursor:pointer;
 }
 
-/* ---------- MAIN ---------- */
-
-.home-main{
-  width:100%;
-  max-width:1100px;
-  margin:0 auto;
-  padding:16px 14px 30px;
+.theme-options button.active{
+background:#9b5cff;
+color:#ffffff;
+border-color:#9b5cff;
 }
 
-/* ---------- WELCOME ---------- */
-
-.home-welcome{
-  border-radius:20px;
-  padding:22px 18px;
-  margin-bottom:16px;
-}
-
-.home-welcome h1{
-  margin:0;
-  font-size:22px;
-  font-weight:1000;
-}
-
-.home-welcome p{
-  margin:7px 0 0;
-  font-size:12px;
-  line-height:1.5;
-}
-
-/* ---------- DASHBOARD ---------- */
-
-.dashboard{
-  margin-bottom:18px;
-}
-
-.section-title{
-  margin:0 0 11px;
-  font-size:16px;
-  font-weight:1000;
-}
-
-.dashboard-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
-}
-
-.dashboard-card{
-  min-height:105px;
-  border-radius:17px;
-  padding:15px;
-  text-decoration:none;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-}
-
-.dashboard-card-icon{
-  font-size:23px;
-}
-
-.dashboard-card-title{
-  font-size:13px;
-  font-weight:900;
-}
-
-.dashboard-card-sub{
-  font-size:10px;
-  opacity:.65;
-  margin-top:3px;
-}
-
-/* ---------- CONTINUE LEARNING ---------- */
-
-.continue-section{
-  margin-top:20px;
-}
-
-.continue-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
-}
-
-.continue-card{
-  min-height:82px;
-  border-radius:16px;
-  padding:13px;
-  display:flex;
-  align-items:center;
-  gap:11px;
-  text-decoration:none;
-}
-
-.continue-icon{
-  width:38px;
-  height:38px;
-  min-width:38px;
-  border-radius:11px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:19px;
-}
-
-.continue-title{
-  font-size:12px;
-  font-weight:900;
-}
-
-.continue-sub{
-  margin-top:3px;
-  font-size:9px;
-  opacity:.65;
-}
-
-/* ---------- COMMUNITY ---------- */
-
-.community-section{
-  margin-top:22px;
-}
-
-.community-grid{
-  width:100%;
-  max-width:92%;
-  margin:0 auto;
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
-}
-
-.community-card{
-  width:100%;
-  max-width:92%;
-  margin:0 auto;
-  min-height:95px;
-  border-radius:17px;
-  padding:14px;
-  display:flex;
-  align-items:center;
-  gap:11px;
-  text-decoration:none;
-}
-
-.community-icon{
-  width:42px;
-  height:42px;
-  min-width:42px;
-  border-radius:12px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:22px;
-}
-
-.community-title{
-  font-size:12px;
-  font-weight:900;
-}
-
-.community-sub{
-  margin-top:3px;
-  font-size:9px;
-  opacity:.65;
-}
-
-/* ---------- FOOTER ---------- */
-
-.home-footer{
-  text-align:center;
-  padding:18px 12px 100px;
-}
-
-.home-footer-title{
-  font-size:13px;
-  font-weight:1000;
-}
-
-.home-footer-sub{
-  margin-top:4px;
-  font-size:9px;
-  opacity:.6;
-}
-
-/* ---------- BOTTOM NAV ---------- */
-
-.bottom-nav{
-  position:fixed;
-  left:10px;
-  right:10px;
-  bottom:10px;
-  z-index:2000;
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  border-radius:18px;
-  padding:6px;
-}
-
-.bottom-nav a{
-  min-height:52px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:3px;
-  text-decoration:none;
-  border-radius:13px;
-}
-
-.bottom-nav-icon{
-  font-size:17px;
-  line-height:1;
-}
-
-.bottom-nav-label{
-  font-size:9px;
-  font-weight:900;
-}
-
-/* ---------- SEARCH ---------- */
+/* ==================================================
+   SEARCH
+   ================================================== */
 
 .search-overlay{
-  position:fixed;
-  inset:0;
-  z-index:4000;
-  display:none;
-  padding:70px 15px 20px;
+position:fixed;
+inset:0;
+z-index:250;
+display:none;
+
+background:rgba(20,12,30,.48);
+padding:18px;
 }
 
-.search-overlay.open{
-  display:block;
+.search-overlay.show{
+display:flex;
+align-items:flex-start;
+justify-content:center;
 }
 
 .search-box{
-  max-width:650px;
-  margin:0 auto;
-  border-radius:18px;
-  padding:12px;
+width:100%;
+max-width:520px;
+
+margin-top:50px;
+
+background:#ffffff;
+
+border-radius:22px;
+
+overflow:hidden;
+
+box-shadow:0 20px 60px rgba(20,10,30,.22);
+}
+
+.search-top{
+display:flex;
+align-items:center;
+
+padding:12px 14px;
+
+border-bottom:1px solid #eee8f2;
 }
 
 .search-input{
-  width:100%;
-  height:44px;
-  border:0;
-  outline:0;
-  border-radius:12px;
-  padding:0 13px;
-  font-size:14px;
+flex:1;
+border:0;
+outline:none;
+
+font-size:15px;
+
+color:#191525;
+background:transparent;
+}
+
+.search-close{
+width:34px;
+height:34px;
+
+border:0;
+border-radius:50%;
+
+background:#f0e8ff;
+color:#7540c4;
+
+font-size:21px;
 }
 
 .search-results{
-  margin-top:10px;
-  max-height:70vh;
-  overflow-y:auto;
+max-height:65vh;
+overflow-y:auto;
+padding:10px;
+}
+
+.search-empty{
+padding:30px 15px;
+text-align:center;
+font-size:13px;
+color:#777180;
 }
 
 .search-result{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:12px;
-  border-radius:12px;
-  text-decoration:none;
-  margin-bottom:5px;
+display:block;
+
+padding:13px;
+
+border-radius:14px;
+
+text-decoration:none;
+
+margin-bottom:6px;
+
+background:#faf8fd;
 }
 
-.search-result-icon{
-  font-size:18px;
+.search-result strong{
+display:block;
+font-size:14px;
+color:#191525;
 }
 
-/* ---------- UPDATES ---------- */
+.search-result span{
+display:block;
+font-size:11px;
+color:#777180;
+margin-top:4px;
+}
+
+/* ==================================================
+   HOME CONTENT
+   ================================================== */
+
+.home-container{
+width:100%;
+max-width:1100px;
+
+margin:0 auto;
+
+padding:18px 18px 30px;
+}
+
+/* ==================================================
+   LAVENDER WELCOME BANNER
+   ================================================== */
+
+.home-welcome{
+position:relative;
+overflow:hidden;
+
+background:
+linear-gradient(
+135deg,
+#e8dcff 0%,
+#f3ebff 50%,
+#e1d1ff 100%
+);
+
+border:1px solid #d1b9ef;
+
+border-radius:25px;
+
+padding:24px 21px;
+
+box-shadow:
+0 9px 28px rgba(104,59,150,.13);
+}
+
+.home-welcome::before{
+content:"";
+
+position:absolute;
+
+width:150px;
+height:150px;
+
+right:-45px;
+top:-55px;
+
+border-radius:50%;
+
+background:rgba(155,92,255,.16);
+}
+
+.home-welcome::after{
+content:"";
+
+position:absolute;
+
+width:80px;
+height:80px;
+
+right:55px;
+bottom:-40px;
+
+border-radius:50%;
+
+background:rgba(255,255,255,.28);
+}
+
+.welcome-pill{
+position:relative;
+z-index:2;
+
+display:inline-flex;
+
+padding:7px 13px;
+
+border-radius:20px;
+
+background:#d8c4fa;
+
+color:#7040b4;
+
+font-size:11px;
+
+font-weight:850;
+
+letter-spacing:.5px;
+
+margin-bottom:12px;
+}
+
+.home-welcome h1{
+position:relative;
+z-index:2;
+
+margin:0;
+
+font-size:29px;
+
+line-height:1.15;
+
+font-weight:850;
+
+color:#21152d;
+}
+
+.home-welcome p{
+position:relative;
+z-index:2;
+
+margin:11px 0 0;
+
+max-width:500px;
+
+font-size:13px;
+
+line-height:1.5;
+
+color:#675d72;
+}
+
+.welcome-action{
+position:relative;
+z-index:3;
+
+display:inline-flex;
+
+align-items:center;
+justify-content:center;
+
+margin-top:18px;
+
+padding:11px 19px;
+
+border-radius:13px;
+
+background:#9b5cff;
+
+color:#ffffff;
+
+text-decoration:none;
+
+font-size:14px;
+
+font-weight:800;
+
+box-shadow:
+0 7px 20px rgba(155,92,255,.28);
+}
+
+.welcome-action span{
+margin-left:7px;
+font-size:18px;
+}
+
+/* ==================================================
+   SECTION HEADING
+   ================================================== */
+
+.section-heading{
+margin:24px 0 12px;
+
+font-size:20px;
+
+font-weight:850;
+
+color:#191525;
+
+display:flex;
+align-items:center;
+}
+
+.section-heading::before{
+content:"";
+
+width:4px;
+height:21px;
+
+background:#9b5cff;
+
+border-radius:5px;
+
+margin-right:9px;
+}
+
+/* ==================================================
+   DASHBOARD
+   ================================================== */
+
+.dashboard-grid{
+display:grid;
+
+grid-template-columns:
+repeat(2,minmax(0,1fr));
+
+gap:11px;
+}
+
+.dashboard-card{
+min-height:130px;
+
+padding:16px;
+
+border-radius:18px;
+
+background:#ffffff;
+
+border:1px solid #e3ddea;
+
+text-decoration:none;
+
+display:flex;
+flex-direction:column;
+
+box-shadow:
+0 5px 17px rgba(30,20,50,.055);
+}
+
+.dashboard-card:active{
+transform:scale(.98);
+}
+
+.dash-icon{
+width:45px;
+height:45px;
+
+border-radius:13px;
+
+background:#f0e5ff;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+margin-bottom:10px;
+}
+
+.dash-icon svg{
+width:24px;
+height:24px;
+
+fill:none;
+
+stroke:#9b5cff;
+
+stroke-width:2;
+
+stroke-linecap:round;
+stroke-linejoin:round;
+}
+
+.dashboard-card strong{
+font-size:14px;
+
+font-weight:800;
+
+color:#191525;
+}
+
+.dashboard-card span{
+margin-top:4px;
+
+font-size:11px;
+
+color:#777180;
+}
+
+/* ==================================================
+   COMMUNITY
+   SLIGHTLY NARROWER HORIZONTAL CARDS
+   ================================================== */
+
+.community-scroll{
+display:flex;
+
+gap:11px;
+
+overflow-x:auto;
+
+padding:2px 1px 12px;
+
+scroll-snap-type:x mandatory;
+
+-webkit-overflow-scrolling:touch;
+
+scrollbar-width:none;
+}
+
+.community-scroll::-webkit-scrollbar{
+display:none;
+}
+
+.community-card{
+flex:0 0 225px;
+
+min-height:215px;
+
+padding:16px;
+
+border-radius:22px;
+
+background:#ffffff;
+
+border:1px solid #e3ddea;
+
+text-decoration:none;
+
+display:flex;
+flex-direction:column;
+
+box-shadow:
+0 6px 18px rgba(30,20,50,.06);
+
+scroll-snap-align:start;
+}
+
+.community-logo{
+width:55px;
+height:55px;
+
+border-radius:16px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+margin-bottom:12px;
+}
+
+.community-logo svg{
+width:33px;
+height:33px;
+}
+
+/* REAL BRAND COLOURS */
+
+.telegram-logo{
+background:#dff3ff;
+}
+
+.telegram-logo svg{
+fill:#229ED9;
+}
+
+.instagram-logo{
+background:#ffe5ef;
+}
+
+.instagram-logo svg{
+fill:none;
+stroke:#E1306C;
+stroke-width:2;
+}
+
+.youtube-logo{
+background:#ffe4e4;
+}
+
+.youtube-logo svg{
+fill:#FF0000;
+}
+
+.discussion-logo{
+background:#e9f7ff;
+}
+
+.discussion-logo svg{
+fill:#229ED9;
+}
+
+.community-card strong{
+font-size:16px;
+font-weight:800;
+color:#191525;
+}
+
+.community-card span{
+font-size:12px;
+line-height:1.45;
+color:#777180;
+margin-top:5px;
+}
+
+.community-button{
+margin-top:auto;
+
+width:calc(100% - 20px);
+
+margin-left:10px;
+
+padding:8px 10px;
+
+border-radius:10px;
+
+font-size:12px;
+
+font-weight:800;
+
+text-align:center;
+
+color:#ffffff;
+}
+
+.telegram-button{
+background:#229ED9;
+}
+
+.instagram-button{
+background:#E1306C;
+}
+
+.youtube-button{
+background:#FF0000;
+}
+
+.discussion-button{
+background:#9b5cff;
+}
+
+/* ==================================================
+   CONTINUE LEARNING
+   ================================================== */
+
+.continue-grid{
+display:flex;
+
+gap:13px;
+
+overflow-x:auto;
+
+padding:2px 1px 12px;
+
+scroll-snap-type:x mandatory;
+
+-webkit-overflow-scrolling:touch;
+
+scrollbar-width:none;
+}
+
+.continue-grid::-webkit-scrollbar{
+display:none;
+}
+
+.continue-card{
+flex:0 0 275px;
+
+min-height:100px;
+
+padding:15px;
+
+border-radius:18px;
+
+background:#ffffff;
+
+border:1px solid #e3ddea;
+
+text-decoration:none;
+
+display:flex;
+align-items:center;
+
+box-shadow:
+0 5px 16px rgba(30,20,50,.05);
+
+scroll-snap-align:start;
+}
+
+.continue-icon{
+width:46px;
+height:46px;
+
+flex-shrink:0;
+
+border-radius:13px;
+
+background:#f0e5ff;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+margin-right:12px;
+}
+
+.continue-icon svg{
+width:24px;
+height:24px;
+
+fill:none;
+
+stroke:#9b5cff;
+
+stroke-width:2;
+
+stroke-linecap:round;
+stroke-linejoin:round;
+}
+
+.continue-card > div:nth-child(2){
+flex:1;
+}
+
+.continue-card strong{
+display:block;
+
+font-size:14px;
+
+font-weight:800;
+
+color:#191525;
+}
+
+.continue-card span{
+display:block;
+
+font-size:11px;
+
+margin-top:4px;
+
+color:#777180;
+}
+
+.continue-card b{
+font-size:25px;
+
+font-weight:400;
+
+color:#8a8390;
+
+margin-left:8px;
+}
+
+/* ==================================================
+   FOOTER
+   ================================================== */
+
+.home-footer{
+text-align:center;
+
+padding:25px 20px 105px;
+
+border-top:1px solid #e6dfeb;
+
+background:#faf8fc;
+}
+
+.home-footer h2{
+margin:0;
+
+font-size:19px;
+
+font-weight:800;
+
+color:#191525;
+}
+
+.home-footer h2 span{
+color:#9b5cff;
+}
+
+.home-footer p{
+margin:6px 0 0;
+
+font-size:11px;
+
+color:#817987;
+}
+
+/* ==================================================
+   BOTTOM NAV
+   ================================================== */
+
+.bottom-nav{
+position:fixed;
+
+left:0;
+right:0;
+bottom:0;
+
+z-index:100;
+
+display:flex;
+align-items:center;
+justify-content:space-around;
+
+background:#f0e8ff;
+
+border-top:1px solid #d9c9ef;
+
+padding:6px 12px 8px;
+}
+
+.bottom-nav a{
+flex:1;
+
+display:flex;
+flex-direction:column;
+
+align-items:center;
+justify-content:center;
+
+gap:3px;
+
+text-decoration:none;
+
+min-height:58px;
+
+padding:3px 8px;
+
+border-radius:12px;
+}
+
+.nav-icon{
+width:26px;
+height:26px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-size:23px;
+
+line-height:1;
+}
+
+.bottom-nav small{
+font-size:12px;
+
+font-weight:600;
+
+color:#71697d;
+}
+
+.bottom-nav a.active small{
+color:#9b5cff;
+}
+
+/* ==================================================
+   UPDATES POPUP
+   ================================================== */
+
+.updates-overlay{
+position:fixed;
+
+inset:0;
+
+z-index:200;
+
+display:none;
+
+align-items:center;
+justify-content:center;
+
+padding:20px;
+
+background:rgba(20,12,30,.48);
+}
+
+.updates-overlay.show{
+display:flex;
+}
 
 .updates-popup{
-  position:fixed;
-  inset:0;
-  z-index:3500;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  background:rgba(0,0,0,.5);
+width:100%;
+max-width:430px;
+
+max-height:80vh;
+
+overflow:hidden;
+
+background:#ffffff;
+
+border-radius:22px;
+
+box-shadow:
+0 20px 60px rgba(20,10,30,.25);
 }
 
-.updates-popup.open{
-  display:flex;
+.updates-popup-header{
+display:flex;
+align-items:center;
+justify-content:space-between;
+
+padding:18px;
+
+border-bottom:1px solid #eee8f2;
 }
 
-.updates-card{
-  width:min(420px,100%);
-  border-radius:20px;
-  padding:20px;
+.updates-popup-header h2{
+margin:0;
+
+font-size:20px;
+
+color:#191525;
 }
 
-.updates-card h3{
-  margin:0;
-  font-size:18px;
-}
+.updates-popup-header p{
+margin:4px 0 0;
 
-.updates-card p{
-  margin:10px 0 0;
-  font-size:13px;
-  line-height:1.5;
+font-size:11px;
+
+color:#777180;
 }
 
 .updates-close{
-  margin-top:16px;
-  width:100%;
-  height:42px;
-  border:0;
-  border-radius:11px;
-  font-weight:900;
-  cursor:pointer;
+width:34px;
+height:34px;
+
+border:0;
+
+border-radius:50%;
+
+background:#f0e8ff;
+
+color:#7b4ac0;
+
+font-size:23px;
 }
 
-/* ---------- MOBILE ---------- */
+.updates-content{
+padding:18px;
 
-@media(max-width:600px){
+overflow-y:auto;
 
-  .header-inner{
-    padding:7px 11px;
-  }
-
-  .header-brand{
-    font-size:21px;
-  }
-
-  .header-tagline{
-    font-size:7px;
-  }
-
-  .home-main{
-    padding-left:11px;
-    padding-right:11px;
-  }
-
-  .home-welcome{
-    padding:19px 15px;
-    border-radius:18px;
-  }
-
-  .home-welcome h1{
-    font-size:20px;
-  }
-
-  .dashboard-grid,
-  .continue-grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .community-grid{
-    max-width:94%;
-    gap:9px;
-  }
-
-  .community-card{
-    max-width:94%;
-    min-height:88px;
-    padding:12px;
-  }
-
-  .community-icon{
-    width:38px;
-    height:38px;
-    min-width:38px;
-    font-size:20px;
-  }
+max-height:60vh;
 }
 
-@media(min-width:768px){
+.no-updates{
+display:flex;
 
-  .dashboard-grid{
-    grid-template-columns:repeat(4,1fr);
-  }
+flex-direction:column;
 
-  .continue-grid{
-    grid-template-columns:repeat(4,1fr);
-  }
+align-items:center;
 
-  .community-grid{
-    max-width:760px;
-  }
+text-align:center;
 
-  .community-card{
-    max-width:100%;
-  }
+padding:28px 15px;
 }
+
+.no-updates-icon{
+width:58px;
+height:58px;
+
+border-radius:17px;
+
+background:#f0e5ff;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+margin-bottom:13px;
+}
+
+.no-updates-icon svg{
+width:29px;
+height:29px;
+
+fill:none;
+
+stroke:#9b5cff;
+
+stroke-width:2;
+
+stroke-linecap:round;
+stroke-linejoin:round;
+}
+
+.no-updates strong{
+font-size:15px;
+
+color:#191525;
+}
+
+.no-updates span{
+font-size:11px;
+
+color:#777180;
+
+margin-top:5px;
+}
+
+.update-item{
+display:flex;
+
+gap:12px;
+
+padding:13px;
+
+border-radius:14px;
+
+background:#faf7ff;
+
+border:1px solid #ece2f7;
+
+margin-bottom:10px;
+}
+
+.update-item-icon{
+width:42px;
+height:42px;
+
+flex-shrink:0;
+
+border-radius:12px;
+
+background:#eee2ff;
+
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.update-item-icon svg{
+width:22px;
+height:22px;
+
+fill:none;
+
+stroke:#9b5cff;
+
+stroke-width:2;
+
+stroke-linecap:round;
+stroke-linejoin:round;
+}
+
+.update-item-text strong{
+display:block;
+
+font-size:13px;
+
+color:#191525;
+}
+
+.update-item-text span{
+display:block;
+
+font-size:11px;
+
+line-height:1.4;
+
+color:#777180;
+
+margin-top:3px;
+}
+
+.update-item-text small{
+display:block;
+
+font-size:9px;
+
+color:#9b5cff;
+
+margin-top:5px;
+}
+
+/* ==================================================
+   DARK THEME
+   ================================================== */
+
+:root[data-theme="dark"] body{
+background:#10091a;
+}
+
+:root[data-theme="dark"] .home-header{
+background:#160d22;
+border-color:#2c2038;
+}
+
+:root[data-theme="dark"] .menu-button span{
+background:#ffffff;
+}
+
+:root[data-theme="dark"] .header-brand{
+color:#ffffff;
+}
+
+:root[data-theme="dark"] .header-tagline{
+color:#aaa1b5;
+}
+
+:root[data-theme="dark"] .header-search svg,
+:root[data-theme="dark"] .update-bell svg{
+stroke:#ffffff;
+}
+
+:root[data-theme="dark"] .home-welcome{
+background:
+linear-gradient(
+135deg,
+#321d4b 0%,
+#1d102b 52%,
+#2c183f 100%
+);
+
+border-color:#4b3262;
+}
+
+:root[data-theme="dark"] .welcome-pill{
+background:#392255;
+color:#c6a4ff;
+}
+
+:root[data-theme="dark"] .home-welcome h1,
+:root[data-theme="dark"] .section-heading,
+:root[data-theme="dark"] .dashboard-card strong,
+:root[data-theme="dark"] .community-card strong,
+:root[data-theme="dark"] .continue-card strong,
+:root[data-theme="dark"] .home-footer h2{
+color:#ffffff;
+}
+
+:root[data-theme="dark"] .home-welcome p,
+:root[data-theme="dark"] .dashboard-card span,
+:root[data-theme="dark"] .community-card span,
+:root[data-theme="dark"] .continue-card span{
+color:#aaa1b5;
+}
+
+:root[data-theme="dark"] .dashboard-card,
+:root[data-theme="dark"] .community-card,
+:root[data-theme="dark"] .continue-card{
+background:#1a1024;
+border-color:#352640;
+}
+
+:root[data-theme="dark"] .dash-icon,
+:root[data-theme="dark"] .continue-icon{
+background:#2a1939;
+}
+
+:root[data-theme="dark"] .home-footer{
+background:#140c1c;
+border-color:#2d2036;
+}
+
+:root[data-theme="dark"] .bottom-nav{
+background:#21142f;
+border-color:#3a2850;
+}
+
+:root[data-theme="dark"] .bottom-nav small{
+color:#aaa1b5;
+}
+
+:root[data-theme="dark"] .bottom-nav a.active small{
+color:#b487ff;
+}
+
+:root[data-theme="dark"] .side-menu{
+background:#1a1024;
+}
+
+:root[data-theme="dark"] .side-menu-header{
+border-color:#352640;
+}
+
+:root[data-theme="dark"] .side-menu-brand{
+color:#ffffff;
+}
+
+:root[data-theme="dark"] .side-menu-links a{
+color:#eee8f2;
+}
+
+:root[data-theme="dark"] .side-menu-links a:hover{
+background:#2a1939;
+}
+
+:root[data-theme="dark"] .side-profile{
+border-color:#352640;
+}
+
+:root[data-theme="dark"] .side-profile-name{
+color:#ffffff;
+}
+
+:root[data-theme="dark"] .menu-theme{
+background:#21142f;
+border-color:#49355b;
+color:#eee8f2;
+}
+
+:root[data-theme="dark"] .theme-icon{
+background:#2a1939;
+}
+
+:root[data-theme="dark"] .menu-divider{
+background:#352640;
+}
+
+:root[data-theme="dark"] .theme-options button{
+background:#241630;
+border-color:#49355b;
+color:#aaa1b5;
+}
+
+:root[data-theme="dark"] .search-box{
+background:#1a1024;
+}
+
+:root[data-theme="dark"] .search-input{
+color:#ffffff;
+}
+
+:root[data-theme="dark"] .search-result{
+background:#241630;
+}
+
+:root[data-theme="dark"] .search-result strong{
+color:#ffffff;
+}
+
+:root[data-theme="dark"] .updates-popup{
+background:#1a1024;
+}
+
+:root[data-theme="dark"] .updates-popup-header{
+border-color:#352640;
+}
+
+:root[data-theme="dark"] .updates-popup-header h2{
+color:#ffffff;
+}
+
+/* ==================================================
+   MOBILE
+   ================================================== */
+
+@media(max-width:420px){
+
+.home-header-content{
+height:68px;
+padding:0 14px;
+}
+
+.header-brand{
+font-size:21px;
+}
+
+.header-tagline{
+font-size:7px;
+}
+
+.menu-button{
+width:36px;
+height:36px;
+}
+
+.header-search,
+.update-bell{
+width:36px;
+height:36px;
+}
+
+.header-search svg{
+width:21px;
+height:21px;
+}
+
+.update-bell svg{
+width:20px;
+height:20px;
+}
+
+.home-container{
+padding:16px 16px 25px;
+}
+
+.home-welcome{
+padding:22px 18px 21px;
+border-radius:23px;
+}
+
+.home-welcome h1{
+font-size:27px;
+}
+
+.home-welcome p{
+font-size:13px;
+}
+
+.dashboard-grid{
+gap:10px;
+}
+
+.dashboard-card{
+min-height:125px;
+padding:15px 14px;
+}
+
+/* COMMUNITY WIDTH REDUCED */
+.community-card{
+flex-basis:225px;
+min-height:210px;
+}
+
+.community-button{
+width:calc(100% - 18px);
+margin-left:9px;
+padding:8px;
+}
+
+.continue-card{
+flex-basis:270px;
+}
+
+.section-heading{
+font-size:19px;
+}
+
+.bottom-nav{
+padding:6px 12px 8px;
+}
+
+.bottom-nav a{
+min-height:58px;
+gap:3px;
+padding:3px 8px;
+}
+
+.nav-icon{
+width:26px;
+height:26px;
+font-size:23px;
+}
+
+.bottom-nav small{
+font-size:12px;
+}
+
+}
+
+/* ==================================================
+   DESKTOP
+   ================================================== */
+
+@media(min-width:700px){
+
+.home-container{
+padding-left:30px;
+padding-right:30px;
+}
+
+.dashboard-grid{
+grid-template-columns:
+repeat(4,minmax(0,1fr));
+}
+
+/* COMMUNITY WIDTH REDUCED */
+.community-card{
+flex-basis:250px;
+}
+
+.continue-card{
+flex-basis:320px;
+}
+
+}
+
 </style>
 </head>
 
 <body>
 
-<!-- ============================================================
-     SIDE MENU
-     ============================================================ -->
-
-<div class="side-menu-overlay" id="sideMenuOverlay"></div>
-
-<aside class="side-menu" id="sideMenu">
-
-  <div class="side-menu-profile">
-    <div class="side-profile-avatar" id="sideAvatar">👤</div>
-
-    <div class="side-profile-info">
-      <div class="side-profile-name" id="sideName">Student</div>
-      <div class="side-profile-sub">SSC EDGE Learner</div>
-    </div>
-  </div>
-
-  <div class="side-menu-links">
-
-    <a href="home.html">
-      <span class="menu-link-icon">🏠</span>
-      <span>Home</span>
-    </a>
-
-    <a href="study.html">
-      <span class="menu-link-icon">📚</span>
-      <span>Study Material</span>
-    </a>
-
-    <a href="practice.html">
-      <span class="menu-link-icon">📝</span>
-      <span>Practice</span>
-    </a>
-
-    <div class="menu-divider"></div>
-
-    <a href="progress.html">
-      <span class="menu-link-icon">📊</span>
-      <span>My Progress</span>
-    </a>
-
-    <a href="streak.html">
-      <span class="menu-link-icon">🔥</span>
-      <span>Day Streak</span>
-    </a>
-
-    <!-- ALIGNED WITH PROFILE TEST HISTORY -->
-    <a href="history.html">
-      <span class="menu-link-icon">📋</span>
-      <span>Test History</span>
-    </a>
-
-    <a href="saved_questions.html">
-      <span class="menu-link-icon">🔖</span>
-      <span>Saved Questions</span>
-    </a>
-
-    <div class="menu-divider"></div>
-
-    <!-- THEME -->
-    <div class="menu-theme">
-
-      <div class="menu-theme-title">
-        <span class="menu-theme-icon">🎨</span>
-        <span>Theme</span>
-      </div>
-
-      <div class="theme-buttons">
-        <button id="darkThemeBtn">Dark</button>
-        <button id="lightThemeBtn">Light</button>
-      </div>
-
-    </div>
-
-    <a href="profile.html">
-      <span class="menu-link-icon">↪️</span>
-      <span>Log Out</span>
-    </a>
-
-  </div>
-</aside>
-
-<!-- ============================================================
+<!-- ==================================================
      HEADER
-     ============================================================ -->
+     ================================================== -->
 
 <header class="home-header">
 
-  <div class="header-inner">
+<div class="home-header-content">
 
-    <div class="header-left">
+<div class="header-left">
 
-      <button class="menu-btn" id="menuBtn" aria-label="Menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+<button
+class="menu-button"
+id="menuButton"
+type="button"
+aria-label="Open menu">
 
-      <div class="header-brand-wrap">
-        <div class="header-brand">SSC EDGE</div>
-        <div class="header-tagline">Learn • Practice • Improve</div>
-      </div>
+<span></span>
+<span></span>
+<span></span>
 
-    </div>
+</button>
 
-    <div class="header-actions">
+<div class="header-brand-wrap">
 
-      <button class="header-icon-btn" id="searchBtn" aria-label="Search">
-        🔍
-      </button>
+<div class="header-brand">
+SSC <span class="edge">EDGE</span>
+</div>
 
-      <button class="header-icon-btn" id="updatesBtn" aria-label="Updates">
-        🔔
-      </button>
+<div class="header-tagline">
+Learn • Practice • Improve
+</div>
 
-    </div>
+</div>
 
-  </div>
+</div>
+
+<div class="header-actions">
+
+<button
+class="header-search"
+id="searchButton"
+type="button"
+aria-label="Search">
+
+<svg viewBox="0 0 24 24">
+<circle cx="11" cy="11" r="7"/>
+<path d="m16.5 16.5 4 4"/>
+</svg>
+
+</button>
+
+<button
+class="update-bell"
+id="updateBell"
+type="button"
+aria-label="Open updates">
+
+<svg viewBox="0 0 24 24">
+
+<path
+d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+
+<path d="M10 21h4"/>
+
+</svg>
+
+<span
+class="update-dot"
+id="updateDot">
+</span>
+
+</button>
+
+</div>
+
+</div>
 
 </header>
 
-<!-- ============================================================
+<!-- ==================================================
+     SIDE MENU
+     ================================================== -->
+
+<div
+class="menu-overlay"
+id="menuOverlay">
+
+<aside class="side-menu">
+
+<!-- PROFILE -->
+
+<div class="side-profile">
+
+<div
+class="side-profile-photo"
+id="sideProfilePhoto">
+
+👤
+
+</div>
+
+<div class="side-profile-info">
+
+<div
+class="side-profile-name"
+id="sideProfileName">
+
+User
+
+</div>
+
+<a
+href="profile.html"
+class="side-profile-link">
+
+View Profile →
+
+</a>
+
+</div>
+
+</div>
+
+<!-- BRAND + CLOSE -->
+
+<div class="side-menu-header">
+
+<div class="side-menu-brand">
+
+SSC <span>EDGE</span>
+
+</div>
+
+<button
+class="menu-close"
+id="menuClose"
+type="button">
+
+×
+
+</button>
+
+</div>
+
+<!-- MAIN LINKS -->
+
+<div class="side-menu-links">
+
+<a href="home.html">
+
+<div class="menu-link-icon">
+🏠
+</div>
+
+Home
+
+</a>
+
+<a href="study.html">
+
+<div class="menu-link-icon">
+📚
+</div>
+
+Study Material
+
+</a>
+
+<a href="practice.html">
+
+<div class="menu-link-icon">
+📝
+</div>
+
+Practice
+
+</a>
+
+<div class="menu-divider"></div>
+
+<a href="progress.html">
+
+<div class="menu-link-icon">
+📊
+</div>
+
+My Progress
+
+</a>
+
+<a href="streak.html">
+
+<div class="menu-link-icon">
+🔥
+</div>
+
+Day Streak
+
+</a>
+
+<!-- ALIGNED WITH PROFILE TEST HISTORY -->
+
+<a href="history.html">
+
+<div class="menu-link-icon">
+📋
+</div>
+
+Test History
+
+</a>
+
+<a href="saved_questions.html">
+
+<div class="menu-link-icon">
+🔖
+</div>
+
+Saved Questions
+
+</a>
+
+<div class="menu-divider"></div>
+
+<!-- FOLLOW US REMOVED -->
+
+<!-- THEME -->
+
+<div class="menu-theme">
+
+<div class="theme-title">
+
+<div class="theme-icon">
+🎨
+</div>
+
+<span>
+Theme
+</span>
+
+</div>
+
+<div class="theme-options">
+
+<button
+id="darkThemeBtn"
+type="button">
+
+Dark
+
+</button>
+
+<button
+id="lightThemeBtn"
+type="button">
+
+Light
+
+</button>
+
+</div>
+
+</div>
+
+<!-- LOGOUT -->
+
+<a
+href="profile.html"
+id="logoutLink">
+
+<div class="menu-link-icon">
+🚪
+</div>
+
+Log Out
+
+</a>
+
+</div>
+
+</aside>
+
+</div>
+
+<!-- ==================================================
      SEARCH
-     ============================================================ -->
+     ================================================== -->
 
-<div class="search-overlay" id="searchOverlay">
+<div
+class="search-overlay"
+id="searchOverlay">
 
-  <div class="search-box">
+<div class="search-box">
 
-    <input
-      type="text"
-      id="searchInput"
-      class="search-input"
-      placeholder="Search SSC EDGE..."
-      autocomplete="off">
+<div class="search-top">
 
-    <div class="search-results" id="searchResults"></div>
+<input
+type="search"
+class="search-input"
+id="searchInput"
+placeholder="Search SSC EDGE..."
+autocomplete="off">
 
-  </div>
+<button
+class="search-close"
+id="searchClose"
+type="button">
+
+×
+
+</button>
 
 </div>
 
-<!-- ============================================================
+<div
+class="search-results"
+id="searchResults">
+
+<div class="search-empty">
+
+Search Study Material, Practice, Progress, Profile and more.
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ==================================================
      UPDATES
-     ============================================================ -->
+     ================================================== -->
 
-<div class="updates-popup" id="updatesPopup">
+<div
+class="updates-overlay"
+id="updatesOverlay">
 
-  <div class="updates-card">
+<div class="updates-popup">
 
-    <h3>🔔 Updates</h3>
+<div class="updates-popup-header">
 
-    <p id="updatesMessage">
-      Currently no update.
-    </p>
+<div>
 
-    <button class="updates-close" id="updatesClose">
-      Close
-    </button>
+<h2>
+Updates
+</h2>
 
-  </div>
+<p>
+SSC EDGE latest updates
+</p>
 
 </div>
 
-<!-- ============================================================
+<button
+class="updates-close"
+id="updatesClose"
+type="button">
+
+×
+
+</button>
+
+</div>
+
+<div
+class="updates-content"
+id="updatesContent">
+
+<div class="no-updates">
+
+<div class="no-updates-icon">
+
+<svg viewBox="0 0 24 24">
+
+<path d="M4 5h16v14H4z"/>
+<path d="M8 9h8M8 13h5"/>
+
+</svg>
+
+</div>
+
+<strong>
+Currently no updates
+</strong>
+
+<span>
+New SSC EDGE updates will appear here.
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ==================================================
      MAIN
-     ============================================================ -->
+     ================================================== -->
 
-<main class="home-main">
+<main class="home-container">
 
-  <!-- WELCOME -->
+<!-- WELCOME -->
 
-  <section class="home-welcome">
+<section class="home-welcome">
 
-    <h1 id="welcomeTitle">
-      Welcome to SSC EDGE 👋
-    </h1>
+<div class="welcome-pill">
+SSC PREPARATION
+</div>
 
-    <p>
-      Your complete preparation platform for SSC exams.
-    </p>
+<h1>
+Welcome to SSC EDGE
+</h1>
 
-  </section>
+<p>
+Your smart preparation platform for SSC exams.
+</p>
 
-  <!-- DASHBOARD -->
+<a
+href="study.html"
+class="welcome-action">
 
-  <section class="dashboard">
+Get Started
 
-    <h2 class="section-title">Dashboard</h2>
+<span>
+→
+</span>
 
-    <div class="dashboard-grid">
+</a>
 
-      <a class="dashboard-card" href="study.html">
-        <div class="dashboard-card-icon">📚</div>
-        <div>
-          <div class="dashboard-card-title">Study Material</div>
-          <div class="dashboard-card-sub">Learn & revise</div>
-        </div>
-      </a>
+</section>
 
-      <a class="dashboard-card" href="practice.html">
-        <div class="dashboard-card-icon">📝</div>
-        <div>
-          <div class="dashboard-card-title">Practice</div>
-          <div class="dashboard-card-sub">Mock tests & practice</div>
-        </div>
-      </a>
+<!-- DASHBOARD -->
 
-      <a class="dashboard-card" href="progress.html">
-        <div class="dashboard-card-icon">📈</div>
-        <div>
-          <div class="dashboard-card-title">Performance</div>
-          <div class="dashboard-card-sub">Track your progress</div>
-        </div>
-      </a>
+<h2 class="section-heading">
+Dashboard
+</h2>
 
-      <a class="dashboard-card" href="history.html">
-        <div class="dashboard-card-icon">📋</div>
-        <div>
-          <div class="dashboard-card-title">Test History</div>
-          <div class="dashboard-card-sub">View your attempts</div>
-        </div>
-      </a>
+<section class="dashboard-grid">
 
-    </div>
+<a
+href="study.html"
+class="dashboard-card">
 
-  </section>
+<div class="dash-icon">
 
-  <!-- CONTINUE LEARNING -->
+<svg viewBox="0 0 24 24">
 
-  <section class="continue-section">
+<path
+d="M4 4h13a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3V4Z"/>
 
-    <h2 class="section-title">Continue Learning</h2>
+<path
+d="M7 20V7a3 3 0 0 1 3-3"/>
 
-    <div class="continue-grid">
+</svg>
 
-      <a class="continue-card" href="practice.html">
+</div>
 
-        <div class="continue-icon">
-          📝
-        </div>
+<strong>
+Study Material
+</strong>
 
-        <div>
-          <div class="continue-title">Mock Test</div>
-          <div class="continue-sub">Start practicing</div>
-        </div>
+<span>
+Notes & PDFs
+</span>
 
-      </a>
+</a>
 
-      <a class="continue-card" href="video.html">
+<a
+href="practice.html"
+class="dashboard-card">
 
-        <div class="continue-icon">
-          ▶️
-        </div>
+<div class="dash-icon">
 
-        <div>
-          <div class="continue-title">Videos</div>
-          <div class="continue-sub">Learn with videos</div>
-        </div>
+<svg viewBox="0 0 24 24">
 
-      </a>
+<path d="M5 4h14v16H5z"/>
+<path d="m8 12 2.5 2.5L16 9"/>
 
-      <a class="continue-card" href="saved_questions.html">
+</svg>
 
-        <div class="continue-icon">
-          🔖
-        </div>
+</div>
 
-        <div>
-          <div class="continue-title">Saved Questions</div>
-          <div class="continue-sub">Review saved questions</div>
-        </div>
+<strong>
+Practice
+</strong>
 
-      </a>
+<span>
+Mock Tests
+</span>
 
-      <a class="continue-card" href="progress.html">
+</a>
 
-        <div class="continue-icon">
-          📊
-        </div>
+<a
+href="progress.html"
+class="dashboard-card">
 
-        <div>
-          <div class="continue-title">Performance</div>
-          <div class="continue-sub">Check your progress</div>
-        </div>
+<div class="dash-icon">
 
-      </a>
+<svg viewBox="0 0 24 24">
 
-    </div>
+<path d="M4 19V5"/>
+<path d="M4 19h16"/>
+<path d="m7 15 4-4 3 2 5-6"/>
 
-  </section>
+</svg>
 
-  <!-- COMMUNITY -->
+</div>
 
-  <section class="community-section">
+<strong>
+Progress
+</strong>
 
-    <h2 class="section-title">Join Our Community</h2>
+<span>
+Track your performance
+</span>
 
-    <div class="community-grid">
+</a>
 
-      <a
-        class="community-card"
-        href="https://t.me/+QCNa39ZJZnBhMzll"
-        target="_blank"
-        rel="noopener">
+<a
+href="streak.html"
+class="dashboard-card">
 
-        <div class="community-icon">✈️</div>
+<div class="dash-icon">
 
-        <div>
-          <div class="community-title">Telegram</div>
-          <div class="community-sub">Join our community</div>
-        </div>
+<svg viewBox="0 0 24 24">
 
-      </a>
+<path
+d="M12 22c4 0 7-2.7 7-7 0-3.5-2.2-5.7-4.7-8.5.1 2.2-.8 3.5-2 4.3.2-3.7-1.8-6.5-4.5-8.8.1 3.7-3 6-3 10 0 5.3 3.4 10 7.2 10Z"/>
 
-      <a
-        class="community-card"
-        href="https://www.instagram.com/ssc_edge"
-        target="_blank"
-        rel="noopener">
+</svg>
 
-        <div class="community-icon">📸</div>
+</div>
 
-        <div>
-          <div class="community-title">Instagram</div>
-          <div class="community-sub">Follow SSC EDGE</div>
-        </div>
+<strong>
+Study Streak
+</strong>
 
-      </a>
+<span>
+Keep your streak alive
+</span>
 
-      <a
-        class="community-card"
-        href="https://youtube.com/@sscedge07?si=F3GngIGL79XRy3PK"
-        target="_blank"
-        rel="noopener">
+</a>
 
-        <div class="community-icon">▶️</div>
+</section>
 
-        <div>
-          <div class="community-title">YouTube</div>
-          <div class="community-sub">Watch & learn</div>
-        </div>
+<!-- COMMUNITY -->
 
-      </a>
+<h2 class="section-heading">
+Join SSC EDGE Community
+</h2>
 
-      <a
-        class="community-card"
-        href="https://t.me/+nHIcGkweGB5mNDdl"
-        target="_blank"
-        rel="noopener">
+<section class="community-scroll">
 
-        <div class="community-icon">💬</div>
+<!-- TELEGRAM -->
 
-        <div>
-          <div class="community-title">Discussion</div>
-          <div class="community-sub">Ask & discuss</div>
-        </div>
+<a
+href="https://t.me/+QCNa39ZJZnBhMzll"
+target="_blank"
+rel="noopener noreferrer"
+class="community-card">
 
-      </a>
+<div class="community-logo telegram-logo">
 
-    </div>
+<svg viewBox="0 0 24 24">
 
-  </section>
+<path
+d="M21.6 3.5 18.4 20c-.2 1-.8 1.4-1.6.9l-4.8-3.6-2.4 2.3c-.3.3-.5.5-.9.5l.3-4.9 9-8.2c.4-.4-.1-.6-.6-.2L6.3 13.3l-4.7-1.5c-1-.3-1-1.1.2-1.5L20.2 3c.9-.3 1.7.2 1.4.5Z"/>
+
+</svg>
+
+</div>
+
+<strong>
+Telegram Channel
+</strong>
+
+<span>
+Daily updates & exam alerts
+</span>
+
+<div class="community-button telegram-button">
+Join Now →
+</div>
+
+</a>
+
+<!-- INSTAGRAM -->
+
+<a
+href="https://www.instagram.com/ssc_edge"
+target="_blank"
+rel="noopener noreferrer"
+class="community-card">
+
+<div class="community-logo instagram-logo">
+
+<svg viewBox="0 0 24 24">
+
+<rect
+x="3"
+y="3"
+width="18"
+height="18"
+rx="5"/>
+
+<circle
+cx="12"
+cy="12"
+r="4"/>
+
+<circle
+cx="17.5"
+cy="6.5"
+r="1"
+fill="#E1306C"
+stroke="none"/>
+
+</svg>
+
+</div>
+
+<strong>
+Instagram
+</strong>
+
+<span>
+Follow SSC EDGE for updates
+</span>
+
+<div class="community-button instagram-button">
+Follow Us →
+</div>
+
+</a>
+
+<!-- YOUTUBE -->
+
+<a
+href="https://youtube.com/@sscedge07?si=G3GngIGL79XRy3PK"
+target="_blank"
+rel="noopener noreferrer"
+class="community-card">
+
+<div class="community-logo youtube-logo">
+
+<svg viewBox="0 0 24 24">
+
+<path
+d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8Z"/>
+
+<path
+d="m9.5 15.5 6-3.5-6-3.5v7Z"
+fill="#ffffff"/>
+
+</svg>
+
+</div>
+
+<strong>
+YouTube
+</strong>
+
+<span>
+Free classes & strategy sessions
+</span>
+
+<div class="community-button youtube-button">
+Watch Now →
+</div>
+
+</a>
+
+<!-- DISCUSSION -->
+
+<a
+href="https://t.me/+nHIcGkweGB5mNDdl"
+target="_blank"
+rel="noopener noreferrer"
+class="community-card">
+
+<div class="community-logo discussion-logo">
+
+<svg viewBox="0 0 24 24">
+
+<path
+d="M4 5.5h16v11H9l-5 4v-15Z"/>
+
+<path
+d="M8 9.5h8M8 13h5"
+fill="none"
+stroke="#ffffff"
+stroke-width="1.7"
+stroke-linecap="round"/>
+
+</svg>
+
+</div>
+
+<strong>
+Discussion Group
+</strong>
+
+<span>
+Ask doubts & discuss with aspirants
+</span>
+
+<div class="community-button discussion-button">
+Join Group →
+</div>
+
+</a>
+
+</section>
+
+<!-- CONTINUE LEARNING -->
+
+<h2 class="section-heading">
+Continue Learning
+</h2>
+
+<section class="continue-grid">
+
+<!-- MOCK TEST -->
+
+<a
+href="practice.html"
+class="continue-card">
+
+<div class="continue-icon">
+
+<svg viewBox="0 0 24 24">
+
+<path d="M5 4h14v16H5z"/>
+<path d="m8 12 2.5 2.5L16 9"/>
+
+</svg>
+
+</div>
+
+<div>
+
+<strong>
+Mock Test
+</strong>
+
+<span>
+Practice SSC mock tests
+</span>
+
+</div>
+
+<b>
+›
+</b>
+
+</a>
+
+<!-- VIDEOS -->
+
+<a
+href="video.html"
+class="continue-card">
+
+<div class="continue-icon">
+
+<svg viewBox="0 0 24 24">
+
+<rect
+x="4"
+y="5"
+width="16"
+height="14"
+rx="3"/>
+
+<path
+d="m10 9 5 3-5 3Z"
+fill="none"/>
+
+</svg>
+
+</div>
+
+<div>
+
+<strong>
+Videos
+</strong>
+
+<span>
+Continue video classes
+</span>
+
+</div>
+
+<b>
+›
+</b>
+
+</a>
+
+<!-- SAVED QUESTIONS -->
+
+<a
+href="saved_questions.html"
+class="continue-card">
+
+<div class="continue-icon">
+
+<svg viewBox="0 0 24 24">
+
+<path
+d="M6 4h12v17l-6-3-6 3V4Z"/>
+
+</svg>
+
+</div>
+
+<div>
+
+<strong>
+Saved Questions
+</strong>
+
+<span>
+Revise saved questions
+</span>
+
+</div>
+
+<b>
+›
+</b>
+
+</a>
+
+<!-- PERFORMANCE -->
+
+<a
+href="progress.html"
+class="continue-card">
+
+<div class="continue-icon">
+
+<svg viewBox="0 0 24 24">
+
+<path d="M4 19V5"/>
+<path d="M4 19h16"/>
+<path d="m7 15 4-4 3 2 5-6"/>
+
+</svg>
+
+</div>
+
+<div>
+
+<strong>
+Performance
+</strong>
+
+<span>
+Check your performance
+</span>
+
+</div>
+
+<b>
+›
+</b>
+
+</a>
+
+</section>
 
 </main>
 
-<!-- ============================================================
+<!-- ==================================================
      FOOTER
-     ============================================================ -->
+     ================================================== -->
 
 <footer class="home-footer">
 
-  <div class="home-footer-title">
-    SSC EDGE
-  </div>
+<h2>
+SSC <span>EDGE</span>
+</h2>
 
-  <div class="home-footer-sub">
-    Learn • Practice • Improve
-  </div>
+<p>
+Learn • Practice • Improve
+</p>
 
 </footer>
 
-<!-- ============================================================
+<!-- ==================================================
      BOTTOM NAV
-     ============================================================ -->
+     ================================================== -->
 
 <nav class="bottom-nav">
 
-  <a href="home.html">
-    <span class="bottom-nav-icon">🏠</span>
-    <span class="bottom-nav-label">Home</span>
-  </a>
+<a
+href="home.html"
+class="active">
 
-  <a href="study.html">
-    <span class="bottom-nav-icon">📚</span>
-    <span class="bottom-nav-label">Study Material</span>
-  </a>
+<span class="nav-icon">
+🏠
+</span>
 
-  <a href="practice.html">
-    <span class="bottom-nav-icon">📝</span>
-    <span class="bottom-nav-label">Practice</span>
-  </a>
+<small>
+Home
+</small>
 
-  <a href="profile.html">
-    <span class="bottom-nav-icon">👤</span>
-    <span class="bottom-nav-label">Profile</span>
-  </a>
+</a>
+
+<a href="study.html">
+
+<span class="nav-icon">
+📚
+</span>
+
+<small>
+Study Material
+</small>
+
+</a>
+
+<a href="practice.html">
+
+<span class="nav-icon">
+📝
+</span>
+
+<small>
+Practice
+</small>
+
+</a>
+
+<a href="profile.html">
+
+<span class="nav-icon">
+👤
+</span>
+
+<small>
+Profile
+</small>
+
+</a>
 
 </nav>
 
-<!-- ============================================================
+<!-- ==================================================
      JAVASCRIPT
-     ============================================================ -->
+     ================================================== -->
 
 <script>
 
-document.addEventListener("DOMContentLoaded", () => {
+/* ==================================================
+   MENU
+   ================================================== */
 
-  /* ==========================================================
-     THEME
-     ========================================================== */
+const menuButton =
+document.getElementById("menuButton");
 
-  const savedTheme =
-    localStorage.getItem("ssc-edge-theme") || "dark";
+const menuOverlay =
+document.getElementById("menuOverlay");
 
-  document.documentElement.setAttribute(
-    "data-theme",
-    savedTheme
-  );
+const menuClose =
+document.getElementById("menuClose");
 
-  /* ==========================================================
-     SIDE MENU
-     ========================================================== */
-
-  const menuBtn =
-    document.getElementById("menuBtn");
+menuButton.addEventListener(
+"click",
+function(){
 
-  const sideMenu =
-    document.getElementById("sideMenu");
-
-  const sideMenuOverlay =
-    document.getElementById("sideMenuOverlay");
-
-  function openMenu(){
-    sideMenu.classList.add("open");
-    sideMenuOverlay.classList.add("open");
-  }
-
-  function closeMenu(){
-    sideMenu.classList.remove("open");
-    sideMenuOverlay.classList.remove("open");
-  }
-
-  menuBtn.addEventListener("click", openMenu);
-
-  sideMenuOverlay.addEventListener(
-    "click",
-    closeMenu
-  );
-
-  /* ==========================================================
-     PROFILE NAME
-     ========================================================== */
-
-  const savedName =
-    localStorage.getItem("ssc-edge-username") ||
-    localStorage.getItem("ssc-edge-name") ||
-    "Student";
-
-  const sideName =
-    document.getElementById("sideName");
-
-  const welcomeTitle =
-    document.getElementById("welcomeTitle");
-
-  sideName.textContent = savedName;
-
-  welcomeTitle.textContent =
-    "Welcome, " + savedName + " 👋";
-
-  /* ==========================================================
-     SEARCH
-     ========================================================== */
-
-  const searchBtn =
-    document.getElementById("searchBtn");
-
-  const searchOverlay =
-    document.getElementById("searchOverlay");
-
-  const searchInput =
-    document.getElementById("searchInput");
+menuOverlay.classList.add("show");
 
-  const searchResults =
-    document.getElementById("searchResults");
+}
+);
 
-  const searchIndex = [
+menuClose.addEventListener(
+"click",
+function(){
 
-    {
-      name:"Home",
-      icon:"🏠",
-      url:"home.html"
-    },
+menuOverlay.classList.remove("show");
 
-    {
-      name:"Study Material",
-      icon:"📚",
-      url:"study.html"
-    },
+}
+);
 
-    {
-      name:"Practice",
-      icon:"📝",
-      url:"practice.html"
-    },
+menuOverlay.addEventListener(
+"click",
+function(event){
 
-    {
-      name:"My Progress",
-      icon:"📊",
-      url:"progress.html"
-    },
+if(event.target === menuOverlay){
 
-    {
-      name:"Day Streak",
-      icon:"🔥",
-      url:"streak.html"
-    },
+menuOverlay.classList.remove("show");
 
-    {
-      name:"Test History",
-      icon:"📋",
-      url:"history.html"
-    },
+}
 
-    {
-      name:"Saved Questions",
-      icon:"🔖",
-      url:"saved_questions.html"
-    },
+}
+);
 
-    {
-      name:"Downloads",
-      icon:"⬇️",
-      url:"downloads.html"
-    },
+/* ==================================================
+   PROFILE NAME
+   ================================================== */
 
-    {
-      name:"Videos",
-      icon:"▶️",
-      url:"video.html"
-    },
+function loadProfileInfo(){
 
-    {
-      name:"E-Books",
-      icon:"📖",
-      url:"ebooks.html"
-    },
+const possibleKeys = [
 
-    {
-      name:"Profile",
-      icon:"👤",
-      url:"profile.html"
-    }
+"ssc-edge-username",
+"ssc-edge-name",
+"sscEdgeUsername",
+"sscEdgeName",
+"username",
+"name"
 
-  ];
+];
 
-  function renderSearchResults(query = ""){
+let savedName = "";
 
-    const q =
-      query.trim().toLowerCase();
+for(const key of possibleKeys){
 
-    const filtered =
-      searchIndex.filter(item =>
-        item.name.toLowerCase().includes(q)
-      );
+const value =
+localStorage.getItem(key);
 
-    searchResults.innerHTML = "";
+if(value){
 
-    if(!filtered.length){
+savedName = value;
 
-      searchResults.innerHTML =
-        `<div class="search-result">
-          <span>No result found</span>
-        </div>`;
+break;
 
-      return;
-    }
+}
 
-    filtered.forEach(item => {
+}
 
-      const a =
-        document.createElement("a");
+if(!savedName){
 
-      a.className =
-        "search-result";
+savedName = "User";
 
-      a.href =
-        item.url;
+}
 
-      a.innerHTML =
-        `<span class="search-result-icon">
-          ${item.icon}
-        </span>
-        <span>${item.name}</span>`;
+document.getElementById(
+"sideProfileName"
+).textContent = savedName;
 
-      searchResults.appendChild(a);
+/*
+   If profile photo is stored as a data URL,
+   display it.
+*/
 
-    });
+const possiblePhotoKeys = [
 
-  }
+"ssc-edge-profile-photo",
+"ssc-edge-profile-image",
+"sscEdgeProfilePhoto",
+"profilePhoto"
 
-  function openSearch(){
+];
 
-    searchOverlay.classList.add("open");
+for(const key of possiblePhotoKeys){
 
-    searchInput.value = "";
+const photo =
+localStorage.getItem(key);
 
-    renderSearchResults();
+if(photo){
 
-    setTimeout(() => {
-      searchInput.focus();
-    },50);
+document.getElementById(
+"sideProfilePhoto"
+).innerHTML =
+`<img src="${photo}" alt="Profile">`;
+
+break;
+
+}
+
+}
+
+}
+
+loadProfileInfo();
+
+/* ==================================================
+   SEARCH
+   ================================================== */
+
+const searchButton =
+document.getElementById("searchButton");
+
+const searchOverlay =
+document.getElementById("searchOverlay");
+
+const searchClose =
+document.getElementById("searchClose");
+
+const searchInput =
+document.getElementById("searchInput");
+
+const searchResults =
+document.getElementById("searchResults");
+
+const searchIndex = [
 
-  }
+{
+title:"Home",
+text:"SSC EDGE home dashboard welcome community continue learning",
+url:"home.html"
+},
 
-  function closeSearch(){
+{
+title:"Study Material",
+text:"Study Material Video E-Books Notes PDFs Quantitative Aptitude General Awareness English Reasoning",
+url:"study.html"
+},
 
-    searchOverlay.classList.remove("open");
+{
+title:"Video Classes",
+text:"Video classes study videos",
+url:"video.html"
+},
 
-  }
+{
+title:"E-Books",
+text:"E Books PDFs books study material downloads",
+url:"ebooks.html"
+},
 
-  searchBtn.addEventListener(
-    "click",
-    openSearch
-  );
+{
+title:"Quantitative Aptitude",
+text:"Quant maths mathematics notes PDF practice",
+url:"quant.html"
+},
 
-  searchOverlay.addEventListener(
-    "click",
-    e => {
+{
+title:"General Awareness",
+text:"GK General Knowledge Current Affairs notes PDF",
+url:"gk.html"
+},
 
-      if(e.target === searchOverlay){
-        closeSearch();
-      }
+{
+title:"English",
+text:"English Grammar Vocabulary notes PDF",
+url:"english.html"
+},
 
-    }
-  );
+{
+title:"Reasoning",
+text:"Reasoning Logic Practice notes PDF",
+url:"reasoning.html"
+},
 
-  searchInput.addEventListener(
-    "input",
-    () => {
-      renderSearchResults(searchInput.value);
-    }
-  );
+{
+title:"Practice",
+text:"Practice Mock Tests Full Mocks CGL PRE CGL MAINS Sectional Mocks SSC",
+url:"practice.html"
+},
 
-  /* ==========================================================
-     UPDATES
-     ========================================================== */
+{
+title:"My Progress",
+text:"Progress performance score accuracy rank percentile test performance",
+url:"progress.html"
+},
 
-  const updatesBtn =
-    document.getElementById("updatesBtn");
+{
+title:"Day Streak",
+text:"Study streak daily learning streak",
+url:"streak.html"
+},
 
-  const updatesPopup =
-    document.getElementById("updatesPopup");
+/* ALIGNED WITH PROFILE */
+{
+title:"Test History",
+text:"Previous attempts test history mock tests",
+url:"history.html"
+},
 
-  const updatesClose =
-    document.getElementById("updatesClose");
+{
+title:"Saved Questions",
+text:"Saved questions questions saved for revision",
+url:"saved_questions.html"
+},
 
-  updatesBtn.addEventListener(
-    "click",
-    () => {
-      updatesPopup.classList.add("open");
-    }
-  );
+{
+title:"Downloads",
+text:"Downloaded PDFs E Books downloads",
+url:"downloads.html"
+},
 
-  updatesClose.addEventListener(
-    "click",
-    () => {
-      updatesPopup.classList.remove("open");
-    }
-  );
+{
+title:"Profile",
+text:"Profile account downloads saved questions test history theme about logout",
+url:"profile.html"
+}
 
-  updatesPopup.addEventListener(
-    "click",
-    e => {
+];
 
-      if(e.target === updatesPopup){
-        updatesPopup.classList.remove("open");
-      }
+function openSearch(){
 
-    }
-  );
+searchOverlay.classList.add("show");
 
-  /* ==========================================================
-     THEME BUTTONS
-     ========================================================== */
+setTimeout(function(){
 
-  const darkThemeBtn =
-    document.getElementById("darkThemeBtn");
+searchInput.focus();
 
-  const lightThemeBtn =
-    document.getElementById("lightThemeBtn");
+},100);
 
-  function setTheme(theme){
+}
 
-    document.documentElement.setAttribute(
-      "data-theme",
-      theme
-    );
+function closeSearch(){
 
-    localStorage.setItem(
-      "ssc-edge-theme",
-      theme
-    );
+searchOverlay.classList.remove("show");
 
-  }
+searchInput.value="";
 
-  darkThemeBtn.addEventListener(
-    "click",
-    () => setTheme("dark")
-  );
+showSearchEmpty();
 
-  lightThemeBtn.addEventListener(
-    "click",
-    () => setTheme("light")
-  );
+}
 
-  /* ==========================================================
-     ESCAPE
-     ========================================================== */
+function showSearchEmpty(){
 
-  document.addEventListener(
-    "keydown",
-    e => {
+searchResults.innerHTML = `
 
-      if(e.key === "Escape"){
+<div class="search-empty">
+Search SSC EDGE pages, subjects and study material.
+</div>
 
-        closeMenu();
-        closeSearch();
+`;
 
-        updatesPopup.classList.remove(
-          "open"
-        );
+}
 
-      }
+function performSearch(){
 
-    }
-  );
+const query =
+searchInput.value
+.trim()
+.toLowerCase();
+
+if(!query){
+
+showSearchEmpty();
+
+return;
+
+}
+
+const results =
+searchIndex.filter(function(item){
+
+return (
+
+item.title
+.toLowerCase()
+.includes(query)
+
+||
+
+item.text
+.toLowerCase()
+.includes(query)
+
+);
 
 });
+
+if(results.length === 0){
+
+searchResults.innerHTML = `
+
+<div class="search-empty">
+
+No results found for
+"<strong>${escapeHtml(query)}</strong>"
+
+</div>
+
+`;
+
+return;
+
+}
+
+searchResults.innerHTML = "";
+
+results.forEach(function(item){
+
+const result =
+document.createElement("a");
+
+result.className =
+"search-result";
+
+result.href =
+item.url;
+
+result.innerHTML = `
+
+<strong>
+${escapeHtml(item.title)}
+</strong>
+
+<span>
+${escapeHtml(item.text)}
+</span>
+
+`;
+
+searchResults.appendChild(result);
+
+});
+
+}
+
+function escapeHtml(value){
+
+return String(value)
+
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+
+}
+
+searchButton.addEventListener(
+"click",
+openSearch
+);
+
+searchClose.addEventListener(
+"click",
+closeSearch
+);
+
+searchInput.addEventListener(
+"input",
+performSearch
+);
+
+searchOverlay.addEventListener(
+"click",
+function(event){
+
+if(event.target === searchOverlay){
+
+closeSearch();
+
+}
+
+}
+);
+
+/* ==================================================
+   UPDATES
+   ================================================== */
+
+const updateBell =
+document.getElementById("updateBell");
+
+const updatesOverlay =
+document.getElementById("updatesOverlay");
+
+const updatesClose =
+document.getElementById("updatesClose");
+
+const updatesContent =
+document.getElementById("updatesContent");
+
+const updateDot =
+document.getElementById("updateDot");
+
+updateBell.addEventListener(
+"click",
+function(){
+
+updatesOverlay.classList.add("show");
+
+}
+);
+
+updatesClose.addEventListener(
+"click",
+function(){
+
+updatesOverlay.classList.remove("show");
+
+}
+);
+
+updatesOverlay.addEventListener(
+"click",
+function(event){
+
+if(event.target === updatesOverlay){
+
+updatesOverlay.classList.remove("show");
+
+}
+
+}
+);
+
+/* ==================================================
+   LOAD UPDATES
+   ================================================== */
+
+function loadUpdates(){
+
+let savedUpdates = [];
+
+try{
+
+savedUpdates =
+JSON.parse(
+localStorage.getItem(
+"sscEdgeUpdates"
+) || "[]"
+);
+
+}catch(error){
+
+savedUpdates = [];
+
+}
+
+if(
+!Array.isArray(savedUpdates) ||
+savedUpdates.length === 0
+){
+
+updateDot.style.display =
+"none";
+
+return;
+
+}
+
+updateDot.style.display =
+"block";
+
+updatesContent.innerHTML = "";
+
+savedUpdates.forEach(function(update){
+
+const item =
+document.createElement("div");
+
+item.className =
+"update-item";
+
+item.innerHTML = `
+
+<div class="update-item-icon">
+
+<svg viewBox="0 0 24 24">
+
+<path d="M5 4h14v16H5z"/>
+<path d="M8 9h8M8 13h6M8 17h4"/>
+
+</svg>
+
+</div>
+
+<div class="update-item-text">
+
+<strong>
+${escapeHtml(
+update.title ||
+"SSC EDGE Update"
+)}
+</strong>
+
+<span>
+${escapeHtml(
+update.text || ""
+)}
+</span>
+
+<small>
+${escapeHtml(
+update.date || ""
+)}
+</small>
+
+</div>
+
+`;
+
+updatesContent.appendChild(item);
+
+});
+
+}
+
+loadUpdates();
+
+/* ==================================================
+   THEME
+   ================================================== */
+
+const darkThemeBtn =
+document.getElementById("darkThemeBtn");
+
+const lightThemeBtn =
+document.getElementById("lightThemeBtn");
+
+function updateThemeButtons(){
+
+const theme =
+localStorage.getItem(
+"ssc-edge-theme"
+) || "dark";
+
+darkThemeBtn.classList.toggle(
+"active",
+theme === "dark"
+);
+
+lightThemeBtn.classList.toggle(
+"active",
+theme === "light"
+);
+
+}
+
+darkThemeBtn.addEventListener(
+"click",
+function(){
+
+localStorage.setItem(
+"ssc-edge-theme",
+"dark"
+);
+
+document.documentElement.dataset.theme =
+"dark";
+
+updateThemeButtons();
+
+}
+);
+
+lightThemeBtn.addEventListener(
+"click",
+function(){
+
+localStorage.setItem(
+"ssc-edge-theme",
+"light"
+);
+
+document.documentElement.dataset.theme =
+"light";
+
+updateThemeButtons();
+
+}
+);
+
+updateThemeButtons();
+
+/* ==================================================
+   ESC KEY
+   ================================================== */
+
+document.addEventListener(
+"keydown",
+function(event){
+
+if(event.key !== "Escape") return;
+
+menuOverlay.classList.remove("show");
+
+closeSearch();
+
+updatesOverlay.classList.remove("show");
+
+}
+);
 
 </script>
 
