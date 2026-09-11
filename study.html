@@ -133,46 +133,63 @@ color:var(--muted);
    SAME STYLE AS PROFILE
    ========================================= */
 
-.bottom-nav{
-display:flex;
-align-items:center;
-justify-content:space-around;
 
-background:#f0e8ff;
-border-top:1px solid #d9c9ef;
+<nav class="bottom-nav">
 
-padding:6px 12px 8px;
-}
+  <a href="home.html">
 
-.bottom-nav a{
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-gap:3px;
+    <span class="nav-icon">
+      🏠
+    </span>
 
-text-decoration:none;
+    <span>
+      Home
+    </span>
 
-min-height:58px;
-padding:3px 8px;
-}
+  </a>
 
-.nav-icon{
-width:26px;
-height:26px;
 
-display:flex;
-align-items:center;
-justify-content:center;
+  <a href="study.html">
 
-font-size:23px;
-line-height:1;
-}
+    <span class="nav-icon">
+      📚
+    </span>
 
-.bottom-nav small{
-font-size:12px;
-font-weight:600;
-}
+    <span>
+      Study Material
+    </span>
+
+  </a>
+
+
+  <a href="practice.html">
+
+    <span class="nav-icon">
+      📝
+    </span>
+
+    <span>
+      Practice
+    </span>
+
+  </a>
+
+
+  <a
+    href="profile.html"
+    class="active">
+
+    <span class="nav-icon">
+      👤
+    </span>
+
+    <span>
+      Profile
+    </span>
+
+  </a>
+
+</nav>
 
 
 /* =========================================
