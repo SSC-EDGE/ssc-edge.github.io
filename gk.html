@@ -49,7 +49,10 @@ overflow:hidden;
 box-shadow:0 5px 18px rgba(0,0,0,.07);
 }
 
-/* THUMBNAIL */
+
+/* =========================
+   THUMBNAIL
+========================= */
 
 .pdf-thumbnail{
 width:100%;
@@ -94,6 +97,11 @@ opacity:.8;
 margin-top:5px;
 }
 
+
+/* =========================
+   CONTENT
+========================= */
+
 .pdf-content{
 padding:16px;
 }
@@ -117,6 +125,11 @@ font-size:14px;
 line-height:1.5;
 margin-bottom:14px;
 }
+
+
+/* =========================
+   ACTIONS
+========================= */
 
 .pdf-actions{
 display:flex;
@@ -148,6 +161,11 @@ color:var(--text);
 border:1px solid var(--border);
 }
 
+
+/* =========================
+   EMPTY
+========================= */
+
 .empty{
 text-align:center;
 color:var(--muted);
@@ -158,19 +176,27 @@ padding:30px 10px;
 
 </head>
 
+
 <body>
 
+
 <div class="container">
+
 
 <div class="page-title">
 General Knowledge
 </div>
 
+
 <div class="page-subtitle">
 SSC EDGE General Knowledge PDFs
 </div>
 
-<div id="pdfList" class="pdf-list">
+
+<div
+id="pdfList"
+class="pdf-list"
+>
 
 <div class="empty">
 Loading PDFs...
@@ -178,330 +204,597 @@ Loading PDFs...
 
 </div>
 
+
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script
+src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
+
 
 <script>
+
+
+/* =========================================================
+   SUPABASE
+========================================================= */
 
 const SUPABASE_URL =
 "https://dvvyoygahzzbnpqrfhen.supabase.co";
 
+
 const SUPABASE_KEY =
 "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
 
+
 const supabaseClient =
 supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
+    SUPABASE_URL,
+    SUPABASE_KEY
 );
 
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
 
 function escapeHtml(value){
 
-return String(value || "")
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
+    return String(value || "")
+
+        .replace(/&/g,"&amp;")
+
+        .replace(/</g,"&lt;")
+
+        .replace(/>/g,"&gt;")
+
+        .replace(/"/g,"&quot;")
+
+        .replace(/'/g,"&#039;");
 
 }
 
+
+/* =========================================================
+   DOWNLOAD URL
+=========================================================
+
+   IMPORTANT:
+
+   Do NOT change the Supabase bucket.
+
+   The original file_url is already the
+   correct working URL.
+
+   We only add ?download so the browser
+   requests the file as a download.
+========================================================= */
 
 function getDownloadUrl(url){
 
-if(
-url &&
-url.includes(
-"/storage/v1/object/public/ssc-edge-pdfs/"
-)
-){
+    if(!url){
 
-return url.replace(
-"/storage/v1/object/public/ssc-edge-pdfs/",
-"/storage/v1/object/download/ssc-edge-pdfs/"
-);
+        return "";
+
+    }
+
+
+    if(
+        url.includes("?")
+    ){
+
+        return (
+            url +
+            "&download"
+        );
+
+    }
+
+
+    return (
+        url +
+        "?download"
+    );
 
 }
 
-return url;
 
-}
-
+/* =========================================================
+   FALLBACK THUMBNAIL
+========================================================= */
 
 function fallbackThumbnail(){
 
-return `
+    return `
 
-<div class="thumbnail-fallback">
+    <div class="thumbnail-fallback">
 
-<div class="thumbnail-icon">
-📚
-</div>
+        <div class="thumbnail-icon">
+            📚
+        </div>
 
-<div class="thumbnail-logo">
-SSC EDGE
-</div>
+        <div class="thumbnail-logo">
+            SSC EDGE
+        </div>
 
-<div class="thumbnail-text">
-Learn • Practice • Improve
-</div>
+        <div class="thumbnail-text">
+            Learn • Practice • Improve
+        </div>
 
-</div>
+    </div>
 
-`;
+    `;
 
 }
 
+
+/* =========================================================
+   RECORD DOWNLOAD
+=========================================================
+
+   IMPORTANT:
+
+   Save the ORIGINAL rawUrl.
+
+   Do NOT save downloadUrl.
+
+   This prevents the Downloads page
+   from storing a broken bucket URL.
+========================================================= */
 
 function recordDownload(
-id,
-title,
-subject,
-url
+    id,
+    title,
+    subject,
+    url
 ){
 
-if(
-window.SSCEdgeDownloads
-){
+    if(
+        window.SSCEdgeDownloads
+    ){
 
-window.SSCEdgeDownloads.recordDownload({
+        window.SSCEdgeDownloads.recordDownload({
 
-id:id,
+            id:
+                id,
 
-title:title,
+            title:
+                title,
 
-subject:subject,
+            subject:
+                subject,
 
-type:"PDF",
+            type:
+                "PDF",
 
-url:url
+            url:
+                url
 
-});
+        });
+
+    }
 
 }
 
-}
 
+/* =========================================================
+   LOAD PDFs
+========================================================= */
 
 async function loadPDFs(){
 
-const pdfList =
-document.getElementById("pdfList");
+    const pdfList =
+        document.getElementById(
+            "pdfList"
+        );
 
 
-const {
-data: subject,
-error: subjectError
-} = await supabaseClient
+    /* =========================
+       GET GK SUBJECT
+    ========================= */
 
-.from("subjects")
+    const {
+        data: subject,
+        error: subjectError
+    } =
+        await supabaseClient
 
-.select("id,name")
+            .from("subjects")
 
-.eq("name","GK")
+            .select(
+                "id,name"
+            )
 
-.single();
+            .eq(
+                "name",
+                "GK"
+            )
+
+            .single();
 
 
-if(subjectError || !subject){
+    if(
+        subjectError ||
+        !subject
+    ){
 
-pdfList.innerHTML =
-`<div class="empty">
-Unable to load GK subject.
-</div>`;
+        console.error(
+            subjectError
+        );
 
-return;
+
+        pdfList.innerHTML = `
+
+            <div class="empty">
+
+                Unable to load GK subject.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    /* =========================
+       GET PDFs
+    ========================= */
+
+    const {
+        data: pdfs,
+        error
+    } =
+        await supabaseClient
+
+            .from("study_material")
+
+            .select("*")
+
+            .eq(
+                "material_type",
+                "PDF"
+            )
+
+            .eq(
+                "subject_id",
+                subject.id
+            )
+
+            .eq(
+                "is_active",
+                true
+            )
+
+            .order(
+                "created_at",
+                {
+                    ascending:false
+                }
+            );
+
+
+    if(error){
+
+        console.error(
+            error
+        );
+
+
+        pdfList.innerHTML = `
+
+            <div class="empty">
+
+                Unable to load PDFs.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    /* =========================
+       NO PDFs
+    ========================= */
+
+    if(
+        !pdfs ||
+        pdfs.length === 0
+    ){
+
+        pdfList.innerHTML = `
+
+            <div class="empty">
+
+                No GK PDFs available yet.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    /* =========================
+       CREATE PDF CARDS
+    ========================= */
+
+    pdfList.innerHTML =
+
+        pdfs.map(
+
+            pdf => {
+
+
+                const rawTitle =
+                    pdf.title ||
+                    "Untitled PDF";
+
+
+                const rawDescription =
+                    pdf.description ||
+                    "";
+
+
+                const rawUrl =
+                    pdf.file_url ||
+                    "";
+
+
+                const rawSubject =
+                    subject.name ||
+                    "GK";
+
+
+                const id =
+                    escapeHtml(
+                        pdf.id ||
+                        rawUrl
+                    );
+
+
+                const title =
+                    escapeHtml(
+                        rawTitle
+                    );
+
+
+                const description =
+                    escapeHtml(
+                        rawDescription
+                    );
+
+
+                /*
+                   OPEN uses the original
+                   working URL.
+                */
+
+                const openUrl =
+                    escapeHtml(
+                        rawUrl
+                    );
+
+
+                /*
+                   DOWNLOAD uses the same
+                   original URL + ?download.
+                */
+
+                const downloadUrl =
+                    escapeHtml(
+
+                        getDownloadUrl(
+                            rawUrl
+                        )
+
+                    );
+
+
+                const thumbnail =
+                    pdf.thumbnail_url ||
+                    "";
+
+
+                /* =========================
+                   THUMBNAIL
+                ========================= */
+
+                const thumbnailHtml =
+
+                    thumbnail
+
+                    ?
+
+                    `
+
+                    <div class="pdf-thumbnail">
+
+                        <img
+
+                            src="${escapeHtml(
+                                thumbnail
+                            )}"
+
+                            alt="${title}"
+
+                            loading="lazy"
+
+                            onerror="this.parentElement.innerHTML='${fallbackThumbnail().replace(
+                                /'/g,
+                                "\\'"
+                            )}'"
+
+                        >
+
+                    </div>
+
+                    `
+
+                    :
+
+                    `
+
+                    <div class="pdf-thumbnail">
+
+                        ${fallbackThumbnail()}
+
+                    </div>
+
+                    `;
+
+
+                /* =========================
+                   CARD
+                ========================= */
+
+                return `
+
+                <div class="pdf-card">
+
+
+                    ${thumbnailHtml}
+
+
+                    <div class="pdf-content">
+
+
+                        <div class="pdf-title">
+
+                            ${title}
+
+                        </div>
+
+
+                        <div class="pdf-subject">
+
+                            📚 ${escapeHtml(
+                                rawSubject
+                            )}
+
+                        </div>
+
+
+                        ${
+                            description
+
+                            ?
+
+                            `
+
+                            <div class="pdf-description">
+
+                                ${description}
+
+                            </div>
+
+                            `
+
+                            :
+
+                            ""
+                        }
+
+
+                        <div class="pdf-actions">
+
+
+                            <!-- =================
+                                 OPEN PDF
+                            ================== -->
+
+                            <a
+
+                                class="open"
+
+                                href="${openUrl}"
+
+                                target="_blank"
+
+                                rel="noopener noreferrer"
+
+                            >
+
+                                📄 Open PDF
+
+                            </a>
+
+
+                            <!-- =================
+                                 DOWNLOAD PDF
+                            ================== -->
+
+                            <a
+
+                                class="download"
+
+                                href="${downloadUrl}"
+
+                                download
+
+                                onclick="recordDownload(
+                                    '${id.replace(
+                                        /'/g,
+                                        "\\'"
+                                    )}',
+
+                                    '${title.replace(
+                                        /'/g,
+                                        "\\'"
+                                    )}',
+
+                                    '${escapeHtml(
+                                        rawSubject
+                                    ).replace(
+                                        /'/g,
+                                        "\\'"
+                                    )}',
+
+                                    '${openUrl.replace(
+                                        /'/g,
+                                        "\\'"
+                                    )}'
+                                )"
+
+                            >
+
+                                📥 Download
+
+                            </a>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+                `;
+
+            }
+
+        ).join("");
 
 }
 
 
-const {
-data: pdfs,
-error
-} = await supabaseClient
-
-.from("study_material")
-
-.select("*")
-
-.eq("material_type","PDF")
-
-.eq("subject_id",subject.id)
-
-.eq("is_active",true)
-
-.order(
-"created_at",
-{
-ascending:false
-}
-);
-
-
-if(error){
-
-console.error(error);
-
-pdfList.innerHTML =
-`<div class="empty">
-Unable to load PDFs.
-</div>`;
-
-return;
-
-}
-
-
-if(!pdfs || pdfs.length === 0){
-
-pdfList.innerHTML =
-`<div class="empty">
-No GK PDFs available yet.
-</div>`;
-
-return;
-
-}
-
-
-pdfList.innerHTML =
-pdfs.map(pdf => {
-
-const rawTitle =
-pdf.title || "Untitled PDF";
-
-const rawDescription =
-pdf.description || "";
-
-const rawUrl =
-pdf.file_url || "";
-
-const rawSubject =
-subject.name || "GK";
-
-const id =
-escapeHtml(pdf.id || rawUrl);
-
-const title =
-escapeHtml(rawTitle);
-
-const description =
-escapeHtml(rawDescription);
-
-const openUrl =
-escapeHtml(rawUrl);
-
-const downloadUrl =
-escapeHtml(
-getDownloadUrl(rawUrl)
-);
-
-const thumbnail =
-pdf.thumbnail_url || "";
-
-
-const thumbnailHtml =
-thumbnail
-
-?
-
-`
-
-<div class="pdf-thumbnail">
-
-<img
-src="${escapeHtml(thumbnail)}"
-alt="${title}"
-loading="lazy"
-onerror="this.parentElement.innerHTML='${fallbackThumbnail().replace(/'/g,"\\'")}'"
->
-
-</div>
-
-`
-
-:
-
-`
-
-<div class="pdf-thumbnail">
-
-${fallbackThumbnail()}
-
-</div>
-
-`;
-
-
-return `
-
-<div class="pdf-card">
-
-${thumbnailHtml}
-
-<div class="pdf-content">
-
-<div class="pdf-title">
-${title}
-</div>
-
-<div class="pdf-subject">
-📚 ${escapeHtml(rawSubject)}
-</div>
-
-${description ? `
-
-<div class="pdf-description">
-${description}
-</div>
-
-` : ""}
-
-<div class="pdf-actions">
-
-<a
-class="open"
-href="${openUrl}"
-target="_blank"
-rel="noopener">
-
-📄 Open PDF
-
-</a>
-
-<a
-class="download"
-href="${downloadUrl}"
-download
-onclick="recordDownload(
-'${id.replace(/'/g,"\\'")}',
-'${title.replace(/'/g,"\\'")}',
-'${escapeHtml(rawSubject).replace(/'/g,"\\'")}',
-'${downloadUrl.replace(/'/g,"\\'")}'
-)">
-
-📥 Download
-
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-`;
-
-}).join("");
-
-}
-
+/* =========================================================
+   INITIAL LOAD
+========================================================= */
 
 loadPDFs();
 
 </script>
+
 
 </body>
 
