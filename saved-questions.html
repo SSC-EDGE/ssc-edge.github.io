@@ -2,740 +2,1426 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>SSC EDGE - Saved Questions</title>
 
 <link rel="stylesheet" href="css/style.css">
 
 <script>
 document.documentElement.dataset.theme =
-  localStorage.getItem("ssc-edge-theme") || "dark";
+    localStorage.getItem("ssc-edge-theme") || "dark";
 </script>
 
 <style>
-*{box-sizing:border-box}
+
+*{
+    box-sizing:border-box;
+}
 
 body{
-  margin:0;
-  padding-bottom:82px;
+    margin:0;
+    padding:0 0 40px;
 }
 
-.saved-page{
-  max-width:900px;
-  margin:0 auto;
-  padding:18px 16px 28px;
+.page{
+    max-width:900px;
+    margin:auto;
+    padding:16px 14px 40px;
 }
 
-.saved-header{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin-bottom:20px;
+/* BACK */
+
+.back{
+    display:inline-block;
+    margin-bottom:14px;
+    color:var(--purple2);
+    text-decoration:none;
+    font-size:13px;
+    font-weight:900;
 }
 
-.back-btn{
-  width:38px;
-  height:38px;
-  border:1px solid var(--border);
-  border-radius:11px;
-  background:var(--card);
-  color:var(--text);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:20px;
-  cursor:pointer;
-  text-decoration:none;
+/* HEADER */
+
+.head{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:16px;
+    margin-bottom:15px;
 }
 
-.saved-title-wrap{
-  min-width:0;
+.head h1{
+    margin:0;
+    color:var(--text);
+    font-size:21px;
+    line-height:1.3;
 }
 
-.saved-title{
-  margin:0;
-  font-size:24px;
-  font-weight:900;
-  line-height:1.1;
+.sub{
+    margin:5px 0 0;
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.5;
 }
 
-.saved-subtitle{
-  margin:4px 0 0;
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.3;
+/* STATUS */
+
+.status{
+    text-align:center;
+    color:var(--muted);
+    padding:28px 12px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    font-size:13px;
+    line-height:1.5;
 }
 
-.saved-summary{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  margin:0 0 14px;
+.empty-icon{
+    font-size:36px;
+    margin-bottom:8px;
 }
 
-.saved-count{
-  color:var(--muted);
-  font-size:13px;
-  font-weight:800;
+/* TEST GROUP */
+
+.test-group{
+    margin-top:18px;
 }
 
-.clear-all{
-  border:1px solid var(--border);
-  background:var(--card2);
-  color:var(--muted);
-  border-radius:9px;
-  padding:7px 10px;
-  font-size:11px;
-  font-weight:800;
-  cursor:pointer;
+.test-title{
+    margin:0 0 10px;
+    color:var(--text);
+    font-size:16px;
+    font-weight:900;
 }
 
-.clear-all:hover{
-  color:var(--text);
-  border-color:var(--purple);
+/* QUESTION CARD */
+
+.question-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:16px;
+    margin-bottom:13px;
+    overflow:hidden;
 }
 
-.saved-list{
-  display:flex;
-  flex-direction:column;
-  gap:12px;
+/* TOP */
+
+.q-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+
+    padding-bottom:9px;
+
+    border-bottom:1px solid var(--border);
 }
 
-.saved-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:15px;
-}
-
-.saved-card-top{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  margin-bottom:10px;
-}
-
-.saved-meta{
-  min-width:0;
-}
-
-.saved-test{
-  color:var(--text);
-  font-size:13px;
-  font-weight:900;
-  line-height:1.3;
-}
-
-.saved-subject{
-  margin-top:3px;
-  color:var(--muted);
-  font-size:11px;
-  font-weight:700;
+.q-number{
+    color:var(--text);
+    font-size:14px;
+    font-weight:900;
 }
 
 .bookmark{
-  flex:0 0 auto;
-  font-size:17px;
-  line-height:1;
-  color:var(--purple2);
+    font-size:20px;
+    line-height:1;
 }
 
-.saved-question{
-  color:var(--text);
-  font-size:15px;
-  font-weight:650;
-  line-height:1.6;
-  white-space:pre-wrap;
-  word-break:break-word;
+/* SUBJECT */
+
+.subject{
+    display:inline-block;
+
+    margin-top:10px;
+
+    color:var(--purple2);
+
+    font-size:11px;
+    font-weight:900;
 }
 
-.saved-options{
-  margin-top:12px;
-  display:flex;
-  flex-direction:column;
-  gap:7px;
+/* QUESTION */
+
+.question{
+    margin-top:10px;
+
+    color:var(--text);
+
+    font-size:14px;
+    font-weight:700;
+
+    line-height:1.65;
+
+    overflow-wrap:anywhere;
 }
 
-.saved-option{
-  padding:9px 10px;
-  border-radius:9px;
-  background:var(--card2);
-  border:1px solid var(--border);
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.45;
+/* OPTIONS */
+
+.options{
+    margin-top:12px;
 }
 
-.remove-btn{
-  margin-top:12px;
-  border:1px solid var(--border);
-  background:transparent;
-  color:var(--muted);
-  border-radius:9px;
-  padding:7px 10px;
-  font-size:11px;
-  font-weight:800;
-  cursor:pointer;
+.option{
+    padding:10px 11px;
+
+    margin-top:7px;
+
+    border:1px solid var(--border);
+
+    border-radius:10px;
+
+    color:var(--text);
+
+    font-size:12px;
+
+    line-height:1.55;
+
+    overflow-wrap:anywhere;
 }
 
-.remove-btn:hover{
-  color:var(--text);
-  border-color:var(--purple);
+/* CORRECT OPTION */
+
+.option.correct{
+    border-color:#2fbf71;
+
+    background:rgba(47,191,113,.10);
 }
 
-.saved-empty,
-.saved-error,
-.saved-loading{
-  padding:35px 15px;
-  text-align:center;
-  color:var(--muted);
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:16px;
-  font-size:14px;
-  line-height:1.5;
+.option.correct b{
+    color:#2fbf71;
 }
 
-.saved-empty-icon{
-  font-size:30px;
-  margin-bottom:9px;
+/* ANSWER */
+
+.answer-box{
+    margin-top:13px;
+
+    padding:12px;
+
+    border-radius:11px;
+
+    background:var(--card2);
+
+    border:1px solid var(--border);
+
+    color:var(--text);
+
+    font-size:13px;
+
+    line-height:1.6;
+
+    overflow-wrap:anywhere;
 }
 
-.hidden{display:none!important}
-
-@media(max-width:480px){
-  .saved-page{padding:15px 12px 25px}
-  .saved-title{font-size:22px}
-  .saved-question{font-size:14px}
+.answer-box strong{
+    color:#2fbf71;
 }
 
-.bottom-nav{
-  position:fixed;
-  left:0;
-  right:0;
-  bottom:0;
-  z-index:50;
+/* EXPLANATION */
+
+.explanation-box{
+    margin-top:11px;
+
+    padding:12px;
+
+    border-radius:11px;
+
+    background:var(--card2);
+
+    border:1px solid var(--border);
+
+    border-left:3px solid var(--purple);
+
+    color:var(--text);
+
+    font-size:13px;
+
+    line-height:1.65;
+
+    overflow-wrap:anywhere;
 }
+
+.explanation-title{
+    display:block;
+
+    color:var(--purple2);
+
+    font-weight:900;
+
+    margin-bottom:5px;
+}
+
+/* BUTTONS */
+
+.actions{
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:8px;
+
+    margin-top:14px;
+}
+
+.btn{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    min-height:42px;
+
+    padding:8px 10px;
+
+    border-radius:10px;
+
+    background:var(--card2);
+
+    border:1px solid var(--border);
+
+    color:var(--text);
+
+    text-decoration:none;
+
+    font-size:11px;
+
+    font-weight:900;
+
+    text-align:center;
+
+    cursor:pointer;
+}
+
+.btn.primary{
+    background:var(--purple);
+
+    border-color:var(--purple);
+
+    color:#fff;
+}
+
+@media(max-width:500px){
+
+    .actions{
+        grid-template-columns:1fr;
+    }
+
+}
+
 </style>
 </head>
 
 <body>
 
-<main class="saved-page">
+<main class="page">
 
-  <header class="saved-header">
-    <a href="profile.html" class="back-btn" aria-label="Back to Profile">‹</a>
+<a class="back" href="profile.html">
+    ← Back to Profile
+</a>
 
-    <div class="saved-title-wrap">
-      <h1 class="saved-title">Saved Questions</h1>
-      <p class="saved-subtitle">Questions you saved to study later</p>
+<div class="head">
+
+    <h1>🔖 Saved Questions</h1>
+
+    <p id="count" class="sub">
+        Loading saved questions...
+    </p>
+
+</div>
+
+<div id="app">
+
+    <div class="status">
+        Loading saved questions...
     </div>
-  </header>
 
-  <div class="saved-summary">
-    <span id="savedCount" class="saved-count">0 Saved Questions</span>
-    <button id="clearAllBtn" class="clear-all hidden" type="button">
-      Clear All
-    </button>
-  </div>
-
-  <section id="savedLoading" class="saved-loading">
-    Loading saved questions...
-  </section>
-
-  <section id="savedError" class="saved-error hidden"></section>
-
-  <section id="savedEmpty" class="saved-empty hidden">
-    <div class="saved-empty-icon">🔖</div>
-    <strong>No saved questions yet</strong>
-    <div>Save questions during a test and they will appear here.</div>
-  </section>
-
-  <section id="savedList" class="saved-list"></section>
+</div>
 
 </main>
 
-<nav class="bottom-nav">
-  <a href="home.html">
-    <span class="nav-icon">⌂</span>
-    <small>Home</small>
-  </a>
-
-  <a href="study.html">
-    <span class="nav-icon">▣</span>
-    <small>Study Material</small>
-  </a>
-
-  <a href="practice.html">
-    <span class="nav-icon">✓</span>
-    <small>Practice</small>
-  </a>
-
-  <a href="profile.html" class="active">
-    <span class="nav-icon">○</span>
-    <small>Profile</small>
-  </a>
-</nav>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
 <script>
+
+/* ==========================================
+   SUPABASE
+========================================== */
+
 const SUPABASE_URL =
-  "https://dvvyoygahzzbnpqrfhen.supabase.co";
+"https://dvvyoygahzzbnpqrfhen.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
 
 const db =
-  supabase.createClient(
+supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY
-  );
+);
 
-let savedItems = [];
 
-function escapeHtml(value){
-  return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+/* ==========================================
+   ELEMENTS
+========================================== */
+
+const app =
+document.getElementById("app");
+
+const count =
+document.getElementById("count");
+
+
+/* ==========================================
+   ESCAPE HTML
+========================================== */
+
+function esc(value){
+
+    return String(value ?? "")
+
+        .replace(/&/g,"&amp;")
+
+        .replace(/</g,"&lt;")
+
+        .replace(/>/g,"&gt;")
+
+        .replace(/"/g,"&quot;")
+
+        .replace(/'/g,"&#039;");
 }
 
-function show(id){
-  document.getElementById(id).classList.remove("hidden");
+
+/* ==========================================
+   CHECK CORRECT OPTION
+========================================== */
+
+function isCorrectOption(option){
+
+    return (
+
+        option.is_correct === true ||
+
+        option.is_correct === "true" ||
+
+        option.is_correct === 1 ||
+
+        option.is_correct === "1"
+
+    );
+
 }
 
-function hide(id){
-  document.getElementById(id).classList.add("hidden");
-}
 
-/*
-  Saved questions are stored by test.html as:
+/* ==========================================
+   GET SAVED QUESTIONS
+========================================== */
 
-  ssc-edge-saved-questions-<testId>
+function getSavedEntries(){
 
-  The value is an array of question IDs.
-*/
-function collectSavedQuestionIds(){
-  const result = [];
-  const seen = new Set();
+    const entries = [];
 
-  for(let i = 0; i < localStorage.length; i++){
+    for(
+        let i = 0;
+        i < localStorage.length;
+        i++
+    ){
 
-    const key = localStorage.key(i);
+        const key =
+        localStorage.key(i);
 
-    if(!key || !key.startsWith("ssc-edge-saved-questions-")){
-      continue;
-    }
+        if(
+            !key ||
+            !key.startsWith(
+                "ssc-edge-saved-questions-"
+            )
+        ){
 
-    const testId =
-      key.substring("ssc-edge-saved-questions-".length);
+            continue;
 
-    if(!testId){
-      continue;
-    }
-
-    try{
-      const raw = localStorage.getItem(key);
-      const ids = JSON.parse(raw);
-
-      if(!Array.isArray(ids)){
-        continue;
-      }
-
-      ids.forEach(questionId => {
-
-        const qid = String(questionId);
-
-        if(!qid || seen.has(qid)){
-          return;
         }
 
-        seen.add(qid);
 
-        result.push({
-          testId:String(testId),
-          questionId:qid,
-          storageKey:key
-        });
+        const testId =
+        key.substring(
+            "ssc-edge-saved-questions-".length
+        );
 
-      });
+
+        try{
+
+            const ids =
+            JSON.parse(
+                localStorage.getItem(key)
+            );
+
+
+            if(Array.isArray(ids)){
+
+                ids.forEach(id=>{
+
+                    entries.push({
+
+                        testId:String(testId),
+
+                        questionId:String(id)
+
+                    });
+
+                });
+
+            }
+
+        }catch(error){
+
+            console.warn(
+                "Could not read saved questions:",
+                error
+            );
+
+        }
+
+    }
+
+
+    return entries;
+
+}
+
+
+/* ==========================================
+   REMOVE SAVED QUESTION
+========================================== */
+
+function removeSaved(
+    testId,
+    questionId
+){
+
+    const key =
+    "ssc-edge-saved-questions-" +
+    String(testId);
+
+
+    try{
+
+        const saved =
+        JSON.parse(
+            localStorage.getItem(key) || "[]"
+        );
+
+
+        const ids =
+        Array.isArray(saved)
+        ? saved.map(x=>String(x))
+        : [];
+
+
+        const next =
+        ids.filter(
+            id =>
+            id !== String(questionId)
+        );
+
+
+        if(next.length){
+
+            localStorage.setItem(
+                key,
+                JSON.stringify(next)
+            );
+
+        }else{
+
+            localStorage.removeItem(key);
+
+        }
+
+
+        loadSavedQuestions();
 
     }catch(error){
-      console.warn(
-        "Could not read saved questions:",
-        key,
-        error
-      );
-    }
-  }
 
-  return result;
+        console.warn(
+            "Could not remove saved question:",
+            error
+        );
+
+    }
+
 }
+
+
+/* ==========================================
+   LOAD TEST DATA
+========================================== */
+
+async function loadTestData(
+    testId,
+    questionIds
+){
+
+    /* TEST */
+
+    const testResult =
+    await db
+        .from("mock_tests")
+        .select("id,title")
+        .eq("id",testId)
+        .maybeSingle();
+
+
+    if(testResult.error){
+
+        throw testResult.error;
+
+    }
+
+
+    /* TEST QUESTIONS */
+
+    const assignmentResult =
+    await db
+        .from("mock_test_questions")
+        .select(
+            "question_id,question_order,section_id"
+        )
+        .eq(
+            "mock_test_id",
+            testId
+        )
+        .order(
+            "question_order",
+            {ascending:true}
+        );
+
+
+    if(assignmentResult.error){
+
+        throw assignmentResult.error;
+
+    }
+
+
+    const assignments =
+    (assignmentResult.data || [])
+        .filter(
+            a =>
+            questionIds.includes(
+                String(a.question_id)
+            )
+        );
+
+
+    if(!assignments.length){
+
+        return {
+
+            title:
+            testResult.data?.title ||
+            "SSC EDGE Test",
+
+            questions:[]
+
+        };
+
+    }
+
+
+    const ids =
+    assignments.map(
+        a => a.question_id
+    );
+
+
+    /* QUESTIONS */
+
+    const questionResult =
+    await db
+        .from("questions")
+        .select(
+            "id,question_text,explanation,subject_id,chapter_id"
+        )
+        .in("id",ids);
+
+
+    if(questionResult.error){
+
+        throw questionResult.error;
+
+    }
+
+
+    /* ==========================================
+       OPTIONS
+       
+       IMPORTANT:
+       is_correct is required to show
+       the correct answer.
+    ========================================== */
+
+    const optionResult =
+    await db
+        .from("question_options")
+        .select(
+            "id,question_id,option_label,option_text,is_correct"
+        )
+        .in("question_id",ids)
+        .order(
+            "id",
+            {ascending:true}
+        );
+
+
+    if(optionResult.error){
+
+        throw optionResult.error;
+
+    }
+
+
+    /* SECTIONS */
+
+    const sectionIds =
+    [
+        ...new Set(
+
+            assignments
+
+                .map(
+                    a => a.section_id
+                )
+
+                .filter(
+                    x =>
+                    x !== null &&
+                    x !== undefined
+                )
+
+        )
+    ];
+
+
+    let sections = [];
+
+
+    if(sectionIds.length){
+
+        const sectionResult =
+        await db
+            .from("mock_test_sections")
+            .select(
+                "id,subject_id,section_order"
+            )
+            .in(
+                "id",
+                sectionIds
+            )
+            .order(
+                "section_order",
+                {ascending:true}
+            );
+
+
+        if(sectionResult.error){
+
+            throw sectionResult.error;
+
+        }
+
+
+        sections =
+        sectionResult.data || [];
+
+    }
+
+
+    /* SUBJECT IDS */
+
+    const subjectIds =
+    [
+        ...new Set(
+
+            [
+
+                ...(questionResult.data || [])
+                    .map(
+                        q =>
+                        q.subject_id
+                    ),
+
+                ...sections
+                    .map(
+                        s =>
+                        s.subject_id
+                    )
+
+            ]
+
+            .filter(
+                x =>
+                x !== null &&
+                x !== undefined
+            )
+
+        )
+    ];
+
+
+    let subjects = [];
+
+
+    if(subjectIds.length){
+
+        const subjectResult =
+        await db
+            .from("subjects")
+            .select("id,name")
+            .in(
+                "id",
+                subjectIds
+            );
+
+
+        if(!subjectResult.error){
+
+            subjects =
+            subjectResult.data || [];
+
+        }
+
+    }
+
+
+    /* ==========================================
+       MAP DATA
+    ========================================== */
+
+    const questionMap =
+    new Map(
+
+        (questionResult.data || [])
+            .map(
+                q =>
+                [
+                    String(q.id),
+                    q
+                ]
+            )
+
+    );
+
+
+    const optionsMap =
+    new Map();
+
+
+    (optionResult.data || [])
+        .forEach(option=>{
+
+            const key =
+            String(option.question_id);
+
+
+            if(
+                !optionsMap.has(key)
+            ){
+
+                optionsMap.set(
+                    key,
+                    []
+                );
+
+            }
+
+
+            optionsMap
+                .get(key)
+                .push(option);
+
+        });
+
+
+    const sectionMap =
+    new Map(
+
+        sections.map(
+            s =>
+            [
+                String(s.id),
+                s
+            ]
+        )
+
+    );
+
+
+    const subjectMap =
+    new Map(
+
+        subjects.map(
+            s =>
+            [
+                String(s.id),
+                s.name
+            ]
+        )
+
+    );
+
+
+    /* ==========================================
+       BUILD QUESTIONS
+    ========================================== */
+
+    const questions =
+    assignments
+
+        .map(a=>{
+
+            const q =
+            questionMap.get(
+                String(a.question_id)
+            );
+
+
+            if(!q){
+
+                return null;
+
+            }
+
+
+            const section =
+            sectionMap.get(
+                String(a.section_id)
+            );
+
+
+            const subjectName =
+
+                subjectMap.get(
+                    String(q.subject_id)
+                )
+
+                ||
+
+                subjectMap.get(
+                    String(section?.subject_id)
+                )
+
+                ||
+
+                "";
+
+
+            return {
+
+                ...q,
+
+                question_order:
+                a.question_order,
+
+                subjectName:
+
+                subjectName,
+
+                options:
+
+                optionsMap.get(
+                    String(q.id)
+                ) || []
+
+            };
+
+        })
+
+        .filter(Boolean);
+
+
+    return {
+
+        title:
+
+        testResult.data?.title ||
+        "SSC EDGE Test",
+
+        questions:
+
+        questions
+
+    };
+
+}
+
+
+/* ==========================================
+   LOAD SAVED QUESTIONS
+========================================== */
 
 async function loadSavedQuestions(){
 
-  hide("savedError");
-  hide("savedEmpty");
+    app.innerHTML = `
+        <div class="status">
+            Loading saved questions...
+        </div>
+    `;
 
-  const rawItems =
-    collectSavedQuestionIds();
 
-  document.getElementById("savedCount").textContent =
-    rawItems.length +
-    (rawItems.length === 1
-      ? " Saved Question"
-      : " Saved Questions");
+    const entries =
+    getSavedEntries();
 
-  if(!rawItems.length){
-    hide("savedLoading");
-    show("savedEmpty");
-    return;
-  }
 
-  const testIds =
-    [...new Set(rawItems.map(item => item.testId))];
+    /* NO SAVED QUESTIONS */
 
-  const questionIds =
-    [...new Set(rawItems.map(item => item.questionId))];
+    if(!entries.length){
 
-  try{
+        count.textContent =
+        "🔖 0 Saved Questions";
 
-    const [
-      testsResult,
-      questionsResult,
-      optionsResult,
-      subjectsResult
-    ] = await Promise.all([
 
-      db
-        .from("mock_tests")
-        .select("id,title,subject_id")
-        .in("id",testIds),
+        app.innerHTML = `
 
-      db
-        .from("questions")
-        .select("id,question_text,subject_id")
-        .in("id",questionIds),
+            <div class="status">
 
-      db
-        .from("question_options")
-        .select("id,question_id,option_text,is_correct")
-        .in("question_id",questionIds)
-        .order("id"),
+                <div class="empty-icon">
+                    🔖
+                </div>
 
-      db
-        .from("subjects")
-        .select("id,name")
-        .order("name")
-    ]);
+                <div>
+                    No saved questions yet.
+                </div>
 
-    if(testsResult.error){
-      throw new Error(
-        "Tests: " + testsResult.error.message
-      );
+                <div style="margin-top:6px;">
+                    Save questions from a test
+                    to revise them later.
+                </div>
+
+            </div>
+
+        `;
+
+        return;
+
     }
 
-    if(questionsResult.error){
-      throw new Error(
-        "Questions: " + questionsResult.error.message
-      );
-    }
 
-    if(optionsResult.error){
-      throw new Error(
-        "Options: " + optionsResult.error.message
-      );
-    }
+    /* GROUP BY TEST */
 
-    if(subjectsResult.error){
-      throw new Error(
-        "Subjects: " + subjectsResult.error.message
-      );
-    }
+    const grouped =
+    new Map();
 
-    const testMap = new Map(
-      (testsResult.data || []).map(test => [
-        String(test.id),
-        test
-      ])
-    );
 
-    const questionMap = new Map(
-      (questionsResult.data || []).map(question => [
-        String(question.id),
-        question
-      ])
-    );
+    entries.forEach(entry=>{
 
-    const subjectMap = new Map(
-      (subjectsResult.data || []).map(subject => [
-        String(subject.id),
-        subject.name
-      ])
-    );
+        if(
+            !grouped.has(
+                entry.testId
+            )
+        ){
 
-    const optionsMap = new Map();
+            grouped.set(
+                entry.testId,
+                []
+            );
 
-    (optionsResult.data || []).forEach(option => {
+        }
 
-      const qid =
-        String(option.question_id);
 
-      if(!optionsMap.has(qid)){
-        optionsMap.set(qid,[]);
-      }
-
-      optionsMap.get(qid).push(option);
+        grouped
+            .get(entry.testId)
+            .push(
+                entry.questionId
+            );
 
     });
 
-    savedItems = rawItems
-      .map(item => {
 
-        const question =
-          questionMap.get(item.questionId);
+    let html = "";
 
-        if(!question){
-          return null;
+    let displayed = 0;
+
+
+    /* ==========================================
+       EACH TEST
+    ========================================== */
+
+    for(
+        const [
+            testId,
+            questionIds
+        ]
+        of grouped
+    ){
+
+        try{
+
+            const data =
+            await loadTestData(
+                testId,
+                questionIds
+            );
+
+
+            if(
+                !data.questions.length
+            ){
+
+                continue;
+
+            }
+
+
+            html += `
+
+                <section class="test-group">
+
+                    <h2 class="test-title">
+                        ${esc(data.title)}
+                    </h2>
+
+            `;
+
+
+            /* ==================================
+               EACH QUESTION
+            ================================== */
+
+            data.questions
+                .forEach(q=>{
+
+                    displayed++;
+
+
+                    /* FIND CORRECT ANSWER */
+
+                    const correct =
+                    q.options.find(
+                        isCorrectOption
+                    );
+
+
+                    /* OPTIONS */
+
+                    const opts =
+                    q.options.length
+
+                    ?
+
+                    `
+
+                    <div class="options">
+
+                        ${
+                            q.options
+                            .map(
+                                (o,i)=>`
+
+                                <div
+                                    class="option ${
+                                        isCorrectOption(o)
+                                        ? "correct"
+                                        : ""
+                                    }"
+                                >
+
+                                    <b>
+                                        ${
+                                            esc(
+                                                o.option_label ||
+                                                String.fromCharCode(
+                                                    65+i
+                                                )
+                                            )
+                                        }
+                                    </b>
+
+                                    ${
+                                        o.option_text
+                                        ?
+                                        " — " +
+                                        esc(
+                                            o.option_text
+                                        )
+                                        :
+                                        ""
+                                    }
+
+                                    ${
+                                        isCorrectOption(o)
+                                        ?
+                                        " ✓"
+                                        :
+                                        ""
+                                    }
+
+                                </div>
+
+                            `
+                            )
+                            .join("")
+                        }
+
+                    </div>
+
+                    `
+
+                    :
+
+                    "";
+
+
+                    /* CORRECT ANSWER TEXT */
+
+                    const answerText =
+
+                    correct
+
+                    ?
+
+                    (
+                        (correct.option_label || "") +
+
+                        (
+                            correct.option_text
+                            ?
+                            " — " +
+                            correct.option_text
+                            :
+                            ""
+                        )
+                    )
+
+                    :
+
+                    "Correct answer is not available.";
+
+
+                    /* EXPLANATION */
+
+                    const explanation =
+
+                    q.explanation
+
+                    ?
+
+                    esc(q.explanation)
+
+                    :
+
+                    "No explanation has been added for this question yet.";
+
+
+                    /* ==================================
+                       QUESTION CARD
+                    ================================== */
+
+                    html += `
+
+                    <article class="question-card">
+
+                        <div class="q-top">
+
+                            <span class="q-number">
+
+                                Question
+                                ${esc(q.question_order)}
+
+                            </span>
+
+
+                            <span
+                                class="bookmark"
+                                title="Saved Question"
+                            >
+                                🔖
+                            </span>
+
+                        </div>
+
+
+                        ${
+                            q.subjectName
+
+                            ?
+
+                            `
+                            <span class="subject">
+
+                                ${esc(q.subjectName)}
+
+                            </span>
+                            `
+
+                            :
+
+                            ""
+                        }
+
+
+                        <div class="question">
+
+                            ${esc(q.question_text)}
+
+                        </div>
+
+
+                        ${opts}
+
+
+                        <!-- CORRECT ANSWER -->
+
+                        <div class="answer-box">
+
+                            <strong>
+                                Correct Answer:
+                            </strong>
+
+                            ${esc(answerText)}
+
+                        </div>
+
+
+                        <!-- EXPLANATION -->
+
+                        <div class="explanation-box">
+
+                            <span class="explanation-title">
+
+                                📖 Explanation
+
+                            </span>
+
+                            ${explanation}
+
+                        </div>
+
+
+                        <!-- ACTIONS -->
+
+                        <div class="actions">
+
+                            <button
+                                class="btn"
+                                type="button"
+                                onclick="
+                                    removeSaved(
+                                        '${esc(testId)}',
+                                        '${esc(q.id)}'
+                                    )
+                                "
+                            >
+
+                                Remove
+
+                            </button>
+
+
+                            <a
+                                class="btn primary"
+                                href="test.html?id=${encodeURIComponent(testId)}"
+                            >
+
+                                Open Test
+
+                            </a>
+
+                        </div>
+
+
+                    </article>
+
+                    `;
+
+                });
+
+
+            html += `
+                </section>
+            `;
+
+
+        }catch(error){
+
+            console.error(
+                "Saved question load error:",
+                error
+            );
+
         }
 
-        const test =
-          testMap.get(item.testId);
+    }
 
-        const subjectId =
-          question.subject_id ??
-          test?.subject_id;
 
-        return {
-          ...item,
-          question,
-          test,
-          subjectName:
-            subjectMap.get(String(subjectId)) ||
-            "Saved Question",
-          options:
-            optionsMap.get(item.questionId) || []
-        };
+    /* ==========================================
+       FINAL OUTPUT
+    ========================================== */
 
-      })
-      .filter(Boolean);
+    if(!html){
 
-    renderSavedQuestions();
+        count.textContent =
+        "🔖 0 Saved Questions";
 
-  }catch(error){
 
-    console.error(
-      "Saved questions load failed:",
-      error
-    );
+        app.innerHTML = `
 
-    hide("savedLoading");
-    show("savedError");
+            <div class="status">
 
-    document.getElementById("savedError").textContent =
-      "Unable to load saved questions: " +
-      (error.message || "Unknown error");
-
-  }
-}
-
-function renderSavedQuestions(){
-
-  hide("savedLoading");
-
-  const list =
-    document.getElementById("savedList");
-
-  list.innerHTML = "";
-
-  if(!savedItems.length){
-
-    show("savedEmpty");
-    hide("clearAllBtn");
-
-    document.getElementById("savedCount").textContent =
-      "0 Saved Questions";
-
-    return;
-  }
-
-  show("clearAllBtn");
-
-  document.getElementById("savedCount").textContent =
-    savedItems.length +
-    (savedItems.length === 1
-      ? " Saved Question"
-      : " Saved Questions");
-
-  list.innerHTML =
-    savedItems.map((item,index) => {
-
-      const testTitle =
-        item.test?.title ||
-        "SSC EDGE Practice";
-
-      const options =
-        item.options.length
-          ? `
-            <div class="saved-options">
-              ${item.options.map((option,optionIndex) => `
-                <div class="saved-option">
-                  <strong>${String.fromCharCode(65 + optionIndex)}.</strong>
-                  ${escapeHtml(option.option_text)}
+                <div>
+                    Saved questions could not be loaded.
                 </div>
-              `).join("")}
-            </div>
-          `
-          : "";
 
-      return `
-        <article class="saved-card">
+                <div style="margin-top:6px;">
+                    The saved test/question may
+                    no longer exist.
+                </div>
 
-          <div class="saved-card-top">
-
-            <div class="saved-meta">
-              <div class="saved-test">
-                ${escapeHtml(testTitle)}
-              </div>
-
-              <div class="saved-subject">
-                ${escapeHtml(item.subjectName)}
-              </div>
             </div>
 
-            <span
-              class="bookmark"
-              title="Saved Question"
-              aria-label="Saved Question"
-            >🔖</span>
+        `;
 
-          </div>
-
-          <div class="saved-question">
-            ${escapeHtml(item.question.question_text)}
-          </div>
-
-          ${options}
-
-          <button
-            class="remove-btn"
-            type="button"
-            onclick="removeSavedQuestion(${index})"
-          >
-            Remove from Saved
-          </button>
-
-        </article>
-      `;
-
-    }).join("");
-}
-
-function removeSavedQuestion(index){
-
-  const item =
-    savedItems[index];
-
-  if(!item){
-    return;
-  }
-
-  try{
-
-    const raw =
-      localStorage.getItem(item.storageKey);
-
-    const ids =
-      raw ? JSON.parse(raw) : [];
-
-    const updated =
-      Array.isArray(ids)
-        ? ids
-            .map(id => String(id))
-            .filter(id =>
-              id !== String(item.questionId)
-            )
-        : [];
-
-    if(updated.length){
-      localStorage.setItem(
-        item.storageKey,
-        JSON.stringify(updated)
-      );
-    }else{
-      localStorage.removeItem(
-        item.storageKey
-      );
-    }
-
-  }catch(error){
-
-    console.error(
-      "Could not remove saved question:",
-      error
-    );
-
-    return;
-  }
-
-  savedItems.splice(index,1);
-  renderSavedQuestions();
-}
-
-function clearAllSavedQuestions(){
-
-  const keys = [];
-
-  for(let i = 0; i < localStorage.length; i++){
-
-    const key =
-      localStorage.key(i);
-
-    if(
-      key &&
-      key.startsWith(
-        "ssc-edge-saved-questions-"
-      )
-    ){
-      keys.push(key);
-    }
-  }
-
-  keys.forEach(key => {
-    localStorage.removeItem(key);
-  });
-
-  savedItems = [];
-  renderSavedQuestions();
-}
-
-document
-  .getElementById("clearAllBtn")
-  .addEventListener(
-    "click",
-    function(){
-
-      if(!savedItems.length){
         return;
-      }
-
-      if(
-        confirm(
-          "Remove all saved questions?"
-        )
-      ){
-        clearAllSavedQuestions();
-      }
 
     }
-  );
+
+
+    app.innerHTML =
+    html;
+
+
+    count.textContent =
+
+        "🔖 " +
+
+        displayed +
+
+        (
+            displayed === 1
+
+            ?
+
+            " Saved Question"
+
+            :
+
+            " Saved Questions"
+        );
+
+}
+
+
+/* ==========================================
+   START
+========================================== */
 
 loadSavedQuestions();
+
 </script>
 
 </body>
