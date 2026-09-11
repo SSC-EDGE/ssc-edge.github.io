@@ -29,11 +29,6 @@ href="css/style.css"
 >
 
 
-<script
-src="js/downloads.js"
-></script>
-
-
 <style>
 
 .container{
@@ -191,6 +186,10 @@ color:var(--text);
 
 box-sizing:border-box;
 
+font-family:inherit;
+
+font-size:14px;
+
 }
 
 
@@ -235,6 +234,25 @@ color:var(--text);
 font-weight:bold;
 
 cursor:pointer;
+
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+.refresh-status{
+
+text-align:center;
+
+font-size:12px;
+
+color:var(--muted);
+
+margin-top:10px;
+
+display:none;
 
 }
 
@@ -306,9 +324,19 @@ class="download-list"
 
 <div class="empty">
 
-No downloads yet.
+Loading downloads...
 
 </div>
+
+</div>
+
+
+<div
+id="refreshStatus"
+class="refresh-status"
+>
+
+Refreshing file information...
 
 </div>
 
@@ -326,255 +354,753 @@ onclick="clearAllDownloads()"
 </div>
 
 
+<script
+src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
+
+
 <script>
+
+
+/* =========================================================
+   SUPABASE
+========================================================= */
+
+const SUPABASE_URL =
+"https://dvvyoygahzzbnpqrfhen.supabase.co";
+
+
+const SUPABASE_KEY =
+"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
+
+const supabaseClient =
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+/* =========================================================
+   DOWNLOAD STORAGE
+========================================================= */
+
+const DOWNLOAD_KEY =
+"ssc-edge-downloads-v3";
+
+
+const OLD_DOWNLOAD_KEY =
+"ssc-edge-downloads-v2";
 
 
 let currentType =
 "ALL";
 
 
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
 function escapeHtml(value){
 
-return String(value || "")
+    return String(value || "")
 
-.replace(/&/g,"&amp;")
+        .replace(/&/g,"&amp;")
 
-.replace(/</g,"&lt;")
+        .replace(/</g,"&lt;")
 
-.replace(/>/g,"&gt;")
+        .replace(/>/g,"&gt;")
 
-.replace(/"/g,"&quot;")
+        .replace(/"/g,"&quot;")
 
-.replace(/'/g,"&#039;");
-
-}
-
-
-/* =========================
-   RENDER DOWNLOADS
-========================= */
-
-function renderDownloads(){
-
-const list =
-document.getElementById(
-"downloadList"
-);
-
-
-let items =
-window.SSCEdgeDownloads
-.getAll();
-
-
-if(
-currentType !== "ALL"
-){
-
-items =
-items.filter(
-item =>
-item.type === currentType
-);
+        .replace(/'/g,"&#039;");
 
 }
 
 
-if(!items.length){
+/* =========================================================
+   GET DOWNLOADS
+========================================================= */
 
-list.innerHTML=
+function getDownloads(){
 
-`<div class="empty">
-No downloads here yet.
-</div>`;
+    try{
 
-return;
+        return JSON.parse(
 
-}
+            localStorage.getItem(
+                DOWNLOAD_KEY
+            ) || "[]"
 
+        );
 
-list.innerHTML=
+    }catch(error){
 
-items.map(item=>{
+        return [];
 
-const title =
-escapeHtml(
-item.title ||
-"Untitled"
-);
-
-
-const subject =
-escapeHtml(
-item.subject ||
-"General"
-);
-
-
-const id =
-escapeHtml(
-item.id ||
-""
-);
-
-
-const url =
-escapeHtml(
-item.url ||
-""
-);
-
-
-const typeLabel =
-item.type === "EBOOK"
-
-? "📚 E-Book"
-
-: "📄 PDF";
-
-
-return `
-
-<div class="download-card">
-
-
-<div class="download-title">
-
-🔖 ${title}
-
-</div>
-
-
-<div class="download-meta">
-
-${typeLabel}
-•
-${subject}
-
-</div>
-
-
-<div class="actions">
-
-
-<a
-class="action primary"
-href="${url}"
-target="_blank"
-rel="noopener"
->
-
-📖 Open
-
-</a>
-
-
-<button
-class="action"
-onclick="removeItem(
-'${id.replace(/'/g,"\\'")}'
-)"
->
-
-🗑️ Remove
-
-</button>
-
-
-</div>
-
-
-</div>
-
-`;
-
-}).join("");
+    }
 
 }
 
 
-/* =========================
+/* =========================================================
+   SAVE DOWNLOADS
+========================================================= */
+
+function saveDownloads(items){
+
+    localStorage.setItem(
+
+        DOWNLOAD_KEY,
+
+        JSON.stringify(items)
+
+    );
+
+}
+
+
+/* =========================================================
+   GET REAL FILE URL
+=========================================================
+
+   We NEVER create a bucket ourselves.
+
+   The URL comes directly from
+   study_material.file_url.
+========================================================= */
+
+async function refreshFileUrls(items){
+
+    if(!items.length){
+
+        return items;
+
+    }
+
+
+    const status =
+        document.getElementById(
+            "refreshStatus"
+        );
+
+
+    status.style.display =
+        "block";
+
+
+    let changed =
+        false;
+
+
+    for(
+        let i = 0;
+        i < items.length;
+        i++
+    ){
+
+        const item =
+            items[i];
+
+
+        /*
+           The id saved by the PDF/E-Book
+           pages is the study_material id.
+
+           If an old record does not have
+           a usable database id, simply
+           keep its existing URL.
+        */
+
+        if(
+            !item.id ||
+            String(item.id).includes("/")
+        ){
+
+            continue;
+
+        }
+
+
+        try{
+
+            const {
+                data,
+                error
+            } = await supabaseClient
+
+                .from("study_material")
+
+                .select(
+                    "id,title,subject_id,file_url,material_type"
+                )
+
+                .eq(
+                    "id",
+                    item.id
+                )
+
+                .maybeSingle();
+
+
+            if(
+                !error &&
+                data &&
+                data.file_url
+            ){
+
+                /*
+                   Use the exact URL currently
+                   stored in Supabase.
+
+                   This replaces any old
+                   wrong-bucket URL.
+                */
+
+                if(
+                    item.url !==
+                    data.file_url
+                ){
+
+                    items[i] = {
+
+                        ...item,
+
+                        url:
+                            data.file_url,
+
+                        title:
+                            data.title ||
+                            item.title,
+
+                        type:
+                            data.material_type ===
+                            "EBOOK"
+                                ? "EBOOK"
+                                : "PDF"
+
+                    };
+
+                    changed =
+                        true;
+
+                }
+
+            }
+
+        }catch(error){
+
+            console.warn(
+                "Could not refresh:",
+                item.id,
+                error
+            );
+
+        }
+
+    }
+
+
+    if(changed){
+
+        saveDownloads(items);
+
+    }
+
+
+    status.style.display =
+        "none";
+
+
+    return items;
+
+}
+
+
+/* =========================================================
+   DOWNLOAD URL
+=========================================================
+
+   Convert ONLY the URL path.
+
+   The bucket is taken from the original URL.
+
+   Example:
+
+   /object/public/my-real-bucket/file.pdf
+
+   becomes:
+
+   /object/download/my-real-bucket/file.pdf
+========================================================= */
+
+function getDownloadUrl(url){
+
+    if(!url){
+
+        return "";
+
+    }
+
+
+    const publicMarker =
+        "/storage/v1/object/public/";
+
+
+    const downloadMarker =
+        "/storage/v1/object/download/";
+
+
+    /*
+       Already a download URL.
+    */
+
+    if(
+        url.includes(
+            downloadMarker
+        )
+    ){
+
+        return url;
+
+    }
+
+
+    /*
+       Public Supabase URL.
+    */
+
+    const position =
+        url.indexOf(
+            publicMarker
+        );
+
+
+    if(position !== -1){
+
+        return (
+
+            url.substring(
+                0,
+                position
+            )
+
+            +
+
+            downloadMarker
+
+            +
+
+            url.substring(
+                position +
+                publicMarker.length
+            )
+
+        );
+
+    }
+
+
+    /*
+       Unknown/external URL.
+
+       Do NOT modify it.
+    */
+
+    return url;
+
+}
+
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+async function renderDownloads(){
+
+    const list =
+        document.getElementById(
+            "downloadList"
+        );
+
+
+    let items =
+        getDownloads();
+
+
+    if(
+        currentType !==
+        "ALL"
+    ){
+
+        items =
+            items.filter(
+
+                item =>
+                    item.type ===
+                    currentType
+
+            );
+
+    }
+
+
+    if(!items.length){
+
+        list.innerHTML = `
+
+            <div class="empty">
+
+                No downloads here yet.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    /*
+       First display the saved list.
+    */
+
+    list.innerHTML =
+
+        items.map(
+
+            item =>
+                createCard(item)
+
+        ).join("");
+
+
+    /*
+       Then refresh every file URL
+       from Supabase.
+
+       This is what fixes old
+       wrong-bucket URLs.
+    */
+
+    const allItems =
+        await refreshFileUrls(
+            getDownloads()
+        );
+
+
+    let refreshedItems =
+        allItems;
+
+
+    if(
+        currentType !==
+        "ALL"
+    ){
+
+        refreshedItems =
+            refreshedItems.filter(
+
+                item =>
+                    item.type ===
+                    currentType
+
+            );
+
+    }
+
+
+    list.innerHTML =
+
+        refreshedItems.map(
+
+            item =>
+                createCard(item)
+
+        ).join("");
+
+}
+
+
+/* =========================================================
+   CREATE CARD
+========================================================= */
+
+function createCard(item){
+
+    const title =
+        escapeHtml(
+
+            item.title ||
+            "Untitled"
+
+        );
+
+
+    const subject =
+        escapeHtml(
+
+            item.subject ||
+            "General"
+
+        );
+
+
+    const id =
+        escapeHtml(
+
+            item.id ||
+            ""
+
+        );
+
+
+    const url =
+        escapeHtml(
+
+            item.url ||
+            ""
+
+        );
+
+
+    const typeLabel =
+        item.type ===
+        "EBOOK"
+
+            ? "📚 E-Book"
+
+            : "📄 PDF";
+
+
+    const downloadUrl =
+        escapeHtml(
+
+            getDownloadUrl(
+                item.url ||
+                ""
+            )
+
+        );
+
+
+    return `
+
+    <div class="download-card">
+
+
+        <div class="download-title">
+
+            🔖 ${title}
+
+        </div>
+
+
+        <div class="download-meta">
+
+            ${typeLabel}
+
+            •
+
+            ${subject}
+
+        </div>
+
+
+        <div class="actions">
+
+
+            <!-- OPEN -->
+
+            <a
+
+                class="action primary"
+
+                href="${url}"
+
+                target="_blank"
+
+                rel="noopener noreferrer"
+
+            >
+
+                📖 Open
+
+            </a>
+
+
+            <!-- DOWNLOAD -->
+
+            <a
+
+                class="action"
+
+                href="${downloadUrl}"
+
+                download
+
+                target="_blank"
+
+                rel="noopener noreferrer"
+
+            >
+
+                ⬇️ Download
+
+            </a>
+
+
+            <!-- REMOVE -->
+
+            <button
+
+                class="action"
+
+                onclick="removeItem(
+                    '${id.replace(
+                        /'/g,
+                        "\\'"
+                    )}'
+                )"
+
+            >
+
+                🗑️ Remove
+
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+    `;
+
+}
+
+
+/* =========================================================
    REMOVE ITEM
-========================= */
+========================================================= */
 
 function removeItem(id){
 
-window.SSCEdgeDownloads
-.removeDownload(id);
+    const items =
+        getDownloads().filter(
 
-renderDownloads();
+            item =>
+                String(item.id) !==
+                String(id)
+
+        );
+
+
+    saveDownloads(items);
+
+
+    renderDownloads();
 
 }
 
 
-/* =========================
+/* =========================================================
    CLEAR ALL
-========================= */
+========================================================= */
 
 function clearAllDownloads(){
 
-if(
-!confirm(
-"Clear all downloads?"
-)
-){
+    if(
+        !confirm(
+            "Clear all downloads?"
+        )
+    ){
 
-return;
+        return;
+
+    }
+
+
+    /*
+       Clear both versions because
+       the old v2 list may contain
+       broken URLs.
+    */
+
+    localStorage.removeItem(
+        DOWNLOAD_KEY
+    );
+
+
+    localStorage.removeItem(
+        OLD_DOWNLOAD_KEY
+    );
+
+
+    renderDownloads();
 
 }
 
 
-localStorage.removeItem(
-"ssc-edge-downloads-v2"
-);
-
-
-renderDownloads();
-
-}
-
-
-/* =========================
+/* =========================================================
    TABS
-========================= */
+========================================================= */
 
 document
-.querySelectorAll(".tab")
-.forEach(tab=>{
 
-tab.addEventListener(
-"click",
-()=>{
+    .querySelectorAll(".tab")
 
-document
-.querySelectorAll(".tab")
-.forEach(
-item =>
-item.classList.remove(
-"active"
-)
-);
+    .forEach(
 
+        tab => {
 
-tab.classList.add(
-"active"
-);
+            tab.addEventListener(
 
+                "click",
 
-currentType =
-tab.dataset.type;
+                () => {
 
+                    document
 
-renderDownloads();
+                        .querySelectorAll(
+                            ".tab"
+                        )
 
-});
+                        .forEach(
 
-});
+                            item =>
+                                item.classList
+                                    .remove(
+                                        "active"
+                                    )
+
+                        );
 
 
-/* =========================
+                    tab.classList.add(
+                        "active"
+                    );
+
+
+                    currentType =
+                        tab.dataset.type;
+
+
+                    renderDownloads();
+
+                }
+
+            );
+
+        }
+
+    );
+
+
+/* =========================================================
    INITIAL LOAD
-========================= */
+========================================================= */
 
 renderDownloads();
 
