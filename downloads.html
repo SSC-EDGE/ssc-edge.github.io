@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>Downloads - SSC EDGE</title>
+
+
+<script>
+
+document.documentElement.dataset.theme =
+localStorage.getItem(
+"ssc-edge-theme"
+) || "dark";
+
+</script>
+
+
+<link
+rel="stylesheet"
+href="css/style.css"
+>
+
+
+<script
+src="js/downloads.js"
+></script>
+
+
+<style>
+
+.container{
+
+padding:20px;
+
+padding-bottom:90px;
+
+}
+
+
+.page-title{
+
+font-size:26px;
+
+font-weight:bold;
+
+margin-bottom:6px;
+
+}
+
+
+.page-subtitle{
+
+color:var(--muted);
+
+margin-bottom:20px;
+
+}
+
+
+.tabs{
+
+display:flex;
+
+gap:10px;
+
+margin-bottom:18px;
+
+}
+
+
+.tab{
+
+flex:1;
+
+padding:11px 10px;
+
+border-radius:10px;
+
+border:1px solid var(--border);
+
+background:var(--card);
+
+color:var(--text);
+
+font-weight:bold;
+
+cursor:pointer;
+
+text-align:center;
+
+}
+
+
+.tab.active{
+
+background:var(--purple);
+
+color:white;
+
+border-color:var(--purple);
+
+}
+
+
+.download-list{
+
+display:flex;
+
+flex-direction:column;
+
+gap:13px;
+
+}
+
+
+.download-card{
+
+background:var(--card);
+
+border:1px solid var(--border);
+
+border-radius:14px;
+
+padding:15px;
+
+}
+
+
+.download-title{
+
+font-size:17px;
+
+font-weight:bold;
+
+line-height:1.35;
+
+margin-bottom:7px;
+
+}
+
+
+.download-meta{
+
+color:var(--muted);
+
+font-size:13px;
+
+margin-bottom:12px;
+
+}
+
+
+.actions{
+
+display:flex;
+
+gap:9px;
+
+}
+
+
+.action{
+
+flex:1;
+
+padding:10px 12px;
+
+border-radius:10px;
+
+border:1px solid var(--border);
+
+font-weight:bold;
+
+text-decoration:none;
+
+text-align:center;
+
+cursor:pointer;
+
+background:var(--card2);
+
+color:var(--text);
+
+box-sizing:border-box;
+
+}
+
+
+.action.primary{
+
+background:var(--purple);
+
+color:white;
+
+border-color:var(--purple);
+
+}
+
+
+.empty{
+
+text-align:center;
+
+color:var(--muted);
+
+padding:35px 10px;
+
+}
+
+
+.clear{
+
+width:100%;
+
+margin-top:16px;
+
+padding:11px;
+
+border-radius:10px;
+
+border:1px solid var(--border);
+
+background:var(--card);
+
+color:var(--text);
+
+font-weight:bold;
+
+cursor:pointer;
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<div class="page-title">
+
+Downloads
+
+</div>
+
+
+<div class="page-subtitle">
+
+Your downloaded SSC EDGE study material
+
+</div>
+
+
+<div class="tabs">
+
+
+<button
+class="tab active"
+data-type="ALL"
+>
+
+All
+
+</button>
+
+
+<button
+class="tab"
+data-type="EBOOK"
+>
+
+📚 E-Books
+
+</button>
+
+
+<button
+class="tab"
+data-type="PDF"
+>
+
+📄 PDFs
+
+</button>
+
+
+</div>
+
+
+<div
+id="downloadList"
+class="download-list"
+>
+
+<div class="empty">
+
+No downloads yet.
+
+</div>
+
+</div>
+
+
+<button
+class="clear"
+onclick="clearAllDownloads()"
+>
+
+🗑️ Clear Download List
+
+</button>
+
+
+</div>
+
+
+<script>
+
+
+let currentType =
+"ALL";
+
+
+function escapeHtml(value){
+
+return String(value || "")
+
+.replace(/&/g,"&amp;")
+
+.replace(/</g,"&lt;")
+
+.replace(/>/g,"&gt;")
+
+.replace(/"/g,"&quot;")
+
+.replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================
+   RENDER DOWNLOADS
+========================= */
+
+function renderDownloads(){
+
+const list =
+document.getElementById(
+"downloadList"
+);
+
+
+let items =
+window.SSCEdgeDownloads
+.getAll();
+
+
+if(
+currentType !== "ALL"
+){
+
+items =
+items.filter(
+item =>
+item.type === currentType
+);
+
+}
+
+
+if(!items.length){
+
+list.innerHTML=
+
+`<div class="empty">
+No downloads here yet.
+</div>`;
+
+return;
+
+}
+
+
+list.innerHTML=
+
+items.map(item=>{
+
+const title =
+escapeHtml(
+item.title ||
+"Untitled"
+);
+
+
+const subject =
+escapeHtml(
+item.subject ||
+"General"
+);
+
+
+const id =
+escapeHtml(
+item.id ||
+""
+);
+
+
+const url =
+escapeHtml(
+item.url ||
+""
+);
+
+
+const typeLabel =
+item.type === "EBOOK"
+
+? "📚 E-Book"
+
+: "📄 PDF";
+
+
+return `
+
+<div class="download-card">
+
+
+<div class="download-title">
+
+🔖 ${title}
+
+</div>
+
+
+<div class="download-meta">
+
+${typeLabel}
+•
+${subject}
+
+</div>
+
+
+<div class="actions">
+
+
+<a
+class="action primary"
+href="${url}"
+target="_blank"
+rel="noopener"
+>
+
+📖 Open
+
+</a>
+
+
+<button
+class="action"
+onclick="removeItem(
+'${id.replace(/'/g,"\\'")}'
+)"
+>
+
+🗑️ Remove
+
+</button>
+
+
+</div>
+
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+
+/* =========================
+   REMOVE ITEM
+========================= */
+
+function removeItem(id){
+
+window.SSCEdgeDownloads
+.removeDownload(id);
+
+renderDownloads();
+
+}
+
+
+/* =========================
+   CLEAR ALL
+========================= */
+
+function clearAllDownloads(){
+
+if(
+!confirm(
+"Clear all downloads?"
+)
+){
+
+return;
+
+}
+
+
+localStorage.removeItem(
+"ssc-edge-downloads-v2"
+);
+
+
+renderDownloads();
+
+}
+
+
+/* =========================
+   TABS
+========================= */
+
+document
+.querySelectorAll(".tab")
+.forEach(tab=>{
+
+tab.addEventListener(
+"click",
+()=>{
+
+document
+.querySelectorAll(".tab")
+.forEach(
+item =>
+item.classList.remove(
+"active"
+)
+);
+
+
+tab.classList.add(
+"active"
+);
+
+
+currentType =
+tab.dataset.type;
+
+
+renderDownloads();
+
+});
+
+});
+
+
+/* =========================
+   INITIAL LOAD
+========================= */
+
+renderDownloads();
+
+</script>
+
+</body>
+
+</html>
