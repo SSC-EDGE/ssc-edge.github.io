@@ -97,20 +97,27 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 }
 
 
-/* PLAY ICON */
+/* =========================
+   PLAY ICON
+========================= */
 
 .thumbnail-play{
     position:absolute;
     left:50%;
     top:50%;
     transform:translate(-50%,-50%);
+
     width:58px;
     height:58px;
+
     border-radius:50%;
+
     background:rgba(0,0,0,.72);
+
     display:flex;
     align-items:center;
     justify-content:center;
+
     color:white;
     font-size:25px;
 }
@@ -136,39 +143,30 @@ localStorage.getItem("ssc-edge-theme") || "dark";
     align-items:center;
     gap:8px;
     flex-wrap:wrap;
+
     color:var(--muted);
+
     font-size:13px;
+
     margin-bottom:10px;
 }
 
 .subject-badge{
     background:var(--card2);
     border:1px solid var(--border);
+
     padding:5px 9px;
+
     border-radius:999px;
 }
 
 .video-description{
     color:var(--muted);
+
     font-size:14px;
     line-height:1.5;
+
     margin-bottom:14px;
-}
-
-
-/* =========================
-   PLAYER
-========================= */
-
-.video-player{
-    width:100%;
-    aspect-ratio:16/9;
-    border-radius:12px;
-    background:#000;
-    display:block;
-    object-fit:contain;
-    margin-top:4px;
-    margin-bottom:13px;
 }
 
 
@@ -182,24 +180,35 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 
 .open-video{
     width:100%;
+
     min-height:46px;
+
     display:flex;
     align-items:center;
     justify-content:center;
+
     border-radius:11px;
+
     padding:11px 12px;
+
     box-sizing:border-box;
+
     font-weight:700;
     font-size:14px;
+
     text-decoration:none;
+
     background:var(--purple);
     color:white;
+
     border:1px solid var(--purple);
 }
 
 .empty{
     text-align:center;
+
     color:var(--muted);
+
     padding:35px 10px;
 }
 
@@ -207,25 +216,26 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 
 </head>
 
+
 <body>
 
 <div class="container">
 
-<div class="page-title">
-Videos
-</div>
+    <div class="page-title">
+        Videos
+    </div>
 
-<div class="page-subtitle">
-SSC EDGE Video Classes
-</div>
+    <div class="page-subtitle">
+        SSC EDGE Video Classes
+    </div>
 
-<div id="videoList" class="video-list">
+    <div id="videoList" class="video-list">
 
-<div class="empty">
-Loading videos...
-</div>
+        <div class="empty">
+            Loading videos...
+        </div>
 
-</div>
+    </div>
 
 </div>
 
@@ -264,37 +274,21 @@ function escapeHtml(value){
 
 
 /* =========================
-   CHECK YOUTUBE / VIMEO
-========================= */
-
-function isExternalVideo(url){
-
-    if(!url) return false;
-
-    const lower = url.toLowerCase();
-
-    return (
-        lower.includes("youtube.com") ||
-        lower.includes("youtu.be") ||
-        lower.includes("vimeo.com")
-    );
-
-}
-
-
-/* =========================
    THUMBNAIL
 ========================= */
 
 function getThumbnail(video){
 
     /*
-       Future admin support:
+       Admin can provide:
 
        video.thumbnail_url
 
-       Admin panel later will upload
-       the thumbnail and save its URL.
+       If thumbnail_url exists,
+       it will be shown.
+
+       Otherwise SSC EDGE fallback
+       thumbnail is shown.
     */
 
     return video.thumbnail_url || "";
@@ -369,20 +363,30 @@ async function loadVideos(){
         );
 
 
+    /* =========================
+       ERROR
+    ========================= */
+
     if(error){
 
         console.error(error);
 
         videoList.innerHTML = `
+
             <div class="empty">
                 Unable to load videos.
             </div>
+
         `;
 
         return;
 
     }
 
+
+    /* =========================
+       NO VIDEOS
+    ========================= */
 
     if(
         !videos ||
@@ -390,9 +394,11 @@ async function loadVideos(){
     ){
 
         videoList.innerHTML = `
+
             <div class="empty">
                 No videos available yet.
             </div>
+
         `;
 
         return;
@@ -400,7 +406,12 @@ async function loadVideos(){
     }
 
 
+    /* =========================
+       CREATE CARDS
+    ========================= */
+
     videoList.innerHTML = videos.map(
+
         video => {
 
             const title =
@@ -437,12 +448,18 @@ async function loadVideos(){
                 getThumbnail(video);
 
 
+            /* =========================
+               THUMBNAIL
+            ========================= */
+
             const thumbnailHtml =
+
                 thumbnail
 
                 ?
 
                 `
+
                 <div class="video-thumbnail">
 
                     <img
@@ -456,11 +473,13 @@ async function loadVideos(){
                     </div>
 
                 </div>
+
                 `
 
                 :
 
                 `
+
                 <div class="video-thumbnail">
 
                     ${fallbackThumbnail()}
@@ -470,54 +489,27 @@ async function loadVideos(){
                     </div>
 
                 </div>
+
                 `;
 
 
             /*
                IMPORTANT:
 
-               No video is preloaded automatically.
+               There is NO <video> element here.
 
-               preload="none" means the browser
-               will NOT automatically download/load
-               the video when the page opens.
+               Every video uses exactly the
+               same thumbnail-based interface.
 
-               The thumbnail remains visible first.
+               This means:
+
+               ✓ No automatic video loading
+               ✓ No video player on page
+               ✓ No first-video special behaviour
+               ✓ No browser preloading
+               ✓ Only thumbnail is shown
+               ✓ Open Video opens the actual URL
             */
-
-            const playerHtml =
-                isExternalVideo(rawUrl)
-
-                ?
-
-                ""
-
-                :
-
-                `
-
-                <video
-                    class="video-player"
-                    controls
-                    preload="none"
-                    playsinline
-                    ${thumbnail
-                        ? `poster="${escapeHtml(thumbnail)}"`
-                        : ""
-                    }
-                >
-
-                    <source
-                        src="${url}"
-                        type="video/mp4"
-                    >
-
-                    Your browser does not support
-                    video playback.
-
-                </video>
-
-                `;
 
 
             return `
@@ -526,11 +518,13 @@ async function loadVideos(){
 
                 ${thumbnailHtml}
 
+
                 <div class="video-content">
 
                     <div class="video-title">
                         ${title}
                     </div>
+
 
                     <div class="video-meta">
 
@@ -547,21 +541,21 @@ async function loadVideos(){
 
                     ${
                         description
+
                         ?
 
                         `
+
                         <div class="video-description">
                             ${description}
                         </div>
+
                         `
 
                         :
 
                         ""
                     }
-
-
-                    ${playerHtml}
 
 
                     <div class="video-actions">
@@ -586,6 +580,7 @@ async function loadVideos(){
             `;
 
         }
+
     ).join("");
 
 }
