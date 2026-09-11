@@ -9,22 +9,13 @@ document.documentElement.dataset.theme =
 </script>
 
 <meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
-
-<meta
-  name="theme-color"
-  content="#f0e8ff"
->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#e9ddff">
 
 <title>SSC EDGE - Home</title>
 
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/home.css">
-
 
 <style>
 
@@ -40,7 +31,6 @@ body{
 margin:0;
 }
 
-
 /* ==================================================
    HEADER
    ================================================== */
@@ -54,20 +44,16 @@ z-index:100;
 
 .home-header-content{
 height:74px;
-
 display:flex;
 align-items:center;
-
 padding:0 18px;
 }
 
 .header-left{
 display:flex;
 align-items:center;
-
-gap:11px;
+gap:8px;
 }
-
 
 /* ==================================================
    THREE LINE MENU
@@ -76,7 +62,6 @@ gap:11px;
 .menu-button{
 width:38px;
 height:38px;
-
 border:0;
 background:transparent;
 
@@ -86,23 +71,17 @@ align-items:center;
 justify-content:center;
 
 gap:5px;
-
 padding:5px;
-
 cursor:pointer;
 }
 
 .menu-button span{
 display:block;
-
-width:25px;
+width:24px;
 height:3px;
-
 border-radius:3px;
-
 background:#191525;
 }
-
 
 /* ==================================================
    BRAND
@@ -118,9 +97,7 @@ justify-content:center;
 font-size:24px;
 font-weight:850;
 letter-spacing:-.4px;
-
 color:#191525;
-
 line-height:1.05;
 }
 
@@ -129,16 +106,12 @@ color:#9b5cff;
 }
 
 .header-tagline{
-font-size:10px;
+font-size:8px;
 font-weight:600;
-
 color:#817987;
-
-margin-top:4px;
-
-letter-spacing:.15px;
+margin-top:3px;
+letter-spacing:.1px;
 }
-
 
 /* ==================================================
    RIGHT HEADER
@@ -146,18 +119,15 @@ letter-spacing:.15px;
 
 .header-actions{
 margin-left:auto;
-
 display:flex;
 align-items:center;
-
-gap:4px;
+gap:3px;
 }
 
 .header-search,
 .update-bell{
-width:38px;
-height:38px;
-
+width:36px;
+height:36px;
 border:0;
 background:transparent;
 
@@ -166,64 +136,49 @@ align-items:center;
 justify-content:center;
 
 padding:0;
-
 cursor:pointer;
 }
 
 .header-search svg{
-width:23px;
-height:23px;
-
+width:22px;
+height:22px;
 fill:none;
 stroke:#191525;
-
 stroke-width:2;
-
 stroke-linecap:round;
 }
 
 .update-bell svg{
-width:23px;
-height:23px;
-
+width:20px;
+height:20px;
 fill:none;
 stroke:#191525;
-
 stroke-width:2;
-
 stroke-linecap:round;
 stroke-linejoin:round;
 }
 
 .update-dot{
 position:absolute;
-
-margin-left:19px;
-margin-top:-19px;
+margin-left:17px;
+margin-top:-17px;
 
 width:7px;
 height:7px;
-
 background:#ff6b35;
-
 border-radius:50%;
-
 display:none;
 }
 
-
 /* ==================================================
-   MENU OVERLAY
+   SIDE MENU
    ================================================== */
 
 .menu-overlay{
 position:fixed;
 inset:0;
-
 background:rgba(20,12,30,.45);
-
 z-index:300;
-
 display:none;
 }
 
@@ -233,7 +188,6 @@ display:block;
 
 .side-menu{
 position:absolute;
-
 left:0;
 top:0;
 bottom:0;
@@ -243,26 +197,93 @@ max-width:82vw;
 
 background:#ffffff;
 
-box-shadow:
-8px 0 30px rgba(20,10,30,.18);
+box-shadow:8px 0 30px rgba(20,10,30,.18);
 
-padding:20px 16px;
+padding:16px;
+overflow-y:auto;
 }
+
+/* ==================================================
+   PROFILE TOP IN MENU
+   ================================================== */
+
+.side-profile{
+display:flex;
+align-items:center;
+gap:12px;
+
+padding:8px 5px 16px;
+
+border-bottom:1px solid #eee8f2;
+}
+
+.side-profile-photo{
+width:48px;
+height:48px;
+
+border-radius:50%;
+
+background:#eadcff;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-size:23px;
+
+overflow:hidden;
+
+flex-shrink:0;
+}
+
+.side-profile-photo img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.side-profile-info{
+min-width:0;
+}
+
+.side-profile-name{
+font-size:16px;
+font-weight:800;
+color:#191525;
+
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+.side-profile-link{
+display:inline-block;
+
+margin-top:3px;
+
+font-size:11px;
+font-weight:600;
+
+color:#8d4fdc;
+
+text-decoration:none;
+}
+
+/* ==================================================
+   MENU BRAND
+   ================================================== */
 
 .side-menu-header{
 display:flex;
 align-items:center;
 justify-content:space-between;
 
-padding:4px 5px 18px;
-
-border-bottom:1px solid #eee8f2;
+padding:15px 5px 12px;
 }
 
 .side-menu-brand{
 font-size:22px;
 font-weight:850;
-
 color:#191525;
 }
 
@@ -271,33 +292,33 @@ color:#9b5cff;
 }
 
 .menu-close{
-width:36px;
-height:36px;
+width:34px;
+height:34px;
 
 border:0;
-
 border-radius:50%;
 
 background:#f0e8ff;
-
 color:#7540c4;
 
-font-size:23px;
-
+font-size:22px;
 cursor:pointer;
 }
 
+/* ==================================================
+   MENU LINKS
+   ================================================== */
+
 .side-menu-links{
-padding-top:14px;
+padding-top:4px;
 }
 
 .side-menu-links a{
 display:flex;
 align-items:center;
+gap:12px;
 
-gap:13px;
-
-padding:13px 12px;
+padding:11px 10px;
 
 border-radius:13px;
 
@@ -308,7 +329,7 @@ color:#292332;
 font-size:14px;
 font-weight:700;
 
-margin-bottom:5px;
+margin-bottom:3px;
 }
 
 .side-menu-links a:hover,
@@ -318,10 +339,10 @@ color:#8d4fdc;
 }
 
 .menu-link-icon{
-width:35px;
-height:35px;
+width:34px;
+height:34px;
 
-border-radius:11px;
+border-radius:10px;
 
 background:#f0e5ff;
 
@@ -329,24 +350,73 @@ display:flex;
 align-items:center;
 justify-content:center;
 
-font-size:19px;
+font-size:18px;
 }
 
+/* ==================================================
+   MENU DIVIDER
+   ================================================== */
+
+.menu-divider{
+height:1px;
+background:#eee8f2;
+margin:9px 4px;
+}
 
 /* ==================================================
-   SEARCH OVERLAY
+   MENU THEME
+   ================================================== */
+
+.menu-theme{
+display:flex;
+align-items:center;
+justify-content:space-between;
+
+padding:11px 10px;
+
+font-size:14px;
+font-weight:700;
+color:#292332;
+}
+
+.theme-options{
+display:flex;
+gap:5px;
+}
+
+.theme-options button{
+border:1px solid #ded3eb;
+background:#f7f2fc;
+
+padding:5px 9px;
+
+border-radius:8px;
+
+font-size:10px;
+font-weight:700;
+
+color:#655b70;
+
+cursor:pointer;
+}
+
+.theme-options button.active{
+background:#9b5cff;
+color:#ffffff;
+border-color:#9b5cff;
+}
+
+/* ==================================================
+   SEARCH
    ================================================== */
 
 .search-overlay{
 position:fixed;
 inset:0;
-
 z-index:250;
-
 display:none;
 
 background:rgba(20,12,30,.48);
-
 padding:18px;
 }
 
@@ -368,8 +438,7 @@ border-radius:22px;
 
 overflow:hidden;
 
-box-shadow:
-0 20px 60px rgba(20,10,30,.22);
+box-shadow:0 20px 60px rgba(20,10,30,.22);
 }
 
 .search-top{
@@ -383,14 +452,12 @@ border-bottom:1px solid #eee8f2;
 
 .search-input{
 flex:1;
-
 border:0;
 outline:none;
 
 font-size:15px;
 
 color:#191525;
-
 background:transparent;
 }
 
@@ -402,7 +469,6 @@ border:0;
 border-radius:50%;
 
 background:#f0e8ff;
-
 color:#7540c4;
 
 font-size:21px;
@@ -410,19 +476,14 @@ font-size:21px;
 
 .search-results{
 max-height:65vh;
-
 overflow-y:auto;
-
 padding:10px;
 }
 
 .search-empty{
 padding:30px 15px;
-
 text-align:center;
-
 font-size:13px;
-
 color:#777180;
 }
 
@@ -442,22 +503,16 @@ background:#faf8fd;
 
 .search-result strong{
 display:block;
-
 font-size:14px;
-
 color:#191525;
 }
 
 .search-result span{
 display:block;
-
 font-size:11px;
-
 color:#777180;
-
 margin-top:4px;
 }
-
 
 /* ==================================================
    HOME CONTENT
@@ -472,32 +527,30 @@ margin:0 auto;
 padding:18px 18px 30px;
 }
 
-
 /* ==================================================
-   WELCOME BANNER
+   LAVENDER WELCOME BANNER
    ================================================== */
 
 .home-welcome{
 position:relative;
-
 overflow:hidden;
 
 background:
 linear-gradient(
 135deg,
-#f0e4ff 0%,
-#ffffff 52%,
-#f7efff 100%
+#e8dcff 0%,
+#f3ebff 50%,
+#e1d1ff 100%
 );
 
-border:1px solid #ddcdf0;
+border:1px solid #d1b9ef;
 
 border-radius:25px;
 
 padding:24px 21px;
 
 box-shadow:
-0 9px 28px rgba(104,59,150,.10);
+0 9px 28px rgba(104,59,150,.13);
 }
 
 .home-welcome::before{
@@ -505,15 +558,15 @@ content:"";
 
 position:absolute;
 
-width:145px;
-height:145px;
+width:150px;
+height:150px;
 
-right:-48px;
-top:-48px;
+right:-45px;
+top:-55px;
 
 border-radius:50%;
 
-background:rgba(155,92,255,.12);
+background:rgba(155,92,255,.16);
 }
 
 .home-welcome::after{
@@ -521,15 +574,15 @@ content:"";
 
 position:absolute;
 
-width:75px;
-height:75px;
+width:80px;
+height:80px;
 
-right:52px;
-bottom:-39px;
+right:55px;
+bottom:-40px;
 
 border-radius:50%;
 
-background:rgba(155,92,255,.08);
+background:rgba(255,255,255,.28);
 }
 
 .welcome-pill{
@@ -542,9 +595,9 @@ padding:7px 13px;
 
 border-radius:20px;
 
-background:#e9dcff;
+background:#d8c4fa;
 
-color:#8048c8;
+color:#7040b4;
 
 font-size:11px;
 
@@ -567,7 +620,7 @@ line-height:1.15;
 
 font-weight:850;
 
-color:#171322;
+color:#21152d;
 }
 
 .home-welcome p{
@@ -582,7 +635,7 @@ font-size:13px;
 
 line-height:1.5;
 
-color:#70697b;
+color:#675d72;
 }
 
 .welcome-action{
@@ -616,10 +669,8 @@ box-shadow:
 
 .welcome-action span{
 margin-left:7px;
-
 font-size:18px;
 }
-
 
 /* ==================================================
    SECTION HEADING
@@ -650,7 +701,6 @@ border-radius:5px;
 
 margin-right:9px;
 }
-
 
 /* ==================================================
    DASHBOARD
@@ -734,7 +784,6 @@ font-size:11px;
 color:#777180;
 }
 
-
 /* ==================================================
    COMMUNITY
    ================================================== */
@@ -742,7 +791,7 @@ color:#777180;
 .community-scroll{
 display:flex;
 
-gap:13px;
+gap:11px;
 
 overflow-x:auto;
 
@@ -762,9 +811,9 @@ display:none;
 .community-card{
 flex:0 0 245px;
 
-min-height:225px;
+min-height:215px;
 
-padding:17px;
+padding:16px;
 
 border-radius:22px;
 
@@ -784,25 +833,24 @@ scroll-snap-align:start;
 }
 
 .community-logo{
-width:58px;
-height:58px;
+width:55px;
+height:55px;
 
-border-radius:17px;
+border-radius:16px;
 
 display:flex;
 align-items:center;
 justify-content:center;
 
-margin-bottom:14px;
+margin-bottom:12px;
 }
 
 .community-logo svg{
-width:34px;
-height:34px;
+width:33px;
+height:33px;
 }
 
-
-/* REAL BRAND LOGOS */
+/* REAL BRAND COLOURS */
 
 .telegram-logo{
 background:#dff3ff;
@@ -831,42 +879,38 @@ fill:#FF0000;
 }
 
 .discussion-logo{
-background:#eee5ff;
+background:#e9f7ff;
 }
 
 .discussion-logo svg{
 fill:#229ED9;
 }
 
-
 .community-card strong{
 font-size:16px;
-
 font-weight:800;
-
 color:#191525;
 }
 
 .community-card span{
 font-size:12px;
-
 line-height:1.45;
-
 color:#777180;
-
 margin-top:5px;
 }
 
 .community-button{
 margin-top:auto;
 
-width:100%;
+width:calc(100% - 20px);
 
-padding:10px 12px;
+margin-left:10px;
 
-border-radius:12px;
+padding:8px 10px;
 
-font-size:13px;
+border-radius:10px;
+
+font-size:12px;
 
 font-weight:800;
 
@@ -890,7 +934,6 @@ background:#FF0000;
 .discussion-button{
 background:#9b5cff;
 }
-
 
 /* ==================================================
    CONTINUE LEARNING
@@ -917,11 +960,11 @@ display:none;
 }
 
 .continue-card{
-flex:0 0 285px;
+flex:0 0 275px;
 
-min-height:105px;
+min-height:100px;
 
-padding:16px;
+padding:15px;
 
 border-radius:18px;
 
@@ -941,12 +984,12 @@ scroll-snap-align:start;
 }
 
 .continue-icon{
-width:48px;
-height:48px;
+width:46px;
+height:46px;
 
 flex-shrink:0;
 
-border-radius:14px;
+border-radius:13px;
 
 background:#f0e5ff;
 
@@ -958,8 +1001,8 @@ margin-right:12px;
 }
 
 .continue-icon svg{
-width:25px;
-height:25px;
+width:24px;
+height:24px;
 
 fill:none;
 
@@ -1005,7 +1048,6 @@ color:#8a8390;
 margin-left:8px;
 }
 
-
 /* ==================================================
    FOOTER
    ================================================== */
@@ -1042,9 +1084,8 @@ font-size:11px;
 color:#817987;
 }
 
-
 /* ==================================================
-   BOTTOM NAV — PROFILE STYLE
+   BOTTOM NAV
    ================================================== */
 
 .bottom-nav{
@@ -1111,7 +1152,6 @@ color:#71697d;
 .bottom-nav a.active small{
 color:#9b5cff;
 }
-
 
 /* ==================================================
    UPDATES POPUP
@@ -1246,15 +1286,12 @@ stroke-linejoin:round;
 
 .no-updates strong{
 font-size:15px;
-
 color:#191525;
 }
 
 .no-updates span{
 font-size:11px;
-
 color:#777180;
-
 margin-top:5px;
 }
 
@@ -1307,7 +1344,6 @@ stroke-linejoin:round;
 display:block;
 
 font-size:13px;
-
 color:#191525;
 }
 
@@ -1332,7 +1368,6 @@ color:#9b5cff;
 
 margin-top:5px;
 }
-
 
 /* ==================================================
    DARK THEME
@@ -1368,12 +1403,17 @@ stroke:#ffffff;
 background:
 linear-gradient(
 135deg,
-#28163a 0%,
-#180d25 55%,
-#241334 100%
+#321d4b 0%,
+#1d102b 52%,
+#2c183f 100%
 );
 
-border-color:#3c2a51;
+border-color:#4b3262;
+}
+
+:root[data-theme="dark"] .welcome-pill{
+background:#392255;
+color:#c6a4ff;
 }
 
 :root[data-theme="dark"] .home-welcome h1,
@@ -1438,6 +1478,32 @@ color:#ffffff;
 color:#eee8f2;
 }
 
+:root[data-theme="dark"] .side-menu-links a:hover{
+background:#2a1939;
+}
+
+:root[data-theme="dark"] .side-profile{
+border-color:#352640;
+}
+
+:root[data-theme="dark"] .side-profile-name{
+color:#ffffff;
+}
+
+:root[data-theme="dark"] .menu-theme{
+color:#eee8f2;
+}
+
+:root[data-theme="dark"] .menu-divider{
+background:#352640;
+}
+
+:root[data-theme="dark"] .theme-options button{
+background:#241630;
+border-color:#49355b;
+color:#aaa1b5;
+}
+
 :root[data-theme="dark"] .search-box{
 background:#1a1024;
 }
@@ -1466,7 +1532,6 @@ border-color:#352640;
 color:#ffffff;
 }
 
-
 /* ==================================================
    MOBILE
    ================================================== */
@@ -1475,7 +1540,6 @@ color:#ffffff;
 
 .home-header-content{
 height:70px;
-
 padding:0 14px;
 }
 
@@ -1484,7 +1548,7 @@ font-size:23px;
 }
 
 .header-tagline{
-font-size:9px;
+font-size:8px;
 }
 
 .menu-button{
@@ -1497,10 +1561,14 @@ width:36px;
 height:36px;
 }
 
-.header-search svg,
+.header-search svg{
+width:21px;
+height:21px;
+}
+
 .update-bell svg{
-width:22px;
-height:22px;
+width:20px;
+height:20px;
 }
 
 .home-container{
@@ -1509,7 +1577,6 @@ padding:16px 16px 25px;
 
 .home-welcome{
 padding:22px 18px 21px;
-
 border-radius:23px;
 }
 
@@ -1527,18 +1594,22 @@ gap:10px;
 
 .dashboard-card{
 min-height:125px;
-
 padding:15px 14px;
 }
 
 .community-card{
-flex-basis:245px;
+flex-basis:235px;
+min-height:210px;
+}
 
-min-height:215px;
+.community-button{
+width:calc(100% - 18px);
+margin-left:9px;
+padding:8px;
 }
 
 .continue-card{
-flex-basis:280px;
+flex-basis:270px;
 }
 
 .section-heading{
@@ -1566,7 +1637,6 @@ font-size:12px;
 }
 
 }
-
 
 /* ==================================================
    DESKTOP
@@ -1598,9 +1668,7 @@ flex-basis:320px;
 
 </head>
 
-
 <body>
-
 
 <!-- ==================================================
      HEADER
@@ -1608,343 +1676,432 @@ flex-basis:320px;
 
 <header class="home-header">
 
-  <div class="home-header-content">
+<div class="home-header-content">
 
+<div class="header-left">
 
-    <!-- 3 LINE MENU -->
+<button
+class="menu-button"
+id="menuButton"
+type="button"
+aria-label="Open menu"
+>
+<span></span>
+<span></span>
+<span></span>
+</button>
 
-    <div class="header-left">
+<div class="header-brand-wrap">
 
-      <button
-        class="menu-button"
-        id="menuButton"
-        type="button"
-        aria-label="Open menu"
-      >
+<div class="header-brand">
+SSC <span class="edge">EDGE</span>
+</div>
 
-        <span></span>
-        <span></span>
-        <span></span>
+<div class="header-tagline">
+Learn • Practice • Improve
+</div>
 
-      </button>
+</div>
 
+</div>
 
-      <div class="header-brand-wrap">
+<div class="header-actions">
 
-        <div class="header-brand">
-          SSC <span class="edge">EDGE</span>
-        </div>
+<button
+class="header-search"
+id="searchButton"
+type="button"
+aria-label="Search"
+>
 
-        <div class="header-tagline">
-          Learn • Practice • Improve
-        </div>
+<svg viewBox="0 0 24 24">
 
-      </div>
+<circle cx="11" cy="11" r="7"/>
 
-    </div>
+<path d="m16.5 16.5 4 4"/>
 
+</svg>
 
-    <!-- SEARCH + BELL -->
+</button>
 
-    <div class="header-actions">
+<button
+class="update-bell"
+id="updateBell"
+type="button"
+aria-label="Open updates"
+>
 
+<svg viewBox="0 0 24 24">
 
-      <button
-        class="header-search"
-        id="searchButton"
-        type="button"
-        aria-label="Search"
-      >
+<path
+d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"
+/>
 
-        <svg viewBox="0 0 24 24">
+<path d="M10 21h4"/>
 
-          <circle
-            cx="11"
-            cy="11"
-            r="7"
-          />
+</svg>
 
-          <path
-            d="m16.5 16.5 4 4"
-          />
+<span
+class="update-dot"
+id="updateDot"
+></span>
 
-        </svg>
+</button>
 
-      </button>
+</div>
 
-
-      <button
-        class="update-bell"
-        id="updateBell"
-        type="button"
-        aria-label="Open updates"
-      >
-
-        <svg
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-        >
-
-          <path
-            d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"
-          />
-
-          <path
-            d="M10 21h4"
-          />
-
-        </svg>
-
-        <span
-          class="update-dot"
-          id="updateDot"
-        ></span>
-
-      </button>
-
-
-    </div>
-
-  </div>
+</div>
 
 </header>
-
-
 
 <!-- ==================================================
      SIDE MENU
      ================================================== -->
 
 <div
-  class="menu-overlay"
-  id="menuOverlay"
+class="menu-overlay"
+id="menuOverlay"
 >
 
-  <aside class="side-menu">
+<aside class="side-menu">
 
+<!-- PROFILE -->
 
-    <div class="side-menu-header">
+<div class="side-profile">
 
-      <div class="side-menu-brand">
-        SSC <span>EDGE</span>
-      </div>
+<div
+class="side-profile-photo"
+id="sideProfilePhoto"
+>
+👤
+</div>
 
-      <button
-        class="menu-close"
-        id="menuClose"
-        type="button"
-      >
-        ×
-      </button>
+<div class="side-profile-info">
 
-    </div>
+<div
+class="side-profile-name"
+id="sideProfileName"
+>
+User
+</div>
 
-
-    <div class="side-menu-links">
-
-
-      <a href="home.html">
-
-        <div class="menu-link-icon">
-          🏠
-        </div>
-
-        Home
-
-      </a>
-
-
-      <a href="study.html">
-
-        <div class="menu-link-icon">
-          📚
-        </div>
-
-        Study Material
-
-      </a>
-
-
-      <a href="practice.html">
-
-        <div class="menu-link-icon">
-          📝
-        </div>
-
-        Practice
-
-      </a>
-
-
-      <a href="progress.html">
-
-        <div class="menu-link-icon">
-          📊
-        </div>
-
-        My Progress
-
-      </a>
-
-
-      <a href="streak.html">
-
-        <div class="menu-link-icon">
-          🔥
-        </div>
-
-        Study Streak
-
-      </a>
-
-
-      <a href="profile.html">
-
-        <div class="menu-link-icon">
-          👤
-        </div>
-
-        Profile
-
-      </a>
-
-
-    </div>
-
-  </aside>
+<a
+href="profile.html"
+class="side-profile-link"
+>
+View Profile →
+</a>
 
 </div>
 
+</div>
 
+<!-- BRAND + CLOSE -->
+
+<div class="side-menu-header">
+
+<div class="side-menu-brand">
+SSC <span>EDGE</span>
+</div>
+
+<button
+class="menu-close"
+id="menuClose"
+type="button"
+>
+×
+</button>
+
+</div>
+
+<!-- MAIN LINKS -->
+
+<div class="side-menu-links">
+
+<a href="home.html">
+
+<div class="menu-link-icon">
+🏠
+</div>
+
+Home
+
+</a>
+
+<a href="study.html">
+
+<div class="menu-link-icon">
+📚
+</div>
+
+Study Material
+
+</a>
+
+<a href="practice.html">
+
+<div class="menu-link-icon">
+📝
+</div>
+
+Practice
+
+</a>
+
+<div class="menu-divider"></div>
+
+<a href="progress.html">
+
+<div class="menu-link-icon">
+📊
+</div>
+
+My Progress
+
+</a>
+
+<a href="streak.html">
+
+<div class="menu-link-icon">
+🔥
+</div>
+
+Day Streak
+
+</a>
+
+<a href="test-history.html">
+
+<div class="menu-link-icon">
+📋
+</div>
+
+Test History
+
+</a>
+
+<a href="saved_questions.html">
+
+<div class="menu-link-icon">
+🔖
+</div>
+
+Saved Questions
+
+</a>
+
+<div class="menu-divider"></div>
+
+<!-- FOLLOW US -->
+
+<a
+href="https://t.me/+QCNa39ZJZnBhMzll"
+target="_blank"
+rel="noopener noreferrer"
+>
+
+<div class="menu-link-icon">
+✈️
+</div>
+
+Follow Us — Telegram
+
+</a>
+
+<a
+href="https://www.instagram.com/ssc_edge"
+target="_blank"
+rel="noopener noreferrer"
+>
+
+<div class="menu-link-icon">
+📸
+</div>
+
+Follow Us — Instagram
+
+</a>
+
+<a
+href="https://youtube.com/@sscedge07?si=G3GngIGL79XRy3PK"
+target="_blank"
+rel="noopener noreferrer"
+>
+
+<div class="menu-link-icon">
+▶️
+</div>
+
+Follow Us — YouTube
+
+</a>
+
+<!-- THEME -->
+
+<div class="menu-divider"></div>
+
+<div class="menu-theme">
+
+<span>
+Theme
+</span>
+
+<div class="theme-options">
+
+<button
+id="darkThemeBtn"
+type="button"
+>
+Dark
+</button>
+
+<button
+id="lightThemeBtn"
+type="button"
+>
+Light
+</button>
+
+</div>
+
+</div>
+
+<!-- LOGOUT -->
+
+<a
+href="profile.html"
+id="logoutLink"
+>
+
+<div class="menu-link-icon">
+🚪
+</div>
+
+Log Out
+
+</a>
+
+</div>
+
+</aside>
+
+</div>
 
 <!-- ==================================================
      SEARCH
      ================================================== -->
 
 <div
-  class="search-overlay"
-  id="searchOverlay"
+class="search-overlay"
+id="searchOverlay"
 >
 
-  <div class="search-box">
+<div class="search-box">
 
+<div class="search-top">
 
-    <div class="search-top">
+<input
+type="search"
+class="search-input"
+id="searchInput"
+placeholder="Search SSC EDGE..."
+autocomplete="off"
+>
 
-      <input
-        type="search"
-        class="search-input"
-        id="searchInput"
-        placeholder="Search SSC EDGE..."
-        autocomplete="off"
-      >
-
-      <button
-        class="search-close"
-        id="searchClose"
-        type="button"
-      >
-        ×
-      </button>
-
-    </div>
-
-
-    <div
-      class="search-results"
-      id="searchResults"
-    >
-
-      <div class="search-empty">
-        Search Study Material, Practice, Progress, Profile and more.
-      </div>
-
-    </div>
-
-  </div>
+<button
+class="search-close"
+id="searchClose"
+type="button"
+>
+×
+</button>
 
 </div>
 
+<div
+class="search-results"
+id="searchResults"
+>
 
+<div class="search-empty">
+Search Study Material, Practice, Progress, Profile and more.
+</div>
+
+</div>
+
+</div>
+
+</div>
 
 <!-- ==================================================
-     UPDATES POPUP
+     UPDATES
      ================================================== -->
 
 <div
-  class="updates-overlay"
-  id="updatesOverlay"
+class="updates-overlay"
+id="updatesOverlay"
 >
 
-  <div class="updates-popup">
+<div class="updates-popup">
 
+<div class="updates-popup-header">
 
-    <div class="updates-popup-header">
+<div>
 
-      <div>
+<h2>
+Updates
+</h2>
 
-        <h2>
-          Updates
-        </h2>
-
-        <p>
-          SSC EDGE latest updates
-        </p>
-
-      </div>
-
-
-      <button
-        class="updates-close"
-        id="updatesClose"
-        type="button"
-      >
-        ×
-      </button>
-
-    </div>
-
-
-    <div
-      class="updates-content"
-      id="updatesContent"
-    >
-
-      <div class="no-updates">
-
-        <div class="no-updates-icon">
-
-          <svg viewBox="0 0 24 24">
-
-            <path
-              d="M4 5h16v14H4z"
-            />
-
-            <path
-              d="M8 9h8M8 13h5"
-            />
-
-          </svg>
-
-        </div>
-
-        <strong>
-          Currently no updates
-        </strong>
-
-        <span>
-          New SSC EDGE updates will appear here.
-        </span>
-
-      </div>
-
-    </div>
-
-  </div>
+<p>
+SSC EDGE latest updates
+</p>
 
 </div>
 
+<button
+class="updates-close"
+id="updatesClose"
+type="button"
+>
+×
+</button>
 
+</div>
+
+<div
+class="updates-content"
+id="updatesContent"
+>
+
+<div class="no-updates">
+
+<div class="no-updates-icon">
+
+<svg viewBox="0 0 24 24">
+
+<path d="M4 5h16v14H4z"/>
+
+<path d="M8 9h8M8 13h5"/>
+
+</svg>
+
+</div>
+
+<strong>
+Currently no updates
+</strong>
+
+<span>
+New SSC EDGE updates will appear here.
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
 
 <!-- ==================================================
      MAIN
@@ -1952,552 +2109,495 @@ flex-basis:320px;
 
 <main class="home-container">
 
+<!-- WELCOME -->
 
-  <!-- ==================================================
-       WELCOME BANNER
-       ================================================== -->
+<section class="home-welcome">
 
-  <section class="home-welcome">
+<div class="welcome-pill">
+SSC PREPARATION
+</div>
 
+<h1>
+Welcome to SSC EDGE
+</h1>
 
-    <div class="welcome-pill">
-      SSC PREPARATION
-    </div>
+<p>
+Your smart preparation platform for SSC exams.
+</p>
 
+<a
+href="study.html"
+class="welcome-action"
+>
+Get Started
+<span>→</span>
+</a>
 
-    <h1>
-      Welcome to SSC EDGE
-    </h1>
+</section>
 
+<!-- DASHBOARD -->
 
-    <p>
-      Your smart preparation platform for SSC exams.
-    </p>
+<h2 class="section-heading">
+Dashboard
+</h2>
 
+<section class="dashboard-grid">
 
-    <a
-      href="study.html"
-      class="welcome-action"
-    >
+<a
+href="study.html"
+class="dashboard-card"
+>
 
-      Get Started
+<div class="dash-icon">
 
-      <span>
-        →
-      </span>
+<svg viewBox="0 0 24 24">
 
-    </a>
+<path
+d="M4 4h13a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3V4Z"
+/>
 
+<path
+d="M7 20V7a3 3 0 0 1 3-3"
+/>
 
-  </section>
+</svg>
 
+</div>
 
+<strong>
+Study Material
+</strong>
 
-  <!-- ==================================================
-       DASHBOARD
-       ================================================== -->
+<span>
+Notes & PDFs
+</span>
 
-  <h2 class="section-heading">
-    Dashboard
-  </h2>
+</a>
 
+<a
+href="practice.html"
+class="dashboard-card"
+>
 
-  <section class="dashboard-grid">
+<div class="dash-icon">
 
+<svg viewBox="0 0 24 24">
 
-    <!-- STUDY MATERIAL -->
+<path d="M5 4h14v16H5z"/>
 
-    <a
-      href="study.html"
-      class="dashboard-card"
-    >
+<path d="m8 12 2.5 2.5L16 9"/>
 
-      <div class="dash-icon">
+</svg>
 
-        <svg viewBox="0 0 24 24">
+</div>
 
-          <path
-            d="M4 4h13a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3V4Z"
-          />
+<strong>
+Practice
+</strong>
 
-          <path
-            d="M7 20V7a3 3 0 0 1 3-3"
-          />
+<span>
+Mock Tests
+</span>
 
-        </svg>
+</a>
 
-      </div>
+<a
+href="progress.html"
+class="dashboard-card"
+>
 
-      <strong>
-        Study Material
-      </strong>
+<div class="dash-icon">
 
-      <span>
-        Notes & PDFs
-      </span>
+<svg viewBox="0 0 24 24">
 
-    </a>
+<path d="M4 19V5"/>
+<path d="M4 19h16"/>
+<path d="m7 15 4-4 3 2 5-6"/>
 
+</svg>
 
+</div>
 
-    <!-- PRACTICE -->
+<strong>
+Progress
+</strong>
 
-    <a
-      href="practice.html"
-      class="dashboard-card"
-    >
+<span>
+Track your performance
+</span>
 
-      <div class="dash-icon">
+</a>
 
-        <svg viewBox="0 0 24 24">
+<a
+href="streak.html"
+class="dashboard-card"
+>
 
-          <path
-            d="M5 4h14v16H5z"
-          />
+<div class="dash-icon">
 
-          <path
-            d="m8 12 2.5 2.5L16 9"
-          />
+<svg viewBox="0 0 24 24">
 
-        </svg>
+<path
+d="M12 22c4 0 7-2.7 7-7 0-3.5-2.2-5.7-4.7-8.5.1 2.2-.8 3.5-2 4.3.2-3.7-1.8-6.5-4.5-8.8.1 3.7-3 6-3 10 0 5.3 3.4 10 7.2 10Z"
+/>
 
-      </div>
+</svg>
 
-      <strong>
-        Practice
-      </strong>
+</div>
 
-      <span>
-        Mock Tests
-      </span>
+<strong>
+Study Streak
+</strong>
 
-    </a>
+<span>
+Keep your streak alive
+</span>
 
+</a>
 
+</section>
 
-    <!-- PROGRESS -->
+<!-- COMMUNITY -->
 
-    <a
-      href="progress.html"
-      class="dashboard-card"
-    >
+<h2 class="section-heading">
+Join SSC EDGE Community
+</h2>
 
-      <div class="dash-icon">
+<section class="community-scroll">
 
-        <svg viewBox="0 0 24 24">
+<!-- TELEGRAM -->
 
-          <path
-            d="M4 19V5"
-          />
+<a
+href="https://t.me/+QCNa39ZJZnBhMzll"
+target="_blank"
+rel="noopener noreferrer"
+class="community-card"
+>
 
-          <path
-            d="M4 19h16"
-          />
+<div class="community-logo telegram-logo">
 
-          <path
-            d="m7 15 4-4 3 2 5-6"
-          />
+<svg viewBox="0 0 24 24">
 
-        </svg>
+<path
+d="M21.6 3.5 18.4 20c-.2 1-.8 1.4-1.6.9l-4.8-3.6-2.4 2.3c-.3.3-.5.5-.9.5l.3-4.9 9-8.2c.4-.4-.1-.6-.6-.2L6.3 13.3l-4.7-1.5c-1-.3-1-1.1.2-1.5L20.2 3c.9-.3 1.7.2 1.4.5Z"
+/>
 
-      </div>
+</svg>
 
-      <strong>
-        Progress
-      </strong>
+</div>
 
-      <span>
-        Track your performance
-      </span>
+<strong>
+Telegram Channel
+</strong>
 
-    </a>
+<span>
+Daily updates & exam alerts
+</span>
 
+<div class="community-button telegram-button">
+Join Now →
+</div>
 
+</a>
 
-    <!-- STUDY STREAK -->
+<!-- INSTAGRAM -->
 
-    <a
-      href="streak.html"
-      class="dashboard-card"
-    >
+<a
+href="https://www.instagram.com/ssc_edge"
+target="_blank"
+rel="noopener noreferrer"
+class="community-card"
+>
 
-      <div class="dash-icon">
+<div class="community-logo instagram-logo">
 
-        <svg viewBox="0 0 24 24">
+<svg viewBox="0 0 24 24">
 
-          <path
-            d="M12 22c4 0 7-2.7 7-7 0-3.5-2.2-5.7-4.7-8.5.1 2.2-.8 3.5-2 4.3.2-3.7-1.8-6.5-4.5-8.8.1 3.7-3 6-3 10 0 5.3 3.4 10 7.2 10Z"
-          />
+<rect
+x="3"
+y="3"
+width="18"
+height="18"
+rx="5"
+/>
 
-        </svg>
+<circle
+cx="12"
+cy="12"
+r="4"
+/>
 
-      </div>
+<circle
+cx="17.5"
+cy="6.5"
+r="1"
+fill="#E1306C"
+stroke="none"
+/>
 
-      <strong>
-        Study Streak
-      </strong>
+</svg>
 
-      <span>
-        Keep your streak alive
-      </span>
+</div>
 
-    </a>
+<strong>
+Instagram
+</strong>
 
+<span>
+Follow SSC EDGE for updates
+</span>
 
-  </section>
+<div class="community-button instagram-button">
+Follow Us →
+</div>
 
+</a>
 
+<!-- YOUTUBE -->
 
-  <!-- ==================================================
-       COMMUNITY
-       ================================================== -->
+<a
+href="https://youtube.com/@sscedge07?si=G3GngIGL79XRy3PK"
+target="_blank"
+rel="noopener noreferrer"
+class="community-card"
+>
 
-  <h2 class="section-heading">
-    Join SSC EDGE Community
-  </h2>
+<div class="community-logo youtube-logo">
 
+<svg viewBox="0 0 24 24">
 
-  <section class="community-scroll">
+<path
+d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8Z"
+/>
 
+<path
+d="m9.5 15.5 6-3.5-6-3.5v7Z"
+fill="#ffffff"
+/>
 
-    <!-- TELEGRAM -->
+</svg>
 
-    <a
-      href="https://t.me/+QCNa39ZJZnBhMzll"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="community-card"
-    >
+</div>
 
-      <div class="community-logo telegram-logo">
+<strong>
+YouTube
+</strong>
 
-        <!-- Telegram actual-style logo -->
+<span>
+Free classes & strategy sessions
+</span>
 
-        <svg viewBox="0 0 24 24">
+<div class="community-button youtube-button">
+Watch Now →
+</div>
 
-          <path
-            d="M21.6 3.5 18.4 20c-.2 1-.8 1.4-1.6.9l-4.8-3.6-2.4 2.3c-.3.3-.5.5-.9.5l.3-4.9 9-8.2c.4-.4-.1-.6-.6-.2L6.3 13.3l-4.7-1.5c-1-.3-1-1.1.2-1.5L20.2 3c.9-.3 1.7.2 1.4.5Z"
-          />
+</a>
 
-        </svg>
+<!-- DISCUSSION -->
 
-      </div>
+<a
+href="https://t.me/+nHIcGkweGB5mNDdl"
+target="_blank"
+rel="noopener noreferrer"
+class="community-card"
+>
 
+<div class="community-logo discussion-logo">
 
-      <strong>
-        Telegram Channel
-      </strong>
+<svg viewBox="0 0 24 24">
 
-      <span>
-        Daily updates & exam alerts
-      </span>
+<path
+d="M4 5.5h16v11H9l-5 4v-15Z"
+/>
 
+<path
+d="M8 9.5h8M8 13h5"
+fill="none"
+stroke="#ffffff"
+stroke-width="1.7"
+stroke-linecap="round"
+/>
 
-      <div class="community-button telegram-button">
-        Join Now →
-      </div>
+</svg>
 
-    </a>
+</div>
 
+<strong>
+Discussion Group
+</strong>
 
+<span>
+Ask doubts & discuss with aspirants
+</span>
 
-    <!-- INSTAGRAM -->
+<div class="community-button discussion-button">
+Join Group →
+</div>
 
-    <a
-      href="https://www.instagram.com/ssc_edge"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="community-card"
-    >
+</a>
 
-      <div class="community-logo instagram-logo">
+</section>
 
-        <!-- Instagram actual-style logo -->
+<!-- CONTINUE LEARNING -->
 
-        <svg viewBox="0 0 24 24">
+<h2 class="section-heading">
+Continue Learning
+</h2>
 
-          <rect
-            x="3"
-            y="3"
-            width="18"
-            height="18"
-            rx="5"
-          />
+<section class="continue-grid">
 
-          <circle
-            cx="12"
-            cy="12"
-            r="4"
-          />
+<!-- MOCK TEST -->
 
-          <circle
-            cx="17.5"
-            cy="6.5"
-            r="1"
-            fill="#E1306C"
-            stroke="none"
-          />
+<a
+href="practice.html"
+class="continue-card"
+>
 
-        </svg>
+<div class="continue-icon">
 
-      </div>
+<svg viewBox="0 0 24 24">
 
+<path d="M5 4h14v16H5z"/>
 
-      <strong>
-        Instagram
-      </strong>
+<path d="m8 12 2.5 2.5L16 9"/>
 
-      <span>
-        Follow SSC EDGE for updates
-      </span>
+</svg>
 
+</div>
 
-      <div class="community-button instagram-button">
-        Follow Us →
-      </div>
+<div>
 
-    </a>
+<strong>
+Mock Test
+</strong>
 
+<span>
+Practice SSC mock tests
+</span>
 
+</div>
 
-    <!-- YOUTUBE -->
+<b>›</b>
 
-    <a
-      href="https://youtube.com/@sscedge07?si=G3GngIGL79XRy3PK"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="community-card"
-    >
+</a>
 
-      <div class="community-logo youtube-logo">
+<!-- VIDEOS -->
 
-        <!-- YouTube actual-style logo -->
+<a
+href="video.html"
+class="continue-card"
+>
 
-        <svg viewBox="0 0 24 24">
+<div class="continue-icon">
 
-          <path
-            d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8Z"
-          />
+<svg viewBox="0 0 24 24">
 
-          <path
-            d="m9.5 15.5 6-3.5-6-3.5v7Z"
-            fill="#ffffff"
-          />
+<rect
+x="4"
+y="5"
+width="16"
+height="14"
+rx="3"
+/>
 
-        </svg>
+<path
+d="m10 9 5 3-5 3Z"
+fill="none"
+/>
 
-      </div>
+</svg>
 
+</div>
 
-      <strong>
-        YouTube
-      </strong>
+<div>
 
-      <span>
-        Free classes & strategy sessions
-      </span>
+<strong>
+Videos
+</strong>
 
+<span>
+Continue video classes
+</span>
 
-      <div class="community-button youtube-button">
-        Watch Now →
-      </div>
+</div>
 
-    </a>
+<b>›</b>
 
+</a>
 
+<!-- SAVED QUESTIONS -->
 
-    <!-- DISCUSSION -->
+<a
+href="saved_questions.html"
+class="continue-card"
+>
 
-    <a
-      href="https://t.me/+nHIcGkweGB5mNDdl"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="community-card"
-    >
+<div class="continue-icon">
 
-      <div class="community-logo discussion-logo">
+<svg viewBox="0 0 24 24">
 
-        <svg viewBox="0 0 24 24">
+<path
+d="M6 4h12v17l-6-3-6 3V4Z"
+/>
 
-          <path
-            d="M4 5.5h16v11H9l-5 4v-15Z"
-          />
+</svg>
 
-          <path
-            d="M8 9.5h8M8 13h5"
-            fill="none"
-            stroke="#ffffff"
-            stroke-width="1.7"
-            stroke-linecap="round"
-          />
+</div>
 
-        </svg>
+<div>
 
-      </div>
+<strong>
+Saved Questions
+</strong>
 
+<span>
+Revise saved questions
+</span>
 
-      <strong>
-        Discussion Group
-      </strong>
+</div>
 
-      <span>
-        Ask doubts & discuss with aspirants
-      </span>
+<b>›</b>
 
+</a>
 
-      <div class="community-button discussion-button">
-        Join Group →
-      </div>
+<!-- PERFORMANCE -->
 
-    </a>
+<a
+href="progress.html"
+class="continue-card"
+>
 
+<div class="continue-icon">
 
-  </section>
+<svg viewBox="0 0 24 24">
 
+<path d="M4 19V5"/>
+<path d="M4 19h16"/>
+<path d="m7 15 4-4 3 2 5-6"/>
 
+</svg>
 
-  <!-- ==================================================
-       CONTINUE LEARNING
-       ================================================== -->
+</div>
 
-  <h2 class="section-heading">
-    Continue Learning
-  </h2>
+<div>
 
+<strong>
+Performance
+</strong>
 
-  <section class="continue-grid">
+<span>
+Check your performance
+</span>
 
+</div>
 
-    <a
-      href="study.html"
-      class="continue-card"
-    >
+<b>›</b>
 
-      <div class="continue-icon">
+</a>
 
-        <svg viewBox="0 0 24 24">
-
-          <path
-            d="M4 4h13a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3V4Z"
-          />
-
-          <path
-            d="M7 20V7a3 3 0 0 1 3-3"
-          />
-
-        </svg>
-
-      </div>
-
-
-      <div>
-
-        <strong>
-          Study Material
-        </strong>
-
-        <span>
-          Continue your learning
-        </span>
-
-      </div>
-
-
-      <b>
-        ›
-      </b>
-
-    </a>
-
-
-
-    <a
-      href="practice.html"
-      class="continue-card"
-    >
-
-      <div class="continue-icon">
-
-        <svg viewBox="0 0 24 24">
-
-          <path
-            d="M5 4h14v16H5z"
-          />
-
-          <path
-            d="m8 12 2.5 2.5L16 9"
-          />
-
-        </svg>
-
-      </div>
-
-
-      <div>
-
-        <strong>
-          Practice
-        </strong>
-
-        <span>
-          Improve your score
-        </span>
-
-      </div>
-
-
-      <b>
-        ›
-      </b>
-
-    </a>
-
-
-
-    <a
-      href="progress.html"
-      class="continue-card"
-    >
-
-      <div class="continue-icon">
-
-        <svg viewBox="0 0 24 24">
-
-          <path d="M4 19V5"/>
-          <path d="M4 19h16"/>
-          <path d="m7 15 4-4 3 2 5-6"/>
-
-        </svg>
-
-      </div>
-
-
-      <div>
-
-        <strong>
-          My Progress
-        </strong>
-
-        <span>
-          Check your performance
-        </span>
-
-      </div>
-
-
-      <b>
-        ›
-      </b>
-
-    </a>
-
-
-  </section>
-
+</section>
 
 </main>
-
-
 
 <!-- ==================================================
      FOOTER
@@ -2505,17 +2605,15 @@ flex-basis:320px;
 
 <footer class="home-footer">
 
-  <h2>
-    SSC <span>EDGE</span>
-  </h2>
+<h2>
+SSC <span>EDGE</span>
+</h2>
 
-  <p>
-    Learn • Practice • Improve
-  </p>
+<p>
+Learn • Practice • Improve
+</p>
 
 </footer>
-
-
 
 <!-- ==================================================
      BOTTOM NAV
@@ -2523,65 +2621,58 @@ flex-basis:320px;
 
 <nav class="bottom-nav">
 
+<a
+href="home.html"
+class="active"
+>
 
-  <a
-    href="home.html"
-    class="active"
-  >
+<span class="nav-icon">
+🏠
+</span>
 
-    <span class="nav-icon">
-      🏠
-    </span>
+<small>
+Home
+</small>
 
-    <small>
-      Home
-    </small>
+</a>
 
-  </a>
+<a href="study.html">
 
+<span class="nav-icon">
+📚
+</span>
 
-  <a href="study.html">
+<small>
+Study Material
+</small>
 
-    <span class="nav-icon">
-      📚
-    </span>
+</a>
 
-    <small>
-      Study Material
-    </small>
+<a href="practice.html">
 
-  </a>
+<span class="nav-icon">
+📝
+</span>
 
+<small>
+Practice
+</small>
 
-  <a href="practice.html">
+</a>
 
-    <span class="nav-icon">
-      📝
-    </span>
+<a href="profile.html">
 
-    <small>
-      Practice
-    </small>
+<span class="nav-icon">
+👤
+</span>
 
-  </a>
+<small>
+Profile
+</small>
 
-
-  <a href="profile.html">
-
-    <span class="nav-icon">
-      👤
-    </span>
-
-    <small>
-      Profile
-    </small>
-
-  </a>
-
+</a>
 
 </nav>
-
-
 
 <!-- ==================================================
      JAVASCRIPT
@@ -2589,404 +2680,448 @@ flex-basis:320px;
 
 <script>
 
-
 /* ==================================================
    MENU
    ================================================== */
 
 const menuButton =
-  document.getElementById("menuButton");
+document.getElementById("menuButton");
 
 const menuOverlay =
-  document.getElementById("menuOverlay");
+document.getElementById("menuOverlay");
 
 const menuClose =
-  document.getElementById("menuClose");
+document.getElementById("menuClose");
 
+menuButton.addEventListener(
+"click",
+function(){
 
-menuButton.addEventListener("click", function(){
+menuOverlay.classList.add("show");
 
-  menuOverlay.classList.add("show");
+}
+);
 
-});
+menuClose.addEventListener(
+"click",
+function(){
 
+menuOverlay.classList.remove("show");
 
-menuClose.addEventListener("click", function(){
+}
+);
 
-  menuOverlay.classList.remove("show");
+menuOverlay.addEventListener(
+"click",
+function(event){
 
-});
+if(event.target === menuOverlay){
 
+menuOverlay.classList.remove("show");
 
-menuOverlay.addEventListener("click", function(event){
+}
 
-  if(event.target === menuOverlay){
+}
+);
 
-    menuOverlay.classList.remove("show");
+/* ==================================================
+   PROFILE NAME
+   ================================================== */
 
-  }
+function loadProfileInfo(){
 
-});
+const possibleKeys = [
 
+"ssc-edge-username",
+"ssc-edge-name",
+"sscEdgeUsername",
+"sscEdgeName",
+"username",
+"name"
+
+];
+
+let savedName = "";
+
+for(const key of possibleKeys){
+
+const value =
+localStorage.getItem(key);
+
+if(value){
+
+savedName = value;
+
+break;
+
+}
+
+}
+
+if(!savedName){
+
+savedName = "User";
+
+}
+
+document.getElementById(
+"sideProfileName"
+).textContent = savedName;
+
+/*
+   If profile photo is stored as a data URL,
+   display it.
+*/
+
+const possiblePhotoKeys = [
+
+"ssc-edge-profile-photo",
+"ssc-edge-profile-image",
+"sscEdgeProfilePhoto",
+"profilePhoto"
+
+];
+
+for(const key of possiblePhotoKeys){
+
+const photo =
+localStorage.getItem(key);
+
+if(photo){
+
+document.getElementById(
+"sideProfilePhoto"
+).innerHTML =
+`<img src="${photo}" alt="Profile">`;
+
+break;
+
+}
+
+}
+
+}
+
+loadProfileInfo();
 
 /* ==================================================
    SEARCH
    ================================================== */
 
 const searchButton =
-  document.getElementById("searchButton");
+document.getElementById("searchButton");
 
 const searchOverlay =
-  document.getElementById("searchOverlay");
+document.getElementById("searchOverlay");
 
 const searchClose =
-  document.getElementById("searchClose");
+document.getElementById("searchClose");
 
 const searchInput =
-  document.getElementById("searchInput");
+document.getElementById("searchInput");
 
 const searchResults =
-  document.getElementById("searchResults");
-
-
-/*
-   SSC EDGE SITE SEARCH INDEX
-
-   These are the actual pages available
-   in the current web app.
-*/
+document.getElementById("searchResults");
 
 const searchIndex = [
 
-  {
-    title:"Home",
-    text:"SSC EDGE home dashboard welcome community continue learning",
-    url:"home.html"
-  },
+{
+title:"Home",
+text:"SSC EDGE home dashboard welcome community continue learning",
+url:"home.html"
+},
 
-  {
-    title:"Study Material",
-    text:"Study Material Video E-Books Notes PDFs Quantitative Aptitude General Awareness English Reasoning",
-    url:"study.html"
-  },
+{
+title:"Study Material",
+text:"Study Material Video E-Books Notes PDFs Quantitative Aptitude General Awareness English Reasoning",
+url:"study.html"
+},
 
-  {
-    title:"Video Classes",
-    text:"Video classes study videos",
-    url:"video.html"
-  },
+{
+title:"Video Classes",
+text:"Video classes study videos",
+url:"video.html"
+},
 
-  {
-    title:"E-Books",
-    text:"E Books PDFs books study material downloads",
-    url:"ebooks.html"
-  },
+{
+title:"E-Books",
+text:"E Books PDFs books study material downloads",
+url:"ebooks.html"
+},
 
-  {
-    title:"Quantitative Aptitude",
-    text:"Quant maths mathematics notes PDF practice",
-    url:"quant.html"
-  },
+{
+title:"Quantitative Aptitude",
+text:"Quant maths mathematics notes PDF practice",
+url:"quant.html"
+},
 
-  {
-    title:"General Awareness",
-    text:"GK General Knowledge Current Affairs notes PDF",
-    url:"gk.html"
-  },
+{
+title:"General Awareness",
+text:"GK General Knowledge Current Affairs notes PDF",
+url:"gk.html"
+},
 
-  {
-    title:"English",
-    text:"English Grammar Vocabulary notes PDF",
-    url:"english.html"
-  },
+{
+title:"English",
+text:"English Grammar Vocabulary notes PDF",
+url:"english.html"
+},
 
-  {
-    title:"Reasoning",
-    text:"Reasoning Logic Practice notes PDF",
-    url:"reasoning.html"
-  },
+{
+title:"Reasoning",
+text:"Reasoning Logic Practice notes PDF",
+url:"reasoning.html"
+},
 
-  {
-    title:"Practice",
-    text:"Practice Mock Tests Full Mocks CGL PRE CGL MAINS Sectional Mocks",
-    url:"practice.html"
-  },
+{
+title:"Practice",
+text:"Practice Mock Tests Full Mocks CGL PRE CGL MAINS Sectional Mocks SSC",
+url:"practice.html"
+},
 
-  {
-    title:"My Progress",
-    text:"Progress performance score accuracy rank percentile test performance",
-    url:"progress.html"
-  },
+{
+title:"My Progress",
+text:"Progress performance score accuracy rank percentile test performance",
+url:"progress.html"
+},
 
-  {
-    title:"Study Streak",
-    text:"Study streak daily learning streak keep going",
-    url:"streak.html"
-  },
+{
+title:"Day Streak",
+text:"Study streak daily learning streak",
+url:"streak.html"
+},
 
-  {
-    title:"Profile",
-    text:"Profile account downloads saved questions test history theme about logout",
-    url:"profile.html"
-  },
+{
+title:"Test History",
+text:"Previous attempts test history mock tests",
+url:"test-history.html"
+},
 
-  {
-    title:"Saved Questions",
-    text:"Saved questions questions saved for revision",
-    url:"saved_questions.html"
-  },
+{
+title:"Saved Questions",
+text:"Saved questions questions saved for revision",
+url:"saved_questions.html"
+},
 
-  {
-    title:"Downloads",
-    text:"Downloaded PDFs E Books downloads",
-    url:"downloads.html"
-  },
+{
+title:"Downloads",
+text:"Downloaded PDFs E Books downloads",
+url:"downloads.html"
+},
 
-  {
-    title:"Test History",
-    text:"Previous attempts test history mock tests",
-    url:"test-history.html"
-  }
+{
+title:"Profile",
+text:"Profile account downloads saved questions test history theme about logout",
+url:"profile.html"
+}
 
 ];
 
-
 function openSearch(){
 
-  searchOverlay.classList.add("show");
+searchOverlay.classList.add("show");
 
-  setTimeout(function(){
+setTimeout(function(){
 
-    searchInput.focus();
+searchInput.focus();
 
-  },100);
+},100);
 
 }
-
 
 function closeSearch(){
 
-  searchOverlay.classList.remove("show");
+searchOverlay.classList.remove("show");
 
-  searchInput.value="";
+searchInput.value="";
 
-  showSearchEmpty();
+showSearchEmpty();
 
 }
-
 
 function showSearchEmpty(){
 
-  searchResults.innerHTML = `
+searchResults.innerHTML = `
 
-    <div class="search-empty">
-      Search Study Material, Practice, Progress, Profile and more.
-    </div>
+<div class="search-empty">
+Search SSC EDGE pages, subjects and study material.
+</div>
 
-  `;
+`;
 
 }
-
 
 function performSearch(){
 
-  const query =
-    searchInput.value
-      .trim()
-      .toLowerCase();
+const query =
+searchInput.value
+.trim()
+.toLowerCase();
 
+if(!query){
 
-  if(!query){
+showSearchEmpty();
 
-    showSearchEmpty();
-
-    return;
-
-  }
-
-
-  const results =
-    searchIndex.filter(function(item){
-
-      return (
-        item.title.toLowerCase().includes(query) ||
-        item.text.toLowerCase().includes(query)
-      );
-
-    });
-
-
-  if(results.length === 0){
-
-    searchResults.innerHTML = `
-
-      <div class="search-empty">
-
-        No results found for
-        "<strong>${escapeHtml(query)}</strong>"
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  searchResults.innerHTML = "";
-
-
-  results.forEach(function(item){
-
-    const result =
-      document.createElement("a");
-
-    result.className =
-      "search-result";
-
-    result.href =
-      item.url;
-
-
-    result.innerHTML = `
-
-      <strong>
-        ${escapeHtml(item.title)}
-      </strong>
-
-      <span>
-        ${escapeHtml(item.text)}
-      </span>
-
-    `;
-
-
-    searchResults.appendChild(result);
-
-  });
+return;
 
 }
 
+const results =
+searchIndex.filter(function(item){
+
+return (
+
+item.title
+.toLowerCase()
+.includes(query)
+
+||
+
+item.text
+.toLowerCase()
+.includes(query)
+
+);
+
+});
+
+if(results.length === 0){
+
+searchResults.innerHTML = `
+
+<div class="search-empty">
+
+No results found for
+"<strong>${escapeHtml(query)}</strong>"
+
+</div>
+
+`;
+
+return;
+
+}
+
+searchResults.innerHTML = "";
+
+results.forEach(function(item){
+
+const result =
+document.createElement("a");
+
+result.className =
+"search-result";
+
+result.href =
+item.url;
+
+result.innerHTML = `
+
+<strong>
+${escapeHtml(item.title)}
+</strong>
+
+<span>
+${escapeHtml(item.text)}
+</span>
+
+`;
+
+searchResults.appendChild(result);
+
+});
+
+}
 
 function escapeHtml(value){
 
-  return String(value)
+return String(value)
 
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
 
 }
 
-
 searchButton.addEventListener(
-  "click",
-  openSearch
+"click",
+openSearch
 );
-
 
 searchClose.addEventListener(
-  "click",
-  closeSearch
+"click",
+closeSearch
 );
-
 
 searchInput.addEventListener(
-  "input",
-  performSearch
+"input",
+performSearch
 );
-
 
 searchOverlay.addEventListener(
-  "click",
-  function(event){
+"click",
+function(event){
 
-    if(event.target === searchOverlay){
+if(event.target === searchOverlay){
 
-      closeSearch();
+closeSearch();
 
-    }
+}
 
-  }
+}
 );
-
-
-/* ==================================================
-   ESC KEY
-   ================================================== */
-
-document.addEventListener(
-  "keydown",
-  function(event){
-
-    if(event.key !== "Escape") return;
-
-    menuOverlay.classList.remove("show");
-
-    closeSearch();
-
-    updatesOverlay.classList.remove("show");
-
-  }
-);
-
 
 /* ==================================================
    UPDATES
    ================================================== */
 
 const updateBell =
-  document.getElementById("updateBell");
+document.getElementById("updateBell");
 
 const updatesOverlay =
-  document.getElementById("updatesOverlay");
+document.getElementById("updatesOverlay");
 
 const updatesClose =
-  document.getElementById("updatesClose");
+document.getElementById("updatesClose");
 
 const updatesContent =
-  document.getElementById("updatesContent");
+document.getElementById("updatesContent");
 
 const updateDot =
-  document.getElementById("updateDot");
-
+document.getElementById("updateDot");
 
 updateBell.addEventListener(
-  "click",
-  function(){
+"click",
+function(){
 
-    updatesOverlay.classList.add("show");
+updatesOverlay.classList.add("show");
 
-  }
+}
 );
-
 
 updatesClose.addEventListener(
-  "click",
-  function(){
+"click",
+function(){
 
-    updatesOverlay.classList.remove("show");
+updatesOverlay.classList.remove("show");
 
-  }
+}
 );
-
 
 updatesOverlay.addEventListener(
-  "click",
-  function(event){
+"click",
+function(event){
 
-    if(event.target === updatesOverlay){
+if(event.target === updatesOverlay){
 
-      updatesOverlay.classList.remove("show");
+updatesOverlay.classList.remove("show");
 
-    }
+}
 
-  }
+}
 );
-
 
 /* ==================================================
    LOAD UPDATES
@@ -2994,114 +3129,180 @@ updatesOverlay.addEventListener(
 
 function loadUpdates(){
 
-  let savedUpdates = [];
+let savedUpdates = [];
 
+try{
 
-  try{
+savedUpdates =
+JSON.parse(
+localStorage.getItem(
+"sscEdgeUpdates"
+) || "[]"
+);
 
-    savedUpdates =
-      JSON.parse(
-        localStorage.getItem(
-          "sscEdgeUpdates"
-        ) || "[]"
-      );
+}catch(error){
 
-  }catch(error){
-
-    savedUpdates = [];
-
-  }
-
-
-  if(
-    !Array.isArray(savedUpdates) ||
-    savedUpdates.length === 0
-  ){
-
-    updateDot.style.display =
-      "none";
-
-    return;
-
-  }
-
-
-  updateDot.style.display =
-    "block";
-
-
-  updatesContent.innerHTML =
-    "";
-
-
-  savedUpdates.forEach(function(update){
-
-    const item =
-      document.createElement("div");
-
-    item.className =
-      "update-item";
-
-
-    item.innerHTML = `
-
-      <div class="update-item-icon">
-
-        <svg
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-        >
-
-          <path
-            d="M5 4h14v16H5z"
-          />
-
-          <path
-            d="M8 9h8M8 13h6M8 17h4"
-          />
-
-        </svg>
-
-      </div>
-
-
-      <div class="update-item-text">
-
-        <strong>
-          ${escapeHtml(
-            update.title ||
-            "SSC EDGE Update"
-          )}
-        </strong>
-
-        <span>
-          ${escapeHtml(
-            update.text || ""
-          )}
-        </span>
-
-        <small>
-          ${escapeHtml(
-            update.date || ""
-          )}
-        </small>
-
-      </div>
-
-    `;
-
-
-    updatesContent.appendChild(item);
-
-  });
+savedUpdates = [];
 
 }
 
+if(
+!Array.isArray(savedUpdates) ||
+savedUpdates.length === 0
+){
+
+updateDot.style.display =
+"none";
+
+return;
+
+}
+
+updateDot.style.display =
+"block";
+
+updatesContent.innerHTML = "";
+
+savedUpdates.forEach(function(update){
+
+const item =
+document.createElement("div");
+
+item.className =
+"update-item";
+
+item.innerHTML = `
+
+<div class="update-item-icon">
+
+<svg viewBox="0 0 24 24">
+
+<path d="M5 4h14v16H5z"/>
+
+<path d="M8 9h8M8 13h6M8 17h4"/>
+
+</svg>
+
+</div>
+
+<div class="update-item-text">
+
+<strong>
+${escapeHtml(
+update.title ||
+"SSC EDGE Update"
+)}
+</strong>
+
+<span>
+${escapeHtml(
+update.text || ""
+)}
+</span>
+
+<small>
+${escapeHtml(
+update.date || ""
+)}
+</small>
+
+</div>
+
+`;
+
+updatesContent.appendChild(item);
+
+});
+
+}
 
 loadUpdates();
 
+/* ==================================================
+   THEME
+   ================================================== */
+
+const darkThemeBtn =
+document.getElementById("darkThemeBtn");
+
+const lightThemeBtn =
+document.getElementById("lightThemeBtn");
+
+function updateThemeButtons(){
+
+const theme =
+localStorage.getItem(
+"ssc-edge-theme"
+) || "dark";
+
+darkThemeBtn.classList.toggle(
+"active",
+theme === "dark"
+);
+
+lightThemeBtn.classList.toggle(
+"active",
+theme === "light"
+);
+
+}
+
+darkThemeBtn.addEventListener(
+"click",
+function(){
+
+localStorage.setItem(
+"ssc-edge-theme",
+"dark"
+);
+
+document.documentElement.dataset.theme =
+"dark";
+
+updateThemeButtons();
+
+}
+);
+
+lightThemeBtn.addEventListener(
+"click",
+function(){
+
+localStorage.setItem(
+"ssc-edge-theme",
+"light"
+);
+
+document.documentElement.dataset.theme =
+"light";
+
+updateThemeButtons();
+
+}
+);
+
+updateThemeButtons();
+
+/* ==================================================
+   ESC KEY
+   ================================================== */
+
+document.addEventListener(
+"keydown",
+function(event){
+
+if(event.key !== "Escape") return;
+
+menuOverlay.classList.remove("show");
+
+closeSearch();
+
+updatesOverlay.classList.remove("show");
+
+}
+);
+
 </script>
 
-
 </body>
-      </html>
+</html>
