@@ -42,7 +42,7 @@ document.documentElement.dataset.theme =
 .header-left{
   display:flex;
   align-items:center;
-  gap:8px;
+  gap:6px;
   height:100%;
 }
 
@@ -58,6 +58,7 @@ document.documentElement.dataset.theme =
   gap:5px;
   cursor:pointer;
   padding:0;
+  flex-shrink:0;
 }
 
 .menu-button span{
@@ -73,14 +74,14 @@ document.documentElement.dataset.theme =
   flex-direction:column;
   align-items:flex-start;
   justify-content:center;
-  height:48px;
+  height:40px;
 }
 
 .header-brand{
-  font-size:25px;
+  font-size:23px;
   font-weight:900;
   letter-spacing:-.7px;
-  line-height:25px;
+  line-height:23px;
   white-space:nowrap;
   color:var(--text);
 }
@@ -90,10 +91,10 @@ document.documentElement.dataset.theme =
 }
 
 .header-tagline{
-  font-size:9px;
+  font-size:7px;
   font-weight:600;
-  margin-top:4px;
-  line-height:9px;
+  margin-top:2px;
+  line-height:7px;
   white-space:nowrap;
   color:var(--muted);
 }
@@ -144,6 +145,7 @@ document.documentElement.dataset.theme =
 
 /* =========================================================
    SIDE MENU
+   PROFILE-MATCHED BUTTON SIZE
    ========================================================= */
 
 .side-menu-overlay{
@@ -222,32 +224,60 @@ document.documentElement.dataset.theme =
   margin-top:2px;
 }
 
+
+/* SAME BASIC SIZE AS PROFILE MENU ITEMS */
+
 .menu-link{
+  min-height:55px;
+  box-sizing:border-box;
+
   display:flex;
   align-items:center;
-  gap:11px;
+  gap:12px;
+
   text-decoration:none;
   color:var(--text);
-  padding:12px 10px;
-  border-radius:11px;
-  font-weight:700;
+
+  padding:11px 13px;
+
+  border-radius:13px;
+
+  font-size:13px;
+  font-weight:900;
+
+  margin-bottom:2px;
 }
 
 .menu-link:hover{
   background:rgba(155,92,255,.1);
 }
 
-.menu-divider{
-  height:1px;
-  background:var(--border);
-  margin:9px 4px;
-}
+
+/* =========================================================
+   THEME
+   ========================================================= */
 
 .theme-row{
+  min-height:55px;
+  box-sizing:border-box;
+
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:10px;
+
+  padding:11px 13px;
+
+  border-radius:13px;
+
+  background:#faf7ff;
+  border:1px solid #e3ddea;
+
+  color:var(--text);
+
+  font-size:13px;
+  font-weight:900;
+
+  margin:3px 0 5px;
 }
 
 .theme-buttons{
@@ -260,8 +290,9 @@ document.documentElement.dataset.theme =
   background:transparent;
   color:var(--text);
   border-radius:8px;
-  padding:5px 8px;
-  font-size:11px;
+  padding:6px 10px;
+  font-size:10px;
+  font-weight:800;
   cursor:pointer;
 }
 
@@ -269,6 +300,22 @@ document.documentElement.dataset.theme =
   background:#9b5cff;
   color:#fff;
   border-color:#9b5cff;
+}
+
+:root[data-theme="dark"] .theme-row{
+  background:#21142f;
+  border-color:#3a2850;
+}
+
+
+/* =========================================================
+   MENU DIVIDER
+   ========================================================= */
+
+.menu-divider{
+  height:1px;
+  background:var(--border);
+  margin:9px 4px;
 }
 
 
@@ -416,7 +463,6 @@ document.documentElement.dataset.theme =
 
 /* =========================================================
    BOTTOM NAV
-   PROFILE JAISE SIZE + LAVENDER
    ========================================================= */
 
 .bottom-nav{
@@ -489,7 +535,7 @@ main{
   }
 
   .header-left{
-    gap:7px;
+    gap:5px;
   }
 
   .menu-button{
@@ -503,20 +549,20 @@ main{
   }
 
   .header-brand-wrap{
-    height:46px;
+    height:40px;
   }
 
   .header-brand{
-    font-size:24px;
+    font-size:22px;
     font-weight:900;
     letter-spacing:-.7px;
-    line-height:24px;
+    line-height:22px;
   }
 
   .header-tagline{
-    font-size:8px;
-    margin-top:4px;
-    line-height:8px;
+    font-size:7px;
+    margin-top:2px;
+    line-height:7px;
   }
 
   .header-search,
@@ -553,7 +599,6 @@ main{
 
 /* =========================================================
    DARK MODE BOTTOM NAV
-   Lavender look but matching dark theme
    ========================================================= */
 
 :root[data-theme="dark"] .bottom-nav{
@@ -770,6 +815,7 @@ main{
     </a>
 
 
+    <!-- PROFILE TEST HISTORY PAGE -->
     <a
       class="menu-link"
       href="history.html"
@@ -790,6 +836,8 @@ main{
 
     <div class="menu-divider"></div>
 
+
+    <!-- THEME -->
 
     <div class="theme-row">
 
@@ -1291,7 +1339,6 @@ main{
 
 <!-- ======================================================
      BOTTOM NAV
-     PROFILE SIZE + LAVENDER
      ====================================================== -->
 
 <nav class="bottom-nav">
@@ -1906,4 +1953,4 @@ document.addEventListener("DOMContentLoaded", function(){
 
 
 </body>
-</html>
+        </html>
