@@ -45,13 +45,13 @@ z-index:100;
 height:70px;
 display:flex;
 align-items:center;
-padding:0 18px;
+padding:0 16px;
 }
 
 .header-left{
 display:flex;
 align-items:center;
-gap:7px;
+gap:8px;
 height:100%;
 }
 
@@ -73,6 +73,7 @@ justify-content:center;
 gap:5px;
 padding:5px;
 cursor:pointer;
+flex-shrink:0;
 }
 
 .menu-button span{
@@ -85,21 +86,26 @@ background:#191525;
 
 /* ==================================================
    BRAND
+   PHOTO STYLE:
+   SSC WHITE
+   EDGE PURPLE
+   TAGLINE DIRECTLY BELOW
    ================================================== */
 
 .header-brand-wrap{
-height:38px;
+height:42px;
 display:flex;
 flex-direction:column;
 justify-content:center;
+align-items:flex-start;
 }
 
 .header-brand{
-font-size:22px;
-font-weight:850;
-letter-spacing:-.4px;
+font-size:21px;
+font-weight:900;
+letter-spacing:-.5px;
 color:#191525;
-line-height:1;
+line-height:20px;
 white-space:nowrap;
 }
 
@@ -108,12 +114,12 @@ color:#9b5cff;
 }
 
 .header-tagline{
-font-size:7px;
+font-size:8px;
 font-weight:600;
 color:#817987;
-margin-top:4px;
+margin-top:3px;
 letter-spacing:.1px;
-line-height:1;
+line-height:8px;
 white-space:nowrap;
 }
 
@@ -315,7 +321,6 @@ cursor:pointer;
 
 /* ==================================================
    MENU LINKS
-   MATCH PROFILE MENU ITEM SIZE
    ================================================== */
 
 .side-menu-links{
@@ -377,7 +382,6 @@ margin:9px 4px;
 
 /* ==================================================
    MENU THEME
-   MORE VISIBLE + SAME ROW SIZE
    ================================================== */
 
 .menu-theme{
@@ -572,7 +576,7 @@ padding:18px 18px 30px;
 }
 
 /* ==================================================
-   LAVENDER WELCOME BANNER
+   WELCOME
    ================================================== */
 
 .home-welcome{
@@ -830,7 +834,6 @@ color:#777180;
 
 /* ==================================================
    COMMUNITY
-   SLIGHTLY NARROWER HORIZONTAL CARDS
    ================================================== */
 
 .community-scroll{
@@ -894,8 +897,6 @@ margin-bottom:12px;
 width:33px;
 height:33px;
 }
-
-/* REAL BRAND COLOURS */
 
 .telegram-logo{
 background:#dff3ff;
@@ -1131,6 +1132,7 @@ color:#817987;
 
 /* ==================================================
    BOTTOM NAV
+   SAME SIZE / STRUCTURE AS PROFILE PAGE
    ================================================== */
 
 .bottom-nav{
@@ -1142,60 +1144,57 @@ bottom:0;
 
 z-index:100;
 
-display:flex;
-align-items:center;
-justify-content:space-around;
+height:67px;
 
-background:#f0e8ff;
+display:grid;
+
+grid-template-columns:repeat(4,1fr);
 
 border-top:1px solid #d9c9ef;
 
-padding:6px 12px 8px;
+background:#ffffff;
+
+backdrop-filter:blur(14px);
 }
 
 .bottom-nav a{
-flex:1;
-
 display:flex;
+
 flex-direction:column;
 
 align-items:center;
+
 justify-content:center;
 
 gap:3px;
 
+color:#71697d;
+
 text-decoration:none;
 
-min-height:58px;
+font-size:9px;
 
-padding:3px 8px;
+font-weight:800;
+}
 
-border-radius:12px;
+.bottom-nav a.active{
+color:#9b5cff;
 }
 
 .nav-icon{
-width:26px;
-height:26px;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-font-size:23px;
+font-size:20px;
 
 line-height:1;
 }
 
 .bottom-nav small{
-font-size:12px;
+font-size:9px;
 
-font-weight:600;
+font-weight:800;
 
-color:#71697d;
-}
+line-height:1;
 
-.bottom-nav a.active small{
-color:#9b5cff;
+color:inherit;
 }
 
 /* ==================================================
@@ -1498,18 +1497,22 @@ background:#140c1c;
 border-color:#2d2036;
 }
 
+/* BOTTOM NAV DARK */
+
 :root[data-theme="dark"] .bottom-nav{
 background:#21142f;
 border-color:#3a2850;
 }
 
-:root[data-theme="dark"] .bottom-nav small{
+:root[data-theme="dark"] .bottom-nav a{
 color:#aaa1b5;
 }
 
-:root[data-theme="dark"] .bottom-nav a.active small{
+:root[data-theme="dark"] .bottom-nav a.active{
 color:#b487ff;
 }
+
+/* SIDE MENU */
 
 :root[data-theme="dark"] .side-menu{
 background:#1a1024;
@@ -1598,17 +1601,35 @@ height:68px;
 padding:0 14px;
 }
 
+.header-left{
+gap:7px;
+}
+
+.header-brand-wrap{
+height:40px;
+}
+
 .header-brand{
 font-size:21px;
+font-weight:900;
+letter-spacing:-.5px;
+line-height:20px;
 }
 
 .header-tagline{
 font-size:7px;
+margin-top:3px;
+line-height:7px;
 }
 
 .menu-button{
 width:36px;
 height:36px;
+}
+
+.menu-button span{
+width:24px;
+height:3px;
 }
 
 .header-search,
@@ -1653,7 +1674,6 @@ min-height:125px;
 padding:15px 14px;
 }
 
-/* COMMUNITY WIDTH REDUCED */
 .community-card{
 flex-basis:225px;
 min-height:210px;
@@ -1673,24 +1693,30 @@ flex-basis:270px;
 font-size:19px;
 }
 
+/* PROFILE-SAME BOTTOM NAV
+   NO OLD OVERRIDE */
+
 .bottom-nav{
-padding:6px 12px 8px;
+height:67px;
+padding:0;
 }
 
 .bottom-nav a{
-min-height:58px;
+min-height:0;
+padding:0;
 gap:3px;
-padding:3px 8px;
+font-size:9px;
 }
 
 .nav-icon{
-width:26px;
-height:26px;
-font-size:23px;
+width:auto;
+height:auto;
+font-size:20px;
 }
 
 .bottom-nav small{
-font-size:12px;
+font-size:9px;
+font-weight:800;
 }
 
 }
@@ -1711,7 +1737,6 @@ grid-template-columns:
 repeat(4,minmax(0,1fr));
 }
 
-/* COMMUNITY WIDTH REDUCED */
 .community-card{
 flex-basis:250px;
 }
@@ -1816,8 +1841,6 @@ id="menuOverlay">
 
 <aside class="side-menu">
 
-<!-- PROFILE -->
-
 <div class="side-profile">
 
 <div
@@ -1850,8 +1873,6 @@ View Profile →
 
 </div>
 
-<!-- BRAND + CLOSE -->
-
 <div class="side-menu-header">
 
 <div class="side-menu-brand">
@@ -1870,8 +1891,6 @@ type="button">
 </button>
 
 </div>
-
-<!-- MAIN LINKS -->
 
 <div class="side-menu-links">
 
@@ -1927,8 +1946,6 @@ Day Streak
 
 </a>
 
-<!-- ALIGNED WITH PROFILE TEST HISTORY -->
-
 <a href="history.html">
 
 <div class="menu-link-icon">
@@ -1950,10 +1967,6 @@ Saved Questions
 </a>
 
 <div class="menu-divider"></div>
-
-<!-- FOLLOW US REMOVED -->
-
-<!-- THEME -->
 
 <div class="menu-theme">
 
@@ -1990,8 +2003,6 @@ Light
 </div>
 
 </div>
-
-<!-- LOGOUT -->
 
 <a
 href="profile.html"
@@ -2131,8 +2142,6 @@ New SSC EDGE updates will appear here.
 
 <main class="home-container">
 
-<!-- WELCOME -->
-
 <section class="home-welcome">
 
 <div class="welcome-pill">
@@ -2160,8 +2169,6 @@ Get Started
 </a>
 
 </section>
-
-<!-- DASHBOARD -->
 
 <h2 class="section-heading">
 Dashboard
@@ -2275,15 +2282,11 @@ Keep your streak alive
 
 </section>
 
-<!-- COMMUNITY -->
-
 <h2 class="section-heading">
 Join SSC EDGE Community
 </h2>
 
 <section class="community-scroll">
-
-<!-- TELEGRAM -->
 
 <a
 href="https://t.me/+QCNa39ZJZnBhMzll"
@@ -2315,8 +2318,6 @@ Join Now →
 </div>
 
 </a>
-
-<!-- INSTAGRAM -->
 
 <a
 href="https://www.instagram.com/ssc_edge"
@@ -2365,8 +2366,6 @@ Follow Us →
 
 </a>
 
-<!-- YOUTUBE -->
-
 <a
 href="https://youtube.com/@sscedge07?si=G3GngIGL79XRy3PK"
 target="_blank"
@@ -2401,8 +2400,6 @@ Watch Now →
 </div>
 
 </a>
-
-<!-- DISCUSSION -->
 
 <a
 href="https://t.me/+nHIcGkweGB5mNDdl"
@@ -2444,15 +2441,11 @@ Join Group →
 
 </section>
 
-<!-- CONTINUE LEARNING -->
-
 <h2 class="section-heading">
 Continue Learning
 </h2>
 
 <section class="continue-grid">
-
-<!-- MOCK TEST -->
 
 <a
 href="practice.html"
@@ -2486,8 +2479,6 @@ Practice SSC mock tests
 </b>
 
 </a>
-
-<!-- VIDEOS -->
 
 <a
 href="video.html"
@@ -2530,8 +2521,6 @@ Continue video classes
 
 </a>
 
-<!-- SAVED QUESTIONS -->
-
 <a
 href="saved_questions.html"
 class="continue-card">
@@ -2564,8 +2553,6 @@ Revise saved questions
 </b>
 
 </a>
-
-<!-- PERFORMANCE -->
 
 <a
 href="progress.html"
@@ -2741,573 +2728,3 @@ const possibleKeys = [
 "ssc-edge-name",
 "sscEdgeUsername",
 "sscEdgeName",
-"username",
-"name"
-
-];
-
-let savedName = "";
-
-for(const key of possibleKeys){
-
-const value =
-localStorage.getItem(key);
-
-if(value){
-
-savedName = value;
-
-break;
-
-}
-
-}
-
-if(!savedName){
-
-savedName = "User";
-
-}
-
-document.getElementById(
-"sideProfileName"
-).textContent = savedName;
-
-/*
-   If profile photo is stored as a data URL,
-   display it.
-*/
-
-const possiblePhotoKeys = [
-
-"ssc-edge-profile-photo",
-"ssc-edge-profile-image",
-"sscEdgeProfilePhoto",
-"profilePhoto"
-
-];
-
-for(const key of possiblePhotoKeys){
-
-const photo =
-localStorage.getItem(key);
-
-if(photo){
-
-document.getElementById(
-"sideProfilePhoto"
-).innerHTML =
-`<img src="${photo}" alt="Profile">`;
-
-break;
-
-}
-
-}
-
-}
-
-loadProfileInfo();
-
-/* ==================================================
-   SEARCH
-   ================================================== */
-
-const searchButton =
-document.getElementById("searchButton");
-
-const searchOverlay =
-document.getElementById("searchOverlay");
-
-const searchClose =
-document.getElementById("searchClose");
-
-const searchInput =
-document.getElementById("searchInput");
-
-const searchResults =
-document.getElementById("searchResults");
-
-const searchIndex = [
-
-{
-title:"Home",
-text:"SSC EDGE home dashboard welcome community continue learning",
-url:"home.html"
-},
-
-{
-title:"Study Material",
-text:"Study Material Video E-Books Notes PDFs Quantitative Aptitude General Awareness English Reasoning",
-url:"study.html"
-},
-
-{
-title:"Video Classes",
-text:"Video classes study videos",
-url:"video.html"
-},
-
-{
-title:"E-Books",
-text:"E Books PDFs books study material downloads",
-url:"ebooks.html"
-},
-
-{
-title:"Quantitative Aptitude",
-text:"Quant maths mathematics notes PDF practice",
-url:"quant.html"
-},
-
-{
-title:"General Awareness",
-text:"GK General Knowledge Current Affairs notes PDF",
-url:"gk.html"
-},
-
-{
-title:"English",
-text:"English Grammar Vocabulary notes PDF",
-url:"english.html"
-},
-
-{
-title:"Reasoning",
-text:"Reasoning Logic Practice notes PDF",
-url:"reasoning.html"
-},
-
-{
-title:"Practice",
-text:"Practice Mock Tests Full Mocks CGL PRE CGL MAINS Sectional Mocks SSC",
-url:"practice.html"
-},
-
-{
-title:"My Progress",
-text:"Progress performance score accuracy rank percentile test performance",
-url:"progress.html"
-},
-
-{
-title:"Day Streak",
-text:"Study streak daily learning streak",
-url:"streak.html"
-},
-
-/* ALIGNED WITH PROFILE */
-{
-title:"Test History",
-text:"Previous attempts test history mock tests",
-url:"history.html"
-},
-
-{
-title:"Saved Questions",
-text:"Saved questions questions saved for revision",
-url:"saved_questions.html"
-},
-
-{
-title:"Downloads",
-text:"Downloaded PDFs E Books downloads",
-url:"downloads.html"
-},
-
-{
-title:"Profile",
-text:"Profile account downloads saved questions test history theme about logout",
-url:"profile.html"
-}
-
-];
-
-function openSearch(){
-
-searchOverlay.classList.add("show");
-
-setTimeout(function(){
-
-searchInput.focus();
-
-},100);
-
-}
-
-function closeSearch(){
-
-searchOverlay.classList.remove("show");
-
-searchInput.value="";
-
-showSearchEmpty();
-
-}
-
-function showSearchEmpty(){
-
-searchResults.innerHTML = `
-
-<div class="search-empty">
-Search SSC EDGE pages, subjects and study material.
-</div>
-
-`;
-
-}
-
-function performSearch(){
-
-const query =
-searchInput.value
-.trim()
-.toLowerCase();
-
-if(!query){
-
-showSearchEmpty();
-
-return;
-
-}
-
-const results =
-searchIndex.filter(function(item){
-
-return (
-
-item.title
-.toLowerCase()
-.includes(query)
-
-||
-
-item.text
-.toLowerCase()
-.includes(query)
-
-);
-
-});
-
-if(results.length === 0){
-
-searchResults.innerHTML = `
-
-<div class="search-empty">
-
-No results found for
-"<strong>${escapeHtml(query)}</strong>"
-
-</div>
-
-`;
-
-return;
-
-}
-
-searchResults.innerHTML = "";
-
-results.forEach(function(item){
-
-const result =
-document.createElement("a");
-
-result.className =
-"search-result";
-
-result.href =
-item.url;
-
-result.innerHTML = `
-
-<strong>
-${escapeHtml(item.title)}
-</strong>
-
-<span>
-${escapeHtml(item.text)}
-</span>
-
-`;
-
-searchResults.appendChild(result);
-
-});
-
-}
-
-function escapeHtml(value){
-
-return String(value)
-
-.replaceAll("&","&amp;")
-.replaceAll("<","&lt;")
-.replaceAll(">","&gt;")
-.replaceAll('"',"&quot;")
-.replaceAll("'","&#039;");
-
-}
-
-searchButton.addEventListener(
-"click",
-openSearch
-);
-
-searchClose.addEventListener(
-"click",
-closeSearch
-);
-
-searchInput.addEventListener(
-"input",
-performSearch
-);
-
-searchOverlay.addEventListener(
-"click",
-function(event){
-
-if(event.target === searchOverlay){
-
-closeSearch();
-
-}
-
-}
-);
-
-/* ==================================================
-   UPDATES
-   ================================================== */
-
-const updateBell =
-document.getElementById("updateBell");
-
-const updatesOverlay =
-document.getElementById("updatesOverlay");
-
-const updatesClose =
-document.getElementById("updatesClose");
-
-const updatesContent =
-document.getElementById("updatesContent");
-
-const updateDot =
-document.getElementById("updateDot");
-
-updateBell.addEventListener(
-"click",
-function(){
-
-updatesOverlay.classList.add("show");
-
-}
-);
-
-updatesClose.addEventListener(
-"click",
-function(){
-
-updatesOverlay.classList.remove("show");
-
-}
-);
-
-updatesOverlay.addEventListener(
-"click",
-function(event){
-
-if(event.target === updatesOverlay){
-
-updatesOverlay.classList.remove("show");
-
-}
-
-}
-);
-
-/* ==================================================
-   LOAD UPDATES
-   ================================================== */
-
-function loadUpdates(){
-
-let savedUpdates = [];
-
-try{
-
-savedUpdates =
-JSON.parse(
-localStorage.getItem(
-"sscEdgeUpdates"
-) || "[]"
-);
-
-}catch(error){
-
-savedUpdates = [];
-
-}
-
-if(
-!Array.isArray(savedUpdates) ||
-savedUpdates.length === 0
-){
-
-updateDot.style.display =
-"none";
-
-return;
-
-}
-
-updateDot.style.display =
-"block";
-
-updatesContent.innerHTML = "";
-
-savedUpdates.forEach(function(update){
-
-const item =
-document.createElement("div");
-
-item.className =
-"update-item";
-
-item.innerHTML = `
-
-<div class="update-item-icon">
-
-<svg viewBox="0 0 24 24">
-
-<path d="M5 4h14v16H5z"/>
-<path d="M8 9h8M8 13h6M8 17h4"/>
-
-</svg>
-
-</div>
-
-<div class="update-item-text">
-
-<strong>
-${escapeHtml(
-update.title ||
-"SSC EDGE Update"
-)}
-</strong>
-
-<span>
-${escapeHtml(
-update.text || ""
-)}
-</span>
-
-<small>
-${escapeHtml(
-update.date || ""
-)}
-</small>
-
-</div>
-
-`;
-
-updatesContent.appendChild(item);
-
-});
-
-}
-
-loadUpdates();
-
-/* ==================================================
-   THEME
-   ================================================== */
-
-const darkThemeBtn =
-document.getElementById("darkThemeBtn");
-
-const lightThemeBtn =
-document.getElementById("lightThemeBtn");
-
-function updateThemeButtons(){
-
-const theme =
-localStorage.getItem(
-"ssc-edge-theme"
-) || "dark";
-
-darkThemeBtn.classList.toggle(
-"active",
-theme === "dark"
-);
-
-lightThemeBtn.classList.toggle(
-"active",
-theme === "light"
-);
-
-}
-
-darkThemeBtn.addEventListener(
-"click",
-function(){
-
-localStorage.setItem(
-"ssc-edge-theme",
-"dark"
-);
-
-document.documentElement.dataset.theme =
-"dark";
-
-updateThemeButtons();
-
-}
-);
-
-lightThemeBtn.addEventListener(
-"click",
-function(){
-
-localStorage.setItem(
-"ssc-edge-theme",
-"light"
-);
-
-document.documentElement.dataset.theme =
-"light";
-
-updateThemeButtons();
-
-}
-);
-
-updateThemeButtons();
-
-/* ==================================================
-   ESC KEY
-   ================================================== */
-
-document.addEventListener(
-"keydown",
-function(event){
-
-if(event.key !== "Escape") return;
-
-menuOverlay.classList.remove("show");
-
-closeSearch();
-
-updatesOverlay.classList.remove("show");
-
-}
-);
-
-</script>
-
-</body>
-</html>
