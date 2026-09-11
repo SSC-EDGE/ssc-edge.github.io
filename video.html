@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
 <meta charset="UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -46,6 +47,7 @@ localStorage.getItem("ssc-edge-theme") || "dark";
     overflow:hidden;
     box-shadow:0 5px 18px rgba(0,0,0,.07);
 }
+
 
 /* =========================
    THUMBNAIL
@@ -94,6 +96,7 @@ localStorage.getItem("ssc-edge-theme") || "dark";
     opacity:.8;
 }
 
+
 /* PLAY ICON */
 
 .thumbnail-play{
@@ -111,6 +114,7 @@ localStorage.getItem("ssc-edge-theme") || "dark";
     color:white;
     font-size:25px;
 }
+
 
 /* =========================
    CARD CONTENT
@@ -151,6 +155,7 @@ localStorage.getItem("ssc-edge-theme") || "dark";
     margin-bottom:14px;
 }
 
+
 /* =========================
    PLAYER
 ========================= */
@@ -165,6 +170,7 @@ localStorage.getItem("ssc-edge-theme") || "dark";
     margin-top:4px;
     margin-bottom:13px;
 }
+
 
 /* =========================
    OPEN BUTTON
@@ -443,10 +449,6 @@ async function loadVideos(){
                         src="${escapeHtml(thumbnail)}"
                         alt="${title}"
                         loading="lazy"
-                        onerror="this.parentElement.innerHTML =
-                        '${fallbackThumbnail()
-                            .replace(/'/g,"\\'")}'
-                        "
                     >
 
                     <div class="thumbnail-play">
@@ -472,11 +474,15 @@ async function loadVideos(){
 
 
             /*
-               YouTube/Vimeo:
-               thumbnail + Open Video
+               IMPORTANT:
 
-               Direct video:
-               thumbnail + actual player + Open Video
+               No video is preloaded automatically.
+
+               preload="none" means the browser
+               will NOT automatically download/load
+               the video when the page opens.
+
+               The thumbnail remains visible first.
             */
 
             const playerHtml =
@@ -493,8 +499,12 @@ async function loadVideos(){
                 <video
                     class="video-player"
                     controls
-                    preload="metadata"
+                    preload="none"
                     playsinline
+                    ${thumbnail
+                        ? `poster="${escapeHtml(thumbnail)}"`
+                        : ""
+                    }
                 >
 
                     <source
@@ -534,6 +544,7 @@ async function loadVideos(){
 
                     </div>
 
+
                     ${
                         description
                         ?
@@ -549,7 +560,9 @@ async function loadVideos(){
                         ""
                     }
 
+
                     ${playerHtml}
+
 
                     <div class="video-actions">
 
