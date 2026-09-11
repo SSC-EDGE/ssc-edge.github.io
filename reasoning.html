@@ -195,6 +195,10 @@ SUPABASE_KEY
 );
 
 
+/* =========================
+   ESCAPE HTML
+========================= */
+
 function escapeHtml(value){
 
 return String(value || "")
@@ -207,26 +211,40 @@ return String(value || "")
 }
 
 
+/* =========================
+   DOWNLOAD URL
+========================= */
+
 function getDownloadUrl(url){
 
-if(
-url &&
-url.includes(
-"/storage/v1/object/public/ssc-edge-pdfs/"
-)
-){
+if(!url){
+return "";
+}
 
-return url.replace(
-"/storage/v1/object/public/ssc-edge-pdfs/",
-"/storage/v1/object/download/ssc-edge-pdfs/"
-);
+/*
+   Keep the original Supabase
+   public file URL.
+
+   Do NOT convert it to:
+
+   /object/download/ssc-edge-pdfs/
+
+   That conversion can cause
+   "Bucket not found".
+*/
+
+if(url.includes("?")){
+return url + "&download";
+}
+
+return url + "?download";
 
 }
 
-return url;
 
-}
-
+/* =========================
+   FALLBACK THUMBNAIL
+========================= */
 
 function fallbackThumbnail(){
 
@@ -253,6 +271,10 @@ Reasoning
 }
 
 
+/* =========================
+   RECORD DOWNLOAD
+========================= */
+
 function recordDownload(
 id,
 title,
@@ -260,14 +282,26 @@ subject,
 url
 ){
 
-if(window.SSCEdgeDownloads){
+if(
+window.SSCEdgeDownloads &&
+window.SSCEdgeDownloads.recordDownload
+){
 
 window.SSCEdgeDownloads.recordDownload({
 
 id:id,
+
 title:title,
+
 subject:subject,
+
 type:"PDF",
+
+/*
+   Store the original working
+   file URL in download history.
+*/
+
 url:url
 
 });
@@ -276,6 +310,10 @@ url:url
 
 }
 
+
+/* =========================
+   LOAD PDFs
+========================= */
 
 async function loadPDFs(){
 
@@ -358,32 +396,59 @@ return;
 }
 
 
+/* =========================
+   RENDER PDFs
+========================= */
+
 pdfList.innerHTML =
 pdfs.map(pdf => {
 
 const rawTitle =
 pdf.title || "Untitled PDF";
 
+
 const rawDescription =
 pdf.description || "";
+
 
 const rawUrl =
 pdf.file_url || "";
 
+
 const id =
 escapeHtml(pdf.id || rawUrl);
+
 
 const title =
 escapeHtml(rawTitle);
 
+
 const description =
 escapeHtml(rawDescription);
+
+
+/*
+   Original URL for opening.
+*/
 
 const openUrl =
 escapeHtml(rawUrl);
 
+
+/*
+   Download URL uses the same
+   original URL with ?download.
+*/
+
 const downloadUrl =
-escapeHtml(getDownloadUrl(rawUrl));
+escapeHtml(
+getDownloadUrl(rawUrl)
+);
+
+
+const subjectName =
+escapeHtml(subject.name);
+
 
 const thumbnail =
 pdf.thumbnail_url || "";
@@ -428,35 +493,53 @@ return `
 
 ${thumbnailHtml}
 
+
 <div class="pdf-content">
+
 
 <div class="pdf-title">
 ${title}
 </div>
 
+
 <div class="pdf-subject">
-📚 ${escapeHtml(subject.name)}
+📚 ${subjectName}
 </div>
 
-${description ? `
+
+${
+description
+
+?
+
+`
 
 <div class="pdf-description">
 ${description}
 </div>
 
-` : ""}
+`
+
+:
+
+""
+}
+
 
 <div class="pdf-actions">
+
 
 <a
 class="open"
 href="${openUrl}"
 target="_blank"
-rel="noopener">
+rel="noopener"
+>
 
 📄 Open PDF
 
 </a>
+
 
 <a
 class="download"
@@ -465,15 +548,18 @@ download
 onclick="recordDownload(
 '${id.replace(/'/g,"\\'")}',
 '${title.replace(/'/g,"\\'")}',
-'${escapeHtml(subject.name).replace(/'/g,"\\'")}',
-'${downloadUrl.replace(/'/g,"\\'")}'
-)">
+'${subjectName.replace(/'/g,"\\'")}',
+'${openUrl.replace(/'/g,"\\'")}'
+)"
+>
 
 📥 Download
 
 </a>
 
+
 </div>
+
 
 </div>
 
@@ -485,6 +571,10 @@ onclick="recordDownload(
 
 }
 
+
+/* =========================
+   INITIAL LOAD
+========================= */
 
 loadPDFs();
 
