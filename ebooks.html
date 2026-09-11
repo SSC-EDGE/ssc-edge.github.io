@@ -272,42 +272,26 @@ function getDownloadUrl(url){
         return "";
     }
 
+    /*
+       Keep the original Supabase
+       public file URL.
 
-    if(
-        url.includes(
-            "/storage/v1/object/public/ssc-edge-ebooks/"
-        )
-    ){
+       Do NOT change:
+       /public/bucket/
+       into:
+       /download/bucket/
 
-        return url.replace(
+       The original URL is valid for
+       opening the file. Adding the
+       download parameter asks the
+       storage server to download it.
+    */
 
-            "/storage/v1/object/public/ssc-edge-ebooks/",
-
-            "/storage/v1/object/download/ssc-edge-ebooks/"
-
-        );
-
+    if(url.includes("?")){
+        return url + "&download";
     }
 
-
-    if(
-        url.includes(
-            "/storage/v1/object/public/ssc-edge-pdfs/"
-        )
-    ){
-
-        return url.replace(
-
-            "/storage/v1/object/public/ssc-edge-pdfs/",
-
-            "/storage/v1/object/download/ssc-edge-pdfs/"
-
-        );
-
-    }
-
-
-    return url;
+    return url + "?download";
 
 }
 
@@ -386,6 +370,12 @@ function recordEbookDownload(
             subject:subject,
 
             type:"EBOOK",
+
+            /*
+               Store the ORIGINAL file URL.
+               Never store a transformed
+               /object/download/ URL.
+            */
 
             url:url
 
@@ -504,6 +494,19 @@ async function loadMaterials(){
                 "";
 
 
+            /*
+               Original URL for opening.
+            */
+
+            const openUrl =
+                escapeHtml(rawFileUrl);
+
+
+            /*
+               Download URL is generated
+               WITHOUT any bucket name.
+            */
+
             const rawDownloadUrl =
                 getDownloadUrl(
                     rawFileUrl
@@ -524,10 +527,6 @@ async function loadMaterials(){
 
             const description =
                 escapeHtml(rawDescription);
-
-
-            const openUrl =
-                escapeHtml(rawFileUrl);
 
 
             const downloadUrl =
@@ -635,7 +634,7 @@ async function loadMaterials(){
                                 '${id.replace(/'/g,"\\'")}',
                                 '${title.replace(/'/g,"\\'")}',
                                 '${subject.replace(/'/g,"\\'")}',
-                                '${downloadUrl.replace(/'/g,"\\'")}'
+                                '${openUrl.replace(/'/g,"\\'")}'
                             )"
                         >
 
