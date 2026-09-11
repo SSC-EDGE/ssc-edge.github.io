@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
@@ -15,27 +16,229 @@ document.documentElement.dataset.theme =
 localStorage.getItem("ssc-edge-theme") || "dark";
 </script>
 
+<style>
+
+/* =========================================
+   HEADER
+   ========================================= */
+
+.simple-header{
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.header-brand{
+font-size:24px;
+font-weight:800;
+letter-spacing:.5px;
+}
+
+.header-brand .edge{
+color:var(--purple);
+}
+
+
+/* =========================================
+   VIDEO & E-BOOKS
+   ========================================= */
+
+.study-options{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:14px;
+}
+
+.study-option-card{
+min-height:145px;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+text-align:center;
+box-sizing:border-box;
+}
+
+.study-option-icon{
+width:58px;
+height:58px;
+margin-bottom:10px;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.study-option-icon svg{
+width:58px;
+height:58px;
+fill:none;
+stroke:currentColor;
+stroke-width:2.7;
+stroke-linecap:round;
+stroke-linejoin:round;
+}
+
+.study-option-text h3{
+margin:0;
+font-size:17px;
+font-weight:700;
+}
+
+.study-option-text span{
+display:block;
+margin-top:4px;
+font-size:12px;
+color:var(--muted);
+}
+
+
+/* =========================================
+   SUBJECTS
+   ========================================= */
+
+.subject-grid{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:14px;
+}
+
+.subject-card{
+min-height:170px;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+text-align:center;
+box-sizing:border-box;
+}
+
+.subject-icon{
+width:62px;
+height:62px;
+margin-bottom:10px;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.subject-icon svg{
+width:62px;
+height:62px;
+fill:none;
+stroke:currentColor;
+stroke-width:2.7;
+stroke-linecap:round;
+stroke-linejoin:round;
+}
+
+.subject-card h3{
+margin:0;
+font-size:16px;
+line-height:1.3;
+}
+
+.subject-card span{
+display:block;
+margin-top:5px;
+font-size:12px;
+color:var(--muted);
+}
+
+
+/* =========================================
+   BOTTOM NAV
+   ========================================= */
+
+.bottom-nav{
+display:flex;
+align-items:stretch;
+justify-content:space-around;
+}
+
+.bottom-nav a{
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:3px;
+text-decoration:none;
+}
+
+.nav-icon{
+width:25px;
+height:25px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:22px;
+line-height:1;
+}
+
+.bottom-nav small{
+font-size:11px;
+}
+
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media(max-width:420px){
+
+.study-options,
+.subject-grid{
+gap:11px;
+}
+
+.study-option-card{
+min-height:140px;
+}
+
+.subject-card{
+min-height:165px;
+}
+
+.header-brand{
+font-size:23px;
+}
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
+
+<!-- HEADER -->
+
 <header class="simple-header">
-  <div class="header-brand">SSC EDGE</div>
+
+  <div class="header-brand">
+    SSC <span class="edge">EDGE</span>
+  </div>
+
 </header>
+
 
 
 <main class="page-container">
 
-  <h1 class="page-title">Study Material</h1>
+
+  <h1 class="page-title">
+    Study Material
+  </h1>
+
 
   <p class="page-subtitle">
     Choose a subject to start learning
   </p>
 
 
-  <!-- =========================================
-       VIDEO & E-BOOKS
-       ========================================= -->
+
+  <!-- VIDEO & E-BOOKS -->
 
   <section class="study-options">
 
@@ -47,17 +250,35 @@ localStorage.getItem("ssc-edge-theme") || "dark";
       <div class="study-option-icon">
 
         <svg viewBox="0 0 64 64">
-          <rect x="8" y="14" width="48" height="36" rx="6"/>
-          <path d="M27 24l14 8-14 8z"/>
+
+          <rect
+            x="7"
+            y="13"
+            width="50"
+            height="38"
+            rx="7"
+          />
+
+          <path
+            d="M27 23l14 9-14 9z"
+            fill="currentColor"
+            stroke="none"
+          />
+
         </svg>
 
       </div>
 
       <div class="study-option-text">
+
         <h3>Video</h3>
+
+        <span>Video Classes</span>
+
       </div>
 
     </a>
+
 
 
     <!-- E-BOOKS -->
@@ -67,36 +288,49 @@ localStorage.getItem("ssc-edge-theme") || "dark";
       <div class="study-option-icon">
 
         <svg viewBox="0 0 64 64">
-          <path d="M10 12h20a10 10 0 0 1 10 10v30H20a10 10 0 0 0-10 10V12z"/>
-          <path d="M54 12H34a10 10 0 0 0-10 10v30h20a10 10 0 0 1 10 10V12z"/>
+
+          <path
+            d="M9 11h20c6 0 11 5 11 11v31H20c-6 0-11 5-11 11V11z"
+          />
+
+          <path
+            d="M55 11H35c-6 0-11 5-11 11v31h20c6 0 11 5 11 11V11z"
+          />
+
+          <path d="M15 23h14"/>
+          <path d="M15 31h14"/>
+          <path d="M35 23h14"/>
+          <path d="M35 31h14"/>
+
         </svg>
 
       </div>
 
       <div class="study-option-text">
+
         <h3>E-Books</h3>
-        <span>Compilation</span>
+
+        <span>Books &amp; PDFs</span>
+
       </div>
 
     </a>
 
+
   </section>
 
 
-  <!-- =========================================
-       DIVIDER
-       ========================================= -->
 
   <div class="study-divider"></div>
 
 
-  <!-- =========================================
-       SUBJECT WISE NOTES & PDF
-       ========================================= -->
+
+  <!-- SUBJECT WISE -->
 
   <h2 class="study-section-title">
     SUBJECT WISE NOTES &amp; PDF
   </h2>
+
 
 
   <section class="subject-grid">
@@ -109,45 +343,90 @@ localStorage.getItem("ssc-edge-theme") || "dark";
       <div class="subject-icon">
 
         <svg viewBox="0 0 64 64">
-          <rect x="15" y="7" width="34" height="50" rx="5"/>
-          <rect x="21" y="14" width="22" height="10" rx="2"/>
-          <circle cx="23" cy="32" r="2"/>
-          <circle cx="32" cy="32" r="2"/>
-          <circle cx="41" cy="32" r="2"/>
-          <circle cx="23" cy="41" r="2"/>
-          <circle cx="32" cy="41" r="2"/>
-          <circle cx="41" cy="41" r="2"/>
-          <circle cx="23" cy="50" r="2"/>
-          <circle cx="32" cy="50" r="2"/>
-          <circle cx="41" cy="50" r="2"/>
+
+          <rect
+            x="13"
+            y="6"
+            width="38"
+            height="52"
+            rx="7"
+          />
+
+          <rect
+            x="20"
+            y="13"
+            width="24"
+            height="10"
+            rx="2"
+          />
+
+          <circle cx="22" cy="31" r="2.2"/>
+          <circle cx="32" cy="31" r="2.2"/>
+          <circle cx="42" cy="31" r="2.2"/>
+
+          <circle cx="22" cy="41" r="2.2"/>
+          <circle cx="32" cy="41" r="2.2"/>
+          <circle cx="42" cy="41" r="2.2"/>
+
+          <circle cx="22" cy="51" r="2.2"/>
+          <circle cx="32" cy="51" r="2.2"/>
+          <circle cx="42" cy="51" r="2.2"/>
+
         </svg>
 
       </div>
 
-      <h3>Quantitative Aptitude</h3>
-      <span>Notes &amp; Practice</span>
+      <h3>
+        Quantitative Aptitude
+      </h3>
+
+      <span>
+        Notes &amp; Practice
+      </span>
 
     </a>
 
 
-    <!-- GK -->
+
+    <!-- GENERAL AWARENESS -->
 
     <a href="gk.html" class="subject-card">
 
       <div class="subject-icon">
 
         <svg viewBox="0 0 64 64">
-          <circle cx="32" cy="32" r="24"/>
-          <path d="M8 32h48M32 8c8 8 8 40 0 48M32 8c-8 8-8 40 0 48"/>
-          <path d="M14 20h36M14 44h36"/>
+
+          <circle
+            cx="32"
+            cy="32"
+            r="25"
+          />
+
+          <path
+            d="M32 7c-9 7-13 15-13 25s4 18 13 25"
+          />
+
+          <path
+            d="M32 7c9 7 13 15 13 25s-4 18-13 25"
+          />
+
+          <path d="M8 25h48"/>
+          <path d="M8 39h48"/>
+
         </svg>
 
       </div>
 
-      <h3>GK</h3>
-      <span>General Knowledge</span>
+      <h3>
+        General Awareness
+      </h3>
+
+      <span>
+        GK &amp; Current Affairs
+      </span>
 
     </a>
+
 
 
     <!-- ENGLISH -->
@@ -156,18 +435,40 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 
       <div class="subject-icon">
 
+        <!-- BOOK ONLY -->
+
         <svg viewBox="0 0 64 64">
-          <path d="M10 12h28a8 8 0 0 1 8 8v30H18a8 8 0 0 0-8 8V12z"/>
-          <path d="M46 50h8V20a8 8 0 0 0-8-8"/>
-          <path d="M20 25h16M20 33h13M20 41h10"/>
+
+          <path
+            d="M8 11h20c6 0 11 5 11 11v34H20c-6 0-12 3-12 7V11z"
+          />
+
+          <path
+            d="M56 11H36c-6 0-11 5-11 11v34h19c6 0 12 3 12 7V11z"
+          />
+
+          <path d="M15 23h16"/>
+          <path d="M15 31h14"/>
+          <path d="M15 39h12"/>
+
+          <path d="M49 23H36"/>
+          <path d="M49 31H36"/>
+          <path d="M49 39H36"/>
+
         </svg>
 
       </div>
 
-      <h3>English</h3>
-      <span>Grammar &amp; Vocabulary</span>
+      <h3>
+        English
+      </h3>
+
+      <span>
+        Grammar &amp; Vocabulary
+      </span>
 
     </a>
+
 
 
     <!-- REASONING -->
@@ -177,14 +478,40 @@ localStorage.getItem("ssc-edge-theme") || "dark";
       <div class="subject-icon">
 
         <svg viewBox="0 0 64 64">
-          <path d="M24 10h16v10h10v16H40v18H24V36H14V20h10z"/>
-          <path d="M24 20h16M24 36h16"/>
+
+          <path
+            d="
+            M24 8
+            h12
+            c0 5 3 8 7 8
+            s7-3 7-8
+            h6
+            v16
+            c-5 0-8 3-8 7
+            s3 7 8 7
+            v16
+            H40
+            c0-5-3-8-7-8
+            s-7 3-7 8
+            H10
+            V38
+            c5 0 8-3 8-7
+            s-3-7-8-7
+            V8z
+            "
+          />
+
         </svg>
 
       </div>
 
-      <h3>Reasoning</h3>
-      <span>Notes &amp; Practice</span>
+      <h3>
+        Reasoning
+      </h3>
+
+      <span>
+        Logic &amp; Practice
+      </span>
 
     </a>
 
@@ -194,31 +521,74 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 </main>
 
 
-<!-- =========================================
-     BOTTOM NAVIGATION
-     ========================================= -->
+
+<!-- BOTTOM NAVIGATION -->
 
 <nav class="bottom-nav">
 
+
+  <!-- HOME -->
+
   <a href="home.html">
-    <span class="nav-icon">⌂</span>
-    <small>Home</small>
+
+    <span class="nav-icon">
+      🏠
+    </span>
+
+    <small>
+      Home
+    </small>
+
   </a>
+
+
+
+  <!-- STUDY MATERIAL -->
 
   <a href="study.html" class="active">
-    <span class="nav-icon">▣</span>
-    <small>Study Material</small>
+
+    <span class="nav-icon">
+      📚
+    </span>
+
+    <small>
+      Study Material
+    </small>
+
   </a>
+
+
+
+  <!-- PRACTICE -->
 
   <a href="practice.html">
-    <span class="nav-icon">✓</span>
-    <small>Practice</small>
+
+    <span class="nav-icon">
+      📝
+    </span>
+
+    <small>
+      Practice
+    </small>
+
   </a>
 
+
+
+  <!-- PROFILE -->
+
   <a href="profile.html">
-    <span class="nav-icon">○</span>
-    <small>Profile</small>
+
+    <span class="nav-icon">
+      👤
+    </span>
+
+    <small>
+      Profile
+    </small>
+
   </a>
+
 
 </nav>
 
