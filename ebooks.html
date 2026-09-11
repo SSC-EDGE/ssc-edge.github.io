@@ -12,187 +12,182 @@ content="width=device-width, initial-scale=1.0"
 
 <title>E-Books - SSC EDGE</title>
 
-
 <script>
 
 document.documentElement.dataset.theme =
-localStorage.getItem(
-"ssc-edge-theme"
-) || "dark";
+localStorage.getItem("ssc-edge-theme") || "dark";
 
 </script>
-
 
 <link
 rel="stylesheet"
 href="css/style.css"
 >
 
-
-<script
-src="js/downloads.js"
-></script>
+<script src="js/downloads.js"></script>
 
 
 <style>
 
 .container{
-
-padding:20px;
-
-padding-bottom:90px;
-
+    padding:20px;
+    padding-bottom:90px;
 }
-
 
 .page-title{
-
-font-size:26px;
-
-font-weight:bold;
-
-margin-bottom:6px;
-
+    font-size:26px;
+    font-weight:700;
+    margin-bottom:5px;
 }
-
 
 .page-subtitle{
-
-color:var(--muted);
-
-margin-bottom:20px;
-
+    color:var(--muted);
+    margin-bottom:20px;
 }
-
 
 .material-list{
-
-display:flex;
-
-flex-direction:column;
-
-gap:14px;
-
+    display:flex;
+    flex-direction:column;
+    gap:18px;
 }
-
 
 .material-card{
-
-background:var(--card);
-
-border:1px solid var(--border);
-
-border-radius:14px;
-
-padding:16px;
-
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:17px;
+    overflow:hidden;
+    box-shadow:0 5px 18px rgba(0,0,0,.07);
 }
 
+/* =========================
+   BOOK COVER
+========================= */
+
+.book-cover{
+    width:100%;
+    aspect-ratio:16/9;
+    background:#111;
+    position:relative;
+    overflow:hidden;
+}
+
+.book-cover img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+
+.cover-fallback{
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+
+    background:linear-gradient(
+        135deg,
+        #171225,
+        #30204f
+    );
+
+    color:white;
+}
+
+.cover-icon{
+    font-size:48px;
+    margin-bottom:8px;
+}
+
+.cover-logo{
+    font-size:27px;
+    font-weight:800;
+    letter-spacing:1px;
+}
+
+.cover-text{
+    margin-top:5px;
+    font-size:13px;
+    opacity:.8;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.material-content{
+    padding:16px;
+}
 
 .material-title{
-
-font-size:18px;
-
-font-weight:bold;
-
-line-height:1.35;
-
-margin-bottom:7px;
-
+    font-size:18px;
+    font-weight:700;
+    line-height:1.4;
+    margin-bottom:8px;
 }
-
 
 .material-subject{
-
-display:inline-block;
-
-font-size:13px;
-
-color:var(--muted);
-
-margin-bottom:8px;
-
+    display:inline-block;
+    font-size:13px;
+    color:var(--muted);
+    margin-bottom:9px;
 }
-
 
 .material-description{
-
-color:var(--muted);
-
-font-size:14px;
-
-line-height:1.5;
-
-margin-bottom:14px;
-
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.5;
+    margin-bottom:14px;
 }
 
+/* =========================
+   BUTTONS
+========================= */
 
 .material-actions{
-
-display:flex;
-
-gap:10px;
-
-flex-wrap:wrap;
-
+    display:flex;
+    gap:10px;
 }
-
 
 .open,
 .download{
+    flex:1;
+    min-width:0;
+    min-height:46px;
 
-flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-min-width:130px;
+    padding:11px 10px;
 
-display:inline-block;
+    border-radius:11px;
 
-padding:11px 15px;
+    text-decoration:none;
 
-border-radius:10px;
+    font-weight:700;
+    font-size:14px;
 
-text-decoration:none;
-
-font-weight:bold;
-
-text-align:center;
-
-box-sizing:border-box;
-
-cursor:pointer;
-
+    box-sizing:border-box;
 }
-
 
 .open{
-
-background:var(--purple);
-
-color:white;
-
+    background:var(--purple);
+    color:white;
 }
-
 
 .download{
-
-background:var(--card2);
-
-color:var(--text);
-
-border:1px solid var(--border);
-
+    background:var(--card2);
+    color:var(--text);
+    border:1px solid var(--border);
 }
 
-
 .empty{
-
-text-align:center;
-
-color:var(--muted);
-
-padding:30px 10px;
-
+    text-align:center;
+    color:var(--muted);
+    padding:35px 10px;
 }
 
 </style>
@@ -207,16 +202,12 @@ padding:30px 10px;
 
 
 <div class="page-title">
-
 E-Books
-
 </div>
 
 
 <div class="page-subtitle">
-
 SSC EDGE Study Material
-
 </div>
 
 
@@ -226,9 +217,7 @@ class="material-list"
 >
 
 <div class="empty">
-
 Loading...
-
 </div>
 
 </div>
@@ -244,19 +233,16 @@ src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
 
 <script>
 
-
 const SUPABASE_URL =
 "https://dvvyoygahzzbnpqrfhen.supabase.co";
-
 
 const SUPABASE_KEY =
 "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
 
-
 const supabaseClient =
 supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
+    SUPABASE_URL,
+    SUPABASE_KEY
 );
 
 
@@ -266,17 +252,12 @@ SUPABASE_KEY
 
 function escapeHtml(value){
 
-return String(value || "")
-
-.replace(/&/g,"&amp;")
-
-.replace(/</g,"&lt;")
-
-.replace(/>/g,"&gt;")
-
-.replace(/"/g,"&quot;")
-
-.replace(/'/g,"&#039;");
+    return String(value || "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 
 }
 
@@ -287,52 +268,95 @@ return String(value || "")
 
 function getDownloadUrl(url){
 
-if(!url){
+    if(!url){
+        return "";
+    }
 
-return "";
+
+    if(
+        url.includes(
+            "/storage/v1/object/public/ssc-edge-ebooks/"
+        )
+    ){
+
+        return url.replace(
+
+            "/storage/v1/object/public/ssc-edge-ebooks/",
+
+            "/storage/v1/object/download/ssc-edge-ebooks/"
+
+        );
+
+    }
+
+
+    if(
+        url.includes(
+            "/storage/v1/object/public/ssc-edge-pdfs/"
+        )
+    ){
+
+        return url.replace(
+
+            "/storage/v1/object/public/ssc-edge-pdfs/",
+
+            "/storage/v1/object/download/ssc-edge-pdfs/"
+
+        );
+
+    }
+
+
+    return url;
 
 }
 
 
-/* E-BOOK BUCKET */
+/* =========================
+   BOOK COVER
+========================= */
 
-if(
-url.includes(
-"/storage/v1/object/public/ssc-edge-ebooks/"
-)
-){
+function getCover(material){
 
-return url.replace(
+    /*
+       Future admin support:
 
-"/storage/v1/object/public/ssc-edge-ebooks/",
+       material.thumbnail_url
 
-"/storage/v1/object/download/ssc-edge-ebooks/"
+       Admin panel later will upload
+       the book cover and save its URL.
+    */
 
-);
-
-}
-
-
-/* PDF BUCKET */
-
-if(
-url.includes(
-"/storage/v1/object/public/ssc-edge-pdfs/"
-)
-){
-
-return url.replace(
-
-"/storage/v1/object/public/ssc-edge-pdfs/",
-
-"/storage/v1/object/download/ssc-edge-pdfs/"
-
-);
+    return material.thumbnail_url || "";
 
 }
 
 
-return url;
+/* =========================
+   FALLBACK COVER
+========================= */
+
+function fallbackCover(){
+
+    return `
+
+    <div class="cover-fallback">
+
+        <div class="cover-icon">
+            📚
+        </div>
+
+        <div class="cover-logo">
+            SSC EDGE
+        </div>
+
+        <div class="cover-text">
+            Learn • Practice • Improve
+        </div>
+
+    </div>
+
+    `;
 
 }
 
@@ -342,246 +366,294 @@ return url;
 ========================= */
 
 function recordEbookDownload(
-id,
-title,
-subject,
-url
+    id,
+    title,
+    subject,
+    url
 ){
 
-window.SSCEdgeDownloads
-.recordDownload({
+    if(
+        window.SSCEdgeDownloads &&
+        window.SSCEdgeDownloads.recordDownload
+    ){
 
-id:id,
+        window.SSCEdgeDownloads.recordDownload({
 
-title:title,
+            id:id,
 
-subject:subject,
+            title:title,
 
-type:"EBOOK",
+            subject:subject,
 
-url:url
+            type:"EBOOK",
 
-});
+            url:url
+
+        });
+
+    }
 
 }
 
 
 /* =========================
-   LOAD MATERIALS
+   LOAD E-BOOKS
 ========================= */
 
 async function loadMaterials(){
 
-const materialList =
-document.getElementById(
-"materialList"
-);
+    const materialList =
+        document.getElementById(
+            "materialList"
+        );
 
 
-const {
-data:materials,
-error
-} =
+    const {
+        data:materials,
+        error
+    } = await supabaseClient
 
-await supabaseClient
+        .from("study_material")
 
-.from("study_material")
+        .select(`
+            *,
+            subjects (
+                name
+            )
+        `)
 
-.select(`
-*,
-subjects (
-name
-)
-`)
+        .eq(
+            "material_type",
+            "EBOOK"
+        )
 
-.eq(
-"material_type",
-"EBOOK"
-)
+        .eq(
+            "is_active",
+            true
+        )
 
-.eq(
-"is_active",
-true
-)
+        .order(
+            "created_at",
+            {
+                ascending:false
+            }
+        );
 
-.order(
-"created_at",
-{
-ascending:false
-}
-);
 
+    if(error){
 
-/* =========================
-   ERROR
-========================= */
+        console.error(error);
 
-if(error){
+        materialList.innerHTML = `
 
-console.error(error);
+            <div class="empty">
+                Unable to load E-Books.
+            </div>
 
-materialList.innerHTML=
+        `;
 
-`<div class="empty">
-Unable to load E-Books.
-</div>`;
+        return;
 
-return;
+    }
 
-}
 
+    if(
+        !materials ||
+        materials.length === 0
+    ){
 
-/* =========================
-   EMPTY
-========================= */
+        materialList.innerHTML = `
 
-if(
-!materials ||
-materials.length === 0
-){
+            <div class="empty">
+                No E-Books available yet.
+            </div>
 
-materialList.innerHTML=
+        `;
 
-`<div class="empty">
-No E-Books available yet.
-</div>`;
+        return;
 
-return;
+    }
 
-}
 
+    materialList.innerHTML = materials.map(
+        material => {
 
-/* =========================
-   RENDER
-========================= */
+            const rawId =
+                material.id ||
+                material.file_url ||
+                "";
 
-materialList.innerHTML=
 
-materials.map(
-material=>{
+            const rawTitle =
+                material.title ||
+                "Untitled";
 
-const id =
-escapeHtml(
-material.id ||
-material.file_url ||
-""
-);
 
+            const rawSubject =
+                material.subjects?.name ||
+                "General";
 
-const title =
-escapeHtml(
-material.title ||
-"Untitled"
-);
 
+            const rawDescription =
+                material.description ||
+                "";
 
-const description =
-escapeHtml(
-material.description ||
-""
-);
 
+            const rawFileUrl =
+                material.file_url ||
+                "";
 
-const subject =
-escapeHtml(
-material.subjects?.name ||
-"General"
-);
 
+            const rawDownloadUrl =
+                getDownloadUrl(
+                    rawFileUrl
+                );
 
-const openUrl =
-escapeHtml(
-material.file_url ||
-""
-);
 
+            const id =
+                escapeHtml(rawId);
 
-const downloadUrl =
-escapeHtml(
-getDownloadUrl(
-material.file_url ||
-""
-)
-);
 
+            const title =
+                escapeHtml(rawTitle);
 
-return `
 
-<div class="material-card">
+            const subject =
+                escapeHtml(rawSubject);
 
 
-<div class="material-title">
+            const description =
+                escapeHtml(rawDescription);
 
-${title}
 
-</div>
+            const openUrl =
+                escapeHtml(rawFileUrl);
 
 
-<div class="material-subject">
+            const downloadUrl =
+                escapeHtml(rawDownloadUrl);
 
-📚 Subject: ${subject}
 
-</div>
+            const cover =
+                getCover(material);
 
 
-${
-description
-?
-`
+            const coverHtml =
+                cover
 
-<div class="material-description">
+                ?
 
-${description}
+                `
 
-</div>
+                <div class="book-cover">
 
-`
-:
-""
-}
+                    <img
+                        src="${escapeHtml(cover)}"
+                        alt="${title}"
+                        loading="lazy"
+                        onerror="this.parentElement.innerHTML =
+                        '${fallbackCover()
+                            .replace(/'/g,"\\'")}'
+                        "
+                    >
 
+                </div>
 
-<div class="material-actions">
+                `
 
+                :
 
-<a
-class="open"
-href="${openUrl}"
-target="_blank"
-rel="noopener"
->
+                `
 
-📖 Open E-Book
+                <div class="book-cover">
 
-</a>
+                    ${fallbackCover()}
 
+                </div>
 
-<a
-class="download"
-href="${downloadUrl}"
-download
-onclick="recordEbookDownload(
-'${id.replace(/'/g,"\\'")}',
-'${title.replace(/'/g,"\\'")}',
-'${subject.replace(/'/g,"\\'")}',
-'${downloadUrl.replace(/'/g,"\\'")}'
-)"
->
+                `;
 
-📥 Download
 
-</a>
+            return `
 
+            <div class="material-card">
 
-</div>
+                ${coverHtml}
 
 
-</div>
+                <div class="material-content">
 
-`;
+                    <div class="material-title">
+                        ${title}
+                    </div>
 
-}
-).join("");
+
+                    <div class="material-subject">
+                        📚 Subject: ${subject}
+                    </div>
+
+
+                    ${
+                        description
+
+                        ?
+
+                        `
+
+                        <div class="material-description">
+                            ${description}
+                        </div>
+
+                        `
+
+                        :
+
+                        ""
+                    }
+
+
+                    <div class="material-actions">
+
+
+                        <a
+                            class="open"
+                            href="${openUrl}"
+                            target="_blank"
+                            rel="noopener"
+                        >
+
+                            📖 Open E-Book
+
+                        </a>
+
+
+                        <a
+                            class="download"
+                            href="${downloadUrl}"
+                            download
+                            onclick="recordEbookDownload(
+                                '${id.replace(/'/g,"\\'")}',
+                                '${title.replace(/'/g,"\\'")}',
+                                '${subject.replace(/'/g,"\\'")}',
+                                '${downloadUrl.replace(/'/g,"\\'")}'
+                            )"
+                        >
+
+                            📥 Download
+
+                        </a>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            `;
+
+        }
+    ).join("");
 
 }
 
