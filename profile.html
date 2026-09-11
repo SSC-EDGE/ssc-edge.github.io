@@ -1,562 +1,1002 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#160b26">
 
-<title>Profile - SSC EDGE</title>
-
-<script>
-document.documentElement.dataset.theme =
-localStorage.getItem("ssc-edge-theme") || "dark";
-</script>
+<title>SSC EDGE - Profile</title>
 
 <link rel="stylesheet" href="css/style.css">
 
-<style>
+<script>
+document.documentElement.dataset.theme =
+  localStorage.getItem("ssc-edge-theme") || "dark";
+</script>
 
+<style>
 *{
   box-sizing:border-box;
 }
 
 body{
   margin:0;
+  padding:0 0 82px;
   background:var(--bg);
   color:var(--text);
-  font-family:Arial,sans-serif;
 }
 
-.simple-header{
-  height:58px;
-  display:flex;
-  align-items:center;
-  padding:0 18px;
-  background:var(--header);
+/* =========================
+   HEADER
+========================= */
+
+.profile-header{
+  padding:13px 16px;
   border-bottom:1px solid var(--border);
-}
-
-.simple-header h2{
-  margin:0;
-  font-size:20px;
-}
-
-.page-container{
-  max-width:600px;
-  margin:auto;
-  padding:22px 16px 100px;
-}
-
-.profile-top{
-  text-align:center;
-  margin-bottom:25px;
-}
-
-.avatar{
-  width:82px;
-  height:82px;
-  border-radius:50%;
-  margin:auto;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:var(--card2);
-  border:2px solid var(--purple);
-  font-size:36px;
-  cursor:pointer;
-}
-
-.profile-top h2{
-  margin:12px 0 4px;
-}
-
-.profile-top p{
-  margin:0;
-  color:var(--muted);
-  font-size:14px;
-}
-
-.section-title{
-  font-size:13px;
-  color:var(--muted);
-  margin:22px 4px 9px;
-  text-transform:uppercase;
-  letter-spacing:.5px;
-}
-
-.card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:14px;
-  margin-bottom:10px;
-  overflow:hidden;
-}
-
-.card-item{
-  padding:16px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  cursor:pointer;
-  border-bottom:1px solid var(--border);
-}
-
-.card-item:last-child{
-  border-bottom:0;
-}
-
-.card-left{
-  display:flex;
-  align-items:center;
-  gap:13px;
-}
-
-.icon{
-  width:38px;
-  height:38px;
-  border-radius:10px;
-  background:var(--card2);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:20px;
-}
-
-.item-text strong{
-  display:block;
-  font-size:15px;
-}
-
-.item-text span{
-  display:block;
-  margin-top:3px;
-  color:var(--muted);
-  font-size:12px;
-}
-
-.arrow{
-  color:var(--muted);
-  font-size:20px;
-}
-
-.bottom-nav{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  height:64px;
   background:var(--header);
-  border-top:1px solid var(--border);
-  display:flex;
-  justify-content:space-around;
-  align-items:center;
+  position:sticky;
+  top:0;
   z-index:20;
 }
 
-.bottom-nav a{
-  text-decoration:none;
-  color:var(--muted);
-  font-size:11px;
-  text-align:center;
-}
-
-.bottom-nav a.active{
-  color:var(--purple2);
-}
-
-.nav-icon{
+.profile-brand{
   font-size:20px;
-  display:block;
-  margin-bottom:2px;
+  font-weight:900;
+  letter-spacing:-.5px;
+  text-align:left;
 }
 
+.profile-brand .edge{
+  color:#9b5cff;
+}
 
 /* =========================
-   POPUP
+   MAIN
 ========================= */
 
-.popup{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.65);
-  z-index:100;
-  align-items:flex-end;
+.profile-container{
+  width:min(680px,100%);
+  margin:0 auto;
+  padding:20px 15px 24px;
+}
+
+/* =========================
+   PROFILE TOP
+========================= */
+
+.profile-top{
+  text-align:center;
+  padding:8px 0 20px;
+}
+
+.avatar{
+  width:76px;
+  height:76px;
+  margin:0 auto 10px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
   justify-content:center;
-}
 
-.popup-box{
-  width:100%;
-  max-width:600px;
-  background:var(--card);
-  border-radius:20px 20px 0 0;
-  padding:20px;
-  border:1px solid var(--border);
-  max-height:90vh;
-  overflow-y:auto;
-}
-
-.popup-box h3{
-  margin:0 0 18px;
-}
-
-.close{
-  float:right;
-  font-size:25px;
-  cursor:pointer;
-  color:var(--muted);
-}
-
-.field{
-  margin-bottom:14px;
-}
-
-.field label{
-  display:block;
-  font-size:12px;
-  color:var(--muted);
-  margin-bottom:6px;
-}
-
-.field input{
-  width:100%;
-  padding:12px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  background:var(--bg);
-  color:var(--text);
-  outline:none;
-}
-
-.field input:focus{
-  border-color:var(--purple);
-}
-
-.primary-btn{
-  width:100%;
-  border:0;
-  padding:13px;
-  border-radius:10px;
-  background:var(--purple);
-  color:white;
-  font-size:15px;
-  cursor:pointer;
-  margin-top:5px;
-}
-
-.secondary-btn{
-  width:100%;
-  border:1px solid var(--border);
-  padding:12px;
-  border-radius:10px;
   background:var(--card2);
+  border:1px solid var(--border);
+
+  font-size:36px;
+}
+
+.profile-name{
+  margin:0;
   color:var(--text);
-  font-size:14px;
-  cursor:pointer;
-  margin-top:9px;
+  font-size:21px;
+  font-weight:900;
 }
 
-.info-text{
+.profile-email{
+  margin-top:4px;
   color:var(--muted);
-  font-size:13px;
-  line-height:1.5;
+  font-size:12px;
+  font-weight:700;
 }
 
+/* =========================
+   SECTION
+========================= */
+
+.section-title{
+  margin:18px 3px 8px;
+
+  color:var(--muted);
+  font-size:11px;
+  font-weight:900;
+
+  text-transform:uppercase;
+  letter-spacing:.8px;
+}
+
+/* =========================
+   MENU
+========================= */
+
+.menu-card{
+  overflow:hidden;
+
+  border:1px solid var(--border);
+  border-radius:14px;
+
+  background:var(--card);
+}
+
+.menu-item{
+  width:100%;
+  min-height:55px;
+
+  padding:11px 13px;
+
+  display:flex;
+  align-items:center;
+  gap:12px;
+
+  border:0;
+  border-bottom:1px solid var(--border);
+
+  background:transparent;
+  color:var(--text);
+
+  text-align:left;
+  font:inherit;
+
+  cursor:pointer;
+}
+
+.menu-item:last-child{
+  border-bottom:0;
+}
+
+.menu-item:active{
+  transform:scale(.995);
+}
+
+.menu-icon{
+  width:34px;
+  height:34px;
+
+  flex:0 0 34px;
+
+  border-radius:10px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:var(--card2);
+  border:1px solid var(--border);
+
+  font-size:17px;
+}
+
+.menu-content{
+  flex:1;
+  min-width:0;
+}
+
+.menu-label{
+  display:block;
+
+  font-size:13px;
+  font-weight:900;
+}
+
+.menu-sub{
+  display:block;
+
+  margin-top:2px;
+
+  color:var(--muted);
+
+  font-size:10px;
+  font-weight:700;
+}
+
+.menu-arrow{
+  color:var(--muted);
+  font-size:18px;
+}
+
+/* =========================
+   THEME
+========================= */
+
+.theme-row{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.theme-chip{
+  padding:5px 8px;
+
+  border-radius:8px;
+
+  border:1px solid var(--border);
+
+  color:var(--muted);
+
+  font-size:9px;
+  font-weight:900;
+}
+
+.theme-chip.active{
+  background:#9b5cff;
+  color:#fff;
+
+  border-color:#9b5cff;
+}
 
 /* =========================
    PERFORMANCE
 ========================= */
 
-.performance-grid{
+.performance-wrap{
   display:grid;
   grid-template-columns:repeat(2,1fr);
   gap:10px;
-  margin-bottom:10px;
 }
 
-.performance-stat{
-  background:var(--card2);
+.performance-card{
+  position:relative;
+
+  min-height:98px;
+
+  padding:14px;
+
   border:1px solid var(--border);
-  border-radius:12px;
-  padding:14px 10px;
-  text-align:center;
+  border-radius:14px;
+
+  background:var(--card);
+
+  overflow:hidden;
 }
 
-.performance-stat strong{
-  display:block;
-  font-size:21px;
+.performance-card::after{
+  content:"";
+
+  position:absolute;
+
+  width:70px;
+  height:70px;
+
+  right:-25px;
+  bottom:-28px;
+
+  border-radius:50%;
+
+  background:#9b5cff;
+
+  opacity:.10;
 }
 
-.performance-stat span{
-  display:block;
-  margin-top:5px;
+.performance-icon{
+  font-size:18px;
+  margin-bottom:6px;
+}
+
+.performance-label{
   color:var(--muted);
+
+  font-size:9px;
+  font-weight:900;
+
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+
+.performance-value{
+  margin-top:5px;
+
+  color:var(--text);
+
+  font-size:23px;
+  line-height:1;
+
+  font-weight:900;
+}
+
+.performance-note{
+  margin-top:6px;
+
+  color:var(--muted);
+
+  font-size:9px;
+  font-weight:700;
+}
+
+.performance-empty{
+  grid-column:1/-1;
+
+  padding:22px 14px;
+
+  border:1px solid var(--border);
+  border-radius:14px;
+
+  background:var(--card);
+
+  color:var(--muted);
+
+  text-align:center;
+
+  font-size:12px;
+  font-weight:700;
+  line-height:1.6;
+}
+
+/* =========================
+   POPUP
+========================= */
+
+.popup-overlay{
+  position:fixed;
+
+  inset:0;
+
+  z-index:100;
+
+  display:none;
+
+  align-items:flex-end;
+  justify-content:center;
+
+  background:rgba(0,0,0,.65);
+}
+
+.popup-overlay.show{
+  display:flex;
+}
+
+.popup{
+  width:min(650px,100%);
+
+  max-height:88vh;
+
+  overflow-y:auto;
+
+  padding:18px 16px 20px;
+
+  border:1px solid var(--border);
+  border-bottom:0;
+
+  border-radius:20px 20px 0 0;
+
+  background:var(--card);
+}
+
+.popup-head{
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  padding-bottom:12px;
+
+  border-bottom:1px solid var(--border);
+}
+
+.popup-title{
+  flex:1;
+
+  margin:0;
+
+  color:var(--text);
+
+  font-size:17px;
+  font-weight:900;
+}
+
+.close-x{
+  width:34px;
+  height:34px;
+
+  border:1px solid var(--border);
+  border-radius:10px;
+
+  background:var(--card2);
+  color:var(--text);
+
+  font-size:20px;
+
+  cursor:pointer;
+}
+
+.popup-body{
+  padding-top:14px;
+}
+
+.popup-text{
+  color:var(--text);
+
+  font-size:13px;
+  line-height:1.7;
+}
+
+/* =========================
+   ABOUT
+========================= */
+
+.about-title{
+  margin:0 0 10px;
+
+  color:#9b5cff;
+
+  font-size:15px;
+  font-weight:900;
+}
+
+.about-close{
+  width:100%;
+
+  min-height:44px;
+
+  margin-top:17px;
+
+  border:0;
+  border-radius:11px;
+
+  background:#9b5cff;
+  color:#fff;
+
+  font-size:12px;
+  font-weight:900;
+
+  cursor:pointer;
+}
+
+/* =========================
+   FORM
+========================= */
+
+.form-group{
+  margin-bottom:12px;
+}
+
+.form-label{
+  display:block;
+
+  margin-bottom:5px;
+
+  color:var(--muted);
+
+  font-size:10px;
+  font-weight:900;
+}
+
+.form-input{
+  width:100%;
+
+  min-height:43px;
+
+  padding:10px 11px;
+
+  border:1px solid var(--border);
+  border-radius:10px;
+
+  outline:0;
+
+  background:var(--card2);
+  color:var(--text);
+
+  font:inherit;
+}
+
+.popup-button{
+  width:100%;
+
+  min-height:44px;
+
+  margin-top:4px;
+
+  border:0;
+  border-radius:10px;
+
+  background:#9b5cff;
+  color:#fff;
+
+  font-size:12px;
+  font-weight:900;
+
+  cursor:pointer;
+}
+
+.details-message{
+  margin-top:8px;
+
+  color:var(--muted);
+
   font-size:11px;
 }
 
-.performance-loading{
-  text-align:center;
-  color:var(--muted);
-  padding:20px 5px;
+/* =========================
+   LOGOUT
+========================= */
+
+.logout-item .menu-label{
+  color:#ff6b6b;
 }
 
+/* =========================
+   FOOTER
+========================= */
+
+.footer-brand{
+  width:min(680px,100%);
+
+  margin:0 auto;
+
+  padding:2px 15px 22px;
+
+  text-align:center;
+}
+
+.footer-main{
+  color:var(--text);
+
+  font-size:14px;
+  font-weight:900;
+
+  letter-spacing:.2px;
+}
+
+.footer-main .edge{
+  color:#9b5cff;
+}
+
+.footer-rights{
+  margin-top:4px;
+
+  color:var(--muted);
+
+  font-size:9px;
+  font-weight:700;
+}
+
+.footer-motto{
+  margin-top:4px;
+
+  color:var(--muted);
+
+  font-size:8px;
+  font-weight:800;
+
+  letter-spacing:1.1px;
+}
+
+/* =========================
+   BOTTOM NAV
+========================= */
+
+.bottom-nav{
+  position:fixed;
+
+  left:0;
+  right:0;
+  bottom:0;
+
+  z-index:50;
+
+  height:67px;
+
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+
+  border-top:1px solid var(--border);
+
+  background:var(--header);
+
+  backdrop-filter:blur(14px);
+}
+
+.bottom-nav a{
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+  justify-content:center;
+
+  gap:3px;
+
+  color:var(--muted);
+
+  text-decoration:none;
+
+  font-size:9px;
+  font-weight:800;
+}
+
+.bottom-nav a.active{
+  color:#9b5cff;
+}
+
+.nav-icon{
+  font-size:20px;
+  line-height:1;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:420px){
+
+  .profile-container{
+    padding-left:12px;
+    padding-right:12px;
+  }
+
+  .performance-card{
+    min-height:92px;
+    padding:12px;
+  }
+
+  .performance-value{
+    font-size:21px;
+  }
+
+  .menu-item{
+    min-height:53px;
+  }
+}
+
+@media(max-width:350px){
+
+  .performance-wrap{
+    gap:7px;
+  }
+
+  .performance-value{
+    font-size:19px;
+  }
+
+  .theme-chip{
+    padding:4px 6px;
+  }
+}
 </style>
-
 </head>
-
 
 <body>
 
+<!-- =========================
+     HEADER
+========================= -->
 
-<header class="simple-header">
+<header class="profile-header">
 
-  <h2>SSC EDGE</h2>
+  <div class="profile-brand">
+    SSC <span class="edge">EDGE</span>
+  </div>
 
 </header>
 
 
-<main class="page-container">
+<!-- =========================
+     MAIN PROFILE
+========================= -->
 
+<main class="profile-container">
 
   <!-- PROFILE -->
+  <section class="profile-top">
 
-  <div class="profile-top">
-
-    <div class="avatar"
-         onclick="openCandidateDetails()">
+    <div class="avatar">
       👤
     </div>
 
-    <h2 id="profileName">
+    <h1 id="profileName" class="profile-name">
       Candidate
-    </h2>
+    </h1>
 
-    <p id="profileEmail">
+    <div id="profileEmail" class="profile-email">
       Guest Mode
-    </p>
+    </div>
 
-  </div>
+  </section>
 
 
-  <!-- ACCOUNT -->
+  <!-- =========================
+       ACCOUNT
+  ========================= -->
 
   <div class="section-title">
     Account
   </div>
 
+  <section class="menu-card">
 
-  <div class="card">
+    <!-- Performance -->
 
+    <button
+      class="menu-item"
+      type="button"
+      onclick="openPerformance()">
 
-    <!-- PERFORMANCE -->
+      <span class="menu-icon">
+        📊
+      </span>
 
-    <div class="card-item"
-         onclick="openPerformance()">
+      <span class="menu-content">
 
-      <div class="card-left">
+        <span class="menu-label">
+          Performance
+        </span>
 
-        <div class="icon">
-          📊
-        </div>
+        <span class="menu-sub">
+          View your test performance
+        </span>
 
-        <div class="item-text">
+      </span>
 
-          <strong>
-            Performance
-          </strong>
-
-          <span>
-            View your test performance
-          </span>
-
-        </div>
-
-      </div>
-
-      <div class="arrow">
+      <span class="menu-arrow">
         ›
-      </div>
+      </span>
 
-    </div>
+    </button>
 
 
-    <!-- SAVED QUESTIONS -->
+    <!-- Saved Questions -->
 
-    <div class="card-item"
-         onclick="location.href='saved-questions.html'">
+    <a
+      class="menu-item"
+      href="saved_questions.html"
+      style="text-decoration:none;">
 
-      <div class="card-left">
+      <span class="menu-icon">
+        🔖
+      </span>
 
-        <div class="icon">
-          🔖
-        </div>
+      <span class="menu-content">
 
-        <div class="item-text">
+        <span class="menu-label">
+          Saved Questions
+        </span>
 
-          <strong>
-            Saved Questions
-          </strong>
+        <span class="menu-sub">
+          Questions saved for revision
+        </span>
 
-          <span>
-            Questions saved for revision
-          </span>
+      </span>
 
-        </div>
-
-      </div>
-
-      <div class="arrow">
+      <span class="menu-arrow">
         ›
-      </div>
+      </span>
 
-    </div>
+    </a>
 
 
-    <!-- TEST HISTORY -->
+    <!-- Downloads -->
 
-    <div class="card-item"
-         onclick="location.href='history.html'">
+    <a
+      class="menu-item"
+      href="downloads.html"
+      style="text-decoration:none;">
 
-      <div class="card-left">
+      <span class="menu-icon">
+        ⬇️
+      </span>
 
-        <div class="icon">
-          📝
-        </div>
+      <span class="menu-content">
 
-        <div class="item-text">
+        <span class="menu-label">
+          Downloads
+        </span>
 
-          <strong>
-            Test History
-          </strong>
+        <span class="menu-sub">
+          View downloaded PDFs & E-Books
+        </span>
 
-          <span>
-            View your attempted tests
-          </span>
+      </span>
 
-        </div>
-
-      </div>
-
-      <div class="arrow">
+      <span class="menu-arrow">
         ›
-      </div>
+      </span>
 
-    </div>
-
-
-  </div>
+    </a>
 
 
-  <!-- OPTIONS -->
+    <!-- Test History -->
+
+    <a
+      class="menu-item"
+      href="history.html"
+      style="text-decoration:none;">
+
+      <span class="menu-icon">
+        🕘
+      </span>
+
+      <span class="menu-content">
+
+        <span class="menu-label">
+          Test History
+        </span>
+
+        <span class="menu-sub">
+          View your previous attempts
+        </span>
+
+      </span>
+
+      <span class="menu-arrow">
+        ›
+      </span>
+
+    </a>
+
+  </section>
+
+
+  <!-- =========================
+       MORE
+  ========================= -->
 
   <div class="section-title">
     More
   </div>
 
+  <section class="menu-card">
 
-  <div class="card">
+    <!-- Theme -->
 
+    <button
+      class="menu-item"
+      type="button"
+      onclick="openTheme()">
 
-    <!-- THEME -->
+      <span class="menu-icon">
+        🎨
+      </span>
 
-    <div class="card-item"
-         onclick="openTheme()">
+      <span class="menu-content">
 
-      <div class="card-left">
+        <span class="menu-label">
+          Theme
+        </span>
 
-        <div class="icon">
-          🌙
-        </div>
+        <span class="menu-sub">
+          Choose dark or light mode
+        </span>
 
-        <div class="item-text">
+      </span>
 
-          <strong>
-            Theme
-          </strong>
+      <span class="theme-row">
 
-          <span id="themeText">
-            Dark
-          </span>
+        <span id="darkChip" class="theme-chip">
+          Dark
+        </span>
 
-        </div>
+        <span id="lightChip" class="theme-chip">
+          Light
+        </span>
 
-      </div>
+      </span>
 
-      <div class="arrow">
+      <span class="menu-arrow">
         ›
-      </div>
+      </span>
 
-    </div>
+    </button>
 
 
-    <!-- ABOUT -->
+    <!-- Follow Us -->
 
-    <div class="card-item"
-         onclick="openAbout()">
+    <button
+      class="menu-item"
+      type="button"
+      onclick="openFollowUs()">
 
-      <div class="card-left">
+      <span class="menu-icon">
+        ▶️
+      </span>
 
-        <div class="icon">
-          ℹ️
-        </div>
+      <span class="menu-content">
 
-        <div class="item-text">
+        <span class="menu-label">
+          Follow Us
+        </span>
 
-          <strong>
-            About SSC EDGE
-          </strong>
+        <span class="menu-sub">
+          Follow SSC EDGE on YouTube
+        </span>
 
-          <span>
-            About the platform
-          </span>
+      </span>
 
-        </div>
-
-      </div>
-
-      <div class="arrow">
+      <span class="menu-arrow">
         ›
-      </div>
+      </span>
 
-    </div>
+    </button>
 
 
-    <!-- LOGOUT -->
+    <!-- About -->
 
-    <div class="card-item"
-         onclick="logout()">
+    <button
+      class="menu-item"
+      type="button"
+      onclick="openAbout()">
 
-      <div class="card-left">
+      <span class="menu-icon">
+        ℹ️
+      </span>
 
-        <div class="icon">
-          🚪
-        </div>
+      <span class="menu-content">
 
-        <div class="item-text">
+        <span class="menu-label">
+          About SSC EDGE
+        </span>
 
-          <strong>
-            Logout
-          </strong>
+        <span class="menu-sub">
+          Learn more about SSC EDGE
+        </span>
 
-          <span>
-            Sign out from this account
-          </span>
+      </span>
 
-        </div>
-
-      </div>
-
-      <div class="arrow">
+      <span class="menu-arrow">
         ›
-      </div>
+      </span>
 
-    </div>
+    </button>
 
 
-  </div>
+    <!-- Logout -->
 
+    <button
+      class="menu-item logout-item"
+      type="button"
+      onclick="logout()">
+
+      <span class="menu-icon">
+        ↪️
+      </span>
+
+      <span class="menu-content">
+
+        <span class="menu-label">
+          Logout
+        </span>
+
+        <span class="menu-sub">
+          Sign out of your account
+        </span>
+
+      </span>
+
+      <span class="menu-arrow">
+        ›
+      </span>
+
+    </button>
+
+  </section>
 
 </main>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer class="footer-brand">
+
+  <div class="footer-main">
+    SSC <span class="edge">EDGE</span>
+  </div>
+
+  <div class="footer-rights">
+    © All Rights Reserved ®️
+  </div>
+
+  <div class="footer-motto">
+    LEARN • PRACTICE • IMPROVE
+  </div>
+
+</footer>
 
 
 <!-- =========================
@@ -568,10 +1008,12 @@ body{
   <a href="home.html">
 
     <span class="nav-icon">
-      ⌂
+      🏠
     </span>
 
-    Home
+    <span>
+      Home
+    </span>
 
   </a>
 
@@ -582,7 +1024,9 @@ body{
       📚
     </span>
 
-    Study Material
+    <span>
+      Study Material
+    </span>
 
   </a>
 
@@ -593,19 +1037,24 @@ body{
       📝
     </span>
 
-    Practice
+    <span>
+      Practice
+    </span>
 
   </a>
 
 
-  <a href="profile.html"
-     class="active">
+  <a
+    href="profile.html"
+    class="active">
 
     <span class="nav-icon">
       👤
     </span>
 
-    Profile
+    <span>
+      Profile
+    </span>
 
   </a>
 
@@ -613,214 +1062,139 @@ body{
 
 
 <!-- =========================
-     CANDIDATE DETAILS
+     CANDIDATE DETAILS POPUP
 ========================= -->
 
-<div class="popup"
-     id="candidatePopup">
+<div
+  id="candidatePopup"
+  class="popup-overlay">
 
-  <div class="popup-box">
+  <div class="popup">
 
-    <span class="close"
-          onclick="closePopup('candidatePopup')">
-      ×
-    </span>
+    <div class="popup-head">
 
-    <h3>
-      Candidate Details
-    </h3>
+      <h2 class="popup-title">
+        Candidate Details
+      </h2>
 
-
-    <div class="field">
-
-      <label>
-        Name
-      </label>
-
-      <input
-        id="candidateName"
-        type="text"
-        placeholder="Enter your name">
+      <button
+        class="close-x"
+        type="button"
+        onclick="closePopup('candidatePopup')">
+        ×
+      </button>
 
     </div>
 
+    <div class="popup-body">
 
-    <div class="field">
+      <div class="form-group">
 
-      <label>
-        Email
-      </label>
+        <label class="form-label">
+          Name
+        </label>
 
-      <input
-        id="candidateEmail"
-        type="email"
-        disabled>
+        <input
+          id="candidateNameInput"
+          class="form-input"
+          type="text"
+          placeholder="Enter your name">
 
-    </div>
+      </div>
 
 
-    <div class="field">
+      <div class="form-group">
 
-      <label>
-        Phone Number (Optional)
-      </label>
+        <label class="form-label">
+          Email
+        </label>
 
-      <input
-        id="candidatePhone"
-        type="tel"
-        placeholder="Enter phone number">
+        <input
+          id="candidateEmailInput"
+          class="form-input"
+          type="email"
+          placeholder="Email">
 
-    </div>
+      </div>
 
 
-    <p class="info-text">
+      <button
+        class="popup-button"
+        type="button"
+        onclick="saveCandidateDetails()">
 
-      Phone number is stored as profile information only.
-      Phone OTP/login is currently unavailable.
+        Save Details
 
-    </p>
+      </button>
 
-
-    <button class="primary-btn"
-            onclick="saveCandidateDetails()">
-
-      Save Details
-
-    </button>
-
-
-    <button class="secondary-btn"
-            onclick="openPasswordPopup()">
-
-      Change Password
-
-    </button>
-
-
-  </div>
-
-</div>
-
-
-<!-- =========================
-     PASSWORD
-========================= -->
-
-<div class="popup"
-     id="passwordPopup">
-
-  <div class="popup-box">
-
-    <span class="close"
-          onclick="closePopup('passwordPopup')">
-      ×
-    </span>
-
-    <h3>
-      Change Password
-    </h3>
-
-
-    <div class="field">
-
-      <label>
-        New Password
-      </label>
-
-      <input
-        id="newPassword"
-        type="password"
-        placeholder="Enter new password">
-
-    </div>
-
-
-    <button class="primary-btn"
-            onclick="changePassword()">
-
-      Update Password
-
-    </button>
-
-  </div>
-
-</div>
-
-
-<!-- =========================
-     GUEST
-========================= -->
-
-<div class="popup"
-     id="guestPopup">
-
-  <div class="popup-box">
-
-    <span class="close"
-          onclick="closePopup('guestPopup')">
-      ×
-    </span>
-
-    <h3>
-      Guest Mode
-    </h3>
-
-
-    <p class="info-text">
-
-      You are currently using SSC EDGE as a guest.
-      You can browse and attempt tests, but your personal
-      performance and saved data will not sync to an account.
-
-    </p>
-
-
-    <button class="primary-btn"
-            onclick="location.href='index.html'">
-
-      Create / Login Account
-
-    </button>
-
-  </div>
-
-</div>
-
-
-<!-- =========================
-     PERFORMANCE
-========================= -->
-
-<div class="popup"
-     id="performancePopup">
-
-  <div class="popup-box">
-
-    <span class="close"
-          onclick="closePopup('performancePopup')">
-      ×
-    </span>
-
-    <h3>
-      Performance
-    </h3>
-
-
-    <div id="performanceContent">
-
-      <div class="performance-loading">
-        Loading your performance...
+      <div
+        id="candidateMessage"
+        class="details-message">
       </div>
 
     </div>
 
+  </div>
 
-    <button class="primary-btn"
-            onclick="location.href='history.html'">
+</div>
 
-      View Test History
 
-    </button>
+<!-- =========================
+     PASSWORD POPUP
+========================= -->
+
+<div
+  id="passwordPopup"
+  class="popup-overlay">
+
+  <div class="popup">
+
+    <div class="popup-head">
+
+      <h2 class="popup-title">
+        Change Password
+      </h2>
+
+      <button
+        class="close-x"
+        type="button"
+        onclick="closePopup('passwordPopup')">
+        ×
+      </button>
+
+    </div>
+
+    <div class="popup-body">
+
+      <div class="form-group">
+
+        <label class="form-label">
+          New Password
+        </label>
+
+        <input
+          id="newPassword"
+          class="form-input"
+          type="password"
+          placeholder="New password">
+
+      </div>
+
+      <button
+        class="popup-button"
+        type="button"
+        onclick="changePassword()">
+
+        Change Password
+
+      </button>
+
+      <div
+        id="passwordMessage"
+        class="details-message">
+      </div>
+
+    </div>
 
   </div>
 
@@ -828,38 +1202,37 @@ body{
 
 
 <!-- =========================
-     THEME
+     GUEST POPUP
 ========================= -->
 
-<div class="popup"
-     id="themePopup">
+<div
+  id="guestPopup"
+  class="popup-overlay">
 
-  <div class="popup-box">
+  <div class="popup">
 
-    <span class="close"
-          onclick="closePopup('themePopup')">
-      ×
-    </span>
+    <div class="popup-head">
 
-    <h3>
-      Theme
-    </h3>
+      <h2 class="popup-title">
+        Guest Mode
+      </h2>
 
+      <button
+        class="close-x"
+        type="button"
+        onclick="closePopup('guestPopup')">
+        ×
+      </button>
 
-    <button class="primary-btn"
-            onclick="setTheme('dark')">
+    </div>
 
-      🌙 Dark
+    <div class="popup-body">
 
-    </button>
+      <div class="popup-text">
+        You are currently using SSC EDGE in Guest Mode.
+      </div>
 
-
-    <button class="secondary-btn"
-            onclick="setTheme('light')">
-
-      ☀️ Light
-
-    </button>
+    </div>
 
   </div>
 
@@ -867,66 +1240,267 @@ body{
 
 
 <!-- =========================
-     ABOUT
+     PERFORMANCE POPUP
 ========================= -->
 
-<div class="popup"
-     id="aboutPopup">
+<div
+  id="performancePopup"
+  class="popup-overlay">
 
-  <div class="popup-box">
+  <div class="popup">
 
-    <span class="close"
-          onclick="closePopup('aboutPopup')">
-      ×
-    </span>
+    <div class="popup-head">
 
-    <h3>
-      About SSC EDGE
-    </h3>
+      <h2 class="popup-title">
+        📊 Performance
+      </h2>
 
+      <button
+        class="close-x"
+        type="button"
+        onclick="closePopup('performancePopup')">
+        ×
+      </button>
 
-    <p class="info-text">
+    </div>
 
-      SSC EDGE is a preparation platform designed for
-      SSC aspirants with study material, mock tests,
-      practice questions and performance tracking.
+    <div class="popup-body">
 
-    </p>
+      <div
+        id="performanceContent"
+        class="performance-wrap">
 
+        <div class="performance-empty">
+          Loading performance...
+        </div>
 
-    <p class="info-text">
+      </div>
 
-      Built for focused and structured exam preparation.
-
-    </p>
+    </div>
 
   </div>
 
 </div>
 
+
+<!-- =========================
+     THEME POPUP
+========================= -->
+
+<div
+  id="themePopup"
+  class="popup-overlay">
+
+  <div class="popup">
+
+    <div class="popup-head">
+
+      <h2 class="popup-title">
+        Choose Theme
+      </h2>
+
+      <button
+        class="close-x"
+        type="button"
+        onclick="closePopup('themePopup')">
+        ×
+      </button>
+
+    </div>
+
+    <div class="popup-body">
+
+      <button
+        class="popup-button"
+        type="button"
+        onclick="setTheme('dark')">
+
+        🌙 Dark Theme
+
+      </button>
+
+
+      <button
+        class="popup-button"
+        type="button"
+        style="margin-top:9px;"
+        onclick="setTheme('light')">
+
+        ☀️ Light Theme
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     FOLLOW US POPUP
+========================= -->
+
+<div
+  id="followPopup"
+  class="popup-overlay">
+
+  <div class="popup">
+
+    <div class="popup-head">
+
+      <h2 class="popup-title">
+        Follow Us
+      </h2>
+
+      <button
+        class="close-x"
+        type="button"
+        onclick="closePopup('followPopup')">
+        ×
+      </button>
+
+    </div>
+
+    <div class="popup-body">
+
+      <div class="popup-text">
+
+        Follow <b>SSC EDGE</b> on YouTube
+        for video classes and preparation
+        updates.
+
+      </div>
+
+
+      <button
+        class="popup-button"
+        type="button"
+        onclick="openYouTube()">
+
+        ▶️ Open SSC EDGE YouTube
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     ABOUT POPUP
+========================= -->
+
+<div
+  id="aboutPopup"
+  class="popup-overlay">
+
+  <div class="popup">
+
+    <div class="popup-head">
+
+      <h2 class="popup-title">
+        About SSC EDGE
+      </h2>
+
+      <button
+        class="close-x"
+        type="button"
+        onclick="closePopup('aboutPopup')">
+        ×
+      </button>
+
+    </div>
+
+    <div class="popup-body">
+
+      <div class="popup-text">
+
+        <div class="about-title">
+          About SSC EDGE
+        </div>
+
+        SSC EDGE is a dedicated learning platform designed to help SSC aspirants prepare smarter and more effectively.
+
+        <br><br>
+
+        It brings study material, notes, e-books, video classes, and practice resources together in one place.
+
+        <br><br>
+
+        The platform focuses on making preparation simple, organised, and easy to access.
+
+        <br><br>
+
+        Students can study subject-wise and strengthen their concepts through regular practice.
+
+        <br><br>
+
+        SSC EDGE is built around the idea of Learn • Practice • Improve.
+
+        <br><br>
+
+        Study smart, practice consistently, and keep improving with SSC EDGE. 🚀📚
+
+      </div>
+
+
+      <!-- CLOSE BUTTON AT END -->
+
+      <button
+        class="about-close"
+        type="button"
+        onclick="closePopup('aboutPopup')">
+
+        Close
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     SUPABASE
+========================= -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-
 <script>
+
+const SUPABASE_URL =
+  "https://dvvyoygahzzbnpqrfhen.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
+const db =
+  supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
 
 
 /* =========================
-   SUPABASE
+   YOUTUBE
 ========================= */
 
-const SUPABASE_URL =
-"https://dvvyoygahzzbnpqrfhen.supabase.co";
-
-const SUPABASE_KEY =
-"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+const YOUTUBE_URL =
+  "https://youtube.com/@sscedge07?si=G3GngIGL79XRy3PK";
 
 
-const supabaseClient =
-supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+/* =========================
+   SHORT SELECTOR
+========================= */
+
+function $(id){
+  return document.getElementById(id);
+}
 
 
 /* =========================
@@ -935,53 +1509,54 @@ supabase.createClient(
 
 async function loadProfile(){
 
-  const isGuest =
-    localStorage.getItem("ssc-edge-guest")
-    === "true";
+  try{
+
+    const result =
+      await db.auth.getUser();
+
+    const user =
+      result.data?.user;
+
+    if(!user){
+
+      $("profileName").textContent =
+        "Candidate";
+
+      $("profileEmail").textContent =
+        "Guest Mode";
+
+      return;
+    }
 
 
-  if(isGuest){
+    const metadata =
+      user.user_metadata || {};
 
-    document.getElementById("profileName")
-      .textContent="Guest";
 
-    document.getElementById("profileEmail")
-      .textContent="Guest Mode";
+    const name =
+      metadata.name ||
+      metadata.full_name ||
+      metadata.username ||
+      "Candidate";
 
-    return;
+
+    $("profileName").textContent =
+      name;
+
+
+    $("profileEmail").textContent =
+      user.email ||
+      "Account";
+
   }
+  catch(error){
 
+    console.warn(
+      "Profile could not be loaded:",
+      error
+    );
 
-  const {
-    data:{user}
-  } =
-  await supabaseClient.auth.getUser();
-
-
-  if(!user){
-
-    document.getElementById("profileName")
-      .textContent="Guest";
-
-    document.getElementById("profileEmail")
-      .textContent="Guest Mode";
-
-    return;
   }
-
-
-  const name =
-    user.user_metadata?.name ||
-    localStorage.getItem("ssc-edge-name") ||
-    "Candidate";
-
-
-  document.getElementById("profileName")
-    .textContent=name;
-
-
-  document.getElementById("profileEmail")
-    .textContent=user.email || "";
 
 }
 
@@ -990,134 +1565,114 @@ async function loadProfile(){
    CANDIDATE DETAILS
 ========================= */
 
-async function openCandidateDetails(){
+function openCandidateDetails(){
 
-  const isGuest =
-    localStorage.getItem("ssc-edge-guest")
-    === "true";
-
-
-  if(isGuest){
-
-    document.getElementById("guestPopup")
-      .style.display="flex";
-
-    return;
-  }
+  $("candidateNameInput").value =
+    $("profileName").textContent === "Candidate"
+      ? ""
+      : $("profileName").textContent;
 
 
-  const {
-    data:{user}
-  } =
-  await supabaseClient.auth.getUser();
+  $("candidateEmailInput").value =
+    $("profileEmail").textContent === "Guest Mode"
+      ? ""
+      : $("profileEmail").textContent;
 
 
-  if(!user){
-
-    document.getElementById("guestPopup")
-      .style.display="flex";
-
-    return;
-  }
+  $("candidateMessage").textContent =
+    "";
 
 
-  document.getElementById("candidateName").value =
-    user.user_metadata?.name || "";
-
-
-  document.getElementById("candidateEmail").value =
-    user.email || "";
-
-
-  document.getElementById("candidatePhone").value =
-    user.user_metadata?.phone || "";
-
-
-  document.getElementById("candidatePopup")
-    .style.display="flex";
+  $("candidatePopup")
+    .classList
+    .add("show");
 
 }
 
-
-/* =========================
-   SAVE DETAILS
-========================= */
 
 async function saveCandidateDetails(){
 
   const name =
-    document.getElementById("candidateName")
-      .value.trim();
+    $("candidateNameInput")
+      .value
+      .trim();
 
 
-  const phone =
-    document.getElementById("candidatePhone")
-      .value.trim();
+  const email =
+    $("candidateEmailInput")
+      .value
+      .trim();
 
 
   if(!name){
 
-    alert("Please enter your name.");
+    $("candidateMessage").textContent =
+      "Please enter your name.";
 
     return;
+
   }
 
 
-  const {
-    error
-  } =
-  await supabaseClient.auth.updateUser({
+  try{
 
-    data:{
-      name:name,
-      phone:phone
+    const result =
+      await db.auth.updateUser({
+
+        data:{
+          name:name,
+          full_name:name
+        }
+
+      });
+
+
+    if(result.error)
+      throw result.error;
+
+
+    $("profileName").textContent =
+      name;
+
+
+    if(email){
+
+      $("profileEmail").textContent =
+        email;
+
     }
 
-  });
 
+    $("candidateMessage").textContent =
+      "Details saved.";
 
-  if(error){
-
-    alert(error.message);
-
-    return;
   }
+  catch(error){
 
+    $("candidateMessage").textContent =
+      error.message ||
+      "Could not save details.";
 
-  localStorage.setItem(
-    "ssc-edge-name",
-    name
-  );
-
-
-  document.getElementById("profileName")
-    .textContent=name;
-
-
-  closePopup("candidatePopup");
-
-
-  alert(
-    "Profile updated successfully."
-  );
+  }
 
 }
 
 
 /* =========================
-   CHANGE PASSWORD
+   PASSWORD
 ========================= */
 
 function openPasswordPopup(){
 
-  closePopup("candidatePopup");
+  $("newPassword").value =
+    "";
 
-  document.getElementById("newPassword")
-    .value="";
+  $("passwordMessage").textContent =
+    "";
 
-
-  document.getElementById("passwordPopup")
-    .style.display="flex";
+  $("passwordPopup")
+    .classList
+    .add("show");
 
 }
 
@@ -1125,44 +1680,321 @@ function openPasswordPopup(){
 async function changePassword(){
 
   const password =
-    document.getElementById("newPassword")
-      .value.trim();
+    $("newPassword").value;
 
 
   if(password.length < 6){
 
-    alert(
-      "Password must be at least 6 characters."
-    );
+    $("passwordMessage").textContent =
+      "Password must be at least 6 characters.";
 
     return;
+
   }
 
 
-  const {
-    error
-  } =
-  await supabaseClient.auth.updateUser({
+  try{
 
-    password:password
-
-  });
+    const result =
+      await db.auth.updateUser({
+        password
+      });
 
 
-  if(error){
+    if(result.error)
+      throw result.error;
 
-    alert(error.message);
 
-    return;
+    $("passwordMessage").textContent =
+      "Password changed successfully.";
+
+  }
+  catch(error){
+
+    $("passwordMessage").textContent =
+      error.message ||
+      "Could not change password.";
+
   }
 
+}
 
-  closePopup("passwordPopup");
+
+/* =========================
+   PERFORMANCE
+========================= */
+
+async function openPerformance(){
+
+  $("performancePopup")
+    .classList
+    .add("show");
 
 
-  alert(
-    "Password changed successfully."
-  );
+  const box =
+    $("performanceContent");
+
+
+  box.innerHTML = `
+    <div class="performance-empty">
+      Loading performance...
+    </div>
+  `;
+
+
+  try{
+
+    const result =
+      await db.auth.getUser();
+
+    const user =
+      result.data?.user;
+
+
+    if(!user){
+
+      box.innerHTML = `
+        <div class="performance-empty">
+          Performance is available after
+          signing in and attempting tests.
+        </div>
+      `;
+
+      return;
+    }
+
+
+    const attemptsResult =
+      await db
+        .from("test_attempts")
+        .select(
+          "score,correct_answers,wrong_answers,unanswered"
+        )
+        .eq(
+          "user_id",
+          user.id
+        );
+
+
+    if(attemptsResult.error)
+      throw attemptsResult.error;
+
+
+    const attempts =
+      attemptsResult.data || [];
+
+
+    if(!attempts.length){
+
+      box.innerHTML = `
+        <div class="performance-empty">
+          <div style="font-size:28px;margin-bottom:7px;">
+            📊
+          </div>
+
+          No test attempts yet.
+
+          <br>
+
+          Attempt a mock test to see
+          your performance here.
+        </div>
+      `;
+
+      return;
+    }
+
+
+    let totalScore = 0;
+    let correct = 0;
+    let wrong = 0;
+    let unanswered = 0;
+
+
+    attempts.forEach(a=>{
+
+      totalScore +=
+        Number(a.score || 0);
+
+      correct +=
+        Number(a.correct_answers || 0);
+
+      wrong +=
+        Number(a.wrong_answers || 0);
+
+      unanswered +=
+        Number(a.unanswered || 0);
+
+    });
+
+
+    const attempted =
+      correct + wrong;
+
+
+    const accuracy =
+      attempted > 0
+        ? Math.round(
+            (correct / attempted) * 100
+          )
+        : 0;
+
+
+    const averageScore =
+      Math.round(
+        (totalScore / attempts.length) * 100
+      ) / 100;
+
+
+    box.innerHTML = `
+
+      <div class="performance-card">
+
+        <div class="performance-icon">
+          📝
+        </div>
+
+        <div class="performance-label">
+          Tests
+        </div>
+
+        <div class="performance-value">
+          ${attempts.length}
+        </div>
+
+        <div class="performance-note">
+          Tests attempted
+        </div>
+
+      </div>
+
+
+      <div class="performance-card">
+
+        <div class="performance-icon">
+          🏆
+        </div>
+
+        <div class="performance-label">
+          Avg. Score
+        </div>
+
+        <div class="performance-value">
+          ${averageScore}
+        </div>
+
+        <div class="performance-note">
+          Average score
+        </div>
+
+      </div>
+
+
+      <div class="performance-card">
+
+        <div class="performance-icon">
+          ✅
+        </div>
+
+        <div class="performance-label">
+          Correct
+        </div>
+
+        <div class="performance-value">
+          ${correct}
+        </div>
+
+        <div class="performance-note">
+          Total correct answers
+        </div>
+
+      </div>
+
+
+      <div class="performance-card">
+
+        <div class="performance-icon">
+          ❌
+        </div>
+
+        <div class="performance-label">
+          Wrong
+        </div>
+
+        <div class="performance-value">
+          ${wrong}
+        </div>
+
+        <div class="performance-note">
+          Total wrong answers
+        </div>
+
+      </div>
+
+
+      <div class="performance-card">
+
+        <div class="performance-icon">
+          🎯
+        </div>
+
+        <div class="performance-label">
+          Accuracy
+        </div>
+
+        <div class="performance-value">
+          ${accuracy}%
+        </div>
+
+        <div class="performance-note">
+          ${attempted} attempted
+        </div>
+
+      </div>
+
+
+      <div class="performance-card">
+
+        <div class="performance-icon">
+          ⏭️
+        </div>
+
+        <div class="performance-label">
+          Unanswered
+        </div>
+
+        <div class="performance-value">
+          ${unanswered}
+        </div>
+
+        <div class="performance-note">
+          Total unanswered
+        </div>
+
+      </div>
+
+    `;
+
+  }
+  catch(error){
+
+    console.error(error);
+
+
+    box.innerHTML = `
+      <div class="performance-empty">
+
+        Unable to load performance
+        right now.
+
+        <br>
+
+        Please try again later.
+
+      </div>
+    `;
+
+  }
 
 }
 
@@ -1173,8 +2005,11 @@ async function changePassword(){
 
 function openTheme(){
 
-  document.getElementById("themePopup")
-    .style.display="flex";
+  updateThemeText();
+
+  $("themePopup")
+    .classList
+    .add("show");
 
 }
 
@@ -1202,274 +2037,49 @@ function setTheme(theme){
 function updateThemeText(){
 
   const theme =
-    localStorage.getItem("ssc-edge-theme")
-    || "dark";
+    localStorage.getItem(
+      "ssc-edge-theme"
+    ) || "dark";
 
 
-  document.getElementById("themeText")
-    .textContent =
+  $("darkChip")
+    .classList
+    .toggle(
+      "active",
+      theme === "dark"
+    );
+
+
+  $("lightChip")
+    .classList
+    .toggle(
+      "active",
       theme === "light"
-      ? "Light"
-      : "Dark";
+    );
 
 }
 
 
 /* =========================
-   PERFORMANCE
+   FOLLOW US
 ========================= */
 
-async function openPerformance(){
+function openFollowUs(){
 
-  const isGuest =
-    localStorage.getItem("ssc-edge-guest")
-    === "true";
+  $("followPopup")
+    .classList
+    .add("show");
 
+}
 
-  if(isGuest){
 
-    document.getElementById("guestPopup")
-      .style.display="flex";
+function openYouTube(){
 
-    return;
-  }
-
-
-  document.getElementById("performancePopup")
-    .style.display="flex";
-
-
-  const content =
-    document.getElementById(
-      "performanceContent"
-    );
-
-
-  content.innerHTML = `
-
-    <div class="performance-loading">
-      Loading your performance...
-    </div>
-
-  `;
-
-
-  const {
-    data:{user},
-    error:userError
-  } =
-  await supabaseClient.auth.getUser();
-
-
-  if(userError || !user){
-
-    content.innerHTML = `
-
-      <p class="info-text">
-        Please login to view your performance.
-      </p>
-
-    `;
-
-    return;
-  }
-
-
-  const {
-    data:attempts,
-    error
-  } =
-  await supabaseClient
-    .from("test_attempts")
-    .select(`
-      score,
-      correct_answers,
-      wrong_answers,
-      unanswered
-    `)
-    .eq("user_id",user.id);
-
-
-  if(error){
-
-    console.error(error);
-
-
-    content.innerHTML = `
-
-      <p class="info-text">
-        Unable to load performance.
-      </p>
-
-    `;
-
-    return;
-  }
-
-
-  if(!attempts || attempts.length === 0){
-
-    content.innerHTML = `
-
-      <div class="info-text">
-
-        <p>
-          <strong>No test attempts yet.</strong>
-        </p>
-
-        <p>
-          Complete a mock test to see your
-          performance statistics here.
-        </p>
-
-      </div>
-
-    `;
-
-    return;
-  }
-
-
-  const totalTests =
-    attempts.length;
-
-
-  const totalCorrect =
-    attempts.reduce(
-      (sum,a)=>
-        sum + Number(a.correct_answers || 0),
-      0
-    );
-
-
-  const totalWrong =
-    attempts.reduce(
-      (sum,a)=>
-        sum + Number(a.wrong_answers || 0),
-      0
-    );
-
-
-  const totalUnanswered =
-    attempts.reduce(
-      (sum,a)=>
-        sum + Number(a.unanswered || 0),
-      0
-    );
-
-
-  const totalQuestions =
-    totalCorrect +
-    totalWrong +
-    totalUnanswered;
-
-
-  const totalScore =
-    attempts.reduce(
-      (sum,a)=>
-        sum + Number(a.score || 0),
-      0
-    );
-
-
-  const averageScore =
-    totalTests
-    ? (totalScore / totalTests).toFixed(2)
-    : "0";
-
-
-  const accuracy =
-    totalQuestions
-    ? ((totalCorrect / totalQuestions) * 100).toFixed(1)
-    : "0";
-
-
-  content.innerHTML = `
-
-    <div class="performance-grid">
-
-
-      <div class="performance-stat">
-
-        <strong>
-          ${totalTests}
-        </strong>
-
-        <span>
-          Tests
-        </span>
-
-      </div>
-
-
-      <div class="performance-stat">
-
-        <strong>
-          ${averageScore}
-        </strong>
-
-        <span>
-          Avg Score
-        </span>
-
-      </div>
-
-
-      <div class="performance-stat">
-
-        <strong>
-          ${totalCorrect}
-        </strong>
-
-        <span>
-          Correct
-        </span>
-
-      </div>
-
-
-      <div class="performance-stat">
-
-        <strong>
-          ${totalWrong}
-        </strong>
-
-        <span>
-          Wrong
-        </span>
-
-      </div>
-
-
-      <div class="performance-stat">
-
-        <strong>
-          ${totalUnanswered}
-        </strong>
-
-        <span>
-          Unanswered
-        </span>
-
-      </div>
-
-
-      <div class="performance-stat">
-
-        <strong>
-          ${accuracy}%
-        </strong>
-
-        <span>
-          Accuracy
-        </span>
-
-      </div>
-
-
-    </div>
-
-  `;
+  window.open(
+    YOUTUBE_URL,
+    "_blank",
+    "noopener,noreferrer"
+  );
 
 }
 
@@ -1480,20 +2090,28 @@ async function openPerformance(){
 
 function openAbout(){
 
-  document.getElementById("aboutPopup")
-    .style.display="flex";
+  $("aboutPopup")
+    .classList
+    .add("show");
 
 }
 
 
 /* =========================
-   POPUP CLOSE
+   CLOSE POPUP
 ========================= */
 
 function closePopup(id){
 
-  document.getElementById(id)
-    .style.display="none";
+  const el =
+    $(id);
+
+  if(el){
+
+    el.classList
+      .remove("show");
+
+  }
 
 }
 
@@ -1504,103 +2122,52 @@ function closePopup(id){
 
 async function logout(){
 
-  const isGuest =
-    localStorage.getItem("ssc-edge-guest")
-    === "true";
+  try{
 
+    await db.auth.signOut();
 
-  if(isGuest){
+  }
+  catch(error){
 
-    localStorage.removeItem(
-      "ssc-edge-guest"
+    console.warn(
+      "Logout error:",
+      error
     );
 
-    localStorage.removeItem(
-      "ssc-edge-user-id"
-    );
-
-    localStorage.removeItem(
-      "ssc-edge-name"
-    );
-
-
-    window.location.replace(
-      "index.html"
-    );
-
-    return;
   }
 
 
-  const confirmed =
-    confirm(
-      "Are you sure you want to logout?"
-    );
-
-
-  if(!confirmed)return;
-
-
-  const {
-    error
-  } =
-  await supabaseClient.auth.signOut();
-
-
-  if(error){
-
-    alert(
-      "Logout failed. Please try again."
-    );
-
-    return;
-  }
-
-
-  localStorage.removeItem(
-    "ssc-edge-user-id"
-  );
-
-
-  localStorage.removeItem(
-    "ssc-edge-guest"
-  );
-
-
-  localStorage.removeItem(
-    "ssc-edge-name"
-  );
-
-
-  window.location.replace(
-    "index.html"
-  );
+  window.location.href =
+    "home.html";
 
 }
 
 
 /* =========================
-   POPUP OUTSIDE CLICK
+   OUTSIDE CLICK
 ========================= */
 
 document
-.querySelectorAll(".popup")
-.forEach(popup=>{
+  .querySelectorAll(".popup-overlay")
+  .forEach(overlay=>{
 
-  popup.addEventListener(
-    "click",
-    function(e){
+    overlay.addEventListener(
+      "click",
+      event=>{
 
-      if(e.target === popup){
+        if(
+          event.target === overlay
+        ){
 
-        popup.style.display="none";
+          overlay.classList
+            .remove("show");
+
+        }
 
       }
+    );
 
-    }
-  );
-
-});
+  });
 
 
 /* =========================
