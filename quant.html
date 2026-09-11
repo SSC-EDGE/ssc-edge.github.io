@@ -15,6 +15,8 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 
 <link rel="stylesheet" href="css/style.css">
 
+<script src="js/downloads.js"></script>
+
 <style>
 
 .container{
@@ -36,41 +38,101 @@ margin-bottom:20px;
 .pdf-list{
 display:flex;
 flex-direction:column;
-gap:14px;
+gap:18px;
 }
 
 .pdf-card{
 background:var(--card);
 border:1px solid var(--border);
-border-radius:14px;
+border-radius:17px;
+overflow:hidden;
+box-shadow:0 5px 18px rgba(0,0,0,.07);
+}
+
+.pdf-thumbnail{
+width:100%;
+aspect-ratio:16/9;
+background:#111;
+overflow:hidden;
+}
+
+.pdf-thumbnail img{
+width:100%;
+height:100%;
+object-fit:cover;
+display:block;
+}
+
+.thumbnail-fallback{
+width:100%;
+height:100%;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+text-align:center;
+background:linear-gradient(135deg,#171225,#30204f);
+color:white;
+}
+
+.thumbnail-icon{
+font-size:45px;
+margin-bottom:7px;
+}
+
+.thumbnail-logo{
+font-size:27px;
+font-weight:800;
+letter-spacing:1px;
+}
+
+.thumbnail-text{
+font-size:13px;
+opacity:.8;
+margin-top:5px;
+}
+
+.pdf-content{
 padding:16px;
 }
 
 .pdf-title{
 font-size:18px;
 font-weight:bold;
+line-height:1.4;
 margin-bottom:7px;
+}
+
+.pdf-subject{
+font-size:13px;
+color:var(--muted);
+margin-bottom:9px;
 }
 
 .pdf-description{
 color:var(--muted);
 font-size:14px;
+line-height:1.5;
 margin-bottom:14px;
 }
 
 .pdf-actions{
 display:flex;
 gap:10px;
-flex-wrap:wrap;
 }
 
 .open,
 .download{
-display:inline-block;
-padding:11px 15px;
+flex:1;
+display:flex;
+align-items:center;
+justify-content:center;
+min-height:46px;
+padding:11px 10px;
 border-radius:10px;
 text-decoration:none;
 font-weight:bold;
+box-sizing:border-box;
 }
 
 .open{
@@ -115,7 +177,6 @@ Loading PDFs...
 </div>
 
 </div>
-
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -167,6 +228,55 @@ return url;
 }
 
 
+function fallbackThumbnail(){
+
+return `
+
+<div class="thumbnail-fallback">
+
+<div class="thumbnail-icon">
+📐
+</div>
+
+<div class="thumbnail-logo">
+SSC EDGE
+</div>
+
+<div class="thumbnail-text">
+Quantitative Aptitude
+</div>
+
+</div>
+
+`;
+
+}
+
+
+function recordDownload(
+id,
+title,
+subject,
+url
+){
+
+if(window.SSCEdgeDownloads){
+
+window.SSCEdgeDownloads.recordDownload({
+
+id:id,
+title:title,
+subject:subject,
+type:"PDF",
+url:url
+
+});
+
+}
+
+}
+
+
 async function loadPDFs(){
 
 const pdfList =
@@ -177,9 +287,13 @@ const {
 data: subject,
 error: subjectError
 } = await supabaseClient
+
 .from("subjects")
+
 .select("id,name")
+
 .eq("name","Quant")
+
 .single();
 
 
@@ -199,15 +313,28 @@ const {
 data: pdfs,
 error
 } = await supabaseClient
+
 .from("study_material")
+
 .select("*")
+
 .eq("material_type","PDF")
+
 .eq("subject_id",subject.id)
+
 .eq("is_active",true)
-.order("created_at",{ascending:false});
+
+.order(
+"created_at",
+{
+ascending:false
+}
+);
 
 
 if(error){
+
+console.error(error);
 
 pdfList.innerHTML =
 `<div class="empty">
@@ -231,33 +358,92 @@ return;
 }
 
 
-pdfList.innerHTML = pdfs.map(pdf => {
+pdfList.innerHTML =
+pdfs.map(pdf => {
+
+const rawTitle =
+pdf.title || "Untitled PDF";
+
+const rawDescription =
+pdf.description || "";
+
+const rawUrl =
+pdf.file_url || "";
+
+const id =
+escapeHtml(pdf.id || rawUrl);
 
 const title =
-escapeHtml(pdf.title || "Untitled PDF");
+escapeHtml(rawTitle);
 
 const description =
-escapeHtml(pdf.description || "");
+escapeHtml(rawDescription);
 
 const openUrl =
-escapeHtml(pdf.file_url || "");
+escapeHtml(rawUrl);
 
 const downloadUrl =
-escapeHtml(getDownloadUrl(pdf.file_url || ""));
+escapeHtml(getDownloadUrl(rawUrl));
+
+const thumbnail =
+pdf.thumbnail_url || "";
+
+
+const thumbnailHtml =
+thumbnail
+
+?
+
+`
+
+<div class="pdf-thumbnail">
+
+<img
+src="${escapeHtml(thumbnail)}"
+alt="${title}"
+loading="lazy"
+onerror="this.parentElement.innerHTML='${fallbackThumbnail().replace(/'/g,"\\'")}'"
+>
+
+</div>
+
+`
+
+:
+
+`
+
+<div class="pdf-thumbnail">
+
+${fallbackThumbnail()}
+
+</div>
+
+`;
 
 
 return `
 
 <div class="pdf-card">
 
+${thumbnailHtml}
+
+<div class="pdf-content">
+
 <div class="pdf-title">
 ${title}
 </div>
 
+<div class="pdf-subject">
+📚 ${escapeHtml(subject.name)}
+</div>
+
 ${description ? `
+
 <div class="pdf-description">
 ${description}
 </div>
+
 ` : ""}
 
 <div class="pdf-actions">
@@ -267,15 +453,27 @@ class="open"
 href="${openUrl}"
 target="_blank"
 rel="noopener">
+
 📄 Open PDF
+
 </a>
 
 <a
 class="download"
 href="${downloadUrl}"
-download>
+download
+onclick="recordDownload(
+'${id.replace(/'/g,"\\'")}',
+'${title.replace(/'/g,"\\'")}',
+'${escapeHtml(subject.name).replace(/'/g,"\\'")}',
+'${downloadUrl.replace(/'/g,"\\'")}'
+)">
+
 📥 Download
+
 </a>
+
+</div>
 
 </div>
 
