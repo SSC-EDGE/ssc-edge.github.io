@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>SSC EDGE - Daily Tasks</title>
+
+<script>
+document.documentElement.dataset.theme =
+localStorage.getItem("ssc-edge-theme") || "dark";
+</script>
+
+<link rel="stylesheet" href="css/style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+}
+
+.admin-page{
+  min-height:100vh;
+  padding:22px 16px 80px;
+}
+
+.top{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:22px;
+}
+
+.back{
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+  font-size:20px;
+  cursor:pointer;
+}
+
+.top h1{
+  margin:0;
+  font-size:23px;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:16px;
+}
+
+.card h2{
+  margin:0 0 15px;
+  font-size:18px;
+}
+
+label{
+  display:block;
+  margin-top:13px;
+  margin-bottom:6px;
+  font-size:13px;
+  font-weight:800;
+}
+
+input,
+textarea,
+select{
+  width:100%;
+  padding:13px;
+  border-radius:11px;
+  border:1px solid var(--border);
+  background:var(--card2);
+  color:var(--text);
+  font-size:14px;
+  outline:none;
+}
+
+textarea{
+  min-height:100px;
+  resize:vertical;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+  border-color:var(--purple);
+}
+
+.type-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:8px;
+}
+
+.type-option{
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:14px 10px;
+  text-align:center;
+  cursor:pointer;
+  background:var(--card2);
+}
+
+.type-option.active{
+  border-color:var(--purple);
+  box-shadow:0 0 0 1px var(--purple);
+}
+
+.type-option input{
+  display:none;
+}
+
+.type-icon{
+  font-size:27px;
+  display:block;
+  margin-bottom:5px;
+}
+
+.type-title{
+  font-weight:800;
+  font-size:13px;
+}
+
+.type-sub{
+  color:var(--muted);
+  font-size:11px;
+  margin-top:3px;
+}
+
+.primary{
+  width:100%;
+  border:0;
+  border-radius:12px;
+  padding:14px;
+  background:var(--purple);
+  color:#fff;
+  font-size:15px;
+  font-weight:800;
+  cursor:pointer;
+  margin-top:18px;
+}
+
+.secondary{
+  width:100%;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px;
+  background:transparent;
+  color:var(--text);
+  font-weight:700;
+  cursor:pointer;
+  margin-top:10px;
+}
+
+.hidden{
+  display:none !important;
+}
+
+.status{
+  margin-top:12px;
+  font-size:13px;
+  color:var(--muted);
+}
+
+.task-item{
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:15px;
+  margin-top:11px;
+  background:var(--card2);
+}
+
+.task-head{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.task-title{
+  font-size:15px;
+  font-weight:800;
+}
+
+.badge{
+  flex-shrink:0;
+  padding:5px 8px;
+  border-radius:8px;
+  background:var(--purple);
+  color:#fff;
+  font-size:10px;
+  font-weight:800;
+}
+
+.task-meta{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:6px;
+  line-height:1.5;
+}
+
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:12px;
+}
+
+.edit-btn,
+.delete-btn{
+  border-radius:10px;
+  padding:10px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.edit-btn{
+  border:1px solid var(--purple);
+  background:transparent;
+  color:var(--purple);
+}
+
+.delete-btn{
+  border:1px solid #ff6b6b;
+  background:transparent;
+  color:#ff6b6b;
+}
+
+.empty{
+  text-align:center;
+  color:var(--muted);
+  padding:25px 10px;
+}
+
+.error{
+  color:#ff6b6b;
+}
+
+.success{
+  color:#55d98a;
+}
+
+@media(max-width:480px){
+
+  .type-grid{
+    grid-template-columns:1fr;
+  }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<main class="admin-page">
+
+  <div class="top">
+
+    <button
+      class="back"
+      onclick="history.back()"
+    >
+      ←
+    </button>
+
+    <div>
+      <h1>Daily Tasks</h1>
+    </div>
+
+  </div>
+
+
+  <!-- ================= TASK FORM ================= -->
+
+  <section class="card">
+
+    <h2 id="formTitle">
+      ➕ Add Daily Task
+    </h2>
+
+    <input
+      type="hidden"
+      id="editId"
+    >
+
+
+    <label>Task Date</label>
+
+    <input
+      type="date"
+      id="taskDate"
+    >
+
+
+    <label>Subject</label>
+
+    <input
+      type="text"
+      id="subject"
+      placeholder="e.g. Quantitative Aptitude"
+    >
+
+
+    <label>Task Title</label>
+
+    <input
+      type="text"
+      id="title"
+      placeholder="e.g. Profit & Loss Practice"
+    >
+
+
+    <label>Description</label>
+
+    <textarea
+      id="description"
+      placeholder="Short description of today's task..."
+    ></textarea>
+
+
+    <label>What do you want to post?</label>
+
+    <div class="type-grid">
+
+      <div
+        class="type-option active"
+        id="contentType"
+        onclick="selectType('content')"
+      >
+
+        <input
+          type="radio"
+          name="taskType"
+          checked
+        >
+
+        <span class="type-icon">📄</span>
+
+        <div class="type-title">
+          Content / PDF / Link
+        </div>
+
+        <div class="type-sub">
+          Message, PDF or link
+        </div>
+
+      </div>
+
+
+      <div
+        class="type-option"
+        id="mockType"
+        onclick="selectType('mock')"
+      >
+
+        <input
+          type="radio"
+          name="taskType"
+        >
+
+        <span class="type-icon">📝</span>
+
+        <div class="type-title">
+          Mock / Test
+        </div>
+
+        <div class="type-sub">
+          Open selected test directly
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- CONTENT -->
+
+    <div id="contentBox">
+
+      <label>Message / Content</label>
+
+      <textarea
+        id="content"
+        placeholder="Write the complete task message/content..."
+      ></textarea>
+
+
+      <label>PDF Link</label>
+
+      <input
+        type="url"
+        id="pdfUrl"
+        placeholder="https://..."
+      >
+
+
+      <label>Optional External Link</label>
+
+      <input
+        type="url"
+        id="taskLink"
+        placeholder="https://..."
+      >
+
+    </div>
+
+
+    <!-- MOCK -->
+
+    <div
+      id="mockBox"
+      class="hidden"
+    >
+
+      <label>Select Mock / Test</label>
+
+      <select id="mockSelect">
+
+        <option value="">
+          Loading tests...
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <label>Task Order</label>
+
+    <input
+      type="number"
+      id="taskOrder"
+      value="1"
+      min="1"
+    >
+
+
+    <button
+      class="primary"
+      onclick="saveTask()"
+      id="saveButton"
+    >
+      Save Task
+    </button>
+
+
+    <button
+      class="secondary hidden"
+      onclick="cancelEdit()"
+      id="cancelButton"
+    >
+      Cancel Edit
+    </button>
+
+
+    <div
+      id="status"
+      class="status"
+    ></div>
+
+  </section>
+
+
+  <!-- ================= TASK LIST ================= -->
+
+  <section class="card">
+
+    <h2>📋 Existing Daily Tasks</h2>
+
+    <div id="taskList">
+      <div class="empty">
+        Loading tasks...
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+
+<script>
+
+const SUPABASE_URL =
+"https://dvvyoygahzzbnpqrfhen.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
+const supabaseClient =
+supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+let selectedType = "content";
+let allTasks = [];
+
+
+/* ================= DATE ================= */
+
+function getToday(){
+
+  const d = new Date();
+
+  const y =
+    d.getFullYear();
+
+  const m =
+    String(d.getMonth()+1)
+      .padStart(2,"0");
+
+  const day =
+    String(d.getDate())
+      .padStart(2,"0");
+
+  return `${y}-${m}-${day}`;
+
+}
+
+
+/* ================= TYPE ================= */
+
+function selectType(type){
+
+  selectedType = type;
+
+  document
+    .getElementById("contentType")
+    .classList
+    .toggle(
+      "active",
+      type === "content"
+    );
+
+  document
+    .getElementById("mockType")
+    .classList
+    .toggle(
+      "active",
+      type === "mock"
+    );
+
+  document
+    .getElementById("contentBox")
+    .classList
+    .toggle(
+      "hidden",
+      type !== "content"
+    );
+
+  document
+    .getElementById("mockBox")
+    .classList
+    .toggle(
+      "hidden",
+      type !== "mock"
+    );
+
+}
+
+
+/* ================= LOAD MOCKS ================= */
+
+async function loadMocks(){
+
+  const select =
+    document.getElementById("mockSelect");
+
+  select.innerHTML =
+    `<option value="">Select Mock / Test</option>`;
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("mock_tests")
+      .select("*")
+      .order("created_at",{ascending:false});
+
+
+  if(error){
+
+    console.log(error);
+
+    select.innerHTML =
+      `<option value="">
+        Unable to load tests
+      </option>`;
+
+    return;
+  }
+
+
+  if(!data || !data.length){
+
+    select.innerHTML =
+      `<option value="">
+        No mock/test found
+      </option>`;
+
+    return;
+  }
+
+
+  data.forEach(test => {
+
+    const option =
+      document.createElement("option");
+
+    option.value =
+      test.id;
+
+    option.textContent =
+      test.title ||
+      test.name ||
+      `Test #${test.id}`;
+
+    select.appendChild(option);
+
+  });
+
+}
+
+
+/* ================= SAVE ================= */
+
+async function saveTask(){
+
+  const status =
+    document.getElementById("status");
+
+  status.className =
+    "status";
+
+  status.textContent =
+    "Saving...";
+
+
+  const taskDate =
+    document.getElementById("taskDate")
+      .value;
+
+  const subject =
+    document.getElementById("subject")
+      .value
+      .trim();
+
+  const title =
+    document.getElementById("title")
+      .value
+      .trim();
+
+  const description =
+    document.getElementById("description")
+      .value
+      .trim();
+
+  const content =
+    document.getElementById("content")
+      .value
+      .trim();
+
+  const pdfUrl =
+    document.getElementById("pdfUrl")
+      .value
+      .trim();
+
+  const taskLink =
+    document.getElementById("taskLink")
+      .value
+      .trim();
+
+  const taskOrder =
+    Number(
+      document.getElementById("taskOrder")
+        .value
+    ) || 1;
+
+  const mockId =
+    document.getElementById("mockSelect")
+      .value;
+
+
+  if(!taskDate || !title){
+
+    status.className =
+      "status error";
+
+    status.textContent =
+      "Please enter Task Date and Task Title.";
+
+    return;
+  }
+
+
+  if(selectedType === "content"){
+
+    if(
+      !content &&
+      !pdfUrl &&
+      !taskLink
+    ){
+
+      status.className =
+        "status error";
+
+      status.textContent =
+        "Add message, PDF link or external link.";
+
+      return;
+    }
+
+  }
+
+
+  if(
+    selectedType === "mock" &&
+    !mockId
+  ){
+
+    status.className =
+      "status error";
+
+    status.textContent =
+      "Please select a Mock / Test.";
+
+    return;
+  }
+
+
+  const payload = {
+
+    task_date:taskDate,
+
+    subject:
+      subject || null,
+
+    title:title,
+
+    description:
+      description || null,
+
+    task_type:
+      selectedType === "mock"
+        ? "Practice"
+        : "Daily Task",
+
+    task_url:
+      selectedType === "mock"
+        ? `test.html?id=${mockId}`
+        : null,
+
+    content:
+      selectedType === "content"
+        ? content || null
+        : null,
+
+    pdf_url:
+      selectedType === "content"
+        ? pdfUrl || null
+        : null,
+
+    task_link:
+      selectedType === "content"
+        ? taskLink || null
+        : null,
+
+    target_type:
+      selectedType,
+
+    target_id:
+      selectedType === "mock"
+        ? Number(mockId)
+        : null,
+
+    task_order:taskOrder,
+
+    is_active:true
+
+  };
+
+
+  const editId =
+    document.getElementById("editId")
+      .value;
+
+
+  let result;
+
+
+  if(editId){
+
+    result =
+      await supabaseClient
+        .from("daily_tasks")
+        .update(payload)
+        .eq(
+          "id",
+          editId
+        );
+
+  }else{
+
+    result =
+      await supabaseClient
+        .from("daily_tasks")
+        .insert(payload);
+
+  }
+
+
+  if(result.error){
+
+    console.log(result.error);
+
+    status.className =
+      "status error";
+
+    status.textContent =
+      result.error.message;
+
+    return;
+  }
+
+
+  status.className =
+    "status success";
+
+  status.textContent =
+    editId
+      ? "Task updated successfully."
+      : "Task added successfully.";
+
+
+  resetForm();
+
+  await loadTasks();
+
+}
+
+
+/* ================= LOAD TASKS ================= */
+
+async function loadTasks(){
+
+  const list =
+    document.getElementById("taskList");
+
+  list.innerHTML =
+    `<div class="empty">Loading...</div>`;
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("daily_tasks")
+      .select("*")
+      .order("task_date",{ascending:false})
+      .order("task_order",{ascending:true});
+
+
+  if(error){
+
+    console.log(error);
+
+    list.innerHTML =
+      `<div class="empty error">
+        Unable to load tasks.<br>
+        ${escapeHtml(error.message)}
+      </div>`;
+
+    return;
+  }
+
+
+  allTasks =
+    data || [];
+
+
+  if(!allTasks.length){
+
+    list.innerHTML =
+      `<div class="empty">
+        No Daily Tasks added yet.
+      </div>`;
+
+    return;
+  }
+
+
+  list.innerHTML = "";
+
+
+  allTasks.forEach(task => {
+
+    const div =
+      document.createElement("div");
+
+    div.className =
+      "task-item";
+
+
+    const typeLabel =
+      task.target_type === "mock"
+        ? "📝 Mock / Test"
+        : "📄 Content";
+
+
+    div.innerHTML = `
+
+      <div class="task-head">
+
+        <div class="task-title">
+          ${escapeHtml(task.title)}
+        </div>
+
+        <div class="badge">
+          ${typeLabel}
+        </div>
+
+      </div>
+
+      <div class="task-meta">
+
+        📅 ${escapeHtml(task.task_date || "")}
+
+        ${task.subject
+          ? ` • ${escapeHtml(task.subject)}`
+          : ""}
+
+        <br>
+
+        Order: ${task.task_order || 1}
+
+        ${
+          task.target_id
+          ? ` • Test ID: ${task.target_id}`
+          : ""
+        }
+
+      </div>
+
+      <div class="actions">
+
+        <button
+          class="edit-btn"
+          onclick="editTask(${task.id})"
+        >
+          Edit
+        </button>
+
+        <button
+          class="delete-btn"
+          onclick="deleteTask(${task.id})"
+        >
+          Delete
+        </button>
+
+      </div>
+
+    `;
+
+
+    list.appendChild(div);
+
+  });
+
+}
+
+
+/* ================= EDIT ================= */
+
+function editTask(id){
+
+  const task =
+    allTasks.find(
+      item => Number(item.id) === Number(id)
+    );
+
+
+  if(!task) return;
+
+
+  document.getElementById("editId")
+    .value = task.id;
+
+  document.getElementById("taskDate")
+    .value = task.task_date || "";
+
+  document.getElementById("subject")
+    .value = task.subject || "";
+
+  document.getElementById("title")
+    .value = task.title || "";
+
+  document.getElementById("description")
+    .value = task.description || "";
+
+  document.getElementById("content")
+    .value = task.content || "";
+
+  document.getElementById("pdfUrl")
+    .value = task.pdf_url || "";
+
+  document.getElementById("taskLink")
+    .value = task.task_link || "";
+
+  document.getElementById("taskOrder")
+    .value = task.task_order || 1;
+
+
+  selectType(
+    task.target_type === "mock"
+      ? "mock"
+      : "content"
+  );
+
+
+  document.getElementById("mockSelect")
+    .value =
+      task.target_id
+        ? String(task.target_id)
+        : "";
+
+
+  document.getElementById("formTitle")
+    .textContent =
+      "✏️ Edit Daily Task";
+
+  document.getElementById("saveButton")
+    .textContent =
+      "Update Task";
+
+  document.getElementById("cancelButton")
+    .classList
+    .remove("hidden");
+
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+/* ================= DELETE ================= */
+
+async function deleteTask(id){
+
+  if(
+    !confirm(
+      "Delete this Daily Task?"
+    )
+  ){
+
+    return;
+  }
+
+
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("daily_tasks")
+      .delete()
+      .eq(
+        "id",
+        id
+      );
+
+
+  if(error){
+
+    alert(
+      "Unable to delete task: " +
+      error.message
+    );
+
+    return;
+  }
+
+
+  await loadTasks();
+
+}
+
+
+/* ================= RESET ================= */
+
+function resetForm(){
+
+  document.getElementById("editId")
+    .value = "";
+
+  document.getElementById("taskDate")
+    .value = getToday();
+
+  document.getElementById("subject")
+    .value = "";
+
+  document.getElementById("title")
+    .value = "";
+
+  document.getElementById("description")
+    .value = "";
+
+  document.getElementById("content")
+    .value = "";
+
+  document.getElementById("pdfUrl")
+    .value = "";
+
+  document.getElementById("taskLink")
+    .value = "";
+
+  document.getElementById("taskOrder")
+    .value = "1";
+
+  document.getElementById("mockSelect")
+    .value = "";
+
+  selectType("content");
+
+  document.getElementById("formTitle")
+    .textContent =
+      "➕ Add Daily Task";
+
+  document.getElementById("saveButton")
+    .textContent =
+      "Save Task";
+
+  document.getElementById("cancelButton")
+    .classList
+    .add("hidden");
+
+}
+
+
+/* ================= CANCEL ================= */
+
+function cancelEdit(){
+
+  resetForm();
+
+  document.getElementById("status")
+    .textContent = "";
+
+}
+
+
+/* ================= ESCAPE ================= */
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+/* ================= START ================= */
+
+document.getElementById("taskDate")
+  .value = getToday();
+
+loadMocks();
+loadTasks();
+
+</script>
+
+</body>
+</html>
