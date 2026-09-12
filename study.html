@@ -104,13 +104,13 @@ box-sizing:border-box;
 }
 
 .subject-icon{
-width:64px;
-height:64px;
+width:54px;
+height:54px;
 margin-bottom:10px;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:48px;
+font-size:40px;
 line-height:1;
 }
 
@@ -130,76 +130,43 @@ color:var(--muted);
 
 /* =========================================
    BOTTOM NAVIGATION
-   SAME STYLE AS PROFILE
+   SAME SIZE AS PROFILE
    ========================================= */
 
 .bottom-nav{
-display:flex;
-align-items:center;
-justify-content:space-around;
-
-background:#f0e8ff;
-border-top:1px solid #d9c9ef;
-
-padding:6px 12px 8px;
+position:fixed;
+left:0;
+right:0;
+bottom:0;
+z-index:50;
+height:67px;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+border-top:1px solid var(--border);
+background:var(--header);
+backdrop-filter:blur(14px);
 }
-   
-<nav class="bottom-nav">
 
-  <a href="home.html">
+.bottom-nav a{
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:3px;
+color:var(--muted);
+text-decoration:none;
+font-size:9px;
+font-weight:800;
+}
 
-    <span class="nav-icon">
-      🏠
-    </span>
+.bottom-nav a.active{
+color:#9b5cff;
+}
 
-    <span>
-      Home
-    </span>
-
-  </a>
-
-
-  <a href="study.html">
-
-    <span class="nav-icon">
-      📚
-    </span>
-
-    <span>
-      Study Material
-    </span>
-
-  </a>
-
-
-  <a href="practice.html">
-
-    <span class="nav-icon">
-      📝
-    </span>
-
-    <span>
-      Practice
-    </span>
-
-  </a>
-
-
-  <a
-    href="profile.html"
-    class="active">
-
-    <span class="nav-icon">
-      👤
-    </span>
-
-    <span>
-      Profile
-    </span>
-
-  </a>
-
-</nav>
+.nav-icon{
+font-size:20px;
+line-height:1;
+}
 
 
 /* =========================================
@@ -223,25 +190,6 @@ min-height:165px;
 
 .header-brand{
 font-size:23px;
-}
-
-.bottom-nav{
-padding:8px 0 10px;
-}
-
-.bottom-nav a{
-min-height:58px;
-gap:4px;
-}
-
-.nav-icon{
-width:30px;
-height:30px;
-font-size:26px;
-}
-
-.bottom-nav small{
-font-size:13px;
 }
 
 }
