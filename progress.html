@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<script>
+document.documentElement.dataset.theme =
+  localStorage.getItem("ssc-edge-theme") || "dark";
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<meta name="theme-color" content="#21142f">
+
+<title>Progress - SSC EDGE</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+/* =========================================
+   THEME
+========================================= */
+
+:root{
+  --bg:#f7f3fb;
+  --card:#ffffff;
+  --card2:#f0e8ff;
+  --text:#21182b;
+  --muted:#766c80;
+  --border:#ded3eb;
+  --purple:#9b5cff;
+  --purple2:#b487ff;
+  --green:#35c77a;
+}
+
+:root[data-theme="dark"]{
+  --bg:#120b18;
+  --card:#1d1327;
+  --card2:#261936;
+  --text:#f5eff9;
+  --muted:#aaa1b5;
+  --border:#3a2850;
+  --purple:#9b5cff;
+  --purple2:#b487ff;
+  --green:#35c77a;
+}
+
+
+/* =========================================
+   BODY
+========================================= */
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  background:var(--bg);
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+  padding-bottom:80px;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.top-header{
+  width:100%;
+  padding:18px 18px 14px;
+  background:var(--bg);
+}
+
+.brand{
+  font-size:23px;
+  font-weight:900;
+  letter-spacing:.3px;
+}
+
+.brand span{
+  color:var(--purple);
+}
+
+
+/* =========================================
+   MAIN
+========================================= */
+
+.container{
+  padding:4px 18px 25px;
+  max-width:700px;
+  margin:0 auto;
+}
+
+.page-title{
+  margin:0;
+  font-size:27px;
+  font-weight:900;
+}
+
+.page-subtitle{
+  margin:6px 0 20px;
+  color:var(--muted);
+  font-size:14px;
+}
+
+
+/* =========================================
+   OVERALL PROGRESS
+========================================= */
+
+.overall-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+  margin-bottom:22px;
+  box-shadow:0 5px 18px rgba(0,0,0,.06);
+}
+
+.overall-title{
+  font-size:17px;
+  font-weight:900;
+  margin-bottom:18px;
+}
+
+.overall-center{
+  text-align:center;
+}
+
+.overall-percent{
+  font-size:42px;
+  line-height:1;
+  font-weight:900;
+  color:var(--purple);
+}
+
+.overall-label{
+  margin-top:7px;
+  color:var(--muted);
+  font-size:12px;
+  font-weight:700;
+}
+
+.progress-bar{
+  height:10px;
+  margin-top:19px;
+  border-radius:20px;
+  overflow:hidden;
+  background:var(--card2);
+}
+
+.progress-fill{
+  height:100%;
+  width:0%;
+  border-radius:20px;
+  background:var(--purple);
+  transition:width .4s ease;
+}
+
+.overall-message{
+  text-align:center;
+  margin-top:13px;
+  color:var(--muted);
+  font-size:13px;
+  font-weight:700;
+}
+
+
+/* =========================================
+   SECTION TITLE
+========================================= */
+
+.section-title{
+  margin:0 0 12px;
+  font-size:18px;
+  font-weight:900;
+}
+
+
+/* =========================================
+   PREPARATION OVERVIEW
+========================================= */
+
+.overview-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+  margin-bottom:24px;
+}
+
+.overview-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:16px;
+  min-height:125px;
+}
+
+.overview-icon{
+  font-size:28px;
+  line-height:1;
+  margin-bottom:12px;
+}
+
+.overview-name{
+  font-size:13px;
+  color:var(--muted);
+  font-weight:800;
+}
+
+.overview-value{
+  margin-top:5px;
+  font-size:24px;
+  font-weight:900;
+}
+
+.overview-small{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:11px;
+}
+
+
+/* =========================================
+   MOCK PERFORMANCE
+========================================= */
+
+.performance-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  overflow:hidden;
+  margin-bottom:24px;
+}
+
+.performance-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:16px 17px;
+  border-bottom:1px solid var(--border);
+}
+
+.performance-row:last-child{
+  border-bottom:0;
+}
+
+.performance-name{
+  color:var(--muted);
+  font-size:13px;
+  font-weight:800;
+}
+
+.performance-value{
+  font-size:16px;
+  font-weight:900;
+}
+
+
+/* =========================================
+   RECENT ATTEMPTS
+========================================= */
+
+.history-card{
+  width:100%;
+  border:1px solid var(--border);
+  border-radius:17px;
+  background:var(--card);
+  padding:17px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  text-align:left;
+  color:var(--text);
+  cursor:pointer;
+  margin-bottom:25px;
+}
+
+.history-left{
+  display:flex;
+  align-items:center;
+  gap:13px;
+}
+
+.history-icon{
+  width:45px;
+  height:45px;
+  border-radius:13px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--card2);
+  font-size:22px;
+  flex-shrink:0;
+}
+
+.history-title{
+  font-size:15px;
+  font-weight:900;
+}
+
+.history-subtitle{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.history-arrow{
+  font-size:25px;
+  color:var(--muted);
+}
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+.loading{
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+  padding:12px 0;
+}
+
+
+/* =========================================
+   BOTTOM NAV
+========================================= */
+
+.bottom-nav{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:100;
+  height:67px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  background:var(--card2);
+  border-top:1px solid var(--border);
+}
+
+.bottom-nav a{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  text-decoration:none;
+  font-size:9px;
+  font-weight:800;
+}
+
+.nav-icon{
+  font-size:20px;
+  line-height:1;
+}
+
+.bottom-nav small{
+  font-size:9px;
+  font-weight:800;
+  color:var(--muted);
+}
+
+.bottom-nav a.active small{
+  color:var(--purple);
+}
+
+
+/* =========================================
+   DARK BOTTOM NAV
+========================================= */
+
+:root[data-theme="dark"] .bottom-nav{
+  background:#21142f;
+  border-color:#3a2850;
+}
+
+:root[data-theme="dark"] .bottom-nav small{
+  color:#aaa1b5;
+}
+
+:root[data-theme="dark"] .bottom-nav a.active small{
+  color:#b487ff;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media(max-width:420px){
+
+  .top-header{
+    padding-left:16px;
+    padding-right:16px;
+  }
+
+  .container{
+    padding-left:16px;
+    padding-right:16px;
+  }
+
+  .overview-card{
+    padding:14px;
+  }
+
+  .overall-percent{
+    font-size:39px;
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================
+     HEADER
+========================================= -->
+
+<header class="top-header">
+
+  <div class="brand">
+    SSC <span>EDGE</span>
+  </div>
+
+</header>
+
+
+<!-- =========================================
+     MAIN
+========================================= -->
+
+<main class="container">
+
+
+  <h1 class="page-title">
+    Progress
+  </h1>
+
+  <p class="page-subtitle">
+    Track your preparation
+  </p>
+
+
+  <!-- =======================================
+       OVERALL PROGRESS
+  ======================================== -->
+
+  <div class="overall-card">
+
+    <div class="overall-title">
+      Overall Progress
+    </div>
+
+    <div class="overall-center">
+
+      <div
+        class="overall-percent"
+        id="overallPercent"
+      >
+        0%
+      </div>
+
+      <div class="overall-label">
+        Preparation completed
+      </div>
+
+    </div>
+
+    <div class="progress-bar">
+
+      <div
+        class="progress-fill"
+        id="overallFill"
+      ></div>
+
+    </div>
+
+    <div
+      class="overall-message"
+      id="overallMessage"
+    >
+      Keep pushing forward!
+    </div>
+
+  </div>
+
+
+  <!-- =======================================
+       PREPARATION OVERVIEW
+  ======================================== -->
+
+  <h2 class="section-title">
+    Preparation Overview
+  </h2>
+
+
+  <div class="overview-grid">
+
+
+    <!-- STUDY -->
+
+    <div class="overview-card">
+
+      <div class="overview-icon">
+        📚
+      </div>
+
+      <div class="overview-name">
+        Study Material
+      </div>
+
+      <div
+        class="overview-value"
+        id="studyValue"
+      >
+        0
+      </div>
+
+      <div class="overview-small">
+        Materials completed
+      </div>
+
+    </div>
+
+
+    <!-- DAILY -->
+
+    <div class="overview-card">
+
+      <div class="overview-icon">
+        🎯
+      </div>
+
+      <div class="overview-name">
+        Daily Tasks
+      </div>
+
+      <div
+        class="overview-value"
+        id="dailyValue"
+      >
+        0%
+      </div>
+
+      <div class="overview-small">
+        Completion rate
+      </div>
+
+    </div>
+
+
+    <!-- TESTS -->
+
+    <div class="overview-card">
+
+      <div class="overview-icon">
+        📝
+      </div>
+
+      <div class="overview-name">
+        Tests
+      </div>
+
+      <div
+        class="overview-value"
+        id="testsValue"
+      >
+        0
+      </div>
+
+      <div class="overview-small">
+        Tests attempted
+      </div>
+
+    </div>
+
+
+    <!-- ACCURACY -->
+
+    <div class="overview-card">
+
+      <div class="overview-icon">
+        📈
+      </div>
+
+      <div class="overview-name">
+        Accuracy
+      </div>
+
+      <div
+        class="overview-value"
+        id="accuracyValue"
+      >
+        0%
+      </div>
+
+      <div class="overview-small">
+        Average accuracy
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =======================================
+       MOCK TEST PERFORMANCE
+  ======================================== -->
+
+  <h2 class="section-title">
+    Mock Test Performance
+  </h2>
+
+
+  <div class="performance-card">
+
+
+    <div class="performance-row">
+
+      <div class="performance-name">
+        Tests Attempted
+      </div>
+
+      <div
+        class="performance-value"
+        id="attemptedValue"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="performance-row">
+
+      <div class="performance-name">
+        Average Score
+      </div>
+
+      <div
+        class="performance-value"
+        id="averageScoreValue"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="performance-row">
+
+      <div class="performance-name">
+        Best Score
+      </div>
+
+      <div
+        class="performance-value"
+        id="bestScoreValue"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="performance-row">
+
+      <div class="performance-name">
+        Average Accuracy
+      </div>
+
+      <div
+        class="performance-value"
+        id="averageAccuracyValue"
+      >
+        0%
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =======================================
+       RECENT ATTEMPTS
+  ======================================== -->
+
+  <h2 class="section-title">
+    Recent Attempts
+  </h2>
+
+
+  <button
+    class="history-card"
+    onclick="openHistory()"
+  >
+
+    <div class="history-left">
+
+      <div class="history-icon">
+        📋
+      </div>
+
+      <div>
+
+        <div class="history-title">
+          Test History
+        </div>
+
+        <div class="history-subtitle">
+          View all your recent test attempts
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="history-arrow">
+      ›
+    </div>
+
+  </button>
+
+
+</main>
+
+
+<!-- =========================================
+     BOTTOM NAV
+========================================= -->
+
+<nav class="bottom-nav">
+
+  <a href="home.html">
+
+    <span class="nav-icon">
+      🏠
+    </span>
+
+    <small>
+      Home
+    </small>
+
+  </a>
+
+
+  <a href="study.html">
+
+    <span class="nav-icon">
+      📚
+    </span>
+
+    <small>
+      Study Material
+    </small>
+
+  </a>
+
+
+  <a href="practice.html">
+
+    <span class="nav-icon">
+      📝
+    </span>
+
+    <small>
+      Practice
+    </small>
+
+  </a>
+
+
+  <a href="profile.html">
+
+    <span class="nav-icon">
+      👤
+    </span>
+
+    <small>
+      Profile
+    </small>
+
+  </a>
+
+</nav>
+
+
+<script>
+
+/* =========================================
+   SUPABASE
+========================================= */
+
+const SUPABASE_URL =
+"https://dvvyoygahzzbnpqrfhen.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
+const supabaseClient =
+supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+/* =========================================
+   OPEN HISTORY
+========================================= */
+
+function openHistory(){
+
+  window.location.href =
+    "history.html";
+
+}
+
+
+/* =========================================
+   DAILY TASK PROGRESS
+========================================= */
+
+async function loadDailyProgress(){
+
+  try{
+
+    const today =
+      getToday();
+
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from("daily_tasks")
+        .select("id")
+        .eq(
+          "task_date",
+          today
+        )
+        .eq(
+          "is_active",
+          true
+        );
+
+
+    if(error){
+
+      console.error(
+        "Daily Progress Error:",
+        error
+      );
+
+      return {
+        total:0,
+        completed:0
+      };
+
+    }
+
+
+    const tasks =
+      data || [];
+
+
+    const completed =
+      getCompletedTasks();
+
+
+    const completedCount =
+      tasks.filter(
+        task =>
+          completed.includes(
+            String(task.id)
+          )
+      ).length;
+
+
+    return {
+
+      total:tasks.length,
+
+      completed:completedCount
+
+    };
+
+  }
+
+  catch(error){
+
+    console.error(error);
+
+    return {
+
+      total:0,
+
+      completed:0
+
+    };
+
+  }
+
+}
+
+
+/* =========================================
+   COMPLETED TASKS
+========================================= */
+
+function getCompletedTasks(){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem(
+        "ssc-edge-daily-completed"
+      ) || "[]"
+    );
+
+  }
+
+  catch(error){
+
+    return [];
+
+  }
+
+}
+
+
+/* =========================================
+   TODAY
+========================================= */
+
+function getToday(){
+
+  const date =
+    new Date();
+
+
+  const year =
+    date.getFullYear();
+
+
+  const month =
+    String(
+      date.getMonth()+1
+    ).padStart(2,"0");
+
+
+  const day =
+    String(
+      date.getDate()
+    ).padStart(2,"0");
+
+
+  return (
+    year +
+    "-" +
+    month +
+    "-" +
+    day
+  );
+
+}
+
+
+/* =========================================
+   UPDATE DAILY
+========================================= */
+
+async function updateDailyProgress(){
+
+  const result =
+    await loadDailyProgress();
+
+
+  const total =
+    result.total;
+
+
+  const completed =
+    result.completed;
+
+
+  const percentage =
+    total === 0
+    ? 0
+    : Math.round(
+        (completed / total) * 100
+      );
+
+
+  document.getElementById(
+    "dailyValue"
+  ).textContent =
+    percentage + "%";
+
+
+  return percentage;
+
+}
+
+
+/* =========================================
+   OVERALL PROGRESS
+========================================= */
+
+async function loadProgress(){
+
+  const dailyPercentage =
+    await updateDailyProgress();
+
+
+  /*
+   Study Material, Tests and Accuracy
+   remain connected to their existing
+   systems. They start at zero until
+   their actual attempt/completion
+   data is available.
+  */
+
+  const studyProgress = 0;
+
+  const testsAttempted = 0;
+
+  const accuracy = 0;
+
+
+  document.getElementById(
+    "studyValue"
+  ).textContent =
+    studyProgress;
+
+
+  document.getElementById(
+    "testsValue"
+  ).textContent =
+    testsAttempted;
+
+
+  document.getElementById(
+    "accuracyValue"
+  ).textContent =
+    accuracy + "%";
+
+
+  document.getElementById(
+    "attemptedValue"
+  ).textContent =
+    testsAttempted;
+
+
+  document.getElementById(
+    "averageScoreValue"
+  ).textContent =
+    "0";
+
+
+  document.getElementById(
+    "bestScoreValue"
+  ).textContent =
+    "0";
+
+
+  document.getElementById(
+    "averageAccuracyValue"
+  ).textContent =
+    accuracy + "%";
+
+
+  /*
+   Overall progress is based on
+   currently available progress.
+  */
+
+  const overall =
+    dailyPercentage;
+
+
+  document.getElementById(
+    "overallPercent"
+  ).textContent =
+    overall + "%";
+
+
+  document.getElementById(
+    "overallFill"
+  ).style.width =
+    overall + "%";
+
+
+  const message =
+    document.getElementById(
+      "overallMessage"
+    );
+
+
+  if(overall === 0){
+
+    message.textContent =
+      "Start your preparation today!";
+
+  }
+
+  else if(overall < 50){
+
+    message.textContent =
+      "Good start! Keep pushing forward.";
+
+  }
+
+  else if(overall < 80){
+
+    message.textContent =
+      "Great progress! Keep going.";
+
+  }
+
+  else if(overall < 100){
+
+    message.textContent =
+      "Excellent progress! Almost there.";
+
+  }
+
+  else{
+
+    message.textContent =
+      "Amazing! Preparation completed.";
+
+  }
+
+}
+
+
+/* =========================================
+   START
+========================================= */
+
+loadProgress();
+
+</script>
+
+</body>
+  </html>
