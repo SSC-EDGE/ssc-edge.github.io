@@ -19,13 +19,14 @@ document.documentElement.dataset.theme =
   * {
     font-family: Arial, Helvetica, sans-serif;
   }
+
   .header-brand {
     font-size: 34px !important;
-}
+  }
 
-.header-tagline {
+  .header-tagline {
     font-size: 14px !important;
-}
+  }
 
 /* ==================================================
    BASIC
@@ -118,8 +119,6 @@ white-space:nowrap;
 .header-brand .edge{
 color:#9b5cff;
 }
-
-/* SMALL TAGLINE - JUST BELOW BRAND */
 
 .header-tagline{
 font-size:7px;
@@ -1026,7 +1025,6 @@ background:#9b5cff;
 
 /* ==================================================
    CONTINUE LEARNING
-   HORIZONTAL SWIPE
    ================================================== */
 
 .continue-grid{
@@ -1705,8 +1703,6 @@ min-height:125px;
 padding:15px 14px;
 }
 
-/* COMMUNITY */
-
 .community-card{
 flex-basis:225px;
 
@@ -1720,8 +1716,6 @@ margin-left:9px;
 
 padding:8px;
 }
-
-/* CONTINUE */
 
 .continue-card{
 flex-basis:270px;
@@ -1787,10 +1781,6 @@ flex-basis:320px;
 </head>
 
 <body>
-
-<!-- ==================================================
-     HEADER
-     ================================================== -->
 
 <header class="home-header">
 
@@ -1873,10 +1863,6 @@ id="updateDot"
 </div>
 
 </header>
-
-<!-- ==================================================
-     SIDE MENU
-     ================================================== -->
 
 <div
 class="menu-overlay"
@@ -1974,13 +1960,13 @@ My Progress
 
 </a>
 
-<a href="streak.html">
+<a href="daily-task.html">
 
 <div class="menu-link-icon">
-🔥
+🎯
 </div>
 
-Day Streak
+Daily Task
 
 </a>
 
@@ -2051,10 +2037,6 @@ Log Out
 
 </div>
 
-<!-- ==================================================
-     SEARCH
-     ================================================== -->
-
 <div
 class="search-overlay"
 id="searchOverlay"
@@ -2096,10 +2078,6 @@ Search Study Material, Practice, Progress, Profile and more.
 </div>
 
 </div>
-
-<!-- ==================================================
-     UPDATES
-     ================================================== -->
 
 <div
 class="updates-overlay"
@@ -2166,10 +2144,6 @@ New SSC EDGE updates will appear here.
 </div>
 
 </div>
-
-<!-- ==================================================
-     MAIN
-     ================================================== -->
 
 <main class="home-container">
 
@@ -2267,6 +2241,25 @@ Mock Tests
 </a>
 
 <a
+href="daily-task.html"
+class="dashboard-card"
+>
+
+<div class="dash-icon">
+🎯
+</div>
+
+<strong>
+Daily Task
+</strong>
+
+<span>
+Daily learning tasks
+</span>
+
+</a>
+
+<a
 href="progress.html"
 class="dashboard-card"
 >
@@ -2293,38 +2286,7 @@ Track your performance
 
 </a>
 
-<a
-href="streak.html"
-class="dashboard-card"
->
-
-<div class="dash-icon">
-
-<svg viewBox="0 0 24 24">
-
-<path
-d="M12 22c4 0 7-2.7 7-7 0-3.5-2.2-5.7-4.7-8.5.1 2.2-.8 3.5-2 4.3.2-3.7-1.8-6.5-4.5-8.8.1 3.7-3 6-3 10 0 5.3 3.4 10 7.2 10Z"
-/>
-
-</svg>
-
-</div>
-
-<strong>
-Study Streak
-</strong>
-
-<span>
-Keep your streak alive
-</span>
-
-</a>
-
 </section>
-
-<!-- ==================================================
-     COMMUNITY
-     ================================================== -->
 
 <h2 class="section-heading">
 Join SSC EDGE Community
@@ -2361,6 +2323,44 @@ Daily updates & exam alerts
 
 <div class="community-button telegram-button">
 Join Now →
+</div>
+
+</a>
+
+<a
+href="https://youtube.com/@sscedge07?si=G3GngIGL79XRy3PK"
+target="_blank"
+rel="noopener noreferrer"
+class="community-card"
+>
+
+<div class="community-logo youtube-logo">
+
+<svg viewBox="0 0 24 24">
+
+<path
+d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8Z"
+/>
+
+<path
+d="m9.5 15.5 6-3.5-6-3.5v7Z"
+fill="#ffffff"
+/>
+
+</svg>
+
+</div>
+
+<strong>
+YouTube
+</strong>
+
+<span>
+Free classes & strategy sessions
+</span>
+
+<div class="community-button youtube-button">
+Watch Now →
 </div>
 
 </a>
@@ -2417,44 +2417,6 @@ Follow Us →
 </a>
 
 <a
-href="https://youtube.com/@sscedge07?si=G3GngIGL79XRy3PK"
-target="_blank"
-rel="noopener noreferrer"
-class="community-card"
->
-
-<div class="community-logo youtube-logo">
-
-<svg viewBox="0 0 24 24">
-
-<path
-d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8Z"
-/>
-
-<path
-d="m9.5 15.5 6-3.5-6-3.5v7Z"
-fill="#ffffff"
-/>
-
-</svg>
-
-</div>
-
-<strong>
-YouTube
-</strong>
-
-<span>
-Free classes & strategy sessions
-</span>
-
-<div class="community-button youtube-button">
-Watch Now →
-</div>
-
-</a>
-
-<a
 href="https://t.me/+nHIcGkweGB5mNDdl"
 target="_blank"
 rel="noopener noreferrer"
@@ -2496,10 +2458,6 @@ Join Group →
 </a>
 
 </section>
-
-<!-- ==================================================
-     CONTINUE LEARNING
-     ================================================== -->
 
 <h2 class="section-heading">
 Continue Learning
@@ -2660,10 +2618,6 @@ Check your performance
 
 </main>
 
-<!-- ==================================================
-     FOOTER
-     ================================================== -->
-
 <footer class="home-footer">
 
 <h2>
@@ -2675,10 +2629,6 @@ Learn • Practice • Improve
 </p>
 
 </footer>
-
-<!-- ==================================================
-     BOTTOM NAV
-     ================================================== -->
 
 <nav class="bottom-nav">
 
@@ -2734,10 +2684,6 @@ Profile
 </a>
 
 </nav>
-
-<!-- ==================================================
-     JAVASCRIPT
-     ================================================== -->
 
 <script>
 
@@ -2942,9 +2888,9 @@ url:"progress.html"
 },
 
 {
-title:"Day Streak",
-text:"Study streak daily learning streak",
-url:"streak.html"
+title:"Daily Task",
+text:"Daily tasks daily learning tasks preparation",
+url:"daily-task.html"
 },
 
 {
@@ -3361,4 +3307,4 @@ updatesOverlay.classList.remove("show");
 </script>
 
 </body>
-  </html>
+</html>
