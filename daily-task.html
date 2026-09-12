@@ -1,0 +1,1678 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<script>
+document.documentElement.dataset.theme =
+  localStorage.getItem("ssc-edge-theme") || "dark";
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="theme-color" content="#21142f">
+
+<title>Daily Task - SSC EDGE</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+/* =========================
+   THEME
+========================= */
+
+:root{
+  --bg:#f8f5fc;
+  --header:#ffffff;
+  --card:#ffffff;
+  --card2:#f2ecfa;
+  --text:#21182b;
+  --muted:#756d80;
+  --border:#ded5e8;
+  --purple:#9b5cff;
+  --purple-dark:#8140df;
+  --green:#24a36b;
+  --green-bg:#e8f8f0;
+  --red:#e05252;
+}
+
+:root[data-theme="dark"]{
+  --bg:#120d18;
+  --header:#1b1225;
+  --card:#21162c;
+  --card2:#2b1d39;
+  --text:#f7f1fc;
+  --muted:#aaa0b5;
+  --border:#3b2b4c;
+  --purple:#a76bff;
+  --purple-dark:#8c4be8;
+  --green:#4bd18a;
+  --green-bg:#173728;
+  --red:#ff6b6b;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  margin:0;
+  padding:0;
+  min-height:100%;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+  padding-bottom:80px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.top-header{
+  height:62px;
+  padding:0 17px;
+  display:flex;
+  align-items:center;
+  background:var(--header);
+  border-bottom:1px solid var(--border);
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+
+.brand{
+  font-size:21px;
+  font-weight:900;
+  letter-spacing:.5px;
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+.container{
+  max-width:700px;
+  margin:auto;
+  padding:22px 16px 30px;
+}
+
+
+/* =========================
+   PAGE TITLE
+========================= */
+
+.page-title{
+  font-size:27px;
+  font-weight:900;
+  margin:0 0 5px;
+}
+
+.page-subtitle{
+  margin:0 0 20px;
+  color:var(--muted);
+  font-size:14px;
+}
+
+
+/* =========================
+   DAILY SCHEDULE BUTTON
+========================= */
+
+.schedule-card{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  padding:17px;
+  margin-bottom:25px;
+
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:17px;
+
+  color:var(--text);
+  text-align:left;
+
+  box-shadow:0 5px 18px rgba(0,0,0,.06);
+
+  cursor:pointer;
+  transition:.2s ease;
+}
+
+.schedule-card:active{
+  transform:scale(.985);
+}
+
+.schedule-icon{
+  width:48px;
+  height:48px;
+  flex-shrink:0;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:13px;
+  background:var(--card2);
+
+  font-size:25px;
+}
+
+.schedule-info{
+  flex:1;
+}
+
+.schedule-title{
+  font-size:17px;
+  font-weight:900;
+  margin-bottom:4px;
+}
+
+.schedule-subtitle{
+  color:var(--muted);
+  font-size:12px;
+  font-weight:600;
+}
+
+.schedule-arrow{
+  font-size:23px;
+  color:var(--muted);
+}
+
+
+/* =========================
+   PROGRESS CARD
+========================= */
+
+.progress-card{
+  background:linear-gradient(
+    135deg,
+    var(--purple-dark),
+    var(--purple)
+  );
+
+  color:white;
+
+  border-radius:18px;
+  padding:19px;
+  margin-bottom:25px;
+
+  box-shadow:0 8px 22px rgba(126,70,220,.22);
+}
+
+.progress-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.progress-title{
+  font-size:16px;
+  font-weight:900;
+}
+
+.progress-count{
+  font-size:14px;
+  font-weight:800;
+}
+
+.progress-bar{
+  height:9px;
+  background:rgba(255,255,255,.28);
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:14px;
+}
+
+.progress-fill{
+  width:0%;
+  height:100%;
+  background:white;
+  border-radius:20px;
+  transition:width .3s ease;
+}
+
+
+/* =========================
+   SECTION TITLE
+========================= */
+
+.section-title{
+  font-size:18px;
+  font-weight:900;
+  margin:0 0 13px;
+}
+
+
+/* =========================
+   TASK LIST
+========================= */
+
+.task-list{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.task-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:17px;
+
+  padding:17px;
+
+  box-shadow:0 5px 18px rgba(0,0,0,.06);
+}
+
+.task-card.completed{
+  border-color:var(--green);
+}
+
+.task-top{
+  display:flex;
+  align-items:flex-start;
+  gap:13px;
+}
+
+.task-icon{
+  width:46px;
+  height:46px;
+  flex-shrink:0;
+
+  border-radius:13px;
+  background:var(--card2);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:25px;
+}
+
+.task-info{
+  flex:1;
+  min-width:0;
+}
+
+.task-subject{
+  color:var(--purple);
+  font-size:12px;
+  font-weight:900;
+  margin-bottom:5px;
+  text-transform:uppercase;
+}
+
+.task-title{
+  font-size:17px;
+  font-weight:900;
+  line-height:1.35;
+}
+
+.task-description{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+  margin-top:6px;
+}
+
+.task-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:15px;
+}
+
+.task-type{
+  color:var(--muted);
+  font-size:12px;
+  font-weight:700;
+}
+
+.task-btn{
+  border:0;
+  background:var(--purple);
+  color:white;
+
+  min-width:110px;
+
+  padding:10px 14px;
+
+  border-radius:10px;
+
+  font-size:13px;
+  font-weight:900;
+
+  cursor:pointer;
+}
+
+.task-card.completed .task-btn{
+  background:var(--green);
+}
+
+.completed-text{
+  color:var(--green);
+  font-weight:900;
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+.status-box{
+  text-align:center;
+  padding:40px 15px;
+  color:var(--muted);
+}
+
+.status-icon{
+  font-size:38px;
+  margin-bottom:10px;
+}
+
+.status-title{
+  font-size:16px;
+  color:var(--text);
+  font-weight:900;
+  margin-bottom:5px;
+}
+
+.status-text{
+  font-size:13px;
+  line-height:1.5;
+}
+
+
+/* =========================
+   SCHEDULE PAGE
+========================= */
+
+.schedule-page{
+  display:none;
+}
+
+.schedule-page.show{
+  display:block;
+}
+
+.task-page.hide{
+  display:none;
+}
+
+.back-btn{
+  display:flex;
+  align-items:center;
+  gap:7px;
+
+  border:0;
+  background:transparent;
+
+  color:var(--purple);
+
+  font-size:14px;
+  font-weight:900;
+
+  padding:0;
+  margin-bottom:20px;
+
+  cursor:pointer;
+}
+
+.schedule-page-title{
+  font-size:26px;
+  font-weight:900;
+  margin:0 0 6px;
+}
+
+.schedule-page-subtitle{
+  color:var(--muted);
+  font-size:14px;
+  margin:0 0 20px;
+}
+
+
+/* =========================
+   DAY LIST
+========================= */
+
+.day-list{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.day-card{
+  width:100%;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+
+  padding:16px;
+
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:15px;
+
+  color:var(--text);
+  text-align:left;
+
+  cursor:pointer;
+
+  box-shadow:0 4px 14px rgba(0,0,0,.05);
+}
+
+.day-left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.day-number{
+  width:42px;
+  height:42px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:11px;
+
+  background:var(--card2);
+
+  color:var(--purple);
+
+  font-size:13px;
+  font-weight:900;
+}
+
+.day-name{
+  font-size:16px;
+  font-weight:900;
+}
+
+.today-label{
+  color:var(--purple);
+  font-size:12px;
+  font-weight:900;
+  margin-left:5px;
+}
+
+.day-arrow{
+  color:var(--muted);
+  font-size:21px;
+}
+
+
+/* =========================
+   SCHEDULE MESSAGE
+========================= */
+
+.schedule-message-page{
+  display:none;
+}
+
+.schedule-message-page.show{
+  display:block;
+}
+
+.message-card{
+  background:var(--card);
+
+  border:1px solid var(--border);
+  border-radius:17px;
+
+  padding:19px;
+
+  box-shadow:0 5px 18px rgba(0,0,0,.06);
+}
+
+.message-day{
+  color:var(--purple);
+  font-size:13px;
+  font-weight:900;
+  text-transform:uppercase;
+  margin-bottom:6px;
+}
+
+.message-date{
+  color:var(--muted);
+  font-size:12px;
+  margin-bottom:17px;
+}
+
+.message-content{
+  color:var(--text);
+  font-size:14px;
+  line-height:1.7;
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+
+
+/* =========================
+   BOTTOM NAV
+========================= */
+
+.bottom-nav{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:100;
+
+  height:67px;
+
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+
+  background:#f0e8ff;
+  border-top:1px solid #d9c9ef;
+}
+
+.bottom-nav a{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  gap:3px;
+
+  text-decoration:none;
+
+  font-size:9px;
+  font-weight:800;
+}
+
+.nav-icon{
+  font-size:20px;
+  line-height:1;
+}
+
+.bottom-nav small{
+  font-size:9px;
+  font-weight:800;
+  color:#71697d;
+}
+
+.bottom-nav a.active small{
+  color:#9b5cff;
+}
+
+:root[data-theme="dark"] .bottom-nav{
+  background:#21142f;
+  border-color:#3a2850;
+}
+
+:root[data-theme="dark"] .bottom-nav small{
+  color:#aaa1b5;
+}
+
+:root[data-theme="dark"] .bottom-nav a.active small{
+  color:#b487ff;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:480px){
+
+  .container{
+    padding:20px 14px 25px;
+  }
+
+  .page-title{
+    font-size:25px;
+  }
+
+  .task-card{
+    padding:15px;
+  }
+
+  .task-title{
+    font-size:16px;
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header class="top-header">
+
+  <div class="brand">
+    SSC EDGE
+  </div>
+
+</header>
+
+
+<!-- =========================================================
+     TASK PAGE
+========================================================= -->
+
+<main
+  class="container task-page"
+  id="taskPage">
+
+  <h1 class="page-title">
+    Daily Task
+  </h1>
+
+  <p class="page-subtitle">
+    Complete your daily preparation
+  </p>
+
+
+  <!-- DAILY SCHEDULE -->
+
+  <button
+    class="schedule-card"
+    onclick="openSchedule()">
+
+    <div class="schedule-icon">
+      📅
+    </div>
+
+    <div class="schedule-info">
+
+      <div class="schedule-title">
+        Daily Schedule
+      </div>
+
+      <div class="schedule-subtitle">
+        View your day-wise preparation schedule
+      </div>
+
+    </div>
+
+    <div class="schedule-arrow">
+      ›
+    </div>
+
+  </button>
+
+
+  <!-- TODAY PROGRESS -->
+
+  <section class="progress-card">
+
+    <div class="progress-top">
+
+      <div class="progress-title">
+        🎯 Today's Progress
+      </div>
+
+      <div
+        class="progress-count"
+        id="progressCount">
+
+        0 / 0 Tasks
+
+      </div>
+
+    </div>
+
+    <div class="progress-bar">
+
+      <div
+        class="progress-fill"
+        id="progressFill">
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- TODAY TASKS -->
+
+  <h2 class="section-title">
+    Today's Tasks
+  </h2>
+
+  <div
+    class="task-list"
+    id="taskList">
+
+    <div class="status-box">
+
+      <div class="status-icon">
+        ⏳
+      </div>
+
+      <div class="status-title">
+        Loading tasks...
+      </div>
+
+      <div class="status-text">
+        Please wait while we load today's tasks.
+      </div>
+
+    </div>
+
+  </div>
+
+</main>
+
+
+<!-- =========================================================
+     SCHEDULE LIST PAGE
+========================================================= -->
+
+<main
+  class="container schedule-page"
+  id="schedulePage">
+
+  <button
+    class="back-btn"
+    onclick="closeSchedule()">
+
+    ← Back
+
+  </button>
+
+  <h1 class="schedule-page-title">
+    Daily Schedule
+  </h1>
+
+  <p class="schedule-page-subtitle">
+    Select a day to view the schedule
+  </p>
+
+
+  <div
+    class="day-list"
+    id="dayList">
+
+    <div class="status-box">
+
+      <div class="status-icon">
+        ⏳
+      </div>
+
+      <div class="status-title">
+        Loading schedule...
+      </div>
+
+      <div class="status-text">
+        Please wait.
+      </div>
+
+    </div>
+
+  </div>
+
+</main>
+
+
+<!-- =========================================================
+     SCHEDULE MESSAGE PAGE
+========================================================= -->
+
+<main
+  class="container schedule-message-page"
+  id="scheduleMessagePage">
+
+  <button
+    class="back-btn"
+    onclick="closeScheduleMessage()">
+
+    ← Back
+
+  </button>
+
+
+  <div
+    class="message-card"
+    id="messageCard">
+
+  </div>
+
+</main>
+
+
+<!-- =========================
+     BOTTOM NAV
+========================= -->
+
+<nav class="bottom-nav">
+
+  <a href="home.html">
+
+    <span class="nav-icon">
+      🏠
+    </span>
+
+    <small>
+      Home
+    </small>
+
+  </a>
+
+
+  <a href="study.html">
+
+    <span class="nav-icon">
+      📚
+    </span>
+
+    <small>
+      Study Material
+    </small>
+
+  </a>
+
+
+  <a href="practice.html">
+
+    <span class="nav-icon">
+      📝
+    </span>
+
+    <small>
+      Practice
+    </small>
+
+  </a>
+
+
+  <a href="profile.html">
+
+    <span class="nav-icon">
+      👤
+    </span>
+
+    <small>
+      Profile
+    </small>
+
+  </a>
+
+</nav>
+
+
+<script>
+
+/* =========================
+   SUPABASE
+========================= */
+
+const SUPABASE_URL =
+"https://dvvyoygahzzbnpqrfhen.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
+const supabaseClient =
+supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+/* =========================
+   ELEMENTS
+========================= */
+
+const taskPage =
+document.getElementById("taskPage");
+
+const schedulePage =
+document.getElementById("schedulePage");
+
+const scheduleMessagePage =
+document.getElementById("scheduleMessagePage");
+
+const taskList =
+document.getElementById("taskList");
+
+const dayList =
+document.getElementById("dayList");
+
+const messageCard =
+document.getElementById("messageCard");
+
+const progressCount =
+document.getElementById("progressCount");
+
+const progressFill =
+document.getElementById("progressFill");
+
+
+/* =========================
+   DATE
+========================= */
+
+function getToday(){
+
+  const date =
+    new Date();
+
+  const year =
+    date.getFullYear();
+
+  const month =
+    String(date.getMonth() + 1)
+      .padStart(2,"0");
+
+  const day =
+    String(date.getDate())
+      .padStart(2,"0");
+
+  return `${year}-${month}-${day}`;
+
+}
+
+
+/* =========================
+   FORMAT DATE
+========================= */
+
+function formatDate(dateString){
+
+  if(!dateString)
+    return "";
+
+  const date =
+    new Date(dateString + "T00:00:00");
+
+  return date.toLocaleDateString(
+    "en-IN",
+    {
+      day:"numeric",
+      month:"long",
+      year:"numeric"
+    }
+  );
+
+}
+
+
+/* =========================
+   COMPLETED TASKS
+========================= */
+
+function getCompletedTasks(){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem(
+        "ssc-edge-daily-completed"
+      ) || "[]"
+    );
+
+  }catch(error){
+
+    return [];
+
+  }
+
+}
+
+
+function saveCompletedTasks(tasks){
+
+  localStorage.setItem(
+    "ssc-edge-daily-completed",
+    JSON.stringify(tasks)
+  );
+
+}
+
+
+/* =========================
+   TASK ICON
+========================= */
+
+function getTaskIcon(type){
+
+  const value =
+    String(type || "").toLowerCase();
+
+  if(value.includes("study"))
+    return "📚";
+
+  if(value.includes("practice"))
+    return "📝";
+
+  if(value.includes("test"))
+    return "🎯";
+
+  if(value.includes("pdf"))
+    return "📄";
+
+  return "🎯";
+
+}
+
+
+/* =========================================================
+   DAILY TASKS
+========================================================= */
+
+let currentTasks = [];
+
+
+async function loadTasks(){
+
+  try{
+
+    const today =
+      getToday();
+
+    const { data, error } =
+      await supabaseClient
+        .from("daily_tasks")
+        .select("*")
+        .eq("task_date", today)
+        .eq("is_active", true)
+        .order("task_order", {
+          ascending:true
+        });
+
+
+    if(error){
+
+      console.error(error);
+
+      showTaskError();
+
+      return;
+
+    }
+
+
+    currentTasks =
+      data || [];
+
+    renderTasks(currentTasks);
+
+    updateProgress(currentTasks);
+
+  }catch(error){
+
+    console.error(error);
+
+    showTaskError();
+
+  }
+
+}
+
+
+function renderTasks(tasks){
+
+  const completed =
+    getCompletedTasks();
+
+  taskList.innerHTML = "";
+
+
+  if(!tasks || tasks.length === 0){
+
+    taskList.innerHTML = `
+
+      <div class="status-box">
+
+        <div class="status-icon">
+          🎉
+        </div>
+
+        <div class="status-title">
+          No tasks for today
+        </div>
+
+        <div class="status-text">
+          Currently no daily tasks are available.
+          Check again later.
+        </div>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  tasks.forEach(task => {
+
+    const id =
+      String(task.id);
+
+    const isCompleted =
+      completed.includes(id);
+
+
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "task-card" +
+      (isCompleted ? " completed" : "");
+
+
+    card.innerHTML = `
+
+      <div class="task-top">
+
+        <div class="task-icon">
+          ${getTaskIcon(task.task_type)}
+        </div>
+
+        <div class="task-info">
+
+          <div class="task-subject">
+            ${escapeHtml(
+              task.subject || "SSC"
+            )}
+          </div>
+
+          <div class="task-title">
+            ${escapeHtml(
+              task.title || "Daily Task"
+            )}
+          </div>
+
+          ${
+            task.description
+            ?
+            `<div class="task-description">
+              ${escapeHtml(task.description)}
+            </div>`
+            :
+            ""
+          }
+
+        </div>
+
+      </div>
+
+
+      <div class="task-bottom">
+
+        <span class="task-type">
+
+          ${
+            isCompleted
+            ?
+            `<span class="completed-text">
+              ✓ Completed
+            </span>`
+            :
+            escapeHtml(
+              task.task_type || "Daily Task"
+            )
+          }
+
+        </span>
+
+
+        <button
+          class="task-btn"
+          onclick="handleTask('${id}')">
+
+          ${
+            isCompleted
+            ? "✓ Completed"
+            : "Start Task"
+          }
+
+        </button>
+
+      </div>
+
+    `;
+
+
+    taskList.appendChild(card);
+
+  });
+
+}
+
+
+function handleTask(id){
+
+  const completed =
+    getCompletedTasks();
+
+  const task =
+    currentTasks.find(
+      item =>
+        String(item.id) === String(id)
+    );
+
+
+  if(!task)
+    return;
+
+
+  if(!completed.includes(String(id))){
+
+    completed.push(String(id));
+
+    saveCompletedTasks(completed);
+
+  }
+
+
+  updateProgress(currentTasks);
+
+  renderTasks(currentTasks);
+
+
+  if(task.task_url){
+
+    window.location.href =
+      task.task_url;
+
+  }
+
+}
+
+
+function updateProgress(tasks){
+
+  const total =
+    tasks.length;
+
+  const completed =
+    getCompletedTasks();
+
+  const completedCount =
+    tasks.filter(
+      task =>
+        completed.includes(
+          String(task.id)
+        )
+    ).length;
+
+
+  progressCount.textContent =
+    `${completedCount} / ${total} Tasks`;
+
+
+  const percentage =
+    total === 0
+    ? 0
+    : (completedCount / total) * 100;
+
+
+  progressFill.style.width =
+    `${percentage}%`;
+
+}
+
+
+function showTaskError(){
+
+  taskList.innerHTML = `
+
+    <div class="status-box">
+
+      <div class="status-icon">
+        ⚠️
+      </div>
+
+      <div class="status-title">
+        Unable to load tasks
+      </div>
+
+      <div class="status-text">
+        Please try again later.
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   DAILY SCHEDULE
+========================================================= */
+
+let schedules = [];
+
+
+async function loadSchedule(){
+
+  try{
+
+    const { data, error } =
+      await supabaseClient
+        .from("daily_schedules")
+        .select("*")
+        .eq("is_active", true)
+        .order("day_number", {
+          ascending:true
+        });
+
+
+    if(error){
+
+      console.error(error);
+
+      showScheduleError();
+
+      return;
+
+    }
+
+
+    schedules =
+      data || [];
+
+    renderSchedule(schedules);
+
+  }catch(error){
+
+    console.error(error);
+
+    showScheduleError();
+
+  }
+
+}
+
+
+function renderSchedule(data){
+
+  dayList.innerHTML = "";
+
+
+  if(!data || data.length === 0){
+
+    dayList.innerHTML = `
+
+      <div class="status-box">
+
+        <div class="status-icon">
+          📅
+        </div>
+
+        <div class="status-title">
+          No schedule available
+        </div>
+
+        <div class="status-text">
+          Daily schedules will appear here.
+        </div>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  const today =
+    getToday();
+
+
+  data.forEach(schedule => {
+
+    const isToday =
+      schedule.schedule_date === today;
+
+
+    const button =
+      document.createElement("button");
+
+    button.className =
+      "day-card";
+
+
+    button.onclick = function(){
+
+      openScheduleMessage(schedule);
+
+    };
+
+
+    button.innerHTML = `
+
+      <div class="day-left">
+
+        <div class="day-number">
+          DAY ${escapeHtml(
+            schedule.day_number
+          )}
+        </div>
+
+        <div>
+
+          <div class="day-name">
+
+            DAY ${escapeHtml(
+              schedule.day_number
+            )}
+
+            ${
+              isToday
+              ?
+              `<span class="today-label">
+                (Today)
+              </span>`
+              :
+              ""
+            }
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="day-arrow">
+        ›
+      </div>
+
+    `;
+
+
+    dayList.appendChild(button);
+
+  });
+
+}
+
+
+function showScheduleError(){
+
+  dayList.innerHTML = `
+
+    <div class="status-box">
+
+      <div class="status-icon">
+        ⚠️
+      </div>
+
+      <div class="status-title">
+        Unable to load schedule
+      </div>
+
+      <div class="status-text">
+        Please try again later.
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   OPEN SCHEDULE
+========================================================= */
+
+function openSchedule(){
+
+  taskPage.classList.add("hide");
+
+  schedulePage.classList.add("show");
+
+  scheduleMessagePage.classList.remove("show");
+
+  loadSchedule();
+
+  window.scrollTo(0,0);
+
+}
+
+
+/* =========================================================
+   CLOSE SCHEDULE
+========================================================= */
+
+function closeSchedule(){
+
+  schedulePage.classList.remove("show");
+
+  scheduleMessagePage.classList.remove("show");
+
+  taskPage.classList.remove("hide");
+
+  window.scrollTo(0,0);
+
+}
+
+
+/* =========================================================
+   OPEN DAY MESSAGE
+========================================================= */
+
+function openScheduleMessage(schedule){
+
+  schedulePage.classList.remove("show");
+
+  scheduleMessagePage.classList.add("show");
+
+
+  const today =
+    getToday();
+
+  const isToday =
+    schedule.schedule_date === today;
+
+
+  messageCard.innerHTML = `
+
+    <div class="message-day">
+
+      DAY ${escapeHtml(
+        schedule.day_number
+      )}
+
+      ${
+        isToday
+        ?
+        `<span class="today-label">
+          (Today)
+        </span>`
+        :
+        ""
+      }
+
+    </div>
+
+
+    <div class="message-date">
+
+      ${formatDate(
+        schedule.schedule_date
+      )}
+
+    </div>
+
+
+    <div class="message-content">
+
+      ${escapeHtml(
+        schedule.message || "No schedule message available."
+      )}
+
+    </div>
+
+  `;
+
+
+  window.scrollTo(0,0);
+
+}
+
+
+/* =========================================================
+   CLOSE DAY MESSAGE
+========================================================= */
+
+function closeScheduleMessage(){
+
+  scheduleMessagePage.classList.remove("show");
+
+  schedulePage.classList.add("show");
+
+  window.scrollTo(0,0);
+
+}
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHtml(value){
+
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+loadTasks();
+
+</script>
+
+</body>
+
+</html>
