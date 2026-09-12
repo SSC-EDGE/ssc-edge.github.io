@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
@@ -54,6 +55,7 @@ localStorage.getItem("ssc-edge-theme") || "dark";
   margin:0;
   color:var(--muted);
   font-size:14px;
+  line-height:1.5;
 }
 
 .admin-btn,
@@ -111,7 +113,8 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 
 <body>
 
-<!-- LOGIN -->
+
+<!-- ================= LOGIN ================= -->
 
 <div id="loginScreen" class="login-box admin-card">
 
@@ -145,7 +148,7 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 </div>
 
 
-<!-- ADMIN PANEL -->
+<!-- ================= ADMIN PANEL ================= -->
 
 <main id="adminPanel" class="admin-page">
 
@@ -268,6 +271,26 @@ localStorage.getItem("ssc-edge-theme") || "dark";
   </div>
 
 
+  <!-- DAILY TASK -->
+
+  <div class="admin-card">
+
+    <h2>🎯 Daily Tasks</h2>
+
+    <p>
+      Create daily tasks, schedules and assign mock tests.
+    </p>
+
+    <button
+      class="admin-btn"
+      onclick="openPage('admin-daily-task.html')"
+    >
+      Manage Daily Tasks
+    </button>
+
+  </div>
+
+
   <!-- QUESTION BANK -->
 
   <div class="admin-card">
@@ -325,7 +348,7 @@ supabase.createClient(
 );
 
 
-/* LOGIN */
+/* ================= LOGIN ================= */
 
 async function login(){
 
@@ -375,7 +398,7 @@ async function login(){
 }
 
 
-/* ADMIN CHECK */
+/* ================= ADMIN CHECK ================= */
 
 async function checkAdmin(){
 
@@ -450,7 +473,7 @@ async function checkAdmin(){
 }
 
 
-/* SHOW LOGIN */
+/* ================= SHOW LOGIN ================= */
 
 function showLogin(){
 
@@ -467,7 +490,7 @@ function showLogin(){
 }
 
 
-/* OPEN PAGE */
+/* ================= OPEN PAGE ================= */
 
 function openPage(page){
 
@@ -477,7 +500,7 @@ function openPage(page){
 }
 
 
-/* LOGOUT */
+/* ================= LOGOUT ================= */
 
 async function logout(){
 
@@ -489,7 +512,7 @@ async function logout(){
 }
 
 
-/* START */
+/* ================= START ================= */
 
 checkAdmin();
 
