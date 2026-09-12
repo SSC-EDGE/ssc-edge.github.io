@@ -51,54 +51,6 @@ box-shadow:0 5px 18px rgba(0,0,0,.07);
 
 
 /* =========================
-   THUMBNAIL
-========================= */
-
-.pdf-thumbnail{
-width:100%;
-aspect-ratio:16/9;
-background:#111;
-overflow:hidden;
-}
-
-.pdf-thumbnail img{
-width:100%;
-height:100%;
-object-fit:cover;
-display:block;
-}
-
-.thumbnail-fallback{
-width:100%;
-height:100%;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-text-align:center;
-background:linear-gradient(135deg,#171225,#30204f);
-color:white;
-}
-
-.thumbnail-icon{
-font-size:45px;
-margin-bottom:7px;
-}
-
-.thumbnail-logo{
-font-size:27px;
-font-weight:800;
-letter-spacing:1px;
-}
-
-.thumbnail-text{
-font-size:13px;
-opacity:.8;
-margin-top:5px;
-}
-
-
-/* =========================
    CONTENT
 ========================= */
 
@@ -176,22 +128,17 @@ padding:30px 10px;
 
 </head>
 
-
 <body>
 
-
 <div class="container">
-
 
 <div class="page-title">
 General Knowledge
 </div>
 
-
 <div class="page-subtitle">
 SSC EDGE General Knowledge PDFs
 </div>
-
 
 <div
 id="pdfList"
@@ -203,7 +150,6 @@ Loading PDFs...
 </div>
 
 </div>
-
 
 </div>
 
@@ -258,17 +204,6 @@ function escapeHtml(value){
 
 /* =========================================================
    DOWNLOAD URL
-=========================================================
-
-   IMPORTANT:
-
-   Do NOT change the Supabase bucket.
-
-   The original file_url is already the
-   correct working URL.
-
-   We only add ?download so the browser
-   requests the file as a download.
 ========================================================= */
 
 function getDownloadUrl(url){
@@ -301,46 +236,7 @@ function getDownloadUrl(url){
 
 
 /* =========================================================
-   FALLBACK THUMBNAIL
-========================================================= */
-
-function fallbackThumbnail(){
-
-    return `
-
-    <div class="thumbnail-fallback">
-
-        <div class="thumbnail-icon">
-            📚
-        </div>
-
-        <div class="thumbnail-logo">
-            SSC EDGE
-        </div>
-
-        <div class="thumbnail-text">
-            Learn • Practice • Improve
-        </div>
-
-    </div>
-
-    `;
-
-}
-
-
-/* =========================================================
    RECORD DOWNLOAD
-=========================================================
-
-   IMPORTANT:
-
-   Save the ORIGINAL rawUrl.
-
-   Do NOT save downloadUrl.
-
-   This prevents the Downloads page
-   from storing a broken bucket URL.
 ========================================================= */
 
 function recordDownload(
@@ -598,59 +494,6 @@ async function loadPDFs(){
                     );
 
 
-                const thumbnail =
-                    pdf.thumbnail_url ||
-                    "";
-
-
-                /* =========================
-                   THUMBNAIL
-                ========================= */
-
-                const thumbnailHtml =
-
-                    thumbnail
-
-                    ?
-
-                    `
-
-                    <div class="pdf-thumbnail">
-
-                        <img
-
-                            src="${escapeHtml(
-                                thumbnail
-                            )}"
-
-                            alt="${title}"
-
-                            loading="lazy"
-
-                            onerror="this.parentElement.innerHTML='${fallbackThumbnail().replace(
-                                /'/g,
-                                "\\'"
-                            )}'"
-
-                        >
-
-                    </div>
-
-                    `
-
-                    :
-
-                    `
-
-                    <div class="pdf-thumbnail">
-
-                        ${fallbackThumbnail()}
-
-                    </div>
-
-                    `;
-
-
                 /* =========================
                    CARD
                 ========================= */
@@ -658,9 +501,6 @@ async function loadPDFs(){
                 return `
 
                 <div class="pdf-card">
-
-
-                    ${thumbnailHtml}
 
 
                     <div class="pdf-content">
