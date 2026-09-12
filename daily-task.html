@@ -567,6 +567,80 @@ body{
 
 
 /* =========================
+   TASK DETAIL
+========================= */
+
+.task-detail-page{
+  display:none;
+}
+
+.task-detail-page.show{
+  display:block;
+}
+
+.task-detail-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:19px;
+  box-shadow:0 5px 18px rgba(0,0,0,.06);
+}
+
+.task-detail-subject{
+  color:var(--purple);
+  font-size:13px;
+  font-weight:900;
+  text-transform:uppercase;
+  margin-bottom:7px;
+}
+
+.task-detail-title{
+  font-size:22px;
+  font-weight:900;
+  line-height:1.35;
+  margin-bottom:9px;
+}
+
+.task-detail-type{
+  color:var(--muted);
+  font-size:12px;
+  font-weight:800;
+  margin-bottom:18px;
+}
+
+.task-detail-content{
+  color:var(--text);
+  font-size:14px;
+  line-height:1.7;
+  white-space:pre-wrap;
+  word-break:break-word;
+  margin-bottom:20px;
+}
+
+.detail-action{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:46px;
+  padding:11px 14px;
+  margin-top:10px;
+
+  border:0;
+  border-radius:10px;
+
+  background:var(--purple);
+  color:white;
+
+  text-decoration:none;
+
+  font-size:13px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+
+/* =========================
    BOTTOM NAV
 ========================= */
 
@@ -665,13 +739,13 @@ body{
      HEADER
 ========================= -->
 
- <header class="top-header">
+<header class="top-header">
 
   <div class="brand">
     SSC <span>EDGE</span>
   </div>
 
- </header>
+</header>
 
 
 <!-- =========================================================
@@ -859,6 +933,32 @@ body{
 </main>
 
 
+<!-- =========================================================
+     TASK DETAIL PAGE
+========================================================= -->
+
+<main
+  class="container task-detail-page"
+  id="taskDetailPage">
+
+  <button
+    class="back-btn"
+    onclick="closeTaskDetail()">
+
+    ← Back
+
+  </button>
+
+
+  <div
+    class="task-detail-card"
+    id="taskDetailCard">
+
+  </div>
+
+</main>
+
+
 <!-- =========================
      BOTTOM NAV
 ========================= -->
@@ -951,6 +1051,9 @@ document.getElementById("schedulePage");
 const scheduleMessagePage =
 document.getElementById("scheduleMessagePage");
 
+const taskDetailPage =
+document.getElementById("taskDetailPage");
+
 const taskList =
 document.getElementById("taskList");
 
@@ -959,6 +1062,9 @@ document.getElementById("dayList");
 
 const messageCard =
 document.getElementById("messageCard");
+
+const taskDetailCard =
+document.getElementById("taskDetailCard");
 
 const progressCount =
 document.getElementById("progressCount");
@@ -1058,13 +1164,22 @@ function getTaskIcon(type){
   const value =
     String(type || "").toLowerCase();
 
-  if(value.includes("study"))
+  if(
+    value.includes("study") ||
+    value.includes("content")
+  )
     return "📚";
 
-  if(value.includes("practice"))
+  if(
+    value.includes("practice") ||
+    value.includes("link")
+  )
     return "📝";
 
-  if(value.includes("test"))
+  if(
+    value.includes("test") ||
+    value.includes("mock")
+  )
     return "🎯";
 
   if(value.includes("pdf"))
@@ -1102,7 +1217,10 @@ async function loadTasks(){
 
     if(error){
 
-      console.error(error);
+      console.error(
+        "Daily Tasks Error:",
+        error
+      );
 
       showTaskError();
 
@@ -1187,7 +1305,10 @@ function renderTasks(tasks){
       <div class="task-top">
 
         <div class="task-icon">
-          ${getTaskIcon(task.task_type)}
+          ${getTaskIcon(
+            task.target_type ||
+            task.task_type
+          )}
         </div>
 
         <div class="task-info">
@@ -1208,7 +1329,9 @@ function renderTasks(tasks){
             task.description
             ?
             `<div class="task-description">
-              ${escapeHtml(task.description)}
+              ${escapeHtml(
+                task.description
+              )}
             </div>`
             :
             ""
@@ -1231,7 +1354,7 @@ function renderTasks(tasks){
             </span>`
             :
             escapeHtml(
-              task.task_type || "Daily Task"
+              getDisplayTaskType(task)
             )
           }
 
@@ -1262,6 +1385,38 @@ function renderTasks(tasks){
 }
 
 
+/* =========================
+   DISPLAY TASK TYPE
+========================= */
+
+function getDisplayTaskType(task){
+
+  const target =
+    String(
+      task.target_type || ""
+    ).toLowerCase();
+
+  if(target === "mock")
+    return "Mock / Test";
+
+  if(target === "content")
+    return "Content";
+
+  if(target === "pdf")
+    return "PDF";
+
+  if(target === "link")
+    return "Link";
+
+  return task.task_type || "Daily Task";
+
+}
+
+
+/* =========================================================
+   HANDLE TASK
+========================================================= */
+
 function handleTask(id){
 
   const completed =
@@ -1278,6 +1433,10 @@ function handleTask(id){
     return;
 
 
+  /* =========================
+     MARK COMPLETE
+  ========================= */
+
   if(!completed.includes(String(id))){
 
     completed.push(String(id));
@@ -1292,15 +1451,371 @@ function handleTask(id){
   renderTasks(currentTasks);
 
 
+  /* =========================
+     TARGET TYPE
+  ========================= */
+
+  const targetType =
+    String(
+      task.target_type || ""
+    ).toLowerCase();
+
+
+  /* =========================
+     MOCK / TEST
+  ========================= */
+
+  if(
+    targetType === "mock" ||
+    targetType === "test"
+  ){
+
+    if(task.target_id){
+
+      window.location.href =
+        "test.html?id=" +
+        encodeURIComponent(
+          task.target_id
+        );
+
+      return;
+
+    }
+
+
+    if(task.task_url){
+
+      window.location.href =
+        task.task_url;
+
+      return;
+
+    }
+
+
+    showTaskDetail(task);
+
+    return;
+
+  }
+
+
+  /* =========================
+     PDF
+  ========================= */
+
+  if(targetType === "pdf"){
+
+    if(task.pdf_url){
+
+      window.open(
+        task.pdf_url,
+        "_blank"
+      );
+
+      return;
+
+    }
+
+
+    if(task.task_url){
+
+      window.open(
+        task.task_url,
+        "_blank"
+      );
+
+      return;
+
+    }
+
+
+    showTaskDetail(task);
+
+    return;
+
+  }
+
+
+  /* =========================
+     LINK
+  ========================= */
+
+  if(targetType === "link"){
+
+    if(task.task_link){
+
+      window.open(
+        task.task_link,
+        "_blank"
+      );
+
+      return;
+
+    }
+
+
+    if(task.task_url){
+
+      window.open(
+        task.task_url,
+        "_blank"
+      );
+
+      return;
+
+    }
+
+
+    showTaskDetail(task);
+
+    return;
+
+  }
+
+
+  /* =========================
+     CONTENT
+  ========================= */
+
+  if(targetType === "content"){
+
+    showTaskDetail(task);
+
+    return;
+
+  }
+
+
+  /* =========================
+     OLD TASK SUPPORT
+  ========================= */
+
   if(task.task_url){
 
     window.location.href =
       task.task_url;
 
+    return;
+
   }
+
+
+  showTaskDetail(task);
 
 }
 
+
+/* =========================================================
+   TASK DETAIL
+========================================================= */
+
+function showTaskDetail(task){
+
+  taskPage.classList.add("hide");
+
+  schedulePage.classList.remove("show");
+
+  scheduleMessagePage.classList.remove("show");
+
+  taskDetailPage.classList.add("show");
+
+
+  const targetType =
+    String(
+      task.target_type || ""
+    ).toLowerCase();
+
+
+  let actionHtml = "";
+
+
+  /* =========================
+     PDF BUTTON
+  ========================= */
+
+  if(
+    targetType === "pdf" &&
+    task.pdf_url
+  ){
+
+    actionHtml = `
+
+      <a
+        class="detail-action"
+        href="${escapeAttribute(
+          task.pdf_url
+        )}"
+        target="_blank"
+        rel="noopener">
+
+        📄 Open PDF
+
+      </a>
+
+    `;
+
+  }
+
+
+  /* =========================
+     LINK BUTTON
+  ========================= */
+
+  else if(
+    targetType === "link" &&
+    task.task_link
+  ){
+
+    actionHtml = `
+
+      <a
+        class="detail-action"
+        href="${escapeAttribute(
+          task.task_link
+        )}"
+        target="_blank"
+        rel="noopener">
+
+        🔗 Open Link
+
+      </a>
+
+    `;
+
+  }
+
+
+  /* =========================
+     MOCK BUTTON
+  ========================= */
+
+  else if(
+    (
+      targetType === "mock" ||
+      targetType === "test"
+    ) &&
+    task.target_id
+  ){
+
+    actionHtml = `
+
+      <a
+        class="detail-action"
+        href="test.html?id=${encodeURIComponent(
+          task.target_id
+        )}">
+
+        🎯 Start Mock / Test
+
+      </a>
+
+    `;
+
+  }
+
+
+  /* =========================
+     OLD URL BUTTON
+  ========================= */
+
+  else if(task.task_url){
+
+    actionHtml = `
+
+      <a
+        class="detail-action"
+        href="${escapeAttribute(
+          task.task_url
+        )}">
+
+        ▶ Open Task
+
+      </a>
+
+    `;
+
+  }
+
+
+  taskDetailCard.innerHTML = `
+
+    <div class="task-detail-subject">
+
+      ${escapeHtml(
+        task.subject || "SSC"
+      )}
+
+    </div>
+
+
+    <div class="task-detail-title">
+
+      ${escapeHtml(
+        task.title || "Daily Task"
+      )}
+
+    </div>
+
+
+    <div class="task-detail-type">
+
+      ${escapeHtml(
+        getDisplayTaskType(task)
+      )}
+
+    </div>
+
+
+    ${
+      task.content
+      ?
+      `<div class="task-detail-content">
+        ${escapeHtml(task.content)}
+      </div>`
+      :
+      task.description
+      ?
+      `<div class="task-detail-content">
+        ${escapeHtml(task.description)}
+      </div>`
+      :
+      ""
+    }
+
+
+    ${actionHtml}
+
+  `;
+
+
+  window.scrollTo(0,0);
+
+}
+
+
+/* =========================
+   CLOSE TASK DETAIL
+========================= */
+
+function closeTaskDetail(){
+
+  taskDetailPage.classList.remove("show");
+
+  schedulePage.classList.remove("show");
+
+  scheduleMessagePage.classList.remove("show");
+
+  taskPage.classList.remove("hide");
+
+  window.scrollTo(0,0);
+
+}
+
+
+/* =========================
+   PROGRESS
+========================= */
 
 function updateProgress(tasks){
 
@@ -1334,6 +1849,10 @@ function updateProgress(tasks){
 
 }
 
+
+/* =========================
+   TASK ERROR
+========================= */
 
 function showTaskError(){
 
@@ -1383,7 +1902,10 @@ async function loadSchedule(){
 
     if(error){
 
-      console.error(error);
+      console.error(
+        "Schedule Error:",
+        error
+      );
 
       showScheduleError();
 
@@ -1459,7 +1981,9 @@ function renderSchedule(data){
 
     button.onclick = function(){
 
-      openScheduleMessage(schedule);
+      openScheduleMessage(
+        schedule
+      );
 
     };
 
@@ -1469,9 +1993,11 @@ function renderSchedule(data){
       <div class="day-left">
 
         <div class="day-number">
+
           DAY ${escapeHtml(
             schedule.day_number
           )}
+
         </div>
 
         <div>
@@ -1550,6 +2076,8 @@ function openSchedule(){
 
   scheduleMessagePage.classList.remove("show");
 
+  taskDetailPage.classList.remove("show");
+
   loadSchedule();
 
   window.scrollTo(0,0);
@@ -1567,6 +2095,8 @@ function closeSchedule(){
 
   scheduleMessagePage.classList.remove("show");
 
+  taskDetailPage.classList.remove("show");
+
   taskPage.classList.remove("hide");
 
   window.scrollTo(0,0);
@@ -1583,6 +2113,8 @@ function openScheduleMessage(schedule){
   schedulePage.classList.remove("show");
 
   scheduleMessagePage.classList.add("show");
+
+  taskDetailPage.classList.remove("show");
 
 
   const today =
@@ -1625,7 +2157,8 @@ function openScheduleMessage(schedule){
     <div class="message-content">
 
       ${escapeHtml(
-        schedule.message || "No schedule message available."
+        schedule.message ||
+        "No schedule message available."
       )}
 
     </div>
@@ -1659,12 +2192,27 @@ function closeScheduleMessage(){
 
 function escapeHtml(value){
 
-  return String(value)
+  return String(value ?? "")
     .replace(/&/g,"&amp;")
     .replace(/</g,"&lt;")
     .replace(/>/g,"&gt;")
     .replace(/"/g,"&quot;")
     .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================
+   ESCAPE ATTRIBUTE
+========================= */
+
+function escapeAttribute(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/"/g,"&quot;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;");
 
 }
 
