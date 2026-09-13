@@ -1,0 +1,1907 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<script>
+document.documentElement.dataset.theme =
+  localStorage.getItem("ssc-edge-theme") || "dark";
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SSC EDGE - Admin Practice</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+.header{
+  padding:18px 20px;
+  border-bottom:1px solid var(--border);
+  background:var(--header);
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+
+.header h1{
+  margin:0;
+  font-size:24px;
+}
+
+.header h1 span{
+  color:var(--purple2);
+}
+
+.header p{
+  margin:5px 0 0;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.container{
+  padding:20px;
+  max-width:1000px;
+  margin:auto;
+  padding-bottom:50px;
+}
+
+.top-actions{
+  display:flex;
+  gap:10px;
+  margin-bottom:20px;
+}
+
+.top-actions a,
+.top-actions button{
+  flex:1;
+  min-height:44px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+  text-decoration:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.section{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:18px;
+  margin-bottom:20px;
+}
+
+.section h2{
+  margin:0 0 15px;
+  font-size:20px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.field.full{
+  grid-column:1 / -1;
+}
+
+label{
+  font-size:13px;
+  font-weight:700;
+  color:var(--muted);
+}
+
+input,
+select{
+  width:100%;
+  min-height:44px;
+  padding:10px 12px;
+  border-radius:9px;
+  border:1px solid var(--border);
+  background:var(--bg);
+  color:var(--text);
+  outline:none;
+}
+
+input:focus,
+select:focus{
+  border-color:var(--purple);
+}
+
+.form-buttons{
+  display:flex;
+  gap:10px;
+  margin-top:15px;
+}
+
+.primary,
+.secondary,
+.danger{
+  min-height:44px;
+  padding:10px 16px;
+  border-radius:9px;
+  border:1px solid var(--border);
+  cursor:pointer;
+  font-weight:700;
+}
+
+.primary{
+  background:var(--purple);
+  color:white;
+  border-color:var(--purple);
+}
+
+.secondary{
+  background:var(--card2);
+  color:var(--text);
+}
+
+.danger{
+  background:#d9534f;
+  color:white;
+  border-color:#d9534f;
+}
+
+.list{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.item{
+  border:1px solid var(--border);
+  background:var(--card2);
+  border-radius:12px;
+  padding:14px;
+}
+
+.item-title{
+  font-size:16px;
+  font-weight:800;
+  margin-bottom:5px;
+}
+
+.item-info{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+}
+
+.item-actions{
+  display:flex;
+  gap:8px;
+  margin-top:12px;
+}
+
+.item-actions button{
+  flex:1;
+  min-height:38px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  cursor:pointer;
+  font-weight:700;
+  background:var(--card);
+  color:var(--text);
+}
+
+.item-actions .delete-btn{
+  color:#d9534f;
+}
+
+.message{
+  margin-bottom:15px;
+  padding:11px 13px;
+  border-radius:9px;
+  display:none;
+  font-size:14px;
+}
+
+.message.show{
+  display:block;
+}
+
+.message.error{
+  background:rgba(217,83,79,.12);
+  color:#d9534f;
+}
+
+.message.success{
+  background:rgba(80,180,100,.12);
+  color:#4caf50;
+}
+
+.empty{
+  text-align:center;
+  color:var(--muted);
+  padding:20px 5px;
+}
+
+.badge{
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:20px;
+  background:rgba(155,92,255,.12);
+  color:var(--purple2);
+  font-size:11px;
+  font-weight:800;
+  margin-top:7px;
+}
+
+@media(max-width:650px){
+
+  .container{
+    padding:15px;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .field.full{
+    grid-column:auto;
+  }
+
+  .top-actions{
+    flex-direction:column;
+  }
+
+  .form-buttons{
+    flex-direction:column;
+  }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header class="header">
+
+  <h1>SSC <span>EDGE</span></h1>
+
+  <p>Practice Structure Management</p>
+
+</header>
+
+
+<main class="container">
+
+
+  <div class="top-actions">
+
+    <a href="admin.html">
+      ← Admin Panel
+    </a>
+
+    <a href="admin-mock.html">
+      Mock Tests
+    </a>
+
+    <button type="button" onclick="loadAll()">
+      Refresh
+    </button>
+
+  </div>
+
+
+  <div id="message" class="message"></div>
+
+
+  <!-- =========================
+       EXAMS
+  ========================== -->
+
+  <section class="section">
+
+    <h2>Exams</h2>
+
+    <form id="examForm">
+
+      <input type="hidden" id="examEditId">
+
+      <div class="form-grid">
+
+        <div class="field full">
+
+          <label>Exam Name</label>
+
+          <input
+            type="text"
+            id="examName"
+            placeholder="Example: SSC CGL"
+            required
+          >
+
+        </div>
+
+      </div>
+
+      <div class="form-buttons">
+
+        <button
+          type="submit"
+          class="primary"
+          id="examSaveBtn"
+        >
+          Add Exam
+        </button>
+
+        <button
+          type="button"
+          class="secondary"
+          onclick="cancelExamEdit()"
+        >
+          Cancel
+        </button>
+
+      </div>
+
+    </form>
+
+    <div
+      id="examList"
+      class="list"
+      style="margin-top:18px;"
+    ></div>
+
+  </section>
+
+
+  <!-- =========================
+       SUBJECTS
+  ========================== -->
+
+  <section class="section">
+
+    <h2>Subjects</h2>
+
+    <form id="subjectForm">
+
+      <input type="hidden" id="subjectEditId">
+
+      <div class="form-grid">
+
+        <div class="field">
+
+          <label>Subject Name</label>
+
+          <input
+            type="text"
+            id="subjectName"
+            placeholder="Example: Quantitative Aptitude"
+            required
+          >
+
+        </div>
+
+      </div>
+
+      <div class="form-buttons">
+
+        <button
+          type="submit"
+          class="primary"
+          id="subjectSaveBtn"
+        >
+          Add Subject
+        </button>
+
+        <button
+          type="button"
+          class="secondary"
+          onclick="cancelSubjectEdit()"
+        >
+          Cancel
+        </button>
+
+      </div>
+
+    </form>
+
+    <div
+      id="subjectList"
+      class="list"
+      style="margin-top:18px;"
+    ></div>
+
+  </section>
+
+
+  <!-- =========================
+       MOCK FOLDERS
+  ========================== -->
+
+  <section class="section">
+
+    <h2>Mock Folders</h2>
+
+    <form id="folderForm">
+
+      <input type="hidden" id="folderEditId">
+
+      <div class="form-grid">
+
+        <div class="field">
+
+          <label>Exam</label>
+
+          <select id="folderExam" required>
+            <option value="">Select Exam</option>
+          </select>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>Folder Type</label>
+
+          <select id="folderType" required>
+
+            <option value="full">
+              Full Mock
+            </option>
+
+            <option value="subject">
+              Subject Practice
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div
+          class="field"
+          id="folderSubjectField"
+          style="display:none;"
+        >
+
+          <label>Subject</label>
+
+          <select id="folderSubject">
+
+            <option value="">
+              Select Subject
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>Folder Name</label>
+
+          <input
+            type="text"
+            id="folderName"
+            placeholder="Example: NEW MOCKS"
+            required
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>Display Order</label>
+
+          <input
+            type="number"
+            id="folderOrder"
+            value="0"
+            min="0"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div class="form-buttons">
+
+        <button
+          type="submit"
+          class="primary"
+          id="folderSaveBtn"
+        >
+          Add Folder
+        </button>
+
+        <button
+          type="button"
+          class="secondary"
+          onclick="cancelFolderEdit()"
+        >
+          Cancel
+        </button>
+
+      </div>
+
+    </form>
+
+
+    <div class="form-buttons">
+
+      <button
+        type="button"
+        class="secondary"
+        onclick="createDefaultFolders()"
+      >
+        Create NEW MOCKS + PYQ
+      </button>
+
+    </div>
+
+
+    <div
+      id="folderList"
+      class="list"
+      style="margin-top:18px;"
+    ></div>
+
+  </section>
+
+
+</main>
+
+
+<script>
+
+/* ==========================================
+   SUPABASE
+========================================== */
+
+const SUPABASE_URL =
+"https://dvvyoygahzzbnpqrfhen.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
+const db =
+supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+/* ==========================================
+   DATA
+========================================== */
+
+let exams = [];
+let subjects = [];
+let folders = [];
+
+
+/* ==========================================
+   MESSAGE
+========================================== */
+
+function showMessage(text,type){
+
+  const box =
+    document.getElementById("message");
+
+  box.textContent = text;
+
+  box.className =
+    "message show " + type;
+
+  setTimeout(function(){
+
+    box.className = "message";
+
+  },4000);
+
+}
+
+
+/* ==========================================
+   ADMIN CHECK
+========================================== */
+
+async function checkAdmin(){
+
+  const result =
+    await db.auth.getUser();
+
+  const user =
+    result.data.user;
+
+  if(!user){
+
+    window.location.href =
+      "admin-login.html";
+
+    return false;
+
+  }
+
+  const adminResult =
+    await db
+      .from("admin_users")
+      .select("user_id")
+      .eq("user_id",user.id)
+      .maybeSingle();
+
+  if(
+    adminResult.error ||
+    !adminResult.data
+  ){
+
+    alert("Admin access required.");
+
+    window.location.href =
+      "admin-login.html";
+
+    return false;
+
+  }
+
+  return true;
+
+}
+
+
+/* ==========================================
+   LOAD ALL
+========================================== */
+
+async function loadAll(){
+
+  try{
+
+    const examResult =
+      await db
+        .from("exams")
+        .select("*")
+        .order("id",{ascending:true});
+
+    if(examResult.error)
+      throw examResult.error;
+
+    exams =
+      examResult.data || [];
+
+
+    const subjectResult =
+      await db
+        .from("subjects")
+        .select("*")
+        .order("id",{ascending:true});
+
+    if(subjectResult.error)
+      throw subjectResult.error;
+
+    subjects =
+      subjectResult.data || [];
+
+
+    const folderResult =
+      await db
+        .from("mock_folders")
+        .select("*")
+        .order("exam_id",{ascending:true})
+        .order("sort_order",{ascending:true})
+        .order("id",{ascending:true});
+
+    if(folderResult.error)
+      throw folderResult.error;
+
+    folders =
+      folderResult.data || [];
+
+
+    renderExamSelects();
+    renderSubjectSelects();
+    renderExams();
+    renderSubjects();
+    renderFolders();
+
+  }catch(error){
+
+    console.error(error);
+
+    showMessage(
+      error.message || "Could not load data.",
+      "error"
+    );
+
+  }
+
+}
+
+
+/* ==========================================
+   NAME HELPERS
+========================================== */
+
+function examName(id){
+
+  const item =
+    exams.find(
+      function(x){
+        return Number(x.id) === Number(id);
+      }
+    );
+
+  return item
+    ? (item.name || item.title || "Unnamed Exam")
+    : "Unknown Exam";
+
+}
+
+
+function subjectName(id){
+
+  const item =
+    subjects.find(
+      function(x){
+        return Number(x.id) === Number(id);
+      }
+    );
+
+  return item
+    ? (item.name || item.title || "Unnamed Subject")
+    : "Unknown Subject";
+
+}
+
+
+/* ==========================================
+   SELECTS
+========================================== */
+
+function renderExamSelects(){
+
+  const select =
+    document.getElementById("folderExam");
+
+  select.innerHTML =
+    '<option value="">Select Exam</option>';
+
+  exams.forEach(function(exam){
+
+    const option =
+      document.createElement("option");
+
+    option.value =
+      exam.id;
+
+    option.textContent =
+      exam.name ||
+      exam.title ||
+      "Unnamed Exam";
+
+    select.appendChild(option);
+
+  });
+
+}
+
+
+function renderSubjectSelects(){
+
+  const select =
+    document.getElementById("folderSubject");
+
+  select.innerHTML =
+    '<option value="">Select Subject</option>';
+
+  subjects.forEach(function(subject){
+
+    const option =
+      document.createElement("option");
+
+    option.value =
+      subject.id;
+
+    option.textContent =
+      subject.name ||
+      subject.title ||
+      "Unnamed Subject";
+
+    select.appendChild(option);
+
+  });
+
+}
+
+
+/* ==========================================
+   EXAM LIST
+========================================== */
+
+function renderExams(){
+
+  const box =
+    document.getElementById("examList");
+
+  if(!exams.length){
+
+    box.innerHTML =
+      '<div class="empty">No exams added yet.</div>';
+
+    return;
+
+  }
+
+  box.innerHTML = "";
+
+  exams.forEach(function(exam){
+
+    const item =
+      document.createElement("div");
+
+    item.className =
+      "item";
+
+    item.innerHTML =
+
+      '<div class="item-title">' +
+      escapeHtml(
+        exam.name ||
+        exam.title ||
+        "Unnamed Exam"
+      ) +
+      '</div>' +
+
+      '<div class="item-info">' +
+      'ID: ' + exam.id +
+      '</div>' +
+
+      '<div class="item-actions">' +
+
+      '<button type="button" onclick="editExam(' +
+      exam.id +
+      ')">Edit</button>' +
+
+      '<button type="button" class="delete-btn" onclick="deleteExam(' +
+      exam.id +
+      ')">Delete</button>' +
+
+      '</div>';
+
+    box.appendChild(item);
+
+  });
+
+}
+
+
+/* ==========================================
+   SUBJECT LIST
+========================================== */
+
+function renderSubjects(){
+
+  const box =
+    document.getElementById("subjectList");
+
+  if(!subjects.length){
+
+    box.innerHTML =
+      '<div class="empty">No subjects added yet.</div>';
+
+    return;
+
+  }
+
+  box.innerHTML = "";
+
+  subjects.forEach(function(subject){
+
+    const item =
+      document.createElement("div");
+
+    item.className =
+      "item";
+
+    item.innerHTML =
+
+      '<div class="item-title">' +
+      escapeHtml(
+        subject.name ||
+        subject.title ||
+        "Unnamed Subject"
+      ) +
+      '</div>' +
+
+      '<div class="item-info">' +
+      'ID: ' + subject.id +
+      '</div>' +
+
+      '<div class="item-actions">' +
+
+      '<button type="button" onclick="editSubject(' +
+      subject.id +
+      ')">Edit</button>' +
+
+      '<button type="button" class="delete-btn" onclick="deleteSubject(' +
+      subject.id +
+      ')">Delete</button>' +
+
+      '</div>';
+
+    box.appendChild(item);
+
+  });
+
+}
+
+
+/* ==========================================
+   FOLDER LIST
+========================================== */
+
+function renderFolders(){
+
+  const box =
+    document.getElementById("folderList");
+
+  if(!folders.length){
+
+    box.innerHTML =
+      '<div class="empty">No mock folders added yet.</div>';
+
+    return;
+
+  }
+
+  box.innerHTML = "";
+
+  folders.forEach(function(folder){
+
+    const typeText =
+      folder.folder_type === "subject"
+        ? "Subject Practice"
+        : "Full Mock";
+
+
+    const subjectText =
+      folder.subject_id
+        ? " • " + subjectName(folder.subject_id)
+        : "";
+
+
+    const item =
+      document.createElement("div");
+
+    item.className =
+      "item";
+
+    item.innerHTML =
+
+      '<div class="item-title">' +
+      escapeHtml(folder.name) +
+      '</div>' +
+
+      '<div class="item-info">' +
+      escapeHtml(examName(folder.exam_id)) +
+      subjectText +
+      '<br>' +
+      'Order: ' +
+      folder.sort_order +
+      '</div>' +
+
+      '<span class="badge">' +
+      typeText +
+      '</span>' +
+
+      '<div class="item-actions">' +
+
+      '<button type="button" onclick="editFolder(' +
+      folder.id +
+      ')">Edit</button>' +
+
+      '<button type="button" class="delete-btn" onclick="deleteFolder(' +
+      folder.id +
+      ')">Delete</button>' +
+
+      '</div>';
+
+    box.appendChild(item);
+
+  });
+
+}
+
+
+/* ==========================================
+   EXAM ADD / EDIT
+========================================== */
+
+document
+  .getElementById("examForm")
+  .addEventListener(
+    "submit",
+    async function(event){
+
+      event.preventDefault();
+
+      const id =
+        document.getElementById("examEditId").value;
+
+      const name =
+        document.getElementById("examName").value.trim();
+
+      if(!name)
+        return;
+
+
+      try{
+
+        if(id){
+
+          const result =
+            await db
+              .from("exams")
+              .update({
+                name:name
+              })
+              .eq("id",id);
+
+          if(result.error)
+            throw result.error;
+
+          showMessage(
+            "Exam updated successfully.",
+            "success"
+          );
+
+        }else{
+
+          const result =
+            await db
+              .from("exams")
+              .insert({
+                name:name
+              })
+              .select()
+              .single();
+
+          if(result.error)
+            throw result.error;
+
+          showMessage(
+            "Exam added successfully.",
+            "success"
+          );
+
+        }
+
+        cancelExamEdit();
+
+        await loadAll();
+
+      }catch(error){
+
+        console.error(error);
+
+        showMessage(
+          error.message ||
+          "Could not save exam.",
+          "error"
+        );
+
+      }
+
+    }
+  );
+
+
+function editExam(id){
+
+  const exam =
+    exams.find(
+      function(x){
+        return Number(x.id) === Number(id);
+      }
+    );
+
+  if(!exam)
+    return;
+
+  document.getElementById("examEditId").value =
+    exam.id;
+
+  document.getElementById("examName").value =
+    exam.name || exam.title || "";
+
+  document.getElementById("examSaveBtn").textContent =
+    "Update Exam";
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+function cancelExamEdit(){
+
+  document.getElementById("examEditId").value =
+    "";
+
+  document.getElementById("examName").value =
+    "";
+
+  document.getElementById("examSaveBtn").textContent =
+    "Add Exam";
+
+}
+
+
+async function deleteExam(id){
+
+  if(!confirm(
+    "Delete this exam?\n\nFolders linked to this exam will also be deleted."
+  ))
+    return;
+
+
+  try{
+
+    const result =
+      await db
+        .from("exams")
+        .delete()
+        .eq("id",id);
+
+    if(result.error)
+      throw result.error;
+
+    showMessage(
+      "Exam deleted.",
+      "success"
+    );
+
+    await loadAll();
+
+  }catch(error){
+
+    console.error(error);
+
+    showMessage(
+      error.message ||
+      "Could not delete exam.",
+      "error"
+    );
+
+  }
+
+}
+
+
+/* ==========================================
+   SUBJECT ADD / EDIT
+========================================== */
+
+document
+  .getElementById("subjectForm")
+  .addEventListener(
+    "submit",
+    async function(event){
+
+      event.preventDefault();
+
+      const id =
+        document.getElementById("subjectEditId").value;
+
+      const name =
+        document.getElementById("subjectName").value.trim();
+
+      if(!name)
+        return;
+
+
+      try{
+
+        if(id){
+
+          const result =
+            await db
+              .from("subjects")
+              .update({
+                name:name
+              })
+              .eq("id",id);
+
+          if(result.error)
+            throw result.error;
+
+          showMessage(
+            "Subject updated successfully.",
+            "success"
+          );
+
+        }else{
+
+          const result =
+            await db
+              .from("subjects")
+              .insert({
+                name:name
+              })
+              .select()
+              .single();
+
+          if(result.error)
+            throw result.error;
+
+          showMessage(
+            "Subject added successfully.",
+            "success"
+          );
+
+        }
+
+        cancelSubjectEdit();
+
+        await loadAll();
+
+      }catch(error){
+
+        console.error(error);
+
+        showMessage(
+          error.message ||
+          "Could not save subject.",
+          "error"
+        );
+
+      }
+
+    }
+  );
+
+
+function editSubject(id){
+
+  const subject =
+    subjects.find(
+      function(x){
+        return Number(x.id) === Number(id);
+      }
+    );
+
+  if(!subject)
+    return;
+
+  document.getElementById("subjectEditId").value =
+    subject.id;
+
+  document.getElementById("subjectName").value =
+    subject.name || subject.title || "";
+
+  document.getElementById("subjectSaveBtn").textContent =
+    "Update Subject";
+
+  window.scrollTo({
+    top:document.getElementById("subjectForm").offsetTop - 20,
+    behavior:"smooth"
+  });
+
+}
+
+
+function cancelSubjectEdit(){
+
+  document.getElementById("subjectEditId").value =
+    "";
+
+  document.getElementById("subjectName").value =
+    "";
+
+  document.getElementById("subjectSaveBtn").textContent =
+    "Add Subject";
+
+}
+
+
+async function deleteSubject(id){
+
+  if(!confirm(
+    "Delete this subject?\n\nOnly do this if you are sure it is not being used by existing material/tests."
+  ))
+    return;
+
+
+  try{
+
+    const result =
+      await db
+        .from("subjects")
+        .delete()
+        .eq("id",id);
+
+    if(result.error)
+      throw result.error;
+
+    showMessage(
+      "Subject deleted.",
+      "success"
+    );
+
+    await loadAll();
+
+  }catch(error){
+
+    console.error(error);
+
+    showMessage(
+      error.message ||
+      "Could not delete subject.",
+      "error"
+    );
+
+  }
+
+}
+
+
+/* ==========================================
+   FOLDER TYPE
+========================================== */
+
+document
+  .getElementById("folderType")
+  .addEventListener(
+    "change",
+    function(){
+
+      const field =
+        document.getElementById(
+          "folderSubjectField"
+        );
+
+      const subject =
+        document.getElementById(
+          "folderSubject"
+        );
+
+      if(this.value === "subject"){
+
+        field.style.display =
+          "flex";
+
+        subject.required =
+          true;
+
+      }else{
+
+        field.style.display =
+          "none";
+
+        subject.required =
+          false;
+
+        subject.value =
+          "";
+
+      }
+
+    }
+  );
+
+
+/* ==========================================
+   FOLDER ADD / EDIT
+========================================== */
+
+document
+  .getElementById("folderForm")
+  .addEventListener(
+    "submit",
+    async function(event){
+
+      event.preventDefault();
+
+      const id =
+        document.getElementById("folderEditId").value;
+
+      const examId =
+        document.getElementById("folderExam").value;
+
+      const folderType =
+        document.getElementById("folderType").value;
+
+      const subjectValue =
+        document.getElementById("folderSubject").value;
+
+      const name =
+        document.getElementById("folderName").value.trim();
+
+      const order =
+        Number(
+          document.getElementById("folderOrder").value
+        ) || 0;
+
+
+      if(!examId || !name){
+
+        showMessage(
+          "Please select an exam and enter folder name.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      if(
+        folderType === "subject" &&
+        !subjectValue
+      ){
+
+        showMessage(
+          "Please select a subject.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      const payload = {
+
+        exam_id:Number(examId),
+
+        subject_id:
+          folderType === "subject"
+            ? Number(subjectValue)
+            : null,
+
+        name:name,
+
+        folder_type:folderType,
+
+        sort_order:order,
+
+        is_active:true
+
+      };
+
+
+      try{
+
+        if(id){
+
+          const result =
+            await db
+              .from("mock_folders")
+              .update(payload)
+              .eq("id",id);
+
+          if(result.error)
+            throw result.error;
+
+          showMessage(
+            "Folder updated successfully.",
+            "success"
+          );
+
+        }else{
+
+          const result =
+            await db
+              .from("mock_folders")
+              .insert(payload);
+
+          if(result.error)
+            throw result.error;
+
+          showMessage(
+            "Folder added successfully.",
+            "success"
+          );
+
+        }
+
+        cancelFolderEdit();
+
+        await loadAll();
+
+      }catch(error){
+
+        console.error(error);
+
+        showMessage(
+          error.message ||
+          "Could not save folder.",
+          "error"
+        );
+
+      }
+
+    }
+  );
+
+
+function editFolder(id){
+
+  const folder =
+    folders.find(
+      function(x){
+        return Number(x.id) === Number(id);
+      }
+    );
+
+  if(!folder)
+    return;
+
+
+  document.getElementById("folderEditId").value =
+    folder.id;
+
+  document.getElementById("folderExam").value =
+    folder.exam_id;
+
+  document.getElementById("folderType").value =
+    folder.folder_type || "full";
+
+  document.getElementById("folderSubject").value =
+    folder.subject_id || "";
+
+  document.getElementById("folderName").value =
+    folder.name || "";
+
+  document.getElementById("folderOrder").value =
+    folder.sort_order || 0;
+
+  document.getElementById("folderSaveBtn").textContent =
+    "Update Folder";
+
+
+  const field =
+    document.getElementById(
+      "folderSubjectField"
+    );
+
+  const subject =
+    document.getElementById(
+      "folderSubject"
+    );
+
+  if(
+    (folder.folder_type || "full") ===
+    "subject"
+  ){
+
+    field.style.display =
+      "flex";
+
+    subject.required =
+      true;
+
+  }else{
+
+    field.style.display =
+      "none";
+
+    subject.required =
+      false;
+
+  }
+
+
+  window.scrollTo({
+    top:document.getElementById("folderForm").offsetTop - 20,
+    behavior:"smooth"
+  });
+
+}
+
+
+function cancelFolderEdit(){
+
+  document.getElementById("folderEditId").value =
+    "";
+
+  document.getElementById("folderExam").value =
+    "";
+
+  document.getElementById("folderType").value =
+    "full";
+
+  document.getElementById("folderSubject").value =
+    "";
+
+  document.getElementById("folderName").value =
+    "";
+
+  document.getElementById("folderOrder").value =
+    "0";
+
+  document.getElementById("folderSaveBtn").textContent =
+    "Add Folder";
+
+
+  document.getElementById(
+    "folderSubjectField"
+  ).style.display =
+    "none";
+
+  document.getElementById(
+    "folderSubject"
+  ).required =
+    false;
+
+}
+
+
+async function deleteFolder(id){
+
+  if(!confirm(
+    "Delete this mock folder?"
+  ))
+    return;
+
+
+  try{
+
+    const result =
+      await db
+        .from("mock_folders")
+        .delete()
+        .eq("id",id);
+
+    if(result.error)
+      throw result.error;
+
+    showMessage(
+      "Folder deleted.",
+      "success"
+    );
+
+    await loadAll();
+
+  }catch(error){
+
+    console.error(error);
+
+    showMessage(
+      error.message ||
+      "Could not delete folder.",
+      "error"
+    );
+
+  }
+
+}
+
+
+/* ==========================================
+   DEFAULT FULL MOCK FOLDERS
+========================================== */
+
+async function createDefaultFolders(){
+
+  if(!exams.length){
+
+    showMessage(
+      "First add at least one exam.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  try{
+
+    let added = 0;
+
+
+    for(
+      const exam of exams
+    ){
+
+      const existing =
+        folders.filter(
+          function(folder){
+
+            return Number(folder.exam_id) ===
+              Number(exam.id);
+
+          }
+        );
+
+
+      const newMocksExists =
+        existing.some(
+          function(folder){
+
+            return (
+              folder.folder_type === "full" &&
+              String(folder.name).trim().toUpperCase() ===
+              "NEW MOCKS"
+            );
+
+          }
+        );
+
+
+      const pyqExists =
+        existing.some(
+          function(folder){
+
+            return (
+              folder.folder_type === "full" &&
+              String(folder.name).trim().toUpperCase() ===
+              "PYQ"
+            );
+
+          }
+        );
+
+
+      const rows = [];
+
+
+      if(!newMocksExists){
+
+        rows.push({
+
+          exam_id:Number(exam.id),
+
+          subject_id:null,
+
+          name:"NEW MOCKS",
+
+          folder_type:"full",
+
+          sort_order:1,
+
+          is_active:true
+
+        });
+
+      }
+
+
+      if(!pyqExists){
+
+        rows.push({
+
+          exam_id:Number(exam.id),
+
+          subject_id:null,
+
+          name:"PYQ",
+
+          folder_type:"full",
+
+          sort_order:2,
+
+          is_active:true
+
+        });
+
+      }
+
+
+      if(rows.length){
+
+        const result =
+          await db
+            .from("mock_folders")
+            .insert(rows);
+
+        if(result.error)
+          throw result.error;
+
+        added += rows.length;
+
+      }
+
+    }
+
+
+    if(added){
+
+      showMessage(
+        added +
+        " default folder(s) created.",
+        "success"
+      );
+
+    }else{
+
+      showMessage(
+        "NEW MOCKS and PYQ already exist for all exams.",
+        "success"
+      );
+
+    }
+
+
+    await loadAll();
+
+  }catch(error){
+
+    console.error(error);
+
+    showMessage(
+      error.message ||
+      "Could not create default folders.",
+      "error"
+    );
+
+  }
+
+}
+
+
+/* ==========================================
+   ESCAPE HTML
+========================================== */
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* ==========================================
+   START
+========================================== */
+
+(async function(){
+
+  const allowed =
+    await checkAdmin();
+
+  if(!allowed)
+    return;
+
+  await loadAll();
+
+})();
+
+</script>
+
+</body>
+  </html>
