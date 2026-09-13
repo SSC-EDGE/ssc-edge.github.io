@@ -207,6 +207,76 @@ url:url
 }
 
 
+/* ==========================================
+   STUDY MATERIAL PROGRESS
+   ========================================== */
+
+async function markStudyMaterialComplete(materialId){
+
+try{
+
+const {
+data: {
+user
+}
+} =
+await supabaseClient.auth.getUser();
+
+
+if(!user){
+
+return;
+
+}
+
+
+const {
+error
+} =
+await supabaseClient
+
+.from("study_material_progress")
+
+.upsert(
+
+{
+user_id:user.id,
+
+material_id:Number(materialId),
+
+completed:true,
+
+completed_at:new Date().toISOString()
+},
+
+{
+onConflict:"user_id,material_id"
+}
+
+);
+
+
+if(error){
+
+console.warn(
+"Study progress could not be saved:",
+error
+);
+
+}
+
+}catch(error){
+
+console.warn(
+"Study progress error:",
+error
+);
+
+}
+
+}
+
+
 async function loadPDFs(){
 
 const pdfList =
@@ -344,7 +414,8 @@ ${description}
 class="open"
 href="${openUrl}"
 target="_blank"
-rel="noopener">
+rel="noopener"
+data-material-id="${id}">
 
 📄 Open PDF
 
@@ -374,6 +445,28 @@ onclick="recordDownload(
 `;
 
 }).join("");
+
+
+/* ==========================================
+   OPEN PDF PROGRESS TRACKING
+   ========================================== */
+
+document
+.querySelectorAll(".open[data-material-id]")
+.forEach(button => {
+
+button.addEventListener(
+"click",
+function(){
+
+markStudyMaterialComplete(
+this.dataset.materialId
+);
+
+}
+);
+
+});
 
 }
 
