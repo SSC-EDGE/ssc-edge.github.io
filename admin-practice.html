@@ -831,7 +831,7 @@ async function moveExam(id,direction){
   await db
     .from("exams")
     .select("*")
-    .order("created_at",{ascending:true});
+    .order("sort_order",{ascending:true});
 
   if(error || !data) return;
 
