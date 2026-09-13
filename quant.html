@@ -3,110 +3,150 @@
 
 <head>
 
+<script>
+document.documentElement.dataset.theme =
+  localStorage.getItem("ssc-edge-theme") || "dark";
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Quantitative Aptitude - SSC EDGE</title>
+<meta name="theme-color" content="#9b5cff">
 
-<script>
-document.documentElement.dataset.theme =
-localStorage.getItem("ssc-edge-theme") || "dark";
-</script>
+<title>SSC EDGE - Quantitative Aptitude</title>
 
 <link rel="stylesheet" href="css/style.css">
-
-<script src="js/downloads.js"></script>
 
 <style>
 
 .container{
-padding:20px;
-padding-bottom:90px;
+  padding:20px;
+  padding-bottom:90px;
 }
 
 .page-title{
-font-size:26px;
-font-weight:bold;
-margin-bottom:6px;
+  font-size:26px;
+  font-weight:bold;
+  margin-bottom:6px;
 }
 
 .page-subtitle{
-color:var(--muted);
-margin-bottom:20px;
+  color:var(--muted);
+  margin-bottom:20px;
 }
 
 .pdf-list{
-display:flex;
-flex-direction:column;
-gap:18px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
 }
 
 .pdf-card{
-background:var(--card);
-border:1px solid var(--border);
-border-radius:17px;
-overflow:hidden;
-box-shadow:0 5px 18px rgba(0,0,0,.07);
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:17px;
+  overflow:hidden;
+  box-shadow:0 5px 18px rgba(0,0,0,.07);
 }
 
 .pdf-content{
-padding:16px;
+  padding:16px;
 }
 
 .pdf-title{
-font-size:18px;
-font-weight:bold;
-line-height:1.4;
-margin-bottom:7px;
+  font-size:18px;
+  font-weight:bold;
+  line-height:1.4;
+  margin-bottom:7px;
 }
 
 .pdf-subject{
-font-size:13px;
-color:var(--muted);
-margin-bottom:9px;
+  font-size:13px;
+  color:var(--muted);
+  margin-bottom:9px;
 }
 
 .pdf-description{
-color:var(--muted);
-font-size:14px;
-line-height:1.5;
-margin-bottom:14px;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.5;
+  margin-bottom:14px;
 }
 
 .pdf-actions{
-display:flex;
-gap:10px;
+  display:flex;
+  gap:10px;
 }
 
 .open,
 .download{
-flex:1;
-display:flex;
-align-items:center;
-justify-content:center;
-min-height:46px;
-padding:11px 10px;
-border-radius:10px;
-text-decoration:none;
-font-weight:bold;
-box-sizing:border-box;
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:46px;
+  padding:11px 10px;
+  border-radius:10px;
+  text-decoration:none;
+  font-weight:bold;
+  box-sizing:border-box;
 }
 
 .open{
-background:var(--purple);
-color:white;
+  background:var(--purple);
+  color:white;
 }
 
 .download{
-background:var(--card2);
-color:var(--text);
-border:1px solid var(--border);
+  background:var(--card2);
+  color:var(--text);
+  border:1px solid var(--border);
 }
 
 .empty{
-text-align:center;
-color:var(--muted);
-padding:30px 10px;
+  text-align:center;
+  color:var(--muted);
+  padding:30px 10px;
+}
+
+
+/* =========================
+   BOTTOM NAV
+========================= */
+
+.bottom-nav{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:50;
+  height:67px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  border-top:1px solid var(--border);
+  background:var(--header);
+  backdrop-filter:blur(14px);
+}
+
+.bottom-nav a{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  color:var(--muted);
+  text-decoration:none;
+  font-size:9px;
+  font-weight:800;
+}
+
+.bottom-nav a.active{
+  color:#9b5cff;
+}
+
+.nav-icon{
+  font-size:20px;
+  line-height:1;
 }
 
 </style>
@@ -115,25 +155,76 @@ padding:30px 10px;
 
 <body>
 
-<div class="container">
+<!-- =========================
+     HEADER
+========================= -->
 
-<div class="page-title">
-Quantitative Aptitude
-</div>
+<header class="top-header">
 
-<div class="page-subtitle">
-SSC EDGE Quantitative Aptitude PDFs
-</div>
+  <div class="brand">
+    <strong>SSC <span>EDGE</span></strong>
+  </div>
 
-<div id="pdfList" class="pdf-list">
+</header>
 
-<div class="empty">
-Loading PDFs...
-</div>
 
-</div>
+<!-- =========================
+     MAIN
+========================= -->
 
-</div>
+<main class="container">
+
+  <div class="page-title">
+    Quantitative Aptitude
+  </div>
+
+  <div class="page-subtitle">
+    Study Material & PDFs
+  </div>
+
+  <div id="pdfList" class="pdf-list">
+
+    <div class="empty">
+      Loading study material...
+    </div>
+
+  </div>
+
+</main>
+
+
+<!-- =========================
+     BOTTOM NAV
+========================= -->
+
+<nav class="bottom-nav">
+
+  <a href="home.html">
+    <span class="nav-icon">🏠</span>
+    <small>Home</small>
+  </a>
+
+  <a href="study.html" class="active">
+    <span class="nav-icon">📚</span>
+    <small>Study Material</small>
+  </a>
+
+  <a href="practice.html">
+    <span class="nav-icon">📝</span>
+    <small>Practice</small>
+  </a>
+
+  <a href="profile.html">
+    <span class="nav-icon">👤</span>
+    <small>Profile</small>
+  </a>
+
+</nav>
+
+
+<!-- =========================
+     SUPABASE
+========================= -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -146,281 +237,311 @@ const SUPABASE_KEY =
 "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
 
 const supabaseClient =
-supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
-);
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
 
 
 /* =========================
-   ESCAPE HTML
+   MARK STUDY MATERIAL COMPLETE
 ========================= */
 
-function escapeHtml(value){
+async function markStudyMaterialComplete(materialId){
 
-return String(value || "")
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
+  try{
 
-}
+    const result =
+      await supabaseClient.auth.getUser();
 
+    const user = result.data.user;
 
-/* =========================
-   DOWNLOAD URL
-========================= */
+    if(!user){
+      return;
+    }
 
-function getDownloadUrl(url){
+    const { error } =
+      await supabaseClient
+        .from("study_material_progress")
+        .upsert(
+          {
+            user_id: user.id,
+            material_id: Number(materialId),
+            completed: true,
+            completed_at: new Date().toISOString()
+          },
+          {
+            onConflict: "user_id,material_id"
+          }
+        );
 
-if(!url){
-return "";
-}
+    if(error){
+      console.warn(
+        "Study progress could not be saved:",
+        error
+      );
+    }
 
-if(url.includes("?")){
-return url + "&download";
-}
+  }catch(error){
 
-return url + "?download";
+    console.warn(
+      "Study progress error:",
+      error
+    );
 
-}
-
-
-/* =========================
-   RECORD DOWNLOAD
-========================= */
-
-function recordDownload(
-id,
-title,
-subject,
-url
-){
-
-if(
-window.SSCEdgeDownloads &&
-window.SSCEdgeDownloads.recordDownload
-){
-
-window.SSCEdgeDownloads.recordDownload({
-
-id:id,
-
-title:title,
-
-subject:subject,
-
-type:"PDF",
-
-url:url
-
-});
-
-}
+  }
 
 }
 
 
 /* =========================
-   LOAD PDFs
+   LOAD QUANT PDFS
 ========================= */
 
 async function loadPDFs(){
 
-const pdfList =
-document.getElementById("pdfList");
+  const list =
+    document.getElementById("pdfList");
+
+  try{
+
+    /* =========================
+       FIND QUANT SUBJECT
+    ========================= */
+
+    const { data: subject, error: subjectError } =
+      await supabaseClient
+        .from("subjects")
+        .select("*")
+        .eq("name", "Quant")
+        .maybeSingle();
+
+    if(subjectError){
+      throw subjectError;
+    }
+
+    if(!subject){
+
+      list.innerHTML = `
+        <div class="empty">
+          Quant subject not found.
+        </div>
+      `;
+
+      return;
+    }
 
 
-const {
-data: subject,
-error: subjectError
-} = await supabaseClient
+    /* =========================
+       GET PDF MATERIAL
+    ========================= */
 
-.from("subjects")
+    const { data: materials, error } =
+      await supabaseClient
+        .from("study_material")
+        .select("*")
+        .eq("material_type", "PDF")
+        .eq("subject_id", subject.id)
+        .eq("is_active", true)
+        .order("created_at", {
+          ascending:false
+        });
 
-.select("id,name")
-
-.eq("name","Quant")
-
-.single();
-
-
-if(subjectError || !subject){
-
-pdfList.innerHTML =
-`<div class="empty">
-Unable to load Quant subject.
-</div>`;
-
-return;
-
-}
+    if(error){
+      throw error;
+    }
 
 
-const {
-data: pdfs,
-error
-} = await supabaseClient
+    /* =========================
+       NO MATERIAL
+    ========================= */
 
-.from("study_material")
+    if(!materials || materials.length === 0){
 
-.select("*")
+      list.innerHTML = `
+        <div class="empty">
+          Currently no study material available.
+        </div>
+      `;
 
-.eq("material_type","PDF")
-
-.eq("subject_id",subject.id)
-
-.eq("is_active",true)
-
-.order(
-"created_at",
-{
-ascending:false
-}
-);
+      return;
+    }
 
 
-if(error){
+    /* =========================
+       RENDER PDF CARDS
+    ========================= */
 
-console.error(error);
+    list.innerHTML = "";
 
-pdfList.innerHTML =
-`<div class="empty">
-Unable to load PDFs.
-</div>`;
+    materials.forEach(material => {
 
-return;
+      const id =
+        String(material.id);
 
-}
+      const title =
+        material.title ||
+        "Untitled PDF";
+
+      const description =
+        material.description ||
+        "Study material for SSC preparation.";
+
+      const fileUrl =
+        material.file_url;
+
+      if(!fileUrl){
+        return;
+      }
 
 
-if(!pdfs || pdfs.length === 0){
+      /* =========================
+         DOWNLOAD URL
+      ========================= */
 
-pdfList.innerHTML =
-`<div class="empty">
-No Quant PDFs available yet.
-</div>`;
+      const downloadUrl =
+        fileUrl.includes("?")
+          ? fileUrl + "&download"
+          : fileUrl + "?download";
 
-return;
+
+      /* =========================
+         CARD
+      ========================= */
+
+      const card =
+        document.createElement("div");
+
+      card.className =
+        "pdf-card";
+
+
+      const content =
+        document.createElement("div");
+
+      content.className =
+        "pdf-content";
+
+
+      content.innerHTML = `
+
+        <div class="pdf-title">
+          ${escapeHTML(title)}
+        </div>
+
+        <div class="pdf-subject">
+          Quantitative Aptitude
+        </div>
+
+        <div class="pdf-description">
+          ${escapeHTML(description)}
+        </div>
+
+        <div class="pdf-actions">
+
+          <a
+            class="open"
+            href="${escapeAttribute(fileUrl)}"
+            target="_blank"
+            rel="noopener"
+          >
+            📄 Open PDF
+          </a>
+
+          <a
+            class="download"
+            href="${escapeAttribute(downloadUrl)}"
+            target="_blank"
+            rel="noopener"
+            download
+          >
+            ⬇ Download
+          </a>
+
+        </div>
+
+      `;
+
+
+      card.appendChild(content);
+
+      list.appendChild(card);
+
+
+      /* =========================
+         PROGRESS TRACKING
+         Added safely after DOM
+         creation — no template
+         string syntax issue.
+      ========================= */
+
+      const openButton =
+        content.querySelector(".open");
+
+      if(openButton){
+
+        openButton.addEventListener(
+          "click",
+          function(){
+
+            markStudyMaterialComplete(id);
+
+          }
+        );
+
+      }
+
+    });
+
+
+  }catch(error){
+
+    console.error(
+      "PDF loading error:",
+      error
+    );
+
+    list.innerHTML = `
+      <div class="empty">
+        Unable to load study material.
+        <br>
+        Please try again later.
+      </div>
+    `;
+
+  }
 
 }
 
 
 /* =========================
-   RENDER PDFs
+   SAFE HTML
 ========================= */
 
-pdfList.innerHTML =
-pdfs.map(pdf => {
+function escapeHTML(value){
 
-const rawTitle =
-pdf.title || "Untitled PDF";
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 
-const rawDescription =
-pdf.description || "";
-
-const rawUrl =
-pdf.file_url || "";
-
-const id =
-escapeHtml(pdf.id || rawUrl);
-
-const title =
-escapeHtml(rawTitle);
-
-const description =
-escapeHtml(rawDescription);
-
-const openUrl =
-escapeHtml(rawUrl);
-
-const rawDownloadUrl =
-getDownloadUrl(rawUrl);
-
-const downloadUrl =
-escapeHtml(rawDownloadUrl);
-
-const subjectName =
-escapeHtml(subject.name);
-
-
-return `
-
-<div class="pdf-card">
-
-<div class="pdf-content">
-
-<div class="pdf-title">
-${title}
-</div>
-
-<div class="pdf-subject">
-📚 ${subjectName}
-</div>
-
-${
-description
-
-?
-
-`
-
-<div class="pdf-description">
-${description}
-</div>
-
-`
-
-:
-
-""
 }
 
-<div class="pdf-actions">
 
-<a
-class="open"
-href="${openUrl}"
-target="_blank"
-rel="noopener"
->
+function escapeAttribute(value){
 
-📄 Open PDF
-
-</a>
-
-<a
-class="download"
-href="${downloadUrl}"
-download
-onclick="recordDownload(
-'${id.replace(/'/g,"\\'")}',
-'${title.replace(/'/g,"\\'")}',
-'${subjectName.replace(/'/g,"\\'")}',
-'${openUrl.replace(/'/g,"\\'")}'
-)"
->
-
-📥 Download
-
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-`;
-
-}).join("");
+  return String(value)
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
 
 }
 
 
 /* =========================
-   INITIAL LOAD
+   START
 ========================= */
 
 loadPDFs();
