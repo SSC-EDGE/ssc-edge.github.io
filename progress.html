@@ -3,422 +3,640 @@
 
 <head>
 
-<script>
-document.documentElement.dataset.theme =
-  localStorage.getItem("ssc-edge-theme") || "dark";
-</script>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<meta name="theme-color" content="#21142f">
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1.0"
+>
+
+<meta
+  name="theme-color"
+  content="#160b26"
+>
 
 <title>Progress - SSC EDGE</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+document.documentElement.dataset.theme =
+  localStorage.getItem("ssc-edge-theme") || "dark";
+
+</script>
+
+
+<link rel="stylesheet" href="css/style.css">
+
 
 <style>
 
-/* =========================================
-   THEME
-========================================= */
-
-:root{
-  --bg:#f7f3fb;
-  --card:#ffffff;
-  --card2:#f0e8ff;
-  --text:#21182b;
-  --muted:#766c80;
-  --border:#ded3eb;
-  --purple:#9b5cff;
-  --purple2:#b487ff;
-  --green:#35c77a;
-}
-
-:root[data-theme="dark"]{
-  --bg:#120b18;
-  --card:#1d1327;
-  --card2:#261936;
-  --text:#f5eff9;
-  --muted:#aaa1b5;
-  --border:#3a2850;
-  --purple:#9b5cff;
-  --purple2:#b487ff;
-  --green:#35c77a;
-}
-
-
-/* =========================================
-   BODY
-========================================= */
+/* =========================================================
+   BASE
+========================================================= */
 
 *{
   box-sizing:border-box;
 }
 
-html{
-  background:var(--bg);
-}
-
 body{
+
   margin:0;
-  min-height:100vh;
+
+  padding:0 0 82px;
+
   background:var(--bg);
+
   color:var(--text);
-  font-family:Arial,Helvetica,sans-serif;
-  padding-bottom:80px;
+
+  font-family:Arial,sans-serif;
+
 }
 
 
-/* =========================================
+/* =========================================================
    HEADER
-========================================= */
+========================================================= */
 
-.top-header{
-  width:100%;
-  padding:18px 18px 14px;
-  background:var(--bg);
+.progress-header{
+
+  height:58px;
+
+  display:flex;
+
+  align-items:center;
+
+  padding:0 18px;
+
+  background:var(--header);
+
+  border-bottom:1px solid var(--border);
+
+  position:sticky;
+
+  top:0;
+
+  z-index:20;
+
 }
 
-.brand{
-  font-size:23px;
+.progress-brand{
+
+  font-size:20px;
+
   font-weight:900;
-  letter-spacing:.3px;
+
+  letter-spacing:-.5px;
+
 }
 
-.brand span{
-  color:var(--purple);
+.progress-brand .edge{
+
+  color:#9b5cff;
+
 }
 
 
-/* =========================================
-   MAIN
-========================================= */
+/* =========================================================
+   CONTAINER
+========================================================= */
 
-.container{
-  padding:4px 18px 25px;
-  max-width:700px;
+.progress-container{
+
+  width:min(680px,100%);
+
   margin:0 auto;
+
+  padding:20px 15px 25px;
+
 }
+
+
+/* =========================================================
+   PAGE TITLE
+========================================================= */
 
 .page-title{
+
   margin:0;
-  font-size:27px;
+
+  font-size:26px;
+
   font-weight:900;
+
 }
 
 .page-subtitle{
+
   margin:6px 0 20px;
+
   color:var(--muted);
-  font-size:14px;
+
+  font-size:13px;
+
 }
 
 
-/* =========================================
-   OVERALL PROGRESS
-========================================= */
+/* =========================================================
+   OVERALL CARD
+========================================================= */
 
 .overall-card{
-  background:var(--card);
+
+  padding:18px;
+
+  margin-bottom:20px;
+
   border:1px solid var(--border);
-  border-radius:18px;
-  padding:20px;
-  margin-bottom:22px;
+
+  border-radius:17px;
+
+  background:var(--card);
+
   box-shadow:0 5px 18px rgba(0,0,0,.06);
+
 }
 
-.overall-title{
-  font-size:17px;
-  font-weight:900;
-  margin-bottom:18px;
+.overall-top{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:15px;
+
 }
 
-.overall-center{
-  text-align:center;
+.overall-circle{
+
+  width:82px;
+
+  height:82px;
+
+  flex:0 0 82px;
+
+  border-radius:50%;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:center;
+
+  background:var(--card2);
+
+  border:2px solid #9b5cff;
+
 }
 
 .overall-percent{
-  font-size:42px;
+
+  font-size:23px;
+
   line-height:1;
+
   font-weight:900;
-  color:var(--purple);
+
+  color:#9b5cff;
+
 }
 
-.overall-label{
-  margin-top:7px;
+.overall-small{
+
+  margin-top:4px;
+
   color:var(--muted);
-  font-size:12px;
-  font-weight:700;
+
+  font-size:8px;
+
+  font-weight:900;
+
+  text-transform:uppercase;
+
 }
 
-.progress-bar{
-  height:10px;
-  margin-top:19px;
-  border-radius:20px;
-  overflow:hidden;
-  background:var(--card2);
+.overall-info{
+
+  flex:1;
+
 }
 
-.progress-fill{
-  height:100%;
-  width:0%;
-  border-radius:20px;
-  background:var(--purple);
-  transition:width .4s ease;
+.overall-title{
+
+  font-size:16px;
+
+  font-weight:900;
+
 }
 
 .overall-message{
-  text-align:center;
-  margin-top:13px;
+
+  margin-top:5px;
+
   color:var(--muted);
-  font-size:13px;
-  font-weight:700;
+
+  font-size:11px;
+
+  line-height:1.5;
+
 }
 
 
-/* =========================================
-   SECTION TITLE
-========================================= */
+/* =========================================================
+   PROGRESS BAR
+========================================================= */
+
+.progress-bar{
+
+  width:100%;
+
+  height:9px;
+
+  margin-top:17px;
+
+  overflow:hidden;
+
+  border-radius:20px;
+
+  background:var(--card2);
+
+}
+
+.progress-fill{
+
+  width:0%;
+
+  height:100%;
+
+  border-radius:20px;
+
+  background:#9b5cff;
+
+  transition:width .4s ease;
+
+}
+
+
+/* =========================================================
+   SECTION
+========================================================= */
 
 .section-title{
-  margin:0 0 12px;
-  font-size:18px;
-  font-weight:900;
-}
 
+  margin:20px 3px 9px;
 
-/* =========================================
-   PREPARATION OVERVIEW
-========================================= */
-
-.overview-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:12px;
-  margin-bottom:24px;
-}
-
-.overview-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:16px;
-  min-height:125px;
-}
-
-.overview-icon{
-  font-size:28px;
-  line-height:1;
-  margin-bottom:12px;
-}
-
-.overview-name{
-  font-size:13px;
   color:var(--muted);
-  font-weight:800;
-}
 
-.overview-value{
-  margin-top:5px;
-  font-size:24px;
-  font-weight:900;
-}
-
-.overview-small{
-  margin-top:4px;
-  color:var(--muted);
   font-size:11px;
+
+  font-weight:900;
+
+  text-transform:uppercase;
+
+  letter-spacing:.8px;
+
 }
 
 
-/* =========================================
-   MOCK PERFORMANCE
-========================================= */
+/* =========================================================
+   STAT GRID
+========================================================= */
 
-.performance-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:18px;
+.stat-grid{
+
+  display:grid;
+
+  grid-template-columns:repeat(2,1fr);
+
+  gap:10px;
+
+}
+
+.stat-card{
+
+  position:relative;
+
+  min-height:112px;
+
+  padding:14px;
+
   overflow:hidden;
-  margin-bottom:24px;
-}
 
-.performance-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:15px;
-  padding:16px 17px;
-  border-bottom:1px solid var(--border);
-}
-
-.performance-row:last-child{
-  border-bottom:0;
-}
-
-.performance-name{
-  color:var(--muted);
-  font-size:13px;
-  font-weight:800;
-}
-
-.performance-value{
-  font-size:16px;
-  font-weight:900;
-}
-
-
-/* =========================================
-   RECENT ATTEMPTS
-========================================= */
-
-.history-card{
-  width:100%;
   border:1px solid var(--border);
-  border-radius:17px;
+
+  border-radius:14px;
+
   background:var(--card);
-  padding:17px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:14px;
-  text-align:left;
-  color:var(--text);
-  cursor:pointer;
-  margin-bottom:25px;
+
 }
 
-.history-left{
-  display:flex;
-  align-items:center;
-  gap:13px;
+.stat-card::after{
+
+  content:"";
+
+  position:absolute;
+
+  width:70px;
+
+  height:70px;
+
+  right:-25px;
+
+  bottom:-28px;
+
+  border-radius:50%;
+
+  background:#9b5cff;
+
+  opacity:.10;
+
 }
 
-.history-icon{
-  width:45px;
-  height:45px;
-  border-radius:13px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:var(--card2);
-  font-size:22px;
-  flex-shrink:0;
+.stat-icon{
+
+  font-size:18px;
+
+  margin-bottom:7px;
+
 }
 
-.history-title{
-  font-size:15px;
+.stat-label{
+
+  color:var(--muted);
+
+  font-size:9px;
+
   font-weight:900;
+
+  text-transform:uppercase;
+
+  letter-spacing:.5px;
+
 }
 
-.history-subtitle{
+.stat-value{
+
+  margin-top:5px;
+
+  color:var(--text);
+
+  font-size:23px;
+
+  line-height:1;
+
+  font-weight:900;
+
+}
+
+.stat-note{
+
+  margin-top:6px;
+
+  color:var(--muted);
+
+  font-size:9px;
+
+  font-weight:700;
+
+}
+
+
+/* =========================================================
+   RECENT ATTEMPTS
+========================================================= */
+
+.recent-card{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:12px;
+
+  padding:15px;
+
+  border:1px solid var(--border);
+
+  border-radius:14px;
+
+  background:var(--card);
+
+  text-decoration:none;
+
+  color:var(--text);
+
+}
+
+.recent-icon{
+
+  width:42px;
+
+  height:42px;
+
+  flex:0 0 42px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  border-radius:11px;
+
+  background:var(--card2);
+
+  border:1px solid var(--border);
+
+  font-size:21px;
+
+}
+
+.recent-content{
+
+  flex:1;
+
+}
+
+.recent-title{
+
+  font-size:13px;
+
+  font-weight:900;
+
+}
+
+.recent-sub{
+
   margin-top:4px;
+
   color:var(--muted);
-  font-size:12px;
+
+  font-size:10px;
+
+  font-weight:700;
+
 }
 
-.history-arrow{
-  font-size:25px;
+.recent-arrow{
+
   color:var(--muted);
+
+  font-size:20px;
+
 }
 
 
-/* =========================================
+/* =========================================================
    LOADING
-========================================= */
+========================================================= */
 
 .loading{
+
   text-align:center;
+
+  padding:25px;
+
   color:var(--muted);
-  font-size:13px;
-  padding:12px 0;
+
+  font-size:12px;
+
 }
 
 
-/* =========================================
+/* =========================================================
    BOTTOM NAV
-========================================= */
+========================================================= */
 
 .bottom-nav{
+
   position:fixed;
+
   left:0;
+
   right:0;
+
   bottom:0;
-  z-index:100;
+
+  z-index:50;
+
   height:67px;
+
   display:grid;
+
   grid-template-columns:repeat(4,1fr);
-  background:var(--card2);
+
   border-top:1px solid var(--border);
+
+  background:var(--header);
+
+  backdrop-filter:blur(14px);
+
 }
 
 .bottom-nav a{
+
   display:flex;
+
   flex-direction:column;
+
   align-items:center;
+
   justify-content:center;
+
   gap:3px;
+
+  color:var(--muted);
+
   text-decoration:none;
+
   font-size:9px;
+
   font-weight:800;
+
+}
+
+.bottom-nav a.active{
+
+  color:#9b5cff;
+
 }
 
 .nav-icon{
+
   font-size:20px;
+
   line-height:1;
-}
 
-.bottom-nav small{
-  font-size:9px;
-  font-weight:800;
-  color:var(--muted);
-}
-
-.bottom-nav a.active small{
-  color:var(--purple);
 }
 
 
-/* =========================================
-   DARK BOTTOM NAV
-========================================= */
-
-:root[data-theme="dark"] .bottom-nav{
-  background:#21142f;
-  border-color:#3a2850;
-}
-
-:root[data-theme="dark"] .bottom-nav small{
-  color:#aaa1b5;
-}
-
-:root[data-theme="dark"] .bottom-nav a.active small{
-  color:#b487ff;
-}
-
-
-/* =========================================
+/* =========================================================
    MOBILE
-========================================= */
+========================================================= */
 
 @media(max-width:420px){
 
-  .top-header{
-    padding-left:16px;
-    padding-right:16px;
+  .progress-container{
+
+    padding-left:12px;
+
+    padding-right:12px;
+
   }
 
-  .container{
-    padding-left:16px;
-    padding-right:16px;
+  .overall-card{
+
+    padding:15px;
+
   }
 
-  .overview-card{
-    padding:14px;
+  .overall-circle{
+
+    width:76px;
+
+    height:76px;
+
+    flex-basis:76px;
+
   }
 
   .overall-percent{
-    font-size:39px;
+
+    font-size:21px;
+
+  }
+
+  .stat-card{
+
+    min-height:105px;
+
+    padding:12px;
+
+  }
+
+  .stat-value{
+
+    font-size:21px;
+
+  }
+
+}
+
+
+@media(max-width:350px){
+
+  .stat-grid{
+
+    gap:7px;
+
+  }
+
+  .stat-value{
+
+    font-size:19px;
+
   }
 
 }
@@ -431,138 +649,153 @@ body{
 <body>
 
 
-<!-- =========================================
+<!-- =========================================================
      HEADER
-========================================= -->
+========================================================= -->
 
-<header class="top-header">
+<header class="progress-header">
 
-  <div class="brand">
-    SSC <span>EDGE</span>
+  <div class="progress-brand">
+
+    SSC <span class="edge">EDGE</span>
+
   </div>
 
 </header>
 
 
-<!-- =========================================
+<!-- =========================================================
      MAIN
-========================================= -->
+========================================================= -->
 
-<main class="container">
+<main class="progress-container">
 
 
   <h1 class="page-title">
     Progress
   </h1>
 
+
   <p class="page-subtitle">
     Track your preparation
   </p>
 
 
-  <!-- =======================================
-       OVERALL PROGRESS
-  ======================================== -->
+  <!-- =======================================================
+       OVERALL
+  ======================================================== -->
 
-  <div class="overall-card">
+  <section class="overall-card">
 
-    <div class="overall-title">
-      Overall Progress
-    </div>
+    <div class="overall-top">
 
-    <div class="overall-center">
+      <div class="overall-circle">
 
-      <div
-        class="overall-percent"
-        id="overallPercent"
-      >
-        0%
+        <div
+          id="overallPercent"
+          class="overall-percent">
+          0%
+        </div>
+
+        <div class="overall-small">
+          Overall
+        </div>
+
       </div>
 
-      <div class="overall-label">
-        Preparation completed
+
+      <div class="overall-info">
+
+        <div class="overall-title">
+          Keep Going! 🚀
+        </div>
+
+        <div
+          id="overallMessage"
+          class="overall-message">
+
+          Loading your progress...
+
+        </div>
+
       </div>
 
     </div>
+
 
     <div class="progress-bar">
 
       <div
-        class="progress-fill"
         id="overallFill"
-      ></div>
+        class="progress-fill">
+      </div>
 
     </div>
 
-    <div
-      class="overall-message"
-      id="overallMessage"
-    >
-      Keep pushing forward!
-    </div>
+  </section>
 
+
+  <!-- =======================================================
+       PREPARATION OVERVIEW
+  ======================================================== -->
+
+  <div class="section-title">
+    Preparation Overview
   </div>
 
 
-  <!-- =======================================
-       PREPARATION OVERVIEW
-  ======================================== -->
-
-  <h2 class="section-title">
-    Preparation Overview
-  </h2>
-
-
-  <div class="overview-grid">
+  <section class="stat-grid">
 
 
     <!-- STUDY -->
 
-    <div class="overview-card">
+    <div class="stat-card">
 
-      <div class="overview-icon">
+      <div class="stat-icon">
         📚
       </div>
 
-      <div class="overview-name">
+      <div class="stat-label">
         Study Material
       </div>
 
       <div
-        class="overview-value"
-        id="studyValue"
-      >
-        0
+        id="studyProgress"
+        class="stat-value">
+        0%
       </div>
 
-      <div class="overview-small">
-        Materials completed
+      <div
+        id="studyNote"
+        class="stat-note">
+        Loading...
       </div>
 
     </div>
 
 
-    <!-- DAILY -->
+    <!-- DAILY TASKS -->
 
-    <div class="overview-card">
+    <div class="stat-card">
 
-      <div class="overview-icon">
+      <div class="stat-icon">
         🎯
       </div>
 
-      <div class="overview-name">
+      <div class="stat-label">
         Daily Tasks
       </div>
 
       <div
-        class="overview-value"
-        id="dailyValue"
-      >
+        id="taskProgress"
+        class="stat-value">
         0%
       </div>
 
-      <div class="overview-small">
-        Completion rate
+      <div
+        id="taskNote"
+        class="stat-note">
+        Loading...
       </div>
 
     </div>
@@ -570,25 +803,26 @@ body{
 
     <!-- TESTS -->
 
-    <div class="overview-card">
+    <div class="stat-card">
 
-      <div class="overview-icon">
+      <div class="stat-icon">
         📝
       </div>
 
-      <div class="overview-name">
+      <div class="stat-label">
         Tests
       </div>
 
       <div
-        class="overview-value"
-        id="testsValue"
-      >
-        0
+        id="testProgress"
+        class="stat-value">
+        0%
       </div>
 
-      <div class="overview-small">
-        Tests attempted
+      <div
+        id="testNote"
+        class="stat-note">
+        Loading...
       </div>
 
     </div>
@@ -596,159 +830,190 @@ body{
 
     <!-- ACCURACY -->
 
-    <div class="overview-card">
+    <div class="stat-card">
 
-      <div class="overview-icon">
-        📈
+      <div class="stat-icon">
+        🎯
       </div>
 
-      <div class="overview-name">
+      <div class="stat-label">
         Accuracy
       </div>
 
       <div
-        class="overview-value"
-        id="accuracyValue"
-      >
+        id="accuracy"
+        class="stat-value">
         0%
       </div>
 
-      <div class="overview-small">
-        Average accuracy
+      <div class="stat-note">
+        Overall accuracy
       </div>
 
     </div>
 
+  </section>
+
+
+  <!-- =======================================================
+       MOCK TEST PERFORMANCE
+  ======================================================== -->
+
+  <div class="section-title">
+    Mock Test Performance
   </div>
 
 
-  <!-- =======================================
-       MOCK TEST PERFORMANCE
-  ======================================== -->
-
-  <h2 class="section-title">
-    Mock Test Performance
-  </h2>
+  <section class="stat-grid">
 
 
-  <div class="performance-card">
+    <!-- ATTEMPTED -->
 
+    <div class="stat-card">
 
-    <div class="performance-row">
+      <div class="stat-icon">
+        📝
+      </div>
 
-      <div class="performance-name">
+      <div class="stat-label">
         Tests Attempted
       </div>
 
       <div
-        class="performance-value"
-        id="attemptedValue"
-      >
+        id="testsAttempted"
+        class="stat-value">
         0
+      </div>
+
+      <div class="stat-note">
+        Completed tests
       </div>
 
     </div>
 
 
-    <div class="performance-row">
+    <!-- AVG SCORE -->
 
-      <div class="performance-name">
+    <div class="stat-card">
+
+      <div class="stat-icon">
+        📈
+      </div>
+
+      <div class="stat-label">
         Average Score
       </div>
 
       <div
-        class="performance-value"
-        id="averageScoreValue"
-      >
+        id="averageScore"
+        class="stat-value">
         0
+      </div>
+
+      <div class="stat-note">
+        Average across tests
       </div>
 
     </div>
 
 
-    <div class="performance-row">
+    <!-- BEST SCORE -->
 
-      <div class="performance-name">
+    <div class="stat-card">
+
+      <div class="stat-icon">
+        🏆
+      </div>
+
+      <div class="stat-label">
         Best Score
       </div>
 
       <div
-        class="performance-value"
-        id="bestScoreValue"
-      >
+        id="bestScore"
+        class="stat-value">
         0
       </div>
 
+      <div class="stat-note">
+        Highest score
+      </div>
+
     </div>
 
 
-    <div class="performance-row">
+    <!-- AVG ACCURACY -->
 
-      <div class="performance-name">
-        Average Accuracy
+    <div class="stat-card">
+
+      <div class="stat-icon">
+        🎯
+      </div>
+
+      <div class="stat-label">
+        Avg. Accuracy
       </div>
 
       <div
-        class="performance-value"
-        id="averageAccuracyValue"
-      >
+        id="averageAccuracy"
+        class="stat-value">
         0%
       </div>
 
+      <div class="stat-note">
+        Average test accuracy
+      </div>
+
     </div>
 
+  </section>
+
+
+  <!-- =======================================================
+       RECENT ATTEMPTS
+  ======================================================== -->
+
+  <div class="section-title">
+    Recent Attempts
   </div>
 
 
-  <!-- =======================================
-       RECENT ATTEMPTS
-  ======================================== -->
+  <a
+    class="recent-card"
+    href="history.html">
 
-  <h2 class="section-title">
-    Recent Attempts
-  </h2>
+    <div class="recent-icon">
+      🕘
+    </div>
 
+    <div class="recent-content">
 
-  <button
-    class="history-card"
-    onclick="openHistory()"
-  >
-
-    <div class="history-left">
-
-      <div class="history-icon">
-        📋
+      <div class="recent-title">
+        View Test History
       </div>
 
-      <div>
-
-        <div class="history-title">
-          Test History
-        </div>
-
-        <div class="history-subtitle">
-          View all your recent test attempts
-        </div>
-
+      <div class="recent-sub">
+        See all your previous test attempts
       </div>
 
     </div>
 
-    <div class="history-arrow">
+    <div class="recent-arrow">
       ›
     </div>
 
-  </button>
+  </a>
 
 
 </main>
 
 
-<!-- =========================================
+<!-- =========================================================
      BOTTOM NAV
-========================================= -->
+========================================================= -->
 
 <nav class="bottom-nav">
+
 
   <a href="home.html">
 
@@ -756,9 +1021,9 @@ body{
       🏠
     </span>
 
-    <small>
+    <span>
       Home
-    </small>
+    </span>
 
   </a>
 
@@ -769,9 +1034,9 @@ body{
       📚
     </span>
 
-    <small>
+    <span>
       Study Material
-    </small>
+    </span>
 
   </a>
 
@@ -782,39 +1047,47 @@ body{
       📝
     </span>
 
-    <small>
+    <span>
       Practice
-    </small>
+    </span>
 
   </a>
 
 
-  <a href="profile.html">
+  <a
+    href="profile.html"
+    class="active">
 
     <span class="nav-icon">
       👤
     </span>
 
-    <small>
+    <span>
       Profile
-    </small>
+    </span>
 
   </a>
+
 
 </nav>
 
 
-<script>
+<!-- =========================================================
+     SUPABASE
+========================================================= -->
 
-/* =========================================
-   SUPABASE
-========================================= */
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
 
 const SUPABASE_URL =
 "https://dvvyoygahzzbnpqrfhen.supabase.co";
 
+
 const SUPABASE_KEY =
 "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
 
 const supabaseClient =
 supabase.createClient(
@@ -823,344 +1096,820 @@ supabase.createClient(
 );
 
 
-/* =========================================
-   OPEN HISTORY
-========================================= */
+/* =========================================================
+   SHORT SELECTOR
+========================================================= */
 
-function openHistory(){
+function $(id){
 
-  window.location.href =
-    "history.html";
+  return document.getElementById(id);
 
 }
 
 
-/* =========================================
-   DAILY TASK PROGRESS
-========================================= */
+/* =========================================================
+   ROUND
+========================================================= */
 
-async function loadDailyProgress(){
+function roundNumber(number){
+
+  return Math.round(
+    Number(number || 0) * 100
+  ) / 100;
+
+}
+
+
+/* =========================================================
+   GET USER
+========================================================= */
+
+async function getCurrentUser(){
+
+  const result =
+    await supabaseClient.auth.getUser();
+
+  return result.data?.user || null;
+
+}
+
+
+/* =========================================================
+   LOAD TEST PROGRESS
+========================================================= */
+
+async function loadTestProgress(user){
+
+  if(!user){
+
+    return {
+
+      attempts:0,
+
+      averageScore:0,
+
+      bestScore:0,
+
+      averageAccuracy:0,
+
+      accuracy:0,
+
+      testProgress:0
+
+    };
+
+  }
+
+
+  /* =======================================================
+     GET ATTEMPTS
+  ======================================================== */
+
+  const {
+    data:attempts,
+    error:attemptError
+  } =
+  await supabaseClient
+
+    .from("test_attempts")
+
+    .select(
+      "id,mock_test_id,score,correct_answers,wrong_answers,unanswered"
+    )
+
+    .eq(
+      "user_id",
+      user.id
+    );
+
+
+  if(testAttemptErrorFix(attemptError)){
+
+    throw attemptError;
+
+  }
+
+
+  const rows =
+    attempts || [];
+
+
+  if(!rows.length){
+
+    return {
+
+      attempts:0,
+
+      averageScore:0,
+
+      bestScore:0,
+
+      averageAccuracy:0,
+
+      accuracy:0,
+
+      testProgress:0
+
+    };
+
+  }
+
+
+  let totalScore = 0;
+
+  let totalCorrect = 0;
+
+  let totalWrong = 0;
+
+  let totalAccuracy = 0;
+
+  let accuracyCount = 0;
+
+
+  rows.forEach(row=>{
+
+    const score =
+      Number(row.score || 0);
+
+    const correct =
+      Number(row.correct_answers || 0);
+
+    const wrong =
+      Number(row.wrong_answers || 0);
+
+
+    totalScore += score;
+
+    totalCorrect += correct;
+
+    totalWrong += wrong;
+
+
+    const attempted =
+      correct + wrong;
+
+
+    if(attempted > 0){
+
+      totalAccuracy +=
+        (correct / attempted) * 100;
+
+      accuracyCount++;
+
+    }
+
+  });
+
+
+  const averageScore =
+    totalScore / rows.length;
+
+
+  const bestScore =
+    Math.max(
+      ...rows.map(
+        row => Number(row.score || 0)
+      )
+    );
+
+
+  const averageAccuracy =
+    accuracyCount > 0
+      ? totalAccuracy / accuracyCount
+      : 0;
+
+
+  const totalAttempted =
+    totalCorrect + totalWrong;
+
+
+  const overallAccuracy =
+    totalAttempted > 0
+      ? (
+          totalCorrect /
+          totalAttempted
+        ) * 100
+      : 0;
+
+
+  /* =======================================================
+     TEST PROGRESS
+     
+     Percentage of active mock tests
+     attempted by this user.
+  ======================================================== */
+
+  let testProgress = 0;
+
+
+  const {
+    data:mockTests,
+    error:mockError
+  } =
+  await supabaseClient
+
+    .from("mock_tests")
+
+    .select("id")
+
+    .eq(
+      "is_active",
+      true
+    );
+
+
+  if(mockError){
+
+    console.warn(
+      "Could not load mock tests:",
+      mockError
+    );
+
+  }
+  else{
+
+    const totalTests =
+      (mockTests || []).length;
+
+
+    const attemptedTests =
+      new Set(
+        rows
+          .map(
+            row =>
+              String(row.mock_test_id)
+          )
+          .filter(
+            id => id !== "undefined"
+          )
+      ).size;
+
+
+    if(totalTests > 0){
+
+      testProgress =
+        Math.min(
+          100,
+          Math.round(
+            (
+              attemptedTests /
+              totalTests
+            ) * 100
+          )
+        );
+
+    }
+
+  }
+
+
+  return {
+
+    attempts:rows.length,
+
+    averageScore:
+      roundNumber(averageScore),
+
+    bestScore:
+      roundNumber(bestScore),
+
+    averageAccuracy:
+      Math.round(averageAccuracy),
+
+    accuracy:
+      Math.round(overallAccuracy),
+
+    testProgress
+
+  };
+
+}
+
+
+/* =========================================================
+   SAFE ERROR CHECK
+========================================================= */
+
+function testAttemptErrorFix(error){
+
+  return !!error;
+
+}
+
+
+/* =========================================================
+   LOAD STUDY MATERIAL PROGRESS
+========================================================= */
+
+async function loadStudyProgress(user){
+
+  if(!user){
+
+    return {
+
+      progress:0,
+
+      completed:0,
+
+      total:0
+
+    };
+
+  }
+
+
+  /* =======================================================
+     GET ACTIVE PDF COUNT
+  ======================================================== */
+
+  const {
+    data:materials,
+    error:materialError
+  } =
+  await supabaseClient
+
+    .from("study_material")
+
+    .select(
+      "id",
+      {
+        count:"exact"
+      }
+    )
+
+    .eq(
+      "material_type",
+      "PDF"
+    )
+
+    .eq(
+      "is_active",
+      true
+    );
+
+
+  if(materialError){
+
+    throw materialError;
+
+  }
+
+
+  const total =
+    materials
+      ? materials.length
+      : 0;
+
+
+  if(total === 0){
+
+    return {
+
+      progress:0,
+
+      completed:0,
+
+      total:0
+
+    };
+
+  }
+
+
+  /* =======================================================
+     GET USER COMPLETED MATERIAL
+  ======================================================== */
+
+  const {
+    data:completedRows,
+    error:progressError
+  } =
+  await supabaseClient
+
+    .from("study_material_progress")
+
+    .select("material_id")
+
+    .eq(
+      "user_id",
+      user.id
+    )
+
+    .eq(
+      "completed",
+      true
+    );
+
+
+  if(progressError){
+
+    throw progressError;
+
+  }
+
+
+  const activeIds =
+    new Set(
+      materials.map(
+        item => String(item.id)
+      )
+    );
+
+
+  const completed =
+    new Set(
+      (completedRows || [])
+        .map(
+          item => String(item.material_id)
+        )
+        .filter(
+          id => activeIds.has(id)
+        )
+    ).size;
+
+
+  const progress =
+    Math.round(
+      (completed / total) * 100
+    );
+
+
+  return {
+
+    progress,
+
+    completed,
+
+    total
+
+  };
+
+}
+
+
+/* =========================================================
+   LOAD DAILY TASK PROGRESS
+========================================================= */
+
+async function loadDailyTaskProgress(){
+
+  const today =
+    new Date()
+      .toISOString()
+      .slice(0,10);
+
+
+  const {
+    data:tasks,
+    error
+  } =
+  await supabaseClient
+
+    .from("daily_tasks")
+
+    .select(
+      "id"
+    )
+
+    .eq(
+      "task_date",
+      today
+    )
+
+    .eq(
+      "is_active",
+      true
+    );
+
+
+  if(error){
+
+    throw error;
+
+  }
+
+
+  const rows =
+    tasks || [];
+
+
+  if(!rows.length){
+
+    return {
+
+      progress:0,
+
+      completed:0,
+
+      total:0
+
+    };
+
+  }
+
+
+  let completedIds = [];
+
 
   try{
 
-    const today =
-      getToday();
-
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
-        .from("daily_tasks")
-        .select("id")
-        .eq(
-          "task_date",
-          today
-        )
-        .eq(
-          "is_active",
-          true
-        );
-
-
-    if(error){
-
-      console.error(
-        "Daily Progress Error:",
-        error
+    completedIds =
+      JSON.parse(
+        localStorage.getItem(
+          "ssc-edge-daily-completed"
+        ) || "[]"
       );
 
-      return {
-        total:0,
-        completed:0
-      };
+  }
+  catch(error){
+
+    completedIds = [];
+
+  }
+
+
+  const completedSet =
+    new Set(
+      completedIds.map(
+        id => String(id)
+      )
+    );
+
+
+  const completed =
+    rows.filter(
+      task =>
+        completedSet.has(
+          String(task.id)
+        )
+    ).length;
+
+
+  const progress =
+    Math.round(
+      (completed / rows.length) * 100
+    );
+
+
+  return {
+
+    progress,
+
+    completed,
+
+    total:rows.length
+
+  };
+
+}
+
+
+/* =========================================================
+   UPDATE UI
+========================================================= */
+
+function updateUI(
+  study,
+  tasks,
+  tests
+){
+
+  /* =======================================================
+     STUDY
+  ======================================================== */
+
+  $("studyProgress").textContent =
+    study.progress + "%";
+
+
+  $("studyNote").textContent =
+    study.total > 0
+
+      ? `${study.completed} of ${study.total} PDFs completed`
+
+      : "No active PDFs";
+
+
+  /* =======================================================
+     DAILY TASKS
+  ======================================================== */
+
+  $("taskProgress").textContent =
+    tasks.progress + "%";
+
+
+  $("taskNote").textContent =
+    tasks.total > 0
+
+      ? `${tasks.completed} of ${tasks.total} tasks completed today`
+
+      : "No tasks today";
+
+
+  /* =======================================================
+     TESTS
+  ======================================================== */
+
+  $("testProgress").textContent =
+    tests.testProgress + "%";
+
+
+  $("testNote").textContent =
+    tests.attempts > 0
+
+      ? `${tests.attempts} test attempts`
+
+      : "No test attempts yet";
+
+
+  /* =======================================================
+     ACCURACY
+  ======================================================== */
+
+  $("accuracy").textContent =
+    tests.accuracy + "%";
+
+
+  /* =======================================================
+     PERFORMANCE
+  ======================================================== */
+
+  $("testsAttempted").textContent =
+    tests.attempts;
+
+
+  $("averageScore").textContent =
+    tests.averageScore;
+
+
+  $("bestScore").textContent =
+    tests.bestScore;
+
+
+  $("averageAccuracy").textContent =
+    tests.averageAccuracy + "%";
+
+
+  /* =======================================================
+     OVERALL
+     
+     Equal weight:
+     Study + Daily Tasks + Tests
+  ======================================================== */
+
+  const overall =
+    Math.round(
+      (
+        study.progress +
+        tasks.progress +
+        tests.testProgress
+      ) / 3
+    );
+
+
+  $("overallPercent").textContent =
+    overall + "%";
+
+
+  $("overallFill").style.width =
+    overall + "%";
+
+
+  /* =======================================================
+     MOTIVATIONAL MESSAGE
+  ======================================================== */
+
+  let message =
+    "Keep learning, practicing and improving.";
+
+
+  if(overall >= 80){
+
+    message =
+      "Excellent progress! Keep pushing towards your goal. 🚀";
+
+  }
+  else if(overall >= 60){
+
+    message =
+      "Great work! Stay consistent and keep improving. 💪";
+
+  }
+  else if(overall >= 40){
+
+    message =
+      "Good start! Keep studying and complete your daily tasks.";
+
+  }
+  else if(overall >= 20){
+
+    message =
+      "You're getting started. Consistency is the key.";
+
+  }
+  else{
+
+    message =
+      "Start today and build your preparation step by step.";
+
+  }
+
+
+  $("overallMessage").textContent =
+    message;
+
+}
+
+
+/* =========================================================
+   LOAD EVERYTHING
+========================================================= */
+
+async function loadProgress(){
+
+  try{
+
+    const user =
+      await getCurrentUser();
+
+
+    /* =====================================================
+       GUEST
+    ====================================================== */
+
+    if(!user){
+
+      $("studyNote").textContent =
+        "Login required";
+
+      $("taskNote").textContent =
+        "Today's task status";
+
+      $("testNote").textContent =
+        "Login to track tests";
+
+
+      $("overallMessage").textContent =
+        "Login and start preparing to track your progress.";
+
+
+      return;
 
     }
 
 
-    const tasks =
-      data || [];
+    /* =====================================================
+       LOAD DATA
+    ====================================================== */
+
+    const [
+      study,
+      tasks,
+      tests
+    ] =
+    await Promise.all([
+
+      loadStudyProgress(user),
+
+      loadDailyTaskProgress(),
+
+      loadTestProgress(user)
+
+    ]);
 
 
-    const completed =
-      getCompletedTasks();
-
-
-    const completedCount =
-      tasks.filter(
-        task =>
-          completed.includes(
-            String(task.id)
-          )
-      ).length;
-
-
-    return {
-
-      total:tasks.length,
-
-      completed:completedCount
-
-    };
-
-  }
-
-  catch(error){
-
-    console.error(error);
-
-    return {
-
-      total:0,
-
-      completed:0
-
-    };
-
-  }
-
-}
-
-
-/* =========================================
-   COMPLETED TASKS
-========================================= */
-
-function getCompletedTasks(){
-
-  try{
-
-    return JSON.parse(
-      localStorage.getItem(
-        "ssc-edge-daily-completed"
-      ) || "[]"
+    updateUI(
+      study,
+      tasks,
+      tests
     );
 
   }
-
   catch(error){
 
-    return [];
-
-  }
-
-}
-
-
-/* =========================================
-   TODAY
-========================================= */
-
-function getToday(){
-
-  const date =
-    new Date();
-
-
-  const year =
-    date.getFullYear();
-
-
-  const month =
-    String(
-      date.getMonth()+1
-    ).padStart(2,"0");
-
-
-  const day =
-    String(
-      date.getDate()
-    ).padStart(2,"0");
-
-
-  return (
-    year +
-    "-" +
-    month +
-    "-" +
-    day
-  );
-
-}
-
-
-/* =========================================
-   UPDATE DAILY
-========================================= */
-
-async function updateDailyProgress(){
-
-  const result =
-    await loadDailyProgress();
-
-
-  const total =
-    result.total;
-
-
-  const completed =
-    result.completed;
-
-
-  const percentage =
-    total === 0
-    ? 0
-    : Math.round(
-        (completed / total) * 100
-      );
-
-
-  document.getElementById(
-    "dailyValue"
-  ).textContent =
-    percentage + "%";
-
-
-  return percentage;
-
-}
-
-
-/* =========================================
-   OVERALL PROGRESS
-========================================= */
-
-async function loadProgress(){
-
-  const dailyPercentage =
-    await updateDailyProgress();
-
-
-  /*
-   Study Material, Tests and Accuracy
-   remain connected to their existing
-   systems. They start at zero until
-   their actual attempt/completion
-   data is available.
-  */
-
-  const studyProgress = 0;
-
-  const testsAttempted = 0;
-
-  const accuracy = 0;
-
-
-  document.getElementById(
-    "studyValue"
-  ).textContent =
-    studyProgress;
-
-
-  document.getElementById(
-    "testsValue"
-  ).textContent =
-    testsAttempted;
-
-
-  document.getElementById(
-    "accuracyValue"
-  ).textContent =
-    accuracy + "%";
-
-
-  document.getElementById(
-    "attemptedValue"
-  ).textContent =
-    testsAttempted;
-
-
-  document.getElementById(
-    "averageScoreValue"
-  ).textContent =
-    "0";
-
-
-  document.getElementById(
-    "bestScoreValue"
-  ).textContent =
-    "0";
-
-
-  document.getElementById(
-    "averageAccuracyValue"
-  ).textContent =
-    accuracy + "%";
-
-
-  /*
-   Overall progress is based on
-   currently available progress.
-  */
-
-  const overall =
-    dailyPercentage;
-
-
-  document.getElementById(
-    "overallPercent"
-  ).textContent =
-    overall + "%";
-
-
-  document.getElementById(
-    "overallFill"
-  ).style.width =
-    overall + "%";
-
-
-  const message =
-    document.getElementById(
-      "overallMessage"
+    console.error(
+      "Progress loading error:",
+      error
     );
 
 
-  if(overall === 0){
+    $("overallMessage").textContent =
+      "Unable to load some progress data right now.";
 
-    message.textContent =
-      "Start your preparation today!";
-
-  }
-
-  else if(overall < 50){
-
-    message.textContent =
-      "Good start! Keep pushing forward.";
-
-  }
-
-  else if(overall < 80){
-
-    message.textContent =
-      "Great progress! Keep going.";
-
-  }
-
-  else if(overall < 100){
-
-    message.textContent =
-      "Excellent progress! Almost there.";
-
-  }
-
-  else{
-
-    message.textContent =
-      "Amazing! Preparation completed.";
 
   }
 
 }
 
 
-/* =========================================
+/* =========================================================
    START
-========================================= */
+========================================================= */
 
 loadProgress();
 
 </script>
 
 </body>
-  </html>
+
+</html>
