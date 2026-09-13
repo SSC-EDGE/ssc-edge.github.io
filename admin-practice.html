@@ -3,357 +3,413 @@
 
 <head>
 
-<script>
-document.documentElement.dataset.theme =
-  localStorage.getItem("ssc-edge-theme") || "dark";
-</script>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>SSC EDGE - Admin Practice</title>
 
+<script>
+document.documentElement.dataset.theme =
+    localStorage.getItem("ssc-edge-theme") || "dark";
+</script>
+
 <link rel="stylesheet" href="css/style.css">
 
 <style>
 
-/* =========================================================
-   ADMIN PRACTICE
-========================================================= */
-
-body {
-    padding-bottom: 40px;
+:root{
+    --a-bg:#0f0f14;
+    --a-card:#17171f;
+    --a-card2:#20202a;
+    --a-border:#30303c;
+    --a-text:#f5f3f8;
+    --a-muted:#aaa4b3;
+    --a-purple:#9b5cff;
+    --a-danger:#ef5350;
 }
 
-.admin-container {
-    max-width: 900px;
-    margin: auto;
-    padding: 18px 15px 40px;
+:root[data-theme="light"]{
+    --a-bg:#f7f5fa;
+    --a-card:#fff;
+    --a-card2:#f0ebf7;
+    --a-border:#ddd6e8;
+    --a-text:#211d27;
+    --a-muted:#716a7b;
+    --a-purple:#8b45ee;
+    --a-danger:#d93636;
 }
 
-.admin-header {
-    margin-bottom: 20px;
+*{
+    box-sizing:border-box;
 }
 
-.admin-title {
-    font-size: 26px;
-    font-weight: 900;
+html,
+body{
+    margin:0;
+    padding:0;
+
+    background:var(--a-bg)!important;
+    color:var(--a-text)!important;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
 }
 
-.admin-subtitle {
-    color: var(--text-muted);
-    margin-top: 4px;
+body{
+    padding-bottom:30px;
 }
 
+.admin-wrap{
+    width:100%;
+    max-width:900px;
 
-/* =========================================================
-   PANELS
-========================================================= */
+    margin:auto;
 
-.admin-panel {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 16px;
-    margin-bottom: 15px;
+    padding:22px 15px 40px;
 }
 
-.panel-title {
-    font-size: 16px;
-    font-weight: 900;
-    margin-bottom: 14px;
+.admin-title{
+    margin:0 0 5px;
+
+    font-size:25px;
+    font-weight:900;
 }
 
+.admin-subtitle{
+    margin:0 0 25px;
 
-/* =========================================================
-   INPUTS
-========================================================= */
-
-.form-grid {
-    display: grid;
-    grid-template-columns: repeat(2,minmax(0,1fr));
-    gap: 10px;
+    font-size:13px;
+    color:var(--a-muted);
 }
 
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+/* CARD */
+
+.admin-card{
+    margin-bottom:15px;
+
+    padding:16px;
+
+    background:var(--a-card);
+
+    border:1px solid var(--a-border);
+
+    border-radius:16px;
 }
 
-.form-group.full {
-    grid-column: 1/-1;
+/* HEAD */
+
+.admin-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:10px;
+
+    margin-bottom:14px;
 }
 
-.form-label {
-    font-size: 11px;
-    font-weight: 800;
-    color: var(--text-muted);
+.admin-head h2{
+    margin:0;
+
+    font-size:16px;
+    font-weight:900;
 }
 
-input,
-select {
+/* BUTTON */
 
-    width: 100%;
-    box-sizing: border-box;
+button{
+    border:0;
+    cursor:pointer;
 
-    border: 1px solid var(--border);
-
-    background: var(--bg);
-
-    color: var(--text);
-
-    border-radius: 11px;
-
-    padding: 11px 12px;
-
-    outline: none;
-
-    font-size: 14px;
+    font-family:inherit;
 }
 
-input:focus,
-select:focus {
-    border-color: var(--purple2);
+.btn{
+    min-height:38px;
+
+    padding:8px 13px;
+
+    border-radius:10px;
+
+    background:var(--a-purple);
+
+    color:#fff;
+
+    font-size:11px;
+    font-weight:850;
 }
 
+.btn.secondary{
+    background:var(--a-card2);
+    color:var(--a-text);
 
-/* =========================================================
-   BUTTONS
-========================================================= */
-
-.admin-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 13px;
+    border:1px solid var(--a-border);
 }
 
-.btn {
-
-    border: 0;
-
-    border-radius: 10px;
-
-    padding: 10px 14px;
-
-    font-weight: 800;
-
-    cursor: pointer;
-
-    background: var(--purple2);
-
-    color: white;
+.btn.danger{
+    background:var(--a-danger);
+    color:#fff;
 }
 
-.btn.secondary {
-
-    background: rgba(145,83,255,.12);
-
-    color: var(--purple2);
-
+.btn.small{
+    min-height:32px;
+    padding:6px 10px;
+    font-size:10px;
 }
 
-.btn.danger {
+/* FORM */
 
-    background: rgba(220,50,70,.12);
+.form-grid{
+    display:grid;
 
-    color: #ff5d70;
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
 
+    gap:10px;
 }
 
-.btn.small {
-    padding: 7px 10px;
-    font-size: 11px;
+.field{
+    display:flex;
+    flex-direction:column;
+
+    gap:5px;
 }
 
-
-/* =========================================================
-   EXAM LIST
-========================================================= */
-
-.exam-admin-list {
-    display: flex;
-    flex-direction: column;
-    gap: 13px;
+.field.full{
+    grid-column:1/-1;
 }
 
-.exam-admin-card {
-
-    border: 1px solid var(--border);
-
-    border-radius: 16px;
-
-    background: var(--bg);
-
-    overflow: hidden;
-
+.field label{
+    font-size:10px;
+    font-weight:800;
+    color:var(--a-muted);
 }
 
-.exam-admin-head {
+.field input,
+.field select{
+    width:100%;
 
-    padding: 14px;
+    min-height:40px;
 
-    display: flex;
+    padding:8px 10px;
 
-    align-items: center;
+    border-radius:9px;
 
-    justify-content: space-between;
+    border:1px solid var(--a-border);
 
-    gap: 10px;
+    background:var(--a-card2);
 
+    color:var(--a-text);
+
+    outline:none;
 }
 
-.exam-admin-name {
-    font-weight: 900;
+.field input:focus,
+.field select:focus{
+    border-color:var(--a-purple);
 }
 
-.exam-admin-meta {
-    color: var(--text-muted);
-    font-size: 11px;
-    margin-top: 3px;
+.form-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+
+    margin-top:12px;
 }
 
-.exam-admin-actions {
+/* EXAM LIST */
 
-    display: flex;
+.exam-row{
+    display:flex;
 
-    gap: 5px;
+    align-items:center;
+    justify-content:space-between;
 
-    flex-wrap: wrap;
+    gap:10px;
 
-    justify-content: flex-end;
+    padding:12px;
 
+    margin-bottom:8px;
+
+    background:var(--a-card2);
+
+    border:1px solid var(--a-border);
+
+    border-radius:12px;
 }
 
-
-/* =========================================================
-   TREE
-========================================================= */
-
-.tree {
-
-    border-top: 1px solid var(--border);
-
-    padding: 12px;
-
+.exam-row.active{
+    border-color:var(--a-purple);
 }
 
-.tree-node {
-
-    margin-bottom: 9px;
-
+.exam-name{
+    font-size:13px;
+    font-weight:850;
 }
 
-.tree-row {
+.exam-meta{
+    margin-top:3px;
 
-    display: flex;
-
-    align-items: center;
-
-    gap: 8px;
-
-    padding: 10px;
-
-    background: var(--card);
-
-    border: 1px solid var(--border);
-
-    border-radius: 12px;
-
+    font-size:10px;
+    color:var(--a-muted);
 }
 
-.tree-indent {
-    width: 14px;
-    flex: 0 0 14px;
+.row-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:5px;
 }
 
-.tree-icon {
+/* TREE */
 
-    width: 30px;
-
-    height: 30px;
-
-    border-radius: 9px;
-
-    background: rgba(145,83,255,.12);
-
-    color: var(--purple2);
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-weight: 900;
-
-    font-size: 11px;
-
+.tree{
+    display:flex;
+    flex-direction:column;
+    gap:9px;
 }
 
-.tree-info {
-    flex: 1;
-    min-width: 0;
+.tree-item{
+    padding:12px;
+
+    background:var(--a-card2);
+
+    border:1px solid var(--a-border);
+
+    border-radius:12px;
 }
 
-.tree-name {
-    font-weight: 800;
-    font-size: 13px;
+.tree-item.root{
+    border-color:#594077;
 }
 
-.tree-type {
-    color: var(--text-muted);
-    font-size: 10px;
-    margin-top: 2px;
+.tree-item.child{
+    margin-left:16px;
 }
 
-.tree-actions {
-
-    display: flex;
-
-    gap: 4px;
-
-    flex-wrap: wrap;
-
+.tree-item.leaf{
+    margin-left:32px;
 }
 
-.empty-admin {
+.tree-top{
+    display:flex;
 
-    padding: 25px 10px;
+    align-items:center;
+    justify-content:space-between;
 
-    text-align: center;
-
-    color: var(--text-muted);
-
+    gap:8px;
 }
 
+.tree-name{
+    font-size:13px;
+    font-weight:850;
+}
 
-/* =========================================================
-   MOBILE
-========================================================= */
+.tree-type{
+    margin-top:3px;
 
-@media(max-width:600px) {
+    font-size:9px;
 
-    .form-grid {
-        grid-template-columns: 1fr;
+    color:var(--a-muted);
+}
+
+.tree-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:4px;
+}
+
+.icon-btn{
+    width:30px;
+    height:30px;
+
+    border-radius:8px;
+
+    background:var(--a-card);
+
+    border:1px solid var(--a-border);
+
+    color:var(--a-text);
+
+    font-size:12px;
+}
+
+.icon-btn.delete{
+    color:#ff7777;
+}
+
+/* TEST */
+
+.test-admin-row{
+    padding:12px;
+
+    margin-top:8px;
+
+    border-radius:12px;
+
+    background:var(--a-card2);
+
+    border:1px solid var(--a-border);
+}
+
+.test-admin-title{
+    font-size:13px;
+    font-weight:850;
+}
+
+.test-admin-meta{
+    margin-top:4px;
+
+    font-size:10px;
+
+    color:var(--a-muted);
+}
+
+.status{
+    margin-top:12px;
+
+    padding:10px;
+
+    border-radius:9px;
+
+    font-size:11px;
+
+    background:var(--a-card2);
+
+    color:var(--a-muted);
+}
+
+.hidden{
+    display:none!important;
+}
+
+.empty{
+    padding:20px;
+
+    text-align:center;
+
+    font-size:12px;
+
+    color:var(--a-muted);
+}
+
+@media(max-width:520px){
+
+    .form-grid{
+        grid-template-columns:1fr;
     }
 
-    .form-group.full {
-        grid-column: auto;
+    .field.full{
+        grid-column:auto;
     }
 
-    .exam-admin-head {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-
-    .exam-admin-actions {
-        justify-content: flex-start;
-    }
-
-    .tree-row {
-        align-items: flex-start;
+    .exam-row,
+    .tree-top{
+        align-items:flex-start;
+        flex-direction:column;
     }
 
 }
@@ -366,51 +422,68 @@ select:focus {
 <body>
 
 
-<header class="simple-header">
-
-    <div class="header-brand">
-        SSC <span style="color:var(--purple2);">EDGE</span>
-    </div>
-
-</header>
+<div class="admin-wrap">
 
 
-<main class="admin-container">
+<h1 class="admin-title">
+    Admin Practice
+</h1>
+
+<p class="admin-subtitle">
+    Manage exams, mock hierarchy and tests
+</p>
 
 
 <!-- =====================================================
-     HEADER
-====================================================== -->
+     EXAMS
+===================================================== -->
 
-<div class="admin-header">
+<div class="admin-card">
 
-    <div class="admin-title">
-        Practice Admin
+    <div class="admin-head">
+
+        <h2>
+            EXAMS
+        </h2>
+
+        <button
+            class="btn"
+            onclick="newExam()"
+        >
+            + Add Exam
+        </button>
+
     </div>
 
-    <div class="admin-subtitle">
-        Manage exams, mock categories, years and sectional subjects.
-    </div>
+
+    <div id="examList"></div>
 
 </div>
 
 
-
 <!-- =====================================================
-     ADD EXAM
-====================================================== -->
+     EXAM FORM
+===================================================== -->
 
-<section class="admin-panel">
+<div
+    id="examFormCard"
+    class="admin-card hidden"
+>
 
-    <div class="panel-title">
-        Add Exam
+    <div class="admin-head">
+
+        <h2 id="examFormTitle">
+            Add Exam
+        </h2>
+
     </div>
+
 
     <div class="form-grid">
 
-        <div class="form-group">
+        <div class="field">
 
-            <label class="form-label">
+            <label>
                 Board
             </label>
 
@@ -429,9 +502,23 @@ select:focus {
         </div>
 
 
-        <div class="form-group">
+        <div class="field">
 
-            <label class="form-label">
+            <label>
+                Exam Name
+            </label>
+
+            <input
+                id="examName"
+                placeholder="CGL"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
                 Mock Type
             </label>
 
@@ -450,16 +537,16 @@ select:focus {
         </div>
 
 
-        <div class="form-group full">
+        <div class="field">
 
-            <label class="form-label">
-                Exam Name
+            <label>
+                Sort Order
             </label>
 
             <input
-                id="examName"
-                type="text"
-                placeholder="Example: SSC CGL"
+                id="examSort"
+                type="number"
+                value="0"
             >
 
         </div>
@@ -467,62 +554,111 @@ select:focus {
     </div>
 
 
-    <div class="admin-actions">
+    <div class="form-actions">
 
         <button
             class="btn"
-            onclick="addExam()"
+            onclick="saveExam()"
         >
-            Add Exam
+            Save Exam
+        </button>
+
+        <button
+            class="btn secondary"
+            onclick="closeExamForm()"
+        >
+            Cancel
         </button>
 
     </div>
 
-</section>
-
+</div>
 
 
 <!-- =====================================================
-     ADD FOLDER
-====================================================== -->
+     SELECTED EXAM
+===================================================== -->
 
-<section class="admin-panel">
+<div
+    id="selectedExamCard"
+    class="admin-card hidden"
+>
 
-    <div class="panel-title">
-        Add Practice Category
+    <div class="admin-head">
+
+        <h2 id="selectedExamTitle">
+            Practice Structure
+        </h2>
+
     </div>
+
+
+    <div class="form-actions">
+
+        <button
+            class="btn"
+            onclick="addRoot('new')"
+        >
+            + NEW MOCKS
+        </button>
+
+        <button
+            class="btn"
+            onclick="addRoot('pyq')"
+        >
+            + PYQ MOCKS
+        </button>
+
+    </div>
+
+
+    <div
+        id="structureTree"
+        class="tree"
+        style="margin-top:15px;"
+    ></div>
+
+</div>
+
+
+<!-- =====================================================
+     FOLDER FORM
+===================================================== -->
+
+<div
+    id="folderFormCard"
+    class="admin-card hidden"
+>
+
+    <div class="admin-head">
+
+        <h2 id="folderFormTitle">
+            Add Folder
+        </h2>
+
+    </div>
+
 
     <div class="form-grid">
 
+        <div class="field">
 
-        <div class="form-group">
-
-            <label class="form-label">
-                Exam
+            <label>
+                Display Name
             </label>
 
-            <select id="folderExam">
-            </select>
+            <input
+                id="folderName"
+                placeholder="NEW MOCKS"
+            >
 
         </div>
 
 
-        <div class="form-group">
+        <div class="field">
 
-            <label class="form-label">
-                Parent
-            </label>
-
-            <select id="folderParent">
-            </select>
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label class="form-label">
-                Category Type
+            <label>
+                Folder Type
             </label>
 
             <select id="folderType">
@@ -544,11 +680,11 @@ select:focus {
                 </option>
 
                 <option value="year">
-                    PYQ YEAR
+                    YEAR
                 </option>
 
                 <option value="subject">
-                    SECTIONAL SUBJECT
+                    SUBJECT
                 </option>
 
             </select>
@@ -556,246 +692,209 @@ select:focus {
         </div>
 
 
-        <div class="form-group">
+        <div class="field">
 
-            <label class="form-label">
-                Display Name
-            </label>
-
-            <input
-                id="folderName"
-                type="text"
-                placeholder="Example: 2025"
-            >
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label class="form-label">
-                Order
-            </label>
-
-            <input
-                id="folderOrder"
-                type="number"
-                value="1"
-            >
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label class="form-label">
-                Subject Link (optional)
+            <label>
+                Subject
             </label>
 
             <select id="folderSubject">
 
                 <option value="">
-                    None
+                    No linked subject
                 </option>
 
             </select>
 
         </div>
 
-    </div>
 
+        <div class="field">
 
-    <div class="admin-actions">
-
-        <button
-            class="btn"
-            onclick="addFolder()"
-        >
-            Add Category
-        </button>
-
-    </div>
-
-</section>
-
-
-
-<!-- =====================================================
-     EDIT
-====================================================== -->
-
-<section
-    class="admin-panel"
-    id="editPanel"
-    style="display:none;"
->
-
-    <div class="panel-title">
-        Edit Item
-    </div>
-
-
-    <input
-        type="hidden"
-        id="editId"
-    >
-
-    <input
-        type="hidden"
-        id="editKind"
-    >
-
-
-    <div class="form-grid">
-
-
-        <div class="form-group full">
-
-            <label class="form-label">
-                Name
+            <label>
+                Sort Order
             </label>
 
             <input
-                id="editName"
-                type="text"
-            >
-
-        </div>
-
-
-        <div
-            class="form-group"
-            id="editBoardGroup"
-        >
-
-            <label class="form-label">
-                Board
-            </label>
-
-            <select id="editBoard">
-
-                <option value="SSC">
-                    SSC
-                </option>
-
-                <option value="RRB">
-                    RRB
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <div
-            class="form-group"
-            id="editMockTypeGroup"
-        >
-
-            <label class="form-label">
-                Mock Type
-            </label>
-
-            <select id="editMockType">
-
-                <option value="Sectional">
-                    Sectional
-                </option>
-
-                <option value="Subject Wise">
-                    Subject Wise
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <div
-            class="form-group"
-            id="editOrderGroup"
-        >
-
-            <label class="form-label">
-                Order
-            </label>
-
-            <input
-                id="editOrder"
+                id="folderSort"
                 type="number"
-                value="1"
+                value="0"
             >
-
-        </div>
-
-
-        <div
-            class="form-group"
-            id="editActiveGroup"
-        >
-
-            <label class="form-label">
-                Status
-            </label>
-
-            <select id="editActive">
-
-                <option value="true">
-                    Active
-                </option>
-
-                <option value="false">
-                    Hidden
-                </option>
-
-            </select>
 
         </div>
 
     </div>
 
 
-    <div class="admin-actions">
+    <div class="form-actions">
 
         <button
             class="btn"
-            onclick="saveEdit()"
+            onclick="saveFolder()"
         >
-            Save Changes
+            Save Folder
         </button>
 
         <button
             class="btn secondary"
-            onclick="closeEdit()"
+            onclick="closeFolderForm()"
         >
             Cancel
         </button>
 
     </div>
 
-</section>
-
+</div>
 
 
 <!-- =====================================================
-     EXAMS
-====================================================== -->
+     TESTS
+===================================================== -->
 
-<section class="admin-panel">
+<div
+    id="testCard"
+    class="admin-card hidden"
+>
 
-    <div class="panel-title">
-        Exams & Practice Structure
+    <div class="admin-head">
+
+        <h2 id="testFormTitle">
+            Add Test
+        </h2>
+
     </div>
 
-    <div id="examAdminList"
-         class="exam-admin-list">
+
+    <div class="form-grid">
+
+        <div class="field full">
+
+            <label>
+                Test Title
+            </label>
+
+            <input
+                id="testTitle"
+                placeholder="SSC CGL Mock Test 01"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Test Type
+            </label>
+
+            <select id="testType">
+
+                <option value="full">
+                    Full
+                </option>
+
+                <option value="sectional">
+                    Sectional
+                </option>
+
+                <option value="subject_wise">
+                    Subject Wise
+                </option>
+
+                <option value="chapter_wise">
+                    Chapter Wise
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Subject
+            </label>
+
+            <select id="testSubject">
+
+                <option value="">
+                    No subject
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Duration (minutes)
+            </label>
+
+            <input
+                id="testDuration"
+                type="number"
+                value="60"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Total Questions
+            </label>
+
+            <input
+                id="testQuestions"
+                type="number"
+                value="25"
+            >
+
+        </div>
+
     </div>
 
-</section>
+
+    <div class="form-actions">
+
+        <button
+            class="btn"
+            onclick="saveTest()"
+        >
+            Save Test
+        </button>
+
+        <button
+            class="btn secondary"
+            onclick="closeTestForm()"
+        >
+            Cancel
+        </button>
+
+    </div>
 
 
-</main>
+    <div
+        id="testListAdmin"
+        style="margin-top:18px;"
+    ></div>
 
+</div>
+
+
+<div
+    id="status"
+    class="status"
+>
+    Loading...
+</div>
+
+
+</div>
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -808,52 +907,47 @@ select:focus {
 ========================================================= */
 
 const SUPABASE_URL =
-    "https://dvvyoygahzzbnpqrfhen.supabase.co";
+"https://dvvyoygahzzbnpqrfhen.supabase.co";
 
 const SUPABASE_KEY =
-    "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
 
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
-
-
-/* =========================================================
-   DATA
-========================================================= */
-
-let exams = [];
-let folders = [];
-let subjects = [];
+const supabaseClient=
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 
 
 /* =========================================================
-   HELPERS
+   STATE
 ========================================================= */
 
-function $(id) {
-    return document.getElementById(id);
-}
+let exams=[];
+let subjects=[];
+let folders=[];
+let tests=[];
+
+let selectedExam=null;
+
+let editingExamId=null;
+let editingFolderId=null;
+let editingTestId=null;
+
+let currentParentId=null;
+let currentTestFolderId=null;
 
 
-function escapeHTML(value) {
+/* =========================================================
+   STATUS
+========================================================= */
 
-    return String(value ?? "")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-}
+function msg(text){
 
+    document
+    .getElementById("status")
+    .textContent=text;
 
-function folderName(folder) {
-
-    return folder.display_name ||
-           folder.name ||
-           "";
 }
 
 
@@ -861,929 +955,331 @@ function folderName(folder) {
    LOAD
 ========================================================= */
 
-async function loadAll() {
+async function loadAll(){
 
-    const [
-        examResult,
-        folderResult,
-        subjectResult
-    ] = await Promise.all([
-
-        supabaseClient
-            .from("exams")
-            .select("*")
-            .order("sort_order",{ascending:true}),
-
-        supabaseClient
-            .from("mock_folders")
-            .select("*")
-            .order("sort_order",{ascending:true}),
-
-        supabaseClient
-            .from("subjects")
-            .select("*")
-            .order("id",{ascending:true})
-
-    ]);
+    msg("Loading...");
 
 
-    if (examResult.error)
-        throw examResult.error;
-
-    if (folderResult.error)
-        throw folderResult.error;
-
-    if (subjectResult.error)
-        throw subjectResult.error;
+    const e=
+    await supabaseClient
+    .from("exams")
+    .select("*")
+    .order("sort_order",{ascending:true})
+    .order("name",{ascending:true});
 
 
-    exams = examResult.data || [];
-
-    folders = folderResult.data || [];
-
-    subjects = subjectResult.data || [];
+    exams=e.data||[];
 
 
-    populateExamSelect();
-
-    populateSubjectSelect();
-
-    renderAdmin();
-
-}
+    const s=
+    await supabaseClient
+    .from("subjects")
+    .select("*")
+    .order("name");
 
 
-/* =========================================================
-   EXAM SELECT
-========================================================= */
-
-function populateExamSelect() {
-
-    $("folderExam").innerHTML =
-        exams.map(exam => `
-
-            <option value="${exam.id}">
-                ${escapeHTML(exam.board)}
-                —
-                ${escapeHTML(exam.name)}
-            </option>
-
-        `).join("");
+    subjects=s.data||[];
 
 
-    updateParentSelect();
+    const f=
+    await supabaseClient
+    .from("mock_folders")
+    .select("*")
+    .order("sort_order",{ascending:true});
 
-}
+
+    folders=f.data||[];
 
 
-function populateSubjectSelect() {
+    const t=
+    await supabaseClient
+    .from("mock_tests")
+    .select("*")
+    .order("created_at",{ascending:false});
 
-    $("folderSubject").innerHTML = `
 
-        <option value="">
-            None
-        </option>
+    tests=t.data||[];
 
-        ${
-            subjects.map(subject => `
 
-                <option value="${subject.id}">
-                    ${escapeHTML(
-                        subject.name ||
-                        subject.title ||
-                        "Subject"
-                    )}
-                </option>
+    renderExams();
+    renderSubjects();
 
-            `).join("")
-        }
 
-    `;
+    msg(
+        "Ready"
+    );
 
 }
 
 
 /* =========================================================
-   PARENT SELECT
+   EXAMS
 ========================================================= */
 
-function updateParentSelect() {
+function renderExams(){
 
-    const examId =
-        Number($("folderExam").value);
-
-
-    const examFolders =
-        folders
-            .filter(f =>
-                Number(f.exam_id) === examId
-            )
-            .sort((a,b) =>
-                (a.sort_order || 0) -
-                (b.sort_order || 0)
-            );
-
-
-    $("folderParent").innerHTML = `
-
-        <option value="">
-            Exam Root
-        </option>
-
-        ${
-            examFolders.map(folder => `
-
-                <option value="${folder.id}">
-                    ${escapeHTML(
-                        folderName(folder)
-                    )}
-                    — ${escapeHTML(
-                        folder.folder_type
-                    )}
-                </option>
-
-            `).join("")
-        }
-
-    `;
-
-}
-
-
-$("folderExam")
-    .addEventListener(
-        "change",
-        updateParentSelect
+    const box=
+    document.getElementById(
+        "examList"
     );
 
 
-/* =========================================================
-   ADD EXAM
-========================================================= */
+    if(!exams.length){
 
-async function addExam() {
-
-    const board =
-        $("examBoard").value;
-
-    const name =
-        $("examName").value.trim();
-
-    const mockType =
-        $("examMockType").value;
-
-
-    if (!name) {
-
-        alert("Please enter exam name.");
-
-        return;
-    }
-
-
-    const sameBoard =
-        exams.filter(e =>
-            String(e.board).toUpperCase() ===
-            String(board).toUpperCase()
-        );
-
-
-    const nextOrder =
-        sameBoard.length + 1;
-
-
-    const { error } =
-        await supabaseClient
-            .from("exams")
-            .insert({
-
-                board,
-                name,
-                mock_type: mockType,
-                is_active: true,
-                sort_order: nextOrder
-
-            });
-
-
-    if (error) {
-
-        console.error(error);
-
-        alert(
-            "Unable to add exam.\n\n" +
-            error.message
-        );
-
-        return;
-    }
-
-
-    $("examName").value = "";
-
-    await loadAll();
-
-    alert("Exam added successfully.");
-
-}
-
-
-/* =========================================================
-   ADD FOLDER
-========================================================= */
-
-async function addFolder() {
-
-    const examId =
-        Number($("folderExam").value);
-
-    const parentValue =
-        $("folderParent").value;
-
-    const type =
-        $("folderType").value;
-
-    const name =
-        $("folderName").value.trim();
-
-    const order =
-        Number(
-            $("folderOrder").value || 1
-        );
-
-    const subjectValue =
-        $("folderSubject").value;
-
-
-    if (!examId) {
-
-        alert("Please select exam.");
-
-        return;
-    }
-
-
-    if (!name) {
-
-        alert("Please enter display name.");
-
-        return;
-    }
-
-
-    const parentId =
-        parentValue
-            ? Number(parentValue)
-            : null;
-
-
-    /*
-       Basic hierarchy validation
-    */
-
-    if (
-        parentId === null &&
-        !["new","pyq"].includes(type)
-    ) {
-
-        alert(
-            "At exam level you can add only NEW MOCKS or PYQ MOCKS."
-        );
-
-        return;
-    }
-
-
-    if (parentId !== null) {
-
-        const parent =
-            folders.find(f =>
-                Number(f.id) === parentId
-            );
-
-
-        if (!parent) {
-
-            alert("Invalid parent.");
-
-            return;
-        }
-
-
-        if (
-            ["new","pyq"].includes(parent.folder_type)
-            &&
-            !["full","sectional"].includes(type)
-        ) {
-
-            alert(
-                "Under NEW/PYQ you can add only FULL MOCKS or SECTIONAL MOCKS."
-            );
-
-            return;
-        }
-
-
-        if (
-            parent.folder_type === "full"
-            &&
-            !(
-                parentId &&
-                folders.some(f =>
-                    Number(f.parent_id) === parentId &&
-                    f.folder_type === "year"
-                )
-            )
-            &&
-            type !== "year"
-        ) {
-
-            /*
-              New FULL does not need child folders.
-              PYQ FULL does.
-              We therefore allow only YEAR as
-              a child when explicitly selected.
-            */
-
-        }
-
-
-        if (
-            parent.folder_type === "sectional"
-            &&
-            type !== "subject"
-        ) {
-
-            alert(
-                "Under SECTIONAL MOCKS you can add only SUBJECTS."
-            );
-
-            return;
-        }
-
-    }
-
-
-    const data = {
-
-        exam_id: examId,
-
-        parent_id: parentId,
-
-        name: name,
-
-        display_name: name,
-
-        folder_type: type,
-
-        sort_order: order,
-
-        is_active: true
-
-    };
-
-
-    if (subjectValue) {
-
-        data.subject_id =
-            Number(subjectValue);
-
-    }
-
-
-    const { error } =
-        await supabaseClient
-            .from("mock_folders")
-            .insert(data);
-
-
-    if (error) {
-
-        console.error(error);
-
-        alert(
-            "Unable to add category.\n\n" +
-            error.message
-        );
-
-        return;
-    }
-
-
-    $("folderName").value = "";
-
-    await loadAll();
-
-    alert("Category added successfully.");
-
-}
-
-
-/* =========================================================
-   RENDER ADMIN
-========================================================= */
-
-function renderAdmin() {
-
-    const container =
-        $("examAdminList");
-
-
-    if (!exams.length) {
-
-        container.innerHTML = `
-            <div class="empty-admin">
+        box.innerHTML=`
+            <div class="empty">
                 No exams added yet.
             </div>
         `;
 
         return;
-    }
-
-
-    container.innerHTML =
-        exams.map(exam => `
-
-            <div class="exam-admin-card">
-
-
-                <div class="exam-admin-head">
-
-                    <div>
-
-                        <div class="exam-admin-name">
-
-                            ${escapeHTML(exam.board)}
-                            —
-                            ${escapeHTML(exam.name)}
-
-                        </div>
-
-                        <div class="exam-admin-meta">
-
-                            Order:
-                            ${exam.sort_order || 0}
-
-                            •
-
-                            ${
-                                exam.is_active !== false
-                                ? "Active"
-                                : "Hidden"
-                            }
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="exam-admin-actions">
-
-                        <button
-                            class="btn small secondary"
-                            onclick="editExam(${exam.id})"
-                        >
-                            Edit
-                        </button>
-
-                        <button
-                            class="btn small secondary"
-                            onclick="moveExam(${exam.id},-1)"
-                        >
-                            ↑
-                        </button>
-
-                        <button
-                            class="btn small secondary"
-                            onclick="moveExam(${exam.id},1)"
-                        >
-                            ↓
-                        </button>
-
-                        <button
-                            class="btn small danger"
-                            onclick="deleteExam(${exam.id})"
-                        >
-                            Delete
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <div class="tree">
-
-                    ${renderExamTree(exam)}
-
-                </div>
-
-            </div>
-
-        `).join("");
-
-}
-
-
-/* =========================================================
-   TREE
-========================================================= */
-
-function renderExamTree(exam) {
-
-    const roots =
-        folders
-            .filter(f =>
-                Number(f.exam_id) ===
-                Number(exam.id)
-            )
-            .filter(f =>
-                f.parent_id === null
-            )
-            .sort((a,b) =>
-                (a.sort_order || 0) -
-                (b.sort_order || 0)
-            );
-
-
-    if (!roots.length) {
-
-        return `
-            <div class="empty-admin">
-                No NEW/PYQ categories yet.
-            </div>
-        `;
 
     }
 
 
-    return roots
-        .map(folder =>
-            renderTreeNode(folder,0)
-        )
-        .join("");
+    box.innerHTML=
+    exams.map((e,i)=>`
 
-}
-
-
-function renderTreeNode(folder,level) {
-
-    const children =
-        folders
-            .filter(f =>
-                Number(f.parent_id) ===
-                Number(folder.id)
-            )
-            .sort((a,b) =>
-                (a.sort_order || 0) -
-                (b.sort_order || 0)
-            );
-
-
-    let html = `
-
-        <div class="tree-node">
-
-            <div class="tree-row">
-
-                <div
-                    class="tree-indent"
-                    style="width:${level * 18}px"
-                ></div>
-
-                <div class="tree-icon">
-                    ${treeIcon(folder.folder_type)}
-                </div>
-
-                <div class="tree-info">
-
-                    <div class="tree-name">
-                        ${escapeHTML(
-                            folderName(folder)
-                        )}
-                    </div>
-
-                    <div class="tree-type">
-                        ${escapeHTML(
-                            folder.folder_type
-                        )}
-                        • Order
-                        ${folder.sort_order || 0}
-                        •
-                        ${
-                            folder.is_active !== false
-                            ? "Active"
-                            : "Hidden"
-                        }
-                    </div>
-
-                </div>
-
-
-                <div class="tree-actions">
-
-                    <button
-                        class="btn small secondary"
-                        onclick="editFolder(${folder.id})"
-                    >
-                        Edit
-                    </button>
-
-                    <button
-                        class="btn small secondary"
-                        onclick="moveFolder(${folder.id},-1)"
-                    >
-                        ↑
-                    </button>
-
-                    <button
-                        class="btn small secondary"
-                        onclick="moveFolder(${folder.id},1)"
-                    >
-                        ↓
-                    </button>
-
-                    <button
-                        class="btn small danger"
-                        onclick="deleteFolder(${folder.id})"
-                    >
-                        Delete
-                    </button>
-
-                </div>
-
-            </div>
-
+        <div
+            class="exam-row
             ${
-                children
-                    .map(child =>
-                        renderTreeNode(
-                            child,
-                            level + 1
-                        )
-                    )
-                    .join("")
-            }
+                selectedExam &&
+                String(selectedExam.id)===
+                String(e.id)
+                ?
+                "active"
+                :
+                ""
+            }"
+        >
+
+            <div
+                onclick="selectExam('${e.id}')"
+                style="flex:1;cursor:pointer;"
+            >
+
+                <div class="exam-name">
+                    ${escapeHtml(e.board)}
+                    -
+                    ${escapeHtml(e.name)}
+                </div>
+
+                <div class="exam-meta">
+                    Mock Type:
+                    ${escapeHtml(e.mock_type||"-")}
+                    • Order:
+                    ${e.sort_order||0}
+                </div>
+
+            </div>
+
+
+            <div class="row-actions">
+
+                <button
+                    class="btn small"
+                    onclick="selectExam('${e.id}')"
+                >
+                    Open
+                </button>
+
+                <button
+                    class="btn small secondary"
+                    onclick="editExam('${e.id}')"
+                >
+                    Edit
+                </button>
+
+                <button
+                    class="btn small danger"
+                    onclick="deleteExam('${e.id}')"
+                >
+                    Delete
+                </button>
+
+            </div>
 
         </div>
 
-    `;
-
-
-    return html;
-
-}
-
-
-function treeIcon(type) {
-
-    if (type === "new") return "N";
-
-    if (type === "pyq") return "P";
-
-    if (type === "full") return "F";
-
-    if (type === "sectional") return "S";
-
-    if (type === "year") return "Y";
-
-    if (type === "subject") return "S";
-
-    return "•";
+    `).join("");
 
 }
 
 
 /* =========================================================
-   EDIT EXAM
+   EXAM FORM
 ========================================================= */
 
-function editExam(id) {
+function newExam(){
 
-    const exam =
-        exams.find(e =>
-            Number(e.id) === Number(id)
-        );
+    editingExamId=null;
 
-    if (!exam) return;
-
-
-    $("editId").value = exam.id;
-
-    $("editKind").value = "exam";
-
-    $("editName").value =
-        exam.name || "";
-
-    $("editBoard").value =
-        exam.board || "SSC";
-
-    $("editMockType").value =
-        exam.mock_type || "Sectional";
-
-    $("editOrder").value =
-        exam.sort_order || 1;
-
-    $("editActive").value =
-        exam.is_active !== false
-            ? "true"
-            : "false";
+    document
+    .getElementById("examFormTitle")
+    .textContent="Add Exam";
 
 
-    $("editPanel").style.display =
-        "block";
+    document
+    .getElementById("examBoard")
+    .value="SSC";
 
-    $("editPanel").scrollIntoView({
-        behavior:"smooth",
-        block:"center"
-    });
+
+    document
+    .getElementById("examName")
+    .value="";
+
+
+    document
+    .getElementById("examMockType")
+    .value="Sectional";
+
+
+    document
+    .getElementById("examSort")
+    .value=exams.length+1;
+
+
+    document
+    .getElementById("examFormCard")
+    .classList
+    .remove("hidden");
 
 }
 
 
-/* =========================================================
-   EDIT FOLDER
-========================================================= */
+function editExam(id){
 
-function editFolder(id) {
-
-    const folder =
-        folders.find(f =>
-            Number(f.id) === Number(id)
-        );
-
-    if (!folder) return;
+    const e=
+    exams.find(x=>
+        String(x.id)===String(id)
+    );
 
 
-    $("editId").value =
-        folder.id;
-
-    $("editKind").value =
-        "folder";
-
-    $("editName").value =
-        folderName(folder);
-
-    $("editOrder").value =
-        folder.sort_order || 1;
-
-    $("editActive").value =
-        folder.is_active !== false
-            ? "true"
-            : "false";
+    if(!e)return;
 
 
-    $("editBoardGroup").style.display =
-        "none";
-
-    $("editMockTypeGroup").style.display =
-        "none";
+    editingExamId=e.id;
 
 
-    $("editPanel").style.display =
-        "block";
+    document
+    .getElementById("examFormTitle")
+    .textContent="Edit Exam";
 
-    $("editPanel").scrollIntoView({
-        behavior:"smooth",
-        block:"center"
-    });
+
+    document
+    .getElementById("examBoard")
+    .value=e.board||"SSC";
+
+
+    document
+    .getElementById("examName")
+    .value=e.name||"";
+
+
+    document
+    .getElementById("examMockType")
+    .value=e.mock_type||"Sectional";
+
+
+    document
+    .getElementById("examSort")
+    .value=e.sort_order||0;
+
+
+    document
+    .getElementById("examFormCard")
+    .classList
+    .remove("hidden");
 
 }
 
 
-/* =========================================================
-   SAVE EDIT
-========================================================= */
+function closeExamForm(){
 
-async function saveEdit() {
+    document
+    .getElementById("examFormCard")
+    .classList
+    .add("hidden");
 
-    const id =
-        Number($("editId").value);
-
-    const kind =
-        $("editKind").value;
+}
 
 
-    if (!id) return;
+async function saveExam(){
+
+    const data={
+
+        board:
+        document.getElementById(
+            "examBoard"
+        ).value,
+
+        name:
+        document.getElementById(
+            "examName"
+        ).value.trim(),
+
+        mock_type:
+        document.getElementById(
+            "examMockType"
+        ).value,
+
+        is_active:true,
+
+        sort_order:
+        Number(
+            document.getElementById(
+                "examSort"
+            ).value
+        )||0
+
+    };
 
 
-    if (kind === "exam") {
+    if(!data.name){
 
-        const updateData = {
+        alert("Enter exam name");
 
-            name:
-                $("editName")
-                    .value
-                    .trim(),
-
-            board:
-                $("editBoard").value,
-
-            mock_type:
-                $("editMockType").value,
-
-            sort_order:
-                Number(
-                    $("editOrder").value || 1
-                ),
-
-            is_active:
-                $("editActive").value === "true"
-
-        };
-
-
-        if (!updateData.name) {
-
-            alert("Name required.");
-
-            return;
-        }
-
-
-        const { error } =
-            await supabaseClient
-                .from("exams")
-                .update(updateData)
-                .eq("id",id);
-
-
-        if (error) {
-
-            alert(error.message);
-
-            return;
-        }
+        return;
 
     }
 
 
-    else {
-
-        const name =
-            $("editName")
-                .value
-                .trim();
+    let r;
 
 
-        if (!name) {
+    if(editingExamId){
 
-            alert("Name required.");
+        r=
+        await supabaseClient
+        .from("exams")
+        .update(data)
+        .eq("id",editingExamId);
 
-            return;
-        }
+    }else{
 
-
-        const { error } =
-            await supabaseClient
-                .from("mock_folders")
-                .update({
-
-                    name,
-
-                    display_name:name,
-
-                    sort_order:
-                        Number(
-                            $("editOrder")
-                                .value || 1
-                        ),
-
-                    is_active:
-                        $("editActive")
-                            .value === "true"
-
-                })
-                .eq("id",id);
-
-
-        if (error) {
-
-            alert(error.message);
-
-            return;
-        }
+        r=
+        await supabaseClient
+        .from("exams")
+        .insert(data);
 
     }
 
 
-    closeEdit();
+    if(r.error){
+
+        alert(
+            "Exam error: "+
+            r.error.message
+        );
+
+        return;
+
+    }
+
+
+    closeExamForm();
 
     await loadAll();
-
-    alert("Saved successfully.");
-
-}
-
-
-/* =========================================================
-   CLOSE EDIT
-========================================================= */
-
-function closeEdit() {
-
-    $("editPanel").style.display =
-        "none";
 
 }
 
@@ -1792,41 +1288,501 @@ function closeEdit() {
    DELETE EXAM
 ========================================================= */
 
-async function deleteExam(id) {
+async function deleteExam(id){
 
-    const exam =
-        exams.find(e =>
-            Number(e.id) === Number(id)
-        );
-
-    if (!exam) return;
+    if(!confirm(
+        "Delete this exam and its practice folders?"
+    ))
+        return;
 
 
-    if (
-        !confirm(
-            "Delete " +
-            exam.name +
-            " and its complete Practice hierarchy?"
-        )
-    ) return;
+    const r=
+    await supabaseClient
+    .from("exams")
+    .delete()
+    .eq("id",id);
 
 
-    const { error } =
-        await supabaseClient
-            .from("exams")
-            .delete()
-            .eq("id",id);
+    if(r.error){
 
-
-    if (error) {
-
-        alert(error.message);
+        alert(r.error.message);
 
         return;
+
+    }
+
+
+    if(
+        selectedExam &&
+        String(selectedExam.id)===
+        String(id)
+    ){
+
+        selectedExam=null;
+
+        document
+        .getElementById("selectedExamCard")
+        .classList
+        .add("hidden");
+
     }
 
 
     await loadAll();
+
+}
+
+
+/* =========================================================
+   SELECT EXAM
+========================================================= */
+
+function selectExam(id){
+
+    selectedExam=
+    exams.find(e=>
+        String(e.id)===String(id)
+    );
+
+
+    if(!selectedExam)return;
+
+
+    document
+    .getElementById("selectedExamCard")
+    .classList
+    .remove("hidden");
+
+
+    document
+    .getElementById("selectedExamTitle")
+    .textContent=
+        selectedExam.board+
+        " • "+
+        selectedExam.name;
+
+
+    renderTree();
+
+    renderExams();
+
+}
+
+
+/* =========================================================
+   SUBJECTS
+========================================================= */
+
+function renderSubjects(){
+
+    const a=
+    document.getElementById(
+        "folderSubject"
+    );
+
+    const b=
+    document.getElementById(
+        "testSubject"
+    );
+
+
+    const options=
+    subjects.map(s=>`
+
+        <option value="${s.id}">
+            ${escapeHtml(s.name)}
+        </option>
+
+    `).join("");
+
+
+    a.innerHTML=
+        `<option value="">
+            No linked subject
+        </option>`+
+        options;
+
+
+    b.innerHTML=
+        `<option value="">
+            No subject
+        </option>`+
+        options;
+
+}
+
+
+/* =========================================================
+   ROOT
+========================================================= */
+
+async function addRoot(type){
+
+    if(!selectedExam){
+
+        alert("Select an exam first");
+
+        return;
+
+    }
+
+
+    const exists=
+    folders.find(f=>
+        String(f.exam_id)===
+        String(selectedExam.id)&&
+        (
+            normalize(f.folder_type)===type
+            ||
+            normalize(f.display_name)===
+            (type==="new"
+                ?"new mocks"
+                :"pyq mocks")
+        )&&
+        (
+            f.parent_id===null||
+            f.parent_id===undefined
+        )
+    );
+
+
+    if(exists){
+
+        alert(
+            type==="new"
+            ?
+            "NEW MOCKS already exists."
+            :
+            "PYQ MOCKS already exists."
+        );
+
+        return;
+
+    }
+
+
+    const max=
+    Math.max(
+        0,
+        ...folders
+        .filter(f=>
+            String(f.exam_id)===
+            String(selectedExam.id)
+        )
+        .map(f=>Number(f.sort_order)||0)
+    );
+
+
+    const r=
+    await supabaseClient
+    .from("mock_folders")
+    .insert({
+
+        exam_id:selectedExam.id,
+
+        parent_id:null,
+
+        subject_id:null,
+
+        name:
+            type==="new"
+            ?
+            "NEW MOCKS"
+            :
+            "PYQ MOCKS",
+
+        display_name:
+            type==="new"
+            ?
+            "NEW MOCKS"
+            :
+            "PYQ MOCKS",
+
+        folder_type:type,
+
+        sort_order:max+1,
+
+        is_active:true
+
+    });
+
+
+    if(r.error){
+
+        alert(r.error.message);
+
+        return;
+
+    }
+
+
+    await loadAll();
+
+    selectExam(selectedExam.id);
+
+}
+
+
+/* =========================================================
+   ADD CHILD
+========================================================= */
+
+function addChild(parentId,type){
+
+    editingFolderId=null;
+
+    currentParentId=parentId;
+
+
+    document
+    .getElementById("folderFormTitle")
+    .textContent=
+        "Add "+
+        type;
+
+
+    document
+    .getElementById("folderName")
+    .value=
+        type==="full"
+        ?
+        "FULL MOCKS"
+        :
+        type==="sectional"
+        ?
+        "SECTIONAL MOCKS"
+        :
+        type==="year"
+        ?
+        "2025"
+        :
+        "";
+
+
+    document
+    .getElementById("folderType")
+    .value=type;
+
+
+    document
+    .getElementById("folderSubject")
+    .value="";
+
+
+    document
+    .getElementById("folderSort")
+    .value=nextSort(parentId);
+
+
+    document
+    .getElementById("folderFormCard")
+    .classList
+    .remove("hidden");
+
+}
+
+
+function nextSort(parentId){
+
+    const list=
+    folders.filter(f=>
+        String(f.parent_id)===
+        String(parentId)
+    );
+
+
+    return(
+        Math.max(
+            0,
+            ...list.map(
+                f=>Number(f.sort_order)||0
+            )
+        )+1
+    );
+
+}
+
+
+/* =========================================================
+   EDIT FOLDER
+========================================================= */
+
+function editFolder(id){
+
+    const f=
+    folders.find(x=>
+        String(x.id)===String(id)
+    );
+
+
+    if(!f)return;
+
+
+    editingFolderId=f.id;
+
+    currentParentId=f.parent_id;
+
+
+    document
+    .getElementById("folderFormTitle")
+    .textContent="Edit Folder";
+
+
+    document
+    .getElementById("folderName")
+    .value=
+        f.display_name||
+        f.name||
+        "";
+
+
+    document
+    .getElementById("folderType")
+    .value=
+        f.folder_type||"subject";
+
+
+    document
+    .getElementById("folderSubject")
+    .value=
+        f.subject_id||"";
+
+
+    document
+    .getElementById("folderSort")
+    .value=
+        f.sort_order||0;
+
+
+    document
+    .getElementById("folderFormCard")
+    .classList
+    .remove("hidden");
+
+}
+
+
+function closeFolderForm(){
+
+    document
+    .getElementById("folderFormCard")
+    .classList
+    .add("hidden");
+
+}
+
+
+/* =========================================================
+   SAVE FOLDER
+========================================================= */
+
+async function saveFolder(){
+
+    if(!selectedExam)return;
+
+
+    const name=
+    document
+    .getElementById("folderName")
+    .value
+    .trim();
+
+
+    const type=
+    document
+    .getElementById("folderType")
+    .value;
+
+
+    const subject=
+    document
+    .getElementById("folderSubject")
+    .value;
+
+
+    const sort=
+    Number(
+        document
+        .getElementById("folderSort")
+        .value
+    )||0;
+
+
+    if(!name){
+
+        alert("Enter folder name");
+
+        return;
+
+    }
+
+
+    const data={
+
+        exam_id:selectedExam.id,
+
+        parent_id:
+            currentParentId||
+            null,
+
+        subject_id:
+            subject
+            ?
+            Number(subject)
+            :
+            null,
+
+        name:name,
+
+        display_name:name,
+
+        folder_type:type,
+
+        sort_order:sort,
+
+        is_active:true
+
+    };
+
+
+    let r;
+
+
+    if(editingFolderId){
+
+        r=
+        await supabaseClient
+        .from("mock_folders")
+        .update(data)
+        .eq("id",editingFolderId);
+
+    }else{
+
+        r=
+        await supabaseClient
+        .from("mock_folders")
+        .insert(data);
+
+    }
+
+
+    if(r.error){
+
+        alert(
+            "Folder error: "+
+            r.error.message
+        );
+
+        return;
+
+    }
+
+
+    closeFolderForm();
+
+    await loadAll();
+
+    selectExam(selectedExam.id);
 
 }
 
@@ -1835,255 +1791,916 @@ async function deleteExam(id) {
    DELETE FOLDER
 ========================================================= */
 
-async function deleteFolder(id) {
+async function deleteFolder(id){
 
-    const folder =
-        folders.find(f =>
-            Number(f.id) === Number(id)
-        );
-
-    if (!folder) return;
-
-
-    if (
-        !confirm(
-            "Delete " +
-            folderName(folder) +
-            " and all child categories?"
-        )
-    ) return;
+    const children=
+    folders.filter(f=>
+        String(f.parent_id)===
+        String(id)
+    );
 
 
-    const { error } =
-        await supabaseClient
-            .from("mock_folders")
-            .delete()
-            .eq("id",id);
+    let message=
+        "Delete this folder?";
 
 
-    if (error) {
+    if(children.length){
 
-        alert(error.message);
+        message+=
+            "\n\nThis will also delete its child folders.";
+
+    }
+
+
+    if(!confirm(message))
+        return;
+
+
+    const r=
+    await supabaseClient
+    .from("mock_folders")
+    .delete()
+    .eq("id",id);
+
+
+    if(r.error){
+
+        alert(r.error.message);
 
         return;
+
     }
 
 
     await loadAll();
 
+    selectExam(selectedExam.id);
+
 }
 
 
 /* =========================================================
-   MOVE EXAM
+   REORDER
 ========================================================= */
 
-async function moveExam(id,direction) {
+async function moveFolder(
+    id,
+    direction
+){
 
-    const exam =
-        exams.find(e =>
-            Number(e.id) === Number(id)
-        );
-
-    if (!exam) return;
-
-
-    const boardExams =
-        exams
-            .filter(e =>
-                String(e.board).toUpperCase() ===
-                String(exam.board).toUpperCase()
-            )
-            .sort((a,b) =>
-                (a.sort_order || 0) -
-                (b.sort_order || 0)
-            );
+    const f=
+    folders.find(x=>
+        String(x.id)===String(id)
+    );
 
 
-    const index =
-        boardExams.findIndex(e =>
-            Number(e.id) === Number(id)
-        );
+    if(!f)return;
 
 
-    const targetIndex =
-        index + direction;
+    const siblings=
+    folders
+    .filter(x=>
+        String(x.exam_id)===
+        String(f.exam_id)&&
+        String(x.parent_id||"")===
+        String(f.parent_id||"")
+    )
+    .sort((a,b)=>
+        Number(a.sort_order||0)-
+        Number(b.sort_order||0)
+    );
 
 
-    if (
-        targetIndex < 0 ||
-        targetIndex >= boardExams.length
-    ) return;
+    const index=
+    siblings.findIndex(x=>
+        String(x.id)===String(id)
+    );
 
 
-    const target =
-        boardExams[targetIndex];
+    const targetIndex=
+        direction==="up"
+        ?
+        index-1
+        :
+        index+1;
 
 
-    const oldOrder =
-        exam.sort_order || index + 1;
+    if(
+        targetIndex<0||
+        targetIndex>=siblings.length
+    )
+        return;
 
-    const targetOrder =
-        target.sort_order ||
-        targetIndex + 1;
+
+    const other=
+    siblings[targetIndex];
 
 
-    await Promise.all([
+    const old=f.sort_order;
 
-        supabaseClient
-            .from("exams")
-            .update({
-                sort_order: targetOrder
-            })
-            .eq("id",exam.id),
+    f.sort_order=
+        other.sort_order;
 
-        supabaseClient
-            .from("exams")
-            .update({
-                sort_order: oldOrder
-            })
-            .eq("id",target.id)
+    other.sort_order=old;
 
-    ]);
+
+    await supabaseClient
+    .from("mock_folders")
+    .update({
+        sort_order:f.sort_order
+    })
+    .eq("id",f.id);
+
+
+    await supabaseClient
+    .from("mock_folders")
+    .update({
+        sort_order:other.sort_order
+    })
+    .eq("id",other.id);
 
 
     await loadAll();
 
+    selectExam(selectedExam.id);
+
 }
 
 
 /* =========================================================
-   MOVE FOLDER
+   TREE
 ========================================================= */
 
-async function moveFolder(id,direction) {
+function renderTree(){
 
-    const folder =
-        folders.find(f =>
-            Number(f.id) === Number(id)
+    const box=
+    document.getElementById(
+        "structureTree"
+    );
+
+
+    const list=
+    folders
+    .filter(f=>
+        String(f.exam_id)===
+        String(selectedExam.id)
+    )
+    .sort((a,b)=>
+        Number(a.sort_order||0)-
+        Number(b.sort_order||0)
+    );
+
+
+    if(!list.length){
+
+        box.innerHTML=`
+            <div class="empty">
+                No practice structure yet.
+                <br><br>
+                Add NEW MOCKS or PYQ MOCKS above.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    const roots=
+    list.filter(f=>
+        f.parent_id===null||
+        f.parent_id===undefined
+    );
+
+
+    box.innerHTML=
+    roots.map(r=>
+        renderTreeItem(
+            r,
+            list,
+            "root"
+        )
+    ).join("");
+
+}
+
+
+function renderTreeItem(
+    folder,
+    all,
+    level
+){
+
+    const children=
+    all
+    .filter(f=>
+        String(f.parent_id)===
+        String(folder.id)
+    )
+    .sort((a,b)=>
+        Number(a.sort_order||0)-
+        Number(b.sort_order||0)
+    );
+
+
+    const type=
+    folder.folder_type||"";
+
+
+    let addButton="";
+
+
+    if(
+        type==="new"||
+        type==="new_mocks"
+    ){
+
+        addButton=`
+            <button
+                class="btn small"
+                onclick="
+                    addChild(
+                        '${folder.id}',
+                        'full'
+                    )
+                "
+            >
+                + Full
+            </button>
+
+            <button
+                class="btn small"
+                onclick="
+                    addChild(
+                        '${folder.id}',
+                        'sectional'
+                    )
+                "
+            >
+                + Sectional
+            </button>
+        `;
+
+    }
+
+
+    else if(
+        type==="pyq"||
+        type==="pyq_mocks"
+    ){
+
+        addButton=`
+            <button
+                class="btn small"
+                onclick="
+                    addChild(
+                        '${folder.id}',
+                        'full'
+                    )
+                "
+            >
+                + Full
+            </button>
+
+            <button
+                class="btn small"
+                onclick="
+                    addChild(
+                        '${folder.id}',
+                        'sectional'
+                    )
+                "
+            >
+                + Sectional
+            </button>
+        `;
+
+    }
+
+
+    else if(type==="full"){
+
+        const root=
+        getParent(folder);
+
+
+        const isPyq=
+        root&&(
+            root.folder_type==="pyq"||
+            root.folder_type==="pyq_mocks"
         );
 
-    if (!folder) return;
+
+        if(isPyq){
+
+            addButton=`
+                <button
+                    class="btn small"
+                    onclick="
+                        addChild(
+                            '${folder.id}',
+                            'year'
+                        )
+                    "
+                >
+                    + Year
+                </button>
+            `;
+
+        }else{
+
+            addButton=`
+                <button
+                    class="btn small"
+                    onclick="
+                        addTestForFolder(
+                            '${folder.id}'
+                        )
+                    "
+                >
+                    + Test
+                </button>
+            `;
+
+        }
+
+    }
 
 
-    const siblings =
-        folders
-            .filter(f =>
-                Number(f.exam_id) ===
-                Number(folder.exam_id)
+    else if(type==="sectional"){
+
+        addButton=`
+            <button
+                class="btn small"
+                onclick="
+                    addChild(
+                        '${folder.id}',
+                        'subject'
+                    )
+                "
+            >
+                + Subject
+            </button>
+        `;
+
+    }
+
+
+    else if(type==="year"){
+
+        addButton=`
+            <button
+                class="btn small"
+                onclick="
+                    addTestForFolder(
+                        '${folder.id}'
+                    )
+                "
+            >
+                + Test
+            </button>
+        `;
+
+    }
+
+
+    else if(type==="subject"){
+
+        addButton=`
+            <button
+                class="btn small"
+                onclick="
+                    addTestForFolder(
+                        '${folder.id}'
+                    )
+                "
+            >
+                + Test
+            </button>
+        `;
+
+    }
+
+
+    return`
+
+        <div class="
+            tree-item
+            ${level}
+        ">
+
+            <div class="tree-top">
+
+                <div>
+
+                    <div class="tree-name">
+                        ${escapeHtml(
+                            folder.display_name||
+                            folder.name
+                        )}
+                    </div>
+
+                    <div class="tree-type">
+                        ${escapeHtml(type)}
+                    </div>
+
+                </div>
+
+
+                <div class="tree-actions">
+
+                    ${addButton}
+
+
+                    <button
+                        class="icon-btn"
+                        onclick="
+                            moveFolder(
+                                '${folder.id}',
+                                'up'
+                            )
+                        "
+                    >
+                        ↑
+                    </button>
+
+
+                    <button
+                        class="icon-btn"
+                        onclick="
+                            moveFolder(
+                                '${folder.id}',
+                                'down'
+                            )
+                        "
+                    >
+                        ↓
+                    </button>
+
+
+                    <button
+                        class="icon-btn"
+                        onclick="
+                            editFolder(
+                                '${folder.id}'
+                            )
+                        "
+                    >
+                        ✏️
+                    </button>
+
+
+                    <button
+                        class="icon-btn delete"
+                        onclick="
+                            deleteFolder(
+                                '${folder.id}'
+                            )
+                        "
+                    >
+                        🗑
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            ${
+                children.length
+                ?
+                children.map(c=>
+                    renderTreeItem(
+                        c,
+                        all,
+                        level==="root"
+                        ?"child"
+                        :"leaf"
+                    )
+                ).join("")
+                :
+                ""
+            }
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   PARENT
+========================================================= */
+
+function getParent(folder){
+
+    return folders.find(f=>
+        String(f.id)===
+        String(folder.parent_id)
+    )||null;
+
+}
+
+
+/* =========================================================
+   TEST FORM
+========================================================= */
+
+function addTestForFolder(folderId){
+
+    editingTestId=null;
+
+    currentTestFolderId=
+        folderId;
+
+
+    document
+    .getElementById("testFormTitle")
+    .textContent=
+        "Add Test";
+
+
+    document
+    .getElementById("testTitle")
+    .value="";
+
+
+    document
+    .getElementById("testDuration")
+    .value=60;
+
+
+    document
+    .getElementById("testQuestions")
+    .value=25;
+
+
+    document
+    .getElementById("testCard")
+    .classList
+    .remove("hidden");
+
+
+    renderAdminTests();
+
+}
+
+
+function editTest(id){
+
+    const t=
+    tests.find(x=>
+        String(x.id)===String(id)
+    );
+
+
+    if(!t)return;
+
+
+    editingTestId=t.id;
+
+    currentTestFolderId=
+        t.folder_id;
+
+
+    document
+    .getElementById("testFormTitle")
+    .textContent=
+        "Edit Test";
+
+
+    document
+    .getElementById("testTitle")
+    .value=t.title||"";
+
+
+    document
+    .getElementById("testType")
+    .value=t.test_type||"full";
+
+
+    document
+    .getElementById("testSubject")
+    .value=t.subject_id||"";
+
+
+    document
+    .getElementById("testDuration")
+    .value=t.duration_minutes||60;
+
+
+    document
+    .getElementById("testQuestions")
+    .value=t.total_questions||25;
+
+
+    document
+    .getElementById("testCard")
+    .classList
+    .remove("hidden");
+
+
+    renderAdminTests();
+
+}
+
+
+function closeTestForm(){
+
+    document
+    .getElementById("testCard")
+    .classList
+    .add("hidden");
+
+}
+
+
+/* =========================================================
+   SAVE TEST
+========================================================= */
+
+async function saveTest(){
+
+    if(!selectedExam){
+
+        alert("Select exam");
+
+        return;
+
+    }
+
+
+    if(!currentTestFolderId){
+
+        alert("Select a folder");
+
+        return;
+
+    }
+
+
+    const data={
+
+        exam_id:selectedExam.id,
+
+        folder_id:
+            currentTestFolderId,
+
+        title:
+            document
+            .getElementById("testTitle")
+            .value
+            .trim(),
+
+        test_type:
+            document
+            .getElementById("testType")
+            .value,
+
+        subject_id:
+            document
+            .getElementById("testSubject")
+            .value
+            ?
+            Number(
+                document
+                .getElementById("testSubject")
+                .value
             )
-            .filter(f => {
+            :
+            null,
 
-                if (folder.parent_id === null)
-                    return f.parent_id === null;
+        duration_minutes:
+            Number(
+                document
+                .getElementById("testDuration")
+                .value
+            )||60,
 
-                return Number(f.parent_id) ===
-                    Number(folder.parent_id);
+        total_questions:
+            Number(
+                document
+                .getElementById("testQuestions")
+                .value
+            )||25,
 
-            })
-            .sort((a,b) =>
-                (a.sort_order || 0) -
-                (b.sort_order || 0)
-            );
+        is_active:true
+
+    };
 
 
-    const index =
-        siblings.findIndex(f =>
-            Number(f.id) === Number(id)
+    if(!data.title){
+
+        alert("Enter test title");
+
+        return;
+
+    }
+
+
+    let r;
+
+
+    if(editingTestId){
+
+        r=
+        await supabaseClient
+        .from("mock_tests")
+        .update(data)
+        .eq("id",editingTestId);
+
+    }else{
+
+        r=
+        await supabaseClient
+        .from("mock_tests")
+        .insert(data);
+
+    }
+
+
+    if(r.error){
+
+        alert(
+            "Test error: "+
+            r.error.message
         );
 
+        return;
 
-    const targetIndex =
-        index + direction;
-
-
-    if (
-        targetIndex < 0 ||
-        targetIndex >= siblings.length
-    ) return;
+    }
 
 
-    const target =
-        siblings[targetIndex];
+    closeTestForm();
+
+    await loadAll();
+
+    renderTree();
+
+}
 
 
-    const oldOrder =
-        folder.sort_order || index + 1;
+/* =========================================================
+   TEST LIST
+========================================================= */
 
-    const targetOrder =
-        target.sort_order ||
-        targetIndex + 1;
+function renderAdminTests(){
+
+    const box=
+    document.getElementById(
+        "testListAdmin"
+    );
 
 
-    await Promise.all([
+    const list=
+    tests.filter(t=>
+        String(t.folder_id)===
+        String(currentTestFolderId)
+    );
 
-        supabaseClient
-            .from("mock_folders")
-            .update({
-                sort_order: targetOrder
-            })
-            .eq("id",folder.id),
 
-        supabaseClient
-            .from("mock_folders")
-            .update({
-                sort_order: oldOrder
-            })
-            .eq("id",target.id)
+    if(!list.length){
 
-    ]);
+        box.innerHTML=`
+            <div class="empty">
+                No tests in this folder yet.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    box.innerHTML=
+    list.map(t=>`
+
+        <div class="test-admin-row">
+
+            <div class="test-admin-title">
+
+                ${escapeHtml(
+                    t.title||"Untitled"
+                )}
+
+            </div>
+
+
+            <div class="test-admin-meta">
+
+                ${escapeHtml(
+                    t.test_type||"-"
+                )}
+                •
+                ${t.duration_minutes||"-"} min
+                •
+                ${t.total_questions||"-"} questions
+
+            </div>
+
+
+            <div
+                class="row-actions"
+                style="margin-top:8px;"
+            >
+
+                <button
+                    class="btn small secondary"
+                    onclick="
+                        editTest('${t.id}')
+                    "
+                >
+                    Edit
+                </button>
+
+
+                <button
+                    class="btn small danger"
+                    onclick="
+                        deleteTest('${t.id}')
+                    "
+                >
+                    Delete
+                </button>
+
+            </div>
+
+        </div>
+
+    `).join("");
+
+}
+
+
+/* =========================================================
+   DELETE TEST
+========================================================= */
+
+async function deleteTest(id){
+
+    if(!confirm(
+        "Delete this test?"
+    ))
+        return;
+
+
+    const r=
+    await supabaseClient
+    .from("mock_tests")
+    .delete()
+    .eq("id",id);
+
+
+    if(r.error){
+
+        alert(r.error.message);
+
+        return;
+
+    }
 
 
     await loadAll();
 
+    renderTree();
+
+    renderAdminTests();
+
 }
 
 
 /* =========================================================
-   RESET EDIT UI
+   ESCAPE
 ========================================================= */
 
-$("editBoardGroup").style.display =
-    "block";
+function escapeHtml(v){
 
-$("editMockTypeGroup").style.display =
-    "block";
+    return String(v??"")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+function normalize(v){
+
+    return String(v??"")
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g," ");
+
+}
 
 
 /* =========================================================
    START
 ========================================================= */
 
-(async function() {
-
-    try {
-
-        await loadAll();
-
-    } catch(error) {
-
-        console.error(error);
-
-        $("examAdminList").innerHTML = `
-
-            <div class="empty-admin">
-
-                Unable to load admin data.
-
-                <br><br>
-
-                ${escapeHTML(
-                    error.message ||
-                    "Unknown error"
-                )}
-
-            </div>
-
-        `;
-
-    }
-
-})();
+loadAll();
 
 </script>
 
