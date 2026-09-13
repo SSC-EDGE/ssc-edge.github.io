@@ -4601,22 +4601,27 @@ function closeTestForm(){
 function inferTestType(folder){
 
     if(!folder)
-        return "full";
+        return "FULL";
+
 
     const type =
         normalizeType(
             folder.folder_type
         );
 
+
     if(type === "subject")
-        return "sectional";
+        return "SECTIONAL";
+
 
     if(type === "sectional")
-        return "sectional";
+        return "SECTIONAL";
 
-    return "full";
+
+    return "FULL";
 
 }
+
 
 /* =========================================================
    SAVE TEST
