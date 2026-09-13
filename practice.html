@@ -3,352 +3,576 @@
 
 <head>
 
-<script>
-document.documentElement.dataset.theme =
-  localStorage.getItem("ssc-edge-theme") || "dark";
-</script>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="theme-color" content="#0f0f14">
-
 <title>SSC EDGE - Practice</title>
 
+<script>
+document.documentElement.dataset.theme =
+    localStorage.getItem("ssc-edge-theme") || "dark";
+</script>
+
 <link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/study.css">
 
 <style>
 
 /* =========================================================
-   PRACTICE
+   SSC EDGE PRACTICE
 ========================================================= */
 
-.practice-page {
-    padding-bottom: 90px;
+:root{
+    --p-bg:#0f0f14;
+    --p-card:#17171f;
+    --p-card2:#20202a;
+    --p-border:#30303c;
+    --p-text:#f7f4fa;
+    --p-muted:#aaa4b3;
+    --p-purple:#9b5cff;
+    --p-purple2:#b487ff;
+    --p-header:#111116;
 }
 
-.practice-container {
-    padding: 18px 16px 30px;
+:root[data-theme="light"]{
+    --p-bg:#f7f5fa;
+    --p-card:#ffffff;
+    --p-card2:#f0ebf7;
+    --p-border:#ddd6e8;
+    --p-text:#211d27;
+    --p-muted:#716a7b;
+    --p-purple:#8b45ee;
+    --p-purple2:#7834db;
+    --p-header:#ffffff;
 }
 
-.practice-title {
-    font-size: 28px;
-    font-weight: 800;
-    margin-bottom: 4px;
+*{
+    box-sizing:border-box;
 }
 
-.practice-subtitle {
-    color: var(--text-muted);
-    margin-bottom: 22px;
+html,
+body{
+    margin:0;
+    padding:0;
+    min-height:100%;
+    background:var(--p-bg)!important;
+    color:var(--p-text)!important;
 }
 
-.practice-section-title {
-    font-size: 14px;
-    font-weight: 800;
-    letter-spacing: .8px;
-    margin: 24px 0 12px;
-    color: var(--text-muted);
+body{
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
+    padding-bottom:80px;
+}
+
+/* HEADER */
+
+.simple-header{
+    width:100%;
+    height:62px;
+
+    display:flex;
+    align-items:center;
+
+    padding:0 20px;
+
+    background:var(--p-header)!important;
+
+    border-bottom:1px solid var(--p-border);
+}
+
+.header-brand{
+    font-size:22px;
+    font-weight:900;
+    color:var(--p-text)!important;
+}
+
+.header-brand .edge{
+    color:#9b5cff!important;
+}
+
+/* PAGE */
+
+.page-container{
+    width:100%;
+    max-width:760px;
+
+    margin:auto;
+
+    padding:24px 18px 30px;
+}
+
+.page-title{
+    margin:0 0 6px;
+
+    font-size:27px;
+    line-height:1.15;
+    font-weight:900;
+
+    color:var(--p-text)!important;
+}
+
+.page-subtitle{
+    margin:0 0 25px;
+
+    font-size:13px;
+    color:var(--p-muted)!important;
+}
+
+.practice-section-title{
+    margin:0 0 14px;
+
+    font-size:16px;
+    font-weight:900;
+
+    color:var(--p-text)!important;
+}
+
+/* GRID */
+
+.practice-options,
+.mock-category-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap:14px;
+}
+
+/* CARD */
+
+.practice-card{
+    min-height:132px;
+
+    padding:16px 11px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+
+    background:var(--p-card)!important;
+
+    border:1px solid var(--p-border)!important;
+    border-radius:18px;
+
+    color:var(--p-text)!important;
+
+    cursor:pointer;
+
+    transition:.15s;
+}
+
+.practice-card:active{
+    transform:scale(.98);
+}
+
+.practice-card:hover{
+    border-color:var(--p-purple)!important;
+}
+
+.practice-card h3{
+    margin:0;
+
+    font-size:15px;
+    font-weight:850;
+
+    color:var(--p-text)!important;
+}
+
+.practice-card span{
+    margin-top:5px;
+
+    font-size:11px;
+
+    color:var(--p-muted)!important;
+}
+
+/* LOGO */
+
+.practice-logo{
+    width:64px;
+    height:64px;
+
+    margin-bottom:10px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    overflow:hidden;
+
+    border-radius:16px;
+
+    background:#fff;
+    border:1px solid var(--p-border);
+}
+
+.practice-logo img{
+    width:100%;
+    height:100%;
+
+    padding:4px;
+
+    object-fit:contain;
+
+    display:block;
+}
+
+/* ICON */
+
+.folder-icon,
+.subject-icon{
+    width:54px;
+    height:54px;
+
+    margin-bottom:10px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:15px;
+
+    background:var(--p-card2);
+
+    border:1px solid var(--p-border);
+
+    font-size:26px;
+}
+
+/* DIVIDER */
+
+.practice-divider{
+    height:1px;
+
+    margin:30px 0 27px;
+
+    background:var(--p-border);
+}
+
+/* EXAMS */
+
+.exam-list{
+    display:flex;
+    flex-direction:column;
+    gap:11px;
+}
+
+.exam-card{
+    min-height:58px;
+
+    padding:13px 15px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    border-radius:15px;
+
+    background:var(--p-card);
+
+    border:1px solid var(--p-border);
+
+    cursor:pointer;
+}
+
+.exam-card:hover{
+    border-color:var(--p-purple);
+}
+
+.exam-card-title{
+    font-size:15px;
+    font-weight:800;
+    color:var(--p-text);
+}
+
+.exam-arrow{
+    color:var(--p-purple2);
+    font-size:21px;
 }
 
 /* =========================================================
-   MAIN SSC / RRB
+   IMPORTANT HORIZONTAL SLIDER
 ========================================================= */
 
-.practice-options {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0,1fr));
-    gap: 14px;
+.practice-horizontal{
+    width:100%;
+
+    display:flex!important;
+    flex-direction:row!important;
+    flex-wrap:nowrap!important;
+
+    gap:12px;
+
+    overflow-x:auto!important;
+    overflow-y:hidden;
+
+    padding:2px 2px 12px;
+
+    scrollbar-width:none;
+
+    -webkit-overflow-scrolling:touch;
 }
 
-.practice-card {
-    min-height: 140px;
-    border-radius: 18px;
-    border: 1px solid var(--border);
-    background: var(--card);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    cursor: pointer;
-    transition: .2s;
+.practice-horizontal::-webkit-scrollbar{
+    display:none;
 }
 
-.practice-card:active {
-    transform: scale(.97);
+.practice-horizontal .practice-card{
+    flex:0 0 145px!important;
+
+    width:145px!important;
+    min-width:145px!important;
 }
 
-.practice-logo {
-    width: 66px;
-    height: 66px;
-    object-fit: contain;
+/* TABS */
+
+.practice-tabs{
+    width:100%;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap:8px;
+
+    margin-bottom:20px;
 }
 
-.practice-card-title {
-    font-weight: 800;
-    font-size: 16px;
+.practice-tab{
+    min-height:42px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:11px;
+
+    background:var(--p-card);
+
+    border:1px solid var(--p-border);
+
+    color:var(--p-muted);
+
+    font-size:11px;
+    font-weight:900;
+
+    cursor:pointer;
 }
 
-/* =========================================================
-   DYNAMIC EXAM / FOLDER CARDS
-========================================================= */
+.practice-tab.active{
+    background:var(--p-purple);
 
-.dynamic-grid {
-    display: grid;
-    grid-template-columns: repeat(2,minmax(0,1fr));
-    gap: 13px;
+    border-color:var(--p-purple);
+
+    color:#fff;
 }
 
-.dynamic-card {
-    min-height: 120px;
-    padding: 16px;
-    border-radius: 18px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    cursor: pointer;
-    transition: .2s;
+/* TESTS */
+
+.test-list{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
 }
 
-.dynamic-card:active {
-    transform: scale(.97);
+.test-card{
+    padding:15px;
+
+    border-radius:16px;
+
+    background:var(--p-card);
+
+    border:1px solid var(--p-border);
 }
 
-.dynamic-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 15px;
-    background: rgba(145,83,255,.12);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--purple2);
-    font-size: 23px;
-    font-weight: 900;
-    margin-bottom: 10px;
+.test-title{
+    margin-bottom:7px;
+
+    font-size:15px;
+    font-weight:850;
+
+    color:var(--p-text);
 }
 
-.dynamic-card-title {
-    font-size: 14px;
-    font-weight: 800;
+.test-info{
+    font-size:12px;
+    line-height:1.7;
+
+    color:var(--p-muted);
 }
 
-.dynamic-card-subtitle {
-    margin-top: 4px;
-    color: var(--text-muted);
-    font-size: 11px;
+.attempt-info{
+    margin-top:7px;
+
+    font-size:11px;
+    font-weight:800;
+
+    color:var(--p-purple2);
 }
 
-/* =========================================================
-   HORIZONTAL CARDS
-========================================================= */
+.test-actions{
+    display:flex;
+    flex-wrap:wrap;
 
-.horizontal-scroll {
-    display: flex;
-    gap: 12px;
-    overflow-x: auto;
-    padding: 3px 2px 10px;
-    scrollbar-width: none;
+    gap:8px;
+
+    margin-top:11px;
 }
 
-.horizontal-scroll::-webkit-scrollbar {
-    display: none;
+.start-test,
+.secondary-test{
+    min-height:37px;
+
+    padding:8px 12px;
+
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:10px;
+
+    font-size:11px;
+    font-weight:850;
+
+    text-decoration:none;
 }
 
-.horizontal-card {
-    min-width: 142px;
-    min-height: 108px;
-    padding: 15px;
-    flex: 0 0 auto;
-    border-radius: 17px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    cursor: pointer;
+.start-test{
+    background:var(--p-purple);
+
+    border:1px solid var(--p-purple);
+
+    color:#fff;
 }
 
-.horizontal-card:active {
-    transform: scale(.97);
+.secondary-test{
+    background:var(--p-card2);
+
+    border:1px solid var(--p-border);
+
+    color:var(--p-text);
 }
 
-.horizontal-icon {
-    font-size: 25px;
-    font-weight: 900;
-    color: var(--purple2);
-    margin-bottom: 9px;
+/* BACK */
+
+.practice-back{
+    display:inline-block;
+
+    margin-bottom:15px;
+
+    color:var(--p-purple2);
+
+    font-size:13px;
+    font-weight:800;
+
+    cursor:pointer;
 }
 
-/* =========================================================
-   TEST TYPE
-========================================================= */
+/* EMPTY */
 
-.type-grid {
-    display: grid;
-    grid-template-columns: repeat(2,minmax(0,1fr));
-    gap: 14px;
+.practice-empty{
+    width:100%;
+
+    padding:25px 12px;
+
+    text-align:center;
+
+    font-size:13px;
+
+    color:var(--p-muted);
 }
 
-.type-card {
-    min-height: 145px;
-    border-radius: 20px;
-    border: 1px solid var(--border);
-    background: var(--card);
-    padding: 18px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    cursor: pointer;
+/* HIDDEN */
+
+.hidden{
+    display:none!important;
 }
 
-.type-card:active {
-    transform: scale(.97);
+/* BOTTOM */
+
+.bottom-nav{
+    position:fixed;
+
+    left:0;
+    right:0;
+    bottom:0;
+
+    z-index:999;
+
+    height:67px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    background:#21142f;
+
+    border-top:1px solid #3a2850;
 }
 
-.type-icon {
-    width: 58px;
-    height: 58px;
-    border-radius: 18px;
-    background: rgba(145,83,255,.13);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 27px;
-    color: var(--purple2);
-    margin-bottom: 12px;
+.bottom-nav a{
+    display:flex;
+
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    gap:4px;
+
+    text-decoration:none;
 }
 
-.type-title {
-    font-size: 15px;
-    font-weight: 900;
+.bottom-nav .nav-icon{
+    font-size:20px;
 }
 
-/* =========================================================
-   TEST LIST
-========================================================= */
-
-.test-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+.bottom-nav small{
+    font-size:9px;
+    font-weight:800;
+    color:#aaa1b5;
 }
 
-.test-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 17px;
-    padding: 15px;
+.bottom-nav a.active small{
+    color:#b487ff;
 }
 
-.test-name {
-    font-weight: 800;
-    margin-bottom: 7px;
-}
+/* MOBILE */
 
-.test-meta {
-    color: var(--text-muted);
-    font-size: 12px;
-    margin-bottom: 12px;
-}
+@media(max-width:480px){
 
-.test-actions {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-.test-btn {
-    border: 0;
-    border-radius: 10px;
-    padding: 9px 13px;
-    font-weight: 800;
-    cursor: pointer;
-    background: var(--purple2);
-    color: white;
-}
-
-.test-btn.secondary {
-    background: rgba(145,83,255,.12);
-    color: var(--purple2);
-}
-
-/* =========================================================
-   BACK
-========================================================= */
-
-.practice-back {
-    display: none;
-    align-items: center;
-    gap: 7px;
-    margin-bottom: 17px;
-    color: var(--purple2);
-    font-weight: 800;
-    cursor: pointer;
-}
-
-/* =========================================================
-   EMPTY
-========================================================= */
-
-.practice-empty {
-    padding: 35px 15px;
-    text-align: center;
-    color: var(--text-muted);
-    border: 1px dashed var(--border);
-    border-radius: 17px;
-}
-
-/* =========================================================
-   PRACTICE DRILL
-   KEPT SEPARATE / UNCHANGED BEHAVIOUR
-========================================================= */
-
-.drill-grid {
-    display: grid;
-    grid-template-columns: repeat(2,minmax(0,1fr));
-    gap: 12px;
-}
-
-.drill-card {
-    min-height: 100px;
-    border: 1px solid var(--border);
-    background: var(--card);
-    border-radius: 17px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 12px;
-    font-weight: 800;
-    cursor: pointer;
-}
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media(max-width:380px) {
-
-    .practice-options,
-    .dynamic-grid,
-    .type-grid,
-    .drill-grid {
-        gap: 10px;
+    .page-container{
+        padding:21px 15px 28px;
     }
 
-    .practice-container {
-        padding-left: 13px;
-        padding-right: 13px;
+    .page-title{
+        font-size:25px;
+    }
+
+    .practice-options,
+    .mock-category-grid{
+        gap:12px;
+    }
+
+    .practice-card{
+        min-height:125px;
+    }
+
+    .practice-horizontal .practice-card{
+        flex-basis:140px!important;
+        width:140px!important;
+        min-width:140px!important;
     }
 
 }
@@ -360,349 +584,362 @@ document.documentElement.dataset.theme =
 
 <body>
 
+
 <header class="simple-header">
 
     <div class="header-brand">
-        SSC <span style="color:var(--purple2);">EDGE</span>
+        SSC <span class="edge">EDGE</span>
     </div>
 
 </header>
 
 
-<main class="practice-page">
-
-<div class="practice-container">
+<main class="page-container">
 
 
 <!-- =====================================================
-     MAIN SCREEN
-====================================================== -->
+     MAIN
+===================================================== -->
 
 <section id="mainScreen">
 
-    <div class="practice-title">
+    <h1 class="page-title">
         Practice
-    </div>
+    </h1>
 
-    <div class="practice-subtitle">
-        Choose your exam and start practising.
-    </div>
+    <p class="page-subtitle">
+        Test your preparation and improve your score
+    </p>
 
 
-    <div class="practice-section-title">
+    <h2 class="practice-section-title">
         MOCK TEST
-    </div>
+    </h2>
 
 
     <div class="practice-options">
 
         <div
             class="practice-card"
-            onclick="openBoard('SSC')"
+            onclick="openSSC()"
         >
 
-            <img
-                class="practice-logo"
-                src="https://ssccr.gov.in/emblem.svg"
-                onerror="this.style.display='none'"
-                alt="SSC"
-            >
+            <div class="practice-logo">
 
-            <div class="practice-card-title">
-                SSC
+                <img
+                    src="https://ssccr.gov.in/emblem.svg"
+                    alt="SSC"
+                >
+
             </div>
+
+            <h3>SSC</h3>
+
+            <span>
+                Staff Selection Commission
+            </span>
 
         </div>
 
 
         <div
             class="practice-card"
-            onclick="openBoard('RRB')"
+            onclick="openRRB()"
         >
 
-            <!-- RRB BUILT-IN LOGO -->
-            <svg
-                class="practice-logo"
-                viewBox="0 0 100 100"
-                aria-label="RRB"
-            >
+            <div class="practice-logo">
 
-                <circle
-                    cx="50"
-                    cy="50"
-                    r="43"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="7"
-                />
-
-                <circle
-                    cx="50"
-                    cy="50"
-                    r="17"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="6"
-                />
-
-                <path
-                    d="M50 7v22M50 71v22M7 50h22M71 50h22"
-                    stroke="currentColor"
-                    stroke-width="6"
-                    stroke-linecap="round"
-                />
-
-                <text
-                    x="50"
-                    y="55"
-                    text-anchor="middle"
-                    font-size="17"
-                    font-weight="900"
-                    fill="currentColor"
+                <img
+                    src="rrb-logo.png"
+                    alt="RRB"
                 >
-                    RRB
-                </text>
 
-            </svg>
-
-            <div class="practice-card-title">
-                RRB
             </div>
+
+            <h3>RRB</h3>
+
+            <span>
+                Railway Recruitment Board
+            </span>
 
         </div>
 
     </div>
 
 
-    <!-- =================================================
-         PRACTICE DRILL
-         ================================================= -->
+    <div class="practice-divider"></div>
 
-    <div class="practice-section-title">
+
+    <h2 class="practice-section-title">
         PRACTICE DRILL
-    </div>
+    </h2>
 
-    <div id="mainSubjectGrid" class="drill-grid"></div>
+
+    <div
+        id="mainSubjectGrid"
+        class="practice-options"
+    ></div>
 
 </section>
 
 
-
 <!-- =====================================================
-     EXAM SCREEN
-====================================================== -->
+     SSC
+===================================================== -->
 
-<section id="examScreen" style="display:none;">
+<section id="sscScreen" class="hidden">
 
     <div
         class="practice-back"
-        id="examBack"
-        onclick="goBack()"
+        onclick="showMain()"
     >
         ← Back
     </div>
 
-    <div class="practice-title" id="examTitle">
+    <h1 class="page-title">
         SSC
-    </div>
+    </h1>
 
-    <div class="practice-subtitle">
-        Select your exam.
-    </div>
+    <p class="page-subtitle">
+        Select an exam
+    </p>
 
-    <div id="examGrid" class="dynamic-grid"></div>
+    <div
+        id="sscList"
+        class="exam-list"
+    ></div>
 
 </section>
 
 
-
 <!-- =====================================================
-     NEW / PYQ SCREEN
-====================================================== -->
+     RRB
+===================================================== -->
 
-<section id="mockModeScreen" style="display:none;">
+<section id="rrbScreen" class="hidden">
 
     <div
         class="practice-back"
-        onclick="goBack()"
+        onclick="showMain()"
     >
         ← Back
     </div>
 
-    <div class="practice-title" id="mockModeTitle">
-        CGL
-    </div>
+    <h1 class="page-title">
+        RRB
+    </h1>
 
-    <div class="practice-subtitle">
-        Choose mock category.
-    </div>
+    <p class="page-subtitle">
+        Select an exam
+    </p>
 
-    <div id="mockModeGrid" class="type-grid"></div>
+    <div
+        id="rrbList"
+        class="exam-list"
+    ></div>
 
 </section>
 
 
-
 <!-- =====================================================
-     FULL / SECTIONAL SCREEN
-====================================================== -->
+     MOCK SCREEN
+===================================================== -->
 
-<section id="mockTypeScreen" style="display:none;">
+<section id="testScreen" class="hidden">
 
     <div
+        id="mockBack"
         class="practice-back"
-        onclick="goBack()"
+        onclick="backToGateway()"
     >
         ← Back
     </div>
 
-    <div class="practice-title" id="mockTypeTitle">
-        NEW MOCKS
+
+    <h1
+        id="examTitle"
+        class="page-title"
+    ></h1>
+
+
+    <!-- NEW / PYQ -->
+
+    <div
+        id="mockCategoryArea"
+        class="mock-category-grid"
+    ></div>
+
+
+    <!-- FULL / SECTIONAL -->
+
+    <div
+        id="mockTypeArea"
+        class="hidden"
+    >
+
+        <div
+            class="practice-back"
+            onclick="backToMockBranches()"
+        >
+            ← Back
+        </div>
+
+
+        <h2
+            id="mockBranchTitle"
+            class="practice-section-title"
+        ></h2>
+
+
+        <div class="practice-tabs">
+
+            <div
+                id="tabFull"
+                class="practice-tab active"
+                onclick="showMockType('full')"
+            >
+                FULL MOCKS
+            </div>
+
+
+            <div
+                id="tabSectional"
+                class="practice-tab"
+                onclick="showMockType('sectional')"
+            >
+                SECTIONAL MOCKS
+            </div>
+
+        </div>
+
+
+        <div id="fullMockArea">
+
+            <div
+                id="fullMockFolders"
+                class="practice-horizontal"
+            ></div>
+
+        </div>
+
+
+        <div
+            id="sectionalArea"
+            class="hidden"
+        >
+
+            <div
+                id="sectionSubjectList"
+                class="practice-horizontal"
+            ></div>
+
+        </div>
+
     </div>
 
-    <div class="practice-subtitle">
-        Choose mock type.
-    </div>
 
-    <div id="mockTypeGrid" class="type-grid"></div>
+    <!-- TEST LIST -->
+
+    <div
+        id="examTestListArea"
+        class="hidden"
+    >
+
+        <div
+            class="practice-back"
+            onclick="backToMockCategories()"
+        >
+            ← Back
+        </div>
+
+
+        <h2
+            id="examTestListTitle"
+            class="practice-section-title"
+        ></h2>
+
+
+        <div
+            id="testList"
+            class="test-list"
+        ></div>
+
+    </div>
 
 </section>
 
 
-
 <!-- =====================================================
-     YEAR SCREEN
-====================================================== -->
+     PRACTICE DRILL
+===================================================== -->
 
-<section id="yearScreen" style="display:none;">
+<section
+    id="chapterScreen"
+    class="hidden"
+>
 
     <div
         class="practice-back"
-        onclick="goBack()"
+        onclick="showMain()"
     >
         ← Back
     </div>
 
-    <div class="practice-title">
-        PYQ FULL MOCKS
-    </div>
 
-    <div class="practice-subtitle">
-        Select year.
-    </div>
-
-    <div id="yearGrid" class="horizontal-scroll"></div>
-
-</section>
+    <h1
+        id="chapterTitle"
+        class="page-title"
+    >
+        Practice Drill
+    </h1>
 
 
+    <p class="page-subtitle">
+        Select a practice test
+    </p>
 
-<!-- =====================================================
-     SUBJECT SCREEN
-====================================================== -->
-
-<section id="subjectScreen" style="display:none;">
 
     <div
-        class="practice-back"
-        onclick="goBack()"
-    >
-        ← Back
-    </div>
-
-    <div class="practice-title">
-        SECTIONAL MOCKS
-    </div>
-
-    <div class="practice-subtitle">
-        Select subject.
-    </div>
-
-    <div id="sectionSubjectGrid" class="horizontal-scroll"></div>
+        id="chapterList"
+        class="test-list"
+    ></div>
 
 </section>
 
-
-
-<!-- =====================================================
-     TEST SCREEN
-====================================================== -->
-
-<section id="testScreen" style="display:none;">
-
-    <div
-        class="practice-back"
-        onclick="goBack()"
-    >
-        ← Back
-    </div>
-
-    <div class="practice-title" id="testScreenTitle">
-        Mock Tests
-    </div>
-
-    <div class="practice-subtitle" id="testScreenSubtitle"></div>
-
-    <div id="testList" class="test-list"></div>
-
-</section>
-
-
-
-<!-- =====================================================
-     PRACTICE DRILL CHAPTER SCREEN
-====================================================== -->
-
-<section id="chapterScreen" style="display:none;">
-
-    <div
-        class="practice-back"
-        onclick="goBack()"
-    >
-        ← Back
-    </div>
-
-    <div class="practice-title" id="chapterTitle"></div>
-
-    <div class="practice-subtitle">
-        Practice questions
-    </div>
-
-    <div id="chapterTests" class="test-list"></div>
-
-</section>
-
-
-</div>
 
 </main>
 
 
-
 <!-- =====================================================
-     BOTTOM NAV
-====================================================== -->
+     NAV
+===================================================== -->
 
 <nav class="bottom-nav">
 
-    <a href="index.html">
-        Home
+    <a href="home.html">
+        <span class="nav-icon">🏠</span>
+        <small>Home</small>
     </a>
 
     <a href="study.html">
-        Study Material
+        <span class="nav-icon">📚</span>
+        <small>Study Material</small>
     </a>
 
-    <a href="practice.html" class="active">
-        Practice
+    <a
+        href="practice.html"
+        class="active"
+    >
+        <span class="nav-icon">📝</span>
+        <small>Practice</small>
     </a>
 
     <a href="profile.html">
-        Profile
+        <span class="nav-icon">👤</span>
+        <small>Profile</small>
     </a>
 
 </nav>
-
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -715,244 +952,401 @@ document.documentElement.dataset.theme =
 ========================================================= */
 
 const SUPABASE_URL =
-    "https://dvvyoygahzzbnpqrfhen.supabase.co";
+"https://dvvyoygahzzbnpqrfhen.supabase.co";
 
 const SUPABASE_KEY =
-    "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
 
 const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 
 
 /* =========================================================
    STATE
 ========================================================= */
 
-let exams = [];
-let folders = [];
-let subjects = [];
-let mockTests = [];
+let exams=[];
+let subjects=[];
+let tests=[];
+let folders=[];
 
-let currentBoard = null;
-let currentExam = null;
+let currentGateway="";
+let currentExam=null;
 
-let currentModeFolder = null;
-let currentTypeFolder = null;
+let currentBranch="";
+let currentMockType="";
 
-let currentFolder = null;
-
-let navigationStack = [];
+let currentFolder=null;
+let currentSubject=null;
 
 
 /* =========================================================
    HELPERS
 ========================================================= */
 
-function $(id) {
-    return document.getElementById(id);
+function normalize(v){
+
+    return String(v??"")
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g," ");
+
 }
 
 
-function escapeHTML(value) {
+function escapeHtml(v){
 
-    return String(value ?? "")
+    return String(v??"")
         .replace(/&/g,"&amp;")
         .replace(/</g,"&lt;")
         .replace(/>/g,"&gt;")
         .replace(/"/g,"&quot;")
         .replace(/'/g,"&#039;");
+
 }
 
 
-function folderName(folder) {
+function folderName(f){
 
-    return folder.display_name ||
-           folder.name ||
-           "";
+    return String(
+        f.display_name ||
+        f.name ||
+        ""
+    ).trim();
+
 }
 
 
-function foldersByParent(parentId) {
+function folderType(f){
 
-    return folders
+    return normalize(
+        f.folder_type
+    );
 
-        .filter(f => {
-
-            if (parentId === null) {
-                return f.parent_id === null;
-            }
-
-            return Number(f.parent_id) === Number(parentId);
-
-        })
-
-        .filter(f => f.is_active !== false)
-
-        .sort((a,b) =>
-            (a.sort_order || 0) -
-            (b.sort_order || 0)
-        );
 }
 
 
-function showOnly(id) {
+/* =========================================================
+   SCREEN
+========================================================= */
 
-    const ids = [
+function hideAll(){
+
+    [
         "mainScreen",
-        "examScreen",
-        "mockModeScreen",
-        "mockTypeScreen",
-        "yearScreen",
-        "subjectScreen",
+        "sscScreen",
+        "rrbScreen",
         "testScreen",
         "chapterScreen"
-    ];
+    ].forEach(id=>{
 
-    ids.forEach(x => {
-
-        $(x).style.display =
-            x === id ? "block" : "none";
+        document
+        .getElementById(id)
+        .classList
+        .add("hidden");
 
     });
 
 }
 
 
-/* =========================================================
-   LOAD DATA
-========================================================= */
+function showMain(){
 
-async function loadPracticeData() {
+    hideAll();
 
-    const [
-        examsResult,
-        foldersResult,
-        subjectsResult,
-        testsResult
-    ] = await Promise.all([
-
-        supabaseClient
-            .from("exams")
-            .select("*")
-            .order("sort_order", {ascending:true}),
-
-        supabaseClient
-            .from("mock_folders")
-            .select("*")
-            .order("sort_order", {ascending:true}),
-
-        supabaseClient
-            .from("subjects")
-            .select("*")
-            .order("id", {ascending:true}),
-
-        supabaseClient
-            .from("mock_tests")
-            .select("*")
-            .order("id", {ascending:false})
-
-    ]);
-
-
-    if (examsResult.error)
-        throw examsResult.error;
-
-    if (foldersResult.error)
-        throw foldersResult.error;
-
-    if (subjectsResult.error)
-        throw subjectsResult.error;
-
-    if (testsResult.error)
-        throw testsResult.error;
-
-
-    exams = examsResult.data || [];
-
-    folders = foldersResult.data || [];
-
-    subjects = subjectsResult.data || [];
-
-    mockTests = testsResult.data || [];
-
-
-    renderPracticeDrill();
+    document
+    .getElementById("mainScreen")
+    .classList
+    .remove("hidden");
 
 }
 
 
 /* =========================================================
-   MAIN BOARD
+   LOAD
 ========================================================= */
 
-async function openBoard(board) {
+async function loadData(){
 
-    currentBoard = board;
+    try{
 
-    navigationStack = ["main"];
+        const e =
+        await supabaseClient
+        .from("exams")
+        .select(`
+            id,
+            board,
+            name,
+            mock_type,
+            is_active,
+            sort_order
+        `)
+        .eq("is_active",true)
+        .order("sort_order",{ascending:true})
+        .order("name",{ascending:true});
 
-    $("examTitle").textContent = board;
+        exams=e.data||[];
 
-    showOnly("examScreen");
 
-    renderExams();
+        const s =
+        await supabaseClient
+        .from("subjects")
+        .select(`
+            id,
+            name
+        `)
+        .order("name");
+
+        subjects=s.data||[];
+
+
+        const t =
+        await supabaseClient
+        .from("mock_tests")
+        .select(`
+            id,
+            exam_id,
+            title,
+            test_type,
+            subject_id,
+            folder_id,
+            duration_minutes,
+            total_questions,
+            is_active,
+            created_at
+        `)
+        .eq("is_active",true)
+        .order("created_at",{ascending:false});
+
+        tests=t.data||[];
+
+
+        const f =
+        await supabaseClient
+        .from("mock_folders")
+        .select(`
+            id,
+            exam_id,
+            parent_id,
+            subject_id,
+            name,
+            display_name,
+            folder_type,
+            sort_order,
+            is_active
+        `)
+        .eq("is_active",true)
+        .order("sort_order",{ascending:true});
+
+        folders=f.data||[];
+
+
+        renderMainSubjects();
+
+
+    }catch(err){
+
+        console.error(err);
+
+    }
 
 }
 
 
-function renderExams() {
+/* =========================================================
+   DRILL
+========================================================= */
 
-    const grid = $("examGrid");
+function renderMainSubjects(){
 
-    const list = exams
-
-        .filter(e =>
-            String(e.board || "")
-                .toUpperCase() === currentBoard
-        )
-
-        .filter(e =>
-            e.is_active !== false
-        )
-
-        .sort((a,b) =>
-            (a.sort_order || 0) -
-            (b.sort_order || 0)
-        );
+    const box =
+    document.getElementById(
+        "mainSubjectGrid"
+    );
 
 
-    if (!list.length) {
+    if(!subjects.length){
 
-        grid.innerHTML = `
+        box.innerHTML=`
             <div class="practice-empty">
-                No exams available yet.
+                No subjects available yet.
             </div>
         `;
 
         return;
+
     }
 
 
-    grid.innerHTML = list.map(exam => `
+    const order=[
+        "quantitative aptitude",
+        "general awareness",
+        "english",
+        "reasoning"
+    ];
+
+
+    const list=[...subjects].sort((a,b)=>{
+
+        const ai=order.indexOf(
+            normalize(a.name)
+        );
+
+        const bi=order.indexOf(
+            normalize(b.name)
+        );
+
+        if(ai===-1&&bi===-1)
+            return normalize(a.name)
+            .localeCompare(normalize(b.name));
+
+        if(ai===-1)return 1;
+        if(bi===-1)return -1;
+
+        return ai-bi;
+
+    });
+
+
+    box.innerHTML=
+    list.map(s=>`
 
         <div
-            class="dynamic-card"
-            onclick="openExam(${exam.id})"
+            class="practice-card"
+            onclick="openChapterById('${s.id}')"
         >
 
-            <div class="dynamic-icon">
-                ${currentBoard === "SSC" ? "S" : "R"}
+            <div class="subject-icon">
+                ${getSubjectIcon(s.name)}
             </div>
 
-            <div class="dynamic-card-title">
-                ${escapeHTML(exam.name)}
+            <h3>
+                ${escapeHtml(s.name)}
+            </h3>
+
+            <span>
+                Chapter Wise
+            </span>
+
+        </div>
+
+    `).join("");
+
+}
+
+
+function getSubjectIcon(name){
+
+    const n=normalize(name);
+
+    if(n.includes("quant"))
+        return "🔢";
+
+    if(
+        n.includes("general")||
+        n==="gk"||
+        n.includes("awareness")
+    )
+        return "🌐";
+
+    if(n.includes("english"))
+        return "📖";
+
+    if(n.includes("reason"))
+        return "🧩";
+
+    return "📚";
+
+}
+
+
+/* =========================================================
+   GATEWAYS
+========================================================= */
+
+function openSSC(){
+
+    currentGateway="SSC";
+
+    hideAll();
+
+    document
+    .getElementById("sscScreen")
+    .classList
+    .remove("hidden");
+
+    renderExams("SSC");
+
+}
+
+
+function openRRB(){
+
+    currentGateway="RRB";
+
+    hideAll();
+
+    document
+    .getElementById("rrbScreen")
+    .classList
+    .remove("hidden");
+
+    renderExams("RRB");
+
+}
+
+
+/* =========================================================
+   EXAMS
+========================================================= */
+
+function renderExams(board){
+
+    const box =
+    board==="SSC"
+    ?
+    document.getElementById("sscList")
+    :
+    document.getElementById("rrbList");
+
+
+    const list=
+    exams.filter(e=>
+        normalize(e.board)===
+        normalize(board)
+    );
+
+
+    if(!list.length){
+
+        box.innerHTML=`
+            <div class="practice-empty">
+                No ${board} exams available yet.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    box.innerHTML=
+    list.map(e=>`
+
+        <div
+            class="exam-card"
+            onclick="openExam('${e.id}')"
+        >
+
+            <div class="exam-card-title">
+                ${escapeHtml(e.name)}
             </div>
 
-            <div class="dynamic-card-subtitle">
-                Mock Tests
+            <div class="exam-arrow">
+                →
             </div>
 
         </div>
@@ -966,640 +1360,1245 @@ function renderExams() {
    EXAM
 ========================================================= */
 
-function openExam(examId) {
+function openExam(id){
 
-    currentExam =
-        exams.find(e =>
-            Number(e.id) === Number(examId)
-        );
-
-    if (!currentExam) return;
-
-    navigationStack.push("exam");
-
-    $("mockModeTitle").textContent =
-        currentExam.name;
-
-    showOnly("mockModeScreen");
-
-    renderMockModes();
-
-}
+    currentExam=
+    exams.find(e=>
+        String(e.id)===String(id)
+    );
 
 
-function renderMockModes() {
-
-    const roots = foldersByParent(null)
-        .filter(f =>
-            Number(f.exam_id) === Number(currentExam.id)
-        );
+    if(!currentExam)return;
 
 
-    /*
-       Root folders belong to an exam.
-       Expected:
-       NEW MOCKS
-       PYQ MOCKS
-    */
-
-    const ordered = [];
-
-    const newFolder =
-        roots.find(f =>
-            f.folder_type === "new"
-        );
-
-    const pyqFolder =
-        roots.find(f =>
-            f.folder_type === "pyq"
-        );
+    hideAll();
 
 
-    if (newFolder) ordered.push(newFolder);
-    if (pyqFolder) ordered.push(pyqFolder);
+    document
+    .getElementById("testScreen")
+    .classList
+    .remove("hidden");
 
 
-    const remaining =
-        roots.filter(f =>
-            !ordered.includes(f)
-        );
+    document
+    .getElementById("examTitle")
+    .textContent=
+    currentExam.name;
 
 
-    ordered.push(...remaining);
+    currentBranch="";
+    currentMockType="";
+    currentFolder=null;
+    currentSubject=null;
 
 
-    if (!ordered.length) {
-
-        $("mockModeGrid").innerHTML = `
-            <div class="practice-empty">
-                No mock categories available.
-            </div>
-        `;
-
-        return;
-    }
-
-
-    $("mockModeGrid").innerHTML =
-        ordered.map(folder => `
-
-            <div
-                class="type-card"
-                onclick="openMockMode(${folder.id})"
-            >
-
-                <div class="type-icon">
-                    ${folder.folder_type === "pyq"
-                        ? "P"
-                        : "N"}
-                </div>
-
-                <div class="type-title">
-                    ${escapeHTML(folderName(folder))}
-                </div>
-
-            </div>
-
-        `).join("");
+    renderBranches();
 
 }
 
 
 /* =========================================================
-   NEW / PYQ
+   CURRENT EXAM FOLDERS
 ========================================================= */
 
-function openMockMode(folderId) {
+function examFolders(){
 
-    currentModeFolder =
-        folders.find(f =>
-            Number(f.id) === Number(folderId)
-        );
+    if(!currentExam)return[];
 
-    if (!currentModeFolder) return;
-
-    navigationStack.push("mode");
-
-    $("mockTypeTitle").textContent =
-        folderName(currentModeFolder);
-
-    showOnly("mockTypeScreen");
-
-    renderMockTypes();
+    return folders.filter(f=>
+        String(f.exam_id)===
+        String(currentExam.id)
+    );
 
 }
 
 
-function renderMockTypes() {
+/* =========================================================
+   ROOTS
+========================================================= */
 
-    const children =
-        foldersByParent(currentModeFolder.id);
+function getRoots(){
+
+    return examFolders()
+    .filter(f=>{
+
+        const name=
+        normalize(folderName(f));
+
+        const type=
+        folderType(f);
+
+        const root=
+        f.parent_id===null||
+        f.parent_id===undefined||
+        f.parent_id==="";
 
 
-    let full =
-        children.find(f =>
-            f.folder_type === "full"
+        if(!root)return false;
+
+
+        return(
+            type==="new"||
+            type==="new_mocks"||
+            type==="pyq"||
+            type==="pyq_mocks"||
+            name==="new"||
+            name==="new mocks"||
+            name==="pyq"||
+            name==="pyq mocks"
         );
 
-    let sectional =
-        children.find(f =>
-            f.folder_type === "sectional"
+    })
+    .sort((a,b)=>
+        Number(a.sort_order||0)-
+        Number(b.sort_order||0)
+    );
+
+}
+
+
+/* =========================================================
+   BRANCHES
+========================================================= */
+
+function renderBranches(){
+
+    const box=
+    document.getElementById(
+        "mockCategoryArea"
+    );
+
+
+    const roots=getRoots();
+
+
+    if(!roots.length){
+
+        box.innerHTML=`
+            <div
+                class="practice-card"
+                onclick="openMockBranch(null,'new')"
+            >
+                <div class="folder-icon">🚀</div>
+                <h3>NEW MOCKS</h3>
+                <span>Latest Mock Tests</span>
+            </div>
+
+            <div
+                class="practice-card"
+                onclick="openMockBranch(null,'pyq')"
+            >
+                <div class="folder-icon">📚</div>
+                <h3>PYQ MOCKS</h3>
+                <span>Previous Year Questions</span>
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    box.innerHTML=
+    roots.map(r=>{
+
+        const n=normalize(folderName(r));
+
+        const isPyq=
+            folderType(r)==="pyq"||
+            folderType(r)==="pyq_mocks"||
+            n==="pyq"||
+            n==="pyq mocks";
+
+
+        return`
+
+            <div
+                class="practice-card"
+                onclick="
+                    openMockBranch(
+                        '${r.id}',
+                        '${isPyq?"pyq":"new"}'
+                    )
+                "
+            >
+
+                <div class="folder-icon">
+                    ${isPyq?"📚":"🚀"}
+                </div>
+
+                <h3>
+                    ${escapeHtml(folderName(r))}
+                </h3>
+
+                <span>
+                    ${
+                        isPyq
+                        ?
+                        "Previous Year Questions"
+                        :
+                        "Latest Mock Tests"
+                    }
+                </span>
+
+            </div>
+
+        `;
+
+    }).join("");
+
+}
+
+
+/* =========================================================
+   OPEN BRANCH
+========================================================= */
+
+function openMockBranch(id,branch){
+
+    currentBranch=branch;
+
+    currentFolder=
+        id
+        ?
+        folders.find(f=>
+            String(f.id)===String(id)
+        )||null
+        :
+        null;
+
+
+    document
+    .getElementById("mockCategoryArea")
+    .classList
+    .add("hidden");
+
+
+    document
+    .getElementById("mockTypeArea")
+    .classList
+    .remove("hidden");
+
+
+    document
+    .getElementById("mockBranchTitle")
+    .textContent=
+    currentFolder
+    ?
+    folderName(currentFolder)
+    :
+    branch==="pyq"
+    ?
+    "PYQ MOCKS"
+    :
+    "NEW MOCKS";
+
+
+    showMockType("full");
+
+}
+
+
+/* =========================================================
+   BRANCH ROOT
+========================================================= */
+
+function branchRoot(){
+
+    if(currentFolder)return currentFolder;
+
+
+    return getRoots().find(f=>{
+
+        const n=normalize(folderName(f));
+        const t=folderType(f);
+
+
+        if(currentBranch==="pyq"){
+
+            return(
+                t==="pyq"||
+                t==="pyq_mocks"||
+                n==="pyq"||
+                n==="pyq mocks"
+            );
+
+        }
+
+
+        return(
+            t==="new"||
+            t==="new_mocks"||
+            n==="new"||
+            n==="new mocks"
         );
 
+    })||null;
 
-    const ordered = [];
+}
 
-    if (full) ordered.push(full);
-    if (sectional) ordered.push(sectional);
 
-    children.forEach(f => {
+/* =========================================================
+   CHILD BY TYPE
+========================================================= */
 
-        if (!ordered.includes(f))
-            ordered.push(f);
+function childFolder(parent,type){
+
+    if(!parent)return null;
+
+
+    const all=examFolders();
+
+
+    return all.find(f=>{
+
+        if(String(f.parent_id)!==
+           String(parent.id))
+            return false;
+
+
+        const ft=folderType(f);
+        const n=normalize(folderName(f));
+
+
+        if(type==="full"){
+
+            return(
+                ft==="full"||
+                ft==="full_mocks"||
+                n==="full"||
+                n==="full mocks"
+            );
+
+        }
+
+
+        if(type==="sectional"){
+
+            return(
+                ft==="sectional"||
+                ft==="sectional_mocks"||
+                n==="sectional"||
+                n==="sectional mocks"
+            );
+
+        }
+
+
+        return false;
+
+    })||null;
+
+}
+
+
+/* =========================================================
+   TYPE
+========================================================= */
+
+function showMockType(type){
+
+    currentMockType=type;
+
+
+    document
+    .getElementById("tabFull")
+    .classList
+    .toggle("active",type==="full");
+
+
+    document
+    .getElementById("tabSectional")
+    .classList
+    .toggle("active",type==="sectional");
+
+
+    document
+    .getElementById("fullMockArea")
+    .classList
+    .toggle("hidden",type!=="full");
+
+
+    document
+    .getElementById("sectionalArea")
+    .classList
+    .toggle("hidden",type!=="sectional");
+
+
+    document
+    .getElementById("examTestListArea")
+    .classList
+    .add("hidden");
+
+
+    if(type==="full")
+        renderFull();
+
+    else
+        renderSectional();
+
+}
+
+
+/* =========================================================
+   FULL
+========================================================= */
+
+function renderFull(){
+
+    const box=
+    document.getElementById(
+        "fullMockFolders"
+    );
+
+
+    const root=branchRoot();
+
+
+    if(!root){
+
+        box.innerHTML=`
+            <div class="practice-empty">
+                No Full Mock Tests available yet.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    const full=
+    childFolder(root,"full");
+
+
+    if(!full){
+
+        box.innerHTML=`
+            <div class="practice-empty">
+                No Full Mock Tests available yet.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    /* NEW FULL → DIRECT TESTS */
+
+    if(currentBranch==="new"){
+
+        openFolderTestsButton(
+            box,
+            full,
+            "📝",
+            "Full Mock Tests"
+        );
+
+        return;
+
+    }
+
+
+    /* PYQ FULL → YEARS */
+
+    const years=
+    examFolders()
+    .filter(f=>
+        String(f.parent_id)===
+        String(full.id)
+    )
+    .filter(f=>{
+
+        const type=folderType(f);
+        const name=normalize(folderName(f));
+
+        return(
+            type==="year"||
+            type==="full_year"||
+            /^\d{4}$/.test(name)
+        );
+
+    })
+    .sort((a,b)=>{
+
+        const ay=parseInt(folderName(a))||0;
+        const by=parseInt(folderName(b))||0;
+
+        if(ay&&by)
+            return by-ay;
+
+        return(
+            Number(a.sort_order||0)-
+            Number(b.sort_order||0)
+        );
 
     });
 
 
-    if (!ordered.length) {
+    if(!years.length){
 
-        $("mockTypeGrid").innerHTML = `
+        box.innerHTML=`
             <div class="practice-empty">
-                Nothing available yet.
+                No PYQ years available yet.
             </div>
         `;
 
         return;
+
     }
 
 
-    $("mockTypeGrid").innerHTML =
-        ordered.map(folder => `
+    box.innerHTML=
+    years.map(y=>`
 
-            <div
-                class="type-card"
-                onclick="openMockType(${folder.id})"
-            >
+        <div
+            class="practice-card"
+            onclick="
+                openFolderTests(
+                    '${y.id}',
+                    '${escapeHtml(folderName(y))}'
+                )
+            "
+        >
 
-                <div class="type-icon">
-                    ${folder.folder_type === "sectional"
-                        ? "S"
-                        : "F"}
-                </div>
-
-                <div class="type-title">
-                    ${escapeHTML(folderName(folder))}
-                </div>
-
+            <div class="folder-icon">
+                📅
             </div>
 
-        `).join("");
+            <h3>
+                ${escapeHtml(folderName(y))}
+            </h3>
+
+            <span>
+                PYQ Full Mocks
+            </span>
+
+        </div>
+
+    `).join("");
 
 }
 
 
 /* =========================================================
-   FULL / SECTIONAL
+   FULL DIRECT BUTTON
 ========================================================= */
 
-function openMockType(folderId) {
+function openFolderTestsButton(
+    box,
+    folder,
+    icon,
+    subtitle
+){
 
-    currentTypeFolder =
-        folders.find(f =>
-            Number(f.id) === Number(folderId)
-        );
+    box.innerHTML=`
 
-    if (!currentTypeFolder) return;
+        <div
+            class="practice-card"
+            onclick="
+                openFolderTests(
+                    '${folder.id}',
+                    '${escapeHtml(folderName(folder))}'
+                )
+            "
+        >
 
-    navigationStack.push("type");
+            <div class="folder-icon">
+                ${icon}
+            </div>
 
+            <h3>
+                ${escapeHtml(folderName(folder))}
+            </h3>
 
-    if (
-        currentTypeFolder.folder_type === "full" &&
-        currentModeFolder.folder_type === "pyq"
-    ) {
+            <span>
+                ${subtitle}
+            </span>
 
-        showOnly("yearScreen");
+        </div>
 
-        renderYears();
+    `;
 
-        return;
-    }
-
-
-    if (
-        currentTypeFolder.folder_type === "sectional"
-    ) {
-
-        showOnly("subjectScreen");
-
-        renderSectionSubjects();
-
-        return;
-    }
+}
 
 
-    /*
-       NEW FULL MOCKS
-       Tests directly under this folder.
-    */
+/* =========================================================
+   SECTIONAL
+========================================================= */
 
-    openTestsForFolder(
-        currentTypeFolder,
-        currentTypeFolder.name
+function renderSectional(){
+
+    const box=
+    document.getElementById(
+        "sectionSubjectList"
     );
 
-}
+
+    const root=branchRoot();
 
 
-/* =========================================================
-   PYQ YEARS
-========================================================= */
+    if(!root){
 
-function renderYears() {
-
-    const years =
-        foldersByParent(currentTypeFolder.id)
-            .filter(f =>
-                f.folder_type === "year"
-            );
-
-
-    if (!years.length) {
-
-        $("yearGrid").innerHTML = `
+        box.innerHTML=`
             <div class="practice-empty">
-                No PYQ years added yet.
+                No sectional subjects available yet.
             </div>
         `;
 
         return;
+
     }
 
 
-    $("yearGrid").innerHTML =
-        years.map(year => `
-
-            <div
-                class="horizontal-card"
-                onclick="openFolderTests(${year.id})"
-            >
-
-                <div class="horizontal-icon">
-                    ${escapeHTML(folderName(year))}
-                </div>
-
-                <div class="dynamic-card-title">
-                    ${escapeHTML(folderName(year))}
-                </div>
-
-            </div>
-
-        `).join("");
-
-}
+    const sectional=
+    childFolder(root,"sectional");
 
 
-/* =========================================================
-   SECTIONAL SUBJECTS
-========================================================= */
+    if(!sectional){
 
-function renderSectionSubjects() {
-
-    const subjectFolders =
-        foldersByParent(currentTypeFolder.id)
-            .filter(f =>
-                f.folder_type === "subject"
-            );
-
-
-    if (!subjectFolders.length) {
-
-        $("sectionSubjectGrid").innerHTML = `
+        box.innerHTML=`
             <div class="practice-empty">
-                No sectional subjects added yet.
+                No sectional subjects available yet.
             </div>
         `;
 
         return;
+
     }
 
 
-    $("sectionSubjectGrid").innerHTML =
-        subjectFolders.map(folder => `
+    const list=
+    examFolders()
+    .filter(f=>
+        String(f.parent_id)===
+        String(sectional.id)
+    )
+    .filter(f=>{
 
-            <div
-                class="horizontal-card"
-                onclick="openFolderTests(${folder.id})"
-            >
+        const type=folderType(f);
 
-                <div class="horizontal-icon">
-                    ${getSubjectInitial(folder)}
-                </div>
-
-                <div class="dynamic-card-title">
-                    ${escapeHTML(folderName(folder))}
-                </div>
-
-            </div>
-
-        `).join("");
-
-}
-
-
-function getSubjectInitial(folder) {
-
-    const text =
-        folderName(folder).trim();
-
-    return text
-        ? text.charAt(0).toUpperCase()
-        : "S";
-
-}
-
-
-/* =========================================================
-   FOLDER → TESTS
-========================================================= */
-
-function openFolderTests(folderId) {
-
-    const folder =
-        folders.find(f =>
-            Number(f.id) === Number(folderId)
+        return(
+            type==="subject"||
+            !!f.subject_id
         );
 
-    if (!folder) return;
-
-    openTestsForFolder(
-        folder,
-        folderName(folder)
+    })
+    .sort((a,b)=>
+        Number(a.sort_order||0)-
+        Number(b.sort_order||0)
     );
 
-}
 
+    if(!list.length){
 
-function openTestsForFolder(folder,title) {
-
-    currentFolder = folder;
-
-    navigationStack.push("tests");
-
-    $("testScreenTitle").textContent =
-        title || "Mock Tests";
-
-    $("testScreenSubtitle").textContent =
-        currentExam
-            ? currentExam.name
-            : "";
-
-    showOnly("testScreen");
-
-    renderTestsForFolder(folder);
-
-}
-
-
-function renderTestsForFolder(folder) {
-
-    const list =
-        mockTests.filter(test =>
-            Number(test.folder_id) === Number(folder.id)
-        );
-
-
-    if (!list.length) {
-
-        $("testList").innerHTML = `
+        box.innerHTML=`
             <div class="practice-empty">
-                No mock tests available yet.
+                No sectional subjects available yet.
             </div>
         `;
 
         return;
+
     }
 
 
-    $("testList").innerHTML =
-        list.map(test => `
+    box.innerHTML=
+    list.map(f=>{
+
+        const s=
+        subjects.find(x=>
+            String(x.id)===
+            String(f.subject_id)
+        );
+
+
+        const name=
+        folderName(f)||
+        s?.name||
+        "Subject";
+
+
+        return`
+
+            <div
+                class="practice-card"
+                onclick="
+                    openFolderTests(
+                        '${f.id}',
+                        '${escapeHtml(name)}'
+                    )
+                "
+            >
+
+                <div class="subject-icon">
+                    ${getSubjectIcon(
+                        s?.name||name
+                    )}
+                </div>
+
+                <h3>
+                    ${escapeHtml(name)}
+                </h3>
+
+                <span>
+                    Sectional Mocks
+                </span>
+
+            </div>
+
+        `;
+
+    }).join("");
+
+}
+
+
+/* =========================================================
+   TESTS
+========================================================= */
+
+function openFolderTests(id,title){
+
+    currentFolder=
+    folders.find(f=>
+        String(f.id)===String(id)
+    )||null;
+
+
+    currentSubject=null;
+
+
+    document
+    .getElementById("mockTypeArea")
+    .classList
+    .add("hidden");
+
+
+    document
+    .getElementById("mockCategoryArea")
+    .classList
+    .add("hidden");
+
+
+    document
+    .getElementById("examTestListArea")
+    .classList
+    .remove("hidden");
+
+
+    document
+    .getElementById("examTestListTitle")
+    .textContent=title;
+
+
+    const list=
+    tests.filter(t=>
+        String(t.exam_id)===
+        String(currentExam.id)&&
+        String(t.folder_id)===
+        String(id)
+    );
+
+
+    renderTests(list);
+
+}
+
+
+async function getAttemptState(testId){
+
+    const result={
+        state:"new",
+        attempts:[],
+        completedCount:0
+    };
+
+
+    try{
+
+        const raw=
+        localStorage.getItem(
+            "ssc-edge-progress-"+testId
+        );
+
+
+        if(raw){
+
+            const saved=JSON.parse(raw);
+
+            if(saved?.progressStarted){
+
+                result.state="resume";
+
+                return result;
+
+            }
+
+        }
+
+    }catch(e){}
+
+
+    try{
+
+        const u=
+        await supabaseClient.auth.getUser();
+
+
+        const user=u?.data?.user;
+
+        if(!user)return result;
+
+
+        const r=
+        await supabaseClient
+        .from("test_attempts")
+        .select(`
+            id,
+            created_at,
+            completed_at,
+            score,
+            correct_answers,
+            wrong_answers,
+            unanswered
+        `)
+        .eq("user_id",user.id)
+        .eq("mock_test_id",testId)
+        .not("completed_at","is",null)
+        .order("completed_at",{ascending:true});
+
+
+        if(r.error)return result;
+
+
+        result.attempts=r.data||[];
+
+        result.completedCount=
+            result.attempts.length;
+
+
+        if(result.completedCount)
+            result.state="completed";
+
+
+    }catch(e){}
+
+
+    return result;
+
+}
+
+
+async function renderTests(list){
+
+    const box=
+    document.getElementById("testList");
+
+
+    if(!list.length){
+
+        box.innerHTML=`
+            <div class="practice-empty">
+                No tests available yet.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    box.innerHTML=`
+        <div class="practice-empty">
+            Loading test status...
+        </div>
+    `;
+
+
+    let html="";
+
+
+    for(const test of list){
+
+        const status=
+        await getAttemptState(test.id);
+
+
+        let actions="";
+
+
+        if(status.state==="resume"){
+
+            actions=`
+                <a
+                    class="start-test"
+                    href="test.html?id=${encodeURIComponent(test.id)}"
+                >
+                    Resume →
+                </a>
+            `;
+
+        }else if(!status.completedCount){
+
+            actions=`
+                <a
+                    class="start-test"
+                    href="test.html?id=${encodeURIComponent(test.id)}"
+                >
+                    Start Test →
+                </a>
+            `;
+
+        }else{
+
+            if(status.completedCount<4){
+
+                actions+=`
+                    <a
+                        class="start-test"
+                        href="test.html?id=${encodeURIComponent(test.id)}&reattempt=1"
+                    >
+                        Re-attempt
+                    </a>
+                `;
+
+            }
+
+
+            const latest=
+            status.attempts[
+                status.attempts.length-1
+            ];
+
+
+            if(latest){
+
+                actions+=`
+                    <a
+                        class="secondary-test"
+                        href="analysis.html?attempt_id=${encodeURIComponent(latest.id)}"
+                    >
+                        Analysis
+                    </a>
+
+                    <a
+                        class="secondary-test"
+                        href="solutions.html?test_id=${encodeURIComponent(test.id)}"
+                    >
+                        Solutions
+                    </a>
+                `;
+
+            }
+
+        }
+
+
+        html+=`
 
             <div class="test-card">
 
-                <div class="test-name">
-                    ${escapeHTML(
-                        test.title ||
-                        test.name ||
-                        "Mock Test"
+                <div class="test-title">
+                    ${escapeHtml(
+                        test.title||"Mock Test"
                     )}
                 </div>
 
-                <div class="test-meta">
-                    ${escapeHTML(
-                        test.description ||
-                        "SSC EDGE Mock Test"
+                <div class="test-info">
+
+                    ⏱
+                    ${escapeHtml(
+                        test.duration_minutes||"-"
                     )}
+                    minutes
+
+                    <br>
+
+                    📝
+                    ${escapeHtml(
+                        test.total_questions||"-"
+                    )}
+                    questions
+
                 </div>
+
+                ${
+                    status.completedCount
+                    ?
+                    `
+                    <div class="attempt-info">
+                        ${status.completedCount}
+                        completed
+                    </div>
+                    `
+                    :
+                    ""
+                }
 
                 <div class="test-actions">
-
-                    <button
-                        class="test-btn"
-                        onclick="openTest(${test.id})"
-                    >
-                        Start Test
-                    </button>
-
+                    ${actions}
                 </div>
 
             </div>
 
-        `).join("");
+        `;
 
-}
+    }
 
 
-function openTest(testId) {
-
-    window.location.href =
-        "test.html?id=" +
-        encodeURIComponent(testId);
+    box.innerHTML=html;
 
 }
 
 
 /* =========================================================
-   BACK NAVIGATION
+   BACK
 ========================================================= */
 
-function goBack() {
+function backToMockBranches(){
 
-    if (
-        $("testScreen").style.display !== "none"
-    ) {
-
-        navigationStack.pop();
-
-        if (
-            currentTypeFolder &&
-            currentTypeFolder.folder_type === "full" &&
-            currentModeFolder &&
-            currentModeFolder.folder_type === "new"
-        ) {
-
-            showOnly("mockTypeScreen");
-            return;
-        }
-
-        if (
-            currentTypeFolder &&
-            currentTypeFolder.folder_type === "full"
-        ) {
-
-            showOnly("yearScreen");
-            return;
-        }
-
-        showOnly("mockTypeScreen");
-        return;
-    }
+    currentFolder=null;
+    currentSubject=null;
 
 
-    if (
-        $("yearScreen").style.display !== "none" ||
-        $("subjectScreen").style.display !== "none"
-    ) {
-
-        showOnly("mockTypeScreen");
-        return;
-    }
+    document
+    .getElementById("mockTypeArea")
+    .classList
+    .add("hidden");
 
 
-    if (
-        $("mockTypeScreen").style.display !== "none"
-    ) {
-
-        showOnly("mockModeScreen");
-        return;
-    }
+    document
+    .getElementById("mockCategoryArea")
+    .classList
+    .remove("hidden");
 
 
-    if (
-        $("mockModeScreen").style.display !== "none"
-    ) {
+    renderBranches();
 
-        showOnly("examScreen");
-        return;
-    }
+}
 
 
-    if (
-        $("examScreen").style.display !== "none"
-    ) {
+function backToMockCategories(){
 
-        currentBoard = null;
-        showOnly("mainScreen");
-        return;
-    }
+    currentFolder=null;
+    currentSubject=null;
 
 
-    if (
-        $("chapterScreen").style.display !== "none"
-    ) {
+    document
+    .getElementById("examTestListArea")
+    .classList
+    .add("hidden");
 
-        showOnly("mainScreen");
-        return;
-    }
+
+    document
+    .getElementById("mockTypeArea")
+    .classList
+    .remove("hidden");
+
+
+    showMockType(
+        currentMockType||"full"
+    );
+
+}
+
+
+function backToGateway(){
+
+    if(currentGateway==="SSC")
+        openSSC();
+    else
+        openRRB();
 
 }
 
 
 /* =========================================================
    PRACTICE DRILL
-   BASIC EXISTING SYSTEM
 ========================================================= */
 
-function renderPracticeDrill() {
+async function openChapterById(subjectId){
 
-    const grid =
-        $("mainSubjectGrid");
+    const subject=
+    subjects.find(s=>
+        String(s.id)===String(subjectId)
+    );
 
-    if (!subjects.length) {
-
-        grid.innerHTML = `
-            <div class="practice-empty">
-                No subjects available.
-            </div>
-        `;
-
-        return;
-    }
-
-
-    grid.innerHTML =
-        subjects.map(subject => `
-
-            <div
-                class="drill-card"
-                onclick="openChapterById(${subject.id})"
-            >
-
-                ${escapeHTML(
-                    subject.name ||
-                    subject.title ||
-                    "Subject"
-                )}
-
-            </div>
-
-        `).join("");
-
-}
-
-
-function openChapterById(subjectId) {
-
-    const subject =
-        subjects.find(s =>
-            Number(s.id) === Number(subjectId)
-        );
-
-    if (!subject) return;
+    if(!subject)return;
 
     openChapterScreen(subject);
 
 }
 
 
-function openChapterScreen(subject) {
+async function openChapterScreen(subject){
 
-    $("chapterTitle").textContent =
-        subject.name ||
-        subject.title ||
-        "Practice";
+    hideAll();
 
-    showOnly("chapterScreen");
+    document
+    .getElementById("chapterScreen")
+    .classList
+    .remove("hidden");
 
-    renderChapterTests(subject);
+
+    document
+    .getElementById("chapterTitle")
+    .textContent=
+    subject.name+" Practice Drill";
+
+
+    const list=
+    tests.filter(test=>{
+
+        const type=
+        normalize(test.test_type);
+
+        return(
+            String(test.subject_id)===
+            String(subject.id)&&
+            (
+                type==="chapter_wise"||
+                type==="subject_wise"
+            )
+        );
+
+    });
+
+
+    await renderChapterTests(
+        list,
+        subject.name
+    );
 
 }
 
 
-function renderChapterTests(subject) {
+async function renderChapterTests(
+    list,
+    subjectName
+){
 
-    /*
-       Practice Drill remains separate from
-       the new Mock Test hierarchy.
+    const box=
+    document.getElementById(
+        "chapterList"
+    );
 
-       Existing drill data can continue to be
-       handled here.
-    */
 
-    $("chapterTests").innerHTML = `
+    if(!list.length){
+
+        box.innerHTML=`
+            <div class="practice-empty">
+                No ${escapeHtml(subjectName)}
+                practice available yet.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    box.innerHTML=`
         <div class="practice-empty">
-            Practice Drill content will load here.
+            Loading test status...
         </div>
     `;
+
+
+    let html="";
+
+
+    for(const test of list){
+
+        const status=
+        await getAttemptState(test.id);
+
+
+        let actions="";
+
+
+        if(status.state==="resume"){
+
+            actions=`
+                <a
+                    class="start-test"
+                    href="test.html?id=${encodeURIComponent(test.id)}"
+                >
+                    Resume Practice →
+                </a>
+            `;
+
+        }else if(!status.completedCount){
+
+            actions=`
+                <a
+                    class="start-test"
+                    href="test.html?id=${encodeURIComponent(test.id)}"
+                >
+                    Start Practice →
+                </a>
+            `;
+
+        }else{
+
+            if(status.completedCount<4){
+
+                actions=`
+                    <a
+                        class="start-test"
+                        href="test.html?id=${encodeURIComponent(test.id)}&reattempt=1"
+                    >
+                        Re-attempt
+                    </a>
+                `;
+
+            }
+
+        }
+
+
+        html+=`
+
+            <div class="test-card">
+
+                <div class="test-title">
+                    ${escapeHtml(
+                        test.title||"Practice Test"
+                    )}
+                </div>
+
+                <div class="test-info">
+
+                    ⏱
+                    ${escapeHtml(
+                        test.duration_minutes||"-"
+                    )}
+                    minutes
+
+                    <br>
+
+                    📝
+                    ${escapeHtml(
+                        test.total_questions||"-"
+                    )}
+                    questions
+
+                </div>
+
+                <div class="test-actions">
+                    ${actions}
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    box.innerHTML=html;
 
 }
 
@@ -1608,27 +2607,7 @@ function renderChapterTests(subject) {
    START
 ========================================================= */
 
-(async function() {
-
-    try {
-
-        await loadPracticeData();
-
-    } catch(error) {
-
-        console.error(error);
-
-        $("mainSubjectGrid").innerHTML = `
-            <div class="practice-empty">
-                Unable to load Practice.
-                <br><br>
-                Please try again.
-            </div>
-        `;
-
-    }
-
-})();
+loadData();
 
 </script>
 
