@@ -1,1 +1,1636 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<script>
+document.documentElement.dataset.theme =
+  localStorage.getItem("ssc-edge-theme") || "dark";
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="theme-color" content="#0f0f14">
+
+<title>SSC EDGE - Practice</title>
+
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/study.css">
+
+<style>
+
+/* =========================================================
+   PRACTICE
+========================================================= */
+
+.practice-page {
+    padding-bottom: 90px;
+}
+
+.practice-container {
+    padding: 18px 16px 30px;
+}
+
+.practice-title {
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 4px;
+}
+
+.practice-subtitle {
+    color: var(--text-muted);
+    margin-bottom: 22px;
+}
+
+.practice-section-title {
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: .8px;
+    margin: 24px 0 12px;
+    color: var(--text-muted);
+}
+
+/* =========================================================
+   MAIN SSC / RRB
+========================================================= */
+
+.practice-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 14px;
+}
+
+.practice-card {
+    min-height: 140px;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.practice-card:active {
+    transform: scale(.97);
+}
+
+.practice-logo {
+    width: 66px;
+    height: 66px;
+    object-fit: contain;
+}
+
+.practice-card-title {
+    font-weight: 800;
+    font-size: 16px;
+}
+
+/* =========================================================
+   DYNAMIC EXAM / FOLDER CARDS
+========================================================= */
+
+.dynamic-grid {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 13px;
+}
+
+.dynamic-card {
+    min-height: 120px;
+    padding: 16px;
+    border-radius: 18px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.dynamic-card:active {
+    transform: scale(.97);
+}
+
+.dynamic-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 15px;
+    background: rgba(145,83,255,.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--purple2);
+    font-size: 23px;
+    font-weight: 900;
+    margin-bottom: 10px;
+}
+
+.dynamic-card-title {
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.dynamic-card-subtitle {
+    margin-top: 4px;
+    color: var(--text-muted);
+    font-size: 11px;
+}
+
+/* =========================================================
+   HORIZONTAL CARDS
+========================================================= */
+
+.horizontal-scroll {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 3px 2px 10px;
+    scrollbar-width: none;
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.horizontal-card {
+    min-width: 142px;
+    min-height: 108px;
+    padding: 15px;
+    flex: 0 0 auto;
+    border-radius: 17px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+}
+
+.horizontal-card:active {
+    transform: scale(.97);
+}
+
+.horizontal-icon {
+    font-size: 25px;
+    font-weight: 900;
+    color: var(--purple2);
+    margin-bottom: 9px;
+}
+
+/* =========================================================
+   TEST TYPE
+========================================================= */
+
+.type-grid {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 14px;
+}
+
+.type-card {
+    min-height: 145px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+}
+
+.type-card:active {
+    transform: scale(.97);
+}
+
+.type-icon {
+    width: 58px;
+    height: 58px;
+    border-radius: 18px;
+    background: rgba(145,83,255,.13);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 27px;
+    color: var(--purple2);
+    margin-bottom: 12px;
+}
+
+.type-title {
+    font-size: 15px;
+    font-weight: 900;
+}
+
+/* =========================================================
+   TEST LIST
+========================================================= */
+
+.test-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.test-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 17px;
+    padding: 15px;
+}
+
+.test-name {
+    font-weight: 800;
+    margin-bottom: 7px;
+}
+
+.test-meta {
+    color: var(--text-muted);
+    font-size: 12px;
+    margin-bottom: 12px;
+}
+
+.test-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.test-btn {
+    border: 0;
+    border-radius: 10px;
+    padding: 9px 13px;
+    font-weight: 800;
+    cursor: pointer;
+    background: var(--purple2);
+    color: white;
+}
+
+.test-btn.secondary {
+    background: rgba(145,83,255,.12);
+    color: var(--purple2);
+}
+
+/* =========================================================
+   BACK
+========================================================= */
+
+.practice-back {
+    display: none;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 17px;
+    color: var(--purple2);
+    font-weight: 800;
+    cursor: pointer;
+}
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.practice-empty {
+    padding: 35px 15px;
+    text-align: center;
+    color: var(--text-muted);
+    border: 1px dashed var(--border);
+    border-radius: 17px;
+}
+
+/* =========================================================
+   PRACTICE DRILL
+   KEPT SEPARATE / UNCHANGED BEHAVIOUR
+========================================================= */
+
+.drill-grid {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 12px;
+}
+
+.drill-card {
+    min-height: 100px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    border-radius: 17px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 12px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:380px) {
+
+    .practice-options,
+    .dynamic-grid,
+    .type-grid,
+    .drill-grid {
+        gap: 10px;
+    }
+
+    .practice-container {
+        padding-left: 13px;
+        padding-right: 13px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<header class="simple-header">
+
+    <div class="header-brand">
+        SSC <span style="color:var(--purple2);">EDGE</span>
+    </div>
+
+</header>
+
+
+<main class="practice-page">
+
+<div class="practice-container">
+
+
+<!-- =====================================================
+     MAIN SCREEN
+====================================================== -->
+
+<section id="mainScreen">
+
+    <div class="practice-title">
+        Practice
+    </div>
+
+    <div class="practice-subtitle">
+        Choose your exam and start practising.
+    </div>
+
+
+    <div class="practice-section-title">
+        MOCK TEST
+    </div>
+
+
+    <div class="practice-options">
+
+        <div
+            class="practice-card"
+            onclick="openBoard('SSC')"
+        >
+
+            <img
+                class="practice-logo"
+                src="https://ssccr.gov.in/emblem.svg"
+                onerror="this.style.display='none'"
+                alt="SSC"
+            >
+
+            <div class="practice-card-title">
+                SSC
+            </div>
+
+        </div>
+
+
+        <div
+            class="practice-card"
+            onclick="openBoard('RRB')"
+        >
+
+            <!-- RRB BUILT-IN LOGO -->
+            <svg
+                class="practice-logo"
+                viewBox="0 0 100 100"
+                aria-label="RRB"
+            >
+
+                <circle
+                    cx="50"
+                    cy="50"
+                    r="43"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="7"
+                />
+
+                <circle
+                    cx="50"
+                    cy="50"
+                    r="17"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="6"
+                />
+
+                <path
+                    d="M50 7v22M50 71v22M7 50h22M71 50h22"
+                    stroke="currentColor"
+                    stroke-width="6"
+                    stroke-linecap="round"
+                />
+
+                <text
+                    x="50"
+                    y="55"
+                    text-anchor="middle"
+                    font-size="17"
+                    font-weight="900"
+                    fill="currentColor"
+                >
+                    RRB
+                </text>
+
+            </svg>
+
+            <div class="practice-card-title">
+                RRB
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         PRACTICE DRILL
+         ================================================= -->
+
+    <div class="practice-section-title">
+        PRACTICE DRILL
+    </div>
+
+    <div id="mainSubjectGrid" class="drill-grid"></div>
+
+</section>
+
+
+
+<!-- =====================================================
+     EXAM SCREEN
+====================================================== -->
+
+<section id="examScreen" style="display:none;">
+
+    <div
+        class="practice-back"
+        id="examBack"
+        onclick="goBack()"
+    >
+        ← Back
+    </div>
+
+    <div class="practice-title" id="examTitle">
+        SSC
+    </div>
+
+    <div class="practice-subtitle">
+        Select your exam.
+    </div>
+
+    <div id="examGrid" class="dynamic-grid"></div>
+
+</section>
+
+
+
+<!-- =====================================================
+     NEW / PYQ SCREEN
+====================================================== -->
+
+<section id="mockModeScreen" style="display:none;">
+
+    <div
+        class="practice-back"
+        onclick="goBack()"
+    >
+        ← Back
+    </div>
+
+    <div class="practice-title" id="mockModeTitle">
+        CGL
+    </div>
+
+    <div class="practice-subtitle">
+        Choose mock category.
+    </div>
+
+    <div id="mockModeGrid" class="type-grid"></div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FULL / SECTIONAL SCREEN
+====================================================== -->
+
+<section id="mockTypeScreen" style="display:none;">
+
+    <div
+        class="practice-back"
+        onclick="goBack()"
+    >
+        ← Back
+    </div>
+
+    <div class="practice-title" id="mockTypeTitle">
+        NEW MOCKS
+    </div>
+
+    <div class="practice-subtitle">
+        Choose mock type.
+    </div>
+
+    <div id="mockTypeGrid" class="type-grid"></div>
+
+</section>
+
+
+
+<!-- =====================================================
+     YEAR SCREEN
+====================================================== -->
+
+<section id="yearScreen" style="display:none;">
+
+    <div
+        class="practice-back"
+        onclick="goBack()"
+    >
+        ← Back
+    </div>
+
+    <div class="practice-title">
+        PYQ FULL MOCKS
+    </div>
+
+    <div class="practice-subtitle">
+        Select year.
+    </div>
+
+    <div id="yearGrid" class="horizontal-scroll"></div>
+
+</section>
+
+
+
+<!-- =====================================================
+     SUBJECT SCREEN
+====================================================== -->
+
+<section id="subjectScreen" style="display:none;">
+
+    <div
+        class="practice-back"
+        onclick="goBack()"
+    >
+        ← Back
+    </div>
+
+    <div class="practice-title">
+        SECTIONAL MOCKS
+    </div>
+
+    <div class="practice-subtitle">
+        Select subject.
+    </div>
+
+    <div id="sectionSubjectGrid" class="horizontal-scroll"></div>
+
+</section>
+
+
+
+<!-- =====================================================
+     TEST SCREEN
+====================================================== -->
+
+<section id="testScreen" style="display:none;">
+
+    <div
+        class="practice-back"
+        onclick="goBack()"
+    >
+        ← Back
+    </div>
+
+    <div class="practice-title" id="testScreenTitle">
+        Mock Tests
+    </div>
+
+    <div class="practice-subtitle" id="testScreenSubtitle"></div>
+
+    <div id="testList" class="test-list"></div>
+
+</section>
+
+
+
+<!-- =====================================================
+     PRACTICE DRILL CHAPTER SCREEN
+====================================================== -->
+
+<section id="chapterScreen" style="display:none;">
+
+    <div
+        class="practice-back"
+        onclick="goBack()"
+    >
+        ← Back
+    </div>
+
+    <div class="practice-title" id="chapterTitle"></div>
+
+    <div class="practice-subtitle">
+        Practice questions
+    </div>
+
+    <div id="chapterTests" class="test-list"></div>
+
+</section>
+
+
+</div>
+
+</main>
+
+
+
+<!-- =====================================================
+     BOTTOM NAV
+====================================================== -->
+
+<nav class="bottom-nav">
+
+    <a href="index.html">
+        Home
+    </a>
+
+    <a href="study.html">
+        Study Material
+    </a>
+
+    <a href="practice.html" class="active">
+        Practice
+    </a>
+
+    <a href="profile.html">
+        Profile
+    </a>
+
+</nav>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+/* =========================================================
+   SUPABASE
+========================================================= */
+
+const SUPABASE_URL =
+    "https://dvvyoygahzzbnpqrfhen.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let exams = [];
+let folders = [];
+let subjects = [];
+let mockTests = [];
+
+let currentBoard = null;
+let currentExam = null;
+
+let currentModeFolder = null;
+let currentTypeFolder = null;
+
+let currentFolder = null;
+
+let navigationStack = [];
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function $(id) {
+    return document.getElementById(id);
+}
+
+
+function escapeHTML(value) {
+
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+
+function folderName(folder) {
+
+    return folder.display_name ||
+           folder.name ||
+           "";
+}
+
+
+function foldersByParent(parentId) {
+
+    return folders
+
+        .filter(f => {
+
+            if (parentId === null) {
+                return f.parent_id === null;
+            }
+
+            return Number(f.parent_id) === Number(parentId);
+
+        })
+
+        .filter(f => f.is_active !== false)
+
+        .sort((a,b) =>
+            (a.sort_order || 0) -
+            (b.sort_order || 0)
+        );
+}
+
+
+function showOnly(id) {
+
+    const ids = [
+        "mainScreen",
+        "examScreen",
+        "mockModeScreen",
+        "mockTypeScreen",
+        "yearScreen",
+        "subjectScreen",
+        "testScreen",
+        "chapterScreen"
+    ];
+
+    ids.forEach(x => {
+
+        $(x).style.display =
+            x === id ? "block" : "none";
+
+    });
+
+}
+
+
+/* =========================================================
+   LOAD DATA
+========================================================= */
+
+async function loadPracticeData() {
+
+    const [
+        examsResult,
+        foldersResult,
+        subjectsResult,
+        testsResult
+    ] = await Promise.all([
+
+        supabaseClient
+            .from("exams")
+            .select("*")
+            .order("sort_order", {ascending:true}),
+
+        supabaseClient
+            .from("mock_folders")
+            .select("*")
+            .order("sort_order", {ascending:true}),
+
+        supabaseClient
+            .from("subjects")
+            .select("*")
+            .order("id", {ascending:true}),
+
+        supabaseClient
+            .from("mock_tests")
+            .select("*")
+            .order("id", {ascending:false})
+
+    ]);
+
+
+    if (examsResult.error)
+        throw examsResult.error;
+
+    if (foldersResult.error)
+        throw foldersResult.error;
+
+    if (subjectsResult.error)
+        throw subjectsResult.error;
+
+    if (testsResult.error)
+        throw testsResult.error;
+
+
+    exams = examsResult.data || [];
+
+    folders = foldersResult.data || [];
+
+    subjects = subjectsResult.data || [];
+
+    mockTests = testsResult.data || [];
+
+
+    renderPracticeDrill();
+
+}
+
+
+/* =========================================================
+   MAIN BOARD
+========================================================= */
+
+async function openBoard(board) {
+
+    currentBoard = board;
+
+    navigationStack = ["main"];
+
+    $("examTitle").textContent = board;
+
+    showOnly("examScreen");
+
+    renderExams();
+
+}
+
+
+function renderExams() {
+
+    const grid = $("examGrid");
+
+    const list = exams
+
+        .filter(e =>
+            String(e.board || "")
+                .toUpperCase() === currentBoard
+        )
+
+        .filter(e =>
+            e.is_active !== false
+        )
+
+        .sort((a,b) =>
+            (a.sort_order || 0) -
+            (b.sort_order || 0)
+        );
+
+
+    if (!list.length) {
+
+        grid.innerHTML = `
+            <div class="practice-empty">
+                No exams available yet.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    grid.innerHTML = list.map(exam => `
+
+        <div
+            class="dynamic-card"
+            onclick="openExam(${exam.id})"
+        >
+
+            <div class="dynamic-icon">
+                ${currentBoard === "SSC" ? "S" : "R"}
+            </div>
+
+            <div class="dynamic-card-title">
+                ${escapeHTML(exam.name)}
+            </div>
+
+            <div class="dynamic-card-subtitle">
+                Mock Tests
+            </div>
+
+        </div>
+
+    `).join("");
+
+}
+
+
+/* =========================================================
+   EXAM
+========================================================= */
+
+function openExam(examId) {
+
+    currentExam =
+        exams.find(e =>
+            Number(e.id) === Number(examId)
+        );
+
+    if (!currentExam) return;
+
+    navigationStack.push("exam");
+
+    $("mockModeTitle").textContent =
+        currentExam.name;
+
+    showOnly("mockModeScreen");
+
+    renderMockModes();
+
+}
+
+
+function renderMockModes() {
+
+    const roots = foldersByParent(null)
+        .filter(f =>
+            Number(f.exam_id) === Number(currentExam.id)
+        );
+
+
+    /*
+       Root folders belong to an exam.
+       Expected:
+       NEW MOCKS
+       PYQ MOCKS
+    */
+
+    const ordered = [];
+
+    const newFolder =
+        roots.find(f =>
+            f.folder_type === "new"
+        );
+
+    const pyqFolder =
+        roots.find(f =>
+            f.folder_type === "pyq"
+        );
+
+
+    if (newFolder) ordered.push(newFolder);
+    if (pyqFolder) ordered.push(pyqFolder);
+
+
+    const remaining =
+        roots.filter(f =>
+            !ordered.includes(f)
+        );
+
+
+    ordered.push(...remaining);
+
+
+    if (!ordered.length) {
+
+        $("mockModeGrid").innerHTML = `
+            <div class="practice-empty">
+                No mock categories available.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    $("mockModeGrid").innerHTML =
+        ordered.map(folder => `
+
+            <div
+                class="type-card"
+                onclick="openMockMode(${folder.id})"
+            >
+
+                <div class="type-icon">
+                    ${folder.folder_type === "pyq"
+                        ? "P"
+                        : "N"}
+                </div>
+
+                <div class="type-title">
+                    ${escapeHTML(folderName(folder))}
+                </div>
+
+            </div>
+
+        `).join("");
+
+}
+
+
+/* =========================================================
+   NEW / PYQ
+========================================================= */
+
+function openMockMode(folderId) {
+
+    currentModeFolder =
+        folders.find(f =>
+            Number(f.id) === Number(folderId)
+        );
+
+    if (!currentModeFolder) return;
+
+    navigationStack.push("mode");
+
+    $("mockTypeTitle").textContent =
+        folderName(currentModeFolder);
+
+    showOnly("mockTypeScreen");
+
+    renderMockTypes();
+
+}
+
+
+function renderMockTypes() {
+
+    const children =
+        foldersByParent(currentModeFolder.id);
+
+
+    let full =
+        children.find(f =>
+            f.folder_type === "full"
+        );
+
+    let sectional =
+        children.find(f =>
+            f.folder_type === "sectional"
+        );
+
+
+    const ordered = [];
+
+    if (full) ordered.push(full);
+    if (sectional) ordered.push(sectional);
+
+    children.forEach(f => {
+
+        if (!ordered.includes(f))
+            ordered.push(f);
+
+    });
+
+
+    if (!ordered.length) {
+
+        $("mockTypeGrid").innerHTML = `
+            <div class="practice-empty">
+                Nothing available yet.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    $("mockTypeGrid").innerHTML =
+        ordered.map(folder => `
+
+            <div
+                class="type-card"
+                onclick="openMockType(${folder.id})"
+            >
+
+                <div class="type-icon">
+                    ${folder.folder_type === "sectional"
+                        ? "S"
+                        : "F"}
+                </div>
+
+                <div class="type-title">
+                    ${escapeHTML(folderName(folder))}
+                </div>
+
+            </div>
+
+        `).join("");
+
+}
+
+
+/* =========================================================
+   FULL / SECTIONAL
+========================================================= */
+
+function openMockType(folderId) {
+
+    currentTypeFolder =
+        folders.find(f =>
+            Number(f.id) === Number(folderId)
+        );
+
+    if (!currentTypeFolder) return;
+
+    navigationStack.push("type");
+
+
+    if (
+        currentTypeFolder.folder_type === "full" &&
+        currentModeFolder.folder_type === "pyq"
+    ) {
+
+        showOnly("yearScreen");
+
+        renderYears();
+
+        return;
+    }
+
+
+    if (
+        currentTypeFolder.folder_type === "sectional"
+    ) {
+
+        showOnly("subjectScreen");
+
+        renderSectionSubjects();
+
+        return;
+    }
+
+
+    /*
+       NEW FULL MOCKS
+       Tests directly under this folder.
+    */
+
+    openTestsForFolder(
+        currentTypeFolder,
+        currentTypeFolder.name
+    );
+
+}
+
+
+/* =========================================================
+   PYQ YEARS
+========================================================= */
+
+function renderYears() {
+
+    const years =
+        foldersByParent(currentTypeFolder.id)
+            .filter(f =>
+                f.folder_type === "year"
+            );
+
+
+    if (!years.length) {
+
+        $("yearGrid").innerHTML = `
+            <div class="practice-empty">
+                No PYQ years added yet.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    $("yearGrid").innerHTML =
+        years.map(year => `
+
+            <div
+                class="horizontal-card"
+                onclick="openFolderTests(${year.id})"
+            >
+
+                <div class="horizontal-icon">
+                    ${escapeHTML(folderName(year))}
+                </div>
+
+                <div class="dynamic-card-title">
+                    ${escapeHTML(folderName(year))}
+                </div>
+
+            </div>
+
+        `).join("");
+
+}
+
+
+/* =========================================================
+   SECTIONAL SUBJECTS
+========================================================= */
+
+function renderSectionSubjects() {
+
+    const subjectFolders =
+        foldersByParent(currentTypeFolder.id)
+            .filter(f =>
+                f.folder_type === "subject"
+            );
+
+
+    if (!subjectFolders.length) {
+
+        $("sectionSubjectGrid").innerHTML = `
+            <div class="practice-empty">
+                No sectional subjects added yet.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    $("sectionSubjectGrid").innerHTML =
+        subjectFolders.map(folder => `
+
+            <div
+                class="horizontal-card"
+                onclick="openFolderTests(${folder.id})"
+            >
+
+                <div class="horizontal-icon">
+                    ${getSubjectInitial(folder)}
+                </div>
+
+                <div class="dynamic-card-title">
+                    ${escapeHTML(folderName(folder))}
+                </div>
+
+            </div>
+
+        `).join("");
+
+}
+
+
+function getSubjectInitial(folder) {
+
+    const text =
+        folderName(folder).trim();
+
+    return text
+        ? text.charAt(0).toUpperCase()
+        : "S";
+
+}
+
+
+/* =========================================================
+   FOLDER → TESTS
+========================================================= */
+
+function openFolderTests(folderId) {
+
+    const folder =
+        folders.find(f =>
+            Number(f.id) === Number(folderId)
+        );
+
+    if (!folder) return;
+
+    openTestsForFolder(
+        folder,
+        folderName(folder)
+    );
+
+}
+
+
+function openTestsForFolder(folder,title) {
+
+    currentFolder = folder;
+
+    navigationStack.push("tests");
+
+    $("testScreenTitle").textContent =
+        title || "Mock Tests";
+
+    $("testScreenSubtitle").textContent =
+        currentExam
+            ? currentExam.name
+            : "";
+
+    showOnly("testScreen");
+
+    renderTestsForFolder(folder);
+
+}
+
+
+function renderTestsForFolder(folder) {
+
+    const list =
+        mockTests.filter(test =>
+            Number(test.folder_id) === Number(folder.id)
+        );
+
+
+    if (!list.length) {
+
+        $("testList").innerHTML = `
+            <div class="practice-empty">
+                No mock tests available yet.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    $("testList").innerHTML =
+        list.map(test => `
+
+            <div class="test-card">
+
+                <div class="test-name">
+                    ${escapeHTML(
+                        test.title ||
+                        test.name ||
+                        "Mock Test"
+                    )}
+                </div>
+
+                <div class="test-meta">
+                    ${escapeHTML(
+                        test.description ||
+                        "SSC EDGE Mock Test"
+                    )}
+                </div>
+
+                <div class="test-actions">
+
+                    <button
+                        class="test-btn"
+                        onclick="openTest(${test.id})"
+                    >
+                        Start Test
+                    </button>
+
+                </div>
+
+            </div>
+
+        `).join("");
+
+}
+
+
+function openTest(testId) {
+
+    window.location.href =
+        "test.html?id=" +
+        encodeURIComponent(testId);
+
+}
+
+
+/* =========================================================
+   BACK NAVIGATION
+========================================================= */
+
+function goBack() {
+
+    if (
+        $("testScreen").style.display !== "none"
+    ) {
+
+        navigationStack.pop();
+
+        if (
+            currentTypeFolder &&
+            currentTypeFolder.folder_type === "full" &&
+            currentModeFolder &&
+            currentModeFolder.folder_type === "new"
+        ) {
+
+            showOnly("mockTypeScreen");
+            return;
+        }
+
+        if (
+            currentTypeFolder &&
+            currentTypeFolder.folder_type === "full"
+        ) {
+
+            showOnly("yearScreen");
+            return;
+        }
+
+        showOnly("mockTypeScreen");
+        return;
+    }
+
+
+    if (
+        $("yearScreen").style.display !== "none" ||
+        $("subjectScreen").style.display !== "none"
+    ) {
+
+        showOnly("mockTypeScreen");
+        return;
+    }
+
+
+    if (
+        $("mockTypeScreen").style.display !== "none"
+    ) {
+
+        showOnly("mockModeScreen");
+        return;
+    }
+
+
+    if (
+        $("mockModeScreen").style.display !== "none"
+    ) {
+
+        showOnly("examScreen");
+        return;
+    }
+
+
+    if (
+        $("examScreen").style.display !== "none"
+    ) {
+
+        currentBoard = null;
+        showOnly("mainScreen");
+        return;
+    }
+
+
+    if (
+        $("chapterScreen").style.display !== "none"
+    ) {
+
+        showOnly("mainScreen");
+        return;
+    }
+
+}
+
+
+/* =========================================================
+   PRACTICE DRILL
+   BASIC EXISTING SYSTEM
+========================================================= */
+
+function renderPracticeDrill() {
+
+    const grid =
+        $("mainSubjectGrid");
+
+    if (!subjects.length) {
+
+        grid.innerHTML = `
+            <div class="practice-empty">
+                No subjects available.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    grid.innerHTML =
+        subjects.map(subject => `
+
+            <div
+                class="drill-card"
+                onclick="openChapterById(${subject.id})"
+            >
+
+                ${escapeHTML(
+                    subject.name ||
+                    subject.title ||
+                    "Subject"
+                )}
+
+            </div>
+
+        `).join("");
+
+}
+
+
+function openChapterById(subjectId) {
+
+    const subject =
+        subjects.find(s =>
+            Number(s.id) === Number(subjectId)
+        );
+
+    if (!subject) return;
+
+    openChapterScreen(subject);
+
+}
+
+
+function openChapterScreen(subject) {
+
+    $("chapterTitle").textContent =
+        subject.name ||
+        subject.title ||
+        "Practice";
+
+    showOnly("chapterScreen");
+
+    renderChapterTests(subject);
+
+}
+
+
+function renderChapterTests(subject) {
+
+    /*
+       Practice Drill remains separate from
+       the new Mock Test hierarchy.
+
+       Existing drill data can continue to be
+       handled here.
+    */
+
+    $("chapterTests").innerHTML = `
+        <div class="practice-empty">
+            Practice Drill content will load here.
+        </div>
+    `;
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+(async function() {
+
+    try {
+
+        await loadPracticeData();
+
+    } catch(error) {
+
+        console.error(error);
+
+        $("mainSubjectGrid").innerHTML = `
+            <div class="practice-empty">
+                Unable to load Practice.
+                <br><br>
+                Please try again.
+            </div>
+        `;
+
+    }
+
+})();
+
+</script>
+
+</body>
+  </html>
