@@ -4,7 +4,6 @@
 <head>
 
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Videos - SSC EDGE</title>
@@ -322,6 +321,81 @@ function fallbackThumbnail(){
 
 
 /* =========================
+   STUDY MATERIAL PROGRESS
+========================= */
+
+async function markStudyMaterialComplete(materialId){
+
+    try{
+
+        const {
+            data: {
+                user
+            }
+        } =
+        await supabaseClient.auth.getUser();
+
+
+        if(!user){
+
+            return;
+
+        }
+
+
+        const {
+            error
+        } =
+        await supabaseClient
+
+            .from("study_material_progress")
+
+            .upsert(
+
+                {
+                    user_id:
+                        user.id,
+
+                    material_id:
+                        Number(materialId),
+
+                    completed:
+                        true,
+
+                    completed_at:
+                        new Date().toISOString()
+                },
+
+                {
+                    onConflict:
+                        "user_id,material_id"
+                }
+
+            );
+
+
+        if(error){
+
+            console.warn(
+                "Study progress could not be saved:",
+                error
+            );
+
+        }
+
+    }catch(error){
+
+        console.warn(
+            "Study progress error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================
    LOAD VIDEOS
 ========================= */
 
@@ -414,6 +488,12 @@ async function loadVideos(){
 
         video => {
 
+            const rawId =
+                video.id ||
+                video.file_url ||
+                "";
+
+
             const title =
                 escapeHtml(
                     video.title ||
@@ -442,6 +522,10 @@ async function loadVideos(){
 
             const url =
                 escapeHtml(rawUrl);
+
+
+            const materialId =
+                escapeHtml(rawId);
 
 
             const thumbnail =
@@ -565,6 +649,7 @@ async function loadVideos(){
                             href="${url}"
                             target="_blank"
                             rel="noopener noreferrer"
+                            data-material-id="${materialId}"
                         >
 
                             ▶️ Open Video
@@ -582,6 +667,32 @@ async function loadVideos(){
         }
 
     ).join("");
+
+
+    /* =========================
+       OPEN VIDEO PROGRESS
+========================= */
+
+    document
+        .querySelectorAll(
+            ".open-video[data-material-id]"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    function(){
+
+                        markStudyMaterialComplete(
+                            this.dataset.materialId
+                        );
+
+                    }
+                );
+
+            }
+        );
 
 }
 
