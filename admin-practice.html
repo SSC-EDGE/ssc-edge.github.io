@@ -332,51 +332,61 @@ button{
   flex-wrap:wrap;
 }
 
-/* ---------- CATEGORY CARDS ---------- */
+/* =========================================================
+   CATEGORY SECTION
+   FULL MOCKS / SECTIONAL MOCKS ARE NOW SECTIONS
+   NOT BIG FOLDER CARDS
+========================================================= */
 
-.category-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:13px;
-}
-
-.category-card{
+.category-section{
   background:var(--card);
   border:1px solid var(--border);
   border-radius:16px;
-  padding:17px;
+  padding:15px;
+  margin-bottom:14px;
 }
 
-.category-icon{
-  font-size:22px;
-  margin-bottom:11px;
+.category-section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:13px;
 }
 
-.category-title{
+.category-section-title{
+  display:flex;
+  align-items:center;
+  gap:9px;
   font-size:17px;
   font-weight:800;
 }
 
-.category-desc{
-  color:var(--muted);
-  font-size:12px;
-  margin-top:5px;
-}
-
-.category-actions{
+.category-section-icon{
+  width:36px;
+  height:36px;
+  border-radius:10px;
+  background:rgba(155,92,255,.12);
   display:flex;
-  gap:7px;
-  flex-wrap:wrap;
-  margin-top:13px;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  flex:none;
 }
 
-/* ---------- HORIZONTAL CHOOSERS ---------- */
+.category-section-actions{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+}
+
+/* ---------- SMALL CHOICES ---------- */
 
 .horizontal-scroll{
   display:flex;
-  gap:10px;
+  gap:9px;
   overflow-x:auto;
-  padding:2px 1px 7px;
+  padding:2px 1px 6px;
   scrollbar-width:none;
 }
 
@@ -385,11 +395,11 @@ button{
 }
 
 .choice-card{
-  min-width:145px;
-  background:var(--card);
+  min-width:120px;
+  background:var(--card2);
   border:1px solid var(--border);
-  border-radius:14px;
-  padding:13px;
+  border-radius:12px;
+  padding:10px;
   flex:none;
 }
 
@@ -398,30 +408,31 @@ button{
 }
 
 .choice-title{
-  font-size:15px;
+  font-size:14px;
   font-weight:800;
 }
 
 .choice-meta{
-  font-size:11px;
+  font-size:10px;
   color:var(--muted);
-  margin-top:4px;
+  margin-top:3px;
 }
 
 .choice-actions{
   display:flex;
   gap:5px;
-  margin-top:10px;
+  margin-top:8px;
+  flex-wrap:wrap;
 }
 
 .reorder-btn{
-  width:30px;
-  height:28px;
+  width:28px;
+  height:27px;
   border-radius:8px;
   border:1px solid var(--border);
-  background:var(--card2);
+  background:var(--card);
   color:var(--text);
-  font-size:12px;
+  font-size:11px;
 }
 
 /* ---------- TESTS ---------- */
@@ -431,11 +442,11 @@ button{
   align-items:center;
   justify-content:space-between;
   gap:10px;
-  margin:19px 0 11px;
+  margin:3px 0 11px;
 }
 
 .tests-title{
-  font-size:17px;
+  font-size:16px;
   font-weight:800;
 }
 
@@ -445,7 +456,7 @@ button{
 }
 
 .test-card{
-  background:var(--card);
+  background:var(--card2);
   border:1px solid var(--border);
   border-radius:14px;
   padding:14px;
@@ -633,8 +644,7 @@ button{
   }
 
   .exam-list,
-  .root-grid,
-  .category-grid{
+  .root-grid{
     grid-template-columns:1fr;
   }
 
@@ -644,6 +654,18 @@ button{
 
   .workspace-head .primary-btn{
     margin-top:11px;
+  }
+
+  .category-section{
+    padding:13px;
+  }
+
+  .category-section-head{
+    align-items:flex-start;
+  }
+
+  .category-section-actions{
+    justify-content:flex-end;
   }
 
   .test-top{
@@ -677,7 +699,10 @@ button{
 
   <div class="header-right">
 
-    <button class="header-btn" onclick="location.href='practice.html'">
+    <button
+      class="header-btn"
+      onclick="location.href='practice.html'"
+    >
       ←
     </button>
 
@@ -697,11 +722,17 @@ button{
 
   <div class="top-actions">
 
-    <button class="primary-btn" onclick="openExamForm()">
+    <button
+      class="primary-btn"
+      onclick="openExamForm()"
+    >
       + Add Exam
     </button>
 
-    <button class="secondary-btn" onclick="loadAll()">
+    <button
+      class="secondary-btn"
+      onclick="loadAll()"
+    >
       ↻ Refresh
     </button>
 
@@ -716,30 +747,43 @@ button{
   </div>
 
   <div id="examList" class="exam-list">
+
     <div class="loading">
       Loading exams...
     </div>
+
   </div>
 
   <!-- =====================================================
        WORKSPACE
   ====================================================== -->
 
-  <section id="workspace" class="workspace hidden">
+  <section
+    id="workspace"
+    class="workspace hidden"
+  >
 
     <div class="workspace-head">
 
       <div>
-        <div id="workspaceTitle" class="workspace-title">
+
+        <div
+          id="workspaceTitle"
+          class="workspace-title"
+        >
           -
         </div>
 
         <div class="workspace-subtitle">
           Practice structure
         </div>
+
       </div>
 
-      <button class="primary-btn" onclick="openRootForm()">
+      <button
+        class="primary-btn"
+        onclick="openRootForm()"
+      >
         + Add Mock Type
       </button>
 
@@ -759,7 +803,10 @@ button{
 
   <div class="modal">
 
-    <div id="examModalTitle" class="modal-title">
+    <div
+      id="examModalTitle"
+      class="modal-title"
+    >
       Add Exam
     </div>
 
@@ -885,7 +932,10 @@ button{
 
   <div class="modal">
 
-    <div id="categoryModalTitle" class="modal-title">
+    <div
+      id="categoryModalTitle"
+      class="modal-title"
+    >
       Add Category
     </div>
 
@@ -939,7 +989,10 @@ button{
 
   <div class="modal">
 
-    <div id="leafModalTitle" class="modal-title">
+    <div
+      id="leafModalTitle"
+      class="modal-title"
+    >
       Add
     </div>
 
@@ -987,7 +1040,10 @@ button{
 
   <div class="modal">
 
-    <div id="testModalTitle" class="modal-title">
+    <div
+      id="testModalTitle"
+      class="modal-title"
+    >
       Add Test
     </div>
 
@@ -1147,7 +1203,10 @@ function showToast(message,error=false){
 
   toast.textContent = message;
 
-  toast.classList.toggle("error",error);
+  toast.classList.toggle(
+    "error",
+    error
+  );
 
   toast.classList.add("show");
 
@@ -1191,13 +1250,19 @@ function sortExams(){
 
   exams.sort((a,b)=>{
 
-    const boardA = String(a.board||"");
-    const boardB = String(b.board||"");
+    const boardA =
+      String(a.board||"");
+
+    const boardB =
+      String(b.board||"");
 
     if(boardA !== boardB){
 
-      if(boardA === "SSC") return -1;
-      if(boardB === "SSC") return 1;
+      if(boardA === "SSC")
+        return -1;
+
+      if(boardB === "SSC")
+        return 1;
 
     }
 
@@ -1230,25 +1295,46 @@ async function loadAll(){
       db
         .from("exams")
         .select("*")
-        .order("sort_order",{ascending:true})
-        .order("id",{ascending:true}),
+        .order(
+          "sort_order",
+          {ascending:true}
+        )
+        .order(
+          "id",
+          {ascending:true}
+        ),
 
       db
         .from("mock_folders")
         .select("*")
-        .order("sort_order",{ascending:true})
-        .order("id",{ascending:true}),
+        .order(
+          "sort_order",
+          {ascending:true}
+        )
+        .order(
+          "id",
+          {ascending:true}
+        ),
 
       db
         .from("mock_tests")
         .select("*")
-        .order("sort_order",{ascending:true})
-        .order("id",{ascending:true}),
+        .order(
+          "sort_order",
+          {ascending:true}
+        )
+        .order(
+          "id",
+          {ascending:true}
+        ),
 
       db
         .from("subjects")
         .select("*")
-        .order("id",{ascending:true})
+        .order(
+          "id",
+          {ascending:true}
+        )
 
     ]);
 
@@ -1280,10 +1366,17 @@ async function loadAll(){
 
   }
 
-  exams = results[0].data || [];
-  folders = results[1].data || [];
-  tests = results[2].data || [];
-  subjects = results[3].data || [];
+  exams =
+    results[0].data || [];
+
+  folders =
+    results[1].data || [];
+
+  tests =
+    results[2].data || [];
+
+  subjects =
+    results[3].data || [];
 
   sortExams();
 
@@ -1293,12 +1386,15 @@ async function loadAll(){
 
     const fresh =
       exams.find(
-        x => Number(x.id) === Number(selectedExam.id)
+        x =>
+          Number(x.id) ===
+          Number(selectedExam.id)
       );
 
     if(fresh){
 
       selectedExam = fresh;
+
       renderWorkspace();
 
     }else{
@@ -1341,10 +1437,13 @@ function renderExams(){
 
       const active =
         selectedExam &&
-        Number(selectedExam.id) === Number(exam.id);
+        Number(selectedExam.id) ===
+        Number(exam.id);
 
       const board =
-        String(exam.board||"SSC").toUpperCase();
+        String(
+          exam.board||"SSC"
+        ).toUpperCase();
 
       const logo =
         board === "RRB"
@@ -1352,7 +1451,10 @@ function renderExams(){
             <img
               src="rrb-logo.png"
               alt="RRB"
-              onerror="this.style.display='none';this.parentElement.innerHTML='🚆';"
+              onerror="
+                this.style.display='none';
+                this.parentElement.innerHTML='🚆';
+              "
             >
           `
           : `
@@ -1363,7 +1465,10 @@ function renderExams(){
 
       return `
 
-        <div class="exam-card ${active ? "active":""}">
+        <div
+          class="exam-card
+          ${active ? "active":""}"
+        >
 
           <div class="exam-main">
 
@@ -1440,12 +1545,16 @@ function selectExam(id){
 
   selectedExam =
     exams.find(
-      x => Number(x.id) === Number(id)
+      x =>
+        Number(x.id) ===
+        Number(id)
     );
 
-  if(!selectedExam) return;
+  if(!selectedExam)
+    return;
 
   renderExams();
+
   renderWorkspace();
 
 }
@@ -1458,13 +1567,16 @@ function openExamForm(){
 
   editingExamId = null;
 
-  document.getElementById("examModalTitle")
+  document
+    .getElementById("examModalTitle")
     .textContent = "Add Exam";
 
-  document.getElementById("examBoard")
+  document
+    .getElementById("examBoard")
     .value = "SSC";
 
-  document.getElementById("examName")
+  document
+    .getElementById("examName")
     .value = "";
 
   openModal("examModal");
@@ -1475,21 +1587,30 @@ function editExam(id){
 
   const exam =
     exams.find(
-      x => Number(x.id) === Number(id)
+      x =>
+        Number(x.id) ===
+        Number(id)
     );
 
-  if(!exam) return;
+  if(!exam)
+    return;
 
-  editingExamId = Number(id);
+  editingExamId =
+    Number(id);
 
-  document.getElementById("examModalTitle")
+  document
+    .getElementById("examModalTitle")
     .textContent = "Edit Exam";
 
-  document.getElementById("examBoard")
-    .value = exam.board || "SSC";
+  document
+    .getElementById("examBoard")
+    .value =
+      exam.board || "SSC";
 
-  document.getElementById("examName")
-    .value = exam.name || "";
+  document
+    .getElementById("examName")
+    .value =
+      exam.name || "";
 
   openModal("examModal");
 
@@ -1504,13 +1625,15 @@ function closeExamForm(){
 async function saveExam(){
 
   const board =
-    document.getElementById("examBoard")
+    document
+      .getElementById("examBoard")
       .value
       .trim()
       .toUpperCase();
 
   const name =
-    document.getElementById("examName")
+    document
+      .getElementById("examName")
       .value
       .trim();
 
@@ -1533,21 +1656,23 @@ async function saveExam(){
 
   if(isEditing){
 
-    const { error } =
+    const {error} =
       await db
         .from("exams")
         .update({
           board:board,
           name:name
         })
-        .eq("id",idBeingEdited);
+        .eq(
+          "id",
+          idBeingEdited
+        );
 
     if(error){
 
-      console.error(error);
-
       showToast(
-        "EXAMS: " + error.message,
+        "EXAMS: " +
+        error.message,
         true
       );
 
@@ -1557,7 +1682,8 @@ async function saveExam(){
 
     if(
       selectedExam &&
-      Number(selectedExam.id) === Number(idBeingEdited)
+      Number(selectedExam.id) ===
+      Number(idBeingEdited)
     ){
 
       selectedExam = {
@@ -1568,51 +1694,55 @@ async function saveExam(){
 
     }
 
-    showToast("Exam updated.");
+    showToast(
+      "Exam updated."
+    );
 
   }else{
 
     const maxOrder =
       exams
-        .filter(x=>String(x.board).toUpperCase()===board)
+        .filter(
+          x =>
+            String(
+              x.board
+            ).toUpperCase() ===
+            board
+        )
         .reduce(
-          (m,x)=>Math.max(
-            m,
-            Number(x.sort_order)||0
-          ),
+          (m,x)=>
+            Math.max(
+              m,
+              Number(x.sort_order)||0
+            ),
           -1
         );
 
-    /*
-      IMPORTANT:
-      exams.mock_type has a DB CHECK constraint.
-      The database accepts only:
-      SECTIONAL
-      SUBJECT_WISE
-
-      It is only a legacy required field.
-      It does NOT control the Practice hierarchy.
-    */
-
-    const { data,error } =
+    const {data,error} =
       await db
         .from("exams")
         .insert({
+
           board:board,
+
           name:name,
+
           mock_type:"SECTIONAL",
+
           is_active:true,
-          sort_order:maxOrder + 1
+
+          sort_order:
+            maxOrder + 1
+
         })
         .select()
         .single();
 
     if(error){
 
-      console.error(error);
-
       showToast(
-        "EXAMS: " + error.message,
+        "EXAMS: " +
+        error.message,
         true
       );
 
@@ -1622,7 +1752,9 @@ async function saveExam(){
 
     selectedExam = data;
 
-    showToast("Exam created.");
+    showToast(
+      "Exam created."
+    );
 
   }
 
@@ -1640,39 +1772,45 @@ async function saveExam(){
 
 async function moveExam(id,direction){
 
-  const index =
-    exams.findIndex(
-      x => Number(x.id) === Number(id)
-    );
-
-  if(index < 0) return;
-
-  const board =
-    String(exams[index].board || "")
-      .toUpperCase();
-
   const sameBoard =
     exams.filter(
       x =>
-        String(x.board||"").toUpperCase() === board
+        String(
+          x.board||""
+        ).toUpperCase() ===
+        String(
+          exams.find(
+            e =>
+              Number(e.id) ===
+              Number(id)
+          )?.board || ""
+        ).toUpperCase()
     );
 
   const pos =
     sameBoard.findIndex(
-      x => Number(x.id) === Number(id)
+      x =>
+        Number(x.id) ===
+        Number(id)
     );
+
+  if(pos < 0)
+    return;
 
   const target =
     pos + direction;
 
-  if(target < 0 || target >= sameBoard.length){
-
+  if(
+    target < 0 ||
+    target >= sameBoard.length
+  )
     return;
 
-  }
+  const current =
+    sameBoard[pos];
 
-  const current = sameBoard[pos];
-  const other = sameBoard[target];
+  const other =
+    sameBoard[target];
 
   const currentOrder =
     Number(current.sort_order)||0;
@@ -1680,18 +1818,22 @@ async function moveExam(id,direction){
   const otherOrder =
     Number(other.sort_order)||0;
 
-  const { error } =
+  const {error} =
     await db
       .from("exams")
       .update({
         sort_order:otherOrder
       })
-      .eq("id",current.id);
+      .eq(
+        "id",
+        current.id
+      );
 
   if(error){
 
     showToast(
-      "EXAMS: " + error.message,
+      "EXAMS: " +
+      error.message,
       true
     );
 
@@ -1699,18 +1841,22 @@ async function moveExam(id,direction){
 
   }
 
-  const { error:error2 } =
+  const {error:error2} =
     await db
       .from("exams")
       .update({
         sort_order:currentOrder
       })
-      .eq("id",other.id);
+      .eq(
+        "id",
+        other.id
+      );
 
   if(error2){
 
     showToast(
-      "EXAMS: " + error2.message,
+      "EXAMS: " +
+      error2.message,
       true
     );
 
@@ -1730,40 +1876,43 @@ async function deleteExam(id){
 
   const exam =
     exams.find(
-      x => Number(x.id) === Number(id)
+      x =>
+        Number(x.id) ===
+        Number(id)
     );
 
-  if(!exam) return;
+  if(!exam)
+    return;
 
   if(
     !confirm(
       `Delete "${exam.name}" and all its practice folders/tests?`
     )
-  ){
-
+  )
     return;
-
-  }
 
   const examFolders =
     folders.filter(
-      x => Number(x.exam_id) === Number(id)
+      x =>
+        Number(x.exam_id) ===
+        Number(id)
     );
 
   const folderIds =
-    examFolders.map(x=>Number(x.id));
-
-  /*
-    Delete tests first.
-  */
+    examFolders.map(
+      x => Number(x.id)
+    );
 
   if(folderIds.length){
 
-    const { error:testError } =
+    const {error:testError} =
       await db
         .from("mock_tests")
         .delete()
-        .in("folder_id",folderIds);
+        .in(
+          "folder_id",
+          folderIds
+        );
 
     if(testError){
 
@@ -1779,26 +1928,25 @@ async function deleteExam(id){
 
   }
 
-  /*
-    Delete folders deepest-first so a self
-    parent_id foreign key does not block deletion.
-  */
-
   const remaining =
     [...examFolders];
 
   while(remaining.length){
 
     const leafFolders =
-      remaining.filter(folder=>{
+      remaining.filter(
+        folder=>{
 
-        return !remaining.some(
-          child =>
-            Number(child.parent_id) ===
-            Number(folder.id)
-        );
+          return !remaining.some(
+            child =>
+              Number(
+                child.parent_id
+              ) ===
+              Number(folder.id)
+          );
 
-      });
+        }
+      );
 
     const batch =
       leafFolders.length
@@ -1806,13 +1954,18 @@ async function deleteExam(id){
         : remaining;
 
     const ids =
-      batch.map(x=>Number(x.id));
+      batch.map(
+        x => Number(x.id)
+      );
 
-    const { error } =
+    const {error} =
       await db
         .from("mock_folders")
         .delete()
-        .in("id",ids);
+        .in(
+          "id",
+          ids
+        );
 
     if(error){
 
@@ -1831,21 +1984,21 @@ async function deleteExam(id){
       const index =
         remaining.indexOf(item);
 
-      if(index >= 0){
-
+      if(index >= 0)
         remaining.splice(index,1);
-
-      }
 
     }
 
   }
 
-  const { error:examError } =
+  const {error:examError} =
     await db
       .from("exams")
       .delete()
-      .eq("id",id);
+      .eq(
+        "id",
+        id
+      );
 
   if(examError){
 
@@ -1861,14 +2014,17 @@ async function deleteExam(id){
 
   if(
     selectedExam &&
-    Number(selectedExam.id) === Number(id)
+    Number(selectedExam.id) ===
+    Number(id)
   ){
 
     selectedExam = null;
 
   }
 
-  showToast("Exam deleted.");
+  showToast(
+    "Exam deleted."
+  );
 
   await loadAll();
 
@@ -1881,19 +2037,28 @@ async function deleteExam(id){
 function renderWorkspace(){
 
   const workspace =
-    document.getElementById("workspace");
+    document.getElementById(
+      "workspace"
+    );
 
   if(!selectedExam){
 
-    workspace.classList.add("hidden");
+    workspace.classList.add(
+      "hidden"
+    );
 
     return;
 
   }
 
-  workspace.classList.remove("hidden");
+  workspace.classList.remove(
+    "hidden"
+  );
 
-  document.getElementById("workspaceTitle")
+  document
+    .getElementById(
+      "workspaceTitle"
+    )
     .textContent =
       `${selectedExam.board} ${selectedExam.name}`;
 
@@ -1907,7 +2072,8 @@ function renderWorkspace(){
 
 function renderRootArea(){
 
-  if(!selectedExam) return;
+  if(!selectedExam)
+    return;
 
   const roots =
     folders
@@ -1917,18 +2083,14 @@ function renderRootArea(){
           Number(selectedExam.id) &&
           !f.parent_id &&
           ["new","pyq"].includes(
-            normalizeType(f.folder_type)
+            normalizeType(
+              f.folder_type
+            )
           )
       )
       .sort(sortByOrder);
 
   let html = "";
-
-  /*
-    Only show missing roots.
-    If NEW and PYQ already exist, no duplicate
-    Add Mock Type card/button is rendered.
-  */
 
   if(roots.length < 2){
 
@@ -1957,7 +2119,8 @@ function renderRootArea(){
       </div>
     `;
 
-    document.getElementById("rootArea")
+    document
+      .getElementById("rootArea")
       .innerHTML = html;
 
     return;
@@ -1969,7 +2132,9 @@ function renderRootArea(){
   html += roots.map(root=>{
 
     const type =
-      normalizeType(root.folder_type);
+      normalizeType(
+        root.folder_type
+      );
 
     const title =
       type === "new"
@@ -2049,7 +2214,8 @@ function renderRootArea(){
 
   html += `</div>`;
 
-  document.getElementById("rootArea")
+  document
+    .getElementById("rootArea")
     .innerHTML = html;
 
 }
@@ -2062,10 +2228,13 @@ function openRoot(rootId){
 
   const root =
     folders.find(
-      x => Number(x.id) === Number(rootId)
+      x =>
+        Number(x.id) ===
+        Number(rootId)
     );
 
-  if(!root) return;
+  if(!root)
+    return;
 
   renderFolderLevel(root);
 
@@ -2092,24 +2261,30 @@ function openRootForm(){
     folders.filter(
       f =>
         Number(f.exam_id) ===
-          Number(selectedExam.id) &&
+        Number(selectedExam.id) &&
         !f.parent_id
     );
 
   const hasNew =
     existing.some(
       x =>
-        normalizeType(x.folder_type) === "new"
+        normalizeType(
+          x.folder_type
+        ) === "new"
     );
 
   const hasPyq =
     existing.some(
       x =>
-        normalizeType(x.folder_type) === "pyq"
+        normalizeType(
+          x.folder_type
+        ) === "pyq"
     );
 
   const select =
-    document.getElementById("rootType");
+    document.getElementById(
+      "rootType"
+    );
 
   select.innerHTML = "";
 
@@ -2144,32 +2319,41 @@ function openRootForm(){
 
   }
 
-  openModal("rootModal");
+  openModal(
+    "rootModal"
+  );
 
 }
 
 function closeRootForm(){
 
-  closeModal("rootModal");
+  closeModal(
+    "rootModal"
+  );
 
 }
 
 async function saveRoot(){
 
-  if(!selectedExam) return;
+  if(!selectedExam)
+    return;
 
   const type =
     normalizeType(
-      document.getElementById("rootType").value
+      document
+        .getElementById("rootType")
+        .value
     );
 
   const duplicate =
     folders.some(
       f =>
         Number(f.exam_id) ===
-          Number(selectedExam.id) &&
+        Number(selectedExam.id) &&
         !f.parent_id &&
-        normalizeType(f.folder_type) === type
+        normalizeType(
+          f.folder_type
+        ) === type
     );
 
   if(duplicate){
@@ -2187,7 +2371,7 @@ async function saveRoot(){
     folders.filter(
       f =>
         Number(f.exam_id) ===
-          Number(selectedExam.id) &&
+        Number(selectedExam.id) &&
         !f.parent_id
     );
 
@@ -2201,21 +2385,34 @@ async function saveRoot(){
       -1
     );
 
-  const { data,error } =
+  const {data,error} =
     await db
       .from("mock_folders")
       .insert({
-        exam_id:selectedExam.id,
-        name:type === "new"
-          ? "NEW MOCKS"
-          : "PYQ MOCKS",
-        display_name:type === "new"
-          ? "NEW MOCKS"
-          : "PYQ MOCKS",
-        folder_type:type,
-        sort_order:maxOrder + 1,
+
+        exam_id:
+          selectedExam.id,
+
+        name:
+          type === "new"
+            ? "NEW MOCKS"
+            : "PYQ MOCKS",
+
+        display_name:
+          type === "new"
+            ? "NEW MOCKS"
+            : "PYQ MOCKS",
+
+        folder_type:
+          type,
+
+        sort_order:
+          maxOrder + 1,
+
         is_active:true,
+
         parent_id:null
+
       })
       .select()
       .single();
@@ -2233,11 +2430,15 @@ async function saveRoot(){
   }
 
   /*
-    Automatically create FULL MOCKS and
-    SECTIONAL MOCKS below the new root.
+    These are logical category containers.
+    They are NOT shown as extra folder cards.
+    FULL MOCKS / SECTIONAL MOCKS are rendered
+    directly as sections inside the root.
   */
 
-  await createRootChildren(data);
+  await createRootChildren(
+    data
+  );
 
   closeRootForm();
 
@@ -2252,7 +2453,7 @@ async function saveRoot(){
 }
 
 /* =========================================================
-   CREATE ROOT CHILDREN
+   CREATE LOGICAL ROOT CHILDREN
 ========================================================= */
 
 async function createRootChildren(root){
@@ -2275,26 +2476,34 @@ async function createRootChildren(root){
 
   ];
 
-  for(const child of children){
+  for(
+    const child of children
+  ){
 
     const {error} =
       await db
         .from("mock_folders")
         .insert({
 
-          exam_id:selectedExam.id,
+          exam_id:
+            selectedExam.id,
 
-          name:child.name,
+          name:
+            child.name,
 
-          display_name:child.display_name,
+          display_name:
+            child.display_name,
 
-          folder_type:child.folder_type,
+          folder_type:
+            child.folder_type,
 
-          sort_order:child.sort_order,
+          sort_order:
+            child.sort_order,
 
           is_active:true,
 
-          parent_id:root.id
+          parent_id:
+            root.id
 
         });
 
@@ -2320,12 +2529,14 @@ async function createRootChildren(root){
 }
 
 /* =========================================================
-   FOLDER LEVEL
+   ROOT OPEN
+   CATEGORY CARDS REMOVED
 ========================================================= */
 
 function renderFolderLevel(root){
 
-  if(!root) return;
+  if(!root)
+    return;
 
   const children =
     folders
@@ -2336,22 +2547,25 @@ function renderFolderLevel(root){
       )
       .sort(sortByOrder);
 
-  const title =
-    root.display_name ||
-    root.name;
-
   const full =
     children.find(
       x =>
-        normalizeType(x.folder_type) ===
-        "full"
+        normalizeType(
+          x.folder_type
+        ) === "full"
     );
 
   const sectional =
     children.find(
       x =>
-        normalizeType(x.folder_type) ===
-        "sectional"
+        normalizeType(
+          x.folder_type
+        ) === "sectional"
+    );
+
+  const rootType =
+    normalizeType(
+      root.folder_type
     );
 
   let html = `
@@ -2367,28 +2581,63 @@ function renderFolderLevel(root){
 
     </div>
 
-    <div class="workspace-title" style="margin-bottom:13px;">
-      ${esc(title)}
+    <div
+      class="workspace-title"
+      style="margin-bottom:14px;"
+    >
+      ${esc(
+        root.display_name ||
+        root.name
+      )}
     </div>
 
   `;
 
   /*
-    Only show missing category.
+    FULL MOCKS
+    ----------------
+    NEW = tests directly
+    PYQ = years
   */
 
-  if(!full || !sectional){
+  if(full){
+
+    html +=
+      renderFullSection(
+        full,
+        rootType
+      );
+
+  }else{
 
     html += `
 
-      <div style="margin-bottom:14px;">
+      <div class="category-section">
 
-        <button
-          class="secondary-btn"
-          onclick="openCategoryForm(${root.id})"
-        >
-          + Add Missing Category
-        </button>
+        <div class="category-section-head">
+
+          <div class="category-section-title">
+
+            <div class="category-section-icon">
+              📝
+            </div>
+
+            FULL MOCKS
+
+          </div>
+
+          <button
+            class="small-btn purple"
+            onclick="openCategoryForm(${root.id})"
+          >
+            + Add
+          </button>
+
+        </div>
+
+        <div class="empty">
+          FULL MOCKS section not created yet.
+        </div>
 
       </div>
 
@@ -2396,417 +2645,170 @@ function renderFolderLevel(root){
 
   }
 
-  html += `<div class="category-grid">`;
-
-  if(full){
-
-    html += renderCategoryCard(
-      full,
-      "FULL MOCKS",
-      "📝",
-      "Direct test cards are placed here."
-    );
-
-  }
+  /*
+    SECTIONAL MOCKS
+    ----------------
+    Subjects as small chips
+  */
 
   if(sectional){
 
-    html += renderCategoryCard(
-      sectional,
-      "SECTIONAL MOCKS",
-      "📖",
-      "Subject-wise sectional tests."
-    );
+    html +=
+      renderSectionalSection(
+        sectional,
+        rootType
+      );
+
+  }else{
+
+    html += `
+
+      <div class="category-section">
+
+        <div class="category-section-head">
+
+          <div class="category-section-title">
+
+            <div class="category-section-icon">
+              📖
+            </div>
+
+            SECTIONAL MOCKS
+
+          </div>
+
+          <button
+            class="small-btn purple"
+            onclick="openCategoryForm(${root.id})"
+          >
+            + Add
+          </button>
+
+        </div>
+
+        <div class="empty">
+          SECTIONAL MOCKS section not created yet.
+        </div>
+
+      </div>
+
+    `;
 
   }
 
-  html += `</div>`;
-
-  document.getElementById("rootArea")
+  document
+    .getElementById("rootArea")
     .innerHTML = html;
 
 }
 
 /* =========================================================
-   CATEGORY CARD
+   FULL SECTION
 ========================================================= */
 
-function renderCategoryCard(
+function renderFullSection(
   folder,
-  title,
-  icon,
-  desc
+  rootType
 ){
-
-  return `
-
-    <div class="category-card">
-
-      <div class="category-icon">
-        ${icon}
-      </div>
-
-      <div class="category-title">
-        ${title}
-      </div>
-
-      <div class="category-desc">
-        ${desc}
-      </div>
-
-      <div class="category-actions">
-
-        <button
-          class="small-btn purple"
-          onclick="openCategory(${folder.id})"
-        >
-          Open
-        </button>
-
-        <button
-          class="small-btn"
-          onclick="editFolder(${folder.id})"
-        >
-          Edit
-        </button>
-
-        <button
-          class="small-btn"
-          onclick="moveFolder(${folder.id},-1)"
-        >
-          ↑
-        </button>
-
-        <button
-          class="small-btn"
-          onclick="moveFolder(${folder.id},1)"
-        >
-          ↓
-        </button>
-
-        <button
-          class="small-btn red"
-          onclick="deleteFolder(${folder.id})"
-        >
-          Delete
-        </button>
-
-      </div>
-
-    </div>
-
-  `;
-
-}
-
-/* =========================================================
-   CATEGORY FORM
-========================================================= */
-
-function openCategoryForm(rootId){
-
-  currentParentId =
-    Number(rootId);
-
-  editingFolderId = null;
-
-  const existing =
-    folders.filter(
-      f =>
-        Number(f.parent_id) ===
-        Number(rootId)
-    );
-
-  const hasFull =
-    existing.some(
-      x =>
-        normalizeType(x.folder_type) ===
-        "full"
-    );
-
-  const hasSectional =
-    existing.some(
-      x =>
-        normalizeType(x.folder_type) ===
-        "sectional"
-    );
-
-  const select =
-    document.getElementById("categoryType");
-
-  select.innerHTML = "";
-
-  if(!hasFull){
-
-    select.innerHTML += `
-      <option value="full">
-        FULL MOCKS
-      </option>
-    `;
-
-  }
-
-  if(!hasSectional){
-
-    select.innerHTML += `
-      <option value="sectional">
-        SECTIONAL MOCKS
-      </option>
-    `;
-
-  }
-
-  if(hasFull && hasSectional){
-
-    showToast(
-      "Both categories already exist.",
-      true
-    );
-
-    return;
-
-  }
-
-  document.getElementById("categoryModalTitle")
-    .textContent =
-      "Add Category";
-
-  openModal("categoryModal");
-
-}
-
-function closeCategoryForm(){
-
-  closeModal("categoryModal");
-
-}
-
-async function saveCategory(){
-
-  if(!selectedExam || !currentParentId){
-
-    showToast(
-      "Invalid parent folder.",
-      true
-    );
-
-    return;
-
-  }
-
-  const type =
-    normalizeType(
-      document.getElementById("categoryType").value
-    );
-
-  const duplicate =
-    folders.some(
-      f =>
-        Number(f.parent_id) ===
-          Number(currentParentId) &&
-        normalizeType(f.folder_type) === type
-    );
-
-  if(duplicate){
-
-    showToast(
-      "This category already exists.",
-      true
-    );
-
-    return;
-
-  }
-
-  const siblings =
-    folders.filter(
-      f =>
-        Number(f.parent_id) ===
-        Number(currentParentId)
-    );
-
-  const maxOrder =
-    siblings.reduce(
-      (m,x)=>
-        Math.max(
-          m,
-          Number(x.sort_order)||0
-        ),
-      -1
-    );
-
-  const title =
-    type === "full"
-      ? "FULL MOCKS"
-      : "SECTIONAL MOCKS";
-
-  const {error} =
-    await db
-      .from("mock_folders")
-      .insert({
-
-        exam_id:selectedExam.id,
-
-        parent_id:currentParentId,
-
-        name:title,
-
-        display_name:title,
-
-        folder_type:type,
-
-        sort_order:maxOrder + 1,
-
-        is_active:true
-
-      });
-
-  if(error){
-
-    showToast(
-      "MOCK_FOLDERS: " +
-      error.message,
-      true
-    );
-
-    return;
-
-  }
-
-  closeCategoryForm();
-
-  showToast(
-    title + " created."
-  );
-
-  await loadAll();
-
-}
-
-/* =========================================================
-   OPEN CATEGORY
-========================================================= */
-
-function openCategory(categoryId){
-
-  const category =
-    folders.find(
-      x => Number(x.id) === Number(categoryId)
-    );
-
-  if(!category) return;
-
-  const type =
-    normalizeType(category.folder_type);
-
-  if(type === "full"){
-
-    renderFullLevel(category);
-
-    return;
-
-  }
-
-  if(type === "sectional"){
-
-    renderSectionalLevel(category);
-
-    return;
-
-  }
-
-  renderLeafLevel(category);
-
-}
-
-/* =========================================================
-   FULL LEVEL
-========================================================= */
-
-function renderFullLevel(category){
-
-  const root =
-    folders.find(
-      x => Number(x.id) ===
-      Number(category.parent_id)
-    );
-
-  const rootType =
-    root
-      ? normalizeType(root.folder_type)
-      : "";
 
   if(rootType === "pyq"){
 
-    renderPYQFull(category);
-
-    return;
+    return renderPYQFullSection(
+      folder
+    );
 
   }
 
-  renderNewFull(category);
+  return renderNewFullSection(
+    folder
+  );
 
 }
 
 /* =========================================================
    NEW FULL
+   DIRECT TESTS
 ========================================================= */
 
-function renderNewFull(folder){
+function renderNewFullSection(
+  folder
+){
 
   const folderTests =
     getTests(folder.id);
 
   let html = `
 
-    <div style="margin-bottom:15px;">
+    <div class="category-section">
 
-      <button
-        class="secondary-btn"
-        onclick="goToParentFolder(${folder.parent_id})"
-      >
-        ← Back
-      </button>
+      <div class="category-section-head">
 
-    </div>
+        <div class="category-section-title">
 
-    <div class="workspace-title">
-      NEW MOCKS / FULL MOCKS
-    </div>
+          <div class="category-section-icon">
+            📝
+          </div>
 
-    <div class="workspace-subtitle" style="margin-bottom:16px;">
-      Tests are shown directly here.
-    </div>
+          FULL MOCKS
 
-    <div class="tests-head">
+        </div>
 
-      <div class="tests-title">
-        Tests
+        <div class="category-section-actions">
+
+          <button
+            class="small-btn"
+            onclick="editFolder(${folder.id})"
+          >
+            Edit
+          </button>
+
+          <button
+            class="small-btn red"
+            onclick="deleteFolder(${folder.id})"
+          >
+            Delete
+          </button>
+
+          <button
+            class="small-btn purple"
+            onclick="openTestForm(${folder.id})"
+          >
+            + Add Mock
+          </button>
+
+        </div>
+
       </div>
 
-      <button
-        class="primary-btn"
-        onclick="openTestForm(${folder.id})"
-      >
-        + Add Test
-      </button>
+      <div class="tests-head">
 
-    </div>
+        <div class="tests-title">
+          Full Mock Tests
+        </div>
+
+      </div>
 
   `;
 
-  html += renderTestList(folderTests);
+  html +=
+    renderTestList(
+      folderTests
+    );
 
-  document.getElementById("rootArea")
-    .innerHTML = html;
+  html += `</div>`;
+
+  return html;
 
 }
 
 /* =========================================================
    PYQ FULL
+   YEARS AS SMALL CHIPS
 ========================================================= */
 
-function renderPYQFull(folder){
+function renderPYQFullSection(
+  folder
+){
 
   const years =
     folders
@@ -2814,42 +2816,54 @@ function renderPYQFull(folder){
         f =>
           Number(f.parent_id) ===
           Number(folder.id) &&
-          normalizeType(f.folder_type) ===
-          "year"
+          normalizeType(
+            f.folder_type
+          ) === "year"
       )
       .sort(sortByOrder);
 
   let html = `
 
-    <div style="margin-bottom:15px;">
+    <div class="category-section">
 
-      <button
-        class="secondary-btn"
-        onclick="goToParentFolder(${folder.parent_id})"
-      >
-        ← Back
-      </button>
+      <div class="category-section-head">
 
-    </div>
+        <div class="category-section-title">
 
-    <div class="workspace-title">
-      PYQ MOCKS / FULL MOCKS
-    </div>
+          <div class="category-section-icon">
+            📝
+          </div>
 
-    <div class="workspace-subtitle" style="margin-bottom:16px;">
-      Add and manage PYQ years.
-    </div>
+          FULL MOCKS
 
-    <div style="margin-bottom:14px;">
+        </div>
 
-      <button
-        class="secondary-btn"
-        onclick="openLeafForm(${folder.id},'year')"
-      >
-        + Add Year
-      </button>
+        <div class="category-section-actions">
 
-    </div>
+          <button
+            class="small-btn"
+            onclick="editFolder(${folder.id})"
+          >
+            Edit
+          </button>
+
+          <button
+            class="small-btn red"
+            onclick="deleteFolder(${folder.id})"
+          >
+            Delete
+          </button>
+
+          <button
+            class="small-btn purple"
+            onclick="openLeafForm(${folder.id},'year')"
+          >
+            + Add Year
+          </button>
+
+        </div>
+
+      </div>
 
   `;
 
@@ -2857,7 +2871,7 @@ function renderPYQFull(folder){
 
     html += `
       <div class="empty">
-        No years added yet.
+        No PYQ years added yet.
       </div>
     `;
 
@@ -2867,64 +2881,71 @@ function renderPYQFull(folder){
       <div class="horizontal-scroll">
     `;
 
-    html += years.map(year=>{
+    html +=
+      years.map(
+        year=>{
 
-      return `
+          return `
 
-        <div class="choice-card">
+            <div class="choice-card">
 
-          <div class="choice-title">
-            ${esc(year.display_name || year.name)}
-          </div>
+              <div class="choice-title">
+                ${esc(
+                  year.display_name ||
+                  year.name
+                )}
+              </div>
 
-          <div class="choice-meta">
-            ${getTests(year.id).length} tests
-          </div>
+              <div class="choice-meta">
+                ${getTests(year.id).length}
+                tests
+              </div>
 
-          <div class="choice-actions">
+              <div class="choice-actions">
 
-            <button
-              class="small-btn purple"
-              onclick="openYear(${year.id})"
-            >
-              Open
-            </button>
+                <button
+                  class="small-btn purple"
+                  onclick="openYear(${year.id})"
+                >
+                  Open
+                </button>
 
-            <button
-              class="reorder-btn"
-              onclick="moveFolder(${year.id},-1)"
-            >
-              ↑
-            </button>
+                <button
+                  class="reorder-btn"
+                  onclick="moveFolder(${year.id},-1)"
+                >
+                  ↑
+                </button>
 
-            <button
-              class="reorder-btn"
-              onclick="moveFolder(${year.id},1)"
-            >
-              ↓
-            </button>
+                <button
+                  class="reorder-btn"
+                  onclick="moveFolder(${year.id},1)"
+                >
+                  ↓
+                </button>
 
-            <button
-              class="small-btn"
-              onclick="editFolder(${year.id})"
-            >
-              Edit
-            </button>
+                <button
+                  class="small-btn"
+                  onclick="editFolder(${year.id})"
+                >
+                  Edit
+                </button>
 
-            <button
-              class="small-btn red"
-              onclick="deleteFolder(${year.id})"
-            >
-              Delete
-            </button>
+                <button
+                  class="small-btn red"
+                  onclick="deleteFolder(${year.id})"
+                >
+                  Delete
+                </button>
 
-          </div>
+              </div>
 
-        </div>
+            </div>
 
-      `;
+          `;
 
-    }).join("");
+        }
+      ).join("");
 
     html += `
       </div>
@@ -2932,8 +2953,9 @@ function renderPYQFull(folder){
 
   }
 
-  document.getElementById("rootArea")
-    .innerHTML = html;
+  html += `</div>`;
+
+  return html;
 
 }
 
@@ -2945,12 +2967,17 @@ function openYear(yearId){
 
   const year =
     folders.find(
-      x => Number(x.id) === Number(yearId)
+      x =>
+        Number(x.id) ===
+        Number(yearId)
     );
 
-  if(!year) return;
+  if(!year)
+    return;
 
-  renderYearTests(year);
+  renderYearTests(
+    year
+  );
 
 }
 
@@ -2960,23 +2987,13 @@ function openYear(yearId){
 
 function renderYearTests(year){
 
-  const parent =
-    folders.find(
-      x => Number(x.id) ===
-      Number(year.parent_id)
-    );
-
   let html = `
 
     <div style="margin-bottom:15px;">
 
       <button
         class="secondary-btn"
-        onclick="renderPYQFull(
-          folders.find(
-            x=>Number(x.id)===Number(${year.parent_id})
-          )
-        )"
+        onclick="goToParentFolder(${year.parent_id})"
       >
         ← Back
       </button>
@@ -2984,11 +3001,18 @@ function renderYearTests(year){
     </div>
 
     <div class="workspace-title">
-      PYQ FULL MOCKS / ${esc(year.display_name || year.name)}
+      PYQ FULL MOCKS /
+      ${esc(
+        year.display_name ||
+        year.name
+      )}
     </div>
 
-    <div class="workspace-subtitle" style="margin-bottom:16px;">
-      Test cards for this year.
+    <div
+      class="workspace-subtitle"
+      style="margin-bottom:16px;"
+    >
+      Tests for this year.
     </div>
 
     <div class="tests-head">
@@ -3013,75 +3037,80 @@ function renderYearTests(year){
       getTests(year.id)
     );
 
-  document.getElementById("rootArea")
+  document
+    .getElementById("rootArea")
     .innerHTML = html;
 
 }
 
 /* =========================================================
-   SECTIONAL LEVEL
+   SECTIONAL SECTION
+   SUBJECTS AS SMALL CHIPS
 ========================================================= */
 
-function renderSectionalLevel(folder){
+function renderSectionalSection(
+  folder,
+  rootType
+){
 
-  const root =
-    folders.find(
-      x =>
-        Number(x.id) ===
-        Number(folder.parent_id)
-    );
-
-  const rootType =
-    root
-      ? normalizeType(root.folder_type)
-      : "";
-
-  const subjectsFolders =
+  const subjectFolders =
     folders
       .filter(
         f =>
           Number(f.parent_id) ===
           Number(folder.id) &&
-          normalizeType(f.folder_type) ===
-          "subject"
+          normalizeType(
+            f.folder_type
+          ) === "subject"
       )
       .sort(sortByOrder);
 
   let html = `
 
-    <div style="margin-bottom:15px;">
+    <div class="category-section">
 
-      <button
-        class="secondary-btn"
-        onclick="goToParentFolder(${folder.parent_id})"
-      >
-        ← Back
-      </button>
+      <div class="category-section-head">
 
-    </div>
+        <div class="category-section-title">
 
-    <div class="workspace-title">
-      ${rootType === "pyq" ? "PYQ" : "NEW"} MOCKS / SECTIONAL MOCKS
-    </div>
+          <div class="category-section-icon">
+            📖
+          </div>
 
-    <div class="workspace-subtitle" style="margin-bottom:16px;">
-      Manage sectional subjects.
-    </div>
+          SECTIONAL MOCKS
 
-    <div style="margin-bottom:14px;">
+        </div>
 
-      <button
-        class="secondary-btn"
-        onclick="openLeafForm(${folder.id},'subject')"
-      >
-        + Add Subject
-      </button>
+        <div class="category-section-actions">
 
-    </div>
+          <button
+            class="small-btn"
+            onclick="editFolder(${folder.id})"
+          >
+            Edit
+          </button>
+
+          <button
+            class="small-btn red"
+            onclick="deleteFolder(${folder.id})"
+          >
+            Delete
+          </button>
+
+          <button
+            class="small-btn purple"
+            onclick="openLeafForm(${folder.id},'subject')"
+          >
+            + Add Subject
+          </button>
+
+        </div>
+
+      </div>
 
   `;
 
-  if(!subjectsFolders.length){
+  if(!subjectFolders.length){
 
     html += `
       <div class="empty">
@@ -3095,67 +3124,71 @@ function renderSectionalLevel(folder){
       <div class="horizontal-scroll">
     `;
 
-    html += subjectsFolders.map(item=>{
+    html +=
+      subjectFolders.map(
+        item=>{
 
-      return `
+          return `
 
-        <div class="choice-card">
+            <div class="choice-card">
 
-          <div class="choice-title">
-            ${esc(
-              item.display_name ||
-              item.name
-            )}
-          </div>
+              <div class="choice-title">
+                ${esc(
+                  item.display_name ||
+                  item.name
+                )}
+              </div>
 
-          <div class="choice-meta">
-            ${getTests(item.id).length} tests
-          </div>
+              <div class="choice-meta">
+                ${getTests(item.id).length}
+                tests
+              </div>
 
-          <div class="choice-actions">
+              <div class="choice-actions">
 
-            <button
-              class="small-btn purple"
-              onclick="openSubject(${item.id})"
-            >
-              Open
-            </button>
+                <button
+                  class="small-btn purple"
+                  onclick="openSubject(${item.id})"
+                >
+                  Open
+                </button>
 
-            <button
-              class="reorder-btn"
-              onclick="moveFolder(${item.id},-1)"
-            >
-              ↑
-            </button>
+                <button
+                  class="reorder-btn"
+                  onclick="moveFolder(${item.id},-1)"
+                >
+                  ↑
+                </button>
 
-            <button
-              class="reorder-btn"
-              onclick="moveFolder(${item.id},1)"
-            >
-              ↓
-            </button>
+                <button
+                  class="reorder-btn"
+                  onclick="moveFolder(${item.id},1)"
+                >
+                  ↓
+                </button>
 
-            <button
-              class="small-btn"
-              onclick="editFolder(${item.id})"
-            >
-              Edit
-            </button>
+                <button
+                  class="small-btn"
+                  onclick="editFolder(${item.id})"
+                >
+                  Edit
+                </button>
 
-            <button
-              class="small-btn red"
-              onclick="deleteFolder(${item.id})"
-            >
-              Delete
-            </button>
+                <button
+                  class="small-btn red"
+                  onclick="deleteFolder(${item.id})"
+                >
+                  Delete
+                </button>
 
-          </div>
+              </div>
 
-        </div>
+            </div>
 
-      `;
+          `;
 
-    }).join("");
+        }
+      ).join("");
 
     html += `
       </div>
@@ -3163,8 +3196,9 @@ function renderSectionalLevel(folder){
 
   }
 
-  document.getElementById("rootArea")
-    .innerHTML = html;
+  html += `</div>`;
+
+  return html;
 
 }
 
@@ -3176,12 +3210,17 @@ function openSubject(id){
 
   const subjectFolder =
     folders.find(
-      x => Number(x.id) === Number(id)
+      x =>
+        Number(x.id) ===
+        Number(id)
     );
 
-  if(!subjectFolder) return;
+  if(!subjectFolder)
+    return;
 
-  renderSubjectTests(subjectFolder);
+  renderSubjectTests(
+    subjectFolder
+  );
 
 }
 
@@ -3189,10 +3228,9 @@ function openSubject(id){
    SUBJECT TESTS
 ========================================================= */
 
-function renderSubjectTests(folder){
-
-  const root =
-    getRootFolder(folder);
+function renderSubjectTests(
+  folder
+){
 
   let html = `
 
@@ -3208,10 +3246,16 @@ function renderSubjectTests(folder){
     </div>
 
     <div class="workspace-title">
-      ${esc(folder.display_name || folder.name)}
+      ${esc(
+        folder.display_name ||
+        folder.name
+      )}
     </div>
 
-    <div class="workspace-subtitle" style="margin-bottom:16px;">
+    <div
+      class="workspace-subtitle"
+      style="margin-bottom:16px;"
+    >
       Sectional tests for this subject.
     </div>
 
@@ -3237,7 +3281,8 @@ function renderSubjectTests(folder){
       getTests(folder.id)
     );
 
-  document.getElementById("rootArea")
+  document
+    .getElementById("rootArea")
     .innerHTML = html;
 
 }
@@ -3290,9 +3335,14 @@ function renderTestList(list){
               </div>
 
               <div
-                class="test-status ${active ? "" : "off"}"
+                class="
+                  test-status
+                  ${active ? "" : "off"}
+                "
               >
-                ${active ? "ACTIVE" : "INACTIVE"}
+                ${active
+                  ? "ACTIVE"
+                  : "INACTIVE"}
               </div>
 
             </div>
@@ -3300,15 +3350,27 @@ function renderTestList(list){
             <div class="test-info">
 
               <span>
-                ⏱ ${Number(test.duration_minutes)||0} min
+                ⏱
+                ${Number(
+                  test.duration_minutes
+                )||0}
+                min
               </span>
 
               <span>
-                ❓ ${Number(test.total_questions)||0} questions
+                ❓
+                ${Number(
+                  test.total_questions
+                )||0}
+                questions
               </span>
 
               <span>
-                TYPE: ${esc(test.test_type || "FULL")}
+                TYPE:
+                ${esc(
+                  test.test_type ||
+                  "FULL"
+                )}
               </span>
 
             </div>
@@ -3383,25 +3445,34 @@ function openTest(id){
 function openTestForm(folderId){
 
   editingTestId = null;
-  currentParentId = Number(folderId);
 
-  document.getElementById("testModalTitle")
+  currentParentId =
+    Number(folderId);
+
+  document
+    .getElementById("testModalTitle")
     .textContent =
       "Add Test";
 
-  document.getElementById("testTitle")
+  document
+    .getElementById("testTitle")
     .value = "";
 
-  document.getElementById("testDuration")
+  document
+    .getElementById("testDuration")
     .value = 60;
 
-  document.getElementById("testQuestions")
+  document
+    .getElementById("testQuestions")
     .value = 25;
 
-  document.getElementById("testActive")
+  document
+    .getElementById("testActive")
     .value = "true";
 
-  openModal("testModal");
+  openModal(
+    "testModal"
+  );
 
 }
 
@@ -3409,44 +3480,62 @@ function editTest(id){
 
   const test =
     tests.find(
-      x => Number(x.id) === Number(id)
+      x =>
+        Number(x.id) ===
+        Number(id)
     );
 
-  if(!test) return;
+  if(!test)
+    return;
 
-  editingTestId = Number(id);
+  editingTestId =
+    Number(id);
+
   currentParentId =
     Number(test.folder_id);
 
-  document.getElementById("testModalTitle")
+  document
+    .getElementById("testModalTitle")
     .textContent =
       "Edit Test";
 
-  document.getElementById("testTitle")
+  document
+    .getElementById("testTitle")
     .value =
       test.title || "";
 
-  document.getElementById("testDuration")
+  document
+    .getElementById("testDuration")
     .value =
-      Number(test.duration_minutes)||60;
+      Number(
+        test.duration_minutes
+      ) || 60;
 
-  document.getElementById("testQuestions")
+  document
+    .getElementById("testQuestions")
     .value =
-      Number(test.total_questions)||25;
+      Number(
+        test.total_questions
+      ) || 25;
 
-  document.getElementById("testActive")
+  document
+    .getElementById("testActive")
     .value =
       test.is_active === false
         ? "false"
         : "true";
 
-  openModal("testModal");
+  openModal(
+    "testModal"
+  );
 
 }
 
 function closeTestForm(){
 
-  closeModal("testModal");
+  closeModal(
+    "testModal"
+  );
 
 }
 
@@ -3456,26 +3545,19 @@ function closeTestForm(){
 
 function inferTestType(folder){
 
-  if(!folder){
-
+  if(!folder)
     return "FULL";
 
-  }
-
   const type =
-    normalizeType(folder.folder_type);
+    normalizeType(
+      folder.folder_type
+    );
 
-  if(type === "subject"){
-
+  if(type === "subject")
     return "SECTIONAL";
 
-  }
-
-  if(type === "sectional"){
-
+  if(type === "sectional")
     return "SECTIONAL";
-
-  }
 
   return "FULL";
 
@@ -3488,24 +3570,28 @@ function inferTestType(folder){
 async function saveTest(){
 
   const title =
-    document.getElementById("testTitle")
+    document
+      .getElementById("testTitle")
       .value
       .trim();
 
   const duration =
     Number(
-      document.getElementById("testDuration")
+      document
+        .getElementById("testDuration")
         .value
     );
 
   const questions =
     Number(
-      document.getElementById("testQuestions")
+      document
+        .getElementById("testQuestions")
         .value
     );
 
   const active =
-    document.getElementById("testActive")
+    document
+      .getElementById("testActive")
       .value === "true";
 
   if(!title){
@@ -3560,18 +3646,9 @@ async function saveTest(){
   }
 
   const testType =
-    inferTestType(folder);
-
-  /*
-    mock_tests.test_type accepts only:
-    FULL
-    SECTIONAL
-    SUBJECT_WISE
-
-    We use:
-    FULL       -> Full mocks
-    SECTIONAL  -> Sectional mocks
-  */
+    inferTestType(
+      folder
+    );
 
   if(editingTestId !== null){
 
@@ -3584,14 +3661,20 @@ async function saveTest(){
 
           test_type:testType,
 
-          duration_minutes:duration,
+          duration_minutes:
+            duration,
 
-          total_questions:questions,
+          total_questions:
+            questions,
 
-          is_active:active
+          is_active:
+            active
 
         })
-        .eq("id",editingTestId);
+        .eq(
+          "id",
+          editingTestId
+        );
 
     if(error){
 
@@ -3605,12 +3688,16 @@ async function saveTest(){
 
     }
 
-    showToast("Test updated.");
+    showToast(
+      "Test updated."
+    );
 
   }else{
 
     const siblings =
-      getTests(folder.id);
+      getTests(
+        folder.id
+      );
 
     const maxOrder =
       siblings.reduce(
@@ -3622,39 +3709,41 @@ async function saveTest(){
         -1
       );
 
-    /*
-      For sectional subject folders,
-      try to use the subject_id attached
-      to that folder.
-
-      If there is no subject_id, it remains null.
-    */
-
     const subjectId =
-      folder.subject_id || null;
+      folder.subject_id ||
+      null;
 
     const {error} =
       await db
         .from("mock_tests")
         .insert({
 
-          exam_id:selectedExam.id,
+          exam_id:
+            selectedExam.id,
 
-          folder_id:folder.id,
+          folder_id:
+            folder.id,
 
-          title:title,
+          title:
+            title,
 
-          test_type:testType,
+          test_type:
+            testType,
 
-          subject_id:subjectId,
+          subject_id:
+            subjectId,
 
-          duration_minutes:duration,
+          duration_minutes:
+            duration,
 
-          total_questions:questions,
+          total_questions:
+            questions,
 
-          is_active:active,
+          is_active:
+            active,
 
-          sort_order:maxOrder + 1
+          sort_order:
+            maxOrder + 1
 
         });
 
@@ -3670,7 +3759,9 @@ async function saveTest(){
 
     }
 
-    showToast("Test created.");
+    showToast(
+      "Test created."
+    );
 
   }
 
@@ -3679,10 +3770,6 @@ async function saveTest(){
   closeTestForm();
 
   await loadAll();
-
-  /*
-    Re-open the same location.
-  */
 
   const freshFolder =
     folders.find(
@@ -3700,15 +3787,31 @@ async function saveTest(){
 
     if(type === "year"){
 
-      renderYearTests(freshFolder);
+      renderYearTests(
+        freshFolder
+      );
 
-    }else if(type === "subject"){
+    }else if(
+      type === "subject"
+    ){
 
-      renderSubjectTests(freshFolder);
+      renderSubjectTests(
+        freshFolder
+      );
 
-    }else if(type === "full"){
+    }else if(
+      type === "full"
+    ){
 
-      renderFullLevel(freshFolder);
+      renderFolderLevel(
+        folders.find(
+          x =>
+            Number(x.id) ===
+            Number(
+              freshFolder.parent_id
+            )
+        )
+      );
 
     }
 
@@ -3720,31 +3823,41 @@ async function saveTest(){
    MOVE TEST
 ========================================================= */
 
-async function moveTest(id,direction){
+async function moveTest(
+  id,
+  direction
+){
 
   const test =
     tests.find(
-      x => Number(x.id) === Number(id)
+      x =>
+        Number(x.id) ===
+        Number(id)
     );
 
-  if(!test) return;
+  if(!test)
+    return;
 
   const siblings =
-    getTests(test.folder_id);
+    getTests(
+      test.folder_id
+    );
 
   const index =
     siblings.findIndex(
-      x => Number(x.id) === Number(id)
+      x =>
+        Number(x.id) ===
+        Number(id)
     );
 
   const target =
     index + direction;
 
-  if(target < 0 || target >= siblings.length){
-
+  if(
+    target < 0 ||
+    target >= siblings.length
+  )
     return;
-
-  }
 
   const current =
     siblings[index];
@@ -3753,18 +3866,26 @@ async function moveTest(id,direction){
     siblings[target];
 
   const currentOrder =
-    Number(current.sort_order)||0;
+    Number(
+      current.sort_order
+    ) || 0;
 
   const otherOrder =
-    Number(other.sort_order)||0;
+    Number(
+      other.sort_order
+    ) || 0;
 
   const {error} =
     await db
       .from("mock_tests")
       .update({
-        sort_order:otherOrder
+        sort_order:
+          otherOrder
       })
-      .eq("id",current.id);
+      .eq(
+        "id",
+        current.id
+      );
 
   if(error){
 
@@ -3782,9 +3903,13 @@ async function moveTest(id,direction){
     await db
       .from("mock_tests")
       .update({
-        sort_order:currentOrder
+        sort_order:
+          currentOrder
       })
-      .eq("id",other.id);
+      .eq(
+        "id",
+        other.id
+      );
 
   if(error2){
 
@@ -3810,26 +3935,29 @@ async function deleteTest(id){
 
   const test =
     tests.find(
-      x => Number(x.id) === Number(id)
+      x =>
+        Number(x.id) ===
+        Number(id)
     );
 
-  if(!test) return;
+  if(!test)
+    return;
 
   if(
     !confirm(
       `Delete "${test.title}"?`
     )
-  ){
-
+  )
     return;
-
-  }
 
   const {error} =
     await db
       .from("mock_tests")
       .delete()
-      .eq("id",id);
+      .eq(
+        "id",
+        id
+      );
 
   if(error){
 
@@ -3843,7 +3971,9 @@ async function deleteTest(id){
 
   }
 
-  showToast("Test deleted.");
+  showToast(
+    "Test deleted."
+  );
 
   await loadAll();
 
@@ -3853,7 +3983,10 @@ async function deleteTest(id){
    LEAF FORM
 ========================================================= */
 
-function openLeafForm(parentId,type){
+function openLeafForm(
+  parentId,
+  type
+){
 
   currentParentId =
     Number(parentId);
@@ -3863,53 +3996,91 @@ function openLeafForm(parentId,type){
 
   editingFolderId = null;
 
-  if(currentLeafType === "year"){
+  if(
+    currentLeafType === "year"
+  ){
 
-    document.getElementById("leafModalTitle")
+    document
+      .getElementById(
+        "leafModalTitle"
+      )
       .textContent =
         "Add PYQ Year";
 
-    document.getElementById("leafLabel")
+    document
+      .getElementById(
+        "leafLabel"
+      )
       .textContent =
         "Year";
 
-    document.getElementById("leafName")
+    document
+      .getElementById(
+        "leafName"
+      )
       .placeholder =
         "2025";
 
   }else{
 
-    document.getElementById("leafModalTitle")
+    document
+      .getElementById(
+        "leafModalTitle"
+      )
       .textContent =
         "Add Subject";
 
-    document.getElementById("leafLabel")
+    document
+      .getElementById(
+        "leafLabel"
+      )
       .textContent =
         "Subject";
 
-    document.getElementById("leafName")
+    document
+      .getElementById(
+        "leafName"
+      )
       .placeholder =
         "English";
 
   }
 
-  document.getElementById("leafName")
+  document
+    .getElementById(
+      "leafName"
+    )
     .value = "";
 
-  openModal("leafModal");
+  openModal(
+    "leafModal"
+  );
 
 }
 
 function closeLeafForm(){
 
-  closeModal("leafModal");
+  closeModal(
+    "leafModal"
+  );
 
 }
 
 async function saveLeaf(){
 
+  if(editingFolderId !== null){
+
+    await saveEditedFolder();
+
+    return;
+
+  }
+
   const name =
-    document.getElementById("leafName")
+    document
+      .getElementById(
+        "leafName"
+      )
       .value
       .trim();
 
@@ -3928,13 +4099,17 @@ async function saveLeaf(){
     folders.some(
       f =>
         Number(f.parent_id) ===
-          Number(currentParentId) &&
-        normalizeType(f.folder_type) ===
-          currentLeafType &&
+        Number(currentParentId) &&
+        normalizeType(
+          f.folder_type
+        ) ===
+        currentLeafType &&
         String(
           f.display_name ||
           f.name
-        ).trim().toLowerCase() ===
+        )
+        .trim()
+        .toLowerCase() ===
         name.toLowerCase()
     );
 
@@ -3971,17 +4146,23 @@ async function saveLeaf(){
       .from("mock_folders")
       .insert({
 
-        exam_id:selectedExam.id,
+        exam_id:
+          selectedExam.id,
 
-        parent_id:currentParentId,
+        parent_id:
+          currentParentId,
 
-        name:name,
+        name:
+          name,
 
-        display_name:name,
+        display_name:
+          name,
 
-        folder_type:currentLeafType,
+        folder_type:
+          currentLeafType,
 
-        sort_order:maxOrder + 1,
+        sort_order:
+          maxOrder + 1,
 
         is_active:true,
 
@@ -4024,15 +4205,31 @@ async function saveLeaf(){
   if(parent){
 
     const type =
-      normalizeType(parent.folder_type);
+      normalizeType(
+        parent.folder_type
+      );
 
     if(type === "full"){
 
-      renderPYQFull(parent);
+      renderFolderLevel(
+        folders.find(
+          x =>
+            Number(x.id) ===
+            Number(parent.parent_id)
+        )
+      );
 
-    }else if(type === "sectional"){
+    }else if(
+      type === "sectional"
+    ){
 
-      renderSectionalLevel(parent);
+      renderFolderLevel(
+        folders.find(
+          x =>
+            Number(x.id) ===
+            Number(parent.parent_id)
+        )
+      );
 
     }
 
@@ -4076,21 +4273,21 @@ function editFolder(id){
 
   const folder =
     folders.find(
-      x => Number(x.id) === Number(id)
+      x =>
+        Number(x.id) ===
+        Number(id)
     );
 
-  if(!folder) return;
+  if(!folder)
+    return;
 
   editingFolderId =
     Number(id);
 
   const type =
-    normalizeType(folder.folder_type);
-
-  /*
-    Root/category/leaf all use the same
-    simple name editor.
-  */
+    normalizeType(
+      folder.folder_type
+    );
 
   currentParentId =
     folder.parent_id
@@ -4100,7 +4297,10 @@ function editFolder(id){
   currentLeafType =
     type;
 
-  document.getElementById("leafModalTitle")
+  document
+    .getElementById(
+      "leafModalTitle"
+    )
     .textContent =
       "Edit " +
       (
@@ -4111,21 +4311,32 @@ function editFolder(id){
             : "Folder"
       );
 
-  document.getElementById("leafLabel")
+  document
+    .getElementById(
+      "leafLabel"
+    )
     .textContent =
       "Name";
 
-  document.getElementById("leafName")
+  document
+    .getElementById(
+      "leafName"
+    )
     .placeholder =
       "Name";
 
-  document.getElementById("leafName")
+  document
+    .getElementById(
+      "leafName"
+    )
     .value =
       folder.display_name ||
       folder.name ||
       "";
 
-  openModal("leafModal");
+  openModal(
+    "leafModal"
+  );
 
 }
 
@@ -4136,7 +4347,10 @@ function editFolder(id){
 async function saveEditedFolder(){
 
   const name =
-    document.getElementById("leafName")
+    document
+      .getElementById(
+        "leafName"
+      )
       .value
       .trim();
 
@@ -4179,7 +4393,10 @@ async function saveEditedFolder(){
         display_name:name
 
       })
-      .eq("id",editingFolderId);
+      .eq(
+        "id",
+        editingFolderId
+      );
 
   if(error){
 
@@ -4197,83 +4414,57 @@ async function saveEditedFolder(){
 
   closeLeafForm();
 
-  showToast("Folder updated.");
+  showToast(
+    "Folder updated."
+  );
 
   await loadAll();
 
 }
 
 /* =========================================================
-   OVERRIDE SAVE LEAF
-========================================================= */
-
-const originalSaveLeaf =
-  saveLeaf;
-
-saveLeaf = async function(){
-
-  if(editingFolderId !== null){
-
-    await saveEditedFolder();
-
-    return;
-
-  }
-
-  await originalSaveLeaf();
-
-};
-
-/* =========================================================
    MOVE FOLDER
 ========================================================= */
 
-async function moveFolder(id,direction){
+async function moveFolder(
+  id,
+  direction
+){
 
   const folder =
     folders.find(
-      x => Number(x.id) === Number(id)
+      x =>
+        Number(x.id) ===
+        Number(id)
     );
 
-  if(!folder) return;
-
-  const siblings =
-    folders
-      .filter(
-        x =>
-          Number(x.exam_id) ===
-            Number(folder.exam_id) &&
-          (
-            Number(x.parent_id || 0) ===
-            Number(folder.parent_id || 0)
-          ) &&
-          normalizeType(x.folder_type) ===
-          normalizeType(folder.folder_type)
-      )
-      .sort(sortByOrder);
-
-  /*
-    For full/sectional categories we DO NOT
-    want to accidentally mix folder types.
-    Root children are therefore reordered
-    together separately below.
-  */
-
-  let orderedSiblings;
+  if(!folder)
+    return;
 
   const parent =
     folder.parent_id
       ? folders.find(
           x =>
             Number(x.id) ===
-            Number(folder.parent_id)
+            Number(
+              folder.parent_id
+            )
         )
       : null;
+
+  let orderedSiblings;
+
+  /*
+    Root children:
+    NEW / PYQ together.
+  */
 
   if(
     parent &&
     ["new","pyq"].includes(
-      normalizeType(parent.folder_type)
+      normalizeType(
+        parent.folder_type
+      )
     )
   ){
 
@@ -4288,14 +4479,29 @@ async function moveFolder(id,direction){
 
   }else{
 
+    /*
+      Same folder type:
+      years with years,
+      subjects with subjects,
+      etc.
+    */
+
     orderedSiblings =
       folders
         .filter(
           x =>
-            Number(x.parent_id || 0) ===
-            Number(folder.parent_id || 0) &&
-            normalizeType(x.folder_type) ===
-            normalizeType(folder.folder_type)
+            Number(
+              x.parent_id || 0
+            ) ===
+            Number(
+              folder.parent_id || 0
+            ) &&
+            normalizeType(
+              x.folder_type
+            ) ===
+            normalizeType(
+              folder.folder_type
+            )
         )
         .sort(sortByOrder);
 
@@ -4303,22 +4509,23 @@ async function moveFolder(id,direction){
 
   const index =
     orderedSiblings.findIndex(
-      x => Number(x.id) === Number(id)
+      x =>
+        Number(x.id) ===
+        Number(id)
     );
 
-  if(index < 0) return;
+  if(index < 0)
+    return;
 
   const target =
     index + direction;
 
   if(
     target < 0 ||
-    target >= orderedSiblings.length
-  ){
-
+    target >=
+      orderedSiblings.length
+  )
     return;
-
-  }
 
   const current =
     orderedSiblings[index];
@@ -4327,18 +4534,26 @@ async function moveFolder(id,direction){
     orderedSiblings[target];
 
   const currentOrder =
-    Number(current.sort_order)||0;
+    Number(
+      current.sort_order
+    ) || 0;
 
   const otherOrder =
-    Number(other.sort_order)||0;
+    Number(
+      other.sort_order
+    ) || 0;
 
   const {error} =
     await db
       .from("mock_folders")
       .update({
-        sort_order:otherOrder
+        sort_order:
+          otherOrder
       })
-      .eq("id",current.id);
+      .eq(
+        "id",
+        current.id
+      );
 
   if(error){
 
@@ -4356,9 +4571,13 @@ async function moveFolder(id,direction){
     await db
       .from("mock_folders")
       .update({
-        sort_order:currentOrder
+        sort_order:
+          currentOrder
       })
-      .eq("id",other.id);
+      .eq(
+        "id",
+        other.id
+      );
 
   if(error2){
 
@@ -4384,38 +4603,39 @@ async function deleteFolder(id){
 
   const folder =
     folders.find(
-      x => Number(x.id) === Number(id)
+      x =>
+        Number(x.id) ===
+        Number(id)
     );
 
-  if(!folder) return;
+  if(!folder)
+    return;
 
   const descendants =
     getDescendants(id);
 
   const allIds = [
     Number(id),
-    ...descendants.map(x=>Number(x.id))
+    ...descendants.map(
+      x => Number(x.id)
+    )
   ];
 
   if(
     !confirm(
       `Delete "${folder.display_name || folder.name}" and everything inside it?`
     )
-  ){
-
+  )
     return;
-
-  }
-
-  /*
-    Delete tests first.
-  */
 
   const {error:testError} =
     await db
       .from("mock_tests")
       .delete()
-      .in("folder_id",allIds);
+      .in(
+        "folder_id",
+        allIds
+      );
 
   if(testError){
 
@@ -4429,27 +4649,32 @@ async function deleteFolder(id){
 
   }
 
-  /*
-    Delete deepest folders first.
-  */
-
   const remaining =
     folders.filter(
-      f => allIds.includes(Number(f.id))
+      f =>
+        allIds.includes(
+          Number(f.id)
+        )
     );
 
   while(remaining.length){
 
     const leafFolders =
-      remaining.filter(folderItem=>{
+      remaining.filter(
+        folderItem=>{
 
-        return !remaining.some(
-          child =>
-            Number(child.parent_id) ===
-            Number(folderItem.id)
-        );
+          return !remaining.some(
+            child =>
+              Number(
+                child.parent_id
+              ) ===
+              Number(
+                folderItem.id
+              )
+          );
 
-      });
+        }
+      );
 
     const batch =
       leafFolders.length
@@ -4458,14 +4683,17 @@ async function deleteFolder(id){
 
     const ids =
       batch.map(
-        x=>Number(x.id)
+        x => Number(x.id)
       );
 
     const {error} =
       await db
         .from("mock_folders")
         .delete()
-        .in("id",ids);
+        .in(
+          "id",
+          ids
+        );
 
     if(error){
 
@@ -4479,22 +4707,26 @@ async function deleteFolder(id){
 
     }
 
-    for(const item of batch){
+    for(
+      const item of batch
+    ){
 
       const index =
         remaining.indexOf(item);
 
-      if(index >= 0){
-
-        remaining.splice(index,1);
-
-      }
+      if(index >= 0)
+        remaining.splice(
+          index,
+          1
+        );
 
     }
 
   }
 
-  showToast("Folder deleted.");
+  showToast(
+    "Folder deleted."
+  );
 
   await loadAll();
 
@@ -4504,7 +4736,9 @@ async function deleteFolder(id){
    DESCENDANTS
 ========================================================= */
 
-function getDescendants(parentId){
+function getDescendants(
+  parentId
+){
 
   const result = [];
 
@@ -4520,13 +4754,19 @@ function getDescendants(parentId){
     const children =
       folders.filter(
         f =>
-          Number(f.parent_id) ===
+          Number(
+            f.parent_id
+          ) ===
           Number(current)
       );
 
-    for(const child of children){
+    for(
+      const child of children
+    ){
 
-      result.push(child);
+      result.push(
+        child
+      );
 
       queue.push(
         Number(child.id)
@@ -4548,7 +4788,9 @@ function goToParentFolder(id){
 
   const parent =
     folders.find(
-      x => Number(x.id) === Number(id)
+      x =>
+        Number(x.id) ===
+        Number(id)
     );
 
   if(!parent){
@@ -4560,11 +4802,18 @@ function goToParentFolder(id){
   }
 
   const type =
-    normalizeType(parent.folder_type);
+    normalizeType(
+      parent.folder_type
+    );
 
-  if(type === "new" || type === "pyq"){
+  if(
+    type === "new" ||
+    type === "pyq"
+  ){
 
-    renderFolderLevel(parent);
+    renderFolderLevel(
+      parent
+    );
 
     return;
 
@@ -4572,7 +4821,17 @@ function goToParentFolder(id){
 
   if(type === "full"){
 
-    renderFullLevel(parent);
+    const root =
+      folders.find(
+        x =>
+          Number(x.id) ===
+          Number(
+            parent.parent_id
+          )
+      );
+
+    if(root)
+      renderFolderLevel(root);
 
     return;
 
@@ -4580,7 +4839,17 @@ function goToParentFolder(id){
 
   if(type === "sectional"){
 
-    renderSectionalLevel(parent);
+    const root =
+      folders.find(
+        x =>
+          Number(x.id) ===
+          Number(
+            parent.parent_id
+          )
+      );
+
+    if(root)
+      renderFolderLevel(root);
 
     return;
 
@@ -4588,7 +4857,9 @@ function goToParentFolder(id){
 
   if(type === "year"){
 
-    renderYearTests(parent);
+    renderYearTests(
+      parent
+    );
 
     return;
 
@@ -4596,7 +4867,9 @@ function goToParentFolder(id){
 
   if(type === "subject"){
 
-    renderSubjectTests(parent);
+    renderSubjectTests(
+      parent
+    );
 
     return;
 
@@ -4610,9 +4883,12 @@ function goToParentFolder(id){
    ROOT FINDER
 ========================================================= */
 
-function getRootFolder(folder){
+function getRootFolder(
+  folder
+){
 
-  let current = folder;
+  let current =
+    folder;
 
   let safety = 0;
 
@@ -4626,12 +4902,16 @@ function getRootFolder(folder){
       folders.find(
         x =>
           Number(x.id) ===
-          Number(current.parent_id)
+          Number(
+            current.parent_id
+          )
       );
 
-    if(!parent) break;
+    if(!parent)
+      break;
 
-    current = parent;
+    current =
+      parent;
 
     safety++;
 
@@ -4642,27 +4922,253 @@ function getRootFolder(folder){
 }
 
 /* =========================================================
-   MODAL CLOSE WHEN CLICKING BACKGROUND
+   CATEGORY FORM
+   KEPT FOR OLD DATABASE STRUCTURE
+========================================================= */
+
+function openCategoryForm(
+  rootId
+){
+
+  currentParentId =
+    Number(rootId);
+
+  editingFolderId = null;
+
+  const existing =
+    folders.filter(
+      f =>
+        Number(f.parent_id) ===
+        Number(rootId)
+    );
+
+  const hasFull =
+    existing.some(
+      x =>
+        normalizeType(
+          x.folder_type
+        ) === "full"
+    );
+
+  const hasSectional =
+    existing.some(
+      x =>
+        normalizeType(
+          x.folder_type
+        ) === "sectional"
+    );
+
+  const select =
+    document.getElementById(
+      "categoryType"
+    );
+
+  select.innerHTML = "";
+
+  if(!hasFull){
+
+    select.innerHTML += `
+      <option value="full">
+        FULL MOCKS
+      </option>
+    `;
+
+  }
+
+  if(!hasSectional){
+
+    select.innerHTML += `
+      <option value="sectional">
+        SECTIONAL MOCKS
+      </option>
+    `;
+
+  }
+
+  if(
+    hasFull &&
+    hasSectional
+  ){
+
+    showToast(
+      "Both categories already exist.",
+      true
+    );
+
+    return;
+
+  }
+
+  document
+    .getElementById(
+      "categoryModalTitle"
+    )
+    .textContent =
+      "Add Category";
+
+  openModal(
+    "categoryModal"
+  );
+
+}
+
+function closeCategoryForm(){
+
+  closeModal(
+    "categoryModal"
+  );
+
+}
+
+async function saveCategory(){
+
+  if(
+    !selectedExam ||
+    !currentParentId
+  ){
+
+    showToast(
+      "Invalid parent folder.",
+      true
+    );
+
+    return;
+
+  }
+
+  const type =
+    normalizeType(
+      document
+        .getElementById(
+          "categoryType"
+        )
+        .value
+    );
+
+  const duplicate =
+    folders.some(
+      f =>
+        Number(f.parent_id) ===
+        Number(currentParentId) &&
+        normalizeType(
+          f.folder_type
+        ) === type
+    );
+
+  if(duplicate){
+
+    showToast(
+      "This category already exists.",
+      true
+    );
+
+    return;
+
+  }
+
+  const siblings =
+    folders.filter(
+      f =>
+        Number(f.parent_id) ===
+        Number(currentParentId)
+    );
+
+  const maxOrder =
+    siblings.reduce(
+      (m,x)=>
+        Math.max(
+          m,
+          Number(x.sort_order)||0
+        ),
+      -1
+    );
+
+  const title =
+    type === "full"
+      ? "FULL MOCKS"
+      : "SECTIONAL MOCKS";
+
+  const {error} =
+    await db
+      .from("mock_folders")
+      .insert({
+
+        exam_id:
+          selectedExam.id,
+
+        parent_id:
+          currentParentId,
+
+        name:
+          title,
+
+        display_name:
+          title,
+
+        folder_type:
+          type,
+
+        sort_order:
+          maxOrder + 1,
+
+        is_active:true
+
+      });
+
+  if(error){
+
+    showToast(
+      "MOCK_FOLDERS: " +
+      error.message,
+      true
+    );
+
+    return;
+
+  }
+
+  closeCategoryForm();
+
+  showToast(
+    title +
+    " created."
+  );
+
+  await loadAll();
+
+}
+
+/* =========================================================
+   MODAL BACKGROUND CLOSE
 ========================================================= */
 
 document
-  .querySelectorAll(".modal-bg")
-  .forEach(modal=>{
+  .querySelectorAll(
+    ".modal-bg"
+  )
+  .forEach(
+    modal=>{
 
-    modal.addEventListener(
-      "click",
-      event=>{
+      modal.addEventListener(
+        "click",
+        event=>{
 
-        if(event.target === modal){
+          if(
+            event.target ===
+            modal
+          ){
 
-          modal.classList.remove("show");
+            modal.classList.remove(
+              "show"
+            );
+
+          }
 
         }
+      );
 
-      }
-    );
-
-  });
+    }
+  );
 
 /* =========================================================
    INITIAL LOAD
