@@ -334,8 +334,6 @@ button{
 
 /* =========================================================
    CATEGORY SECTION
-   FULL MOCKS / SECTIONAL MOCKS ARE NOW SECTIONS
-   NOT BIG FOLDER CARDS
 ========================================================= */
 
 .category-section{
@@ -433,6 +431,59 @@ button{
   background:var(--card);
   color:var(--text);
   font-size:11px;
+}
+
+/* ---------- CHIPS (NEW) ---------- */
+.chip-list {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 5px 0 15px;
+  scrollbar-width: none;
+}
+
+.chip-list::-webkit-scrollbar {
+  display: none; 
+}
+
+.chip {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--card2);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.chip:hover {
+  border-color: var(--purple);
+}
+
+.chip.active {
+  background: var(--purple);
+  color: white;
+  border-color: var(--purple);
+}
+
+.active-leaf-admin {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px dashed var(--border);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.active-leaf-title {
+  font-size: 14px;
+  font-weight: 800;
+  margin-right: auto;
 }
 
 /* ---------- TESTS ---------- */
@@ -1173,66 +1224,66 @@ let editingTestId = null;
 let currentParentId = null;
 let currentLeafType = null;
 
+let currentActiveYearId = null;
+let currentActiveSubjectId = null;
+
 /* =========================================================
    HELPERS
 ========================================================= */
 
 function normalizeType(value){
-
   return String(value || "")
     .trim()
     .toLowerCase();
-
 }
 
 function esc(value){
-
   return String(value ?? "")
     .replace(/&/g,"&amp;")
     .replace(/</g,"&lt;")
     .replace(/>/g,"&gt;")
     .replace(/"/g,"&quot;")
     .replace(/'/g,"&#039;");
-
 }
 
 function showToast(message,error=false){
-
   const toast =
     document.getElementById("toast");
-
   toast.textContent = message;
-
   toast.classList.toggle(
     "error",
     error
   );
-
   toast.classList.add("show");
-
   clearTimeout(window.toastTimer);
-
   window.toastTimer =
     setTimeout(()=>{
       toast.classList.remove("show");
     },2600);
-
 }
 
 function closeModal(id){
-
   document
     .getElementById(id)
     .classList.remove("show");
-
 }
 
 function openModal(id){
-
   document
     .getElementById(id)
     .classList.add("show");
+}
 
+function selectYear(id, rootId) {
+  currentActiveYearId = id;
+  const root = folders.find(x => Number(x.id) === Number(rootId));
+  if(root) renderFolderLevel(root);
+}
+
+function selectSubject(id, rootId) {
+  currentActiveSubjectId = id;
+  const root = folders.find(x => Number(x.id) === Number(rootId));
+  if(root) renderFolderLevel(root);
 }
 
 /* =========================================================
@@ -1240,36 +1291,24 @@ function openModal(id){
 ========================================================= */
 
 function sortByOrder(a,b){
-
   return (Number(a.sort_order)||0)
        - (Number(b.sort_order)||0);
-
 }
 
 function sortExams(){
-
   exams.sort((a,b)=>{
-
     const boardA =
       String(a.board||"");
-
     const boardB =
       String(b.board||"");
-
     if(boardA !== boardB){
-
       if(boardA === "SSC")
         return -1;
-
       if(boardB === "SSC")
         return 1;
-
     }
-
     return sortByOrder(a,b);
-
   });
-
 }
 
 /* =========================================================
@@ -1277,21 +1316,16 @@ function sortExams(){
 ========================================================= */
 
 async function loadAll(){
-
   if(!window.supabase){
-
     showToast(
       "Supabase library failed to load.",
       true
     );
-
     return;
-
   }
 
   const results =
     await Promise.all([
-
       db
         .from("exams")
         .select("*")
@@ -1303,7 +1337,6 @@ async function loadAll(){
           "id",
           {ascending:true}
         ),
-
       db
         .from("mock_folders")
         .select("*")
@@ -1315,7 +1348,6 @@ async function loadAll(){
           "id",
           {ascending:true}
         ),
-
       db
         .from("mock_tests")
         .select("*")
@@ -1327,7 +1359,6 @@ async function loadAll(){
           "id",
           {ascending:true}
         ),
-
       db
         .from("subjects")
         .select("*")
@@ -1335,7 +1366,6 @@ async function loadAll(){
           "id",
           {ascending:true}
         )
-
     ]);
 
   const names = [
@@ -1346,44 +1376,33 @@ async function loadAll(){
   ];
 
   for(let i=0;i<results.length;i++){
-
     if(results[i].error){
-
       console.error(
         names[i],
         results[i].error
       );
-
       showToast(
         names[i] + ": " +
         results[i].error.message,
         true
       );
-
       return;
-
     }
-
   }
 
   exams =
     results[0].data || [];
-
   folders =
     results[1].data || [];
-
   tests =
     results[2].data || [];
-
   subjects =
     results[3].data || [];
 
   sortExams();
-
   renderExams();
 
   if(selectedExam){
-
     const fresh =
       exams.find(
         x =>
@@ -1392,23 +1411,15 @@ async function loadAll(){
       );
 
     if(fresh){
-
       selectedExam = fresh;
-
       renderWorkspace();
-
     }else{
-
       selectedExam = null;
-
       document
         .getElementById("workspace")
         .classList.add("hidden");
-
     }
-
   }
-
 }
 
 /* =========================================================
@@ -1416,25 +1427,20 @@ async function loadAll(){
 ========================================================= */
 
 function renderExams(){
-
   const box =
     document.getElementById("examList");
 
   if(!exams.length){
-
     box.innerHTML = `
       <div class="empty">
         No exams added yet.
       </div>
     `;
-
     return;
-
   }
 
   box.innerHTML =
     exams.map(exam=>{
-
       const active =
         selectedExam &&
         Number(selectedExam.id) ===
@@ -1464,77 +1470,58 @@ function renderExams(){
           `;
 
       return `
-
         <div
           class="exam-card
           ${active ? "active":""}"
         >
-
           <div class="exam-main">
-
             <div class="exam-logo">
               ${logo}
             </div>
-
             <div>
-
               <div class="exam-name">
                 ${esc(exam.name)}
               </div>
-
               <div class="exam-board">
                 ${esc(board)}
               </div>
-
             </div>
-
           </div>
-
           <div class="exam-actions">
-
             <button
               class="small-btn purple"
               onclick="selectExam(${exam.id})"
             >
               Manage
             </button>
-
             <button
               class="small-btn"
               onclick="editExam(${exam.id})"
             >
               Edit
             </button>
-
             <button
               class="small-btn"
               onclick="moveExam(${exam.id},-1)"
             >
               ↑
             </button>
-
             <button
               class="small-btn"
               onclick="moveExam(${exam.id},1)"
             >
               ↓
             </button>
-
             <button
               class="small-btn red"
               onclick="deleteExam(${exam.id})"
             >
               Delete
             </button>
-
           </div>
-
         </div>
-
       `;
-
     }).join("");
-
 }
 
 /* =========================================================
@@ -1542,7 +1529,6 @@ function renderExams(){
 ========================================================= */
 
 function selectExam(id){
-
   selectedExam =
     exams.find(
       x =>
@@ -1554,9 +1540,7 @@ function selectExam(id){
     return;
 
   renderExams();
-
   renderWorkspace();
-
 }
 
 /* =========================================================
@@ -1564,27 +1548,20 @@ function selectExam(id){
 ========================================================= */
 
 function openExamForm(){
-
   editingExamId = null;
-
   document
     .getElementById("examModalTitle")
     .textContent = "Add Exam";
-
   document
     .getElementById("examBoard")
     .value = "SSC";
-
   document
     .getElementById("examName")
     .value = "";
-
   openModal("examModal");
-
 }
 
 function editExam(id){
-
   const exam =
     exams.find(
       x =>
@@ -1597,33 +1574,25 @@ function editExam(id){
 
   editingExamId =
     Number(id);
-
   document
     .getElementById("examModalTitle")
     .textContent = "Edit Exam";
-
   document
     .getElementById("examBoard")
     .value =
       exam.board || "SSC";
-
   document
     .getElementById("examName")
     .value =
       exam.name || "";
-
   openModal("examModal");
-
 }
 
 function closeExamForm(){
-
   closeModal("examModal");
-
 }
 
 async function saveExam(){
-
   const board =
     document
       .getElementById("examBoard")
@@ -1638,14 +1607,11 @@ async function saveExam(){
       .trim();
 
   if(!name){
-
     showToast(
       "Enter exam name.",
       true
     );
-
     return;
-
   }
 
   const isEditing =
@@ -1655,7 +1621,6 @@ async function saveExam(){
     editingExamId;
 
   if(isEditing){
-
     const {error} =
       await db
         .from("exams")
@@ -1669,15 +1634,12 @@ async function saveExam(){
         );
 
     if(error){
-
       showToast(
         "EXAMS: " +
         error.message,
         true
       );
-
       return;
-
     }
 
     if(
@@ -1685,21 +1647,16 @@ async function saveExam(){
       Number(selectedExam.id) ===
       Number(idBeingEdited)
     ){
-
       selectedExam = {
         ...selectedExam,
         board,
         name
       };
-
     }
 
-    showToast(
-      "Exam updated."
-    );
+    showToast("Exam updated.");
 
   }else{
-
     const maxOrder =
       exams
         .filter(
@@ -1722,48 +1679,32 @@ async function saveExam(){
       await db
         .from("exams")
         .insert({
-
           board:board,
-
           name:name,
-
           mock_type:"SECTIONAL",
-
           is_active:true,
-
           sort_order:
             maxOrder + 1
-
         })
         .select()
         .single();
 
     if(error){
-
       showToast(
         "EXAMS: " +
         error.message,
         true
       );
-
       return;
-
     }
 
     selectedExam = data;
-
-    showToast(
-      "Exam created."
-    );
-
+    showToast("Exam created.");
   }
 
   editingExamId = null;
-
   closeExamForm();
-
   await loadAll();
-
 }
 
 /* =========================================================
@@ -1771,7 +1712,6 @@ async function saveExam(){
 ========================================================= */
 
 async function moveExam(id,direction){
-
   const sameBoard =
     exams.filter(
       x =>
@@ -1808,13 +1748,11 @@ async function moveExam(id,direction){
 
   const current =
     sameBoard[pos];
-
   const other =
     sameBoard[target];
 
   const currentOrder =
     Number(current.sort_order)||0;
-
   const otherOrder =
     Number(other.sort_order)||0;
 
@@ -1830,15 +1768,12 @@ async function moveExam(id,direction){
       );
 
   if(error){
-
     showToast(
       "EXAMS: " +
       error.message,
       true
     );
-
     return;
-
   }
 
   const {error:error2} =
@@ -1853,19 +1788,15 @@ async function moveExam(id,direction){
       );
 
   if(error2){
-
     showToast(
       "EXAMS: " +
       error2.message,
       true
     );
-
     return;
-
   }
 
   await loadAll();
-
 }
 
 /* =========================================================
@@ -1873,7 +1804,6 @@ async function moveExam(id,direction){
 ========================================================= */
 
 async function deleteExam(id){
-
   const exam =
     exams.find(
       x =>
@@ -1904,7 +1834,6 @@ async function deleteExam(id){
     );
 
   if(folderIds.length){
-
     const {error:testError} =
       await db
         .from("mock_tests")
@@ -1913,30 +1842,23 @@ async function deleteExam(id){
           "folder_id",
           folderIds
         );
-
     if(testError){
-
       showToast(
         "MOCK_TESTS: " +
         testError.message,
         true
       );
-
       return;
-
     }
-
   }
 
   const remaining =
     [...examFolders];
 
   while(remaining.length){
-
     const leafFolders =
       remaining.filter(
         folder=>{
-
           return !remaining.some(
             child =>
               Number(
@@ -1944,7 +1866,6 @@ async function deleteExam(id){
               ) ===
               Number(folder.id)
           );
-
         }
       );
 
@@ -1968,27 +1889,20 @@ async function deleteExam(id){
         );
 
     if(error){
-
       showToast(
         "MOCK_FOLDERS: " +
         error.message,
         true
       );
-
       return;
-
     }
 
     for(const item of batch){
-
       const index =
         remaining.indexOf(item);
-
       if(index >= 0)
         remaining.splice(index,1);
-
     }
-
   }
 
   const {error:examError} =
@@ -2001,15 +1915,12 @@ async function deleteExam(id){
       );
 
   if(examError){
-
     showToast(
       "EXAMS: " +
       examError.message,
       true
     );
-
     return;
-
   }
 
   if(
@@ -2017,17 +1928,11 @@ async function deleteExam(id){
     Number(selectedExam.id) ===
     Number(id)
   ){
-
     selectedExam = null;
-
   }
 
-  showToast(
-    "Exam deleted."
-  );
-
+  showToast("Exam deleted.");
   await loadAll();
-
 }
 
 /* =========================================================
@@ -2035,20 +1940,16 @@ async function deleteExam(id){
 ========================================================= */
 
 function renderWorkspace(){
-
   const workspace =
     document.getElementById(
       "workspace"
     );
 
   if(!selectedExam){
-
     workspace.classList.add(
       "hidden"
     );
-
     return;
-
   }
 
   workspace.classList.remove(
@@ -2063,7 +1964,6 @@ function renderWorkspace(){
       `${selectedExam.board} ${selectedExam.name}`;
 
   renderRootArea();
-
 }
 
 /* =========================================================
@@ -2071,7 +1971,6 @@ function renderWorkspace(){
 ========================================================= */
 
 function renderRootArea(){
-
   if(!selectedExam)
     return;
 
@@ -2093,123 +1992,95 @@ function renderRootArea(){
   let html = "";
 
   if(roots.length < 2){
-
     html += `
-
       <div style="margin-bottom:14px;">
-
         <button
           class="secondary-btn"
           onclick="openRootForm()"
         >
           + Add Missing Mock Type
         </button>
-
       </div>
-
     `;
-
   }
 
   if(!roots.length){
-
     html += `
       <div class="empty">
         No mock structure added for this exam.
       </div>
     `;
-
     document
       .getElementById("rootArea")
       .innerHTML = html;
-
     return;
-
   }
 
   html += `<div class="root-grid">`;
 
   html += roots.map(root=>{
-
     const type =
       normalizeType(
         root.folder_type
       );
-
     const title =
       type === "new"
         ? "NEW MOCKS"
         : "PYQ MOCKS";
-
     const desc =
       type === "new"
         ? "Newly created mock tests."
         : "Previous Year Question mock tests.";
-
     const icon =
       type === "new"
         ? "⚡"
         : "📚";
 
     return `
-
       <div class="root-card">
-
         <div class="root-icon">
           ${icon}
         </div>
-
         <div class="root-title">
           ${title}
         </div>
-
         <div class="root-desc">
           ${desc}
         </div>
-
         <div class="root-actions">
-
           <button
             class="small-btn purple"
             onclick="openRoot(${root.id})"
           >
             Open
           </button>
-
           <button
             class="small-btn"
             onclick="editFolder(${root.id})"
           >
             Edit
           </button>
-
           <button
             class="small-btn"
             onclick="moveFolder(${root.id},-1)"
           >
             ↑
           </button>
-
           <button
             class="small-btn"
             onclick="moveFolder(${root.id},1)"
           >
             ↓
           </button>
-
           <button
             class="small-btn red"
             onclick="deleteFolder(${root.id})"
           >
             Delete
           </button>
-
         </div>
-
       </div>
-
     `;
-
   }).join("");
 
   html += `</div>`;
@@ -2217,7 +2088,6 @@ function renderRootArea(){
   document
     .getElementById("rootArea")
     .innerHTML = html;
-
 }
 
 /* =========================================================
@@ -2225,7 +2095,6 @@ function renderRootArea(){
 ========================================================= */
 
 function openRoot(rootId){
-
   const root =
     folders.find(
       x =>
@@ -2237,7 +2106,6 @@ function openRoot(rootId){
     return;
 
   renderFolderLevel(root);
-
 }
 
 /* =========================================================
@@ -2245,16 +2113,12 @@ function openRoot(rootId){
 ========================================================= */
 
 function openRootForm(){
-
   if(!selectedExam){
-
     showToast(
       "Select an exam first.",
       true
     );
-
     return;
-
   }
 
   const existing =
@@ -2289,52 +2153,37 @@ function openRootForm(){
   select.innerHTML = "";
 
   if(!hasNew){
-
     select.innerHTML += `
       <option value="new">
         NEW MOCKS
       </option>
     `;
-
   }
 
   if(!hasPyq){
-
     select.innerHTML += `
       <option value="pyq">
         PYQ MOCKS
       </option>
     `;
-
   }
 
   if(hasNew && hasPyq){
-
     showToast(
       "Both NEW MOCKS and PYQ MOCKS already exist.",
       true
     );
-
     return;
-
   }
 
-  openModal(
-    "rootModal"
-  );
-
+  openModal("rootModal");
 }
 
 function closeRootForm(){
-
-  closeModal(
-    "rootModal"
-  );
-
+  closeModal("rootModal");
 }
 
 async function saveRoot(){
-
   if(!selectedExam)
     return;
 
@@ -2357,14 +2206,11 @@ async function saveRoot(){
     );
 
   if(duplicate){
-
     showToast(
       "This mock type already exists.",
       true
     );
-
     return;
-
   }
 
   const roots =
@@ -2389,67 +2235,43 @@ async function saveRoot(){
     await db
       .from("mock_folders")
       .insert({
-
         exam_id:
           selectedExam.id,
-
         name:
           type === "new"
             ? "NEW MOCKS"
             : "PYQ MOCKS",
-
         display_name:
           type === "new"
             ? "NEW MOCKS"
             : "PYQ MOCKS",
-
         folder_type:
           type,
-
         sort_order:
           maxOrder + 1,
-
         is_active:true,
-
         parent_id:null
-
       })
       .select()
       .single();
 
   if(error){
-
     showToast(
       "MOCK_FOLDERS: " +
       error.message,
       true
     );
-
     return;
-
   }
 
-  /*
-    These are logical category containers.
-    They are NOT shown as extra folder cards.
-    FULL MOCKS / SECTIONAL MOCKS are rendered
-    directly as sections inside the root.
-  */
-
-  await createRootChildren(
-    data
-  );
-
+  await createRootChildren(data);
   closeRootForm();
-
   showToast(
     type === "new"
       ? "NEW MOCKS created."
       : "PYQ MOCKS created."
   );
-
   await loadAll();
-
 }
 
 /* =========================================================
@@ -2457,84 +2279,55 @@ async function saveRoot(){
 ========================================================= */
 
 async function createRootChildren(root){
-
   const children = [
-
     {
       name:"FULL MOCKS",
       display_name:"FULL MOCKS",
       folder_type:"full",
       sort_order:0
     },
-
     {
       name:"SECTIONAL MOCKS",
       display_name:"SECTIONAL MOCKS",
       folder_type:"sectional",
       sort_order:1
     }
-
   ];
 
-  for(
-    const child of children
-  ){
-
+  for(const child of children){
     const {error} =
       await db
         .from("mock_folders")
         .insert({
-
-          exam_id:
-            selectedExam.id,
-
-          name:
-            child.name,
-
-          display_name:
-            child.display_name,
-
-          folder_type:
-            child.folder_type,
-
-          sort_order:
-            child.sort_order,
-
+          exam_id:selectedExam.id,
+          name:child.name,
+          display_name:child.display_name,
+          folder_type:child.folder_type,
+          sort_order:child.sort_order,
           is_active:true,
-
-          parent_id:
-            root.id
-
+          parent_id:root.id
         });
 
     if(error){
-
       console.error(
         "createRootChildren",
         error
       );
-
       showToast(
         "Folder creation error: " +
         error.message,
         true
       );
-
       return;
-
     }
-
   }
-
 }
 
 /* =========================================================
    ROOT OPEN
-   CATEGORY CARDS REMOVED
 ========================================================= */
 
 function renderFolderLevel(root){
-
   if(!root)
     return;
 
@@ -2569,18 +2362,14 @@ function renderFolderLevel(root){
     );
 
   let html = `
-
     <div style="margin-bottom:15px;">
-
       <button
         class="secondary-btn"
         onclick="renderRootArea()"
       >
         ← Back
       </button>
-
     </div>
-
     <div
       class="workspace-title"
       style="margin-bottom:14px;"
@@ -2590,116 +2379,71 @@ function renderFolderLevel(root){
         root.name
       )}
     </div>
-
   `;
 
-  /*
-    FULL MOCKS
-    ----------------
-    NEW = tests directly
-    PYQ = years
-  */
-
   if(full){
-
     html +=
       renderFullSection(
         full,
         rootType
       );
-
   }else{
-
     html += `
-
       <div class="category-section">
-
         <div class="category-section-head">
-
           <div class="category-section-title">
-
             <div class="category-section-icon">
               📝
             </div>
-
             FULL MOCKS
-
           </div>
-
           <button
             class="small-btn purple"
             onclick="openCategoryForm(${root.id})"
           >
             + Add
           </button>
-
         </div>
-
         <div class="empty">
           FULL MOCKS section not created yet.
         </div>
-
       </div>
-
     `;
-
   }
 
-  /*
-    SECTIONAL MOCKS
-    ----------------
-    Subjects as small chips
-  */
-
   if(sectional){
-
     html +=
       renderSectionalSection(
         sectional,
         rootType
       );
-
   }else{
-
     html += `
-
       <div class="category-section">
-
         <div class="category-section-head">
-
           <div class="category-section-title">
-
             <div class="category-section-icon">
               📖
             </div>
-
             SECTIONAL MOCKS
-
           </div>
-
           <button
             class="small-btn purple"
             onclick="openCategoryForm(${root.id})"
           >
             + Add
           </button>
-
         </div>
-
         <div class="empty">
           SECTIONAL MOCKS section not created yet.
         </div>
-
       </div>
-
     `;
-
   }
 
   document
     .getElementById("rootArea")
     .innerHTML = html;
-
 }
 
 /* =========================================================
@@ -2710,19 +2454,14 @@ function renderFullSection(
   folder,
   rootType
 ){
-
   if(rootType === "pyq"){
-
     return renderPYQFullSection(
       folder
     );
-
   }
-
   return renderNewFullSection(
     folder
   );
-
 }
 
 /* =========================================================
@@ -2730,561 +2469,195 @@ function renderFullSection(
    DIRECT TESTS
 ========================================================= */
 
-function renderNewFullSection(
-  folder
-){
-
+function renderNewFullSection(folder){
   const folderTests =
     getTests(folder.id);
 
   let html = `
-
     <div class="category-section">
-
       <div class="category-section-head">
-
         <div class="category-section-title">
-
           <div class="category-section-icon">
             📝
           </div>
-
           FULL MOCKS
-
         </div>
-
         <div class="category-section-actions">
-
           <button
             class="small-btn"
             onclick="editFolder(${folder.id})"
           >
             Edit
           </button>
-
           <button
             class="small-btn red"
             onclick="deleteFolder(${folder.id})"
           >
             Delete
           </button>
-
           <button
             class="small-btn purple"
             onclick="openTestForm(${folder.id})"
           >
             + Add Mock
           </button>
-
         </div>
-
       </div>
-
       <div class="tests-head">
-
         <div class="tests-title">
           Full Mock Tests
         </div>
-
       </div>
-
   `;
 
   html +=
     renderTestList(
       folderTests
     );
-
   html += `</div>`;
-
   return html;
-
 }
 
 /* =========================================================
    PYQ FULL
-   YEARS AS SMALL CHIPS
+   YEARS AS CLIPS
 ========================================================= */
 
-function renderPYQFullSection(
-  folder
-){
+function renderPYQFullSection(folder) {
+  const years = folders
+    .filter(f => Number(f.parent_id) === Number(folder.id) && normalizeType(f.folder_type) === "year")
+    .sort(sortByOrder);
 
-  const years =
-    folders
-      .filter(
-        f =>
-          Number(f.parent_id) ===
-          Number(folder.id) &&
-          normalizeType(
-            f.folder_type
-          ) === "year"
-      )
-      .sort(sortByOrder);
+  // Set default active year if none is selected
+  if (years.length > 0 && (!currentActiveYearId || !years.find(y => y.id === currentActiveYearId))) {
+    currentActiveYearId = years[0].id;
+  }
 
   let html = `
-
     <div class="category-section">
-
       <div class="category-section-head">
-
         <div class="category-section-title">
-
-          <div class="category-section-icon">
-            📝
-          </div>
-
+          <div class="category-section-icon">📝</div>
           FULL MOCKS
-
         </div>
-
         <div class="category-section-actions">
-
-          <button
-            class="small-btn"
-            onclick="editFolder(${folder.id})"
-          >
-            Edit
-          </button>
-
-          <button
-            class="small-btn red"
-            onclick="deleteFolder(${folder.id})"
-          >
-            Delete
-          </button>
-
-          <button
-            class="small-btn purple"
-            onclick="openLeafForm(${folder.id},'year')"
-          >
-            + Add Year
-          </button>
-
+          <button class="small-btn" onclick="editFolder(${folder.id})">Edit</button>
+          <button class="small-btn red" onclick="deleteFolder(${folder.id})">Delete</button>
+          <button class="small-btn purple" onclick="openLeafForm(${folder.id},'year')">+ Add Year</button>
         </div>
-
       </div>
-
   `;
 
-  if(!years.length){
+  if (!years.length) {
+    html += `<div class="empty">No PYQ years added yet.</div>`;
+  } else {
+    // Render the clips
+    html += `<div class="chip-list">`;
+    html += years.map(year => {
+      const isActive = year.id === currentActiveYearId;
+      const testCount = getTests(year.id).length;
+      return `
+        <div class="chip ${isActive ? 'active' : ''}" onclick="selectYear(${year.id}, ${folder.parent_id})">
+          ${esc(year.display_name || year.name)} (${testCount})
+        </div>
+      `;
+    }).join("");
+    html += `</div>`;
 
-    html += `
-      <div class="empty">
-        No PYQ years added yet.
-      </div>
-    `;
-
-  }else{
-
-    html += `
-      <div class="horizontal-scroll">
-    `;
-
-    html +=
-      years.map(
-        year=>{
-
-          return `
-
-            <div class="choice-card">
-
-              <div class="choice-title">
-                ${esc(
-                  year.display_name ||
-                  year.name
-                )}
-              </div>
-
-              <div class="choice-meta">
-                ${getTests(year.id).length}
-                tests
-              </div>
-
-              <div class="choice-actions">
-
-                <button
-                  class="small-btn purple"
-                  onclick="openYear(${year.id})"
-                >
-                  Open
-                </button>
-
-                <button
-                  class="reorder-btn"
-                  onclick="moveFolder(${year.id},-1)"
-                >
-                  ↑
-                </button>
-
-                <button
-                  class="reorder-btn"
-                  onclick="moveFolder(${year.id},1)"
-                >
-                  ↓
-                </button>
-
-                <button
-                  class="small-btn"
-                  onclick="editFolder(${year.id})"
-                >
-                  Edit
-                </button>
-
-                <button
-                  class="small-btn red"
-                  onclick="deleteFolder(${year.id})"
-                >
-                  Delete
-                </button>
-
-              </div>
-
-            </div>
-
-          `;
-
-        }
-      ).join("");
-
-    html += `
-      </div>
-    `;
-
+    // Render admin actions & tests for the selected clip
+    const activeYear = years.find(y => y.id === currentActiveYearId);
+    if (activeYear) {
+      html += `
+        <div class="active-leaf-admin">
+          <div class="active-leaf-title">${esc(activeYear.display_name || activeYear.name)} Settings:</div>
+          <button class="small-btn" onclick="moveFolder(${activeYear.id},-1)">← Move</button>
+          <button class="small-btn" onclick="moveFolder(${activeYear.id},1)">Move →</button>
+          <button class="small-btn" onclick="editFolder(${activeYear.id})">Edit</button>
+          <button class="small-btn red" onclick="deleteFolder(${activeYear.id})">Delete</button>
+        </div>
+        
+        <div class="tests-head">
+          <div class="tests-title">Tests</div>
+          <button class="small-btn purple" onclick="openTestForm(${activeYear.id})">+ Add Test</button>
+        </div>
+      `;
+      html += renderTestList(getTests(activeYear.id));
+    }
   }
 
   html += `</div>`;
-
   return html;
-
-}
-
-/* =========================================================
-   OPEN YEAR
-========================================================= */
-
-function openYear(yearId){
-
-  const year =
-    folders.find(
-      x =>
-        Number(x.id) ===
-        Number(yearId)
-    );
-
-  if(!year)
-    return;
-
-  renderYearTests(
-    year
-  );
-
-}
-
-/* =========================================================
-   YEAR TESTS
-========================================================= */
-
-function renderYearTests(year){
-
-  let html = `
-
-    <div style="margin-bottom:15px;">
-
-      <button
-        class="secondary-btn"
-        onclick="goToParentFolder(${year.parent_id})"
-      >
-        ← Back
-      </button>
-
-    </div>
-
-    <div class="workspace-title">
-      PYQ FULL MOCKS /
-      ${esc(
-        year.display_name ||
-        year.name
-      )}
-    </div>
-
-    <div
-      class="workspace-subtitle"
-      style="margin-bottom:16px;"
-    >
-      Tests for this year.
-    </div>
-
-    <div class="tests-head">
-
-      <div class="tests-title">
-        Tests
-      </div>
-
-      <button
-        class="primary-btn"
-        onclick="openTestForm(${year.id})"
-      >
-        + Add Test
-      </button>
-
-    </div>
-
-  `;
-
-  html +=
-    renderTestList(
-      getTests(year.id)
-    );
-
-  document
-    .getElementById("rootArea")
-    .innerHTML = html;
-
 }
 
 /* =========================================================
    SECTIONAL SECTION
-   SUBJECTS AS SMALL CHIPS
+   SUBJECTS AS CLIPS
 ========================================================= */
 
-function renderSectionalSection(
-  folder,
-  rootType
-){
+function renderSectionalSection(folder, rootType) {
+  const subjectFolders = folders
+    .filter(f => Number(f.parent_id) === Number(folder.id) && normalizeType(f.folder_type) === "subject")
+    .sort(sortByOrder);
 
-  const subjectFolders =
-    folders
-      .filter(
-        f =>
-          Number(f.parent_id) ===
-          Number(folder.id) &&
-          normalizeType(
-            f.folder_type
-          ) === "subject"
-      )
-      .sort(sortByOrder);
+  // Set default active subject if none is selected
+  if (subjectFolders.length > 0 && (!currentActiveSubjectId || !subjectFolders.find(s => s.id === currentActiveSubjectId))) {
+    currentActiveSubjectId = subjectFolders[0].id;
+  }
 
   let html = `
-
     <div class="category-section">
-
       <div class="category-section-head">
-
         <div class="category-section-title">
-
-          <div class="category-section-icon">
-            📖
-          </div>
-
+          <div class="category-section-icon">📖</div>
           SECTIONAL MOCKS
-
         </div>
-
         <div class="category-section-actions">
-
-          <button
-            class="small-btn"
-            onclick="editFolder(${folder.id})"
-          >
-            Edit
-          </button>
-
-          <button
-            class="small-btn red"
-            onclick="deleteFolder(${folder.id})"
-          >
-            Delete
-          </button>
-
-          <button
-            class="small-btn purple"
-            onclick="openLeafForm(${folder.id},'subject')"
-          >
-            + Add Subject
-          </button>
-
+          <button class="small-btn" onclick="editFolder(${folder.id})">Edit</button>
+          <button class="small-btn red" onclick="deleteFolder(${folder.id})">Delete</button>
+          <button class="small-btn purple" onclick="openLeafForm(${folder.id},'subject')">+ Add Subject</button>
         </div>
-
       </div>
-
   `;
 
-  if(!subjectFolders.length){
+  if (!subjectFolders.length) {
+    html += `<div class="empty">No sectional subjects added yet.</div>`;
+  } else {
+    // Render the clips
+    html += `<div class="chip-list">`;
+    html += subjectFolders.map(subj => {
+      const isActive = subj.id === currentActiveSubjectId;
+      const testCount = getTests(subj.id).length;
+      return `
+        <div class="chip ${isActive ? 'active' : ''}" onclick="selectSubject(${subj.id}, ${folder.parent_id})">
+          ${esc(subj.display_name || subj.name)} (${testCount})
+        </div>
+      `;
+    }).join("");
+    html += `</div>`;
 
-    html += `
-      <div class="empty">
-        No sectional subjects added yet.
-      </div>
-    `;
+    // Render admin actions & tests for the selected clip
+    const activeSubj = subjectFolders.find(s => s.id === currentActiveSubjectId);
+    if (activeSubj) {
+      html += `
+        <div class="active-leaf-admin">
+          <div class="active-leaf-title">${esc(activeSubj.display_name || activeSubj.name)} Settings:</div>
+          <button class="small-btn" onclick="moveFolder(${activeSubj.id},-1)">← Move</button>
+          <button class="small-btn" onclick="moveFolder(${activeSubj.id},1)">Move →</button>
+          <button class="small-btn" onclick="editFolder(${activeSubj.id})">Edit</button>
+          <button class="small-btn red" onclick="deleteFolder(${activeSubj.id})">Delete</button>
+        </div>
 
-  }else{
-
-    html += `
-      <div class="horizontal-scroll">
-    `;
-
-    html +=
-      subjectFolders.map(
-        item=>{
-
-          return `
-
-            <div class="choice-card">
-
-              <div class="choice-title">
-                ${esc(
-                  item.display_name ||
-                  item.name
-                )}
-              </div>
-
-              <div class="choice-meta">
-                ${getTests(item.id).length}
-                tests
-              </div>
-
-              <div class="choice-actions">
-
-                <button
-                  class="small-btn purple"
-                  onclick="openSubject(${item.id})"
-                >
-                  Open
-                </button>
-
-                <button
-                  class="reorder-btn"
-                  onclick="moveFolder(${item.id},-1)"
-                >
-                  ↑
-                </button>
-
-                <button
-                  class="reorder-btn"
-                  onclick="moveFolder(${item.id},1)"
-                >
-                  ↓
-                </button>
-
-                <button
-                  class="small-btn"
-                  onclick="editFolder(${item.id})"
-                >
-                  Edit
-                </button>
-
-                <button
-                  class="small-btn red"
-                  onclick="deleteFolder(${item.id})"
-                >
-                  Delete
-                </button>
-
-              </div>
-
-            </div>
-
-          `;
-
-        }
-      ).join("");
-
-    html += `
-      </div>
-    `;
-
+        <div class="tests-head">
+          <div class="tests-title">Tests</div>
+          <button class="small-btn purple" onclick="openTestForm(${activeSubj.id})">+ Add Test</button>
+        </div>
+      `;
+      html += renderTestList(getTests(activeSubj.id));
+    }
   }
 
   html += `</div>`;
-
   return html;
-
-}
-
-/* =========================================================
-   OPEN SUBJECT
-========================================================= */
-
-function openSubject(id){
-
-  const subjectFolder =
-    folders.find(
-      x =>
-        Number(x.id) ===
-        Number(id)
-    );
-
-  if(!subjectFolder)
-    return;
-
-  renderSubjectTests(
-    subjectFolder
-  );
-
-}
-
-/* =========================================================
-   SUBJECT TESTS
-========================================================= */
-
-function renderSubjectTests(
-  folder
-){
-
-  let html = `
-
-    <div style="margin-bottom:15px;">
-
-      <button
-        class="secondary-btn"
-        onclick="goToParentFolder(${folder.parent_id})"
-      >
-        ← Back
-      </button>
-
-    </div>
-
-    <div class="workspace-title">
-      ${esc(
-        folder.display_name ||
-        folder.name
-      )}
-    </div>
-
-    <div
-      class="workspace-subtitle"
-      style="margin-bottom:16px;"
-    >
-      Sectional tests for this subject.
-    </div>
-
-    <div class="tests-head">
-
-      <div class="tests-title">
-        Tests
-      </div>
-
-      <button
-        class="primary-btn"
-        onclick="openTestForm(${folder.id})"
-      >
-        + Add Test
-      </button>
-
-    </div>
-
-  `;
-
-  html +=
-    renderTestList(
-      getTests(folder.id)
-    );
-
-  document
-    .getElementById("rootArea")
-    .innerHTML = html;
-
 }
 
 /* =========================================================
@@ -3292,7 +2665,6 @@ function renderSubjectTests(
 ========================================================= */
 
 function getTests(folderId){
-
   return tests
     .filter(
       t =>
@@ -3300,40 +2672,29 @@ function getTests(folderId){
         Number(folderId)
     )
     .sort(sortByOrder);
-
 }
 
 function renderTestList(list){
-
   if(!list.length){
-
     return `
       <div class="empty">
         No tests added yet.
       </div>
     `;
-
   }
 
   return `
-
     <div class="test-list">
-
       ${list.map(test=>{
-
         const active =
           test.is_active !== false;
 
         return `
-
           <div class="test-card">
-
             <div class="test-top">
-
               <div class="test-title">
                 ${esc(test.title)}
               </div>
-
               <div
                 class="
                   test-status
@@ -3344,11 +2705,9 @@ function renderTestList(list){
                   ? "ACTIVE"
                   : "INACTIVE"}
               </div>
-
             </div>
 
             <div class="test-info">
-
               <span>
                 ⏱
                 ${Number(
@@ -3356,7 +2715,6 @@ function renderTestList(list){
                 )||0}
                 min
               </span>
-
               <span>
                 ❓
                 ${Number(
@@ -3364,7 +2722,6 @@ function renderTestList(list){
                 )||0}
                 questions
               </span>
-
               <span>
                 TYPE:
                 ${esc(
@@ -3372,58 +2729,45 @@ function renderTestList(list){
                   "FULL"
                 )}
               </span>
-
             </div>
 
             <div class="test-actions">
-
               <button
                 class="small-btn"
                 onclick="editTest(${test.id})"
               >
                 Edit
               </button>
-
               <button
                 class="small-btn"
                 onclick="moveTest(${test.id},-1)"
               >
                 ↑
               </button>
-
               <button
                 class="small-btn"
                 onclick="moveTest(${test.id},1)"
               >
                 ↓
               </button>
-
               <button
                 class="small-btn red"
                 onclick="deleteTest(${test.id})"
               >
                 Delete
               </button>
-
               <button
                 class="small-btn purple"
                 onclick="openTest(${test.id})"
               >
                 Open
               </button>
-
             </div>
-
           </div>
-
         `;
-
       }).join("")}
-
     </div>
-
   `;
-
 }
 
 /* =========================================================
@@ -3431,11 +2775,9 @@ function renderTestList(list){
 ========================================================= */
 
 function openTest(id){
-
   location.href =
     "test.html?id=" +
     encodeURIComponent(id);
-
 }
 
 /* =========================================================
@@ -3443,9 +2785,7 @@ function openTest(id){
 ========================================================= */
 
 function openTestForm(folderId){
-
   editingTestId = null;
-
   currentParentId =
     Number(folderId);
 
@@ -3453,31 +2793,23 @@ function openTestForm(folderId){
     .getElementById("testModalTitle")
     .textContent =
       "Add Test";
-
   document
     .getElementById("testTitle")
     .value = "";
-
   document
     .getElementById("testDuration")
     .value = 60;
-
   document
     .getElementById("testQuestions")
     .value = 25;
-
   document
     .getElementById("testActive")
     .value = "true";
 
-  openModal(
-    "testModal"
-  );
-
+  openModal("testModal");
 }
 
 function editTest(id){
-
   const test =
     tests.find(
       x =>
@@ -3490,7 +2822,6 @@ function editTest(id){
 
   editingTestId =
     Number(id);
-
   currentParentId =
     Number(test.folder_id);
 
@@ -3498,26 +2829,22 @@ function editTest(id){
     .getElementById("testModalTitle")
     .textContent =
       "Edit Test";
-
   document
     .getElementById("testTitle")
     .value =
       test.title || "";
-
   document
     .getElementById("testDuration")
     .value =
       Number(
         test.duration_minutes
       ) || 60;
-
   document
     .getElementById("testQuestions")
     .value =
       Number(
         test.total_questions
       ) || 25;
-
   document
     .getElementById("testActive")
     .value =
@@ -3525,18 +2852,11 @@ function editTest(id){
         ? "false"
         : "true";
 
-  openModal(
-    "testModal"
-  );
-
+  openModal("testModal");
 }
 
 function closeTestForm(){
-
-  closeModal(
-    "testModal"
-  );
-
+  closeModal("testModal");
 }
 
 /* =========================================================
@@ -3544,7 +2864,6 @@ function closeTestForm(){
 ========================================================= */
 
 function inferTestType(folder){
-
   if(!folder)
     return "FULL";
 
@@ -3560,7 +2879,6 @@ function inferTestType(folder){
     return "SECTIONAL";
 
   return "FULL";
-
 }
 
 /* =========================================================
@@ -3568,63 +2886,50 @@ function inferTestType(folder){
 ========================================================= */
 
 async function saveTest(){
-
   const title =
     document
       .getElementById("testTitle")
       .value
       .trim();
-
   const duration =
     Number(
       document
         .getElementById("testDuration")
         .value
     );
-
   const questions =
     Number(
       document
         .getElementById("testQuestions")
         .value
     );
-
   const active =
     document
       .getElementById("testActive")
       .value === "true";
 
   if(!title){
-
     showToast(
       "Enter test title.",
       true
     );
-
     return;
-
   }
 
   if(!duration || duration < 1){
-
     showToast(
       "Enter valid duration.",
       true
     );
-
     return;
-
   }
 
   if(!questions || questions < 1){
-
     showToast(
       "Enter valid question count.",
       true
     );
-
     return;
-
   }
 
   const folder =
@@ -3635,14 +2940,11 @@ async function saveTest(){
     );
 
   if(!folder){
-
     showToast(
       "Test folder not found.",
       true
     );
-
     return;
-
   }
 
   const testType =
@@ -3651,25 +2953,18 @@ async function saveTest(){
     );
 
   if(editingTestId !== null){
-
     const {error} =
       await db
         .from("mock_tests")
         .update({
-
           title:title,
-
           test_type:testType,
-
           duration_minutes:
             duration,
-
           total_questions:
             questions,
-
           is_active:
             active
-
         })
         .eq(
           "id",
@@ -3677,23 +2972,15 @@ async function saveTest(){
         );
 
     if(error){
-
       showToast(
         "MOCK_TESTS: " +
         error.message,
         true
       );
-
       return;
-
     }
-
-    showToast(
-      "Test updated."
-    );
-
+    showToast("Test updated.");
   }else{
-
     const siblings =
       getTests(
         folder.id
@@ -3717,58 +3004,39 @@ async function saveTest(){
       await db
         .from("mock_tests")
         .insert({
-
           exam_id:
             selectedExam.id,
-
           folder_id:
             folder.id,
-
           title:
             title,
-
           test_type:
             testType,
-
           subject_id:
             subjectId,
-
           duration_minutes:
             duration,
-
           total_questions:
             questions,
-
           is_active:
             active,
-
           sort_order:
             maxOrder + 1
-
         });
 
     if(error){
-
       showToast(
         "MOCK_TESTS: " +
         error.message,
         true
       );
-
       return;
-
     }
-
-    showToast(
-      "Test created."
-    );
-
+    showToast("Test created.");
   }
 
   editingTestId = null;
-
   closeTestForm();
-
   await loadAll();
 
   const freshFolder =
@@ -3779,44 +3047,13 @@ async function saveTest(){
     );
 
   if(freshFolder){
-
-    const type =
-      normalizeType(
-        freshFolder.folder_type
-      );
-
-    if(type === "year"){
-
-      renderYearTests(
-        freshFolder
-      );
-
-    }else if(
-      type === "subject"
-    ){
-
-      renderSubjectTests(
-        freshFolder
-      );
-
-    }else if(
-      type === "full"
-    ){
-
-      renderFolderLevel(
-        folders.find(
-          x =>
-            Number(x.id) ===
-            Number(
-              freshFolder.parent_id
-            )
-        )
-      );
-
+    const type = normalizeType(freshFolder.folder_type);
+    if(type === "year" || type === "subject") {
+      renderFolderLevel(folders.find(x => Number(x.id) === Number(freshFolder.parent_id)));
+    } else if(type === "full" || type === "sectional") {
+      renderFolderLevel(folders.find(x => Number(x.id) === Number(freshFolder.parent_id)));
     }
-
   }
-
 }
 
 /* =========================================================
@@ -3827,7 +3064,6 @@ async function moveTest(
   id,
   direction
 ){
-
   const test =
     tests.find(
       x =>
@@ -3861,7 +3097,6 @@ async function moveTest(
 
   const current =
     siblings[index];
-
   const other =
     siblings[target];
 
@@ -3869,7 +3104,6 @@ async function moveTest(
     Number(
       current.sort_order
     ) || 0;
-
   const otherOrder =
     Number(
       other.sort_order
@@ -3888,15 +3122,12 @@ async function moveTest(
       );
 
   if(error){
-
     showToast(
       "MOCK_TESTS: " +
       error.message,
       true
     );
-
     return;
-
   }
 
   const {error:error2} =
@@ -3912,19 +3143,15 @@ async function moveTest(
       );
 
   if(error2){
-
     showToast(
       "MOCK_TESTS: " +
       error2.message,
       true
     );
-
     return;
-
   }
 
   await loadAll();
-
 }
 
 /* =========================================================
@@ -3932,7 +3159,6 @@ async function moveTest(
 ========================================================= */
 
 async function deleteTest(id){
-
   const test =
     tests.find(
       x =>
@@ -3960,23 +3186,16 @@ async function deleteTest(id){
       );
 
   if(error){
-
     showToast(
       "MOCK_TESTS: " +
       error.message,
       true
     );
-
     return;
-
   }
 
-  showToast(
-    "Test deleted."
-  );
-
+  showToast("Test deleted.");
   await loadAll();
-
 }
 
 /* =========================================================
@@ -3987,63 +3206,50 @@ function openLeafForm(
   parentId,
   type
 ){
-
   currentParentId =
     Number(parentId);
-
   currentLeafType =
     normalizeType(type);
-
   editingFolderId = null;
 
-  if(
-    currentLeafType === "year"
-  ){
-
+  if(currentLeafType === "year"){
     document
       .getElementById(
         "leafModalTitle"
       )
       .textContent =
         "Add PYQ Year";
-
     document
       .getElementById(
         "leafLabel"
       )
       .textContent =
         "Year";
-
     document
       .getElementById(
         "leafName"
       )
       .placeholder =
         "2025";
-
   }else{
-
     document
       .getElementById(
         "leafModalTitle"
       )
       .textContent =
         "Add Subject";
-
     document
       .getElementById(
         "leafLabel"
       )
       .textContent =
         "Subject";
-
     document
       .getElementById(
         "leafName"
       )
       .placeholder =
         "English";
-
   }
 
   document
@@ -4052,28 +3258,17 @@ function openLeafForm(
     )
     .value = "";
 
-  openModal(
-    "leafModal"
-  );
-
+  openModal("leafModal");
 }
 
 function closeLeafForm(){
-
-  closeModal(
-    "leafModal"
-  );
-
+  closeModal("leafModal");
 }
 
 async function saveLeaf(){
-
   if(editingFolderId !== null){
-
     await saveEditedFolder();
-
     return;
-
   }
 
   const name =
@@ -4085,14 +3280,11 @@ async function saveLeaf(){
       .trim();
 
   if(!name){
-
     showToast(
       "Enter a name.",
       true
     );
-
     return;
-
   }
 
   const duplicate =
@@ -4114,14 +3306,11 @@ async function saveLeaf(){
     );
 
   if(duplicate){
-
     showToast(
       "This item already exists.",
       true
     );
-
     return;
-
   }
 
   const siblings =
@@ -4145,44 +3334,32 @@ async function saveLeaf(){
     await db
       .from("mock_folders")
       .insert({
-
         exam_id:
           selectedExam.id,
-
         parent_id:
           currentParentId,
-
         name:
           name,
-
         display_name:
           name,
-
         folder_type:
           currentLeafType,
-
         sort_order:
           maxOrder + 1,
-
         is_active:true,
-
         subject_id:
           currentLeafType === "subject"
             ? findSubjectId(name)
             : null
-
       });
 
   if(error){
-
     showToast(
       "MOCK_FOLDERS: " +
       error.message,
       true
     );
-
     return;
-
   }
 
   closeLeafForm();
@@ -4203,14 +3380,11 @@ async function saveLeaf(){
     );
 
   if(parent){
-
     const type =
       normalizeType(
         parent.folder_type
       );
-
-    if(type === "full"){
-
+    if(type === "full" || type === "sectional"){
       renderFolderLevel(
         folders.find(
           x =>
@@ -4218,23 +3392,8 @@ async function saveLeaf(){
             Number(parent.parent_id)
         )
       );
-
-    }else if(
-      type === "sectional"
-    ){
-
-      renderFolderLevel(
-        folders.find(
-          x =>
-            Number(x.id) ===
-            Number(parent.parent_id)
-        )
-      );
-
     }
-
   }
-
 }
 
 /* =========================================================
@@ -4242,7 +3401,6 @@ async function saveLeaf(){
 ========================================================= */
 
 function findSubjectId(name){
-
   const found =
     subjects.find(
       s =>
@@ -4262,7 +3420,6 @@ function findSubjectId(name){
   return found
     ? found.id
     : null;
-
 }
 
 /* =========================================================
@@ -4270,7 +3427,6 @@ function findSubjectId(name){
 ========================================================= */
 
 function editFolder(id){
-
   const folder =
     folders.find(
       x =>
@@ -4334,10 +3490,7 @@ function editFolder(id){
       folder.name ||
       "";
 
-  openModal(
-    "leafModal"
-  );
-
+  openModal("leafModal");
 }
 
 /* =========================================================
@@ -4345,7 +3498,6 @@ function editFolder(id){
 ========================================================= */
 
 async function saveEditedFolder(){
-
   const name =
     document
       .getElementById(
@@ -4355,14 +3507,11 @@ async function saveEditedFolder(){
       .trim();
 
   if(!name){
-
     showToast(
       "Enter a name.",
       true
     );
-
     return;
-
   }
 
   const folder =
@@ -4373,25 +3522,19 @@ async function saveEditedFolder(){
     );
 
   if(!folder){
-
     showToast(
       "Folder not found.",
       true
     );
-
     return;
-
   }
 
   const {error} =
     await db
       .from("mock_folders")
       .update({
-
         name:name,
-
         display_name:name
-
       })
       .eq(
         "id",
@@ -4399,27 +3542,18 @@ async function saveEditedFolder(){
       );
 
   if(error){
-
     showToast(
       "MOCK_FOLDERS: " +
       error.message,
       true
     );
-
     return;
-
   }
 
   editingFolderId = null;
-
   closeLeafForm();
-
-  showToast(
-    "Folder updated."
-  );
-
+  showToast("Folder updated.");
   await loadAll();
-
 }
 
 /* =========================================================
@@ -4430,7 +3564,6 @@ async function moveFolder(
   id,
   direction
 ){
-
   const folder =
     folders.find(
       x =>
@@ -4454,11 +3587,6 @@ async function moveFolder(
 
   let orderedSiblings;
 
-  /*
-    Root children:
-    NEW / PYQ together.
-  */
-
   if(
     parent &&
     ["new","pyq"].includes(
@@ -4467,7 +3595,6 @@ async function moveFolder(
       )
     )
   ){
-
     orderedSiblings =
       folders
         .filter(
@@ -4476,16 +3603,7 @@ async function moveFolder(
             Number(folder.parent_id)
         )
         .sort(sortByOrder);
-
   }else{
-
-    /*
-      Same folder type:
-      years with years,
-      subjects with subjects,
-      etc.
-    */
-
     orderedSiblings =
       folders
         .filter(
@@ -4504,7 +3622,6 @@ async function moveFolder(
             )
         )
         .sort(sortByOrder);
-
   }
 
   const index =
@@ -4529,7 +3646,6 @@ async function moveFolder(
 
   const current =
     orderedSiblings[index];
-
   const other =
     orderedSiblings[target];
 
@@ -4537,7 +3653,6 @@ async function moveFolder(
     Number(
       current.sort_order
     ) || 0;
-
   const otherOrder =
     Number(
       other.sort_order
@@ -4556,15 +3671,12 @@ async function moveFolder(
       );
 
   if(error){
-
     showToast(
       "MOCK_FOLDERS: " +
       error.message,
       true
     );
-
     return;
-
   }
 
   const {error:error2} =
@@ -4580,19 +3692,15 @@ async function moveFolder(
       );
 
   if(error2){
-
     showToast(
       "MOCK_FOLDERS: " +
       error2.message,
       true
     );
-
     return;
-
   }
 
   await loadAll();
-
 }
 
 /* =========================================================
@@ -4600,7 +3708,6 @@ async function moveFolder(
 ========================================================= */
 
 async function deleteFolder(id){
-
   const folder =
     folders.find(
       x =>
@@ -4638,15 +3745,12 @@ async function deleteFolder(id){
       );
 
   if(testError){
-
     showToast(
       "MOCK_TESTS: " +
       testError.message,
       true
     );
-
     return;
-
   }
 
   const remaining =
@@ -4658,11 +3762,9 @@ async function deleteFolder(id){
     );
 
   while(remaining.length){
-
     const leafFolders =
       remaining.filter(
         folderItem=>{
-
           return !remaining.some(
             child =>
               Number(
@@ -4672,7 +3774,6 @@ async function deleteFolder(id){
                 folderItem.id
               )
           );
-
         }
       );
 
@@ -4696,40 +3797,29 @@ async function deleteFolder(id){
         );
 
     if(error){
-
       showToast(
         "MOCK_FOLDERS: " +
         error.message,
         true
       );
-
       return;
-
     }
 
     for(
       const item of batch
     ){
-
       const index =
         remaining.indexOf(item);
-
       if(index >= 0)
         remaining.splice(
           index,
           1
         );
-
     }
-
   }
 
-  showToast(
-    "Folder deleted."
-  );
-
+  showToast("Folder deleted.");
   await loadAll();
-
 }
 
 /* =========================================================
@@ -4739,15 +3829,12 @@ async function deleteFolder(id){
 function getDescendants(
   parentId
 ){
-
   const result = [];
-
   const queue = [
     Number(parentId)
   ];
 
   while(queue.length){
-
     const current =
       queue.shift();
 
@@ -4763,21 +3850,16 @@ function getDescendants(
     for(
       const child of children
     ){
-
       result.push(
         child
       );
-
       queue.push(
         Number(child.id)
       );
-
     }
-
   }
 
   return result;
-
 }
 
 /* =========================================================
@@ -4785,7 +3867,6 @@ function getDescendants(
 ========================================================= */
 
 function goToParentFolder(id){
-
   const parent =
     folders.find(
       x =>
@@ -4794,11 +3875,8 @@ function goToParentFolder(id){
     );
 
   if(!parent){
-
     renderRootArea();
-
     return;
-
   }
 
   const type =
@@ -4810,17 +3888,13 @@ function goToParentFolder(id){
     type === "new" ||
     type === "pyq"
   ){
-
     renderFolderLevel(
       parent
     );
-
     return;
-
   }
 
-  if(type === "full"){
-
+  if(type === "full" || type === "sectional"){
     const root =
       folders.find(
         x =>
@@ -4829,17 +3903,13 @@ function goToParentFolder(id){
             parent.parent_id
           )
       );
-
     if(root)
       renderFolderLevel(root);
-
     return;
-
   }
 
-  if(type === "sectional"){
-
-    const root =
+  if(type === "year" || type === "subject"){
+    const grandParent =
       folders.find(
         x =>
           Number(x.id) ===
@@ -4847,36 +3917,12 @@ function goToParentFolder(id){
             parent.parent_id
           )
       );
-
-    if(root)
-      renderFolderLevel(root);
-
+    if(grandParent)
+      renderFolderLevel(grandParent);
     return;
-
-  }
-
-  if(type === "year"){
-
-    renderYearTests(
-      parent
-    );
-
-    return;
-
-  }
-
-  if(type === "subject"){
-
-    renderSubjectTests(
-      parent
-    );
-
-    return;
-
   }
 
   renderRootArea();
-
 }
 
 /* =========================================================
@@ -4886,10 +3932,8 @@ function goToParentFolder(id){
 function getRootFolder(
   folder
 ){
-
   let current =
     folder;
-
   let safety = 0;
 
   while(
@@ -4897,7 +3941,6 @@ function getRootFolder(
     current.parent_id &&
     safety < 20
   ){
-
     const parent =
       folders.find(
         x =>
@@ -4912,27 +3955,21 @@ function getRootFolder(
 
     current =
       parent;
-
     safety++;
-
   }
 
   return current;
-
 }
 
 /* =========================================================
    CATEGORY FORM
-   KEPT FOR OLD DATABASE STRUCTURE
 ========================================================= */
 
 function openCategoryForm(
   rootId
 ){
-
   currentParentId =
     Number(rootId);
-
   editingFolderId = null;
 
   const existing =
@@ -4966,37 +4003,30 @@ function openCategoryForm(
   select.innerHTML = "";
 
   if(!hasFull){
-
     select.innerHTML += `
       <option value="full">
         FULL MOCKS
       </option>
     `;
-
   }
 
   if(!hasSectional){
-
     select.innerHTML += `
       <option value="sectional">
         SECTIONAL MOCKS
       </option>
     `;
-
   }
 
   if(
     hasFull &&
     hasSectional
   ){
-
     showToast(
       "Both categories already exist.",
       true
     );
-
     return;
-
   }
 
   document
@@ -5006,34 +4036,23 @@ function openCategoryForm(
     .textContent =
       "Add Category";
 
-  openModal(
-    "categoryModal"
-  );
-
+  openModal("categoryModal");
 }
 
 function closeCategoryForm(){
-
-  closeModal(
-    "categoryModal"
-  );
-
+  closeModal("categoryModal");
 }
 
 async function saveCategory(){
-
   if(
     !selectedExam ||
     !currentParentId
   ){
-
     showToast(
       "Invalid parent folder.",
       true
     );
-
     return;
-
   }
 
   const type =
@@ -5056,14 +4075,11 @@ async function saveCategory(){
     );
 
   if(duplicate){
-
     showToast(
       "This category already exists.",
       true
     );
-
     return;
-
   }
 
   const siblings =
@@ -5092,50 +4108,36 @@ async function saveCategory(){
     await db
       .from("mock_folders")
       .insert({
-
         exam_id:
           selectedExam.id,
-
         parent_id:
           currentParentId,
-
         name:
           title,
-
         display_name:
           title,
-
         folder_type:
           type,
-
         sort_order:
           maxOrder + 1,
-
         is_active:true
-
       });
 
   if(error){
-
     showToast(
       "MOCK_FOLDERS: " +
       error.message,
       true
     );
-
     return;
-
   }
 
   closeCategoryForm();
-
   showToast(
     title +
     " created."
   );
-
   await loadAll();
-
 }
 
 /* =========================================================
@@ -5148,25 +4150,19 @@ document
   )
   .forEach(
     modal=>{
-
       modal.addEventListener(
         "click",
         event=>{
-
           if(
             event.target ===
             modal
           ){
-
             modal.classList.remove(
               "show"
             );
-
           }
-
         }
       );
-
     }
   );
 
