@@ -3,23 +3,48 @@
 
 <head>
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <script>
 document.documentElement.dataset.theme =
   localStorage.getItem("ssc-edge-theme") || "dark";
 </script>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>SSC EDGE - Admin Practice</title>
+<title>SSC EDGE - Practice Admin</title>
 
 <link rel="stylesheet" href="css/style.css">
 
 <style>
 
 /* =========================================================
-   ADMIN PRACTICE
+   SSC EDGE PRACTICE ADMIN
 ========================================================= */
+
+:root{
+  --purple:#9b5cff;
+  --purple2:#7b35e8;
+  --bg:#09090d;
+  --card:#111117;
+  --card2:#15151d;
+  --border:#252530;
+  --text:#f5f5f7;
+  --muted:#92929e;
+  --green:#28c76f;
+  --red:#ff4d5e;
+  --yellow:#ffbd4a;
+}
+
+:root[data-theme="light"]{
+  --bg:#f6f4fa;
+  --card:#ffffff;
+  --card2:#f1eef7;
+  --border:#ddd8e8;
+  --text:#17151c;
+  --muted:#686473;
+}
+
+/* ---------- RESET ---------- */
 
 *{
   box-sizing:border-box;
@@ -27,402 +52,766 @@ document.documentElement.dataset.theme =
 
 body{
   margin:0;
+  background:var(--bg);
+  color:var(--text);
   font-family:Arial,Helvetica,sans-serif;
 }
 
-.admin-page{
-  width:100%;
-  min-height:100vh;
-  padding:18px;
+button,
+input,
+select{
+  font:inherit;
 }
 
-.admin-container{
-  max-width:1100px;
-  margin:auto;
+button{
+  cursor:pointer;
 }
 
-.admin-title{
-  font-size:26px;
-  font-weight:800;
-  margin-bottom:5px;
-}
+/* ---------- HEADER ---------- */
 
-.admin-subtitle{
-  opacity:.7;
-  margin-bottom:22px;
-}
-
-.admin-topbar{
+.admin-header{
+  height:72px;
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:space-between;
+  padding:0 18px;
+  border-bottom:1px solid var(--border);
+  background:var(--bg);
+  position:sticky;
+  top:0;
+  z-index:50;
+}
+
+.brand{
+  font-size:23px;
+  font-weight:800;
+  letter-spacing:-.5px;
+}
+
+.brand span{
+  color:var(--purple);
+}
+
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.header-btn{
+  width:40px;
+  height:40px;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+  border-radius:12px;
+  font-size:18px;
+}
+
+/* ---------- PAGE ---------- */
+
+.page{
+  width:min(1050px,100%);
+  margin:auto;
+  padding:20px 15px 50px;
+}
+
+.page-title{
+  font-size:25px;
+  font-weight:800;
+  margin:3px 0 5px;
+}
+
+.page-subtitle{
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:20px;
+}
+
+/* ---------- TOP ACTIONS ---------- */
+
+.top-actions{
+  display:flex;
   gap:10px;
   flex-wrap:wrap;
   margin-bottom:20px;
 }
 
-.admin-btn{
+.primary-btn,
+.secondary-btn,
+.danger-btn{
   border:0;
-  border-radius:12px;
-  padding:11px 16px;
-  font-size:14px;
+  border-radius:11px;
+  padding:11px 15px;
   font-weight:700;
-  cursor:pointer;
-  background:#7c3aed;
-  color:#fff;
 }
 
-.admin-btn.secondary{
-  background:rgba(127,127,127,.15);
-  color:inherit;
+.primary-btn{
+  background:var(--purple);
+  color:white;
 }
 
-.admin-btn.danger{
-  background:#dc2626;
+.secondary-btn{
+  background:var(--card2);
+  color:var(--text);
+  border:1px solid var(--border);
 }
 
-.admin-btn.small{
-  padding:7px 10px;
+.danger-btn{
+  background:#3a151a;
+  color:#ff6b79;
+  border:1px solid #60222b;
+}
+
+/* ---------- EXAMS ---------- */
+
+.section-label{
   font-size:12px;
-  border-radius:9px;
-}
-
-.admin-section{
-  margin-bottom:24px;
-}
-
-.admin-section-title{
-  font-size:18px;
   font-weight:800;
-  margin-bottom:12px;
+  color:var(--muted);
+  letter-spacing:.8px;
+  margin:22px 0 10px;
+  text-transform:uppercase;
 }
 
-.exam-grid,
-.root-grid,
-.category-grid{
+.exam-list{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:14px;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
 }
 
-.admin-card{
-  background:rgba(127,127,127,.09);
-  border:1px solid rgba(127,127,127,.16);
-  border-radius:18px;
-  padding:18px;
-  cursor:pointer;
-  transition:.2s;
+.exam-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:15px;
+  transition:.15s;
 }
 
-.admin-card:hover{
-  transform:translateY(-2px);
-  border-color:#8b5cf6;
+.exam-card.active{
+  border-color:var(--purple);
+  box-shadow:0 0 0 1px rgba(155,92,255,.15);
 }
 
-.admin-card.active{
-  border:2px solid #8b5cf6;
+.exam-main{
+  display:flex;
+  align-items:center;
+  gap:12px;
 }
 
-.admin-card-title{
+.exam-logo{
+  width:48px;
+  height:48px;
+  border-radius:13px;
+  background:var(--card2);
+  border:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  overflow:hidden;
+}
+
+.exam-logo img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+
+.exam-logo.ssc-logo{
+  font-size:17px;
+  font-weight:900;
+  color:var(--purple);
+}
+
+.exam-name{
   font-size:17px;
   font-weight:800;
 }
 
-.admin-card-subtitle{
+.exam-board{
+  color:var(--muted);
   font-size:12px;
-  opacity:.65;
-  margin-top:5px;
+  margin-top:4px;
 }
 
-.admin-card-actions{
+.exam-actions{
   display:flex;
-  gap:6px;
+  gap:7px;
+  margin-top:13px;
   flex-wrap:wrap;
-  margin-top:14px;
 }
+
+.small-btn{
+  border:1px solid var(--border);
+  background:var(--card2);
+  color:var(--text);
+  border-radius:9px;
+  padding:7px 10px;
+  font-size:12px;
+  font-weight:700;
+}
+
+.small-btn.purple{
+  background:var(--purple);
+  border-color:var(--purple);
+  color:white;
+}
+
+.small-btn.red{
+  color:#ff6674;
+}
+
+/* ---------- WORKSPACE ---------- */
 
 .workspace{
   margin-top:25px;
 }
 
-.breadcrumb{
+.workspace-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:14px;
+}
+
+.workspace-title{
+  font-size:21px;
+  font-weight:800;
+}
+
+.workspace-subtitle{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:4px;
+}
+
+/* ---------- ROOT CARDS ---------- */
+
+.root-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:13px;
+}
+
+.root-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:17px;
+}
+
+.root-icon{
+  width:44px;
+  height:44px;
+  border-radius:12px;
+  background:rgba(155,92,255,.12);
   display:flex;
   align-items:center;
+  justify-content:center;
+  font-size:20px;
+  margin-bottom:12px;
+}
+
+.root-title{
+  font-size:18px;
+  font-weight:800;
+}
+
+.root-desc{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:5px;
+}
+
+.root-actions{
+  display:flex;
+  gap:7px;
+  margin-top:13px;
+  flex-wrap:wrap;
+}
+
+/* ---------- CATEGORY CARDS ---------- */
+
+.category-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:13px;
+}
+
+.category-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:17px;
+}
+
+.category-icon{
+  font-size:22px;
+  margin-bottom:11px;
+}
+
+.category-title{
+  font-size:17px;
+  font-weight:800;
+}
+
+.category-desc{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:5px;
+}
+
+.category-actions{
+  display:flex;
   gap:7px;
   flex-wrap:wrap;
-  margin-bottom:16px;
-  font-size:13px;
-  opacity:.8;
+  margin-top:13px;
 }
 
-.breadcrumb span{
-  cursor:pointer;
-}
-
-.breadcrumb .current{
-  font-weight:800;
-  opacity:1;
-}
+/* ---------- HORIZONTAL CHOOSERS ---------- */
 
 .horizontal-scroll{
   display:flex;
-  gap:12px;
+  gap:10px;
   overflow-x:auto;
-  padding-bottom:7px;
+  padding:2px 1px 7px;
+  scrollbar-width:none;
 }
 
 .horizontal-scroll::-webkit-scrollbar{
-  height:5px;
+  display:none;
 }
 
-.horizontal-scroll::-webkit-scrollbar-thumb{
-  background:#7c3aed;
-  border-radius:20px;
+.choice-card{
+  min-width:145px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:13px;
+  flex:none;
 }
 
-.subject-card,
-.year-card{
-  min-width:170px;
-  flex:0 0 170px;
-  background:rgba(127,127,127,.09);
-  border:1px solid rgba(127,127,127,.16);
-  border-radius:16px;
-  padding:15px;
-  cursor:pointer;
+.choice-card.active{
+  border-color:var(--purple);
 }
 
-.subject-card:hover,
-.year-card:hover{
-  border-color:#8b5cf6;
-}
-
-.test-list{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  margin-top:14px;
-}
-
-.test-card{
-  background:rgba(127,127,127,.09);
-  border:1px solid rgba(127,127,127,.16);
-  border-radius:15px;
-  padding:15px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-}
-
-.test-title{
+.choice-title{
+  font-size:15px;
   font-weight:800;
 }
 
-.test-meta{
+.choice-meta{
+  font-size:11px;
+  color:var(--muted);
+  margin-top:4px;
+}
+
+.choice-actions{
+  display:flex;
+  gap:5px;
+  margin-top:10px;
+}
+
+.reorder-btn{
+  width:30px;
+  height:28px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:var(--card2);
+  color:var(--text);
   font-size:12px;
-  opacity:.65;
-  margin-top:5px;
+}
+
+/* ---------- TESTS ---------- */
+
+.tests-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:19px 0 11px;
+}
+
+.tests-title{
+  font-size:17px;
+  font-weight:800;
+}
+
+.test-list{
+  display:grid;
+  gap:10px;
+}
+
+.test-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:14px;
+}
+
+.test-top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.test-title{
+  font-size:15px;
+  font-weight:800;
+}
+
+.test-status{
+  font-size:10px;
+  padding:4px 7px;
+  border-radius:7px;
+  background:rgba(40,199,111,.12);
+  color:var(--green);
+  white-space:nowrap;
+}
+
+.test-status.off{
+  background:rgba(255,77,94,.12);
+  color:var(--red);
+}
+
+.test-info{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  color:var(--muted);
+  font-size:11px;
+  margin-top:7px;
 }
 
 .test-actions{
   display:flex;
-  gap:5px;
+  gap:7px;
   flex-wrap:wrap;
-  justify-content:flex-end;
+  margin-top:11px;
 }
+
+/* ---------- EMPTY ---------- */
 
 .empty{
+  border:1px dashed var(--border);
+  background:var(--card);
+  border-radius:14px;
   padding:22px;
   text-align:center;
-  opacity:.6;
-  background:rgba(127,127,127,.07);
-  border-radius:15px;
+  color:var(--muted);
+  font-size:13px;
 }
 
-.form-overlay{
+/* ---------- MODAL ---------- */
+
+.modal-bg{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.65);
+  background:rgba(0,0,0,.72);
   display:none;
   align-items:center;
   justify-content:center;
   padding:15px;
-  z-index:9999;
+  z-index:100;
 }
 
-.form-overlay.show{
+.modal-bg.show{
   display:flex;
 }
 
-.form-box{
-  width:100%;
-  max-width:480px;
+.modal{
+  width:min(480px,100%);
   max-height:90vh;
   overflow-y:auto;
-  background:var(--card-bg,#17151f);
-  border-radius:20px;
-  padding:22px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:19px;
 }
 
-.form-title{
-  font-size:20px;
+.modal-title{
+  font-size:19px;
   font-weight:800;
-  margin-bottom:18px;
+  margin-bottom:16px;
 }
 
-.form-group{
-  margin-bottom:14px;
+.field{
+  margin-bottom:13px;
 }
 
-.form-group label{
+.field label{
   display:block;
-  font-size:13px;
+  color:var(--muted);
+  font-size:12px;
   font-weight:700;
   margin-bottom:6px;
 }
 
-.form-group input,
-.form-group select{
+.field input,
+.field select{
   width:100%;
-  padding:12px;
-  border-radius:11px;
-  border:1px solid rgba(127,127,127,.25);
-  background:rgba(127,127,127,.08);
-  color:inherit;
+  height:43px;
+  border:1px solid var(--border);
+  background:var(--card2);
+  color:var(--text);
+  border-radius:10px;
+  padding:0 12px;
   outline:none;
 }
 
-.form-actions{
+.field input:focus,
+.field select:focus{
+  border-color:var(--purple);
+}
+
+.modal-actions{
   display:flex;
   gap:8px;
   justify-content:flex-end;
-  margin-top:18px;
+  margin-top:17px;
 }
 
-.notice{
-  padding:12px 15px;
-  border-radius:12px;
-  background:rgba(124,58,237,.12);
-  margin-bottom:18px;
-  font-size:13px;
+.help-text{
+  font-size:11px;
+  color:var(--muted);
+  line-height:1.5;
+  margin-top:4px;
 }
 
-@media(max-width:600px){
+/* ---------- TOAST ---------- */
 
-  .admin-page{
-    padding:12px;
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:22px;
+  transform:translateX(-50%) translateY(20px);
+  background:#191920;
+  color:white;
+  border:1px solid #33333e;
+  padding:11px 15px;
+  border-radius:11px;
+  font-size:12px;
+  opacity:0;
+  pointer-events:none;
+  transition:.2s;
+  z-index:200;
+  max-width:90%;
+  text-align:center;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+.toast.error{
+  border-color:#712631;
+  color:#ff8290;
+}
+
+/* ---------- MOBILE ---------- */
+
+@media(max-width:650px){
+
+  .admin-header{
+    height:64px;
+    padding:0 13px;
   }
 
-  .admin-title{
+  .brand{
+    font-size:21px;
+  }
+
+  .page{
+    padding:16px 12px 40px;
+  }
+
+  .page-title{
     font-size:22px;
   }
 
-  .admin-card{
-    padding:15px;
+  .exam-list,
+  .root-grid,
+  .category-grid{
+    grid-template-columns:1fr;
   }
 
-  .test-card{
-    flex-direction:column;
+  .workspace-head{
+    display:block;
+  }
+
+  .workspace-head .primary-btn{
+    margin-top:11px;
+  }
+
+  .test-top{
     align-items:flex-start;
-  }
-
-  .test-actions{
-    justify-content:flex-start;
   }
 
 }
 
-</style>
+/* ---------- LOADING ---------- */
 
+.loading{
+  padding:30px;
+  text-align:center;
+  color:var(--muted);
+}
+
+.hidden{
+  display:none!important;
+}
+
+</style>
 </head>
 
 <body>
 
-<div class="admin-page">
+<header class="admin-header">
 
-<div class="admin-container">
+  <div class="brand">
+    SSC <span>EDGE</span>
+  </div>
 
-  <div class="admin-topbar">
+  <div class="header-right">
 
-    <div>
-      <div class="admin-title">Admin Practice</div>
-      <div class="admin-subtitle">
-        Manage SSC EDGE practice hierarchy, mocks and tests
-      </div>
-    </div>
-
-    <button class="admin-btn" onclick="openExamForm()">
-      + Add Exam
+    <button class="header-btn" onclick="location.href='practice.html'">
+      ←
     </button>
 
   </div>
 
-  <div id="message"></div>
+</header>
 
-  <div class="admin-section">
+<main class="page">
 
-    <div class="admin-section-title">
-      Exams
-    </div>
+  <div class="page-title">
+    Practice Admin
+  </div>
 
-    <div id="examList" class="exam-grid"></div>
+  <div class="page-subtitle">
+    Manage exams, mock categories, years, subjects and tests.
+  </div>
+
+  <div class="top-actions">
+
+    <button class="primary-btn" onclick="openExamForm()">
+      + Add Exam
+    </button>
+
+    <button class="secondary-btn" onclick="loadAll()">
+      ↻ Refresh
+    </button>
 
   </div>
 
-  <div id="workspace" class="workspace"></div>
+  <!-- =====================================================
+       EXAMS
+  ====================================================== -->
 
-</div>
+  <div class="section-label">
+    Exams
+  </div>
 
-</div>
+  <div id="examList" class="exam-list">
+    <div class="loading">
+      Loading exams...
+    </div>
+  </div>
 
-<!-- =========================================================
-     EXAM FORM
-========================================================= -->
+  <!-- =====================================================
+       WORKSPACE
+  ====================================================== -->
 
-<div id="examOverlay" class="form-overlay">
+  <section id="workspace" class="workspace hidden">
 
-  <div class="form-box">
+    <div class="workspace-head">
 
-    <div class="form-title" id="examFormTitle">
+      <div>
+        <div id="workspaceTitle" class="workspace-title">
+          -
+        </div>
+
+        <div class="workspace-subtitle">
+          Practice structure
+        </div>
+      </div>
+
+      <button class="primary-btn" onclick="openRootForm()">
+        + Add Mock Type
+      </button>
+
+    </div>
+
+    <div id="rootArea"></div>
+
+  </section>
+
+</main>
+
+<!-- =======================================================
+     EXAM MODAL
+======================================================= -->
+
+<div id="examModal" class="modal-bg">
+
+  <div class="modal">
+
+    <div id="examModalTitle" class="modal-title">
       Add Exam
     </div>
 
-    <div class="form-group">
+    <div class="field">
 
-      <label>Board</label>
+      <label>
+        Board
+      </label>
 
       <select id="examBoard">
 
-        <option value="SSC">SSC</option>
-        <option value="RRB">RRB</option>
+        <option value="SSC">
+          SSC
+        </option>
+
+        <option value="RRB">
+          RRB
+        </option>
 
       </select>
 
     </div>
 
-    <div class="form-group">
+    <div class="field">
 
-      <label>Exam Name</label>
+      <label>
+        Exam Name
+      </label>
 
       <input
         id="examName"
         type="text"
-        placeholder="Example: CGL"
+        placeholder="CGL"
       >
 
     </div>
 
-    <div class="form-actions">
+    <div class="help-text">
+      Example: CGL, CHSL, CPO, MTS, NTPC etc.
+    </div>
+
+    <div class="modal-actions">
 
       <button
-        class="admin-btn secondary"
+        class="secondary-btn"
         onclick="closeExamForm()"
       >
         Cancel
       </button>
 
       <button
-        class="admin-btn"
+        class="primary-btn"
         onclick="saveExam()"
       >
         Save
@@ -434,42 +823,104 @@ body{
 
 </div>
 
-<!-- =========================================================
-     FOLDER FORM
-========================================================= -->
+<!-- =======================================================
+     ROOT MODAL
+======================================================= -->
 
-<div id="folderOverlay" class="form-overlay">
+<div id="rootModal" class="modal-bg">
 
-  <div class="form-box">
+  <div class="modal">
 
-    <div class="form-title" id="folderFormTitle">
-      Add Category
+    <div class="modal-title">
+      Add Mock Type
     </div>
 
-    <div class="form-group">
+    <div class="field">
 
-      <label>Name</label>
+      <label>
+        Mock Type
+      </label>
 
-      <input
-        id="folderName"
-        type="text"
-        placeholder="Enter name"
-      >
+      <select id="rootType">
+
+        <option value="new">
+          NEW MOCKS
+        </option>
+
+        <option value="pyq">
+          PYQ MOCKS
+        </option>
+
+      </select>
 
     </div>
 
-    <div class="form-actions">
+    <div class="modal-actions">
 
       <button
-        class="admin-btn secondary"
-        onclick="closeFolderForm()"
+        class="secondary-btn"
+        onclick="closeRootForm()"
       >
         Cancel
       </button>
 
       <button
-        class="admin-btn"
-        onclick="saveFolder()"
+        class="primary-btn"
+        onclick="saveRoot()"
+      >
+        Create
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =======================================================
+     CATEGORY MODAL
+======================================================= -->
+
+<div id="categoryModal" class="modal-bg">
+
+  <div class="modal">
+
+    <div id="categoryModalTitle" class="modal-title">
+      Add Category
+    </div>
+
+    <div class="field">
+
+      <label>
+        Category
+      </label>
+
+      <select id="categoryType">
+
+        <option value="full">
+          FULL MOCKS
+        </option>
+
+        <option value="sectional">
+          SECTIONAL MOCKS
+        </option>
+
+      </select>
+
+    </div>
+
+    <div class="modal-actions">
+
+      <button
+        class="secondary-btn"
+        onclick="closeCategoryForm()"
+      >
+        Cancel
+      </button>
+
+      <button
+        class="primary-btn"
+        onclick="saveCategory()"
       >
         Save
       </button>
@@ -480,33 +931,85 @@ body{
 
 </div>
 
-<!-- =========================================================
-     TEST FORM
-========================================================= -->
+<!-- =======================================================
+     YEAR / SUBJECT MODAL
+======================================================= -->
 
-<div id="testOverlay" class="form-overlay">
+<div id="leafModal" class="modal-bg">
 
-  <div class="form-box">
+  <div class="modal">
 
-    <div class="form-title" id="testFormTitle">
-      Add Test
+    <div id="leafModalTitle" class="modal-title">
+      Add
     </div>
 
-    <div class="form-group">
+    <div class="field">
 
-      <label>Test Title</label>
+      <label id="leafLabel">
+        Name
+      </label>
 
       <input
-        id="testTitle"
+        id="leafName"
         type="text"
-        placeholder="Example: SSC CGL Mock Test 01"
+        placeholder=""
       >
 
     </div>
 
-    <div class="form-group">
+    <div class="modal-actions">
 
-      <label>Duration (minutes)</label>
+      <button
+        class="secondary-btn"
+        onclick="closeLeafForm()"
+      >
+        Cancel
+      </button>
+
+      <button
+        class="primary-btn"
+        onclick="saveLeaf()"
+      >
+        Save
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =======================================================
+     TEST MODAL
+======================================================= -->
+
+<div id="testModal" class="modal-bg">
+
+  <div class="modal">
+
+    <div id="testModalTitle" class="modal-title">
+      Add Test
+    </div>
+
+    <div class="field">
+
+      <label>
+        Test Title
+      </label>
+
+      <input
+        id="testTitle"
+        type="text"
+        placeholder="SSC CGL Mock Test 01"
+      >
+
+    </div>
+
+    <div class="field">
+
+      <label>
+        Duration (minutes)
+      </label>
 
       <input
         id="testDuration"
@@ -517,9 +1020,11 @@ body{
 
     </div>
 
-    <div class="form-group">
+    <div class="field">
 
-      <label>Total Questions</label>
+      <label>
+        Total Questions
+      </label>
 
       <input
         id="testQuestions"
@@ -530,17 +1035,37 @@ body{
 
     </div>
 
-    <div class="form-actions">
+    <div class="field">
+
+      <label>
+        Active
+      </label>
+
+      <select id="testActive">
+
+        <option value="true">
+          Active
+        </option>
+
+        <option value="false">
+          Inactive
+        </option>
+
+      </select>
+
+    </div>
+
+    <div class="modal-actions">
 
       <button
-        class="admin-btn secondary"
+        class="secondary-btn"
         onclick="closeTestForm()"
       >
         Cancel
       </button>
 
       <button
-        class="admin-btn"
+        class="primary-btn"
         onclick="saveTest()"
       >
         Save
@@ -551,6 +1076,10 @@ body{
   </div>
 
 </div>
+
+<div id="toast" class="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
@@ -564,6 +1093,12 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
 
+const db =
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
 /* =========================================================
    STATE
 ========================================================= */
@@ -574,191 +1109,70 @@ let tests = [];
 let subjects = [];
 
 let selectedExam = null;
-let currentFolder = null;
 
 let editingExamId = null;
 let editingFolderId = null;
 let editingTestId = null;
 
-let currentFolderParentId = null;
-let currentFolderType = null;
-let currentTestFolderId = null;
+let currentParentId = null;
+let currentLeafType = null;
 
 /* =========================================================
-   SUPABASE REQUEST
+   HELPERS
 ========================================================= */
 
-async function supabaseRequest(
-  table,
-  options = {}
-){
+function normalizeType(value){
 
-  let url =
-    SUPABASE_URL +
-    "/rest/v1/" +
-    table;
-
-  const params = [];
-
-  if(options.select)
-    params.push(
-      "select=" +
-      encodeURIComponent(options.select)
-    );
-
-  if(options.filters){
-
-    Object.entries(options.filters).forEach(
-      ([key,value]) => {
-
-        params.push(
-          key +
-          "=eq." +
-          encodeURIComponent(value)
-        );
-
-      }
-    );
-
-  }
-
-  if(options.order)
-    params.push(
-      "order=" +
-      encodeURIComponent(options.order)
-    );
-
-  if(options.limit)
-    params.push(
-      "limit=" +
-      options.limit
-    );
-
-  if(params.length)
-    url += "?" + params.join("&");
-
-  const headers = {
-
-    "apikey": SUPABASE_KEY,
-
-    "Authorization":
-      "Bearer " + SUPABASE_KEY,
-
-    "Content-Type":
-      "application/json"
-
-  };
-
-  const fetchOptions = {
-
-    method:options.method || "GET",
-
-    headers
-
-  };
-
-  if(options.body){
-
-    fetchOptions.body =
-      JSON.stringify(options.body);
-
-  }
-
-  const response =
-    await fetch(
-      url,
-      fetchOptions
-    );
-
-  const text =
-    await response.text();
-
-  let data = null;
-
-  try{
-
-    data =
-      text ?
-      JSON.parse(text) :
-      null;
-
-  }catch{
-
-    data = text;
-
-  }
-
-  if(!response.ok){
-
-    throw new Error(
-      data?.message ||
-      data?.details ||
-      data?.hint ||
-      text ||
-      "Supabase request failed"
-    );
-
-  }
-
-  return data;
-
-}
-
-/* =========================================================
-   MESSAGE
-========================================================= */
-
-function showMessage(
-  text,
-  type = "success"
-){
-
-  const el =
-    document.getElementById("message");
-
-  el.innerHTML = `
-    <div class="notice"
-         style="${
-           type === "error"
-           ? "background:rgba(220,38,38,.12)"
-           : ""
-         }">
-      ${escapeHtml(text)}
-    </div>
-  `;
-
-  setTimeout(() => {
-
-    el.innerHTML = "";
-
-  },4000);
-
-}
-
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
-
-function escapeHtml(value){
-
-  return String(value ?? "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-
-}
-
-/* =========================================================
-   NORMALIZE FOLDER TYPE
-========================================================= */
-
-function normalizeType(type){
-
-  return String(type || "")
+  return String(value || "")
     .trim()
     .toLowerCase();
+
+}
+
+function esc(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+function showToast(message,error=false){
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent = message;
+
+  toast.classList.toggle("error",error);
+
+  toast.classList.add("show");
+
+  clearTimeout(window.toastTimer);
+
+  window.toastTimer =
+    setTimeout(()=>{
+      toast.classList.remove("show");
+    },2600);
+
+}
+
+function closeModal(id){
+
+  document
+    .getElementById(id)
+    .classList.remove("show");
+
+}
+
+function openModal(id){
+
+  document
+    .getElementById(id)
+    .classList.add("show");
 
 }
 
@@ -766,38 +1180,30 @@ function normalizeType(type){
    SORT
 ========================================================= */
 
-function sortItems(array){
+function sortByOrder(a,b){
 
-  return [...array].sort(
-    (a,b) => {
+  return (Number(a.sort_order)||0)
+       - (Number(b.sort_order)||0);
 
-      const ao =
-        Number(a.sort_order ?? 0);
+}
 
-      const bo =
-        Number(b.sort_order ?? 0);
+function sortExams(){
 
-      if(ao !== bo)
-        return ao - bo;
+  exams.sort((a,b)=>{
 
-      return String(
-        a.display_name ||
-        a.name ||
-        a.title ||
-        ""
-      ).localeCompare(
-        String(
-          b.display_name ||
-          b.name ||
-          b.title ||
-          ""
-        ),
-        undefined,
-        {numeric:true}
-      );
+    const boardA = String(a.board||"");
+    const boardB = String(b.board||"");
+
+    if(boardA !== boardB){
+
+      if(boardA === "SSC") return -1;
+      if(boardB === "SSC") return 1;
 
     }
-  );
+
+    return sortByOrder(a,b);
+
+  });
 
 }
 
@@ -807,175 +1213,211 @@ function sortItems(array){
 
 async function loadAll(){
 
-  try{
+  if(!window.supabase){
 
-    const [
-      examsData,
-      foldersData,
-      testsData,
-      subjectsData
-    ] = await Promise.all([
+    showToast(
+      "Supabase library failed to load.",
+      true
+    );
 
-      supabaseRequest(
-        "exams",
-        {
-          select:"*",
-          order:"sort_order.asc"
-        }
-      ),
+    return;
 
-      supabaseRequest(
-        "mock_folders",
-        {
-          select:"*",
-          order:"sort_order.asc"
-        }
-      ),
+  }
 
-      supabaseRequest(
-        "mock_tests",
-        {
-          select:"*",
-          order:"sort_order.asc"
-        }
-      ),
+  const results =
+    await Promise.all([
 
-      supabaseRequest(
-        "subjects",
-        {
-          select:"*"
-        }
-      )
+      db
+        .from("exams")
+        .select("*")
+        .order("sort_order",{ascending:true})
+        .order("id",{ascending:true}),
+
+      db
+        .from("mock_folders")
+        .select("*")
+        .order("sort_order",{ascending:true})
+        .order("id",{ascending:true}),
+
+      db
+        .from("mock_tests")
+        .select("*")
+        .order("sort_order",{ascending:true})
+        .order("id",{ascending:true}),
+
+      db
+        .from("subjects")
+        .select("*")
+        .order("id",{ascending:true})
 
     ]);
 
-    exams =
-      sortItems(examsData || []);
+  const names = [
+    "EXAMS",
+    "MOCK_FOLDERS",
+    "MOCK_TESTS",
+    "SUBJECTS"
+  ];
 
-    folders =
-      sortItems(foldersData || []);
+  for(let i=0;i<results.length;i++){
 
-    tests =
-      sortItems(testsData || []);
+    if(results[i].error){
 
-    subjects =
-      subjectsData || [];
+      console.error(
+        names[i],
+        results[i].error
+      );
 
-    renderExams();
+      showToast(
+        names[i] + ": " +
+        results[i].error.message,
+        true
+      );
 
-    if(selectedExam){
-
-      const freshExam =
-        exams.find(
-          e =>
-            String(e.id) ===
-            String(selectedExam.id)
-        );
-
-      if(freshExam){
-
-        selectedExam =
-          freshExam;
-
-        renderWorkspace();
-
-      }else{
-
-        selectedExam = null;
-        currentFolder = null;
-        renderWorkspace();
-
-      }
+      return;
 
     }
 
-  }catch(error){
+  }
 
-    console.error(error);
+  exams = results[0].data || [];
+  folders = results[1].data || [];
+  tests = results[2].data || [];
+  subjects = results[3].data || [];
 
-    showMessage(
-      error.message,
-      "error"
-    );
+  sortExams();
+
+  renderExams();
+
+  if(selectedExam){
+
+    const fresh =
+      exams.find(
+        x => Number(x.id) === Number(selectedExam.id)
+      );
+
+    if(fresh){
+
+      selectedExam = fresh;
+      renderWorkspace();
+
+    }else{
+
+      selectedExam = null;
+
+      document
+        .getElementById("workspace")
+        .classList.add("hidden");
+
+    }
 
   }
 
 }
 
 /* =========================================================
-   EXAM RENDER
+   EXAMS
 ========================================================= */
 
 function renderExams(){
 
-  const container =
+  const box =
     document.getElementById("examList");
 
   if(!exams.length){
 
-    container.innerHTML =
-      `<div class="empty">
+    box.innerHTML = `
+      <div class="empty">
         No exams added yet.
-      </div>`;
+      </div>
+    `;
 
     return;
 
   }
 
-  container.innerHTML =
-    exams.map(exam => {
+  box.innerHTML =
+    exams.map(exam=>{
 
       const active =
         selectedExam &&
-        String(selectedExam.id) ===
-        String(exam.id);
+        Number(selectedExam.id) === Number(exam.id);
+
+      const board =
+        String(exam.board||"SSC").toUpperCase();
+
+      const logo =
+        board === "RRB"
+          ? `
+            <img
+              src="rrb-logo.png"
+              alt="RRB"
+              onerror="this.style.display='none';this.parentElement.innerHTML='🚆';"
+            >
+          `
+          : `
+            <div class="ssc-logo">
+              SSC
+            </div>
+          `;
 
       return `
 
-        <div
-          class="admin-card ${active ? "active" : ""}"
-          onclick="selectExam('${exam.id}')"
-        >
+        <div class="exam-card ${active ? "active":""}">
 
-          <div class="admin-card-title">
-            ${escapeHtml(exam.board)}
-            •
-            ${escapeHtml(exam.name)}
+          <div class="exam-main">
+
+            <div class="exam-logo">
+              ${logo}
+            </div>
+
+            <div>
+
+              <div class="exam-name">
+                ${esc(exam.name)}
+              </div>
+
+              <div class="exam-board">
+                ${esc(board)}
+              </div>
+
+            </div>
+
           </div>
 
-          <div class="admin-card-subtitle">
-            Practice structure
-          </div>
-
-          <div
-            class="admin-card-actions"
-            onclick="event.stopPropagation()"
-          >
+          <div class="exam-actions">
 
             <button
-              class="admin-btn small"
-              onclick="editExam('${exam.id}')"
+              class="small-btn purple"
+              onclick="selectExam(${exam.id})"
+            >
+              Manage
+            </button>
+
+            <button
+              class="small-btn"
+              onclick="editExam(${exam.id})"
             >
               Edit
             </button>
 
             <button
-              class="admin-btn small secondary"
-              onclick="moveExam('${exam.id}',-1)"
+              class="small-btn"
+              onclick="moveExam(${exam.id},-1)"
             >
               ↑
             </button>
 
             <button
-              class="admin-btn small secondary"
-              onclick="moveExam('${exam.id}',1)"
+              class="small-btn"
+              onclick="moveExam(${exam.id},1)"
             >
               ↓
             </button>
 
             <button
-              class="admin-btn small danger"
-              onclick="deleteExam('${exam.id}')"
+              class="small-btn red"
+              onclick="deleteExam(${exam.id})"
             >
               Delete
             </button>
@@ -998,12 +1440,10 @@ function selectExam(id){
 
   selectedExam =
     exams.find(
-      e =>
-        String(e.id) ===
-        String(id)
-    ) || null;
+      x => Number(x.id) === Number(id)
+    );
 
-  currentFolder = null;
+  if(!selectedExam) return;
 
   renderExams();
   renderWorkspace();
@@ -1011,7 +1451,431 @@ function selectExam(id){
 }
 
 /* =========================================================
-   RENDER WORKSPACE
+   EXAM FORM
+========================================================= */
+
+function openExamForm(){
+
+  editingExamId = null;
+
+  document.getElementById("examModalTitle")
+    .textContent = "Add Exam";
+
+  document.getElementById("examBoard")
+    .value = "SSC";
+
+  document.getElementById("examName")
+    .value = "";
+
+  openModal("examModal");
+
+}
+
+function editExam(id){
+
+  const exam =
+    exams.find(
+      x => Number(x.id) === Number(id)
+    );
+
+  if(!exam) return;
+
+  editingExamId = Number(id);
+
+  document.getElementById("examModalTitle")
+    .textContent = "Edit Exam";
+
+  document.getElementById("examBoard")
+    .value = exam.board || "SSC";
+
+  document.getElementById("examName")
+    .value = exam.name || "";
+
+  openModal("examModal");
+
+}
+
+function closeExamForm(){
+
+  closeModal("examModal");
+
+}
+
+async function saveExam(){
+
+  const board =
+    document.getElementById("examBoard")
+      .value
+      .trim()
+      .toUpperCase();
+
+  const name =
+    document.getElementById("examName")
+      .value
+      .trim();
+
+  if(!name){
+
+    showToast(
+      "Enter exam name.",
+      true
+    );
+
+    return;
+
+  }
+
+  const isEditing =
+    editingExamId !== null;
+
+  const idBeingEdited =
+    editingExamId;
+
+  if(isEditing){
+
+    const { error } =
+      await db
+        .from("exams")
+        .update({
+          board:board,
+          name:name
+        })
+        .eq("id",idBeingEdited);
+
+    if(error){
+
+      console.error(error);
+
+      showToast(
+        "EXAMS: " + error.message,
+        true
+      );
+
+      return;
+
+    }
+
+    if(
+      selectedExam &&
+      Number(selectedExam.id) === Number(idBeingEdited)
+    ){
+
+      selectedExam = {
+        ...selectedExam,
+        board,
+        name
+      };
+
+    }
+
+    showToast("Exam updated.");
+
+  }else{
+
+    const maxOrder =
+      exams
+        .filter(x=>String(x.board).toUpperCase()===board)
+        .reduce(
+          (m,x)=>Math.max(
+            m,
+            Number(x.sort_order)||0
+          ),
+          -1
+        );
+
+    /*
+      IMPORTANT:
+      exams.mock_type has a DB CHECK constraint.
+      The database accepts only:
+      SECTIONAL
+      SUBJECT_WISE
+
+      It is only a legacy required field.
+      It does NOT control the Practice hierarchy.
+    */
+
+    const { data,error } =
+      await db
+        .from("exams")
+        .insert({
+          board:board,
+          name:name,
+          mock_type:"SECTIONAL",
+          is_active:true,
+          sort_order:maxOrder + 1
+        })
+        .select()
+        .single();
+
+    if(error){
+
+      console.error(error);
+
+      showToast(
+        "EXAMS: " + error.message,
+        true
+      );
+
+      return;
+
+    }
+
+    selectedExam = data;
+
+    showToast("Exam created.");
+
+  }
+
+  editingExamId = null;
+
+  closeExamForm();
+
+  await loadAll();
+
+}
+
+/* =========================================================
+   EXAM REORDER
+========================================================= */
+
+async function moveExam(id,direction){
+
+  const index =
+    exams.findIndex(
+      x => Number(x.id) === Number(id)
+    );
+
+  if(index < 0) return;
+
+  const board =
+    String(exams[index].board || "")
+      .toUpperCase();
+
+  const sameBoard =
+    exams.filter(
+      x =>
+        String(x.board||"").toUpperCase() === board
+    );
+
+  const pos =
+    sameBoard.findIndex(
+      x => Number(x.id) === Number(id)
+    );
+
+  const target =
+    pos + direction;
+
+  if(target < 0 || target >= sameBoard.length){
+
+    return;
+
+  }
+
+  const current = sameBoard[pos];
+  const other = sameBoard[target];
+
+  const currentOrder =
+    Number(current.sort_order)||0;
+
+  const otherOrder =
+    Number(other.sort_order)||0;
+
+  const { error } =
+    await db
+      .from("exams")
+      .update({
+        sort_order:otherOrder
+      })
+      .eq("id",current.id);
+
+  if(error){
+
+    showToast(
+      "EXAMS: " + error.message,
+      true
+    );
+
+    return;
+
+  }
+
+  const { error:error2 } =
+    await db
+      .from("exams")
+      .update({
+        sort_order:currentOrder
+      })
+      .eq("id",other.id);
+
+  if(error2){
+
+    showToast(
+      "EXAMS: " + error2.message,
+      true
+    );
+
+    return;
+
+  }
+
+  await loadAll();
+
+}
+
+/* =========================================================
+   DELETE EXAM
+========================================================= */
+
+async function deleteExam(id){
+
+  const exam =
+    exams.find(
+      x => Number(x.id) === Number(id)
+    );
+
+  if(!exam) return;
+
+  if(
+    !confirm(
+      `Delete "${exam.name}" and all its practice folders/tests?`
+    )
+  ){
+
+    return;
+
+  }
+
+  const examFolders =
+    folders.filter(
+      x => Number(x.exam_id) === Number(id)
+    );
+
+  const folderIds =
+    examFolders.map(x=>Number(x.id));
+
+  /*
+    Delete tests first.
+  */
+
+  if(folderIds.length){
+
+    const { error:testError } =
+      await db
+        .from("mock_tests")
+        .delete()
+        .in("folder_id",folderIds);
+
+    if(testError){
+
+      showToast(
+        "MOCK_TESTS: " +
+        testError.message,
+        true
+      );
+
+      return;
+
+    }
+
+  }
+
+  /*
+    Delete folders deepest-first so a self
+    parent_id foreign key does not block deletion.
+  */
+
+  const remaining =
+    [...examFolders];
+
+  while(remaining.length){
+
+    const leafFolders =
+      remaining.filter(folder=>{
+
+        return !remaining.some(
+          child =>
+            Number(child.parent_id) ===
+            Number(folder.id)
+        );
+
+      });
+
+    const batch =
+      leafFolders.length
+        ? leafFolders
+        : remaining;
+
+    const ids =
+      batch.map(x=>Number(x.id));
+
+    const { error } =
+      await db
+        .from("mock_folders")
+        .delete()
+        .in("id",ids);
+
+    if(error){
+
+      showToast(
+        "MOCK_FOLDERS: " +
+        error.message,
+        true
+      );
+
+      return;
+
+    }
+
+    for(const item of batch){
+
+      const index =
+        remaining.indexOf(item);
+
+      if(index >= 0){
+
+        remaining.splice(index,1);
+
+      }
+
+    }
+
+  }
+
+  const { error:examError } =
+    await db
+      .from("exams")
+      .delete()
+      .eq("id",id);
+
+  if(examError){
+
+    showToast(
+      "EXAMS: " +
+      examError.message,
+      true
+    );
+
+    return;
+
+  }
+
+  if(
+    selectedExam &&
+    Number(selectedExam.id) === Number(id)
+  ){
+
+    selectedExam = null;
+
+  }
+
+  showToast("Exam deleted.");
+
+  await loadAll();
+
+}
+
+/* =========================================================
+   WORKSPACE
 ========================================================= */
 
 function renderWorkspace(){
@@ -1021,101 +1885,63 @@ function renderWorkspace(){
 
   if(!selectedExam){
 
-    workspace.innerHTML = "";
+    workspace.classList.add("hidden");
 
     return;
 
   }
 
-  workspace.innerHTML = `
+  workspace.classList.remove("hidden");
 
-    <div class="admin-section">
+  document.getElementById("workspaceTitle")
+    .textContent =
+      `${selectedExam.board} ${selectedExam.name}`;
 
-      <div class="admin-section-title">
-        ${escapeHtml(selectedExam.board)}
-        →
-        ${escapeHtml(selectedExam.name)}
-      </div>
-
-      <div id="hierarchyArea"></div>
-
-    </div>
-
-  `;
-
-  renderRootLevel();
+  renderRootArea();
 
 }
 
 /* =========================================================
-   ROOT LEVEL
+   ROOT AREA
 ========================================================= */
 
-function renderRootLevel(){
+function renderRootArea(){
 
-  const area =
-    document.getElementById("hierarchyArea");
-
-  if(!area)
-    return;
+  if(!selectedExam) return;
 
   const roots =
-    sortItems(
-      folders.filter(
+    folders
+      .filter(
         f =>
-          String(f.exam_id) ===
-            String(selectedExam.id) &&
-          !f.parent_id
+          Number(f.exam_id) ===
+          Number(selectedExam.id) &&
+          !f.parent_id &&
+          ["new","pyq"].includes(
+            normalizeType(f.folder_type)
+          )
       )
-    );
+      .sort(sortByOrder);
 
-  const newFolder =
-    roots.find(
-      f =>
-        normalizeType(f.folder_type) ===
-        "new"
-    );
+  let html = "";
 
-  const pyqFolder =
-    roots.find(
-      f =>
-        normalizeType(f.folder_type) ===
-        "pyq"
-    );
+  /*
+    Only show missing roots.
+    If NEW and PYQ already exist, no duplicate
+    Add Mock Type card/button is rendered.
+  */
 
-  let html = `
-
-    <div class="breadcrumb">
-      <span class="current">
-        ${escapeHtml(selectedExam.name)}
-      </span>
-    </div>
-
-    <div class="root-grid">
-
-  `;
-
-  if(newFolder){
-
-    html += renderFolderCard(
-      newFolder,
-      "NEW MOCKS"
-    );
-
-  }else{
+  if(roots.length < 2){
 
     html += `
 
-      <div class="admin-card"
-           onclick="openCategoryForm(null,'new')">
+      <div style="margin-bottom:14px;">
 
-        <div class="admin-card-title">
-          + NEW MOCKS
-        </div>
-
-        <div class="admin-card-subtitle">
-          Add New Mocks
-        </div>
+        <button
+          class="secondary-btn"
+          onclick="openRootForm()"
+        >
+          + Add Missing Mock Type
+        </button>
 
       </div>
 
@@ -1123,97 +1949,544 @@ function renderRootLevel(){
 
   }
 
-  if(pyqFolder){
-
-    html += renderFolderCard(
-      pyqFolder,
-      "PYQ MOCKS"
-    );
-
-  }else{
+  if(!roots.length){
 
     html += `
+      <div class="empty">
+        No mock structure added for this exam.
+      </div>
+    `;
 
-      <div class="admin-card"
-           onclick="openCategoryForm(null,'pyq')">
+    document.getElementById("rootArea")
+      .innerHTML = html;
 
-        <div class="admin-card-title">
-          + PYQ MOCKS
+    return;
+
+  }
+
+  html += `<div class="root-grid">`;
+
+  html += roots.map(root=>{
+
+    const type =
+      normalizeType(root.folder_type);
+
+    const title =
+      type === "new"
+        ? "NEW MOCKS"
+        : "PYQ MOCKS";
+
+    const desc =
+      type === "new"
+        ? "Newly created mock tests."
+        : "Previous Year Question mock tests.";
+
+    const icon =
+      type === "new"
+        ? "⚡"
+        : "📚";
+
+    return `
+
+      <div class="root-card">
+
+        <div class="root-icon">
+          ${icon}
         </div>
 
-        <div class="admin-card-subtitle">
-          Add PYQ Mocks
+        <div class="root-title">
+          ${title}
+        </div>
+
+        <div class="root-desc">
+          ${desc}
+        </div>
+
+        <div class="root-actions">
+
+          <button
+            class="small-btn purple"
+            onclick="openRoot(${root.id})"
+          >
+            Open
+          </button>
+
+          <button
+            class="small-btn"
+            onclick="editFolder(${root.id})"
+          >
+            Edit
+          </button>
+
+          <button
+            class="small-btn"
+            onclick="moveFolder(${root.id},-1)"
+          >
+            ↑
+          </button>
+
+          <button
+            class="small-btn"
+            onclick="moveFolder(${root.id},1)"
+          >
+            ↓
+          </button>
+
+          <button
+            class="small-btn red"
+            onclick="deleteFolder(${root.id})"
+          >
+            Delete
+          </button>
+
         </div>
 
       </div>
 
     `;
+
+  }).join("");
+
+  html += `</div>`;
+
+  document.getElementById("rootArea")
+    .innerHTML = html;
+
+}
+
+/* =========================================================
+   OPEN ROOT
+========================================================= */
+
+function openRoot(rootId){
+
+  const root =
+    folders.find(
+      x => Number(x.id) === Number(rootId)
+    );
+
+  if(!root) return;
+
+  renderFolderLevel(root);
+
+}
+
+/* =========================================================
+   ROOT FORM
+========================================================= */
+
+function openRootForm(){
+
+  if(!selectedExam){
+
+    showToast(
+      "Select an exam first.",
+      true
+    );
+
+    return;
+
+  }
+
+  const existing =
+    folders.filter(
+      f =>
+        Number(f.exam_id) ===
+          Number(selectedExam.id) &&
+        !f.parent_id
+    );
+
+  const hasNew =
+    existing.some(
+      x =>
+        normalizeType(x.folder_type) === "new"
+    );
+
+  const hasPyq =
+    existing.some(
+      x =>
+        normalizeType(x.folder_type) === "pyq"
+    );
+
+  const select =
+    document.getElementById("rootType");
+
+  select.innerHTML = "";
+
+  if(!hasNew){
+
+    select.innerHTML += `
+      <option value="new">
+        NEW MOCKS
+      </option>
+    `;
+
+  }
+
+  if(!hasPyq){
+
+    select.innerHTML += `
+      <option value="pyq">
+        PYQ MOCKS
+      </option>
+    `;
+
+  }
+
+  if(hasNew && hasPyq){
+
+    showToast(
+      "Both NEW MOCKS and PYQ MOCKS already exist.",
+      true
+    );
+
+    return;
+
+  }
+
+  openModal("rootModal");
+
+}
+
+function closeRootForm(){
+
+  closeModal("rootModal");
+
+}
+
+async function saveRoot(){
+
+  if(!selectedExam) return;
+
+  const type =
+    normalizeType(
+      document.getElementById("rootType").value
+    );
+
+  const duplicate =
+    folders.some(
+      f =>
+        Number(f.exam_id) ===
+          Number(selectedExam.id) &&
+        !f.parent_id &&
+        normalizeType(f.folder_type) === type
+    );
+
+  if(duplicate){
+
+    showToast(
+      "This mock type already exists.",
+      true
+    );
+
+    return;
+
+  }
+
+  const roots =
+    folders.filter(
+      f =>
+        Number(f.exam_id) ===
+          Number(selectedExam.id) &&
+        !f.parent_id
+    );
+
+  const maxOrder =
+    roots.reduce(
+      (m,x)=>
+        Math.max(
+          m,
+          Number(x.sort_order)||0
+        ),
+      -1
+    );
+
+  const { data,error } =
+    await db
+      .from("mock_folders")
+      .insert({
+        exam_id:selectedExam.id,
+        name:type === "new"
+          ? "NEW MOCKS"
+          : "PYQ MOCKS",
+        display_name:type === "new"
+          ? "NEW MOCKS"
+          : "PYQ MOCKS",
+        folder_type:type,
+        sort_order:maxOrder + 1,
+        is_active:true,
+        parent_id:null
+      })
+      .select()
+      .single();
+
+  if(error){
+
+    showToast(
+      "MOCK_FOLDERS: " +
+      error.message,
+      true
+    );
+
+    return;
+
+  }
+
+  /*
+    Automatically create FULL MOCKS and
+    SECTIONAL MOCKS below the new root.
+  */
+
+  await createRootChildren(data);
+
+  closeRootForm();
+
+  showToast(
+    type === "new"
+      ? "NEW MOCKS created."
+      : "PYQ MOCKS created."
+  );
+
+  await loadAll();
+
+}
+
+/* =========================================================
+   CREATE ROOT CHILDREN
+========================================================= */
+
+async function createRootChildren(root){
+
+  const children = [
+
+    {
+      name:"FULL MOCKS",
+      display_name:"FULL MOCKS",
+      folder_type:"full",
+      sort_order:0
+    },
+
+    {
+      name:"SECTIONAL MOCKS",
+      display_name:"SECTIONAL MOCKS",
+      folder_type:"sectional",
+      sort_order:1
+    }
+
+  ];
+
+  for(const child of children){
+
+    const {error} =
+      await db
+        .from("mock_folders")
+        .insert({
+
+          exam_id:selectedExam.id,
+
+          name:child.name,
+
+          display_name:child.display_name,
+
+          folder_type:child.folder_type,
+
+          sort_order:child.sort_order,
+
+          is_active:true,
+
+          parent_id:root.id
+
+        });
+
+    if(error){
+
+      console.error(
+        "createRootChildren",
+        error
+      );
+
+      showToast(
+        "Folder creation error: " +
+        error.message,
+        true
+      );
+
+      return;
+
+    }
+
+  }
+
+}
+
+/* =========================================================
+   FOLDER LEVEL
+========================================================= */
+
+function renderFolderLevel(root){
+
+  if(!root) return;
+
+  const children =
+    folders
+      .filter(
+        f =>
+          Number(f.parent_id) ===
+          Number(root.id)
+      )
+      .sort(sortByOrder);
+
+  const title =
+    root.display_name ||
+    root.name;
+
+  const full =
+    children.find(
+      x =>
+        normalizeType(x.folder_type) ===
+        "full"
+    );
+
+  const sectional =
+    children.find(
+      x =>
+        normalizeType(x.folder_type) ===
+        "sectional"
+    );
+
+  let html = `
+
+    <div style="margin-bottom:15px;">
+
+      <button
+        class="secondary-btn"
+        onclick="renderRootArea()"
+      >
+        ← Back
+      </button>
+
+    </div>
+
+    <div class="workspace-title" style="margin-bottom:13px;">
+      ${esc(title)}
+    </div>
+
+  `;
+
+  /*
+    Only show missing category.
+  */
+
+  if(!full || !sectional){
+
+    html += `
+
+      <div style="margin-bottom:14px;">
+
+        <button
+          class="secondary-btn"
+          onclick="openCategoryForm(${root.id})"
+        >
+          + Add Missing Category
+        </button>
+
+      </div>
+
+    `;
+
+  }
+
+  html += `<div class="category-grid">`;
+
+  if(full){
+
+    html += renderCategoryCard(
+      full,
+      "FULL MOCKS",
+      "📝",
+      "Direct test cards are placed here."
+    );
+
+  }
+
+  if(sectional){
+
+    html += renderCategoryCard(
+      sectional,
+      "SECTIONAL MOCKS",
+      "📖",
+      "Subject-wise sectional tests."
+    );
 
   }
 
   html += `</div>`;
 
-  area.innerHTML = html;
+  document.getElementById("rootArea")
+    .innerHTML = html;
 
 }
 
 /* =========================================================
-   FOLDER CARD
+   CATEGORY CARD
 ========================================================= */
 
-function renderFolderCard(
+function renderCategoryCard(
   folder,
-  title
+  title,
+  icon,
+  desc
 ){
 
   return `
 
-    <div
-      class="admin-card"
-      onclick="openFolder('${folder.id}')"
-    >
+    <div class="category-card">
 
-      <div class="admin-card-title">
-        ${escapeHtml(
-          folder.display_name ||
-          folder.name ||
-          title
-        )}
+      <div class="category-icon">
+        ${icon}
       </div>
 
-      <div class="admin-card-subtitle">
-        ${escapeHtml(title)}
+      <div class="category-title">
+        ${title}
       </div>
 
-      <div
-        class="admin-card-actions"
-        onclick="event.stopPropagation()"
-      >
+      <div class="category-desc">
+        ${desc}
+      </div>
+
+      <div class="category-actions">
 
         <button
-          class="admin-btn small"
-          onclick="editFolder('${folder.id}')"
+          class="small-btn purple"
+          onclick="openCategory(${folder.id})"
+        >
+          Open
+        </button>
+
+        <button
+          class="small-btn"
+          onclick="editFolder(${folder.id})"
         >
           Edit
         </button>
 
         <button
-          class="admin-btn small secondary"
-          onclick="moveFolder('${folder.id}',-1)"
+          class="small-btn"
+          onclick="moveFolder(${folder.id},-1)"
         >
           ↑
         </button>
 
         <button
-          class="admin-btn small secondary"
-          onclick="moveFolder('${folder.id}',1)"
+          class="small-btn"
+          onclick="moveFolder(${folder.id},1)"
         >
           ↓
         </button>
 
         <button
-          class="admin-btn small danger"
-          onclick="deleteFolder('${folder.id}')"
+          class="small-btn red"
+          onclick="deleteFolder(${folder.id})"
         >
           Delete
         </button>
@@ -1227,1776 +2500,953 @@ function renderFolderCard(
 }
 
 /* =========================================================
-   OPEN FOLDER
+   CATEGORY FORM
 ========================================================= */
 
-function openFolder(id){
+function openCategoryForm(rootId){
 
-  currentFolder =
-    folders.find(
-      f =>
-        String(f.id) ===
-        String(id)
-    ) || null;
+  currentParentId =
+    Number(rootId);
 
-  if(!currentFolder)
-    return;
-
-  renderFolderLevel(
-    currentFolder
-  );
-
-}
-
-/* =========================================================
-   RENDER FOLDER LEVEL
-========================================================= */
-
-function renderFolderLevel(
-  folder
-){
-
-  const area =
-    document.getElementById(
-      "hierarchyArea"
-    );
-
-  if(!area)
-    return;
-
-  const type =
-    normalizeType(
-      folder.folder_type
-    );
-
-  const parent =
-    folder.parent_id
-      ? folders.find(
-          f =>
-            String(f.id) ===
-            String(folder.parent_id)
-        )
-      : null;
-
-  let breadcrumb = `
-
-    <div class="breadcrumb">
-
-      <span onclick="renderRootLevel()">
-        ${escapeHtml(selectedExam.name)}
-      </span>
-
-      <span>›</span>
-
-      ${
-        parent
-        ? `
-          <span
-            onclick="openFolder('${parent.id}')"
-          >
-            ${escapeHtml(
-              parent.display_name ||
-              parent.name
-            )}
-          </span>
-
-          <span>›</span>
-        `
-        : ""
-      }
-
-      <span class="current">
-        ${escapeHtml(
-          folder.display_name ||
-          folder.name
-        )}
-      </span>
-
-    </div>
-
-  `;
-
-  let html =
-    breadcrumb;
-
-  /* =======================================================
-     NEW / PYQ
-  ======================================================= */
-
-  if(type === "new" || type === "pyq"){
-
-    const children =
-      sortItems(
-        folders.filter(
-          f =>
-            String(f.parent_id) ===
-            String(folder.id)
-        )
-      );
-
-    const fullFolder =
-      children.find(
-        f =>
-          normalizeType(
-            f.folder_type
-          ) === "full"
-      );
-
-    const sectionalFolder =
-      children.find(
-        f =>
-          normalizeType(
-            f.folder_type
-          ) === "sectional"
-      );
-
-    html += `
-
-      <div class="category-grid">
-
-    `;
-
-    if(fullFolder){
-
-      html += renderFolderCard(
-        fullFolder,
-        "FULL MOCKS"
-      );
-
-    }
-
-    if(sectionalFolder){
-
-      html += renderFolderCard(
-        sectionalFolder,
-        "SECTIONAL MOCKS"
-      );
-
-    }
-
-    html += `</div>`;
-
-    /*
-      IMPORTANT:
-      Only allow the missing category to be added.
-      If both exist, no duplicate category button.
-    */
-
-    if(!fullFolder || !sectionalFolder){
-
-      let missingType = null;
-
-      if(!fullFolder)
-        missingType = "full";
-
-      if(!sectionalFolder && !missingType)
-        missingType = "sectional";
-
-      const buttonText =
-        missingType === "full"
-          ? "+ Add FULL MOCKS"
-          : missingType === "sectional"
-            ? "+ Add SECTIONAL MOCKS"
-            : "+ Add Category";
-
-      html += `
-
-        <div style="margin-top:15px">
-
-          <button
-            class="admin-btn"
-            onclick="openCategoryForm(
-              '${folder.id}',
-              '${missingType || ""}'
-            )"
-          >
-            ${buttonText}
-          </button>
-
-        </div>
-
-      `;
-
-    }
-
-    area.innerHTML =
-      html;
-
-    return;
-
-  }
-
-  /* =======================================================
-     FULL
-  ======================================================= */
-
-  if(type === "full"){
-
-    const parentType =
-      parent
-        ? normalizeType(
-            parent.folder_type
-          )
-        : "";
-
-    /*
-      NEW FULL
-      Tests directly
-    */
-
-    if(parentType === "new"){
-
-      html += renderTestArea(
-        folder,
-        "FULL MOCKS"
-      );
-
-      area.innerHTML =
-        html;
-
-      return;
-
-    }
-
-    /*
-      PYQ FULL
-      Show years
-    */
-
-    if(parentType === "pyq"){
-
-      const years =
-        sortItems(
-          folders.filter(
-            f =>
-              String(f.parent_id) ===
-              String(folder.id) &&
-              normalizeType(
-                f.folder_type
-              ) === "year"
-          )
-        );
-
-      html += `
-
-        <div class="admin-section-title">
-          PYQ YEARS
-        </div>
-
-        <div class="horizontal-scroll">
-
-          ${
-            years.length
-              ? years
-                  .map(
-                    year =>
-                      renderYearCard(year)
-                  )
-                  .join("")
-              : `
-                <div class="empty">
-                  No years added.
-                </div>
-              `
-          }
-
-        </div>
-
-        <div style="margin-top:15px">
-
-          <button
-            class="admin-btn"
-            onclick="openCategoryForm(
-              '${folder.id}',
-              'year'
-            )"
-          >
-            + Add Year
-          </button>
-
-        </div>
-
-      `;
-
-      area.innerHTML =
-        html;
-
-      return;
-
-    }
-
-  }
-
-  /* =======================================================
-     SECTIONAL
-  ======================================================= */
-
-  if(type === "sectional"){
-
-    const subjectsFolders =
-      sortItems(
-        folders.filter(
-          f =>
-            String(f.parent_id) ===
-            String(folder.id) &&
-            normalizeType(
-              f.folder_type
-            ) === "subject"
-        )
-      );
-
-    html += `
-
-      <div class="admin-section-title">
-        SUBJECTS
-      </div>
-
-      <div class="horizontal-scroll">
-
-        ${
-          subjectsFolders.length
-            ? subjectsFolders
-                .map(
-                  subject =>
-                    renderSubjectCard(
-                      subject
-                    )
-                )
-                .join("")
-            : `
-              <div class="empty">
-                No subjects added.
-              </div>
-            `
-        }
-
-      </div>
-
-      <div style="margin-top:15px">
-
-        <button
-          class="admin-btn"
-          onclick="openCategoryForm(
-            '${folder.id}',
-            'subject'
-          )"
-        >
-          + Add Subject
-        </button>
-
-      </div>
-
-    `;
-
-    area.innerHTML =
-      html;
-
-    return;
-
-  }
-
-  /* =======================================================
-     YEAR
-  ======================================================= */
-
-  if(type === "year"){
-
-    html += renderTestArea(
-      folder,
-      folder.display_name ||
-      folder.name ||
-      "YEAR"
-    );
-
-    area.innerHTML =
-      html;
-
-    return;
-
-  }
-
-  /* =======================================================
-     SUBJECT
-  ======================================================= */
-
-  if(type === "subject"){
-
-    html += renderTestArea(
-      folder,
-      folder.display_name ||
-      folder.name ||
-      "SUBJECT"
-    );
-
-    area.innerHTML =
-      html;
-
-    return;
-
-  }
-
-  area.innerHTML =
-    html;
-
-}
-
-/* =========================================================
-   YEAR CARD
-========================================================= */
-
-function renderYearCard(
-  year
-){
-
-  return `
-
-    <div
-      class="year-card"
-      onclick="openFolder('${year.id}')"
-    >
-
-      <div class="admin-card-title">
-        ${escapeHtml(
-          year.display_name ||
-          year.name
-        )}
-      </div>
-
-      <div class="admin-card-subtitle">
-        PYQ FULL MOCKS
-      </div>
-
-      <div
-        class="admin-card-actions"
-        onclick="event.stopPropagation()"
-      >
-
-        <button
-          class="admin-btn small"
-          onclick="editFolder('${year.id}')"
-        >
-          Edit
-        </button>
-
-        <button
-          class="admin-btn small secondary"
-          onclick="moveFolder('${year.id}',-1)"
-        >
-          ↑
-        </button>
-
-        <button
-          class="admin-btn small secondary"
-          onclick="moveFolder('${year.id}',1)"
-        >
-          ↓
-        </button>
-
-        <button
-          class="admin-btn small danger"
-          onclick="deleteFolder('${year.id}')"
-        >
-          Delete
-        </button>
-
-      </div>
-
-    </div>
-
-  `;
-
-}
-
-/* =========================================================
-   SUBJECT CARD
-========================================================= */
-
-function renderSubjectCard(
-  subject
-){
-
-  return `
-
-    <div
-      class="subject-card"
-      onclick="openFolder('${subject.id}')"
-    >
-
-      <div class="admin-card-title">
-        ${escapeHtml(
-          subject.display_name ||
-          subject.name
-        )}
-      </div>
-
-      <div class="admin-card-subtitle">
-        SECTIONAL MOCKS
-      </div>
-
-      <div
-        class="admin-card-actions"
-        onclick="event.stopPropagation()"
-      >
-
-        <button
-          class="admin-btn small"
-          onclick="editFolder('${subject.id}')"
-        >
-          Edit
-        </button>
-
-        <button
-          class="admin-btn small secondary"
-          onclick="moveFolder('${subject.id}',-1)"
-        >
-          ↑
-        </button>
-
-        <button
-          class="admin-btn small secondary"
-          onclick="moveFolder('${subject.id}',1)"
-        >
-          ↓
-        </button>
-
-        <button
-          class="admin-btn small danger"
-          onclick="deleteFolder('${subject.id}')"
-        >
-          Delete
-        </button>
-
-      </div>
-
-    </div>
-
-  `;
-
-}
-
-/* =========================================================
-   TEST AREA
-========================================================= */
-
-function renderTestArea(
-  folder,
-  heading
-){
-
-  const folderTests =
-    sortItems(
-      tests.filter(
-        t =>
-          String(t.folder_id) ===
-          String(folder.id)
-      )
-    );
-
-  return `
-
-    <div class="admin-section">
-
-      <div class="admin-section-title">
-        ${escapeHtml(heading)}
-      </div>
-
-      <button
-        class="admin-btn"
-        onclick="openTestForm('${folder.id}')"
-      >
-        + Add Test
-      </button>
-
-      <div class="test-list">
-
-        ${
-          folderTests.length
-            ? folderTests
-                .map(
-                  test =>
-                    renderTestCard(test)
-                )
-                .join("")
-            : `
-              <div class="empty">
-                No tests added yet.
-              </div>
-            `
-        }
-
-      </div>
-
-    </div>
-
-  `;
-
-}
-
-/* =========================================================
-   TEST CARD
-========================================================= */
-
-function renderTestCard(
-  test
-){
-
-  return `
-
-    <div class="test-card">
-
-      <div>
-
-        <div class="test-title">
-          ${escapeHtml(test.title)}
-        </div>
-
-        <div class="test-meta">
-
-          ${escapeHtml(
-            test.test_type || ""
-          )}
-
-          •
-
-          ${Number(
-            test.duration_minutes || 0
-          )} min
-
-          •
-
-          ${Number(
-            test.total_questions || 0
-          )} questions
-
-        </div>
-
-      </div>
-
-      <div class="test-actions">
-
-        <button
-          class="admin-btn small"
-          onclick="editTest('${test.id}')"
-        >
-          Edit
-        </button>
-
-        <button
-          class="admin-btn small secondary"
-          onclick="moveTest('${test.id}',-1)"
-        >
-          ↑
-        </button>
-
-        <button
-          class="admin-btn small secondary"
-          onclick="moveTest('${test.id}',1)"
-        >
-          ↓
-        </button>
-
-        <button
-          class="admin-btn small danger"
-          onclick="deleteTest('${test.id}')"
-        >
-          Delete
-        </button>
-
-      </div>
-
-    </div>
-
-  `;
-
-}
-
-/* =========================================================
-   EXAM FORM
-========================================================= */
-
-function openExamForm(
-  exam = null
-){
-
-  editingExamId =
-    exam
-      ? exam.id
-      : null;
-
-  document.getElementById(
-    "examFormTitle"
-  ).textContent =
-    exam
-      ? "Edit Exam"
-      : "Add Exam";
-
-  document.getElementById(
-    "examBoard"
-  ).value =
-    exam?.board ||
-    "SSC";
-
-  document.getElementById(
-    "examName"
-  ).value =
-    exam?.name ||
-    "";
-
-  document.getElementById(
-    "examOverlay"
-  ).classList.add("show");
-
-}
-
-/* =========================================================
-   CLOSE EXAM FORM
-========================================================= */
-
-function closeExamForm(){
-
-  document.getElementById(
-    "examOverlay"
-  ).classList.remove("show");
-
-  editingExamId = null;
-
-}
-
-/* =========================================================
-   EDIT EXAM
-========================================================= */
-
-function editExam(id){
-
-  const exam =
-    exams.find(
-      e =>
-        String(e.id) ===
-        String(id)
-    );
-
-  if(exam)
-    openExamForm(exam);
-
-}
-
-/* =========================================================
-   SAVE EXAM
-========================================================= */
-
-async function saveExam(){
-
-  const board =
-    document.getElementById(
-      "examBoard"
-    ).value.trim();
-
-  const name =
-    document.getElementById(
-      "examName"
-    ).value.trim();
-
-  if(!name){
-
-    showMessage(
-      "Please enter exam name.",
-      "error"
-    );
-
-    return;
-
-  }
-
-  /*
-    IMPORTANT:
-    Capture edit state BEFORE closeExamForm()
-    because closeExamForm() clears editingExamId.
-  */
-
-  const wasEditing =
-    !!editingExamId;
-
-  const savedExamId =
-    editingExamId;
-
-  try{
-
-    if(wasEditing){
-
-      await supabaseRequest(
-        "exams",
-        {
-          method:"PATCH",
-
-          filters:{
-            id:savedExamId
-          },
-
-          body:{
-            board,
-            name
-          }
-
-        }
-      );
-
-    }else{
-
-      /*
-        IMPORTANT:
-        exams.mock_type allows only:
-        SECTIONAL
-        SUBJECT_WISE
-
-        We use SECTIONAL as the
-        required legacy value.
-      */
-
-      const created =
-        await supabaseRequest(
-          "exams",
-          {
-            method:"POST",
-
-            body:{
-              board,
-              name,
-              mock_type:"SECTIONAL",
-              is_active:true,
-              sort_order:
-                exams.length
-                  ? Math.max(
-                      ...exams.map(
-                        e =>
-                          Number(
-                            e.sort_order || 0
-                          )
-                      )
-                    ) + 1
-                  : 0
-            }
-          }
-        );
-
-      const newExam =
-        Array.isArray(created)
-          ? created[0]
-          : created;
-
-      if(newExam?.id){
-
-        await createDefaultStructure(
-          newExam.id
-        );
-
-      }
-
-    }
-
-    closeExamForm();
-
-    await loadAll();
-
-    if(wasEditing){
-
-      const updated =
-        exams.find(
-          e =>
-            String(e.id) ===
-            String(savedExamId)
-        );
-
-      if(updated){
-
-        selectedExam =
-          updated;
-
-      }
-
-    }else{
-
-      const newest =
-        [...exams]
-          .sort(
-            (a,b) =>
-              Number(b.id) -
-              Number(a.id)
-          )[0];
-
-      if(newest){
-
-        selectedExam =
-          newest;
-
-      }
-
-    }
-
-    renderExams();
-    renderWorkspace();
-
-    showMessage(
-      wasEditing
-        ? "Exam updated successfully."
-        : "Exam created successfully."
-    );
-
-  }catch(error){
-
-    console.error(error);
-
-    showMessage(
-      error.message,
-      "error"
-    );
-
-  }
-
-}
-
-/* =========================================================
-   CREATE DEFAULT STRUCTURE
-========================================================= */
-
-async function createDefaultStructure(
-  examId
-){
+  editingFolderId = null;
 
   const existing =
     folders.filter(
       f =>
-        String(f.exam_id) ===
-        String(examId)
+        Number(f.parent_id) ===
+        Number(rootId)
     );
 
-  if(existing.length)
-    return;
-
-  /*
-    Root:
-      NEW MOCKS
-      PYQ MOCKS
-  */
-
-  const rootRows = [
-
-    {
-      exam_id:examId,
-      name:"NEW MOCKS",
-      display_name:"NEW MOCKS",
-      folder_type:"new",
-      parent_id:null,
-      sort_order:0,
-      is_active:true
-    },
-
-    {
-      exam_id:examId,
-      name:"PYQ MOCKS",
-      display_name:"PYQ MOCKS",
-      folder_type:"pyq",
-      parent_id:null,
-      sort_order:1,
-      is_active:true
-    }
-
-  ];
-
-  const roots =
-    await supabaseRequest(
-      "mock_folders",
-      {
-        method:"POST",
-        body:rootRows
-      }
+  const hasFull =
+    existing.some(
+      x =>
+        normalizeType(x.folder_type) ===
+        "full"
     );
 
-  const newRoot =
-    roots[0];
+  const hasSectional =
+    existing.some(
+      x =>
+        normalizeType(x.folder_type) ===
+        "sectional"
+    );
 
-  const pyqRoot =
-    roots[1];
+  const select =
+    document.getElementById("categoryType");
 
-  /*
-    Children:
-      FULL MOCKS
-      SECTIONAL MOCKS
-  */
+  select.innerHTML = "";
 
-  const children = [
+  if(!hasFull){
 
-    {
-      exam_id:examId,
-      name:"FULL MOCKS",
-      display_name:"FULL MOCKS",
-      folder_type:"full",
-      parent_id:newRoot.id,
-      sort_order:0,
-      is_active:true
-    },
-
-    {
-      exam_id:examId,
-      name:"SECTIONAL MOCKS",
-      display_name:"SECTIONAL MOCKS",
-      folder_type:"sectional",
-      parent_id:newRoot.id,
-      sort_order:1,
-      is_active:true
-    },
-
-    {
-      exam_id:examId,
-      name:"FULL MOCKS",
-      display_name:"FULL MOCKS",
-      folder_type:"full",
-      parent_id:pyqRoot.id,
-      sort_order:0,
-      is_active:true
-    },
-
-    {
-      exam_id:examId,
-      name:"SECTIONAL MOCKS",
-      display_name:"SECTIONAL MOCKS",
-      folder_type:"sectional",
-      parent_id:pyqRoot.id,
-      sort_order:1,
-      is_active:true
-    }
-
-  ];
-
-  await supabaseRequest(
-    "mock_folders",
-    {
-      method:"POST",
-      body:children
-    }
-  );
-
-}
-
-/* =========================================================
-   OPEN CATEGORY FORM
-========================================================= */
-
-function openCategoryForm(
-  parentId = null,
-  forcedType = null
-){
-
-  const parent =
-    parentId
-      ? folders.find(
-          f =>
-            String(f.id) ===
-            String(parentId)
-        )
-      : null;
-
-  /*
-    Root category:
-      new / pyq
-  */
-
-  if(!parent && forcedType){
-
-    const exists =
-      folders.some(
-        f =>
-          String(f.exam_id) ===
-            String(selectedExam.id) &&
-          !f.parent_id &&
-          normalizeType(
-            f.folder_type
-          ) ===
-            normalizeType(forcedType)
-      );
-
-    if(exists){
-
-      showMessage(
-        "This category already exists.",
-        "error"
-      );
-
-      return;
-
-    }
+    select.innerHTML += `
+      <option value="full">
+        FULL MOCKS
+      </option>
+    `;
 
   }
 
-  /*
-    NEW/PYQ children:
-      full / sectional
+  if(!hasSectional){
 
-    Prevent duplicate.
-  */
-
-  if(parent){
-
-    const parentType =
-      normalizeType(
-        parent.folder_type
-      );
-
-    if(
-      (parentType === "new" ||
-       parentType === "pyq") &&
-      forcedType
-    ){
-
-      const exists =
-        folders.some(
-          f =>
-            String(f.parent_id) ===
-              String(parent.id) &&
-            normalizeType(
-              f.folder_type
-            ) ===
-              normalizeType(forcedType)
-        );
-
-      if(exists){
-
-        showMessage(
-          "This category already exists.",
-          "error"
-        );
-
-        return;
-
-      }
-
-    }
+    select.innerHTML += `
+      <option value="sectional">
+        SECTIONAL MOCKS
+      </option>
+    `;
 
   }
 
-  currentFolderParentId =
-    parentId;
+  if(hasFull && hasSectional){
 
-  currentFolderType =
-    forcedType || null;
-
-  editingFolderId = null;
-
-  let defaultName = "";
-
-  if(forcedType === "new")
-    defaultName = "NEW MOCKS";
-
-  if(forcedType === "pyq")
-    defaultName = "PYQ MOCKS";
-
-  if(forcedType === "full")
-    defaultName = "FULL MOCKS";
-
-  if(forcedType === "sectional")
-    defaultName = "SECTIONAL MOCKS";
-
-  if(forcedType === "year")
-    defaultName = "";
-
-  if(forcedType === "subject")
-    defaultName = "";
-
-  document.getElementById(
-    "folderFormTitle"
-  ).textContent =
-    forcedType === "year"
-      ? "Add Year"
-      : forcedType === "subject"
-        ? "Add Subject"
-        : "Add Category";
-
-  document.getElementById(
-    "folderName"
-  ).value =
-    defaultName;
-
-  document.getElementById(
-    "folderOverlay"
-  ).classList.add("show");
-
-}
-
-/* =========================================================
-   CLOSE FOLDER FORM
-========================================================= */
-
-function closeFolderForm(){
-
-  document.getElementById(
-    "folderOverlay"
-  ).classList.remove("show");
-
-  editingFolderId = null;
-  currentFolderParentId = null;
-  currentFolderType = null;
-
-}
-
-/* =========================================================
-   EDIT FOLDER
-========================================================= */
-
-function editFolder(id){
-
-  const folder =
-    folders.find(
-      f =>
-        String(f.id) ===
-        String(id)
+    showToast(
+      "Both categories already exist.",
+      true
     );
 
-  if(!folder)
     return;
 
-  editingFolderId =
-    folder.id;
+  }
 
-  currentFolderParentId =
-    folder.parent_id;
+  document.getElementById("categoryModalTitle")
+    .textContent =
+      "Add Category";
 
-  currentFolderType =
+  openModal("categoryModal");
+
+}
+
+function closeCategoryForm(){
+
+  closeModal("categoryModal");
+
+}
+
+async function saveCategory(){
+
+  if(!selectedExam || !currentParentId){
+
+    showToast(
+      "Invalid parent folder.",
+      true
+    );
+
+    return;
+
+  }
+
+  const type =
     normalizeType(
-      folder.folder_type
+      document.getElementById("categoryType").value
     );
 
-  document.getElementById(
-    "folderFormTitle"
-  ).textContent =
-    "Edit";
-
-  document.getElementById(
-    "folderName"
-  ).value =
-    folder.display_name ||
-    folder.name ||
-    "";
-
-  document.getElementById(
-    "folderOverlay"
-  ).classList.add("show");
-
-}
-
-/* =========================================================
-   SAVE FOLDER
-========================================================= */
-
-async function saveFolder(){
-
-  const name =
-    document.getElementById(
-      "folderName"
-    ).value.trim();
-
-  if(!name){
-
-    showMessage(
-      "Please enter a name.",
-      "error"
-    );
-
-    return;
-
-  }
-
-  try{
-
-    if(editingFolderId){
-
-      await supabaseRequest(
-        "mock_folders",
-        {
-          method:"PATCH",
-
-          filters:{
-            id:editingFolderId
-          },
-
-          body:{
-            name,
-            display_name:name
-          }
-
-        }
-      );
-
-    }else{
-
-      const parent =
-        currentFolderParentId
-          ? folders.find(
-              f =>
-                String(f.id) ===
-                String(
-                  currentFolderParentId
-                )
-            )
-          : null;
-
-      const siblings =
-        folders.filter(
-          f =>
-            String(f.exam_id) ===
-              String(selectedExam.id) &&
-            String(
-              f.parent_id || ""
-            ) ===
-              String(
-                currentFolderParentId || ""
-              )
-        );
-
-      const maxOrder =
-        siblings.length
-          ? Math.max(
-              ...siblings.map(
-                f =>
-                  Number(
-                    f.sort_order || 0
-                  )
-              )
-            )
-          : -1;
-
-      await supabaseRequest(
-        "mock_folders",
-        {
-          method:"POST",
-
-          body:{
-            exam_id:selectedExam.id,
-
-            parent_id:
-              currentFolderParentId ||
-              null,
-
-            name,
-
-            display_name:name,
-
-            folder_type:
-              currentFolderType ||
-              "subject",
-
-            sort_order:
-              maxOrder + 1,
-
-            is_active:true
-          }
-
-        }
-      );
-
-    }
-
-    closeFolderForm();
-
-    await loadAll();
-
-    if(selectedExam)
-      renderWorkspace();
-
-    showMessage(
-      editingFolderId
-        ? "Folder updated successfully."
-        : "Folder added successfully."
-    );
-
-  }catch(error){
-
-    console.error(error);
-
-    showMessage(
-      error.message,
-      "error"
-    );
-
-  }
-
-}
-
-/* =========================================================
-   DELETE FOLDER
-========================================================= */
-
-async function deleteFolder(
-  id
-){
-
-  const folder =
-    folders.find(
+  const duplicate =
+    folders.some(
       f =>
-        String(f.id) ===
-        String(id)
+        Number(f.parent_id) ===
+          Number(currentParentId) &&
+        normalizeType(f.folder_type) === type
     );
 
-  if(!folder)
+  if(duplicate){
+
+    showToast(
+      "This category already exists.",
+      true
+    );
+
     return;
-
-  if(
-    !confirm(
-      `Delete "${folder.display_name || folder.name}" and everything inside it?`
-    )
-  )
-    return;
-
-  try{
-
-    /*
-      Delete descendants first.
-    */
-
-    const allIds =
-      getDescendantFolderIds(id);
-
-    allIds.push(id);
-
-    /*
-      Tests must be deleted before folders.
-    */
-
-    await supabaseRequest(
-      "mock_tests",
-      {
-        method:"DELETE",
-
-        filters:{
-          folder_id:id
-        }
-      }
-    );
-
-    for(
-      const childId
-      of allIds.filter(
-        x =>
-          String(x) !==
-          String(id)
-      )
-    ){
-
-      await supabaseRequest(
-        "mock_tests",
-        {
-          method:"DELETE",
-
-          filters:{
-            folder_id:childId
-          }
-        }
-      );
-
-    }
-
-    /*
-      Delete folders from deepest level.
-    */
-
-    const descendants =
-      allIds
-        .filter(
-          x =>
-            String(x) !==
-            String(id)
-        )
-        .reverse();
-
-    for(
-      const childId
-      of descendants
-    ){
-
-      await supabaseRequest(
-        "mock_folders",
-        {
-          method:"DELETE",
-
-          filters:{
-            id:childId
-          }
-        }
-      );
-
-    }
-
-    await supabaseRequest(
-      "mock_folders",
-      {
-        method:"DELETE",
-
-        filters:{
-          id
-        }
-      }
-    );
-
-    currentFolder = null;
-
-    await loadAll();
-
-    renderWorkspace();
-
-    showMessage(
-      "Folder deleted successfully."
-    );
-
-  }catch(error){
-
-    console.error(error);
-
-    showMessage(
-      error.message,
-      "error"
-    );
 
   }
-
-}
-
-/* =========================================================
-   GET DESCENDANTS
-========================================================= */
-
-function getDescendantFolderIds(
-  parentId
-){
-
-  const result = [];
-
-  function walk(id){
-
-    const children =
-      folders.filter(
-        f =>
-          String(f.parent_id) ===
-          String(id)
-      );
-
-    children.forEach(
-      child => {
-
-        result.push(child.id);
-
-        walk(child.id);
-
-      }
-    );
-
-  }
-
-  walk(parentId);
-
-  return result;
-
-}
-
-/* =========================================================
-   MOVE FOLDER
-========================================================= */
-
-async function moveFolder(
-  id,
-  direction
-){
-
-  const folder =
-    folders.find(
-      f =>
-        String(f.id) ===
-        String(id)
-    );
-
-  if(!folder)
-    return;
 
   const siblings =
-    sortItems(
-      folders.filter(
-        f =>
-          String(f.exam_id) ===
-            String(folder.exam_id) &&
-          String(
-            f.parent_id || ""
-          ) ===
-            String(
-              folder.parent_id || ""
-            )
-      )
-    );
-
-  const index =
-    siblings.findIndex(
+    folders.filter(
       f =>
-        String(f.id) ===
-        String(id)
+        Number(f.parent_id) ===
+        Number(currentParentId)
     );
 
-  const targetIndex =
-    index + direction;
+  const maxOrder =
+    siblings.reduce(
+      (m,x)=>
+        Math.max(
+          m,
+          Number(x.sort_order)||0
+        ),
+      -1
+    );
 
-  if(
-    targetIndex < 0 ||
-    targetIndex >= siblings.length
-  )
-    return;
+  const title =
+    type === "full"
+      ? "FULL MOCKS"
+      : "SECTIONAL MOCKS";
 
-  const other =
-    siblings[targetIndex];
+  const {error} =
+    await db
+      .from("mock_folders")
+      .insert({
 
-  try{
+        exam_id:selectedExam.id,
 
-    const oldOrder =
-      Number(
-        folder.sort_order || 0
-      );
+        parent_id:currentParentId,
 
-    const newOrder =
-      Number(
-        other.sort_order || 0
-      );
+        name:title,
 
-    await Promise.all([
+        display_name:title,
 
-      supabaseRequest(
-        "mock_folders",
-        {
-          method:"PATCH",
+        folder_type:type,
 
-          filters:{
-            id:folder.id
-          },
+        sort_order:maxOrder + 1,
 
-          body:{
-            sort_order:newOrder
-          }
+        is_active:true
 
-        }
-      ),
+      });
 
-      supabaseRequest(
-        "mock_folders",
-        {
-          method:"PATCH",
+  if(error){
 
-          filters:{
-            id:other.id
-          },
-
-          body:{
-            sort_order:oldOrder
-          }
-
-        }
-      )
-
-    ]);
-
-    await loadAll();
-
-    renderWorkspace();
-
-  }catch(error){
-
-    console.error(error);
-
-    showMessage(
+    showToast(
+      "MOCK_FOLDERS: " +
       error.message,
-      "error"
+      true
     );
+
+    return;
 
   }
 
-}
+  closeCategoryForm();
 
-/* =========================================================
-   OPEN TEST FORM
-========================================================= */
+  showToast(
+    title + " created."
+  );
 
-function openTestForm(
-  folderId,
-  test = null
-){
-
-  currentTestFolderId =
-    folderId;
-
-  editingTestId =
-    test
-      ? test.id
-      : null;
-
-  document.getElementById(
-    "testFormTitle"
-  ).textContent =
-    test
-      ? "Edit Test"
-      : "Add Test";
-
-  document.getElementById(
-    "testTitle"
-  ).value =
-    test?.title ||
-    "";
-
-  document.getElementById(
-    "testDuration"
-  ).value =
-    test?.duration_minutes ||
-    60;
-
-  document.getElementById(
-    "testQuestions"
-  ).value =
-    test?.total_questions ||
-    25;
-
-  document.getElementById(
-    "testOverlay"
-  ).classList.add("show");
+  await loadAll();
 
 }
 
 /* =========================================================
-   CLOSE TEST FORM
+   OPEN CATEGORY
 ========================================================= */
 
-function closeTestForm(){
+function openCategory(categoryId){
 
-  document.getElementById(
-    "testOverlay"
-  ).classList.remove("show");
+  const category =
+    folders.find(
+      x => Number(x.id) === Number(categoryId)
+    );
+
+  if(!category) return;
+
+  const type =
+    normalizeType(category.folder_type);
+
+  if(type === "full"){
+
+    renderFullLevel(category);
+
+    return;
+
+  }
+
+  if(type === "sectional"){
+
+    renderSectionalLevel(category);
+
+    return;
+
+  }
+
+  renderLeafLevel(category);
+
+}
+
+/* =========================================================
+   FULL LEVEL
+========================================================= */
+
+function renderFullLevel(category){
+
+  const root =
+    folders.find(
+      x => Number(x.id) ===
+      Number(category.parent_id)
+    );
+
+  const rootType =
+    root
+      ? normalizeType(root.folder_type)
+      : "";
+
+  if(rootType === "pyq"){
+
+    renderPYQFull(category);
+
+    return;
+
+  }
+
+  renderNewFull(category);
+
+}
+
+/* =========================================================
+   NEW FULL
+========================================================= */
+
+function renderNewFull(folder){
+
+  const folderTests =
+    getTests(folder.id);
+
+  let html = `
+
+    <div style="margin-bottom:15px;">
+
+      <button
+        class="secondary-btn"
+        onclick="goToParentFolder(${folder.parent_id})"
+      >
+        ← Back
+      </button>
+
+    </div>
+
+    <div class="workspace-title">
+      NEW MOCKS / FULL MOCKS
+    </div>
+
+    <div class="workspace-subtitle" style="margin-bottom:16px;">
+      Tests are shown directly here.
+    </div>
+
+    <div class="tests-head">
+
+      <div class="tests-title">
+        Tests
+      </div>
+
+      <button
+        class="primary-btn"
+        onclick="openTestForm(${folder.id})"
+      >
+        + Add Test
+      </button>
+
+    </div>
+
+  `;
+
+  html += renderTestList(folderTests);
+
+  document.getElementById("rootArea")
+    .innerHTML = html;
+
+}
+
+/* =========================================================
+   PYQ FULL
+========================================================= */
+
+function renderPYQFull(folder){
+
+  const years =
+    folders
+      .filter(
+        f =>
+          Number(f.parent_id) ===
+          Number(folder.id) &&
+          normalizeType(f.folder_type) ===
+          "year"
+      )
+      .sort(sortByOrder);
+
+  let html = `
+
+    <div style="margin-bottom:15px;">
+
+      <button
+        class="secondary-btn"
+        onclick="goToParentFolder(${folder.parent_id})"
+      >
+        ← Back
+      </button>
+
+    </div>
+
+    <div class="workspace-title">
+      PYQ MOCKS / FULL MOCKS
+    </div>
+
+    <div class="workspace-subtitle" style="margin-bottom:16px;">
+      Add and manage PYQ years.
+    </div>
+
+    <div style="margin-bottom:14px;">
+
+      <button
+        class="secondary-btn"
+        onclick="openLeafForm(${folder.id},'year')"
+      >
+        + Add Year
+      </button>
+
+    </div>
+
+  `;
+
+  if(!years.length){
+
+    html += `
+      <div class="empty">
+        No years added yet.
+      </div>
+    `;
+
+  }else{
+
+    html += `
+      <div class="horizontal-scroll">
+    `;
+
+    html += years.map(year=>{
+
+      return `
+
+        <div class="choice-card">
+
+          <div class="choice-title">
+            ${esc(year.display_name || year.name)}
+          </div>
+
+          <div class="choice-meta">
+            ${getTests(year.id).length} tests
+          </div>
+
+          <div class="choice-actions">
+
+            <button
+              class="small-btn purple"
+              onclick="openYear(${year.id})"
+            >
+              Open
+            </button>
+
+            <button
+              class="reorder-btn"
+              onclick="moveFolder(${year.id},-1)"
+            >
+              ↑
+            </button>
+
+            <button
+              class="reorder-btn"
+              onclick="moveFolder(${year.id},1)"
+            >
+              ↓
+            </button>
+
+            <button
+              class="small-btn"
+              onclick="editFolder(${year.id})"
+            >
+              Edit
+            </button>
+
+            <button
+              class="small-btn red"
+              onclick="deleteFolder(${year.id})"
+            >
+              Delete
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+    html += `
+      </div>
+    `;
+
+  }
+
+  document.getElementById("rootArea")
+    .innerHTML = html;
+
+}
+
+/* =========================================================
+   OPEN YEAR
+========================================================= */
+
+function openYear(yearId){
+
+  const year =
+    folders.find(
+      x => Number(x.id) === Number(yearId)
+    );
+
+  if(!year) return;
+
+  renderYearTests(year);
+
+}
+
+/* =========================================================
+   YEAR TESTS
+========================================================= */
+
+function renderYearTests(year){
+
+  const parent =
+    folders.find(
+      x => Number(x.id) ===
+      Number(year.parent_id)
+    );
+
+  let html = `
+
+    <div style="margin-bottom:15px;">
+
+      <button
+        class="secondary-btn"
+        onclick="renderPYQFull(
+          folders.find(
+            x=>Number(x.id)===Number(${year.parent_id})
+          )
+        )"
+      >
+        ← Back
+      </button>
+
+    </div>
+
+    <div class="workspace-title">
+      PYQ FULL MOCKS / ${esc(year.display_name || year.name)}
+    </div>
+
+    <div class="workspace-subtitle" style="margin-bottom:16px;">
+      Test cards for this year.
+    </div>
+
+    <div class="tests-head">
+
+      <div class="tests-title">
+        Tests
+      </div>
+
+      <button
+        class="primary-btn"
+        onclick="openTestForm(${year.id})"
+      >
+        + Add Test
+      </button>
+
+    </div>
+
+  `;
+
+  html +=
+    renderTestList(
+      getTests(year.id)
+    );
+
+  document.getElementById("rootArea")
+    .innerHTML = html;
+
+}
+
+/* =========================================================
+   SECTIONAL LEVEL
+========================================================= */
+
+function renderSectionalLevel(folder){
+
+  const root =
+    folders.find(
+      x =>
+        Number(x.id) ===
+        Number(folder.parent_id)
+    );
+
+  const rootType =
+    root
+      ? normalizeType(root.folder_type)
+      : "";
+
+  const subjectsFolders =
+    folders
+      .filter(
+        f =>
+          Number(f.parent_id) ===
+          Number(folder.id) &&
+          normalizeType(f.folder_type) ===
+          "subject"
+      )
+      .sort(sortByOrder);
+
+  let html = `
+
+    <div style="margin-bottom:15px;">
+
+      <button
+        class="secondary-btn"
+        onclick="goToParentFolder(${folder.parent_id})"
+      >
+        ← Back
+      </button>
+
+    </div>
+
+    <div class="workspace-title">
+      ${rootType === "pyq" ? "PYQ" : "NEW"} MOCKS / SECTIONAL MOCKS
+    </div>
+
+    <div class="workspace-subtitle" style="margin-bottom:16px;">
+      Manage sectional subjects.
+    </div>
+
+    <div style="margin-bottom:14px;">
+
+      <button
+        class="secondary-btn"
+        onclick="openLeafForm(${folder.id},'subject')"
+      >
+        + Add Subject
+      </button>
+
+    </div>
+
+  `;
+
+  if(!subjectsFolders.length){
+
+    html += `
+      <div class="empty">
+        No sectional subjects added yet.
+      </div>
+    `;
+
+  }else{
+
+    html += `
+      <div class="horizontal-scroll">
+    `;
+
+    html += subjectsFolders.map(item=>{
+
+      return `
+
+        <div class="choice-card">
+
+          <div class="choice-title">
+            ${esc(
+              item.display_name ||
+              item.name
+            )}
+          </div>
+
+          <div class="choice-meta">
+            ${getTests(item.id).length} tests
+          </div>
+
+          <div class="choice-actions">
+
+            <button
+              class="small-btn purple"
+              onclick="openSubject(${item.id})"
+            >
+              Open
+            </button>
+
+            <button
+              class="reorder-btn"
+              onclick="moveFolder(${item.id},-1)"
+            >
+              ↑
+            </button>
+
+            <button
+              class="reorder-btn"
+              onclick="moveFolder(${item.id},1)"
+            >
+              ↓
+            </button>
+
+            <button
+              class="small-btn"
+              onclick="editFolder(${item.id})"
+            >
+              Edit
+            </button>
+
+            <button
+              class="small-btn red"
+              onclick="deleteFolder(${item.id})"
+            >
+              Delete
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+    html += `
+      </div>
+    `;
+
+  }
+
+  document.getElementById("rootArea")
+    .innerHTML = html;
+
+}
+
+/* =========================================================
+   OPEN SUBJECT
+========================================================= */
+
+function openSubject(id){
+
+  const subjectFolder =
+    folders.find(
+      x => Number(x.id) === Number(id)
+    );
+
+  if(!subjectFolder) return;
+
+  renderSubjectTests(subjectFolder);
+
+}
+
+/* =========================================================
+   SUBJECT TESTS
+========================================================= */
+
+function renderSubjectTests(folder){
+
+  const root =
+    getRootFolder(folder);
+
+  let html = `
+
+    <div style="margin-bottom:15px;">
+
+      <button
+        class="secondary-btn"
+        onclick="goToParentFolder(${folder.parent_id})"
+      >
+        ← Back
+      </button>
+
+    </div>
+
+    <div class="workspace-title">
+      ${esc(folder.display_name || folder.name)}
+    </div>
+
+    <div class="workspace-subtitle" style="margin-bottom:16px;">
+      Sectional tests for this subject.
+    </div>
+
+    <div class="tests-head">
+
+      <div class="tests-title">
+        Tests
+      </div>
+
+      <button
+        class="primary-btn"
+        onclick="openTestForm(${folder.id})"
+      >
+        + Add Test
+      </button>
+
+    </div>
+
+  `;
+
+  html +=
+    renderTestList(
+      getTests(folder.id)
+    );
+
+  document.getElementById("rootArea")
+    .innerHTML = html;
+
+}
+
+/* =========================================================
+   TEST LIST
+========================================================= */
+
+function getTests(folderId){
+
+  return tests
+    .filter(
+      t =>
+        Number(t.folder_id) ===
+        Number(folderId)
+    )
+    .sort(sortByOrder);
+
+}
+
+function renderTestList(list){
+
+  if(!list.length){
+
+    return `
+      <div class="empty">
+        No tests added yet.
+      </div>
+    `;
+
+  }
+
+  return `
+
+    <div class="test-list">
+
+      ${list.map(test=>{
+
+        const active =
+          test.is_active !== false;
+
+        return `
+
+          <div class="test-card">
+
+            <div class="test-top">
+
+              <div class="test-title">
+                ${esc(test.title)}
+              </div>
+
+              <div
+                class="test-status ${active ? "" : "off"}"
+              >
+                ${active ? "ACTIVE" : "INACTIVE"}
+              </div>
+
+            </div>
+
+            <div class="test-info">
+
+              <span>
+                ⏱ ${Number(test.duration_minutes)||0} min
+              </span>
+
+              <span>
+                ❓ ${Number(test.total_questions)||0} questions
+              </span>
+
+              <span>
+                TYPE: ${esc(test.test_type || "FULL")}
+              </span>
+
+            </div>
+
+            <div class="test-actions">
+
+              <button
+                class="small-btn"
+                onclick="editTest(${test.id})"
+              >
+                Edit
+              </button>
+
+              <button
+                class="small-btn"
+                onclick="moveTest(${test.id},-1)"
+              >
+                ↑
+              </button>
+
+              <button
+                class="small-btn"
+                onclick="moveTest(${test.id},1)"
+              >
+                ↓
+              </button>
+
+              <button
+                class="small-btn red"
+                onclick="deleteTest(${test.id})"
+              >
+                Delete
+              </button>
+
+              <button
+                class="small-btn purple"
+                onclick="openTest(${test.id})"
+              >
+                Open
+              </button>
+
+            </div>
+
+          </div>
+
+        `;
+
+      }).join("")}
+
+    </div>
+
+  `;
+
+}
+
+/* =========================================================
+   OPEN TEST
+========================================================= */
+
+function openTest(id){
+
+  location.href =
+    "test.html?id=" +
+    encodeURIComponent(id);
+
+}
+
+/* =========================================================
+   TEST FORM
+========================================================= */
+
+function openTestForm(folderId){
 
   editingTestId = null;
-  currentTestFolderId = null;
+  currentParentId = Number(folderId);
+
+  document.getElementById("testModalTitle")
+    .textContent =
+      "Add Test";
+
+  document.getElementById("testTitle")
+    .value = "";
+
+  document.getElementById("testDuration")
+    .value = 60;
+
+  document.getElementById("testQuestions")
+    .value = 25;
+
+  document.getElementById("testActive")
+    .value = "true";
+
+  openModal("testModal");
 
 }
-
-/* =========================================================
-   EDIT TEST
-========================================================= */
 
 function editTest(id){
 
   const test =
     tests.find(
-      t =>
-        String(t.id) ===
-        String(id)
+      x => Number(x.id) === Number(id)
     );
 
-  if(test){
+  if(!test) return;
 
-    openTestForm(
-      test.folder_id,
-      test
-    );
+  editingTestId = Number(id);
+  currentParentId =
+    Number(test.folder_id);
 
-  }
+  document.getElementById("testModalTitle")
+    .textContent =
+      "Edit Test";
+
+  document.getElementById("testTitle")
+    .value =
+      test.title || "";
+
+  document.getElementById("testDuration")
+    .value =
+      Number(test.duration_minutes)||60;
+
+  document.getElementById("testQuestions")
+    .value =
+      Number(test.total_questions)||25;
+
+  document.getElementById("testActive")
+    .value =
+      test.is_active === false
+        ? "false"
+        : "true";
+
+  openModal("testModal");
+
+}
+
+function closeTestForm(){
+
+  closeModal("testModal");
 
 }
 
@@ -3004,28 +3454,24 @@ function editTest(id){
    INFER TEST TYPE
 ========================================================= */
 
-function inferTestType(
-  folder
-){
+function inferTestType(folder){
+
+  if(!folder){
+
+    return "FULL";
+
+  }
 
   const type =
-    normalizeType(
-      folder?.folder_type
-    );
+    normalizeType(folder.folder_type);
 
-  /*
-    IMPORTANT:
-    mock_tests.test_type accepts ONLY:
+  if(type === "subject"){
 
-      FULL
-      SECTIONAL
-      SUBJECT_WISE
-  */
+    return "SECTIONAL";
 
-  if(
-    type === "subject" ||
-    type === "sectional"
-  ){
+  }
+
+  if(type === "sectional"){
 
     return "SECTIONAL";
 
@@ -3042,253 +3488,229 @@ function inferTestType(
 async function saveTest(){
 
   const title =
-    document.getElementById(
-      "testTitle"
-    ).value.trim();
+    document.getElementById("testTitle")
+      .value
+      .trim();
 
   const duration =
     Number(
-      document.getElementById(
-        "testDuration"
-      ).value
+      document.getElementById("testDuration")
+        .value
     );
 
-  const totalQuestions =
+  const questions =
     Number(
-      document.getElementById(
-        "testQuestions"
-      ).value
+      document.getElementById("testQuestions")
+        .value
     );
+
+  const active =
+    document.getElementById("testActive")
+      .value === "true";
 
   if(!title){
 
-    showMessage(
-      "Please enter test title.",
-      "error"
+    showToast(
+      "Enter test title.",
+      true
     );
 
     return;
 
   }
 
-  if(
-    !duration ||
-    duration < 1
-  ){
+  if(!duration || duration < 1){
 
-    showMessage(
-      "Please enter valid duration.",
-      "error"
+    showToast(
+      "Enter valid duration.",
+      true
     );
 
     return;
 
   }
 
-  if(
-    !totalQuestions ||
-    totalQuestions < 1
-  ){
+  if(!questions || questions < 1){
 
-    showMessage(
-      "Please enter valid question count.",
-      "error"
+    showToast(
+      "Enter valid question count.",
+      true
     );
 
     return;
 
   }
 
-  try{
+  const folder =
+    folders.find(
+      x =>
+        Number(x.id) ===
+        Number(currentParentId)
+    );
 
-    if(editingTestId){
+  if(!folder){
 
-      await supabaseRequest(
-        "mock_tests",
-        {
-          method:"PATCH",
+    showToast(
+      "Test folder not found.",
+      true
+    );
 
-          filters:{
-            id:editingTestId
-          },
+    return;
 
-          body:{
-            title,
-            duration_minutes:duration,
-            total_questions:totalQuestions
-          }
+  }
 
-        }
+  const testType =
+    inferTestType(folder);
+
+  /*
+    mock_tests.test_type accepts only:
+    FULL
+    SECTIONAL
+    SUBJECT_WISE
+
+    We use:
+    FULL       -> Full mocks
+    SECTIONAL  -> Sectional mocks
+  */
+
+  if(editingTestId !== null){
+
+    const {error} =
+      await db
+        .from("mock_tests")
+        .update({
+
+          title:title,
+
+          test_type:testType,
+
+          duration_minutes:duration,
+
+          total_questions:questions,
+
+          is_active:active
+
+        })
+        .eq("id",editingTestId);
+
+    if(error){
+
+      showToast(
+        "MOCK_TESTS: " +
+        error.message,
+        true
       );
 
-    }else{
-
-      const folder =
-        folders.find(
-          f =>
-            String(f.id) ===
-            String(
-              currentTestFolderId
-            )
-        );
-
-      if(!folder){
-
-        showMessage(
-          "Folder not found.",
-          "error"
-        );
-
-        return;
-
-      }
-
-      const folderTests =
-        tests.filter(
-          t =>
-            String(t.folder_id) ===
-            String(folder.id)
-        );
-
-      const maxOrder =
-        folderTests.length
-          ? Math.max(
-              ...folderTests.map(
-                t =>
-                  Number(
-                    t.sort_order || 0
-                  )
-              )
-            )
-          : -1;
-
-      /*
-        IMPORTANT FIX:
-        Use uppercase test_type values
-        accepted by database constraint.
-      */
-
-      const testType =
-        inferTestType(
-          folder
-        );
-
-      await supabaseRequest(
-        "mock_tests",
-        {
-          method:"POST",
-
-          body:{
-            exam_id:selectedExam.id,
-
-            folder_id:
-              folder.id,
-
-            title,
-
-            test_type:
-              testType,
-
-            subject_id:
-              folder.subject_id ||
-              null,
-
-            duration_minutes:
-              duration,
-
-            total_questions:
-              totalQuestions,
-
-            is_active:true,
-
-            sort_order:
-              maxOrder + 1
-          }
-
-        }
-      );
+      return;
 
     }
 
-    closeTestForm();
+    showToast("Test updated.");
 
-    await loadAll();
+  }else{
 
-    renderWorkspace();
+    const siblings =
+      getTests(folder.id);
 
-    showMessage(
-      editingTestId
-        ? "Test updated successfully."
-        : "Test added successfully."
-    );
+    const maxOrder =
+      siblings.reduce(
+        (m,x)=>
+          Math.max(
+            m,
+            Number(x.sort_order)||0
+          ),
+        -1
+      );
 
-  }catch(error){
+    /*
+      For sectional subject folders,
+      try to use the subject_id attached
+      to that folder.
 
-    console.error(error);
+      If there is no subject_id, it remains null.
+    */
 
-    showMessage(
-      error.message,
-      "error"
-    );
+    const subjectId =
+      folder.subject_id || null;
+
+    const {error} =
+      await db
+        .from("mock_tests")
+        .insert({
+
+          exam_id:selectedExam.id,
+
+          folder_id:folder.id,
+
+          title:title,
+
+          test_type:testType,
+
+          subject_id:subjectId,
+
+          duration_minutes:duration,
+
+          total_questions:questions,
+
+          is_active:active,
+
+          sort_order:maxOrder + 1
+
+        });
+
+    if(error){
+
+      showToast(
+        "MOCK_TESTS: " +
+        error.message,
+        true
+      );
+
+      return;
+
+    }
+
+    showToast("Test created.");
 
   }
 
-}
+  editingTestId = null;
 
-/* =========================================================
-   DELETE TEST
-========================================================= */
+  closeTestForm();
 
-async function deleteTest(
-  id
-){
+  await loadAll();
 
-  const test =
-    tests.find(
-      t =>
-        String(t.id) ===
-        String(id)
+  /*
+    Re-open the same location.
+  */
+
+  const freshFolder =
+    folders.find(
+      x =>
+        Number(x.id) ===
+        Number(currentParentId)
     );
 
-  if(!test)
-    return;
+  if(freshFolder){
 
-  if(
-    !confirm(
-      `Delete "${test.title}"?`
-    )
-  )
-    return;
+    const type =
+      normalizeType(
+        freshFolder.folder_type
+      );
 
-  try{
+    if(type === "year"){
 
-    await supabaseRequest(
-      "mock_tests",
-      {
-        method:"DELETE",
+      renderYearTests(freshFolder);
 
-        filters:{
-          id
-        }
-      }
-    );
+    }else if(type === "subject"){
 
-    await loadAll();
+      renderSubjectTests(freshFolder);
 
-    renderWorkspace();
+    }else if(type === "full"){
 
-    showMessage(
-      "Test deleted successfully."
-    );
+      renderFullLevel(freshFolder);
 
-  }catch(error){
-
-    console.error(error);
-
-    showMessage(
-      error.message,
-      "error"
-    );
+    }
 
   }
 
@@ -3298,359 +3720,952 @@ async function deleteTest(
    MOVE TEST
 ========================================================= */
 
-async function moveTest(
-  id,
-  direction
-){
+async function moveTest(id,direction){
 
   const test =
     tests.find(
-      t =>
-        String(t.id) ===
-        String(id)
+      x => Number(x.id) === Number(id)
     );
 
-  if(!test)
-    return;
+  if(!test) return;
 
   const siblings =
-    sortItems(
-      tests.filter(
-        t =>
-          String(t.folder_id) ===
-          String(test.folder_id)
-      )
-    );
+    getTests(test.folder_id);
 
   const index =
     siblings.findIndex(
-      t =>
-        String(t.id) ===
-        String(id)
+      x => Number(x.id) === Number(id)
     );
 
-  const targetIndex =
+  const target =
     index + direction;
 
-  if(
-    targetIndex < 0 ||
-    targetIndex >= siblings.length
-  )
+  if(target < 0 || target >= siblings.length){
+
     return;
 
+  }
+
+  const current =
+    siblings[index];
+
   const other =
-    siblings[targetIndex];
+    siblings[target];
 
-  try{
+  const currentOrder =
+    Number(current.sort_order)||0;
 
-    const oldOrder =
-      Number(
-        test.sort_order || 0
-      );
+  const otherOrder =
+    Number(other.sort_order)||0;
 
-    const newOrder =
-      Number(
-        other.sort_order || 0
-      );
+  const {error} =
+    await db
+      .from("mock_tests")
+      .update({
+        sort_order:otherOrder
+      })
+      .eq("id",current.id);
 
-    await Promise.all([
+  if(error){
 
-      supabaseRequest(
-        "mock_tests",
-        {
-          method:"PATCH",
-
-          filters:{
-            id:test.id
-          },
-
-          body:{
-            sort_order:newOrder
-          }
-
-        }
-      ),
-
-      supabaseRequest(
-        "mock_tests",
-        {
-          method:"PATCH",
-
-          filters:{
-            id:other.id
-          },
-
-          body:{
-            sort_order:oldOrder
-          }
-
-        }
-      )
-
-    ]);
-
-    await loadAll();
-
-    renderWorkspace();
-
-  }catch(error){
-
-    console.error(error);
-
-    showMessage(
+    showToast(
+      "MOCK_TESTS: " +
       error.message,
-      "error"
+      true
     );
 
+    return;
+
   }
+
+  const {error:error2} =
+    await db
+      .from("mock_tests")
+      .update({
+        sort_order:currentOrder
+      })
+      .eq("id",other.id);
+
+  if(error2){
+
+    showToast(
+      "MOCK_TESTS: " +
+      error2.message,
+      true
+    );
+
+    return;
+
+  }
+
+  await loadAll();
 
 }
 
 /* =========================================================
-   MOVE EXAM
+   DELETE TEST
 ========================================================= */
 
-async function moveExam(
-  id,
-  direction
-){
+async function deleteTest(id){
 
-  const exam =
-    exams.find(
-      e =>
-        String(e.id) ===
-        String(id)
+  const test =
+    tests.find(
+      x => Number(x.id) === Number(id)
     );
 
-  if(!exam)
-    return;
-
-  const siblings =
-    sortItems(
-      exams.filter(
-        e =>
-          String(e.board) ===
-          String(exam.board)
-      )
-    );
-
-  const index =
-    siblings.findIndex(
-      e =>
-        String(e.id) ===
-        String(id)
-    );
-
-  const targetIndex =
-    index + direction;
-
-  if(
-    targetIndex < 0 ||
-    targetIndex >= siblings.length
-  )
-    return;
-
-  const other =
-    siblings[targetIndex];
-
-  try{
-
-    const oldOrder =
-      Number(
-        exam.sort_order || 0
-      );
-
-    const newOrder =
-      Number(
-        other.sort_order || 0
-      );
-
-    await Promise.all([
-
-      supabaseRequest(
-        "exams",
-        {
-          method:"PATCH",
-
-          filters:{
-            id:exam.id
-          },
-
-          body:{
-            sort_order:newOrder
-          }
-
-        }
-      ),
-
-      supabaseRequest(
-        "exams",
-        {
-          method:"PATCH",
-
-          filters:{
-            id:other.id
-          },
-
-          body:{
-            sort_order:oldOrder
-          }
-
-        }
-      )
-
-    ]);
-
-    await loadAll();
-
-  }catch(error){
-
-    console.error(error);
-
-    showMessage(
-      error.message,
-      "error"
-    );
-
-  }
-
-}
-
-/* =========================================================
-   DELETE EXAM
-========================================================= */
-
-async function deleteExam(
-  id
-){
-
-  const exam =
-    exams.find(
-      e =>
-        String(e.id) ===
-        String(id)
-    );
-
-  if(!exam)
-    return;
+  if(!test) return;
 
   if(
     !confirm(
-      `Delete ${exam.board} ${exam.name} and all its mocks/tests?`
+      `Delete "${test.title}"?`
     )
-  )
+  ){
+
     return;
 
-  try{
+  }
 
-    const examFolders =
-      folders.filter(
-        f =>
-          String(f.exam_id) ===
-          String(id)
-      );
+  const {error} =
+    await db
+      .from("mock_tests")
+      .delete()
+      .eq("id",id);
 
-    /*
-      Delete tests first.
-    */
+  if(error){
 
-    const examTests =
-      tests.filter(
-        t =>
-          String(t.exam_id) ===
-          String(id)
-      );
-
-    for(
-      const test
-      of examTests
-    ){
-
-      await supabaseRequest(
-        "mock_tests",
-        {
-          method:"DELETE",
-
-          filters:{
-            id:test.id
-          }
-        }
-      );
-
-    }
-
-    /*
-      Delete folders deepest first.
-    */
-
-    const folderIds =
-      examFolders
-        .map(f => f.id)
-        .reverse();
-
-    for(
-      const folderId
-      of folderIds
-    ){
-
-      await supabaseRequest(
-        "mock_folders",
-        {
-          method:"DELETE",
-
-          filters:{
-            id:folderId
-          }
-        }
-      );
-
-    }
-
-    await supabaseRequest(
-      "exams",
-      {
-        method:"DELETE",
-
-        filters:{
-          id
-        }
-      }
-    );
-
-    if(
-      selectedExam &&
-      String(selectedExam.id) ===
-      String(id)
-    ){
-
-      selectedExam = null;
-      currentFolder = null;
-
-    }
-
-    await loadAll();
-
-    renderWorkspace();
-
-    showMessage(
-      "Exam deleted successfully."
-    );
-
-  }catch(error){
-
-    console.error(error);
-
-    showMessage(
+    showToast(
+      "MOCK_TESTS: " +
       error.message,
-      "error"
+      true
     );
+
+    return;
+
+  }
+
+  showToast("Test deleted.");
+
+  await loadAll();
+
+}
+
+/* =========================================================
+   LEAF FORM
+========================================================= */
+
+function openLeafForm(parentId,type){
+
+  currentParentId =
+    Number(parentId);
+
+  currentLeafType =
+    normalizeType(type);
+
+  editingFolderId = null;
+
+  if(currentLeafType === "year"){
+
+    document.getElementById("leafModalTitle")
+      .textContent =
+        "Add PYQ Year";
+
+    document.getElementById("leafLabel")
+      .textContent =
+        "Year";
+
+    document.getElementById("leafName")
+      .placeholder =
+        "2025";
+
+  }else{
+
+    document.getElementById("leafModalTitle")
+      .textContent =
+        "Add Subject";
+
+    document.getElementById("leafLabel")
+      .textContent =
+        "Subject";
+
+    document.getElementById("leafName")
+      .placeholder =
+        "English";
+
+  }
+
+  document.getElementById("leafName")
+    .value = "";
+
+  openModal("leafModal");
+
+}
+
+function closeLeafForm(){
+
+  closeModal("leafModal");
+
+}
+
+async function saveLeaf(){
+
+  const name =
+    document.getElementById("leafName")
+      .value
+      .trim();
+
+  if(!name){
+
+    showToast(
+      "Enter a name.",
+      true
+    );
+
+    return;
+
+  }
+
+  const duplicate =
+    folders.some(
+      f =>
+        Number(f.parent_id) ===
+          Number(currentParentId) &&
+        normalizeType(f.folder_type) ===
+          currentLeafType &&
+        String(
+          f.display_name ||
+          f.name
+        ).trim().toLowerCase() ===
+        name.toLowerCase()
+    );
+
+  if(duplicate){
+
+    showToast(
+      "This item already exists.",
+      true
+    );
+
+    return;
+
+  }
+
+  const siblings =
+    folders.filter(
+      f =>
+        Number(f.parent_id) ===
+        Number(currentParentId)
+    );
+
+  const maxOrder =
+    siblings.reduce(
+      (m,x)=>
+        Math.max(
+          m,
+          Number(x.sort_order)||0
+        ),
+      -1
+    );
+
+  const {error} =
+    await db
+      .from("mock_folders")
+      .insert({
+
+        exam_id:selectedExam.id,
+
+        parent_id:currentParentId,
+
+        name:name,
+
+        display_name:name,
+
+        folder_type:currentLeafType,
+
+        sort_order:maxOrder + 1,
+
+        is_active:true,
+
+        subject_id:
+          currentLeafType === "subject"
+            ? findSubjectId(name)
+            : null
+
+      });
+
+  if(error){
+
+    showToast(
+      "MOCK_FOLDERS: " +
+      error.message,
+      true
+    );
+
+    return;
+
+  }
+
+  closeLeafForm();
+
+  showToast(
+    currentLeafType === "year"
+      ? "Year added."
+      : "Subject added."
+  );
+
+  await loadAll();
+
+  const parent =
+    folders.find(
+      x =>
+        Number(x.id) ===
+        Number(currentParentId)
+    );
+
+  if(parent){
+
+    const type =
+      normalizeType(parent.folder_type);
+
+    if(type === "full"){
+
+      renderPYQFull(parent);
+
+    }else if(type === "sectional"){
+
+      renderSectionalLevel(parent);
+
+    }
 
   }
 
 }
 
 /* =========================================================
-   START
+   FIND SUBJECT ID
+========================================================= */
+
+function findSubjectId(name){
+
+  const found =
+    subjects.find(
+      s =>
+        String(
+          s.name ||
+          s.title ||
+          s.subject_name ||
+          ""
+        )
+        .trim()
+        .toLowerCase() ===
+        String(name)
+          .trim()
+          .toLowerCase()
+    );
+
+  return found
+    ? found.id
+    : null;
+
+}
+
+/* =========================================================
+   EDIT FOLDER
+========================================================= */
+
+function editFolder(id){
+
+  const folder =
+    folders.find(
+      x => Number(x.id) === Number(id)
+    );
+
+  if(!folder) return;
+
+  editingFolderId =
+    Number(id);
+
+  const type =
+    normalizeType(folder.folder_type);
+
+  /*
+    Root/category/leaf all use the same
+    simple name editor.
+  */
+
+  currentParentId =
+    folder.parent_id
+      ? Number(folder.parent_id)
+      : null;
+
+  currentLeafType =
+    type;
+
+  document.getElementById("leafModalTitle")
+    .textContent =
+      "Edit " +
+      (
+        type === "year"
+          ? "Year"
+          : type === "subject"
+            ? "Subject"
+            : "Folder"
+      );
+
+  document.getElementById("leafLabel")
+    .textContent =
+      "Name";
+
+  document.getElementById("leafName")
+    .placeholder =
+      "Name";
+
+  document.getElementById("leafName")
+    .value =
+      folder.display_name ||
+      folder.name ||
+      "";
+
+  openModal("leafModal");
+
+}
+
+/* =========================================================
+   SAVE EDITED FOLDER
+========================================================= */
+
+async function saveEditedFolder(){
+
+  const name =
+    document.getElementById("leafName")
+      .value
+      .trim();
+
+  if(!name){
+
+    showToast(
+      "Enter a name.",
+      true
+    );
+
+    return;
+
+  }
+
+  const folder =
+    folders.find(
+      x =>
+        Number(x.id) ===
+        Number(editingFolderId)
+    );
+
+  if(!folder){
+
+    showToast(
+      "Folder not found.",
+      true
+    );
+
+    return;
+
+  }
+
+  const {error} =
+    await db
+      .from("mock_folders")
+      .update({
+
+        name:name,
+
+        display_name:name
+
+      })
+      .eq("id",editingFolderId);
+
+  if(error){
+
+    showToast(
+      "MOCK_FOLDERS: " +
+      error.message,
+      true
+    );
+
+    return;
+
+  }
+
+  editingFolderId = null;
+
+  closeLeafForm();
+
+  showToast("Folder updated.");
+
+  await loadAll();
+
+}
+
+/* =========================================================
+   OVERRIDE SAVE LEAF
+========================================================= */
+
+const originalSaveLeaf =
+  saveLeaf;
+
+saveLeaf = async function(){
+
+  if(editingFolderId !== null){
+
+    await saveEditedFolder();
+
+    return;
+
+  }
+
+  await originalSaveLeaf();
+
+};
+
+/* =========================================================
+   MOVE FOLDER
+========================================================= */
+
+async function moveFolder(id,direction){
+
+  const folder =
+    folders.find(
+      x => Number(x.id) === Number(id)
+    );
+
+  if(!folder) return;
+
+  const siblings =
+    folders
+      .filter(
+        x =>
+          Number(x.exam_id) ===
+            Number(folder.exam_id) &&
+          (
+            Number(x.parent_id || 0) ===
+            Number(folder.parent_id || 0)
+          ) &&
+          normalizeType(x.folder_type) ===
+          normalizeType(folder.folder_type)
+      )
+      .sort(sortByOrder);
+
+  /*
+    For full/sectional categories we DO NOT
+    want to accidentally mix folder types.
+    Root children are therefore reordered
+    together separately below.
+  */
+
+  let orderedSiblings;
+
+  const parent =
+    folder.parent_id
+      ? folders.find(
+          x =>
+            Number(x.id) ===
+            Number(folder.parent_id)
+        )
+      : null;
+
+  if(
+    parent &&
+    ["new","pyq"].includes(
+      normalizeType(parent.folder_type)
+    )
+  ){
+
+    orderedSiblings =
+      folders
+        .filter(
+          x =>
+            Number(x.parent_id) ===
+            Number(folder.parent_id)
+        )
+        .sort(sortByOrder);
+
+  }else{
+
+    orderedSiblings =
+      folders
+        .filter(
+          x =>
+            Number(x.parent_id || 0) ===
+            Number(folder.parent_id || 0) &&
+            normalizeType(x.folder_type) ===
+            normalizeType(folder.folder_type)
+        )
+        .sort(sortByOrder);
+
+  }
+
+  const index =
+    orderedSiblings.findIndex(
+      x => Number(x.id) === Number(id)
+    );
+
+  if(index < 0) return;
+
+  const target =
+    index + direction;
+
+  if(
+    target < 0 ||
+    target >= orderedSiblings.length
+  ){
+
+    return;
+
+  }
+
+  const current =
+    orderedSiblings[index];
+
+  const other =
+    orderedSiblings[target];
+
+  const currentOrder =
+    Number(current.sort_order)||0;
+
+  const otherOrder =
+    Number(other.sort_order)||0;
+
+  const {error} =
+    await db
+      .from("mock_folders")
+      .update({
+        sort_order:otherOrder
+      })
+      .eq("id",current.id);
+
+  if(error){
+
+    showToast(
+      "MOCK_FOLDERS: " +
+      error.message,
+      true
+    );
+
+    return;
+
+  }
+
+  const {error:error2} =
+    await db
+      .from("mock_folders")
+      .update({
+        sort_order:currentOrder
+      })
+      .eq("id",other.id);
+
+  if(error2){
+
+    showToast(
+      "MOCK_FOLDERS: " +
+      error2.message,
+      true
+    );
+
+    return;
+
+  }
+
+  await loadAll();
+
+}
+
+/* =========================================================
+   DELETE FOLDER
+========================================================= */
+
+async function deleteFolder(id){
+
+  const folder =
+    folders.find(
+      x => Number(x.id) === Number(id)
+    );
+
+  if(!folder) return;
+
+  const descendants =
+    getDescendants(id);
+
+  const allIds = [
+    Number(id),
+    ...descendants.map(x=>Number(x.id))
+  ];
+
+  if(
+    !confirm(
+      `Delete "${folder.display_name || folder.name}" and everything inside it?`
+    )
+  ){
+
+    return;
+
+  }
+
+  /*
+    Delete tests first.
+  */
+
+  const {error:testError} =
+    await db
+      .from("mock_tests")
+      .delete()
+      .in("folder_id",allIds);
+
+  if(testError){
+
+    showToast(
+      "MOCK_TESTS: " +
+      testError.message,
+      true
+    );
+
+    return;
+
+  }
+
+  /*
+    Delete deepest folders first.
+  */
+
+  const remaining =
+    folders.filter(
+      f => allIds.includes(Number(f.id))
+    );
+
+  while(remaining.length){
+
+    const leafFolders =
+      remaining.filter(folderItem=>{
+
+        return !remaining.some(
+          child =>
+            Number(child.parent_id) ===
+            Number(folderItem.id)
+        );
+
+      });
+
+    const batch =
+      leafFolders.length
+        ? leafFolders
+        : remaining;
+
+    const ids =
+      batch.map(
+        x=>Number(x.id)
+      );
+
+    const {error} =
+      await db
+        .from("mock_folders")
+        .delete()
+        .in("id",ids);
+
+    if(error){
+
+      showToast(
+        "MOCK_FOLDERS: " +
+        error.message,
+        true
+      );
+
+      return;
+
+    }
+
+    for(const item of batch){
+
+      const index =
+        remaining.indexOf(item);
+
+      if(index >= 0){
+
+        remaining.splice(index,1);
+
+      }
+
+    }
+
+  }
+
+  showToast("Folder deleted.");
+
+  await loadAll();
+
+}
+
+/* =========================================================
+   DESCENDANTS
+========================================================= */
+
+function getDescendants(parentId){
+
+  const result = [];
+
+  const queue = [
+    Number(parentId)
+  ];
+
+  while(queue.length){
+
+    const current =
+      queue.shift();
+
+    const children =
+      folders.filter(
+        f =>
+          Number(f.parent_id) ===
+          Number(current)
+      );
+
+    for(const child of children){
+
+      result.push(child);
+
+      queue.push(
+        Number(child.id)
+      );
+
+    }
+
+  }
+
+  return result;
+
+}
+
+/* =========================================================
+   PARENT NAVIGATION
+========================================================= */
+
+function goToParentFolder(id){
+
+  const parent =
+    folders.find(
+      x => Number(x.id) === Number(id)
+    );
+
+  if(!parent){
+
+    renderRootArea();
+
+    return;
+
+  }
+
+  const type =
+    normalizeType(parent.folder_type);
+
+  if(type === "new" || type === "pyq"){
+
+    renderFolderLevel(parent);
+
+    return;
+
+  }
+
+  if(type === "full"){
+
+    renderFullLevel(parent);
+
+    return;
+
+  }
+
+  if(type === "sectional"){
+
+    renderSectionalLevel(parent);
+
+    return;
+
+  }
+
+  if(type === "year"){
+
+    renderYearTests(parent);
+
+    return;
+
+  }
+
+  if(type === "subject"){
+
+    renderSubjectTests(parent);
+
+    return;
+
+  }
+
+  renderRootArea();
+
+}
+
+/* =========================================================
+   ROOT FINDER
+========================================================= */
+
+function getRootFolder(folder){
+
+  let current = folder;
+
+  let safety = 0;
+
+  while(
+    current &&
+    current.parent_id &&
+    safety < 20
+  ){
+
+    const parent =
+      folders.find(
+        x =>
+          Number(x.id) ===
+          Number(current.parent_id)
+      );
+
+    if(!parent) break;
+
+    current = parent;
+
+    safety++;
+
+  }
+
+  return current;
+
+}
+
+/* =========================================================
+   MODAL CLOSE WHEN CLICKING BACKGROUND
+========================================================= */
+
+document
+  .querySelectorAll(".modal-bg")
+  .forEach(modal=>{
+
+    modal.addEventListener(
+      "click",
+      event=>{
+
+        if(event.target === modal){
+
+          modal.classList.remove("show");
+
+        }
+
+      }
+    );
+
+  });
+
+/* =========================================================
+   INITIAL LOAD
 ========================================================= */
 
 loadAll();
