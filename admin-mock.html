@@ -1,685 +1,1337 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<title>SSC EDGE - Admin Mock Tests</title>
-
-<link rel="stylesheet" href="css/style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <script>
 document.documentElement.dataset.theme =
 localStorage.getItem("ssc-edge-theme") || "dark";
 </script>
 
+<title>SSC EDGE - Mock Questions</title>
+
+<link rel="stylesheet" href="css/style.css">
+
 <style>
 
-body{margin:0}
-
-.admin-container{
-  max-width:850px;
-  margin:auto;
-  padding:20px 16px 60px;
+:root{
+  --am-bg:#080811;
+  --am-card:#11111d;
+  --am-card2:#171727;
+  --am-border:rgba(255,255,255,.10);
+  --am-text:#fff;
+  --am-muted:#9b9bad;
+  --am-purple:#9b5cff;
+  --am-purple2:#7435d8;
+  --am-danger:#ff5577;
+  --am-success:#31d49b;
 }
 
-.simple-header{
+:root[data-theme="light"]{
+  --am-bg:#f6f4fb;
+  --am-card:#fff;
+  --am-card2:#f0edf8;
+  --am-border:rgba(40,25,80,.13);
+  --am-text:#171321;
+  --am-muted:#777080;
+  --am-purple:#7138d4;
+  --am-purple2:#8e55ed;
+  --am-danger:#e64264;
+  --am-success:#159d70;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:var(--am-bg);
+  color:var(--am-text);
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+button,input,select,textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.am-header{
+  height:70px;
   display:flex;
   align-items:center;
-  padding:16px;
-  background:var(--header);
-  border-bottom:1px solid var(--border);
+  justify-content:space-between;
+  padding:0 16px;
+  background:var(--am-card);
+  border-bottom:1px solid var(--am-border);
+  position:sticky;
+  top:0;
+  z-index:100;
 }
 
-.header-brand{
+.am-header-left{
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
+
+.am-back{
+  width:38px;
+  height:38px;
+  border:1px solid var(--am-border);
+  border-radius:11px;
+  background:var(--am-card2);
+  color:var(--am-text);
+  font-size:21px;
+}
+
+.am-brand{
   font-size:19px;
   font-weight:900;
 }
 
-.page-title{margin:8px 0 4px}
-
-.page-subtitle{
-  color:var(--muted);
-  margin-bottom:22px;
+.am-brand span{
+  color:var(--am-purple);
 }
 
-.form-card,
-.test-card,
-.section-card,
-.bank-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:16px;
-  margin-bottom:16px;
+.am-subtitle{
+  color:var(--am-muted);
+  font-size:10px;
+  margin-top:3px;
 }
 
-label{
-  display:block;
+.am-header-actions{
+  display:flex;
+  gap:8px;
+}
+
+.am-icon-btn{
+  width:38px;
+  height:38px;
+  border:1px solid var(--am-border);
+  border-radius:11px;
+  background:var(--am-card2);
+  color:var(--am-text);
+  font-size:17px;
+}
+
+.am-page{
+  max-width:1100px;
+  margin:auto;
+  padding:18px 15px 40px;
+}
+
+.am-title{
+  font-size:22px;
+  font-weight:900;
+  margin:2px 0 5px;
+}
+
+.am-description{
+  color:var(--am-muted);
   font-size:12px;
-  font-weight:800;
-  margin:14px 0 6px;
+  line-height:1.5;
+  margin-bottom:18px;
 }
 
-input,
-select,
-textarea{
-  width:100%;
-  box-sizing:border-box;
-  border:1px solid var(--border);
-  background:var(--bg);
-  color:var(--text);
-  border-radius:10px;
-  padding:11px;
+.am-tabs{
+  display:flex;
+  gap:8px;
+  margin-bottom:17px;
+}
+
+.am-tab{
+  flex:1;
+  min-height:44px;
+  border:1px solid var(--am-border);
+  border-radius:12px;
+  background:var(--am-card);
+  color:var(--am-muted);
+  font-size:12px;
+  font-weight:900;
+}
+
+.am-tab.active{
+  background:linear-gradient(135deg,var(--am-purple),var(--am-purple2));
+  border-color:transparent;
+  color:#fff;
+}
+
+.am-section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:18px 0 11px;
+}
+
+.am-section-title{
   font-size:14px;
-  outline:none;
+  font-weight:900;
 }
 
-textarea{
-  min-height:80px;
-  resize:vertical;
+.am-section-note{
+  color:var(--am-muted);
+  font-size:10px;
+  margin-top:4px;
 }
 
-input:focus,
-select:focus,
-textarea:focus{
-  border-color:var(--purple);
-}
-
-.grid2{
+.am-grid{
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:repeat(2,minmax(0,1fr));
   gap:10px;
 }
 
-.checkbox-row{
+.am-card{
+  border:1px solid var(--am-border);
+  background:var(--am-card);
+  border-radius:15px;
+  padding:14px;
+}
+
+.am-exam-card,
+.am-choice-card{
+  min-height:78px;
   display:flex;
   align-items:center;
-  gap:9px;
-  margin:15px 0;
+  justify-content:space-between;
+  gap:8px;
+  text-align:left;
 }
 
-.checkbox-row input{
-  width:auto;
+.am-card:hover,
+.am-card.active{
+  border-color:var(--am-purple);
 }
 
-.checkbox-row label{margin:0}
-
-.hidden{
-  display:none!important;
+.am-card-title{
+  font-size:13px;
+  font-weight:900;
+  line-height:1.4;
 }
 
-.section-card{
+.am-card-meta{
+  color:var(--am-muted);
+  font-size:10px;
+  margin-top:5px;
+}
+
+.am-arrow{
+  color:var(--am-purple);
+  font-size:20px;
+  font-weight:900;
+}
+
+.am-workspace{
+  display:none;
+  margin-top:20px;
+}
+
+.am-workspace.visible{
+  display:block;
+}
+
+.am-selected{
+  border:1px solid rgba(155,92,255,.30);
+  background:rgba(155,92,255,.10);
+  border-radius:14px;
   padding:13px;
+  margin-bottom:15px;
 }
 
-.section-head{
+.am-selected-label{
+  color:var(--am-muted);
+  font-size:10px;
+}
+
+.am-selected-name{
+  font-size:15px;
+  font-weight:900;
+  margin-top:4px;
+}
+
+.am-panel{
+  border:1px solid var(--am-border);
+  background:var(--am-card);
+  border-radius:16px;
+  padding:14px;
+  margin-bottom:14px;
+}
+
+.am-panel-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:13px;
+}
+
+.am-panel-title{
+  font-size:14px;
+  font-weight:900;
+}
+
+.am-panel-note{
+  color:var(--am-muted);
+  font-size:10px;
+  margin-top:4px;
+}
+
+.am-btn{
+  border:1px solid var(--am-border);
+  background:var(--am-card2);
+  color:var(--am-text);
+  border-radius:9px;
+  padding:9px 12px;
+  font-size:11px;
+  font-weight:800;
+}
+
+.am-btn.primary{
+  background:linear-gradient(135deg,var(--am-purple),var(--am-purple2));
+  color:#fff;
+  border:0;
+}
+
+.am-btn.danger{
+  color:var(--am-danger);
+  border-color:rgba(255,85,119,.25);
+  background:rgba(255,85,119,.08);
+}
+
+.am-btn.success{
+  color:var(--am-success);
+  border-color:rgba(49,212,155,.25);
+  background:rgba(49,212,155,.08);
+}
+
+.am-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.am-chip-row{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  scrollbar-width:none;
+  padding:2px 0 6px;
+}
+
+.am-chip-row::-webkit-scrollbar{
+  display:none;
+}
+
+.am-chip{
+  flex:0 0 auto;
+  border:1px solid var(--am-border);
+  background:var(--am-card2);
+  color:var(--am-muted);
+  border-radius:999px;
+  padding:9px 13px;
+  font-size:11px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.am-chip.active{
+  color:#fff;
+  background:var(--am-purple);
+  border-color:var(--am-purple);
+}
+
+.am-test-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.am-test-card{
+  border:1px solid var(--am-border);
+  background:var(--am-card2);
+  border-radius:13px;
+  padding:12px;
+}
+
+.am-test-title{
+  font-size:13px;
+  font-weight:900;
+}
+
+.am-test-meta{
+  color:var(--am-muted);
+  font-size:10px;
+  margin-top:5px;
+  line-height:1.5;
+}
+
+.am-test-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:11px;
+}
+
+.am-section-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.am-section-box{
+  border:1px solid var(--am-border);
+  background:var(--am-card2);
+  border-radius:12px;
+  padding:12px;
+}
+
+.am-section-box-head{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:8px;
 }
 
-.section-number{
-  font-weight:900;
-}
-
-.section-controls{
-  display:flex;
-  gap:5px;
-}
-
-.small-btn{
-  border:1px solid var(--border);
-  background:var(--bg);
-  color:var(--text);
-  border-radius:8px;
-  padding:6px 9px;
-  cursor:pointer;
-  font-weight:800;
-}
-
-.remove-btn{color:#ff6868}
-
-.primary-btn,
-.secondary-btn,
-.danger-btn{
-  width:100%;
-  border:0;
-  border-radius:11px;
-  padding:12px;
-  font-size:14px;
-  font-weight:800;
-  cursor:pointer;
-  margin-top:10px;
-}
-
-.primary-btn{
-  background:var(--purple);
-  color:white;
-}
-
-.secondary-btn{
-  background:var(--card2);
-  color:var(--text);
-  border:1px solid var(--border);
-}
-
-.danger-btn{
-  background:#8f2525;
-  color:white;
-}
-
-.test-title{
-  font-size:17px;
-  font-weight:900;
-}
-
-.test-info{
-  color:var(--muted);
+.am-section-name{
   font-size:12px;
-  line-height:1.7;
+  font-weight:900;
+}
+
+.am-section-count{
+  color:var(--am-muted);
+  font-size:10px;
+  margin-top:5px;
+}
+
+.am-empty{
+  border:1px dashed var(--am-border);
+  border-radius:12px;
+  padding:27px 12px;
+  text-align:center;
+  color:var(--am-muted);
+  font-size:11px;
+}
+
+.am-loading{
+  text-align:center;
+  padding:25px;
+  color:var(--am-muted);
+  font-size:11px;
+}
+
+.am-error{
+  border:1px solid rgba(255,85,119,.25);
+  background:rgba(255,85,119,.08);
+  color:var(--am-danger);
+  padding:12px;
+  border-radius:11px;
+  font-size:11px;
+}
+
+.am-question-tools{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:9px;
+  margin-bottom:12px;
+}
+
+.am-input,
+.am-select,
+.am-textarea{
+  width:100%;
+  border:1px solid var(--am-border);
+  background:var(--am-card2);
+  color:var(--am-text);
+  border-radius:9px;
+  padding:10px;
+  outline:none;
+  font-size:11px;
+}
+
+.am-textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+.am-input:focus,
+.am-select:focus,
+.am-textarea:focus{
+  border-color:var(--am-purple);
+}
+
+.am-question-card{
+  border:1px solid var(--am-border);
+  background:var(--am-card2);
+  border-radius:12px;
+  padding:12px;
+  margin-bottom:9px;
+}
+
+.am-question-text{
+  font-size:12px;
+  font-weight:700;
+  line-height:1.5;
+}
+
+.am-question-options{
+  color:var(--am-muted);
+  font-size:10px;
+  line-height:1.6;
   margin-top:7px;
 }
 
-.test-actions{
-  display:grid;
-  grid-template-columns:1fr 1fr;
+.am-question-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
   gap:8px;
-  margin-top:12px;
+  margin-top:10px;
 }
 
-.status{
-  display:inline-block;
-  margin-top:8px;
-  padding:4px 8px;
-  border-radius:7px;
+.am-check{
+  accent-color:var(--am-purple);
+}
+
+.am-modal-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:500;
+  background:rgba(0,0,0,.72);
+  padding:10px;
+  overflow-y:auto;
+  align-items:flex-start;
+  justify-content:center;
+}
+
+.am-modal-overlay.open{
+  display:flex;
+}
+
+.am-modal{
+  width:100%;
+  max-width:650px;
+  margin:18px auto;
+  background:var(--am-card);
+  border:1px solid var(--am-border);
+  border-radius:17px;
+  overflow:hidden;
+}
+
+.am-modal-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:15px;
+  border-bottom:1px solid var(--am-border);
+}
+
+.am-modal-title{
+  font-size:15px;
+  font-weight:900;
+}
+
+.am-close{
+  width:33px;
+  height:33px;
+  border:1px solid var(--am-border);
+  background:var(--am-card2);
+  color:var(--am-text);
+  border-radius:8px;
+  font-size:18px;
+}
+
+.am-modal-body{
+  padding:15px;
+}
+
+.am-modal-footer{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  padding:13px 15px;
+  border-top:1px solid var(--am-border);
+}
+
+.am-form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+
+.am-form-group{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+
+.am-form-group.full{
+  grid-column:1/-1;
+}
+
+.am-label{
+  color:var(--am-muted);
   font-size:10px;
   font-weight:800;
 }
 
-.active-status{
-  background:#174f2a;
-  color:#8cffae;
+.am-option-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:10px;
 }
 
-.inactive-status{
-  background:#512020;
-  color:#ff9999;
-}
-
-.message{
-  padding:12px;
+.am-toast{
+  position:fixed;
+  z-index:1000;
+  bottom:22px;
+  left:50%;
+  transform:translate(-50%,20px);
+  opacity:0;
+  pointer-events:none;
+  background:#20202e;
+  color:#fff;
+  border:1px solid rgba(255,255,255,.12);
   border-radius:10px;
-  background:var(--card2);
-  color:var(--muted);
-  font-size:13px;
-  margin-bottom:14px;
-}
-
-.total-time{
-  text-align:center;
-  padding:10px;
-  background:var(--card2);
-  border-radius:10px;
-  margin:10px 0;
-  font-size:13px;
-  font-weight:800;
-}
-
-.bank-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-}
-
-.bank-count{
-  font-size:12px;
-  color:var(--muted);
-}
-
-.bank-list{
-  max-height:430px;
-  overflow-y:auto;
-  margin-top:14px;
-}
-
-.bank-question{
-  display:flex;
-  gap:10px;
-  align-items:flex-start;
-  padding:12px;
-  border:1px solid var(--border);
-  border-radius:11px;
-  margin-bottom:8px;
-  cursor:pointer;
-}
-
-.bank-question input{
-  width:auto;
-  margin-top:3px;
-}
-
-.bank-question-text{
-  font-size:13px;
-  line-height:1.45;
-}
-
-.bank-meta{
-  color:var(--muted);
+  padding:11px 15px;
   font-size:11px;
-  margin-top:4px;
-}
-
-.selected-box{
-  margin-top:14px;
-  padding:12px;
-  border-radius:10px;
-  background:var(--card2);
-  font-size:13px;
   font-weight:800;
+  transition:.25s;
+  max-width:calc(100% - 25px);
+  text-align:center;
 }
 
-.assigned-item{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  align-items:center;
-  padding:9px 0;
-  border-bottom:1px solid var(--border);
-  font-size:12px;
+.am-toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
 }
 
-.assigned-item:last-child{
-  border-bottom:0;
-}
+@media(max-width:600px){
 
-@media(max-width:500px){
+  .am-header{
+    height:64px;
+    padding:0 11px;
+  }
 
-  .grid2{
+  .am-brand{
+    font-size:17px;
+  }
+
+  .am-title{
+    font-size:20px;
+  }
+
+  .am-page{
+    padding:15px 11px 35px;
+  }
+
+  .am-form-grid{
     grid-template-columns:1fr;
   }
 
-  .test-actions{
+  .am-form-group.full{
+    grid-column:auto;
+  }
+
+  .am-question-tools{
     grid-template-columns:1fr;
+  }
+
+  .am-modal{
+    margin:10px auto;
   }
 
 }
 
 </style>
+
 </head>
 
 <body>
 
-<header class="simple-header">
-  <div class="header-brand">SSC EDGE — Admin</div>
+<header class="am-header">
+
+  <div class="am-header-left">
+
+    <button
+      class="am-back"
+      id="adminMockBack"
+      type="button">
+      ‹
+    </button>
+
+    <div>
+      <div class="am-brand">
+        SSC <span>EDGE</span>
+      </div>
+
+      <div class="am-subtitle">
+        Mock Question Manager
+      </div>
+    </div>
+
+  </div>
+
+  <div class="am-header-actions">
+
+    <button
+      class="am-icon-btn"
+      id="amRefreshBtn"
+      type="button">
+      ↻
+    </button>
+
+  </div>
+
 </header>
 
-<main class="admin-container">
+<main class="am-page">
 
-<h1 class="page-title">Mock Tests</h1>
+  <h1 class="am-title">
+    Mock Questions
+  </h1>
 
-<p class="page-subtitle">
-Create tests and select questions from the Question Bank
-</p>
+  <div class="am-description">
+    Select an exam and mock, then create or assign questions to its sections.
+  </div>
 
-<div id="message"></div>
+  <!-- EXAM BOARD -->
 
+  <div class="am-tabs">
 
-<!-- =========================================
-     TEST FORM
-========================================= -->
+    <button
+      class="am-tab active"
+      data-board="SSC"
+      type="button">
+      SSC
+    </button>
 
-<div class="form-card">
+    <button
+      class="am-tab"
+      data-board="RRB"
+      type="button">
+      RRB
+    </button>
 
-<input type="hidden" id="editId">
-<input type="hidden" id="folderId" value="">
+  </div>
 
-<label>Test Title</label>
+  <!-- EXAM LIST -->
 
-<input
-id="title"
-placeholder="Example: CGL Full Mock Test 1"
->
+  <section>
 
+    <div class="am-section-head">
 
-<label>Description</label>
+      <div>
+        <div class="am-section-title">
+          Select Exam
+        </div>
 
-<textarea
-id="description"
-placeholder="Test description"></textarea>
+        <div class="am-section-note">
+          All exams created in Practice Admin
+        </div>
+      </div>
 
+    </div>
 
-<div class="grid2">
+    <div
+      class="am-grid"
+      id="amExamGrid">
 
-<div>
+      <div class="am-loading">
+        Loading exams...
+      </div>
 
-<label>Exam</label>
+    </div>
 
-<select id="exam">
-<option value="">Select Exam</option>
-</select>
+  </section>
 
-</div>
+  <!-- WORKSPACE -->
 
-<div>
+  <section
+    class="am-workspace"
+    id="amWorkspace">
 
-<label>Test Type</label>
+    <div class="am-selected">
 
-<select id="testType" onchange="handleTestType()">
+      <div class="am-selected-label">
+        Selected Exam
+      </div>
 
-<option value="FULL">FULL</option>
-<option value="SECTIONAL">SECTIONAL</option>
-<option value="SUBJECT_WISE">SUBJECT_WISE</option>
-<option value="CHAPTER_WISE">CHAPTER_WISE</option>
+      <div
+        class="am-selected-name"
+        id="amSelectedExamName">
+        —
+      </div>
 
-</select>
+    </div>
 
-</div>
+    <!-- BRANCH -->
 
-</div>
+    <div
+      class="am-panel"
+      id="amBranchPanel">
 
+      <div class="am-panel-head">
 
-<div id="normalDurationBox">
+        <div>
+          <div class="am-panel-title">
+            Select Mock Branch
+          </div>
 
-<label>Total Duration (minutes)</label>
+          <div class="am-panel-note">
+            Choose New Mocks or PYQ Mocks
+          </div>
+        </div>
 
-<input
-id="duration"
-type="number"
-min="1"
-value="60">
+      </div>
 
-</div>
+      <div class="am-grid">
 
+        <button
+          class="am-card am-choice-card"
+          data-am-branch="NEW"
+          type="button">
 
-<div id="singleSubjectBox" class="hidden">
+          <div>
+            <div class="am-card-title">
+              New Mocks
+            </div>
 
-<label>Subject</label>
+            <div class="am-card-meta">
+              Newly created mocks
+            </div>
+          </div>
 
-<select id="subject">
-<option value="">Select Subject</option>
-</select>
+          <div class="am-arrow">›</div>
 
-</div>
+        </button>
 
+        <button
+          class="am-card am-choice-card"
+          data-am-branch="PYQ"
+          type="button">
 
-<div id="chapterBox" class="hidden">
+          <div>
+            <div class="am-card-title">
+              PYQ Mocks
+            </div>
 
-<label>Chapter</label>
+            <div class="am-card-meta">
+              Previous year mocks
+            </div>
+          </div>
 
-<select id="chapter">
-<option value="">Select Chapter</option>
-</select>
+          <div class="am-arrow">›</div>
 
-</div>
+        </button>
 
+      </div>
 
-<!-- FULL SETTINGS -->
+    </div>
 
-<div id="fullSettings">
+    <!-- CATEGORY -->
 
-<div class="checkbox-row">
+    <div
+      class="am-panel"
+      id="amCategoryPanel"
+      style="display:none;">
 
-<input
-type="checkbox"
-id="subjectTiming"
-onchange="toggleSubjectTiming()">
+      <div class="am-panel-head">
 
-<label for="subjectTiming">
-Enable Subject-wise Timing
-</label>
+        <div>
+          <div class="am-panel-title">
+            Select Category
+          </div>
 
-</div>
+          <div class="am-panel-note">
+            Fixed categories
+          </div>
+        </div>
 
+        <button
+          class="am-btn"
+          id="amBackBranchBtn"
+          type="button">
+          Back
+        </button>
 
-<div id="sectionSettings" class="hidden">
+      </div>
 
-<div class="message">
+      <div class="am-grid">
 
-Set the subject order and timing for this FULL test.
+        <button
+          class="am-card am-choice-card"
+          data-am-category="FULL"
+          type="button">
 
-</div>
+          <div>
+            <div class="am-card-title">
+              FULL MOCKS
+            </div>
 
-<div id="sections"></div>
+            <div class="am-card-meta">
+              Complete mock tests
+            </div>
+          </div>
 
-<button
-type="button"
-class="secondary-btn"
-onclick="addSection()">
+          <div class="am-arrow">›</div>
 
-+ Add Subject
+        </button>
 
-</button>
+        <button
+          class="am-card am-choice-card"
+          data-am-category="SECTIONAL"
+          type="button">
 
-<div
-id="totalSectionTime"
-class="total-time">
+          <div>
+            <div class="am-card-title">
+              Sectional Mocks
+            </div>
 
-Total Section Time: 0 minutes
+            <div class="am-card-meta">
+              Subject-wise mock tests
+            </div>
+          </div>
 
-</div>
+          <div class="am-arrow">›</div>
 
-</div>
+        </button>
 
-</div>
+      </div>
 
+    </div>
 
-<div class="grid2">
+    <!-- SUBJECT / YEAR / MOCK SELECTION -->
 
-<div>
+    <div
+      class="am-panel"
+      id="amSelectionPanel"
+      style="display:none;">
 
-<label>Marks per Question</label>
+      <div class="am-panel-head">
 
-<input
-id="marks"
-type="number"
-step="0.01"
-value="2">
+        <div>
+          <div
+            class="am-panel-title"
+            id="amSelectionTitle">
+            Select Mock
+          </div>
 
-</div>
+          <div
+            class="am-panel-note"
+            id="amSelectionNote">
+            Select a mock
+          </div>
+        </div>
 
-<div>
+        <button
+          class="am-btn"
+          id="amBackCategoryBtn"
+          type="button">
+          Back
+        </button>
 
-<label>Negative Marks</label>
+      </div>
 
-<input
-id="negative"
-type="number"
-step="0.01"
-value="0">
+      <div
+        id="amYearArea"
+        style="display:none;">
 
-</div>
+        <div class="am-section-note">
+          Select Year
+        </div>
 
-</div>
+        <div
+          class="am-chip-row"
+          id="amYearChips">
+        </div>
 
+      </div>
 
-<label>Total Questions</label>
+      <div
+        id="amSubjectArea"
+        style="display:none;margin-top:13px;">
 
-<input
-id="totalQuestions"
-type="number"
-min="1"
-value="25">
+        <div class="am-section-note">
+          Select Subject
+        </div>
 
+        <div
+          class="am-chip-row"
+          id="amSubjectChips">
+        </div>
 
-<button
-id="saveBtn"
-class="primary-btn"
-onclick="saveTest()">
+      </div>
 
-Create Test
+      <div
+        class="am-test-list"
+        id="amMockList">
 
-</button>
+        <div class="am-empty">
+          Select the required options first.
+        </div>
 
+      </div>
 
-<button
-id="cancelBtn"
-class="secondary-btn hidden"
-onclick="cancelEdit()">
+    </div>
 
-Cancel Edit
+    <!-- SELECTED MOCK -->
 
-</button>
+    <div
+      class="am-panel"
+      id="amMockPanel"
+      style="display:none;">
 
-</div>
+      <div class="am-panel-head">
 
+        <div>
+          <div
+            class="am-panel-title"
+            id="amMockTitle">
+            Selected Mock
+          </div>
 
-<!-- =========================================
-     QUESTION BANK ASSIGNMENT
-========================================= -->
+          <div
+            class="am-panel-note"
+            id="amMockNote">
+            Manage questions
+          </div>
+        </div>
 
-<div
-id="questionManager"
-class="bank-card hidden">
+        <button
+          class="am-btn"
+          id="amBackMockListBtn"
+          type="button">
+          Back
+        </button>
 
-<div class="bank-header">
+      </div>
 
-<h2 style="margin:0">
-Question Bank
-</h2>
+      <div
+        class="am-section-list"
+        id="amMockSections">
 
-<div
-id="bankCount"
-class="bank-count">
-0 available
-</div>
+        <div class="am-loading">
+          Loading sections...
+        </div>
 
-</div>
+      </div>
 
+    </div>
 
-<p
-id="bankHelp"
-style="
-color:var(--muted);
-font-size:12px;
-line-height:1.5;
-">
+    <!-- QUESTION MANAGER -->
 
-Select questions from your central Question Bank.
+    <div
+      class="am-panel"
+      id="amQuestionPanel"
+      style="display:none;">
 
-</p>
+      <div class="am-panel-head">
 
+        <div>
+          <div
+            class="am-panel-title"
+            id="amQuestionPanelTitle">
+            Questions
+          </div>
 
-<div class="grid2">
+          <div class="am-panel-note">
+            Add new questions or select from Question Bank
+          </div>
+        </div>
 
-<div>
+        <button
+          class="am-btn"
+          id="amBackSectionsBtn"
+          type="button">
+          Back
+        </button>
 
-<label>Subject Filter</label>
+      </div>
 
-<select id="bankSubject">
-<option value="">All Subjects</option>
-</select>
+      <div class="am-actions">
 
-</div>
+        <button
+          class="am-btn primary"
+          id="amCreateQuestionBtn"
+          type="button">
+          + Create Question
+        </button>
 
-<div>
+        <button
+          class="am-btn"
+          id="amBankQuestionBtn"
+          type="button">
+          Select Question Bank
+        </button>
 
-<label>Chapter Filter</label>
+      </div>
 
-<select id="bankChapter">
-<option value="">All Chapters</option>
-</select>
+      <div
+        id="amAssignedQuestions"
+        style="margin-top:14px;">
 
-</div>
+      </div>
 
-</div>
+    </div>
 
+    <!-- QUESTION BANK -->
 
-<label>Search</label>
+    <div
+      class="am-panel"
+      id="amBankPanel"
+      style="display:none;">
 
-<input
-id="bankSearch"
-placeholder="Search question..."
-oninput="renderBank()">
+      <div class="am-panel-head">
 
+        <div>
+          <div class="am-panel-title">
+            Question Bank
+          </div>
 
-<div
-id="sectionAssignmentBox"
-class="hidden">
+          <div class="am-panel-note">
+            Filter by subject, chapter or search
+          </div>
+        </div>
 
-<label>
-Section for Selected Questions
-</label>
+        <button
+          class="am-btn"
+          id="amBackQuestionManagerBtn"
+          type="button">
+          Back
+        </button>
 
-<select id="assignmentSection">
+      </div>
 
-<option value="">
-Select Section
-</option>
+      <div class="am-question-tools">
 
-</select>
+        <select
+          class="am-select"
+          id="amBankSubject">
 
-</div>
+          <option value="">
+            All Subjects
+          </option>
 
+        </select>
 
-<div class="selected-box">
+        <select
+          class="am-select"
+          id="amBankChapter">
 
-Selected:
-<span id="selectedCount">0</span>
+          <option value="">
+            All Chapters
+          </option>
 
-</div>
+        </select>
 
+        <input
+          class="am-input"
+          id="amBankSearch"
+          type="search"
+          placeholder="Search question...">
 
-<div
-id="bankList"
-class="bank-list">
+      </div>
 
-<div class="message">
-Select a test first.
-</div>
+      <div
+        id="amBankList">
 
-</div>
+        <div class="am-loading">
+          Loading question bank...
+        </div>
 
+      </div>
 
-<button
-class="primary-btn"
-onclick="assignSelectedQuestions()">
+      <div class="am-actions">
 
-Add Selected Questions to Test
+        <button
+          class="am-btn primary"
+          id="amAssignSelectedBtn"
+          type="button">
+          Assign Selected Questions
+        </button>
 
-</button>
+      </div>
 
+    </div>
 
-<h3 style="margin-top:22px">
-Questions in This Test
-</h3>
-
-<div id="assignedList">
-
-<div class="message">
-No questions assigned yet.
-</div>
-
-</div>
-
-</div>
-
-
-<!-- =========================================
-     EXISTING TESTS
-========================================= -->
-
-<h2 class="page-title">
-Existing Tests
-</h2>
-
-<div id="tests">
-Loading...
-</div>
+  </section>
 
 </main>
 
+<!-- =====================================================
+     CREATE QUESTION MODAL
+===================================================== -->
+
+<div
+  class="am-modal-overlay"
+  id="amQuestionModal">
+
+  <div class="am-modal">
+
+    <div class="am-modal-head">
+
+      <div class="am-modal-title">
+        Create Question
+      </div>
+
+      <button
+        class="am-close"
+        data-am-close="amQuestionModal"
+        type="button">
+        ×
+      </button>
+
+    </div>
+
+    <div class="am-modal-body">
+
+      <div class="am-form-grid">
+
+        <div class="am-form-group">
+
+          <label class="am-label">
+            Subject
+          </label>
+
+          <select
+            class="am-select"
+            id="amCreateSubject">
+          </select>
+
+        </div>
+
+        <div class="am-form-group">
+
+          <label class="am-label">
+            Chapter
+          </label>
+
+          <select
+            class="am-select"
+            id="amCreateChapter">
+          </select>
+
+        </div>
+
+        <div class="am-form-group full">
+
+          <label class="am-label">
+            Question
+          </label>
+
+          <textarea
+            class="am-textarea"
+            id="amCreateQuestion"
+            placeholder="Enter question"></textarea>
+
+        </div>
+
+      </div>
+
+      <div class="am-option-row">
+
+        <input
+          class="am-input"
+          id="amOptionA"
+          placeholder="Option A">
+
+        <input
+          class="am-input"
+          id="amOptionB"
+          placeholder="Option B">
+
+        <input
+          class="am-input"
+          id="amOptionC"
+          placeholder="Option C">
+
+        <input
+          class="am-input"
+          id="amOptionD"
+          placeholder="Option D">
+
+      </div>
+
+      <div
+        class="am-form-group"
+        style="margin-top:11px;">
+
+        <label class="am-label">
+          Correct Option
+        </label>
+
+        <select
+          class="am-select"
+          id="amCorrectOption">
+
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+          <option value="D">D</option>
+
+        </select>
+
+      </div>
+
+      <div
+        class="am-form-group"
+        style="margin-top:11px;">
+
+        <label class="am-label">
+          Explanation
+        </label>
+
+        <textarea
+          class="am-textarea"
+          id="amExplanation"
+          placeholder="Optional explanation"></textarea>
+
+      </div>
+
+    </div>
+
+    <div class="am-modal-footer">
+
+      <button
+        class="am-btn"
+        data-am-close="amQuestionModal"
+        type="button">
+        Cancel
+      </button>
+
+      <button
+        class="am-btn primary"
+        id="amSaveQuestionBtn"
+        type="button">
+        Save Question
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div
+  class="am-toast"
+  id="amToast">
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-
-/* =========================================
-   SUPABASE
-========================================= */
 
 const SUPABASE_URL =
 "https://dvvyoygahzzbnpqrfhen.supabase.co";
@@ -687,2881 +1339,1869 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
 
-const db =
-supabase.createClient(
+const db = supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
 );
 
+/* =========================
+   STATE
+========================= */
 
-/* =========================================
-   DATA
-========================================= */
+let board = "SSC";
 
-let exams=[];
-let subjects=[];
-let chapters=[];
-let tests=[];
-let sections=[];
+let exams = [];
+let subjects = [];
+let chapters = [];
+let tests = [];
+let sections = [];
+let bankQuestions = [];
+let assignedQuestions = [];
 
-let bankQuestions=[];
-let assignedQuestions=[];
+let selectedExam = null;
+let selectedBranch = null;
+let selectedCategory = null;
+let selectedYear = null;
+let selectedSubject = null;
+let selectedTest = null;
+let selectedSection = null;
 
-let selectedQuestionIds=new Set();
+let selectedBankQuestionIds = new Set();
 
+/* =========================
+   ELEMENTS
+========================= */
 
-/* =========================================
-   ADMIN CHECK
-========================================= */
+const examGrid = document.getElementById("amExamGrid");
+const workspace = document.getElementById("amWorkspace");
+const selectedExamName = document.getElementById("amSelectedExamName");
 
-async function checkAdmin(){
+const branchPanel = document.getElementById("amBranchPanel");
+const categoryPanel = document.getElementById("amCategoryPanel");
+const selectionPanel = document.getElementById("amSelectionPanel");
+const mockPanel = document.getElementById("amMockPanel");
+const questionPanel = document.getElementById("amQuestionPanel");
+const bankPanel = document.getElementById("amBankPanel");
 
-  const {
-    data:{user}
-  } =
-  await db.auth.getUser();
+const selectionTitle = document.getElementById("amSelectionTitle");
+const selectionNote = document.getElementById("amSelectionNote");
 
-  if(!user){
+const yearArea = document.getElementById("amYearArea");
+const subjectArea = document.getElementById("amSubjectArea");
 
-    document.body.innerHTML=
-    "<div style='padding:30px;text-align:center'>Please login as admin.</div>";
+const yearChips = document.getElementById("amYearChips");
+const subjectChips = document.getElementById("amSubjectChips");
+const mockList = document.getElementById("amMockList");
 
-    return false;
-  }
+const mockTitle = document.getElementById("amMockTitle");
+const mockNote = document.getElementById("amMockNote");
+const mockSections = document.getElementById("amMockSections");
 
+const questionPanelTitle =
+document.getElementById("amQuestionPanelTitle");
 
-  const {data,error} =
-  await db
-    .from("admin_users")
-    .select("user_id")
-    .eq("user_id",user.id)
-    .maybeSingle();
+const assignedQuestionsBox =
+document.getElementById("amAssignedQuestions");
 
+const bankList =
+document.getElementById("amBankList");
 
-  if(error || !data){
+const toast =
+document.getElementById("amToast");
 
-    document.body.innerHTML=
-    "<div style='padding:30px;text-align:center'>Access denied.</div>";
+/* =========================
+   HELPERS
+========================= */
 
-    return false;
-  }
+function showToast(message){
 
-  return true;
+  toast.textContent = message;
+  toast.classList.add("show");
+
+  clearTimeout(window.__toastTimer);
+
+  window.__toastTimer = setTimeout(()=>{
+    toast.classList.remove("show");
+  },2600);
 
 }
 
+function escapeHTML(value){
 
-/* =========================================
-   LOAD DATA
-========================================= */
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 
-async function loadData(){
+}
 
-  if(!await checkAdmin()) return;
+function normalize(value){
 
+  return String(value || "")
+    .trim()
+    .toLowerCase();
 
-  const examResult =
-    await db
-      .from("exams")
-      .select("*")
-      .order("id");
+}
 
+function hideAllLowerPanels(){
 
-  if(examResult.error){
+  categoryPanel.style.display = "none";
+  selectionPanel.style.display = "none";
+  mockPanel.style.display = "none";
+  questionPanel.style.display = "none";
+  bankPanel.style.display = "none";
 
-    showMessage(
-      examResult.error.message
-    );
+}
+
+function resetAfterExam(){
+
+  selectedBranch = null;
+  selectedCategory = null;
+  selectedYear = null;
+  selectedSubject = null;
+  selectedTest = null;
+  selectedSection = null;
+
+  hideAllLowerPanels();
+
+  branchPanel.style.display = "block";
+
+}
+
+function resetAfterBranch(){
+
+  selectedCategory = null;
+  selectedYear = null;
+  selectedSubject = null;
+  selectedTest = null;
+  selectedSection = null;
+
+  selectionPanel.style.display = "none";
+  mockPanel.style.display = "none";
+  questionPanel.style.display = "none";
+  bankPanel.style.display = "none";
+
+  categoryPanel.style.display = "block";
+
+}
+
+function resetAfterCategory(){
+
+  selectedYear = null;
+  selectedSubject = null;
+  selectedTest = null;
+  selectedSection = null;
+
+  mockPanel.style.display = "none";
+  questionPanel.style.display = "none";
+  bankPanel.style.display = "none";
+
+  selectionPanel.style.display = "block";
+
+}
+
+/* =========================
+   LOAD ALL DATA
+========================= */
+
+async function loadAllData(){
+
+  try{
+
+    const [
+      examsResponse,
+      subjectsResponse,
+      chaptersResponse,
+      testsResponse
+    ] = await Promise.all([
+
+      db
+        .from("exams")
+        .select("*")
+        .order("id",{ascending:true}),
+
+      db
+        .from("subjects")
+        .select("*")
+        .order("id",{ascending:true}),
+
+      db
+        .from("chapters")
+        .select("*")
+        .order("id",{ascending:true}),
+
+      db
+        .from("mock_tests")
+        .select("*")
+        .order("created_at",{ascending:false})
+
+    ]);
+
+    if(examsResponse.error)
+      throw examsResponse.error;
+
+    if(subjectsResponse.error)
+      throw subjectsResponse.error;
+
+    if(chaptersResponse.error)
+      throw chaptersResponse.error;
+
+    if(testsResponse.error)
+      throw testsResponse.error;
+
+    exams = examsResponse.data || [];
+    subjects = subjectsResponse.data || [];
+    chapters = chaptersResponse.data || [];
+    tests = testsResponse.data || [];
+
+    renderExams();
+
+  }catch(error){
+
+    console.error(error);
+
+    examGrid.innerHTML = `
+      <div class="am-error">
+        Failed to load data. Check Supabase table permissions.
+      </div>
+    `;
+
+  }
+
+}
+
+/* =========================
+   BOARD FILTER
+========================= */
+
+function renderExams(){
+
+  const filtered = exams.filter(exam=>{
+
+    const text = [
+      exam.name,
+      exam.title,
+      exam.exam_name,
+      exam.board,
+      exam.category
+    ].join(" ");
+
+    if(board === "SSC"){
+      return normalize(text).includes("ssc");
+    }
+
+    if(board === "RRB"){
+      return normalize(text).includes("rrb") ||
+             normalize(text).includes("railway");
+    }
+
+    return true;
+
+  });
+
+  if(!filtered.length){
+
+    examGrid.innerHTML = `
+      <div class="am-empty">
+        No ${escapeHTML(board)} exams found.
+      </div>
+    `;
 
     return;
-  }
-
-
-  exams=
-    examResult.data || [];
-
-
-  const subjectResult =
-    await db
-      .from("subjects")
-      .select("*")
-      .order("id");
-
-
-  if(subjectResult.error){
-
-    showMessage(
-      subjectResult.error.message
-    );
-
-    return;
-  }
-
-
-  subjects=
-    subjectResult.data || [];
-
-
-  const chapterResult =
-    await db
-      .from("chapters")
-      .select("*")
-      .order("id");
-
-
-  if(!chapterResult.error){
-
-    chapters=
-      chapterResult.data || [];
 
   }
 
+  examGrid.innerHTML = filtered.map(exam=>{
 
-  fillExams();
-  if(window.__urlExamId){ document.getElementById("exam").value=window.__urlExamId; }
-  fillSubjects();
-  fillBankSubjects();
+    const examName =
+      exam.name ||
+      exam.title ||
+      exam.exam_name ||
+      "Unnamed Exam";
 
-  await loadTests();
+    return `
 
-  handleTestType();
+      <button
+        class="am-card am-exam-card"
+        data-exam-id="${exam.id}"
+        type="button">
 
-}
+        <div>
 
+          <div class="am-card-title">
+            ${escapeHTML(examName)}
+          </div>
 
-/* =========================================
-   FILL EXAMS
-========================================= */
+          <div class="am-card-meta">
+            ID: ${escapeHTML(exam.id)}
+          </div>
 
-function fillExams(){
+        </div>
 
-  const select=
-    document.getElementById("exam");
+        <div class="am-arrow">›</div>
 
-  select.innerHTML=
-    '<option value="">Select Exam</option>';
+      </button>
 
+    `;
 
-  exams.forEach(e=>{
+  }).join("");
 
-    const option=
-      document.createElement("option");
+  document.querySelectorAll("[data-exam-id]")
+    .forEach(button=>{
 
-    option.value=e.id;
+      button.addEventListener("click",()=>{
 
-    option.textContent=
-      e.name ||
-      e.title ||
-      e.exam_name ||
-      "Exam "+e.id;
+        const id = button.dataset.examId;
 
-    select.appendChild(option);
+        selectedExam =
+          exams.find(item=>String(item.id) === String(id));
 
-  });
+        if(!selectedExam) return;
 
-}
+        selectedExamName.textContent =
+          selectedExam.name ||
+          selectedExam.title ||
+          selectedExam.exam_name ||
+          "Selected Exam";
 
+        workspace.classList.add("visible");
 
-/* =========================================
-   FILL SUBJECTS
-========================================= */
+        resetAfterExam();
 
-function fillSubjects(){
+        workspace.scrollIntoView({
+          behavior:"smooth",
+          block:"start"
+        });
 
-  const select=
-    document.getElementById("subject");
-
-  select.innerHTML=
-    '<option value="">Select Subject</option>';
-
-
-  subjects.forEach(s=>{
-
-    const option=
-      document.createElement("option");
-
-    option.value=s.id;
-
-    option.textContent=
-      s.name ||
-      s.title ||
-      "Subject "+s.id;
-
-    select.appendChild(option);
-
-  });
-
-}
-
-
-/* =========================================
-   BANK SUBJECTS
-========================================= */
-
-function fillBankSubjects(){
-
-  const select=
-    document.getElementById("bankSubject");
-
-  select.innerHTML=
-    '<option value="">All Subjects</option>';
-
-
-  subjects.forEach(s=>{
-
-    const option=
-      document.createElement("option");
-
-    option.value=s.id;
-
-    option.textContent=
-      s.name ||
-      s.title ||
-      "Subject "+s.id;
-
-    select.appendChild(option);
-
-  });
-
-}
-
-
-/* =========================================
-   CHAPTERS
-========================================= */
-
-function fillChapters(){
-
-  const subjectId=
-    document.getElementById("subject").value;
-
-  const select=
-    document.getElementById("chapter");
-
-  select.innerHTML=
-    '<option value="">Select Chapter</option>';
-
-
-  if(!subjectId) return;
-
-
-  chapters
-    .filter(c=>
-      String(c.subject_id)===
-      String(subjectId)
-    )
-    .forEach(c=>{
-
-      const option=
-        document.createElement("option");
-
-      option.value=c.id;
-
-      option.textContent=
-        c.name ||
-        c.title ||
-        "Chapter "+c.id;
-
-      select.appendChild(option);
+      });
 
     });
 
 }
 
+/* =========================
+   BRANCH SETUP
+========================= */
 
-/* =========================================
-   SUBJECT CHANGE
-========================================= */
+function setupBranchButtons(){
 
-document
-.getElementById("subject")
-.addEventListener(
-  "change",
-  fillChapters
-);
+  document.querySelectorAll("[data-am-branch]")
+    .forEach(button=>{
 
+      button.addEventListener("click",()=>{
 
-/* =========================================
-   BANK FILTER CHANGE
-========================================= */
+        selectedBranch = button.dataset.amBranch;
 
-document
-.getElementById("bankSubject")
-.addEventListener(
-  "change",
-  function(){
+        resetAfterBranch();
 
-    fillBankChapters();
+        selectionTitle.textContent =
+          selectedBranch === "PYQ"
+          ? "PYQ Mock Selection"
+          : "New Mock Selection";
 
-    renderBank();
+        selectionNote.textContent =
+          selectedBranch === "PYQ"
+          ? "Select year, subject and mock"
+          : "Select subject and mock";
 
-  }
-);
+        categoryPanel.style.display = "block";
 
+        categoryPanel.scrollIntoView({
+          behavior:"smooth",
+          block:"start"
+        });
 
-document
-.getElementById("bankChapter")
-.addEventListener(
-  "change",
-  renderBank
-);
-
-
-/* =========================================
-   BANK CHAPTERS
-========================================= */
-
-function fillBankChapters(){
-
-  const subjectId=
-    document.getElementById(
-      "bankSubject"
-    ).value;
-
-  const select=
-    document.getElementById(
-      "bankChapter"
-    );
-
-
-  select.innerHTML=
-    '<option value="">All Chapters</option>';
-
-
-  chapters
-    .filter(c=>{
-
-      if(!subjectId)
-        return true;
-
-      return String(c.subject_id)===
-        String(subjectId);
-
-    })
-    .forEach(c=>{
-
-      const option=
-        document.createElement("option");
-
-      option.value=c.id;
-
-      option.textContent=
-        c.name ||
-        c.title ||
-        "Chapter "+c.id;
-
-      select.appendChild(option);
+      });
 
     });
 
 }
 
+/* =========================
+   CATEGORY SETUP
+========================= */
 
-/* =========================================
-   TEST TYPE
-========================================= */
+function setupCategoryButtons(){
 
-function handleTestType(){
+  document.querySelectorAll("[data-am-category]")
+    .forEach(button=>{
 
-  const type=
-    document.getElementById(
-      "testType"
-    ).value;
+      button.addEventListener("click",()=>{
 
+        selectedCategory = button.dataset.amCategory;
 
-  document
-    .getElementById("fullSettings")
-    .classList.toggle(
-      "hidden",
-      type!=="FULL"
-    );
+        resetAfterCategory();
 
+        prepareSelectionPanel();
 
-  document
-    .getElementById("singleSubjectBox")
-    .classList.toggle(
-      "hidden",
-      ![
-        "SECTIONAL",
-        "SUBJECT_WISE",
-        "CHAPTER_WISE"
-      ].includes(type)
-    );
+        selectionPanel.scrollIntoView({
+          behavior:"smooth",
+          block:"start"
+        });
 
+      });
 
-  document
-    .getElementById("chapterBox")
-    .classList.toggle(
-      "hidden",
-      type!=="CHAPTER_WISE"
-    );
-
-
-  if(type!=="FULL"){
-
-    document
-      .getElementById(
-        "subjectTiming"
-      ).checked=false;
-
-    document
-      .getElementById(
-        "sectionSettings"
-      ).classList.add("hidden");
-
-  }
-
-
-  updateBankForTest();
+    });
 
 }
 
+/* =========================
+   PREPARE SELECTION
+========================= */
 
-/* =========================================
-   TIMING
-========================================= */
+function prepareSelectionPanel(){
 
-function toggleSubjectTiming(){
+  selectionPanel.style.display = "block";
 
-  const enabled=
-    document
-      .getElementById(
-        "subjectTiming"
-      ).checked;
+  yearArea.style.display = "none";
+  subjectArea.style.display = "none";
 
+  yearChips.innerHTML = "";
+  subjectChips.innerHTML = "";
+  mockList.innerHTML = "";
 
-  document
-    .getElementById(
-      "sectionSettings"
-    )
-    .classList.toggle(
-      "hidden",
-      !enabled
-    );
+  const relevantTests = getRelevantTests();
 
+  if(selectedBranch === "PYQ"){
 
-  if(
-    enabled &&
-    sections.length===0
-  ){
+    const years = [...new Set(
 
-    addSection();
+      relevantTests
+        .map(test=>getTestYear(test))
+        .filter(Boolean)
+
+    )].sort((a,b)=>String(b).localeCompare(String(a)));
+
+    if(years.length){
+
+      yearArea.style.display = "block";
+
+      yearChips.innerHTML = years.map(year=>`
+
+        <button
+          class="am-chip"
+          data-year="${escapeHTML(year)}"
+          type="button">
+          ${escapeHTML(year)}
+        </button>
+
+      `).join("");
+
+      document.querySelectorAll("[data-year]")
+        .forEach(button=>{
+
+          button.addEventListener("click",()=>{
+
+            selectedYear = button.dataset.year;
+
+            document.querySelectorAll("[data-year]")
+              .forEach(item=>item.classList.remove("active"));
+
+            button.classList.add("active");
+
+            renderSubjectOrMocks();
+
+          });
+
+        });
+
+    }
 
   }
 
+  if(selectedCategory === "SECTIONAL"){
 
-  updateTotalTime();
+    renderSubjectChips(relevantTests);
 
-  updateSectionAssignment();
+  }else{
+
+    renderMocks();
+
+  }
 
 }
 
+/* =========================
+   GET TEST YEAR
+========================= */
 
-/* =========================================
-   ADD SECTION
-========================================= */
+function getTestYear(test){
 
-function addSection(
-  subjectId="",
-  duration=15
-){
+  return (
+    test.year ||
+    test.exam_year ||
+    test.pyq_year ||
+    test.session_year ||
+    extractYear(test.title) ||
+    extractYear(test.name)
+  );
 
-  sections.push({
+}
 
-    subject_id:
-      subjectId,
+function extractYear(value){
 
-    duration_minutes:
-      Number(duration)||15
+  const match = String(value || "")
+    .match(/\b(20\d{2}|19\d{2})\b/);
+
+  return match ? match[1] : "";
+
+}
+
+/* =========================
+   TEST FILTER
+========================= */
+
+function getRelevantTests(){
+
+  if(!selectedExam) return [];
+
+  return tests.filter(test=>{
+
+    const examMatch =
+      String(test.exam_id) === String(selectedExam.id);
+
+    if(!examMatch) return false;
+
+    const type = normalize(
+      test.test_type ||
+      test.type ||
+      test.mock_type ||
+      ""
+    );
+
+    if(selectedCategory === "FULL"){
+
+      if(
+        type.includes("sectional") ||
+        type.includes("subject") ||
+        type.includes("chapter")
+      ){
+        return false;
+      }
+
+    }
+
+    if(selectedCategory === "SECTIONAL"){
+
+      if(
+        !type.includes("sectional") &&
+        !type.includes("subject") &&
+        !type.includes("chapter")
+      ){
+        return false;
+      }
+
+    }
+
+    const branchText = normalize([
+      test.branch,
+      test.mock_branch,
+      test.category,
+      test.mock_category,
+      test.folder_type,
+      test.test_group
+    ].join(" "));
+
+    if(selectedBranch === "PYQ"){
+
+      if(
+        !branchText.includes("pyq") &&
+        !getTestYear(test)
+      ){
+        return false;
+      }
+
+    }
+
+    if(selectedBranch === "NEW"){
+
+      if(branchText.includes("pyq")){
+        return false;
+      }
+
+    }
+
+    return true;
 
   });
 
+}
 
-  renderSections();
+/* =========================
+   SUBJECT CHIPS
+========================= */
+
+function renderSubjectChips(relevantTests){
+
+  const subjectIds = [
+    ...new Set(
+
+      relevantTests
+        .filter(test=>{
+
+          if(selectedYear &&
+             String(getTestYear(test)) !== String(selectedYear)){
+            return false;
+          }
+
+          return true;
+
+        })
+        .map(test=>
+          test.subject_id ||
+          test.section_subject_id ||
+          test.subject
+        )
+        .filter(Boolean)
+
+    )
+  ];
+
+  let availableSubjects = subjects.filter(subject=>{
+
+    return subjectIds.some(id=>
+      String(id) === String(subject.id)
+    );
+
+  });
+
+  if(!availableSubjects.length){
+
+    availableSubjects = subjects;
+
+  }
+
+  if(availableSubjects.length){
+
+    subjectArea.style.display = "block";
+
+    subjectChips.innerHTML = availableSubjects.map(subject=>`
+
+      <button
+        class="am-chip"
+        data-subject-id="${subject.id}"
+        type="button">
+
+        ${escapeHTML(
+          subject.name ||
+          subject.title ||
+          subject.subject_name ||
+          "Subject"
+        )}
+
+      </button>
+
+    `).join("");
+
+    document.querySelectorAll("[data-subject-id]")
+      .forEach(button=>{
+
+        button.addEventListener("click",()=>{
+
+          selectedSubject = button.dataset.subjectId;
+
+          document.querySelectorAll("[data-subject-id]")
+            .forEach(item=>item.classList.remove("active"));
+
+          button.classList.add("active");
+
+          renderMocks();
+
+        });
+
+      });
+
+  }
+
+  renderMocks();
 
 }
 
+/* =========================
+   SUBJECT/YEAR FILTER
+========================= */
 
-/* =========================================
+function renderSubjectOrMocks(){
+
+  const relevantTests = getRelevantTests();
+
+  if(selectedCategory === "SECTIONAL"){
+
+    renderSubjectChips(relevantTests);
+
+  }else{
+
+    renderMocks();
+
+  }
+
+}
+
+/* =========================
+   MOCK LIST
+========================= */
+
+function renderMocks(){
+
+  let list = getRelevantTests();
+
+  if(selectedYear){
+
+    list = list.filter(test=>
+      String(getTestYear(test)) === String(selectedYear)
+    );
+
+  }
+
+  if(selectedSubject){
+
+    list = list.filter(test=>
+      String(
+        test.subject_id ||
+        test.section_subject_id ||
+        test.subject
+      ) === String(selectedSubject)
+    );
+
+  }
+
+  if(!list.length){
+
+    mockList.innerHTML = `
+      <div class="am-empty">
+        No mocks found for this selection.
+      </div>
+    `;
+
+    return;
+
+  }
+
+  mockList.innerHTML = list.map(test=>{
+
+    const title =
+      test.title ||
+      test.name ||
+      "Untitled Mock";
+
+    const duration =
+      test.duration_minutes ||
+      test.duration ||
+      0;
+
+    const total =
+      test.total_questions ||
+      test.question_count ||
+      0;
+
+    return `
+
+      <div class="am-test-card">
+
+        <div class="am-test-title">
+          ${escapeHTML(title)}
+        </div>
+
+        <div class="am-test-meta">
+          ${escapeHTML(test.test_type || "Mock")}
+          ${duration ? " • " + duration + " min" : ""}
+          ${total ? " • " + total + " questions" : ""}
+        </div>
+
+        <div class="am-test-actions">
+
+          <button
+            class="am-btn primary"
+            data-open-test="${test.id}"
+            type="button">
+            Manage Questions
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+  }).join("");
+
+  document.querySelectorAll("[data-open-test]")
+    .forEach(button=>{
+
+      button.addEventListener("click",()=>{
+
+        const test = tests.find(item=>
+          String(item.id) === String(button.dataset.openTest)
+        );
+
+        if(!test) return;
+
+        openSelectedTest(test);
+
+      });
+
+    });
+
+}
+
+/* =========================
+   OPEN TEST
+========================= */
+
+async function openSelectedTest(test){
+
+  selectedTest = test;
+
+  mockPanel.style.display = "block";
+  questionPanel.style.display = "none";
+  bankPanel.style.display = "none";
+
+  mockTitle.textContent =
+    test.title ||
+    test.name ||
+    "Selected Mock";
+
+  mockNote.textContent =
+    "Select a section to manage questions";
+
+  mockSections.innerHTML = `
+    <div class="am-loading">
+      Loading sections...
+    </div>
+  `;
+
+  mockPanel.scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
+
+  await loadTestSections();
+
+}
+
+/* =========================
+   LOAD TEST SECTIONS
+========================= */
+
+async function loadTestSections(){
+
+  if(!selectedTest) return;
+
+  try{
+
+    const response = await db
+      .from("mock_test_sections")
+      .select("*")
+      .eq("mock_test_id",selectedTest.id)
+      .order("section_order",{ascending:true});
+
+    if(response.error) throw response.error;
+
+    sections = response.data || [];
+
+    if(!sections.length){
+
+      const fallbackName =
+        selectedTest.subject_name ||
+        selectedTest.subject ||
+        "General";
+
+      sections = [{
+        id:null,
+        mock_test_id:selectedTest.id,
+        name:fallbackName,
+        section_name:fallbackName,
+        question_count:selectedTest.total_questions || 0
+      }];
+
+    }
+
+    renderSections();
+
+  }catch(error){
+
+    console.error(error);
+
+    mockSections.innerHTML = `
+      <div class="am-error">
+        Sections could not be loaded.
+      </div>
+    `;
+
+  }
+
+}
+
+/* =========================
    RENDER SECTIONS
-========================================= */
+========================= */
 
 function renderSections(){
 
-  const box=
-    document.getElementById(
-      "sections"
-    );
+  if(!sections.length){
 
-  box.innerHTML="";
+    mockSections.innerHTML = `
+      <div class="am-empty">
+        No sections available.
+      </div>
+    `;
 
+    return;
 
-  sections.forEach(
-    (section,index)=>{
+  }
 
-      const div=
-        document.createElement(
-          "div"
-        );
+  mockSections.innerHTML = sections.map(section=>{
 
-      div.className=
-        "section-card";
+    const name =
+      section.name ||
+      section.section_name ||
+      section.subject_name ||
+      "Section";
 
+    const count =
+      section.question_count ||
+      section.total_questions ||
+      0;
 
-      div.innerHTML=`
+    return `
 
-        <div class="section-head">
+      <div class="am-section-box">
 
-          <div class="section-number">
-            Subject ${index+1}
+        <div class="am-section-box-head">
+
+          <div>
+            <div class="am-section-name">
+              ${escapeHTML(name)}
+            </div>
+
+            <div class="am-section-count">
+              ${count} questions configured
+            </div>
           </div>
 
-          <div class="section-controls">
+          <button
+            class="am-btn primary"
+            data-open-section="${section.id || "fallback"}"
+            type="button">
+            Manage
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+  }).join("");
+
+  document.querySelectorAll("[data-open-section]")
+    .forEach(button=>{
+
+      button.addEventListener("click",()=>{
+
+        const id = button.dataset.openSection;
+
+        selectedSection =
+          sections.find(section=>
+            String(section.id || "fallback") === String(id)
+          );
+
+        if(!selectedSection) return;
+
+        openQuestionManager();
+
+      });
+
+    });
+
+}
+
+/* =========================
+   QUESTION MANAGER
+========================= */
+
+async function openQuestionManager(){
+
+  questionPanel.style.display = "block";
+  bankPanel.style.display = "none";
+
+  const sectionName =
+    selectedSection.name ||
+    selectedSection.section_name ||
+    selectedSection.subject_name ||
+    "Section";
+
+  questionPanelTitle.textContent =
+    "Questions • " + sectionName;
+
+  assignedQuestionsBox.innerHTML = `
+    <div class="am-loading">
+      Loading assigned questions...
+    </div>
+  `;
+
+  questionPanel.scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
+
+  await loadAssignedQuestions();
+
+}
+
+/* =========================
+   LOAD ASSIGNED QUESTIONS
+========================= */
+
+async function loadAssignedQuestions(){
+
+  if(!selectedTest || !selectedSection) return;
+
+  try{
+
+    let query = db
+      .from("mock_test_questions")
+      .select(`
+        *,
+        questions(*)
+      `)
+      .eq("mock_test_id",selectedTest.id);
+
+    if(selectedSection.id){
+      query = query.eq(
+        "section_id",
+        selectedSection.id
+      );
+    }
+
+    const response = await query;
+
+    if(response.error) throw response.error;
+
+    assignedQuestions = response.data || [];
+
+    renderAssignedQuestions();
+
+  }catch(error){
+
+    console.error(error);
+
+    assignedQuestionsBox.innerHTML = `
+      <div class="am-error">
+        Assigned questions could not be loaded.
+      </div>
+    `;
+
+  }
+
+}
+
+/* =========================
+   RENDER ASSIGNED
+========================= */
+
+function renderAssignedQuestions(){
+
+  if(!assignedQuestions.length){
+
+    assignedQuestionsBox.innerHTML = `
+      <div class="am-empty">
+        No questions assigned to this section yet.
+      </div>
+    `;
+
+    return;
+
+  }
+
+  assignedQuestionsBox.innerHTML = `
+
+    <div class="am-section-note"
+         style="margin-bottom:10px;">
+      Assigned Questions: ${assignedQuestions.length}
+    </div>
+
+    ${assignedQuestions.map((item,index)=>{
+
+      const question =
+        item.questions ||
+        item.question ||
+        {};
+
+      const text =
+        question.question_text ||
+        question.question ||
+        question.text ||
+        item.question_text ||
+        "Question";
+
+      return `
+
+        <div class="am-question-card">
+
+          <div class="am-question-text">
+            ${index+1}. ${escapeHTML(text)}
+          </div>
+
+          <div class="am-question-bottom">
+
+            <div class="am-card-meta">
+              Assigned
+            </div>
 
             <button
-            type="button"
-            class="small-btn"
-            onclick="moveSection(${index},-1)"
-            ${index===0?"disabled":""}>
-              ↑
-            </button>
-
-            <button
-            type="button"
-            class="small-btn"
-            onclick="moveSection(${index},1)"
-            ${index===sections.length-1?"disabled":""}>
-              ↓
-            </button>
-
-            <button
-            type="button"
-            class="small-btn remove-btn"
-            onclick="removeSection(${index})">
-              ×
+              class="am-btn danger"
+              data-remove-assigned="${item.id}"
+              type="button">
+              Remove
             </button>
 
           </div>
 
         </div>
 
-
-        <label>Subject</label>
-
-        <select
-        onchange="changeSectionSubject(${index},this.value)">
-
-          <option value="">
-            Select Subject
-          </option>
-
-          ${subjects.map(s=>`
-
-            <option
-            value="${s.id}"
-            ${String(s.id)===
-              String(section.subject_id)
-              ?"selected":""}>
-
-              ${escapeHtml(
-                s.name ||
-                s.title ||
-                "Subject "+s.id
-              )}
-
-            </option>
-
-          `).join("")}
-
-        </select>
-
-
-        <label>Section Time (minutes)</label>
-
-        <input
-        type="number"
-        min="1"
-        value="${section.duration_minutes}"
-        onchange="changeSectionTime(${index},this.value)">
-
       `;
 
+    }).join("")}
 
-      box.appendChild(div);
+  `;
 
-    }
-  );
+  document.querySelectorAll("[data-remove-assigned]")
+    .forEach(button=>{
 
+      button.addEventListener("click",()=>{
 
-  updateTotalTime();
-  updateSectionAssignment();
-
-}
-
-
-/* =========================================
-   SECTION CHANGES
-========================================= */
-
-function changeSectionSubject(
-  index,
-  value
-){
-
-  sections[index].subject_id=
-    value;
-
-  updateSectionAssignment();
-
-}
-
-
-function changeSectionTime(
-  index,
-  value
-){
-
-  sections[index].duration_minutes=
-    Number(value)||1;
-
-  updateTotalTime();
-
-}
-
-
-/* =========================================
-   MOVE
-========================================= */
-
-function moveSection(
-  index,
-  direction
-){
-
-  const newIndex=
-    index+direction;
-
-
-  if(
-    newIndex<0 ||
-    newIndex>=sections.length
-  ) return;
-
-
-  [
-    sections[index],
-    sections[newIndex]
-  ]=[
-    sections[newIndex],
-    sections[index]
-  ];
-
-
-  renderSections();
-
-}
-
-
-/* =========================================
-   REMOVE
-========================================= */
-
-function removeSection(index){
-
-  sections.splice(index,1);
-
-  renderSections();
-
-}
-
-
-/* =========================================
-   TOTAL TIME
-========================================= */
-
-function updateTotalTime(){
-
-  const total=
-    sections.reduce(
-      (sum,s)=>
-        sum+
-        (Number(
-          s.duration_minutes
-        )||0),
-      0
-    );
-
-
-  document
-    .getElementById(
-      "totalSectionTime"
-    )
-    .textContent=
-      "Total Section Time: "+
-      total+
-      " minutes";
-
-
-  if(
-    document
-      .getElementById(
-        "subjectTiming"
-      ).checked
-  ){
-
-    document
-      .getElementById(
-        "duration"
-      ).value=
-        total||"";
-
-  }
-
-}
-
-
-/* =========================================
-   SECTION ASSIGNMENT
-========================================= */
-
-function updateSectionAssignment(){
-
-  const box=
-    document.getElementById(
-      "sectionAssignmentBox"
-    );
-
-  const select=
-    document.getElementById(
-      "assignmentSection"
-    );
-
-
-  const type=
-    document.getElementById(
-      "testType"
-    ).value;
-
-
-  if(
-    type!=="FULL" ||
-    !document
-      .getElementById(
-        "subjectTiming"
-      ).checked
-  ){
-
-    box.classList.add("hidden");
-
-    return;
-
-  }
-
-
-  box.classList.remove("hidden");
-
-
-  select.innerHTML=
-    '<option value="">Select Section</option>';
-
-
-  sections.forEach(
-    (section,index)=>{
-
-      if(!section.subject_id)
-        return;
-
-
-      const subject=
-        subjects.find(
-          s=>String(s.id)===
-             String(section.subject_id)
+        removeAssignedQuestion(
+          button.dataset.removeAssigned
         );
 
-
-      const option=
-        document.createElement(
-          "option"
-        );
-
-      option.value=
-        section._savedId ||
-        "new-"+index;
-
-      option.textContent=
-        "Section "+
-        (index+1)+
-        " • "+
-        (
-          subject?.name ||
-          subject?.title ||
-          "Subject"
-        )+
-        " • "+
-        section.duration_minutes+
-        " min";
-
-
-      select.appendChild(option);
-
-    }
-  );
-
-}
-
-
-/* =========================================
-   SAVE TEST
-========================================= */
-
-async function saveTest(){
-
-  const editId=
-    document.getElementById(
-      "editId"
-    ).value;
-
-
-  const title=
-    document.getElementById(
-      "title"
-    ).value.trim();
-
-
-  const description=
-    document.getElementById(
-      "description"
-    ).value.trim();
-
-
-  const examId=
-    document.getElementById(
-      "exam"
-    ).value;
-
-
-  const type=
-    document.getElementById(
-      "testType"
-    ).value;
-
-
-  const duration=
-    Number(
-      document.getElementById(
-        "duration"
-      ).value
-    );
-
-
-  const subjectId=
-    document.getElementById(
-      "subject"
-    ).value;
-
-
-  const chapterId=
-    document.getElementById(
-      "chapter"
-    ).value;
-
-
-  const totalQuestions=
-    Number(
-      document.getElementById(
-        "totalQuestions"
-      ).value
-    );
-
-
-  const marks=
-    Number(
-      document.getElementById(
-        "marks"
-      ).value
-    );
-
-
-  const negative=
-    Number(
-      document.getElementById(
-        "negative"
-      ).value
-    );
-
-
-  const timingEnabled=
-    document.getElementById(
-      "subjectTiming"
-    ).checked;
-
-
-  if(!title){
-
-    showMessage(
-      "Enter test title."
-    );
-
-    return;
-
-  }
-
-
-  if(!examId){
-
-    showMessage(
-      "Select an exam."
-    );
-
-    return;
-
-  }
-
-
-  if(!duration || duration<=0){
-
-    showMessage(
-      "Enter valid duration."
-    );
-
-    return;
-
-  }
-
-
-  if(
-    !totalQuestions ||
-    totalQuestions<=0
-  ){
-
-    showMessage(
-      "Enter total questions."
-    );
-
-    return;
-
-  }
-
-
-  if(
-    type!=="FULL" &&
-    !subjectId
-  ){
-
-    showMessage(
-      "Select a subject."
-    );
-
-    return;
-
-  }
-
-
-  if(
-    type==="CHAPTER_WISE" &&
-    !chapterId
-  ){
-
-    showMessage(
-      "Select a chapter."
-    );
-
-    return;
-
-  }
-
-
-  if(
-    type==="FULL" &&
-    timingEnabled
-  ){
-
-    if(!sections.length){
-
-      showMessage(
-        "Add at least one section."
-      );
-
-      return;
-
-    }
-
-
-    if(
-      sections.some(
-        s=>
-          !s.subject_id ||
-          Number(s.duration_minutes)<=0
-      )
-    ){
-
-      showMessage(
-        "Select subject and duration for every section."
-      );
-
-      return;
-
-    }
-
-
-    const ids=
-      sections.map(
-        s=>String(s.subject_id)
-      );
-
-
-    if(
-      new Set(ids).size!==ids.length
-    ){
-
-      showMessage(
-        "A subject cannot be repeated in the same FULL test."
-      );
-
-      return;
-
-    }
-
-  }
-
-
-  const payload={
-
-    exam_id:Number(examId),
-
-    folder_id:(document.getElementById("folderId").value || null),
-
-    title:title,
-
-    test_type:type,
-
-    subject_id:
-      type==="FULL"
-      ?null
-      :(subjectId||null),
-
-    chapter_id:
-      type==="CHAPTER_WISE"
-      ?(chapterId||null)
-      :null,
-
-    duration_minutes:duration,
-
-    total_questions:totalQuestions,
-
-    is_active:true,
-
-    description:
-      description||null,
-
-    marks_per_question:marks,
-
-    negative_marks:negative,
-
-    subject_wise_timing:
-      type==="FULL"
-      ?timingEnabled
-      :false
-
-  };
-
-
-  const oldTestId=
-    editId||null;
-
-
-  let result;
-
-
-  if(editId){
-
-    result=
-      await db
-        .from("mock_tests")
-        .update(payload)
-        .eq("id",editId);
-
-  }else{
-
-    result=
-      await db
-        .from("mock_tests")
-        .insert(payload);
-
-  }
-
-
-  if(result.error){
-
-    showMessage(
-      result.error.message
-    );
-
-    return;
-
-  }
-
-
-  let savedTest;
-
-  if(editId){
-
-    const refreshed=
-      await db
-        .from("mock_tests")
-        .select("*")
-        .eq("id",editId)
-        .single();
-
-    if(refreshed.error){
-
-      showMessage(
-        "Test updated, but refresh failed: "+
-        refreshed.error.message
-      );
-
-      return;
-
-    }
-
-    savedTest=refreshed.data;
-
-  }else{
-
-    const created=
-      await db
-        .from("mock_tests")
-        .select("*")
-        .eq("title",title)
-        .eq("exam_id",Number(examId))
-        .order("created_at",{ascending:false})
-        .limit(1)
-        .single();
-
-    if(created.error){
-
-      showMessage(
-        "Test created, but could not reload it: "+
-        created.error.message
-      );
-
-      return;
-
-    }
-
-    savedTest=created.data;
-
-  }
-
-
-  /* =======================================
-     SAVE SECTIONS
-  ======================================= */
-
-  if(type==="FULL"){
-
-    /*
-      Preserve existing question assignments
-      before replacing section records.
-    */
-
-    let oldAssignments=[];
-
-
-    if(editId){
-
-      const oldResult=
-        await db
-          .from("mock_test_questions")
-          .select(`
-            question_id,
-            section_id,
-            questions(subject_id)
-          `)
-          .eq(
-            "mock_test_id",
-            savedTest.id
-          );
-
-
-      if(!oldResult.error){
-
-        oldAssignments=
-          oldResult.data||[];
-
-      }
-
-    }
-
-
-    await db
-      .from("mock_test_sections")
-      .delete()
-      .eq(
-        "mock_test_id",
-        savedTest.id
-      );
-
-
-    if(
-      timingEnabled &&
-      sections.length
-    ){
-
-      const rows=
-        sections.map(
-          (s,index)=>({
-
-            mock_test_id:
-              savedTest.id,
-
-            subject_id:
-              Number(s.subject_id),
-
-            section_order:
-              index+1,
-
-            duration_minutes:
-              Number(
-                s.duration_minutes
-              )
-
-          })
-        );
-
-
-      const sectionResult=
-        await db
-          .from("mock_test_sections")
-          .insert(rows)
-          .select();
-
-
-      if(sectionResult.error){
-
-        showMessage(
-          sectionResult.error.message
-        );
-
-        return;
-
-      }
-
-
-      sections=
-        sectionResult.data.map(
-          s=>({
-
-            subject_id:
-              s.subject_id,
-
-            duration_minutes:
-              s.duration_minutes,
-
-            _savedId:
-              s.id
-
-          })
-        );
-
-
-      /*
-        Reconnect old questions to their
-        new section using subject.
-      */
-
-      for(
-        const assignment of oldAssignments
-      ){
-
-        const subjectId=
-          assignment.questions?.subject_id;
-
-
-        const newSection=
-          sections.find(
-            s=>
-              String(s.subject_id)===
-              String(subjectId)
-          );
-
-
-        if(
-          newSection &&
-          assignment.question_id
-        ){
-
-          await db
-            .from(
-              "mock_test_questions"
-            )
-            .update({
-              section_id:
-                newSection._savedId
-            })
-            .eq(
-              "mock_test_id",
-              savedTest.id
-            )
-            .eq(
-              "question_id",
-              assignment.question_id
-            );
-
-        }
-
-      }
-
-    }
-
-  }
-
-
-  document
-    .getElementById(
-      "editId"
-    ).value=
-      savedTest.id;
-
-
-  showMessage(
-    editId
-      ?"Test updated successfully."
-      :"Test created successfully."
-  );
-
-
-  await loadTests();
-
-
-  await openQuestionManager(
-    savedTest.id
-  );
-
-}
-
-
-/* =========================================
-   OPEN QUESTION MANAGER
-========================================= */
-
-async function openQuestionManager(
-  testId
-){
-
-  const test=
-    tests.find(
-      t=>String(t.id)===
-         String(testId)
-    ) ||
-    (
-      String(
-        document
-          .getElementById("editId")
-          .value
-      )===String(testId)
-      ?null
-      :null
-    );
-
-
-  /*
-    If newly created test is not yet in
-    the old array, load it directly.
-  */
-
-  let currentTest=test;
-
-
-  if(!currentTest){
-
-    const result=
-      await db
-        .from("mock_tests")
-        .select("*")
-        .eq("id",testId)
-        .single();
-
-
-    if(result.error){
-
-      showMessage(
-        result.error.message
-      );
-
-      return;
-
-    }
-
-
-    currentTest=result.data;
-
-  }
-
-
-  document
-    .getElementById(
-      "questionManager"
-    )
-    .classList
-    .remove("hidden");
-
-
-  await loadBankQuestions(
-    currentTest
-  );
-
-
-  await loadAssignedQuestions(
-    testId
-  );
-
-
-  updateSectionAssignment();
-
-}
-
-
-/* =========================================
-   LOAD QUESTION BANK
-========================================= */
-
-async function loadBankQuestions(
-  test
-){
-
-  let query=
-    db
-      .from("questions")
-      .select(`
-        id,
-        subject_id,
-        chapter_id,
-        question_text,
-        marks,
-        negative_marks,
-        subjects(name)
-      `)
-      .order(
-        "created_at",
-        {ascending:true}
-      );
-
-
-  /*
-    For SECTIONAL / SUBJECT_WISE,
-    automatically focus the selected subject.
-  */
-
-  if(
-    test.test_type==="SECTIONAL" ||
-    test.test_type==="SUBJECT_WISE"
-  ){
-
-    if(test.subject_id){
-
-      query=
-        query.eq(
-          "subject_id",
-          test.subject_id
-        );
-
-    }
-
-  }
-
-
-  if(
-    test.test_type==="CHAPTER_WISE"
-  ){
-
-    if(test.chapter_id){
-
-      query=
-        query.eq(
-          "chapter_id",
-          test.chapter_id
-        );
-
-    }
-
-  }
-
-
-  const result=
-    await query;
-
-
-  if(result.error){
-
-    console.error(
-      result.error
-    );
-
-    showMessage(
-      result.error.message
-    );
-
-    return;
-
-  }
-
-
-  bankQuestions=
-    result.data||[];
-
-
-  selectedQuestionIds=
-    new Set();
-
-
-  renderBank();
-
-}
-
-
-/* =========================================
-   RENDER BANK
-========================================= */
-
-function renderBank(){
-
-  const list=
-    document.getElementById(
-      "bankList"
-    );
-
-
-  const subjectId=
-    document.getElementById(
-      "bankSubject"
-    ).value;
-
-
-  const chapterId=
-    document.getElementById(
-      "bankChapter"
-    ).value;
-
-
-  const search=
-    document.getElementById(
-      "bankSearch"
-    ).value
-    .trim()
-    .toLowerCase();
-
-
-  const filtered=
-    bankQuestions.filter(q=>{
-
-      if(
-        subjectId &&
-        String(q.subject_id)!==
-        String(subjectId)
-      ){
-
-        return false;
-
-      }
-
-
-      if(
-        chapterId &&
-        String(q.chapter_id)!==
-        String(chapterId)
-      ){
-
-        return false;
-
-      }
-
-
-      if(
-        search &&
-        !String(
-          q.question_text||""
-        )
-        .toLowerCase()
-        .includes(search)
-      ){
-
-        return false;
-
-      }
-
-
-      return true;
+      });
 
     });
 
+}
 
-  document
-    .getElementById(
-      "bankCount"
-    )
-    .textContent=
-      filtered.length+
-      " available";
+/* =========================
+   REMOVE ASSIGNED
+========================= */
 
+async function removeAssignedQuestion(id){
 
-  if(!filtered.length){
-
-    list.innerHTML=
-      '<div class="message">'+
-      'No questions available in the Question Bank.'+
-      '</div>';
-
-    updateSelectedCount();
-
+  if(!confirm("Remove this question from the section?")){
     return;
+  }
+
+  try{
+
+    const response = await db
+      .from("mock_test_questions")
+      .delete()
+      .eq("id",id);
+
+    if(response.error) throw response.error;
+
+    showToast("Question removed");
+
+    await loadAssignedQuestions();
+
+  }catch(error){
+
+    console.error(error);
+
+    showToast("Unable to remove question");
 
   }
 
+}
 
-  list.innerHTML="";
+/* =========================
+   OPEN QUESTION BANK
+========================= */
 
+async function openQuestionBank(){
 
-  filtered.forEach(q=>{
+  bankPanel.style.display = "block";
+  questionPanel.style.display = "none";
 
-    const row=
-      document.createElement(
-        "label"
-      );
+  selectedBankQuestionIds.clear();
 
-    row.className=
-      "bank-question";
+  await populateBankFilters();
+  await loadBankQuestions();
 
-
-    const checkbox=
-      document.createElement(
-        "input"
-      );
-
-    checkbox.type="checkbox";
-
-    checkbox.checked=
-      selectedQuestionIds.has(
-        String(q.id)
-      );
-
-
-    checkbox.onchange=()=>{
-
-      const id=
-        String(q.id);
-
-
-      if(
-        checkbox.checked
-      ){
-
-        selectedQuestionIds.add(id);
-
-      }else{
-
-        selectedQuestionIds.delete(id);
-
-      }
-
-
-      updateSelectedCount();
-
-    };
-
-
-    const content=
-      document.createElement(
-        "div"
-      );
-
-
-    content.className=
-      "bank-question-text";
-
-
-    content.textContent=
-      q.question_text||"";
-
-
-    const meta=
-      document.createElement(
-        "div"
-      );
-
-
-    meta.className=
-      "bank-meta";
-
-
-    const subject=
-      q.subjects?.name ||
-      getSubjectName(
-        q.subject_id
-      );
-
-
-    meta.textContent=
-      subject+
-      " • Marks: "+
-      (q.marks??0)+
-      " • Negative: "+
-      (q.negative_marks??0);
-
-
-    content.appendChild(meta);
-
-    row.appendChild(checkbox);
-
-    row.appendChild(content);
-
-    list.appendChild(row);
-
+  bankPanel.scrollIntoView({
+    behavior:"smooth",
+    block:"start"
   });
 
+}
 
-  updateSelectedCount();
+/* =========================
+   BANK FILTERS
+========================= */
+
+async function populateBankFilters(){
+
+  const subjectSelect =
+    document.getElementById("amBankSubject");
+
+  const chapterSelect =
+    document.getElementById("amBankChapter");
+
+  const createSubject =
+    document.getElementById("amCreateSubject");
+
+  const createChapter =
+    document.getElementById("amCreateChapter");
+
+  const subjectOptions = subjects.map(subject=>`
+
+    <option value="${subject.id}">
+      ${escapeHTML(
+        subject.name ||
+        subject.title ||
+        subject.subject_name ||
+        "Subject"
+      )}
+    </option>
+
+  `).join("");
+
+  subjectSelect.innerHTML =
+    `<option value="">All Subjects</option>` +
+    subjectOptions;
+
+  createSubject.innerHTML = subjectOptions;
+
+  chapterSelect.innerHTML =
+    `<option value="">All Chapters</option>`;
+
+  createChapter.innerHTML =
+    `<option value="">Select Chapter</option>`;
+
+  renderChaptersForSubject(
+    subjectSelect.value,
+    chapterSelect
+  );
+
+  renderChaptersForSubject(
+    createSubject.value,
+    createChapter
+  );
 
 }
 
+/* =========================
+   CHAPTER FILTER
+========================= */
 
-/* =========================================
-   SELECTED COUNT
-========================================= */
+function renderChaptersForSubject(subjectId,selectElement){
 
-function updateSelectedCount(){
+  let list = chapters;
 
-  document
-    .getElementById(
-      "selectedCount"
-    )
-    .textContent=
-      selectedQuestionIds.size;
+  if(subjectId){
+
+    list = chapters.filter(chapter=>
+      String(
+        chapter.subject_id ||
+        chapter.subject
+      ) === String(subjectId)
+    );
+
+  }
+
+  const firstOption =
+    selectElement.id === "amBankChapter"
+    ? `<option value="">All Chapters</option>`
+    : `<option value="">Select Chapter</option>`;
+
+  selectElement.innerHTML =
+    firstOption +
+    list.map(chapter=>`
+
+      <option value="${chapter.id}">
+        ${escapeHTML(
+          chapter.name ||
+          chapter.title ||
+          chapter.chapter_name ||
+          "Chapter"
+        )}
+      </option>
+
+    `).join("");
 
 }
 
+/* =========================
+   LOAD BANK QUESTIONS
+========================= */
 
-/* =========================================
-   ASSIGN SELECTED
-========================================= */
+async function loadBankQuestions(){
 
-async function assignSelectedQuestions(){
+  bankList.innerHTML = `
+    <div class="am-loading">
+      Loading question bank...
+    </div>
+  `;
 
-  const testId=
-    document
-      .getElementById(
-        "editId"
-      ).value;
+  try{
 
+    let query = db
+      .from("questions")
+      .select("*")
+      .order("id",{ascending:false})
+      .limit(500);
 
-  if(!testId){
+    const subjectId =
+      document.getElementById("amBankSubject").value;
 
-    showMessage(
-      "Save the mock test first."
-    );
+    const chapterId =
+      document.getElementById("amBankChapter").value;
 
-    return;
+    const search =
+      document.getElementById("amBankSearch").value.trim();
 
-  }
+    if(subjectId){
 
-
-  if(!selectedQuestionIds.size){
-
-    showMessage(
-      "Select at least one question."
-    );
-
-    return;
-
-  }
-
-
-  const type=
-    document
-      .getElementById(
-        "testType"
-      ).value;
-
-
-  let sectionId=null;
-
-
-  if(
-    type==="FULL" &&
-    document
-      .getElementById(
-        "subjectTiming"
-      ).checked
-  ){
-
-    const selected=
-      document
-        .getElementById(
-          "assignmentSection"
-        ).value;
-
-
-    if(!selected){
-
-      showMessage(
-        "Select the section for these questions."
+      query = query.eq(
+        "subject_id",
+        subjectId
       );
-
-      return;
 
     }
 
+    if(chapterId){
 
-    /*
-      Existing section ID or new section
-      currently displayed.
-    */
-
-    sectionId=
-      selected.startsWith("new-")
-      ?null
-      :Number(selected);
-
-  }
-
-
-  /*
-    Find the highest current order.
-  */
-
-  const existing=
-    await db
-      .from("mock_test_questions")
-      .select(
-        "question_id,question_order"
-      )
-      .eq(
-        "mock_test_id",
-        testId
+      query = query.eq(
+        "chapter_id",
+        chapterId
       );
-
-
-  if(existing.error){
-
-    showMessage(
-      existing.error.message
-    );
-
-    return;
-
-  }
-
-
-  const existingIds=
-    new Set(
-      (existing.data||[])
-      .map(
-        x=>String(
-          x.question_id
-        )
-      )
-    );
-
-
-  let nextOrder=
-    (
-      existing.data||[]
-    )
-    .reduce(
-      (max,x)=>
-        Math.max(
-          max,
-          Number(
-            x.question_order
-          )||0
-        ),
-      0
-    )+1;
-
-
-  const rows=[];
-
-
-  for(
-    const id of selectedQuestionIds
-  ){
-
-    if(
-      existingIds.has(
-        String(id)
-      )
-    ){
-
-      continue;
 
     }
 
+    if(search){
 
-    rows.push({
-
-      mock_test_id:
-        Number(testId),
-
-      question_id:
-        Number(id),
-
-      section_id:
-        sectionId,
-
-      question_order:
-        nextOrder++
-
-    });
-
-  }
-
-
-  if(!rows.length){
-
-    showMessage(
-      "All selected questions are already in this test."
-    );
-
-    return;
-
-  }
-
-
-  const result=
-    await db
-      .from(
-        "mock_test_questions"
-      )
-      .insert(rows);
-
-
-  if(result.error){
-
-    showMessage(
-      result.error.message
-    );
-
-    return;
-
-  }
-
-
-  selectedQuestionIds=
-    new Set();
-
-
-  showMessage(
-    rows.length+
-    " question(s) added to the test."
-  );
-
-
-  await loadAssignedQuestions(
-    testId
-  );
-
-
-  renderBank();
-
-}
-
-
-/* =========================================
-   ASSIGNED QUESTIONS
-========================================= */
-
-async function loadAssignedQuestions(
-  testId
-){
-
-  const result=
-    await db
-      .from(
-        "mock_test_questions"
-      )
-      .select(`
-        id,
-        question_id,
-        question_order,
-        section_id,
-        questions(
-          question_text,
-          subject_id,
-          chapter_id
-        ),
-        mock_test_sections(
-          section_order,
-          subject_id,
-          duration_minutes
-        )
-      `)
-      .eq(
-        "mock_test_id",
-        testId
-      )
-      .order(
-        "question_order"
+      query = query.ilike(
+        "question_text",
+        `%${search}%`
       );
-
-
-  if(result.error){
-
-    console.error(
-      result.error
-    );
-
-    return;
-
-  }
-
-
-  assignedQuestions=
-    result.data||[];
-
-
-  renderAssignedQuestions();
-
-}
-
-
-/* =========================================
-   RENDER ASSIGNED
-========================================= */
-
-function renderAssignedQuestions(){
-
-  const box=
-    document.getElementById(
-      "assignedList"
-    );
-
-
-  if(!assignedQuestions.length){
-
-    box.innerHTML=
-      '<div class="message">'+
-      'No questions assigned yet.'+
-      '</div>';
-
-    return;
-
-  }
-
-
-  box.innerHTML="";
-
-
-  assignedQuestions.forEach(
-    (item,index)=>{
-
-      const row=
-        document.createElement(
-          "div"
-        );
-
-      row.className=
-        "assigned-item";
-
-
-      const left=
-        document.createElement(
-          "div"
-        );
-
-
-      left.style.flex="1";
-
-
-      left.textContent=
-        (index+1)+
-        ". "+
-        (
-          item.questions?.question_text||
-          "Question"
-        );
-
-
-      const right=
-        document.createElement(
-          "div"
-        );
-
-
-      const remove=
-        document.createElement(
-          "button"
-        );
-
-
-      remove.className=
-        "small-btn remove-btn";
-
-      remove.textContent=
-        "Remove";
-
-
-      remove.onclick=
-        ()=>removeAssigned(
-          item.id
-        );
-
-
-      right.appendChild(
-        remove
-      );
-
-
-      row.appendChild(left);
-      row.appendChild(right);
-
-      box.appendChild(row);
 
     }
-  );
+
+    const response = await query;
+
+    if(response.error) throw response.error;
+
+    bankQuestions = response.data || [];
+
+    renderBankQuestions();
+
+  }catch(error){
+
+    console.error(error);
+
+    bankList.innerHTML = `
+      <div class="am-error">
+        Question bank could not be loaded.
+      </div>
+    `;
+
+  }
 
 }
 
+/* =========================
+   RENDER BANK QUESTIONS
+========================= */
 
-/* =========================================
-   REMOVE ASSIGNED
-========================================= */
+function renderBankQuestions(){
 
-async function removeAssigned(id){
+  if(!bankQuestions.length){
 
-  if(
-    !confirm(
-      "Remove this question from the test?"
-    )
-  ){
-
-    return;
-
-  }
-
-
-  const result=
-    await db
-      .from(
-        "mock_test_questions"
-      )
-      .delete()
-      .eq(
-        "id",
-        id
-      );
-
-
-  if(result.error){
-
-    showMessage(
-      result.error.message
-    );
-
-    return;
-
-  }
-
-
-  await loadAssignedQuestions(
-    document
-      .getElementById(
-        "editId"
-      ).value
-  );
-
-}
-
-
-/* =========================================
-   LOAD TESTS
-========================================= */
-
-async function loadTests(){
-
-  const result=
-    await db
-      .from("mock_tests")
-      .select(`
-        *,
-        exams(*),
-        subjects(*)
-      `)
-      .order(
-        "created_at",
-        {ascending:false}
-      );
-
-
-  if(result.error){
-
-    document
-      .getElementById(
-        "tests"
-      )
-      .textContent=
-        result.error.message;
-
-    return;
-
-  }
-
-
-  tests=
-    result.data||[];
-
-
-  renderTests();
-
-}
-
-
-/* =========================================
-   RENDER TESTS
-========================================= */
-
-function renderTests(){
-
-  const box=
-    document.getElementById(
-      "tests"
-    );
-
-
-  if(!tests.length){
-
-    box.innerHTML=
-      '<div class="message">'+
-      'No mock tests created yet.'+
-      '</div>';
-
-    return;
-
-  }
-
-
-  box.innerHTML="";
-
-
-  tests.forEach(test=>{
-
-    const examName=
-      test.exams?.name||
-      test.exams?.title||
-      test.exams?.exam_name||
-      "Exam";
-
-
-    const subjectName=
-      test.subjects?.name||
-      test.subjects?.title||
-      "";
-
-
-    const card=
-      document.createElement(
-        "div"
-      );
-
-    card.className=
-      "test-card";
-
-
-    card.innerHTML=`
-
-      <div class="test-title">
-        ${escapeHtml(test.title)}
+    bankList.innerHTML = `
+      <div class="am-empty">
+        No questions found.
       </div>
+    `;
 
-      <span class="status ${
-        test.is_active
-        ?"active-status"
-        :"inactive-status"
-      }">
+    return;
 
-        ${
-          test.is_active
-          ?"ACTIVE"
-          :"INACTIVE"
-        }
+  }
 
-      </span>
+  bankList.innerHTML = bankQuestions.map((question,index)=>{
 
+    const id = question.id;
 
-      <div class="test-info">
+    const text =
+      question.question_text ||
+      question.question ||
+      question.text ||
+      "Question";
 
-        Exam:
-        ${escapeHtml(examName)}
+    const checked =
+      selectedBankQuestionIds.has(String(id))
+      ? "checked"
+      : "";
 
-        <br>
+    return `
 
-        Type:
-        ${escapeHtml(test.test_type)}
+      <div class="am-question-card">
 
-        ${
-          subjectName
-          ?
-          "<br>Subject: "+
-          escapeHtml(subjectName)
-          :""
-        }
+        <div class="am-question-text">
+          ${index+1}. ${escapeHTML(text)}
+        </div>
 
-        <br>
+        <div class="am-question-options">
 
-        Duration:
-        ${test.duration_minutes} min
+          ${question.option_a
+            ? "A. " + escapeHTML(question.option_a) + "<br>"
+            : ""}
 
-        <br>
+          ${question.option_b
+            ? "B. " + escapeHTML(question.option_b) + "<br>"
+            : ""}
 
-        Questions:
-        ${test.total_questions}
+          ${question.option_c
+            ? "C. " + escapeHTML(question.option_c) + "<br>"
+            : ""}
 
-        <br>
+          ${question.option_d
+            ? "D. " + escapeHTML(question.option_d)
+            : ""}
 
-        Marks:
-        ${test.marks_per_question??2}
+        </div>
 
-        &nbsp; | &nbsp;
+        <div class="am-question-bottom">
 
-        Negative:
-        ${test.negative_marks??0}
+          <label class="am-card-meta">
 
-        ${
-          test.test_type==="FULL"
-          ?
-          "<br>Subject-wise Timing: "+
-          (
-            test.subject_wise_timing
-            ?"ON"
-            :"OFF"
-          )
-          :""
-        }
+            <input
+              class="am-check"
+              type="checkbox"
+              data-bank-check="${id}"
+              ${checked}>
 
-      </div>
+            Select Question
 
+          </label>
 
-      <div class="test-actions">
-
-        <button
-        class="secondary-btn"
-        onclick="editTest('${test.id}')">
-
-          Edit
-
-        </button>
-
-
-        <button
-        class="secondary-btn"
-        onclick="openQuestionManager('${test.id}')">
-
-          Questions
-
-        </button>
-
-      </div>
-
-
-      <div class="test-actions">
-
-        <button
-        class="secondary-btn"
-        onclick="toggleActive('${test.id}',${test.is_active})">
-
-          ${
-            test.is_active
-            ?"Deactivate"
-            :"Activate"
-          }
-
-        </button>
-
-
-        <button
-        class="danger-btn"
-        onclick="deleteTest('${test.id}')">
-
-          Delete
-
-        </button>
+        </div>
 
       </div>
 
     `;
 
+  }).join("");
 
-    box.appendChild(card);
+  document.querySelectorAll("[data-bank-check]")
+    .forEach(input=>{
 
-  });
+      input.addEventListener("change",()=>{
+
+        const id = String(input.dataset.bankCheck);
+
+        if(input.checked){
+          selectedBankQuestionIds.add(id);
+        }else{
+          selectedBankQuestionIds.delete(id);
+        }
+
+      });
+
+    });
 
 }
 
+/* =========================
+   ASSIGN BANK QUESTIONS
+========================= */
 
-/* =========================================
-   EDIT TEST
-========================================= */
+async function assignSelectedQuestions(){
 
-async function editTest(id){
+  if(!selectedTest || !selectedSection){
+    showToast("Select a test section first");
+    return;
+  }
 
-  const test=
-    tests.find(
-      t=>String(t.id)===
-         String(id)
+  const ids = [...selectedBankQuestionIds];
+
+  if(!ids.length){
+    showToast("Select at least one question");
+    return;
+  }
+
+  try{
+
+    const rows = ids.map(questionId=>{
+
+      const row = {
+        mock_test_id:selectedTest.id,
+        question_id:questionId
+      };
+
+      if(selectedSection.id){
+        row.section_id = selectedSection.id;
+      }
+
+      return row;
+
+    });
+
+    const response = await db
+      .from("mock_test_questions")
+      .insert(rows);
+
+    if(response.error) throw response.error;
+
+    showToast(
+      `${ids.length} question(s) assigned successfully`
     );
 
+    selectedBankQuestionIds.clear();
 
-  if(!test) return;
+    await loadAssignedQuestions();
 
+    bankPanel.style.display = "none";
+    questionPanel.style.display = "block";
 
-  document
-    .getElementById("editId")
-    .value=test.id;
+  }catch(error){
 
+    console.error(error);
 
-  document
-    .getElementById("title")
-    .value=test.title||"";
+    showToast(
+      error.message ||
+      "Questions could not be assigned"
+    );
 
+  }
 
-  document
-    .getElementById("description")
-    .value=test.description||"";
+}
 
+/* =========================
+   CREATE QUESTION MODAL
+========================= */
 
-  document
-    .getElementById("exam")
-    .value=test.exam_id||"";
-
-  document
-    .getElementById("folderId")
-    .value=test.folder_id||"";
-
+function openCreateQuestionModal(){
 
   document
-    .getElementById("testType")
-    .value=test.test_type||"FULL";
+    .getElementById("amQuestionModal")
+    .classList.add("open");
 
+  populateBankFilters();
 
-  document
-    .getElementById("duration")
-    .value=test.duration_minutes||60;
+}
 
-
-  document
-    .getElementById("totalQuestions")
-    .value=test.total_questions||25;
-
+function closeModal(id){
 
   document
-    .getElementById("marks")
-    .value=test.marks_per_question??2;
+    .getElementById(id)
+    .classList.remove("open");
 
+}
 
-  document
-    .getElementById("negative")
-    .value=test.negative_marks??0;
+async function saveCreatedQuestion(){
 
+  const subjectId =
+    document.getElementById("amCreateSubject").value;
 
-  document
-    .getElementById("subject")
-    .value=test.subject_id||"";
+  const chapterId =
+    document.getElementById("amCreateChapter").value;
 
+  const questionText =
+    document.getElementById("amCreateQuestion").value.trim();
 
-  fillChapters();
+  const optionA =
+    document.getElementById("amOptionA").value.trim();
 
-  handleTestType();
+  const optionB =
+    document.getElementById("amOptionB").value.trim();
 
+  const optionC =
+    document.getElementById("amOptionC").value.trim();
 
-  sections=[];
+  const optionD =
+    document.getElementById("amOptionD").value.trim();
 
+  const correctOption =
+    document.getElementById("amCorrectOption").value;
 
-  if(
-    test.test_type==="FULL" &&
-    test.subject_wise_timing
-  ){
+  const explanation =
+    document.getElementById("amExplanation").value.trim();
 
-    const result=
-      await db
-        .from(
-          "mock_test_sections"
-        )
-        .select("*")
-        .eq(
-          "mock_test_id",
-          test.id
-        )
-        .order(
-          "section_order"
-        );
+  if(!subjectId){
+    showToast("Select subject");
+    return;
+  }
 
+  if(!questionText){
+    showToast("Enter question");
+    return;
+  }
 
-    if(!result.error){
+  if(!optionA || !optionB || !optionC || !optionD){
+    showToast("Enter all four options");
+    return;
+  }
 
-      sections=
-        (result.data||[])
-        .map(s=>({
+  try{
 
-          subject_id:
-            s.subject_id,
+    const questionPayload = {
+      subject_id:subjectId,
+      chapter_id:chapterId || null,
+      question_text:questionText,
+      option_a:optionA,
+      option_b:optionB,
+      option_c:optionC,
+      option_d:optionD,
+      correct_option:correctOption,
+      explanation:explanation || null
+    };
 
-          duration_minutes:
-            s.duration_minutes,
+    const response = await db
+      .from("questions")
+      .insert(questionPayload)
+      .select()
+      .single();
 
-          _savedId:
-            s.id
+    if(response.error) throw response.error;
 
-        }));
+    const newQuestion = response.data;
 
+    const assignment = {
+      mock_test_id:selectedTest.id,
+      question_id:newQuestion.id
+    };
+
+    if(selectedSection && selectedSection.id){
+      assignment.section_id = selectedSection.id;
     }
 
+    const assignResponse = await db
+      .from("mock_test_questions")
+      .insert(assignment);
 
-    document
-      .getElementById(
-        "subjectTiming"
-      ).checked=true;
+    if(assignResponse.error)
+      throw assignResponse.error;
 
-  }else{
+    showToast("Question created and assigned");
 
-    document
-      .getElementById(
-        "subjectTiming"
-      ).checked=false;
+    clearQuestionForm();
+
+    closeModal("amQuestionModal");
+
+    await loadAssignedQuestions();
+
+  }catch(error){
+
+    console.error(error);
+
+    showToast(
+      error.message ||
+      "Question could not be created"
+    );
 
   }
 
+}
 
-  toggleSubjectTiming();
+/* =========================
+   CLEAR FORM
+========================= */
 
+function clearQuestionForm(){
 
-  document
-    .getElementById(
-      "saveBtn"
-    )
-    .textContent=
-      "Update Test";
+  document.getElementById("amCreateQuestion").value = "";
+  document.getElementById("amOptionA").value = "";
+  document.getElementById("amOptionB").value = "";
+  document.getElementById("amOptionC").value = "";
+  document.getElementById("amOptionD").value = "";
+  document.getElementById("amExplanation").value = "";
 
+  document.getElementById("amCorrectOption").value = "A";
 
-  document
-    .getElementById(
-      "cancelBtn"
-    )
-    .classList
-    .remove("hidden");
+}
 
+/* =========================
+   EVENT LISTENERS
+========================= */
 
-  await openQuestionManager(
-    test.id
-  );
+document.querySelectorAll("[data-board]")
+  .forEach(button=>{
 
+    button.addEventListener("click",()=>{
 
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
+      board = button.dataset.board;
+
+      document.querySelectorAll("[data-board]")
+        .forEach(item=>item.classList.remove("active"));
+
+      button.classList.add("active");
+
+      selectedExam = null;
+      workspace.classList.remove("visible");
+
+      renderExams();
+
+    });
+
   });
 
-}
+document
+  .getElementById("amBackBranchBtn")
+  .addEventListener("click",()=>{
 
+    resetAfterExam();
 
-/* =========================================
-   UPDATE BANK FOR TEST
-========================================= */
+    workspace.scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
 
-async function updateBankForTest(){
+  });
 
-  const editId=
-    document
-      .getElementById(
-        "editId"
-      ).value;
+document
+  .getElementById("amBackCategoryBtn")
+  .addEventListener("click",()=>{
 
+    resetAfterBranch();
 
-  if(!editId) return;
+  });
 
+document
+  .getElementById("amBackMockListBtn")
+  .addEventListener("click",()=>{
 
-  const test=
-    tests.find(
-      t=>String(t.id)===
-         String(editId)
+    mockPanel.style.display = "none";
+    selectionPanel.style.display = "block";
+
+  });
+
+document
+  .getElementById("amBackSectionsBtn")
+  .addEventListener("click",()=>{
+
+    questionPanel.style.display = "none";
+    mockPanel.style.display = "block";
+
+  });
+
+document
+  .getElementById("amBackQuestionManagerBtn")
+  .addEventListener("click",()=>{
+
+    bankPanel.style.display = "none";
+    questionPanel.style.display = "block";
+
+  });
+
+document
+  .getElementById("amCreateQuestionBtn")
+  .addEventListener("click",openCreateQuestionModal);
+
+document
+  .getElementById("amBankQuestionBtn")
+  .addEventListener("click",openQuestionBank);
+
+document
+  .getElementById("amAssignSelectedBtn")
+  .addEventListener("click",assignSelectedQuestions);
+
+document
+  .getElementById("amSaveQuestionBtn")
+  .addEventListener("click",saveCreatedQuestion);
+
+document
+  .getElementById("amRefreshBtn")
+  .addEventListener("click",async()=>{
+
+    showToast("Refreshing...");
+
+    await loadAllData();
+
+  });
+
+document
+  .getElementById("amBankSubject")
+  .addEventListener("change",()=>{
+
+    renderChaptersForSubject(
+      document.getElementById("amBankSubject").value,
+      document.getElementById("amBankChapter")
     );
 
+    loadBankQuestions();
 
-  if(test){
+  });
 
-    await loadBankQuestions(
-      test
+document
+  .getElementById("amBankChapter")
+  .addEventListener("change",loadBankQuestions);
+
+let bankSearchTimer;
+
+document
+  .getElementById("amBankSearch")
+  .addEventListener("input",()=>{
+
+    clearTimeout(bankSearchTimer);
+
+    bankSearchTimer = setTimeout(
+      loadBankQuestions,
+      400
     );
 
-    await loadAssignedQuestions(
-      test.id
+  });
+
+document
+  .getElementById("amCreateSubject")
+  .addEventListener("change",()=>{
+
+    renderChaptersForSubject(
+      document.getElementById("amCreateSubject").value,
+      document.getElementById("amCreateChapter")
     );
 
-  }
+  });
 
-}
+document.querySelectorAll("[data-am-close]")
+  .forEach(button=>{
 
+    button.addEventListener("click",()=>{
 
-/* =========================================
-   RESET
-========================================= */
+      closeModal(button.dataset.amClose);
 
-function cancelEdit(){
+    });
 
-  resetForm();
+  });
 
-}
+document
+  .getElementById("amQuestionModal")
+  .addEventListener("click",event=>{
 
+    if(event.target.id === "amQuestionModal"){
+      closeModal("amQuestionModal");
+    }
 
-function resetForm(){
+  });
 
-  document
-    .getElementById("editId")
-    .value="";
+document
+  .getElementById("adminMockBack")
+  .addEventListener("click",()=>{
 
-  document
-    .getElementById("folderId")
-    .value="";
+    window.location.href = "admin-practice.html";
 
+  });
 
-  document
-    .getElementById("title")
-    .value="";
-
-
-  document
-    .getElementById("description")
-    .value="";
-
-
-  document
-    .getElementById("exam")
-    .value="";
-
-
-  document
-    .getElementById("testType")
-    .value="FULL";
-
-
-  document
-    .getElementById("duration")
-    .value=60;
-
-
-  document
-    .getElementById("subject")
-    .value="";
-
-
-  document
-    .getElementById("chapter")
-    .innerHTML=
-      '<option value="">Select Chapter</option>';
-
-
-  document
-    .getElementById("totalQuestions")
-    .value=25;
-
-
-  document
-    .getElementById("marks")
-    .value=2;
-
-
-  document
-    .getElementById("negative")
-    .value=0;
-
-
-  document
-    .getElementById("subjectTiming")
-    .checked=false;
-
-
-  sections=[];
-
-  bankQuestions=[];
-  assignedQuestions=[];
-
-  selectedQuestionIds=
-    new Set();
-
-
-  document
-    .getElementById(
-      "sections"
-    ).innerHTML="";
-
-
-  document
-    .getElementById(
-      "questionManager"
-    ).classList.add(
-      "hidden"
-    );
-
-
-  document
-    .getElementById(
-      "saveBtn"
-    ).textContent=
-      "Create Test";
-
-
-  document
-    .getElementById(
-      "cancelBtn"
-    ).classList.add(
-      "hidden"
-    );
-
-
-  handleTestType();
-
-}
-
-
-/* =========================================
-   ACTIVATE
-========================================= */
-
-async function toggleActive(
-  id,
-  current
-){
-
-  const result=
-    await db
-      .from("mock_tests")
-      .update({
-        is_active:!current
-      })
-      .eq(
-        "id",
-        id
-      );
-
-
-  if(result.error){
-
-    showMessage(
-      result.error.message
-    );
-
-    return;
-
-  }
-
-
-  await loadTests();
-
-}
-
-
-/* =========================================
-   DELETE TEST
-========================================= */
-
-async function deleteTest(id){
-
-  if(
-    !confirm(
-      "Delete this mock test?"
-    )
-  ) return;
-
-
-  const result=
-    await db
-      .from("mock_tests")
-      .delete()
-      .eq(
-        "id",
-        id
-      );
-
-
-  if(result.error){
-
-    showMessage(
-      result.error.message
-    );
-
-    return;
-
-  }
-
-
-  await loadTests();
-
-}
-
-
-/* =========================================
-   HELPERS
-========================================= */
-
-function getSubjectName(id){
-
-  const subject=
-    subjects.find(
-      s=>String(s.id)===
-         String(id)
-    );
-
-
-  return subject?.name||
-    subject?.title||
-    "Subject";
-
-}
-
-
-function showMessage(text){
-
-  document
-    .getElementById(
-      "message"
-    ).innerHTML=
-      '<div class="message">'+
-      escapeHtml(text)+
-      '</div>';
-
-
-  setTimeout(
-    ()=>{
-      document
-        .getElementById(
-          "message"
-        ).innerHTML="";
-    },
-    4000
-  );
-
-}
-
-
-function escapeHtml(value){
-
-  return String(
-    value??""
-  )
-  .replace(/&/g,"&amp;")
-  .replace(/</g,"&lt;")
-  .replace(/>/g,"&gt;")
-  .replace(/"/g,"&quot;")
-  .replace(/'/g,"&#039;");
-
-}
-
-
-/* =========================================
+/* =========================
    START
-========================================= */
+========================= */
 
-loadData();
+setupBranchButtons();
+setupCategoryButtons();
+loadAllData();
 
 </script>
 
 </body>
-  </html>
+</html>

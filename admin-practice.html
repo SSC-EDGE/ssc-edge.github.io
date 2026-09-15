@@ -4,11 +4,12 @@
 <head>
 
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <script>
 document.documentElement.dataset.theme =
-  localStorage.getItem("ssc-edge-theme") || "dark";
+localStorage.getItem("ssc-edge-theme") || "dark";
 </script>
 
 <title>SSC EDGE - Practice Admin</title>
@@ -17,34 +18,37 @@ document.documentElement.dataset.theme =
 
 <style>
 
-/* =========================================================
+/* =====================================================
    SSC EDGE PRACTICE ADMIN
-========================================================= */
+===================================================== */
 
 :root{
-  --purple:#9b5cff;
-  --purple2:#7b35e8;
-  --bg:#09090d;
-  --card:#111117;
-  --card2:#15151d;
-  --border:#252530;
-  --text:#f5f5f7;
-  --muted:#92929e;
-  --green:#28c76f;
-  --red:#ff4d5e;
-  --yellow:#ffbd4a;
+  --ap-bg:#080811;
+  --ap-card:#11111d;
+  --ap-card2:#171727;
+  --ap-border:rgba(255,255,255,.10);
+  --ap-text:#ffffff;
+  --ap-muted:#9b9bad;
+  --ap-purple:#9b5cff;
+  --ap-purple2:#7435d8;
+  --ap-danger:#ff5577;
+  --ap-success:#31d49b;
+  --ap-warning:#ffc857;
 }
 
 :root[data-theme="light"]{
-  --bg:#f6f4fa;
-  --card:#ffffff;
-  --card2:#f1eef7;
-  --border:#ddd8e8;
-  --text:#17151c;
-  --muted:#686473;
+  --ap-bg:#f6f4fb;
+  --ap-card:#ffffff;
+  --ap-card2:#f0edf8;
+  --ap-border:rgba(40,25,80,.13);
+  --ap-text:#171321;
+  --ap-muted:#777080;
+  --ap-purple:#7138d4;
+  --ap-purple2:#8e55ed;
+  --ap-danger:#e64264;
+  --ap-success:#159d70;
+  --ap-warning:#b67b00;
 }
-
-/* ---------- RESET ---------- */
 
 *{
   box-sizing:border-box;
@@ -52,14 +56,16 @@ document.documentElement.dataset.theme =
 
 body{
   margin:0;
-  background:var(--bg);
-  color:var(--text);
+  background:var(--ap-bg);
+  color:var(--ap-text);
   font-family:Arial,Helvetica,sans-serif;
+  min-height:100vh;
 }
 
 button,
 input,
-select{
+select,
+textarea{
   font:inherit;
 }
 
@@ -67,753 +73,1699 @@ button{
   cursor:pointer;
 }
 
-/* ---------- HEADER ---------- */
+button:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
 
-.admin-header{
-  height:72px;
+/* =====================================================
+   HEADER
+===================================================== */
+
+.ap-header{
+  height:70px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:0 18px;
-  border-bottom:1px solid var(--border);
-  background:var(--bg);
+  padding:0 16px;
+  border-bottom:1px solid var(--ap-border);
+  background:var(--ap-card);
   position:sticky;
   top:0;
-  z-index:50;
+  z-index:100;
 }
 
-.brand{
-  font-size:23px;
-  font-weight:800;
-  letter-spacing:-.5px;
-}
-
-.brand span{
-  color:var(--purple);
-}
-
-.header-right{
+.ap-header-left{
   display:flex;
   align-items:center;
-  gap:9px;
+  gap:12px;
+  min-width:0;
 }
 
-.header-btn{
-  width:40px;
-  height:40px;
-  border:1px solid var(--border);
-  background:var(--card);
-  color:var(--text);
+.ap-back-btn{
+  width:38px;
+  height:38px;
+  border:1px solid var(--ap-border);
+  background:var(--ap-card2);
+  color:var(--ap-text);
   border-radius:12px;
-  font-size:18px;
-}
-
-/* ---------- PAGE ---------- */
-
-.page{
-  width:min(1050px,100%);
-  margin:auto;
-  padding:20px 15px 50px;
-}
-
-.page-title{
-  font-size:25px;
-  font-weight:800;
-  margin:3px 0 5px;
-}
-
-.page-subtitle{
-  color:var(--muted);
-  font-size:13px;
-  margin-bottom:20px;
-}
-
-/* ---------- TOP ACTIONS ---------- */
-
-.top-actions{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-bottom:20px;
-}
-
-.primary-btn,
-.secondary-btn,
-.danger-btn{
-  border:0;
-  border-radius:11px;
-  padding:11px 15px;
-  font-weight:700;
-}
-
-.primary-btn{
-  background:var(--purple);
-  color:white;
-}
-
-.secondary-btn{
-  background:var(--card2);
-  color:var(--text);
-  border:1px solid var(--border);
-}
-
-.danger-btn{
-  background:#3a151a;
-  color:#ff6b79;
-  border:1px solid #60222b;
-}
-
-/* ---------- EXAMS ---------- */
-
-.section-label{
-  font-size:12px;
-  font-weight:800;
-  color:var(--muted);
-  letter-spacing:.8px;
-  margin:22px 0 10px;
-  text-transform:uppercase;
-}
-
-.exam-list{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:12px;
-}
-
-.exam-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:15px;
-  transition:.15s;
-}
-
-.exam-card.active{
-  border-color:var(--purple);
-  box-shadow:0 0 0 1px rgba(155,92,255,.15);
-}
-
-.exam-main{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-.exam-logo{
-  width:48px;
-  height:48px;
-  border-radius:13px;
-  background:var(--card2);
-  border:1px solid var(--border);
+  font-size:20px;
   display:flex;
   align-items:center;
   justify-content:center;
-  flex:none;
-  overflow:hidden;
 }
 
-.exam-logo img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-}
-
-.exam-logo.ssc-logo{
-  font-size:17px;
+.ap-brand{
+  font-size:19px;
   font-weight:900;
-  color:var(--purple);
+  letter-spacing:.2px;
+  white-space:nowrap;
 }
 
-.exam-name{
-  font-size:17px;
-  font-weight:800;
+.ap-brand span{
+  color:var(--ap-purple);
 }
 
-.exam-board{
-  color:var(--muted);
-  font-size:12px;
-  margin-top:4px;
+.ap-header-sub{
+  color:var(--ap-muted);
+  font-size:11px;
+  margin-top:3px;
 }
 
-.exam-actions{
+.ap-header-actions{
   display:flex;
-  gap:7px;
-  margin-top:13px;
-  flex-wrap:wrap;
+  align-items:center;
+  gap:8px;
 }
 
-.small-btn{
-  border:1px solid var(--border);
-  background:var(--card2);
-  color:var(--text);
-  border-radius:9px;
-  padding:7px 10px;
+.ap-icon-btn{
+  width:38px;
+  height:38px;
+  border:1px solid var(--ap-border);
+  border-radius:11px;
+  background:var(--ap-card2);
+  color:var(--ap-text);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:17px;
+}
+
+.ap-primary-btn{
+  border:0;
+  background:linear-gradient(135deg,var(--ap-purple),var(--ap-purple2));
+  color:#fff;
+  border-radius:11px;
+  padding:11px 14px;
+  font-size:12px;
+  font-weight:800;
+  box-shadow:0 5px 16px rgba(125,60,220,.20);
+}
+
+.ap-secondary-btn{
+  border:1px solid var(--ap-border);
+  background:var(--ap-card2);
+  color:var(--ap-text);
+  border-radius:11px;
+  padding:10px 13px;
   font-size:12px;
   font-weight:700;
 }
 
-.small-btn.purple{
-  background:var(--purple);
-  border-color:var(--purple);
-  color:white;
+.ap-danger-btn{
+  border:1px solid rgba(255,85,119,.25);
+  background:rgba(255,85,119,.10);
+  color:var(--ap-danger);
+  border-radius:10px;
+  padding:9px 12px;
+  font-size:12px;
+  font-weight:800;
 }
 
-.small-btn.red{
-  color:#ff6674;
+/* =====================================================
+   PAGE
+===================================================== */
+
+.ap-page{
+  width:100%;
+  max-width:1100px;
+  margin:0 auto;
+  padding:18px 15px 40px;
 }
 
-/* ---------- WORKSPACE ---------- */
-
-.workspace{
-  margin-top:25px;
+.ap-page-title{
+  font-size:22px;
+  font-weight:900;
+  margin:3px 0 5px;
 }
 
-.workspace-head{
+.ap-page-description{
+  font-size:12px;
+  color:var(--ap-muted);
+  line-height:1.5;
+  margin-bottom:18px;
+}
+
+/* =====================================================
+   BOARD TABS
+===================================================== */
+
+.ap-board-tabs{
+  display:flex;
+  gap:9px;
+  margin-bottom:17px;
+}
+
+.ap-board-tab{
+  flex:1;
+  min-height:46px;
+  border:1px solid var(--ap-border);
+  background:var(--ap-card);
+  color:var(--ap-muted);
+  border-radius:13px;
+  font-size:13px;
+  font-weight:900;
+}
+
+.ap-board-tab.active{
+  color:#fff;
+  border-color:transparent;
+  background:linear-gradient(135deg,var(--ap-purple),var(--ap-purple2));
+  box-shadow:0 6px 18px rgba(125,60,220,.18);
+}
+
+/* =====================================================
+   SECTION HEAD
+===================================================== */
+
+.ap-section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:20px 0 11px;
+}
+
+.ap-section-title{
+  font-size:15px;
+  font-weight:900;
+}
+
+.ap-section-note{
+  color:var(--ap-muted);
+  font-size:11px;
+}
+
+/* =====================================================
+   EXAM GRID
+===================================================== */
+
+.ap-exam-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:11px;
+}
+
+.ap-exam-card{
+  border:1px solid var(--ap-border);
+  background:var(--ap-card);
+  border-radius:16px;
+  padding:15px;
+  min-height:86px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  transition:.18s;
+}
+
+.ap-exam-card:hover{
+  border-color:rgba(155,92,255,.55);
+  transform:translateY(-1px);
+}
+
+.ap-exam-card.selected{
+  border-color:var(--ap-purple);
+  box-shadow:0 0 0 1px rgba(155,92,255,.22);
+}
+
+.ap-exam-name{
+  font-size:14px;
+  font-weight:900;
+  line-height:1.35;
+}
+
+.ap-exam-meta{
+  color:var(--ap-muted);
+  font-size:10px;
+  margin-top:5px;
+}
+
+.ap-exam-arrow{
+  color:var(--ap-purple);
+  font-size:20px;
+  font-weight:900;
+}
+
+/* =====================================================
+   WORKSPACE
+===================================================== */
+
+.ap-workspace{
+  display:none;
+  margin-top:22px;
+}
+
+.ap-workspace.visible{
+  display:block;
+}
+
+.ap-selected-strip{
+  border:1px solid rgba(155,92,255,.28);
+  background:linear-gradient(
+    135deg,
+    rgba(155,92,255,.15),
+    rgba(116,53,216,.06)
+  );
+  border-radius:15px;
+  padding:13px 14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:16px;
+}
+
+.ap-selected-label{
+  color:var(--ap-muted);
+  font-size:10px;
+  margin-bottom:4px;
+}
+
+.ap-selected-name{
+  font-size:15px;
+  font-weight:900;
+}
+
+.ap-selected-actions{
+  display:flex;
+  gap:7px;
+}
+
+/* =====================================================
+   FIXED BRANCH / CATEGORY CARDS
+===================================================== */
+
+.ap-choice-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:11px;
+}
+
+.ap-choice-card{
+  min-height:83px;
+  border:1px solid var(--ap-border);
+  background:var(--ap-card);
+  border-radius:15px;
+  padding:14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  text-align:left;
+}
+
+.ap-choice-card:hover,
+.ap-choice-card.active{
+  border-color:var(--ap-purple);
+  background:linear-gradient(
+    135deg,
+    rgba(155,92,255,.14),
+    var(--ap-card)
+  );
+}
+
+.ap-choice-title{
+  font-size:13px;
+  font-weight:900;
+}
+
+.ap-choice-sub{
+  font-size:10px;
+  color:var(--ap-muted);
+  margin-top:5px;
+  line-height:1.4;
+}
+
+.ap-choice-arrow{
+  color:var(--ap-purple);
+  font-size:19px;
+}
+
+/* =====================================================
+   INNER PANEL
+===================================================== */
+
+.ap-inner-panel{
+  display:none;
+  margin-top:17px;
+}
+
+.ap-inner-panel.visible{
+  display:block;
+}
+
+.ap-panel{
+  background:var(--ap-card);
+  border:1px solid var(--ap-border);
+  border-radius:16px;
+  padding:14px;
+  margin-bottom:14px;
+}
+
+.ap-panel-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:13px;
+}
+
+.ap-panel-title{
+  font-size:14px;
+  font-weight:900;
+}
+
+.ap-panel-subtitle{
+  color:var(--ap-muted);
+  font-size:10px;
+  margin-top:4px;
+  line-height:1.4;
+}
+
+/* =====================================================
+   CHIPS
+===================================================== */
+
+.ap-chip-row{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding:2px 1px 5px;
+  scrollbar-width:none;
+}
+
+.ap-chip-row::-webkit-scrollbar{
+  display:none;
+}
+
+.ap-chip{
+  flex:0 0 auto;
+  border:1px solid var(--ap-border);
+  background:var(--ap-card2);
+  color:var(--ap-muted);
+  border-radius:999px;
+  padding:9px 13px;
+  font-size:11px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.ap-chip.active{
+  background:var(--ap-purple);
+  border-color:var(--ap-purple);
+  color:#fff;
+}
+
+/* =====================================================
+   TEST LIST
+===================================================== */
+
+.ap-test-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.ap-test-card{
+  border:1px solid var(--ap-border);
+  background:var(--ap-card);
+  border-radius:14px;
+  padding:13px;
+}
+
+.ap-test-top{
   display:flex;
   align-items:flex-start;
   justify-content:space-between;
   gap:10px;
-  margin-bottom:14px;
 }
 
-.workspace-title{
-  font-size:21px;
-  font-weight:800;
+.ap-test-title{
+  font-size:13px;
+  font-weight:900;
+  line-height:1.4;
 }
 
-.workspace-subtitle{
-  color:var(--muted);
-  font-size:12px;
-  margin-top:4px;
-}
-
-/* ---------- ROOT CARDS ---------- */
-
-.root-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:13px;
-}
-
-.root-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:17px;
-}
-
-.root-icon{
-  width:44px;
-  height:44px;
-  border-radius:12px;
-  background:rgba(155,92,255,.12);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:20px;
-  margin-bottom:12px;
-}
-
-.root-title{
-  font-size:18px;
-  font-weight:800;
-}
-
-.root-desc{
-  color:var(--muted);
-  font-size:12px;
+.ap-test-description{
+  color:var(--ap-muted);
+  font-size:10px;
   margin-top:5px;
+  line-height:1.4;
 }
 
-.root-actions{
+.ap-test-badges{
   display:flex;
-  gap:7px;
-  margin-top:13px;
   flex-wrap:wrap;
-}
-
-/* ---------- CATEGORY CARDS ---------- */
-
-.category-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:13px;
-}
-
-.category-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:17px;
-}
-
-.category-icon{
-  font-size:22px;
-  margin-bottom:11px;
-}
-
-.category-title{
-  font-size:17px;
-  font-weight:800;
-}
-
-.category-desc{
-  color:var(--muted);
-  font-size:12px;
-  margin-top:5px;
-}
-
-.category-actions{
-  display:flex;
-  gap:7px;
-  flex-wrap:wrap;
-  margin-top:13px;
-}
-
-/* ---------- HORIZONTAL CHOOSERS ---------- */
-
-.horizontal-scroll{
-  display:flex;
-  gap:10px;
-  overflow-x:auto;
-  padding:2px 1px 7px;
-  scrollbar-width:none;
-}
-
-.horizontal-scroll::-webkit-scrollbar{
-  display:none;
-}
-
-.choice-card{
-  min-width:145px;
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:13px;
-  flex:none;
-}
-
-.choice-card.active{
-  border-color:var(--purple);
-}
-
-.choice-title{
-  font-size:15px;
-  font-weight:800;
-}
-
-.choice-meta{
-  font-size:11px;
-  color:var(--muted);
-  margin-top:4px;
-}
-
-.choice-actions{
-  display:flex;
   gap:5px;
   margin-top:10px;
 }
 
-.reorder-btn{
-  width:30px;
-  height:28px;
-  border-radius:8px;
-  border:1px solid var(--border);
-  background:var(--card2);
-  color:var(--text);
-  font-size:12px;
-}
-
-/* ---------- TESTS ---------- */
-
-.tests-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  margin:19px 0 11px;
-}
-
-.tests-title{
-  font-size:17px;
-  font-weight:800;
-}
-
-.test-list{
-  display:grid;
-  gap:10px;
-}
-
-.test-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:14px;
-}
-
-.test-top{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-}
-
-.test-title{
-  font-size:15px;
-  font-weight:800;
-}
-
-.test-status{
-  font-size:10px;
+.ap-test-badge{
+  border:1px solid var(--ap-border);
+  background:var(--ap-card2);
+  color:var(--ap-muted);
+  border-radius:6px;
   padding:4px 7px;
-  border-radius:7px;
-  background:rgba(40,199,111,.12);
-  color:var(--green);
-  white-space:nowrap;
+  font-size:9px;
+  font-weight:800;
 }
 
-.test-status.off{
-  background:rgba(255,77,94,.12);
-  color:var(--red);
+.ap-test-badge.active{
+  color:var(--ap-success);
+  border-color:rgba(49,212,155,.25);
+  background:rgba(49,212,155,.08);
 }
 
-.test-info{
-  display:flex;
-  gap:14px;
-  flex-wrap:wrap;
-  color:var(--muted);
-  font-size:11px;
-  margin-top:7px;
+.ap-test-badge.inactive{
+  color:var(--ap-danger);
+  border-color:rgba(255,85,119,.25);
+  background:rgba(255,85,119,.08);
 }
 
-.test-actions{
+.ap-test-actions{
   display:flex;
   gap:7px;
   flex-wrap:wrap;
-  margin-top:11px;
+  margin-top:12px;
 }
 
-/* ---------- EMPTY ---------- */
-
-.empty{
-  border:1px dashed var(--border);
-  background:var(--card);
-  border-radius:14px;
-  padding:22px;
-  text-align:center;
-  color:var(--muted);
-  font-size:13px;
-}
-
-/* ---------- MODAL ---------- */
-
-.modal-bg{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.72);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:15px;
-  z-index:100;
-}
-
-.modal-bg.show{
-  display:flex;
-}
-
-.modal{
-  width:min(480px,100%);
-  max-height:90vh;
-  overflow-y:auto;
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:19px;
-}
-
-.modal-title{
-  font-size:19px;
+.ap-small-btn{
+  border:1px solid var(--ap-border);
+  background:var(--ap-card2);
+  color:var(--ap-text);
+  border-radius:8px;
+  padding:8px 10px;
+  font-size:10px;
   font-weight:800;
-  margin-bottom:16px;
 }
 
-.field{
-  margin-bottom:13px;
+.ap-small-btn.edit{
+  color:var(--ap-purple);
+  border-color:rgba(155,92,255,.30);
 }
 
-.field label{
-  display:block;
-  color:var(--muted);
+.ap-small-btn.delete{
+  color:var(--ap-danger);
+  border-color:rgba(255,85,119,.25);
+}
+
+/* =====================================================
+   EMPTY / LOADING
+===================================================== */
+
+.ap-empty{
+  text-align:center;
+  padding:28px 15px;
+  color:var(--ap-muted);
   font-size:12px;
-  font-weight:700;
-  margin-bottom:6px;
+  border:1px dashed var(--ap-border);
+  border-radius:13px;
 }
 
-.field input,
-.field select{
-  width:100%;
-  height:43px;
-  border:1px solid var(--border);
-  background:var(--card2);
-  color:var(--text);
-  border-radius:10px;
-  padding:0 12px;
-  outline:none;
+.ap-loading{
+  text-align:center;
+  padding:28px;
+  color:var(--ap-muted);
+  font-size:12px;
 }
 
-.field input:focus,
-.field select:focus{
-  border-color:var(--purple);
-}
-
-.modal-actions{
-  display:flex;
-  gap:8px;
-  justify-content:flex-end;
-  margin-top:17px;
-}
-
-.help-text{
+.ap-error{
+  border:1px solid rgba(255,85,119,.25);
+  background:rgba(255,85,119,.08);
+  color:var(--ap-danger);
+  border-radius:12px;
+  padding:12px;
   font-size:11px;
-  color:var(--muted);
   line-height:1.5;
+}
+
+/* =====================================================
+   PRACTICE DRILL
+===================================================== */
+
+.ap-drill-subject-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+
+.ap-drill-subject{
+  border:1px solid var(--ap-border);
+  background:var(--ap-card);
+  border-radius:14px;
+  padding:14px;
+  min-height:75px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+
+.ap-drill-subject-name{
+  font-size:12px;
+  font-weight:900;
+}
+
+.ap-drill-subject-count{
+  color:var(--ap-muted);
+  font-size:10px;
   margin-top:4px;
 }
 
-/* ---------- TOAST ---------- */
+/* =====================================================
+   MODAL
+===================================================== */
 
-.toast{
+.ap-modal-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:500;
+  background:rgba(0,0,0,.70);
+  padding:16px;
+  overflow-y:auto;
+  align-items:flex-start;
+  justify-content:center;
+}
+
+.ap-modal-overlay.open{
+  display:flex;
+}
+
+.ap-modal{
+  width:100%;
+  max-width:650px;
+  background:var(--ap-card);
+  border:1px solid var(--ap-border);
+  border-radius:18px;
+  margin:25px auto;
+  overflow:hidden;
+  box-shadow:0 20px 70px rgba(0,0,0,.35);
+}
+
+.ap-modal-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:16px;
+  border-bottom:1px solid var(--ap-border);
+}
+
+.ap-modal-title{
+  font-size:16px;
+  font-weight:900;
+}
+
+.ap-modal-close{
+  width:34px;
+  height:34px;
+  border:1px solid var(--ap-border);
+  border-radius:9px;
+  background:var(--ap-card2);
+  color:var(--ap-text);
+  font-size:18px;
+}
+
+.ap-modal-body{
+  padding:16px;
+}
+
+.ap-modal-footer{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  padding:14px 16px;
+  border-top:1px solid var(--ap-border);
+}
+
+/* =====================================================
+   FORM
+===================================================== */
+
+.ap-form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+
+.ap-form-group{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.ap-form-group.full{
+  grid-column:1/-1;
+}
+
+.ap-form-label{
+  color:var(--ap-muted);
+  font-size:10px;
+  font-weight:800;
+}
+
+.ap-form-input,
+.ap-form-select,
+.ap-form-textarea{
+  width:100%;
+  border:1px solid var(--ap-border);
+  background:var(--ap-card2);
+  color:var(--ap-text);
+  border-radius:9px;
+  padding:11px;
+  outline:none;
+  font-size:12px;
+}
+
+.ap-form-input:focus,
+.ap-form-select:focus,
+.ap-form-textarea:focus{
+  border-color:var(--ap-purple);
+}
+
+.ap-form-textarea{
+  min-height:75px;
+  resize:vertical;
+}
+
+.ap-check-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 0;
+}
+
+.ap-check-row input{
+  accent-color:var(--ap-purple);
+}
+
+.ap-check-row label{
+  font-size:11px;
+  font-weight:700;
+}
+
+/* =====================================================
+   SECTION CONFIG
+===================================================== */
+
+.ap-section-config{
+  margin-top:15px;
+  border-top:1px solid var(--ap-border);
+  padding-top:14px;
+}
+
+.ap-section-config-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:10px;
+}
+
+.ap-section-config-title{
+  font-size:12px;
+  font-weight:900;
+}
+
+.ap-section-row{
+  display:grid;
+  grid-template-columns:1.3fr .7fr .7fr auto;
+  gap:7px;
+  margin-bottom:8px;
+}
+
+.ap-section-row input{
+  min-width:0;
+  border:1px solid var(--ap-border);
+  background:var(--ap-card2);
+  color:var(--ap-text);
+  border-radius:8px;
+  padding:9px;
+  font-size:10px;
+  outline:none;
+}
+
+.ap-remove-section{
+  width:32px;
+  border:1px solid rgba(255,85,119,.25);
+  background:rgba(255,85,119,.08);
+  color:var(--ap-danger);
+  border-radius:8px;
+}
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+.ap-toast{
   position:fixed;
   left:50%;
   bottom:22px;
   transform:translateX(-50%) translateY(20px);
-  background:#191920;
-  color:white;
-  border:1px solid #33333e;
-  padding:11px 15px;
-  border-radius:11px;
-  font-size:12px;
   opacity:0;
   pointer-events:none;
-  transition:.2s;
-  z-index:200;
-  max-width:90%;
+  z-index:1000;
+  background:#20202e;
+  color:#fff;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:10px;
+  padding:11px 15px;
+  font-size:11px;
+  font-weight:800;
+  transition:.25s;
+  max-width:calc(100% - 30px);
   text-align:center;
 }
 
-.toast.show{
+.ap-toast.show{
   opacity:1;
   transform:translateX(-50%) translateY(0);
 }
 
-.toast.error{
-  border-color:#712631;
-  color:#ff8290;
-}
+/* =====================================================
+   MOBILE
+===================================================== */
 
-/* ---------- MOBILE ---------- */
+@media(max-width:600px){
 
-@media(max-width:650px){
-
-  .admin-header{
+  .ap-header{
     height:64px;
-    padding:0 13px;
+    padding:0 11px;
   }
 
-  .brand{
-    font-size:21px;
+  .ap-brand{
+    font-size:17px;
   }
 
-  .page{
-    padding:16px 12px 40px;
+  .ap-header-sub{
+    font-size:9px;
   }
 
-  .page-title{
-    font-size:22px;
+  .ap-header-actions .ap-primary-btn{
+    padding:9px 10px;
+    font-size:10px;
   }
 
-  .exam-list,
-  .root-grid,
-  .category-grid{
+  .ap-page{
+    padding:15px 11px 35px;
+  }
+
+  .ap-page-title{
+    font-size:20px;
+  }
+
+  .ap-exam-grid,
+  .ap-choice-grid,
+  .ap-drill-subject-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .ap-exam-card{
+    min-height:80px;
+    padding:12px;
+  }
+
+  .ap-exam-name{
+    font-size:12px;
+  }
+
+  .ap-choice-card{
+    min-height:78px;
+    padding:12px;
+  }
+
+  .ap-choice-title{
+    font-size:12px;
+  }
+
+  .ap-selected-strip{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .ap-selected-actions{
+    width:100%;
+  }
+
+  .ap-selected-actions button{
+    flex:1;
+  }
+
+  .ap-form-grid{
     grid-template-columns:1fr;
   }
 
-  .workspace-head{
-    display:block;
+  .ap-form-group.full{
+    grid-column:auto;
   }
 
-  .workspace-head .primary-btn{
-    margin-top:11px;
+  .ap-section-row{
+    grid-template-columns:1.2fr .7fr .7fr 32px;
   }
 
-  .test-top{
-    align-items:flex-start;
+  .ap-modal-overlay{
+    padding:8px;
   }
 
-}
+  .ap-modal{
+    margin:12px auto;
+    border-radius:15px;
+  }
 
-/* ---------- LOADING ---------- */
+  .ap-modal-body{
+    padding:13px;
+  }
 
-.loading{
-  padding:30px;
-  text-align:center;
-  color:var(--muted);
-}
+  .ap-modal-head{
+    padding:13px;
+  }
 
-.hidden{
-  display:none!important;
+  .ap-modal-footer{
+    padding:12px 13px;
+  }
 }
 
 </style>
+
 </head>
 
 <body>
 
-<header class="admin-header">
+<!-- =====================================================
+     HEADER
+===================================================== -->
 
-  <div class="brand">
-    SSC <span>EDGE</span>
+<header class="ap-header">
+
+  <div class="ap-header-left">
+
+    <button
+      class="ap-back-btn"
+      id="adminBackBtn"
+      type="button"
+      aria-label="Back">
+      ‹
+    </button>
+
+    <div>
+      <div class="ap-brand">
+        SSC <span>EDGE</span>
+      </div>
+
+      <div class="ap-header-sub">
+        Practice Management
+      </div>
+    </div>
+
   </div>
 
-  <div class="header-right">
+  <div class="ap-header-actions">
 
-    <button class="header-btn" onclick="location.href='practice.html'">
-      ←
+    <button
+      class="ap-icon-btn"
+      id="refreshBtn"
+      type="button"
+      title="Refresh">
+      ↻
+    </button>
+
+    <button
+      class="ap-primary-btn"
+      id="addExamBtn"
+      type="button">
+      + Exam
     </button>
 
   </div>
 
 </header>
 
-<main class="page">
+<main class="ap-page">
 
-  <div class="page-title">
+  <h1 class="ap-page-title">
     Practice Admin
+  </h1>
+
+  <div class="ap-page-description">
+    Manage exams, mock categories, subjects, years, folders and mock tests.
   </div>
 
-  <div class="page-subtitle">
-    Manage exams, mock categories, years, subjects and tests.
-  </div>
+  <!-- BOARD TABS -->
 
-  <div class="top-actions">
+  <div class="ap-board-tabs">
 
-    <button class="primary-btn" onclick="openExamForm()">
-      + Add Exam
+    <button
+      class="ap-board-tab active"
+      data-board="SSC"
+      type="button">
+      SSC
     </button>
 
-    <button class="secondary-btn" onclick="loadAll()">
-      ↻ Refresh
+    <button
+      class="ap-board-tab"
+      data-board="RRB"
+      type="button">
+      RRB
     </button>
 
   </div>
 
-  <!-- =====================================================
-       EXAMS
-  ====================================================== -->
+  <!-- EXAMS -->
 
-  <div class="section-label">
-    Exams
-  </div>
+  <section>
 
-  <div id="examList" class="exam-list">
-    <div class="loading">
-      Loading exams...
-    </div>
-  </div>
-
-  <!-- =====================================================
-       WORKSPACE
-  ====================================================== -->
-
-  <section id="workspace" class="workspace hidden">
-
-    <div class="workspace-head">
+    <div class="ap-section-head">
 
       <div>
-        <div id="workspaceTitle" class="workspace-title">
-          -
+        <div class="ap-section-title">
+          Exams
         </div>
 
-        <div class="workspace-subtitle">
-          Practice structure
+        <div class="ap-section-note">
+          Select an exam to manage its practice structure
         </div>
       </div>
 
-      <button class="primary-btn" onclick="openRootForm()">
-        + Add Mock Type
-      </button>
+    </div>
+
+    <div
+      class="ap-exam-grid"
+      id="examGrid">
+
+      <div class="ap-loading">
+        Loading exams...
+      </div>
 
     </div>
 
-    <div id="rootArea"></div>
+  </section>
+
+  <!-- SELECTED EXAM WORKSPACE -->
+
+  <section
+    class="ap-workspace"
+    id="workspace">
+
+    <div class="ap-selected-strip">
+
+      <div>
+        <div class="ap-selected-label">
+          Selected Exam
+        </div>
+
+        <div
+          class="ap-selected-name"
+          id="selectedExamName">
+          —
+        </div>
+      </div>
+
+      <div class="ap-selected-actions">
+
+        <button
+          class="ap-secondary-btn"
+          id="changeExamBtn"
+          type="button">
+          Change
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- BRANCHES -->
+
+    <div
+      id="branchView">
+
+      <div class="ap-section-head">
+
+        <div>
+          <div class="ap-section-title">
+            Mock Branch
+          </div>
+
+          <div class="ap-section-note">
+            Choose new mocks or previous year mocks
+          </div>
+        </div>
+
+      </div>
+
+      <div class="ap-choice-grid">
+
+        <button
+          class="ap-choice-card"
+          data-branch="NEW"
+          type="button">
+
+          <div>
+            <div class="ap-choice-title">
+              New Mocks
+            </div>
+
+            <div class="ap-choice-sub">
+              Manage newly created mock tests
+            </div>
+          </div>
+
+          <div class="ap-choice-arrow">
+            ›
+          </div>
+
+        </button>
+
+        <button
+          class="ap-choice-card"
+          data-branch="PYQ"
+          type="button">
+
+          <div>
+            <div class="ap-choice-title">
+              PYQ Mocks
+            </div>
+
+            <div class="ap-choice-sub">
+              Manage previous year question mocks
+            </div>
+          </div>
+
+          <div class="ap-choice-arrow">
+            ›
+          </div>
+
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- CATEGORY VIEW -->
+
+    <div
+      class="ap-inner-panel"
+      id="categoryView">
+
+      <div class="ap-section-head">
+
+        <div>
+          <div class="ap-section-title" id="branchHeading">
+            New Mocks
+          </div>
+
+          <div class="ap-section-note">
+            Fixed practice categories
+          </div>
+        </div>
+
+        <button
+          class="ap-secondary-btn"
+          id="backToBranchesBtn"
+          type="button">
+          Back
+        </button>
+
+      </div>
+
+      <div class="ap-choice-grid">
+
+        <button
+          class="ap-choice-card"
+          data-category="FULL"
+          type="button">
+
+          <div>
+            <div class="ap-choice-title">
+              FULL MOCKS
+            </div>
+
+            <div class="ap-choice-sub">
+              Complete exam mock tests
+            </div>
+          </div>
+
+          <div class="ap-choice-arrow">
+            ›
+          </div>
+
+        </button>
+
+        <button
+          class="ap-choice-card"
+          data-category="SECTIONAL"
+          type="button">
+
+          <div>
+            <div class="ap-choice-title">
+              Sectional Mocks
+            </div>
+
+            <div class="ap-choice-sub">
+              Subject-wise mock tests
+            </div>
+          </div>
+
+          <div class="ap-choice-arrow">
+            ›
+          </div>
+
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- MOCK MANAGEMENT VIEW -->
+
+    <div
+      class="ap-inner-panel"
+      id="mockManagementView">
+
+      <div class="ap-panel">
+
+        <div class="ap-panel-head">
+
+          <div>
+            <div
+              class="ap-panel-title"
+              id="managementTitle">
+              Mock Management
+            </div>
+
+            <div
+              class="ap-panel-subtitle"
+              id="managementSubtitle">
+              Manage mock tests
+            </div>
+          </div>
+
+          <button
+            class="ap-secondary-btn"
+            id="backToCategoriesBtn"
+            type="button">
+            Back
+          </button>
+
+        </div>
+
+        <!-- YEAR / SUBJECT CHIPS -->
+
+        <div
+          id="managementChipsArea"
+          style="display:none;">
+
+          <div class="ap-section-head">
+            <div class="ap-section-title" id="chipsTitle">
+              Select
+            </div>
+          </div>
+
+          <div
+            class="ap-chip-row"
+            id="managementChips">
+          </div>
+
+        </div>
+
+        <!-- ADD SUBJECT / YEAR / FOLDER -->
+
+        <div
+          class="ap-test-actions"
+          id="managementExtraActions">
+        </div>
+
+        <!-- TEST LIST -->
+
+        <div
+          id="managementTestList"
+          class="ap-test-list">
+
+          <div class="ap-loading">
+            Loading mock tests...
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- PRACTICE DRILL VIEW -->
+
+    <div
+      class="ap-inner-panel"
+      id="practiceDrillView">
+
+      <div class="ap-panel">
+
+        <div class="ap-panel-head">
+
+          <div>
+            <div class="ap-panel-title">
+              Practice Drill
+            </div>
+
+            <div class="ap-panel-subtitle">
+              Subject-wise folders and practice mocks
+            </div>
+          </div>
+
+          <button
+            class="ap-secondary-btn"
+            id="backFromDrillBtn"
+            type="button">
+            Back
+          </button>
+
+        </div>
+
+        <div
+          class="ap-drill-subject-grid"
+          id="drillSubjectGrid">
+
+          <div class="ap-loading">
+            Loading subjects...
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- PRACTICE DRILL FOLDER VIEW -->
+
+    <div
+      class="ap-inner-panel"
+      id="drillFolderView">
+
+      <div class="ap-panel">
+
+        <div class="ap-panel-head">
+
+          <div>
+            <div
+              class="ap-panel-title"
+              id="drillFolderTitle">
+              Practice Drill
+            </div>
+
+            <div class="ap-panel-subtitle">
+              Manage folders and mocks
+            </div>
+          </div>
+
+          <button
+            class="ap-secondary-btn"
+            id="backToDrillSubjectsBtn"
+            type="button">
+            Back
+          </button>
+
+        </div>
+
+        <div
+          class="ap-test-actions"
+          id="drillFolderActions">
+        </div>
+
+        <div
+          id="drillFolderList"
+          class="ap-test-list">
+
+          <div class="ap-loading">
+            Loading folders...
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
 
   </section>
 
 </main>
 
-<!-- =======================================================
+<!-- =====================================================
      EXAM MODAL
-======================================================= -->
+===================================================== -->
 
-<div id="examModal" class="modal-bg">
+<div
+  class="ap-modal-overlay"
+  id="examModal">
 
-  <div class="modal">
+  <div class="ap-modal">
 
-    <div id="examModalTitle" class="modal-title">
-      Add Exam
-    </div>
+    <div class="ap-modal-head">
 
-    <div class="field">
-
-      <label>
-        Board
-      </label>
-
-      <select id="examBoard">
-
-        <option value="SSC">
-          SSC
-        </option>
-
-        <option value="RRB">
-          RRB
-        </option>
-
-      </select>
-
-    </div>
-
-    <div class="field">
-
-      <label>
-        Exam Name
-      </label>
-
-      <input
-        id="examName"
-        type="text"
-        placeholder="CGL"
-      >
-
-    </div>
-
-    <div class="help-text">
-      Example: CGL, CHSL, CPO, MTS, NTPC etc.
-    </div>
-
-    <div class="modal-actions">
+      <div class="ap-modal-title">
+        Add / Edit Exam
+      </div>
 
       <button
-        class="secondary-btn"
-        onclick="closeExamForm()"
-      >
+        class="ap-modal-close"
+        data-close-modal="examModal"
+        type="button">
+        ×
+      </button>
+
+    </div>
+
+    <div class="ap-modal-body">
+
+      <div class="ap-form-grid">
+
+        <div class="ap-form-group">
+
+          <label class="ap-form-label">
+            Exam Board
+          </label>
+
+          <select
+            class="ap-form-select"
+            id="examBoardInput">
+
+            <option value="SSC">
+              SSC
+            </option>
+
+            <option value="RRB">
+              RRB
+            </option>
+
+          </select>
+
+        </div>
+
+        <div class="ap-form-group">
+
+          <label class="ap-form-label">
+            Exam Name
+          </label>
+
+          <input
+            class="ap-form-input"
+            id="examNameInput"
+            type="text"
+            placeholder="Example: SSC CGL">
+
+        </div>
+
+        <div class="ap-form-group full">
+
+          <label class="ap-form-label">
+            Exam Stage / Subtitle
+          </label>
+
+          <input
+            class="ap-form-input"
+            id="examStageInput"
+            type="text"
+            placeholder="Example: Tier 1">
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="ap-modal-footer">
+
+      <button
+        class="ap-secondary-btn"
+        data-close-modal="examModal"
+        type="button">
         Cancel
       </button>
 
       <button
-        class="primary-btn"
-        onclick="saveExam()"
-      >
+        class="ap-primary-btn"
+        id="saveExamBtn"
+        type="button">
+        Save Exam
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =====================================================
+     MOCK EDITOR MODAL
+===================================================== -->
+
+<div
+  class="ap-modal-overlay"
+  id="mockModal">
+
+  <div class="ap-modal">
+
+    <div class="ap-modal-head">
+
+      <div
+        class="ap-modal-title"
+        id="mockModalTitle">
+        Add Mock
+      </div>
+
+      <button
+        class="ap-modal-close"
+        data-close-modal="mockModal"
+        type="button">
+        ×
+      </button>
+
+    </div>
+
+    <div class="ap-modal-body">
+
+      <div class="ap-form-grid">
+
+        <div class="ap-form-group full">
+
+          <label class="ap-form-label">
+            Mock Title
+          </label>
+
+          <input
+            class="ap-form-input"
+            id="mockTitleInput"
+            type="text"
+            placeholder="Enter mock test title">
+
+        </div>
+
+        <div class="ap-form-group full">
+
+          <label class="ap-form-label">
+            Description
+          </label>
+
+          <textarea
+            class="ap-form-textarea"
+            id="mockDescriptionInput"
+            placeholder="Optional description"></textarea>
+
+        </div>
+
+        <div class="ap-form-group">
+
+          <label class="ap-form-label">
+            Duration (Minutes)
+          </label>
+
+          <input
+            class="ap-form-input"
+            id="mockDurationInput"
+            type="number"
+            min="1"
+            value="60">
+
+        </div>
+
+        <div class="ap-form-group">
+
+          <label class="ap-form-label">
+            Total Questions
+          </label>
+
+          <input
+            class="ap-form-input"
+            id="mockQuestionsInput"
+            type="number"
+            min="1"
+            value="25">
+
+        </div>
+
+        <div class="ap-form-group">
+
+          <label class="ap-form-label">
+            Mock Status
+          </label>
+
+          <select
+            class="ap-form-select"
+            id="mockActiveInput">
+
+            <option value="true">
+              Active
+            </option>
+
+            <option value="false">
+              Inactive
+            </option>
+
+          </select>
+
+        </div>
+
+        <div class="ap-form-group">
+
+          <label class="ap-form-label">
+            Access Type
+          </label>
+
+          <select
+            class="ap-form-select"
+            id="mockAccessInput">
+
+            <option value="free">
+              Free
+            </option>
+
+            <option value="paid">
+              Paid
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+      <div class="ap-check-row">
+
+        <input
+          id="sectionalTimingInput"
+          type="checkbox">
+
+        <label for="sectionalTimingInput">
+          Enable sectional timing
+        </label>
+
+      </div>
+
+      <div class="ap-section-config">
+
+        <div class="ap-section-config-head">
+
+          <div class="ap-section-config-title">
+            Test Sections
+          </div>
+
+          <button
+            class="ap-secondary-btn"
+            id="addSectionBtn"
+            type="button">
+            + Section
+          </button>
+
+        </div>
+
+        <div
+          id="sectionRows">
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="ap-modal-footer">
+
+      <button
+        class="ap-secondary-btn"
+        data-close-modal="mockModal"
+        type="button">
+        Cancel
+      </button>
+
+      <button
+        class="ap-primary-btn"
+        id="saveMockBtn"
+        type="button">
+        Save Mock
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =====================================================
+     SUBJECT / YEAR / FOLDER MODAL
+===================================================== -->
+
+<div
+  class="ap-modal-overlay"
+  id="structureModal">
+
+  <div class="ap-modal">
+
+    <div class="ap-modal-head">
+
+      <div
+        class="ap-modal-title"
+        id="structureModalTitle">
+        Add Item
+      </div>
+
+      <button
+        class="ap-modal-close"
+        data-close-modal="structureModal"
+        type="button">
+        ×
+      </button>
+
+    </div>
+
+    <div class="ap-modal-body">
+
+      <div class="ap-form-group">
+
+        <label
+          class="ap-form-label"
+          id="structureInputLabel">
+          Name
+        </label>
+
+        <input
+          class="ap-form-input"
+          id="structureNameInput"
+          type="text"
+          placeholder="Enter name">
+
+      </div>
+
+    </div>
+
+    <div class="ap-modal-footer">
+
+      <button
+        class="ap-secondary-btn"
+        data-close-modal="structureModal"
+        type="button">
+        Cancel
+      </button>
+
+      <button
+        class="ap-primary-btn"
+        id="saveStructureBtn"
+        type="button">
         Save
       </button>
 
@@ -823,269 +1775,24 @@ button{
 
 </div>
 
-<!-- =======================================================
-     ROOT MODAL
-======================================================= -->
+<!-- =====================================================
+     TOAST
+===================================================== -->
 
-<div id="rootModal" class="modal-bg">
-
-  <div class="modal">
-
-    <div class="modal-title">
-      Add Mock Type
-    </div>
-
-    <div class="field">
-
-      <label>
-        Mock Type
-      </label>
-
-      <select id="rootType">
-
-        <option value="new">
-          NEW MOCKS
-        </option>
-
-        <option value="pyq">
-          PYQ MOCKS
-        </option>
-
-      </select>
-
-    </div>
-
-    <div class="modal-actions">
-
-      <button
-        class="secondary-btn"
-        onclick="closeRootForm()"
-      >
-        Cancel
-      </button>
-
-      <button
-        class="primary-btn"
-        onclick="saveRoot()"
-      >
-        Create
-      </button>
-
-    </div>
-
-  </div>
-
+<div
+  class="ap-toast"
+  id="toast">
 </div>
 
-<!-- =======================================================
-     CATEGORY MODAL
-======================================================= -->
-
-<div id="categoryModal" class="modal-bg">
-
-  <div class="modal">
-
-    <div id="categoryModalTitle" class="modal-title">
-      Add Category
-    </div>
-
-    <div class="field">
-
-      <label>
-        Category
-      </label>
-
-      <select id="categoryType">
-
-        <option value="full">
-          FULL MOCKS
-        </option>
-
-        <option value="sectional">
-          SECTIONAL MOCKS
-        </option>
-
-      </select>
-
-    </div>
-
-    <div class="modal-actions">
-
-      <button
-        class="secondary-btn"
-        onclick="closeCategoryForm()"
-      >
-        Cancel
-      </button>
-
-      <button
-        class="primary-btn"
-        onclick="saveCategory()"
-      >
-        Save
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-<!-- =======================================================
-     YEAR / SUBJECT MODAL
-======================================================= -->
-
-<div id="leafModal" class="modal-bg">
-
-  <div class="modal">
-
-    <div id="leafModalTitle" class="modal-title">
-      Add
-    </div>
-
-    <div class="field">
-
-      <label id="leafLabel">
-        Name
-      </label>
-
-      <input
-        id="leafName"
-        type="text"
-        placeholder=""
-      >
-
-    </div>
-
-    <div class="modal-actions">
-
-      <button
-        class="secondary-btn"
-        onclick="closeLeafForm()"
-      >
-        Cancel
-      </button>
-
-      <button
-        class="primary-btn"
-        onclick="saveLeaf()"
-      >
-        Save
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-<!-- =======================================================
-     TEST MODAL
-======================================================= -->
-
-<div id="testModal" class="modal-bg">
-
-  <div class="modal">
-
-    <div id="testModalTitle" class="modal-title">
-      Add Test
-    </div>
-
-    <div class="field">
-
-      <label>
-        Test Title
-      </label>
-
-      <input
-        id="testTitle"
-        type="text"
-        placeholder="SSC CGL Mock Test 01"
-      >
-
-    </div>
-
-    <div class="field">
-
-      <label>
-        Duration (minutes)
-      </label>
-
-      <input
-        id="testDuration"
-        type="number"
-        min="1"
-        value="60"
-      >
-
-    </div>
-
-    <div class="field">
-
-      <label>
-        Total Questions
-      </label>
-
-      <input
-        id="testQuestions"
-        type="number"
-        min="1"
-        value="25"
-      >
-
-    </div>
-
-    <div class="field">
-
-      <label>
-        Active
-      </label>
-
-      <select id="testActive">
-
-        <option value="true">
-          Active
-        </option>
-
-        <option value="false">
-          Inactive
-        </option>
-
-      </select>
-
-    </div>
-
-    <div class="modal-actions">
-
-      <button
-        class="secondary-btn"
-        onclick="closeTestForm()"
-      >
-        Cancel
-      </button>
-
-      <button
-        class="primary-btn"
-        onclick="saveTest()"
-      >
-        Save
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-<div id="toast" class="toast"></div>
+<!-- =====================================================
+     SUPABASE
+===================================================== -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-
-/* =========================================================
-   SUPABASE
-========================================================= */
+/*
+  <script>
 
 const SUPABASE_URL =
 "https://dvvyoygahzzbnpqrfhen.supabase.co";
@@ -1093,3634 +1800,2005 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
 
-const db =
+const supabaseClient =
 window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
 );
 
-/* =========================================================
+/* =====================================================
    STATE
-========================================================= */
+===================================================== */
 
 let exams = [];
+let subjects = [];
 let folders = [];
 let tests = [];
-let subjects = [];
 
+let activeBoard = "SSC";
 let selectedExam = null;
 
+let selectedBranch = null;
+let selectedCategory = null;
+
+let selectedSubject = null;
+let selectedYear = null;
+let selectedFolder = null;
+
 let editingExamId = null;
-let editingFolderId = null;
-let editingTestId = null;
+let editingMockId = null;
 
-let currentParentId = null;
-let currentLeafType = null;
+let structureMode = null;
 
-/* =========================================================
+/* =====================================================
+   DOM
+===================================================== */
+
+const examGrid =
+document.getElementById("examGrid");
+
+const workspace =
+document.getElementById("workspace");
+
+const selectedExamName =
+document.getElementById("selectedExamName");
+
+const branchView =
+document.getElementById("branchView");
+
+const categoryView =
+document.getElementById("categoryView");
+
+const mockManagementView =
+document.getElementById("mockManagementView");
+
+const practiceDrillView =
+document.getElementById("practiceDrillView");
+
+const drillFolderView =
+document.getElementById("drillFolderView");
+
+const branchHeading =
+document.getElementById("branchHeading");
+
+const managementTitle =
+document.getElementById("managementTitle");
+
+const managementSubtitle =
+document.getElementById("managementSubtitle");
+
+const managementChipsArea =
+document.getElementById("managementChipsArea");
+
+const managementChips =
+document.getElementById("managementChips");
+
+const managementExtraActions =
+document.getElementById("managementExtraActions");
+
+const managementTestList =
+document.getElementById("managementTestList");
+
+const drillSubjectGrid =
+document.getElementById("drillSubjectGrid");
+
+const drillFolderTitle =
+document.getElementById("drillFolderTitle");
+
+const drillFolderActions =
+document.getElementById("drillFolderActions");
+
+const drillFolderList =
+document.getElementById("drillFolderList");
+
+const toast =
+document.getElementById("toast");
+
+/* =====================================================
    HELPERS
-========================================================= */
+===================================================== */
 
-function normalizeType(value){
-
-  return String(value || "")
-    .trim()
-    .toLowerCase();
-
-}
-
-function esc(value){
-
-  return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
-}
-
-function showToast(message,error=false){
-
-  const toast =
-    document.getElementById("toast");
+function showToast(message){
 
   toast.textContent = message;
-
-  toast.classList.toggle("error",error);
-
   toast.classList.add("show");
 
-  clearTimeout(window.toastTimer);
+  clearTimeout(window.__toastTimer);
 
-  window.toastTimer =
-    setTimeout(()=>{
-      toast.classList.remove("show");
-    },2600);
-
-}
-
-function closeModal(id){
-
-  document
-    .getElementById(id)
-    .classList.remove("show");
+  window.__toastTimer =
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2500);
 
 }
 
 function openModal(id){
 
   document
-    .getElementById(id)
-    .classList.add("show");
+  .getElementById(id)
+  .classList.add("open");
 
 }
 
-/* =========================================================
-   SORT
-========================================================= */
+function closeModal(id){
 
-function sortByOrder(a,b){
-
-  return (Number(a.sort_order)||0)
-       - (Number(b.sort_order)||0);
+  document
+  .getElementById(id)
+  .classList.remove("open");
 
 }
 
-function sortExams(){
+function escapeHTML(value){
 
-  exams.sort((a,b)=>{
+  return String(value ?? "")
+  .replaceAll("&","&amp;")
+  .replaceAll("<","&lt;")
+  .replaceAll(">","&gt;")
+  .replaceAll('"',"&quot;")
+  .replaceAll("'","&#039;");
 
-    const boardA = String(a.board||"");
-    const boardB = String(b.board||"");
+}
 
-    if(boardA !== boardB){
+function resetWorkspace(){
 
-      if(boardA === "SSC") return -1;
-      if(boardB === "SSC") return 1;
+  branchView.style.display = "block";
+
+  categoryView.classList.remove("visible");
+  mockManagementView.classList.remove("visible");
+  practiceDrillView.classList.remove("visible");
+  drillFolderView.classList.remove("visible");
+
+  selectedBranch = null;
+  selectedCategory = null;
+  selectedSubject = null;
+  selectedYear = null;
+  selectedFolder = null;
+
+}
+
+function getExamBoard(exam){
+
+  return (
+    exam.board ||
+    exam.exam_board ||
+    exam.category ||
+    exam.organization ||
+    "SSC"
+  ).toUpperCase();
+
+}
+
+function getExamName(exam){
+
+  return (
+    exam.name ||
+    exam.exam_name ||
+    exam.title ||
+    "Unnamed Exam"
+  );
+
+}
+
+function getTestTitle(test){
+
+  return (
+    test.title ||
+    test.name ||
+    "Untitled Mock"
+  );
+
+}
+
+function getTestActive(test){
+
+  return test.is_active !== false;
+
+}
+
+function getTestFolderId(test){
+
+  return (
+    test.folder_id ||
+    test.mock_folder_id ||
+    null
+  );
+
+}
+
+function getFolderName(folder){
+
+  return (
+    folder.display_name ||
+    folder.name ||
+    "Unnamed"
+  );
+
+}
+
+function normalizeType(value){
+
+  return String(value || "")
+  .toUpperCase()
+  .replaceAll("-","_")
+  .replaceAll(" ","_");
+
+}
+
+function isFullTest(test){
+
+  const type =
+  normalizeType(test.test_type);
+
+  return (
+    type === "FULL" ||
+    type === "FULL_MOCK" ||
+    type === "FULL_MOCKS"
+  );
+
+}
+
+function isSectionalTest(test){
+
+  const type =
+  normalizeType(test.test_type);
+
+  return (
+    type === "SECTIONAL" ||
+    type === "SUBJECT_WISE" ||
+    type === "CHAPTER_WISE"
+  );
+
+}
+
+function isPyqFolder(folder){
+
+  const type =
+  normalizeType(folder.folder_type);
+
+  const name =
+  getFolderName(folder).toLowerCase();
+
+  return (
+    type.includes("PYQ") ||
+    name.includes("pyq") ||
+    name.includes("previous")
+  );
+
+}
+
+function isNewFolder(folder){
+
+  const type =
+  normalizeType(folder.folder_type);
+
+  const name =
+  getFolderName(folder).toLowerCase();
+
+  return (
+    type.includes("NEW") ||
+    name.includes("new")
+  );
+
+}
+
+function isPracticeDrillFolder(folder){
+
+  const type =
+  normalizeType(folder.folder_type);
+
+  return (
+    type.includes("DRILL") ||
+    type.includes("PRACTICE")
+  );
+
+}
+
+/* =====================================================
+   DATA LOAD
+===================================================== */
+
+async function loadAllData(){
+
+  examGrid.innerHTML =
+  `<div class="ap-loading">Loading exams...</div>`;
+
+  try{
+
+    const [
+      examsResponse,
+      subjectsResponse,
+      foldersResponse,
+      testsResponse
+    ] = await Promise.all([
+
+      supabaseClient
+      .from("exams")
+      .select("*")
+      .order("id",{ascending:true}),
+
+      supabaseClient
+      .from("subjects")
+      .select("*")
+      .order("id",{ascending:true}),
+
+      supabaseClient
+      .from("mock_folders")
+      .select("*")
+      .order("sort_order",{ascending:true}),
+
+      supabaseClient
+      .from("mock_tests")
+      .select("*")
+      .order("id",{ascending:false})
+
+    ]);
+
+    if(examsResponse.error)
+      throw examsResponse.error;
+
+    if(subjectsResponse.error)
+      throw subjectsResponse.error;
+
+    if(foldersResponse.error)
+      throw foldersResponse.error;
+
+    if(testsResponse.error)
+      throw testsResponse.error;
+
+    exams =
+    examsResponse.data || [];
+
+    subjects =
+    subjectsResponse.data || [];
+
+    folders =
+    foldersResponse.data || [];
+
+    tests =
+    testsResponse.data || [];
+
+    renderExams();
+
+    if(selectedExam){
+
+      const updated =
+      exams.find(
+        x => String(x.id) === String(selectedExam.id)
+      );
+
+      if(updated){
+        selectedExam = updated;
+        selectedExamName.textContent =
+        getExamName(updated);
+      }
 
     }
 
-    return sortByOrder(a,b);
+  }catch(error){
+
+    console.error(error);
+
+    examGrid.innerHTML = `
+      <div class="ap-error">
+        Unable to load data.<br>
+        ${escapeHTML(error.message || "Unknown error")}
+      </div>
+    `;
+
+  }
+
+}
+
+/* =====================================================
+   EXAM RENDER
+===================================================== */
+
+function renderExams(){
+
+  const filtered =
+  exams.filter(
+    exam => getExamBoard(exam) === activeBoard
+  );
+
+  if(!filtered.length){
+
+    examGrid.innerHTML = `
+      <div class="ap-empty">
+        No exams found for ${activeBoard}.
+      </div>
+    `;
+
+    return;
+  }
+
+  examGrid.innerHTML =
+  filtered.map(exam => {
+
+    const count =
+    tests.filter(
+      test => String(test.exam_id) === String(exam.id)
+    ).length;
+
+    return `
+      <button
+        class="ap-exam-card ${
+          selectedExam &&
+          String(selectedExam.id) === String(exam.id)
+          ? "selected"
+          : ""
+        }"
+        data-exam-id="${escapeHTML(exam.id)}"
+        type="button">
+
+        <div>
+          <div class="ap-exam-name">
+            ${escapeHTML(getExamName(exam))}
+          </div>
+
+          <div class="ap-exam-meta">
+            ${count} mock${count === 1 ? "" : "s"}
+          </div>
+        </div>
+
+        <div class="ap-exam-arrow">›</div>
+
+      </button>
+    `;
+
+  }).join("");
+
+  document
+  .querySelectorAll(".ap-exam-card")
+  .forEach(card => {
+
+    card.addEventListener("click",() => {
+
+      const exam =
+      exams.find(
+        x => String(x.id) ===
+        String(card.dataset.examId)
+      );
+
+      if(!exam) return;
+
+      selectExam(exam);
+
+    });
 
   });
 
 }
 
-/* =========================================================
-   LOAD ALL
-========================================================= */
+/* =====================================================
+   SELECT EXAM
+===================================================== */
 
-async function loadAll(){
+function selectExam(exam){
 
-  if(!window.supabase){
+  selectedExam = exam;
 
-    showToast(
-      "Supabase library failed to load.",
-      true
-    );
+  selectedExamName.textContent =
+  getExamName(exam);
 
-    return;
+  workspace.classList.add("visible");
 
-  }
-
-  const results =
-    await Promise.all([
-
-      db
-        .from("exams")
-        .select("*")
-        .order("sort_order",{ascending:true})
-        .order("id",{ascending:true}),
-
-      db
-        .from("mock_folders")
-        .select("*")
-        .order("sort_order",{ascending:true})
-        .order("id",{ascending:true}),
-
-      db
-        .from("mock_tests")
-        .select("*")
-        .order("sort_order",{ascending:true})
-        .order("id",{ascending:true}),
-
-      db
-        .from("subjects")
-        .select("*")
-        .order("id",{ascending:true})
-
-    ]);
-
-  const names = [
-    "EXAMS",
-    "MOCK_FOLDERS",
-    "MOCK_TESTS",
-    "SUBJECTS"
-  ];
-
-  for(let i=0;i<results.length;i++){
-
-    if(results[i].error){
-
-      console.error(
-        names[i],
-        results[i].error
-      );
-
-      showToast(
-        names[i] + ": " +
-        results[i].error.message,
-        true
-      );
-
-      return;
-
-    }
-
-  }
-
-  exams = results[0].data || [];
-  folders = results[1].data || [];
-  tests = results[2].data || [];
-  subjects = results[3].data || [];
-
-  sortExams();
+  resetWorkspace();
 
   renderExams();
 
-  if(selectedExam){
-
-    const fresh =
-      exams.find(
-        x => Number(x.id) === Number(selectedExam.id)
-      );
-
-    if(fresh){
-
-      selectedExam = fresh;
-      renderWorkspace();
-
-    }else{
-
-      selectedExam = null;
-
-      document
-        .getElementById("workspace")
-        .classList.add("hidden");
-
-    }
-
-  }
+  window.scrollTo({
+    top:workspace.offsetTop - 75,
+    behavior:"smooth"
+  });
 
 }
 
-/* =========================================================
-   EXAMS
-========================================================= */
+/* =====================================================
+   BRANCH SELECTION
+===================================================== */
 
-function renderExams(){
-
-  const box =
-    document.getElementById("examList");
-
-  if(!exams.length){
-
-    box.innerHTML = `
-      <div class="empty">
-        No exams added yet.
-      </div>
-    `;
-
-    return;
-
-  }
-
-  box.innerHTML =
-    exams.map(exam=>{
-
-      const active =
-        selectedExam &&
-        Number(selectedExam.id) === Number(exam.id);
-
-      const board =
-        String(exam.board||"SSC").toUpperCase();
-
-      const logo =
-        board === "RRB"
-          ? `
-            <img
-              src="rrb-logo.png"
-              alt="RRB"
-              onerror="this.style.display='none';this.parentElement.innerHTML='🚆';"
-            >
-          `
-          : `
-            <div class="ssc-logo">
-              SSC
-            </div>
-          `;
-
-      return `
-
-        <div class="exam-card ${active ? "active":""}">
-
-          <div class="exam-main">
-
-            <div class="exam-logo">
-              ${logo}
-            </div>
-
-            <div>
-
-              <div class="exam-name">
-                ${esc(exam.name)}
-              </div>
-
-              <div class="exam-board">
-                ${esc(board)}
-              </div>
-
-            </div>
-
-          </div>
-
-          <div class="exam-actions">
-
-            <button
-              class="small-btn purple"
-              onclick="selectExam(${exam.id})"
-            >
-              Manage
-            </button>
-
-            <button
-              class="small-btn"
-              onclick="editExam(${exam.id})"
-            >
-              Edit
-            </button>
-
-            <button
-              class="small-btn"
-              onclick="moveExam(${exam.id},-1)"
-            >
-              ↑
-            </button>
-
-            <button
-              class="small-btn"
-              onclick="moveExam(${exam.id},1)"
-            >
-              ↓
-            </button>
-
-            <button
-              class="small-btn red"
-              onclick="deleteExam(${exam.id})"
-            >
-              Delete
-            </button>
-
-          </div>
-
-        </div>
-
-      `;
-
-    }).join("");
-
-}
-
-/* =========================================================
-   SELECT EXAM
-========================================================= */
-
-function selectExam(id){
-
-  selectedExam =
-    exams.find(
-      x => Number(x.id) === Number(id)
-    );
+function openBranch(branch){
 
   if(!selectedExam) return;
 
-  renderExams();
-  renderWorkspace();
+  selectedBranch = branch;
+
+  branchView.style.display = "none";
+
+  categoryView.classList.add("visible");
+
+  mockManagementView.classList.remove("visible");
+  practiceDrillView.classList.remove("visible");
+  drillFolderView.classList.remove("visible");
+
+  branchHeading.textContent =
+  branch === "PYQ"
+  ? "PYQ Mocks"
+  : "New Mocks";
 
 }
 
-/* =========================================================
-   EXAM FORM
-========================================================= */
+/* =====================================================
+   CATEGORY SELECTION
+===================================================== */
 
-function openExamForm(){
+function openCategory(category){
 
-  editingExamId = null;
+  selectedCategory = category;
 
-  document.getElementById("examModalTitle")
-    .textContent = "Add Exam";
+  categoryView.classList.remove("visible");
 
-  document.getElementById("examBoard")
-    .value = "SSC";
+  mockManagementView.classList.add("visible");
 
-  document.getElementById("examName")
-    .value = "";
+  selectedSubject = null;
+  selectedYear = null;
+  selectedFolder = null;
 
-  openModal("examModal");
+  managementChipsArea.style.display = "none";
+  managementChips.innerHTML = "";
+  managementExtraActions.innerHTML = "";
 
-}
+  if(category === "FULL"){
 
-function editExam(id){
+    managementTitle.textContent =
+    selectedBranch === "PYQ"
+    ? "PYQ Full Mocks"
+    : "New Full Mocks";
 
-  const exam =
-    exams.find(
-      x => Number(x.id) === Number(id)
-    );
+    managementSubtitle.textContent =
+    "Manage complete mock tests directly";
 
-  if(!exam) return;
-
-  editingExamId = Number(id);
-
-  document.getElementById("examModalTitle")
-    .textContent = "Edit Exam";
-
-  document.getElementById("examBoard")
-    .value = exam.board || "SSC";
-
-  document.getElementById("examName")
-    .value = exam.name || "";
-
-  openModal("examModal");
-
-}
-
-function closeExamForm(){
-
-  closeModal("examModal");
-
-}
-
-async function saveExam(){
-
-  const board =
-    document.getElementById("examBoard")
-      .value
-      .trim()
-      .toUpperCase();
-
-  const name =
-    document.getElementById("examName")
-      .value
-      .trim();
-
-  if(!name){
-
-    showToast(
-      "Enter exam name.",
-      true
-    );
-
-    return;
-
-  }
-
-  const isEditing =
-    editingExamId !== null;
-
-  const idBeingEdited =
-    editingExamId;
-
-  if(isEditing){
-
-    const { error } =
-      await db
-        .from("exams")
-        .update({
-          board:board,
-          name:name
-        })
-        .eq("id",idBeingEdited);
-
-    if(error){
-
-      console.error(error);
-
-      showToast(
-        "EXAMS: " + error.message,
-        true
-      );
-
-      return;
-
-    }
-
-    if(
-      selectedExam &&
-      Number(selectedExam.id) === Number(idBeingEdited)
-    ){
-
-      selectedExam = {
-        ...selectedExam,
-        board,
-        name
-      };
-
-    }
-
-    showToast("Exam updated.");
+    renderFullManagement();
 
   }else{
 
-    const maxOrder =
-      exams
-        .filter(x=>String(x.board).toUpperCase()===board)
-        .reduce(
-          (m,x)=>Math.max(
-            m,
-            Number(x.sort_order)||0
-          ),
-          -1
-        );
+    managementTitle.textContent =
+    selectedBranch === "PYQ"
+    ? "PYQ Sectional Mocks"
+    : "New Sectional Mocks";
 
-    /*
-      IMPORTANT:
-      exams.mock_type has a DB CHECK constraint.
-      The database accepts only:
-      SECTIONAL
-      SUBJECT_WISE
+    managementSubtitle.textContent =
+    "Select a subject chip to manage mocks";
 
-      It is only a legacy required field.
-      It does NOT control the Practice hierarchy.
-    */
-
-    const { data,error } =
-      await db
-        .from("exams")
-        .insert({
-          board:board,
-          name:name,
-          mock_type:"SECTIONAL",
-          is_active:true,
-          sort_order:maxOrder + 1
-        })
-        .select()
-        .single();
-
-    if(error){
-
-      console.error(error);
-
-      showToast(
-        "EXAMS: " + error.message,
-        true
-      );
-
-      return;
-
-    }
-
-    selectedExam = data;
-
-    showToast("Exam created.");
+    renderSectionalManagement();
 
   }
-
-  editingExamId = null;
-
-  closeExamForm();
-
-  await loadAll();
 
 }
 
-/* =========================================================
-   EXAM REORDER
-========================================================= */
+/* =====================================================
+   FULL MANAGEMENT
+===================================================== */
 
-async function moveExam(id,direction){
+function renderFullManagement(){
 
-  const index =
-    exams.findIndex(
-      x => Number(x.id) === Number(id)
+  managementChipsArea.style.display = "none";
+
+  managementExtraActions.innerHTML = `
+    <button
+      class="ap-primary-btn"
+      id="addFullMockAction"
+      type="button">
+      + Add Full Mock
+    </button>
+  `;
+
+  document
+  .getElementById("addFullMockAction")
+  .onclick = () => openMockEditor("FULL");
+
+  const list =
+  tests.filter(test => {
+
+    if(String(test.exam_id) !== String(selectedExam.id))
+      return false;
+
+    if(!isFullTest(test))
+      return false;
+
+    const folder =
+    folders.find(
+      f => String(f.id) === String(getTestFolderId(test))
     );
 
-  if(index < 0) return;
+    if(selectedBranch === "PYQ")
+      return folder ? isPyqFolder(folder) : false;
 
-  const board =
-    String(exams[index].board || "")
-      .toUpperCase();
+    return folder ? !isPyqFolder(folder) : true;
 
-  const sameBoard =
-    exams.filter(
-      x =>
-        String(x.board||"").toUpperCase() === board
-    );
+  });
 
-  const pos =
-    sameBoard.findIndex(
-      x => Number(x.id) === Number(id)
-    );
-
-  const target =
-    pos + direction;
-
-  if(target < 0 || target >= sameBoard.length){
-
-    return;
-
-  }
-
-  const current = sameBoard[pos];
-  const other = sameBoard[target];
-
-  const currentOrder =
-    Number(current.sort_order)||0;
-
-  const otherOrder =
-    Number(other.sort_order)||0;
-
-  const { error } =
-    await db
-      .from("exams")
-      .update({
-        sort_order:otherOrder
-      })
-      .eq("id",current.id);
-
-  if(error){
-
-    showToast(
-      "EXAMS: " + error.message,
-      true
-    );
-
-    return;
-
-  }
-
-  const { error:error2 } =
-    await db
-      .from("exams")
-      .update({
-        sort_order:currentOrder
-      })
-      .eq("id",other.id);
-
-  if(error2){
-
-    showToast(
-      "EXAMS: " + error2.message,
-      true
-    );
-
-    return;
-
-  }
-
-  await loadAll();
+  renderTestList(list);
 
 }
 
-/* =========================================================
-   DELETE EXAM
-========================================================= */
+/* =====================================================
+   SECTIONAL MANAGEMENT
+===================================================== */
 
-async function deleteExam(id){
+function renderSectionalManagement(){
 
-  const exam =
-    exams.find(
-      x => Number(x.id) === Number(id)
-    );
+  managementChipsArea.style.display = "block";
 
-  if(!exam) return;
+  managementExtraActions.innerHTML = "";
 
-  if(
-    !confirm(
-      `Delete "${exam.name}" and all its practice folders/tests?`
-    )
-  ){
+  const examSubjects =
+  subjects.filter(subject => {
 
-    return;
+    if(subject.exam_id == null)
+      return true;
 
-  }
+    return String(subject.exam_id) ===
+    String(selectedExam.id);
 
-  const examFolders =
-    folders.filter(
-      x => Number(x.exam_id) === Number(id)
-    );
+  });
 
-  const folderIds =
-    examFolders.map(x=>Number(x.id));
+  if(!examSubjects.length){
 
-  /*
-    Delete tests first.
-  */
-
-  if(folderIds.length){
-
-    const { error:testError } =
-      await db
-        .from("mock_tests")
-        .delete()
-        .in("folder_id",folderIds);
-
-    if(testError){
-
-      showToast(
-        "MOCK_TESTS: " +
-        testError.message,
-        true
-      );
-
-      return;
-
-    }
-
-  }
-
-  /*
-    Delete folders deepest-first so a self
-    parent_id foreign key does not block deletion.
-  */
-
-  const remaining =
-    [...examFolders];
-
-  while(remaining.length){
-
-    const leafFolders =
-      remaining.filter(folder=>{
-
-        return !remaining.some(
-          child =>
-            Number(child.parent_id) ===
-            Number(folder.id)
-        );
-
-      });
-
-    const batch =
-      leafFolders.length
-        ? leafFolders
-        : remaining;
-
-    const ids =
-      batch.map(x=>Number(x.id));
-
-    const { error } =
-      await db
-        .from("mock_folders")
-        .delete()
-        .in("id",ids);
-
-    if(error){
-
-      showToast(
-        "MOCK_FOLDERS: " +
-        error.message,
-        true
-      );
-
-      return;
-
-    }
-
-    for(const item of batch){
-
-      const index =
-        remaining.indexOf(item);
-
-      if(index >= 0){
-
-        remaining.splice(index,1);
-
-      }
-
-    }
-
-  }
-
-  const { error:examError } =
-    await db
-      .from("exams")
-      .delete()
-      .eq("id",id);
-
-  if(examError){
-
-    showToast(
-      "EXAMS: " +
-      examError.message,
-      true
-    );
-
-    return;
-
-  }
-
-  if(
-    selectedExam &&
-    Number(selectedExam.id) === Number(id)
-  ){
-
-    selectedExam = null;
-
-  }
-
-  showToast("Exam deleted.");
-
-  await loadAll();
-
-}
-
-/* =========================================================
-   WORKSPACE
-========================================================= */
-
-function renderWorkspace(){
-
-  const workspace =
-    document.getElementById("workspace");
-
-  if(!selectedExam){
-
-    workspace.classList.add("hidden");
-
-    return;
-
-  }
-
-  workspace.classList.remove("hidden");
-
-  document.getElementById("workspaceTitle")
-    .textContent =
-      `${selectedExam.board} ${selectedExam.name}`;
-
-  renderRootArea();
-
-}
-
-/* =========================================================
-   ROOT AREA
-========================================================= */
-
-function renderRootArea(){
-
-  if(!selectedExam) return;
-
-  const roots =
-    folders
-      .filter(
-        f =>
-          Number(f.exam_id) ===
-          Number(selectedExam.id) &&
-          !f.parent_id &&
-          ["new","pyq"].includes(
-            normalizeType(f.folder_type)
-          )
-      )
-      .sort(sortByOrder);
-
-  let html = "";
-
-  /*
-    Only show missing roots.
-    If NEW and PYQ already exist, no duplicate
-    Add Mock Type card/button is rendered.
-  */
-
-  if(roots.length < 2){
-
-    html += `
-
-      <div style="margin-bottom:14px;">
-
-        <button
-          class="secondary-btn"
-          onclick="openRootForm()"
-        >
-          + Add Missing Mock Type
-        </button>
-
-      </div>
-
-    `;
-
-  }
-
-  if(!roots.length){
-
-    html += `
-      <div class="empty">
-        No mock structure added for this exam.
+    managementChips.innerHTML = `
+      <div class="ap-empty">
+        No subjects found.
       </div>
     `;
 
-    document.getElementById("rootArea")
-      .innerHTML = html;
+    managementTestList.innerHTML = `
+      <div class="ap-empty">
+        Add subjects in the database first.
+      </div>
+    `;
 
     return;
-
   }
 
-  html += `<div class="root-grid">`;
+  managementChips.innerHTML =
+  examSubjects.map(subject => {
 
-  html += roots.map(root=>{
+    const subjectName =
+    subject.name ||
+    subject.subject_name ||
+    subject.title ||
+    "Subject";
 
-    const type =
-      normalizeType(root.folder_type);
-
-    const title =
-      type === "new"
-        ? "NEW MOCKS"
-        : "PYQ MOCKS";
-
-    const desc =
-      type === "new"
-        ? "Newly created mock tests."
-        : "Previous Year Question mock tests.";
-
-    const icon =
-      type === "new"
-        ? "⚡"
-        : "📚";
+    const subjectId =
+    subject.id;
 
     return `
+      <button
+        class="ap-chip ${
+          selectedSubject &&
+          String(selectedSubject.id) === String(subjectId)
+          ? "active"
+          : ""
+        }"
+        data-subject-id="${escapeHTML(subjectId)}"
+        type="button">
 
-      <div class="root-card">
+        ${escapeHTML(subjectName)}
 
-        <div class="root-icon">
-          ${icon}
+      </button>
+    `;
+
+  }).join("");
+
+  document
+  .querySelectorAll("#managementChips .ap-chip")
+  .forEach(chip => {
+
+    chip.onclick = () => {
+
+      selectedSubject =
+      examSubjects.find(
+        s => String(s.id) ===
+        String(chip.dataset.subjectId)
+      );
+
+      selectedYear = null;
+
+      renderSectionalManagement();
+
+    };
+
+  });
+
+  if(selectedBranch === "PYQ"){
+
+    managementExtraActions.innerHTML = `
+      <button
+        class="ap-secondary-btn"
+        id="addYearAction"
+        type="button">
+        + Add Year
+      </button>
+    `;
+
+  }
+
+  if(!selectedSubject){
+
+    managementTestList.innerHTML = `
+      <div class="ap-empty">
+        Select a subject chip to view its mocks.
+      </div>
+    `;
+
+    return;
+  }
+
+  renderSubjectMockList();
+
+}
+
+/* =====================================================
+   SUBJECT MOCK LIST
+===================================================== */
+
+function renderSubjectMockList(){
+
+  const subjectId =
+  selectedSubject.id;
+
+  const list =
+  tests.filter(test => {
+
+    if(String(test.exam_id) !== String(selectedExam.id))
+      return false;
+
+    if(!isSectionalTest(test))
+      return false;
+
+    if(test.subject_id != null &&
+       String(test.subject_id) !== String(subjectId))
+      return false;
+
+    const folder =
+    folders.find(
+      f => String(f.id) === String(getTestFolderId(test))
+    );
+
+    if(selectedBranch === "PYQ")
+      return folder ? isPyqFolder(folder) : false;
+
+    return folder ? !isPyqFolder(folder) : true;
+
+  });
+
+  managementExtraActions.innerHTML += `
+    <button
+      class="ap-primary-btn"
+      id="addSectionalMockAction"
+      type="button">
+      + Add Sectional Mock
+    </button>
+  `;
+
+  document
+  .getElementById("addSectionalMockAction")
+  .onclick = () => openMockEditor("SECTIONAL");
+
+  renderTestList(list);
+
+}
+
+/* =====================================================
+   TEST LIST RENDER
+===================================================== */
+
+function renderTestList(list){
+
+  if(!list.length){
+
+    managementTestList.innerHTML = `
+      <div class="ap-empty">
+        No mock tests found here.
+      </div>
+    `;
+
+    return;
+  }
+
+  managementTestList.innerHTML =
+  list.map(test => {
+
+    const active =
+    getTestActive(test);
+
+    const duration =
+    test.duration_minutes ||
+    test.duration ||
+    0;
+
+    const total =
+    test.total_questions ||
+    test.question_count ||
+    0;
+
+    const timing =
+    test.subject_wise_timing ||
+    test.sectional_timing;
+
+    return `
+      <div class="ap-test-card">
+
+        <div class="ap-test-top">
+
+          <div>
+            <div class="ap-test-title">
+              ${escapeHTML(getTestTitle(test))}
+            </div>
+
+            ${
+              test.description
+              ? `
+                <div class="ap-test-description">
+                  ${escapeHTML(test.description)}
+                </div>
+              `
+              : ""
+            }
+          </div>
+
         </div>
 
-        <div class="root-title">
-          ${title}
+        <div class="ap-test-badges">
+
+          <span class="ap-test-badge">
+            ${duration} min
+          </span>
+
+          <span class="ap-test-badge">
+            ${total} Questions
+          </span>
+
+          ${
+            timing
+            ? `
+              <span class="ap-test-badge">
+                Section Timing
+              </span>
+            `
+            : ""
+          }
+
+          <span class="ap-test-badge ${
+            active ? "active" : "inactive"
+          }">
+            ${active ? "Active" : "Inactive"}
+          </span>
+
         </div>
 
-        <div class="root-desc">
-          ${desc}
-        </div>
-
-        <div class="root-actions">
+        <div class="ap-test-actions">
 
           <button
-            class="small-btn purple"
-            onclick="openRoot(${root.id})"
-          >
-            Open
-          </button>
-
-          <button
-            class="small-btn"
-            onclick="editFolder(${root.id})"
-          >
+            class="ap-small-btn edit"
+            data-edit-test="${escapeHTML(test.id)}"
+            type="button">
             Edit
           </button>
 
           <button
-            class="small-btn"
-            onclick="moveFolder(${root.id},-1)"
-          >
-            ↑
+            class="ap-small-btn"
+            data-question-test="${escapeHTML(test.id)}"
+            type="button">
+            Questions
           </button>
 
           <button
-            class="small-btn"
-            onclick="moveFolder(${root.id},1)"
-          >
-            ↓
-          </button>
-
-          <button
-            class="small-btn red"
-            onclick="deleteFolder(${root.id})"
-          >
+            class="ap-small-btn delete"
+            data-delete-test="${escapeHTML(test.id)}"
+            type="button">
             Delete
           </button>
 
         </div>
 
       </div>
-
     `;
 
   }).join("");
 
-  html += `</div>`;
+  document
+  .querySelectorAll("[data-edit-test]")
+  .forEach(button => {
 
-  document.getElementById("rootArea")
-    .innerHTML = html;
+    button.onclick = () => {
+
+      const test =
+      tests.find(
+        x => String(x.id) ===
+        String(button.dataset.editTest)
+      );
+
+      if(test)
+        openMockEditor(
+          normalizeType(test.test_type),
+          test
+        );
+
+    };
+
+  });
+
+  document
+  .querySelectorAll("[data-delete-test]")
+  .forEach(button => {
+
+    button.onclick = () => {
+
+      const test =
+      tests.find(
+        x => String(x.id) ===
+        String(button.dataset.deleteTest)
+      );
+
+      if(test)
+        deleteMock(test);
+
+    };
+
+  });
+
+  document
+  .querySelectorAll("[data-question-test]")
+  .forEach(button => {
+
+    button.onclick = () => {
+
+      const id =
+      button.dataset.questionTest;
+
+      window.location.href =
+      `admin-mock.html?test_id=${encodeURIComponent(id)}`;
+
+    };
+
+  });
 
 }
 
-/* =========================================================
-   OPEN ROOT
-========================================================= */
+/* =====================================================
+   MOCK EDITOR
+===================================================== */
 
-function openRoot(rootId){
+function openMockEditor(type,test=null){
 
-  const root =
-    folders.find(
-      x => Number(x.id) === Number(rootId)
-    );
+  editingMockId =
+  test ? test.id : null;
 
-  if(!root) return;
+  document
+  .getElementById("mockModalTitle")
+  .textContent =
+  test ? "Edit Mock" : "Add Mock";
 
-  renderFolderLevel(root);
+  document
+  .getElementById("mockTitleInput")
+  .value =
+  test ? getTestTitle(test) : "";
+
+  document
+  .getElementById("mockDescriptionInput")
+  .value =
+  test ? (test.description || "") : "";
+
+  document
+  .getElementById("mockDurationInput")
+  .value =
+  test
+  ? (test.duration_minutes || test.duration || 60)
+  : 60;
+
+  document
+  .getElementById("mockQuestionsInput")
+  .value =
+  test
+  ? (test.total_questions || test.question_count || 25)
+  : 25;
+
+  document
+  .getElementById("mockActiveInput")
+  .value =
+  test && test.is_active === false
+  ? "false"
+  : "true";
+
+  document
+  .getElementById("mockAccessInput")
+  .value =
+  test && (
+    test.access_type === "paid" ||
+    test.is_free === false
+  )
+  ? "paid"
+  : "free";
+
+  document
+  .getElementById("sectionalTimingInput")
+  .checked =
+  test
+  ? Boolean(
+      test.subject_wise_timing ||
+      test.sectional_timing
+    )
+  : false;
+
+  renderSectionRows(test);
+
+  openModal("mockModal");
 
 }
 
-/* =========================================================
-   ROOT FORM
-========================================================= */
+function renderSectionRows(test=null){
 
-function openRootForm(){
+  const sectionRows =
+  document.getElementById("sectionRows");
+
+  sectionRows.innerHTML = "";
+
+  let sections = [];
+
+  if(test && Array.isArray(test.sections))
+    sections = test.sections;
+
+  if(!sections.length){
+
+    sections = [
+      {
+        name:"",
+        duration:"",
+        questions:""
+      }
+    ];
+
+  }
+
+  sections.forEach(section => {
+    addSectionRow(section);
+  });
+
+}
+
+function addSectionRow(data={}){
+
+  const sectionRows =
+  document.getElementById("sectionRows");
+
+  const row =
+  document.createElement("div");
+
+  row.className =
+  "ap-section-row";
+
+  row.innerHTML = `
+
+    <input
+      class="section-name"
+      type="text"
+      placeholder="Subject / Section"
+      value="${escapeHTML(data.name || data.subject_name || "")}">
+
+    <input
+      class="section-time"
+      type="number"
+      min="0"
+      placeholder="Min"
+      value="${escapeHTML(data.duration || data.time || "")}">
+
+    <input
+      class="section-questions"
+      type="number"
+      min="0"
+      placeholder="Ques"
+      value="${escapeHTML(data.questions || data.question_count || "")}">
+
+    <button
+      class="ap-remove-section"
+      type="button">
+      ×
+    </button>
+
+  `;
+
+  row
+  .querySelector(".ap-remove-section")
+  .onclick = () => row.remove();
+
+  sectionRows.appendChild(row);
+
+}
+
+/* =====================================================
+   SAVE MOCK
+===================================================== */
+
+async function saveMock(){
 
   if(!selectedExam){
 
-    showToast(
-      "Select an exam first.",
-      true
-    );
-
+    showToast("Select an exam first");
     return;
 
   }
-
-  const existing =
-    folders.filter(
-      f =>
-        Number(f.exam_id) ===
-          Number(selectedExam.id) &&
-        !f.parent_id
-    );
-
-  const hasNew =
-    existing.some(
-      x =>
-        normalizeType(x.folder_type) === "new"
-    );
-
-  const hasPyq =
-    existing.some(
-      x =>
-        normalizeType(x.folder_type) === "pyq"
-    );
-
-  const select =
-    document.getElementById("rootType");
-
-  select.innerHTML = "";
-
-  if(!hasNew){
-
-    select.innerHTML += `
-      <option value="new">
-        NEW MOCKS
-      </option>
-    `;
-
-  }
-
-  if(!hasPyq){
-
-    select.innerHTML += `
-      <option value="pyq">
-        PYQ MOCKS
-      </option>
-    `;
-
-  }
-
-  if(hasNew && hasPyq){
-
-    showToast(
-      "Both NEW MOCKS and PYQ MOCKS already exist.",
-      true
-    );
-
-    return;
-
-  }
-
-  openModal("rootModal");
-
-}
-
-function closeRootForm(){
-
-  closeModal("rootModal");
-
-}
-
-async function saveRoot(){
-
-  if(!selectedExam) return;
-
-  const type =
-    normalizeType(
-      document.getElementById("rootType").value
-    );
-
-  const duplicate =
-    folders.some(
-      f =>
-        Number(f.exam_id) ===
-          Number(selectedExam.id) &&
-        !f.parent_id &&
-        normalizeType(f.folder_type) === type
-    );
-
-  if(duplicate){
-
-    showToast(
-      "This mock type already exists.",
-      true
-    );
-
-    return;
-
-  }
-
-  const roots =
-    folders.filter(
-      f =>
-        Number(f.exam_id) ===
-          Number(selectedExam.id) &&
-        !f.parent_id
-    );
-
-  const maxOrder =
-    roots.reduce(
-      (m,x)=>
-        Math.max(
-          m,
-          Number(x.sort_order)||0
-        ),
-      -1
-    );
-
-  const { data,error } =
-    await db
-      .from("mock_folders")
-      .insert({
-        exam_id:examId,
-        name:type === "new"
-          ? "NEW MOCKS"
-          : "PYQ MOCKS",
-        display_name:type === "new"
-          ? "NEW MOCKS"
-          : "PYQ MOCKS",
-        folder_type:type,
-        sort_order:maxOrder + 1,
-        is_active:true,
-        parent_id:null
-      })
-      .select()
-      .single();
-
-  if(error){
-
-    showToast(
-      "MOCK_FOLDERS: " +
-      error.message,
-      true
-    );
-
-    return;
-
-  }
-
-  /*
-    Automatically create FULL MOCKS and
-    SECTIONAL MOCKS below the new root.
-  */
-
-  await createRootChildren(data);
-
-  closeRootForm();
-
-  showToast(
-    type === "new"
-      ? "NEW MOCKS created."
-      : "PYQ MOCKS created."
-  );
-
-  await loadAll();
-
-}
-
-/* =========================================================
-   CREATE ROOT CHILDREN
-========================================================= */
-
-async function createRootChildren(root){
-
-  const children = [
-
-    {
-      name:"FULL MOCKS",
-      display_name:"FULL MOCKS",
-      folder_type:"full",
-      sort_order:0
-    },
-
-    {
-      name:"SECTIONAL MOCKS",
-      display_name:"SECTIONAL MOCKS",
-      folder_type:"sectional",
-      sort_order:1
-    }
-
-  ];
-
-  for(const child of children){
-
-    const {error} =
-      await db
-        .from("mock_folders")
-        .insert({
-
-          exam_id:selectedExam.id,
-
-          name:child.name,
-
-          display_name:child.display_name,
-
-          folder_type:child.folder_type,
-
-          sort_order:child.sort_order,
-
-          is_active:true,
-
-          parent_id:root.id
-
-        });
-
-    if(error){
-
-      console.error(
-        "createRootChildren",
-        error
-      );
-
-      showToast(
-        "Folder creation error: " +
-        error.message,
-        true
-      );
-
-      return;
-
-    }
-
-  }
-
-}
-
-/* =========================================================
-   FOLDER LEVEL
-========================================================= */
-
-function renderFolderLevel(root){
-
-  if(!root) return;
-
-  const children =
-    folders
-      .filter(
-        f =>
-          Number(f.parent_id) ===
-          Number(root.id)
-      )
-      .sort(sortByOrder);
 
   const title =
-    root.display_name ||
-    root.name;
-
-  const full =
-    children.find(
-      x =>
-        normalizeType(x.folder_type) ===
-        "full"
-    );
-
-  const sectional =
-    children.find(
-      x =>
-        normalizeType(x.folder_type) ===
-        "sectional"
-    );
-
-  let html = `
-
-    <div style="margin-bottom:15px;">
-
-      <button
-        class="secondary-btn"
-        onclick="renderRootArea()"
-      >
-        ← Back
-      </button>
-
-    </div>
-
-    <div class="workspace-title" style="margin-bottom:13px;">
-      ${esc(title)}
-    </div>
-
-  `;
-
-  /*
-    Only show missing category.
-  */
-
-  if(!full || !sectional){
-
-    html += `
-
-      <div style="margin-bottom:14px;">
-
-        <button
-          class="secondary-btn"
-          onclick="openCategoryForm(${root.id})"
-        >
-          + Add Missing Category
-        </button>
-
-      </div>
-
-    `;
-
-  }
-
-  html += `<div class="category-grid">`;
-
-  if(full){
-
-    html += renderCategoryCard(
-      full,
-      "FULL MOCKS",
-      "📝",
-      "Direct test cards are placed here."
-    );
-
-  }
-
-  if(sectional){
-
-    html += renderCategoryCard(
-      sectional,
-      "SECTIONAL MOCKS",
-      "📖",
-      "Subject-wise sectional tests."
-    );
-
-  }
-
-  html += `</div>`;
-
-  document.getElementById("rootArea")
-    .innerHTML = html;
-
-}
-
-/* =========================================================
-   CATEGORY CARD
-========================================================= */
-
-function renderCategoryCard(
-  folder,
-  title,
-  icon,
-  desc
-){
-
-  return `
-
-    <div class="category-card">
-
-      <div class="category-icon">
-        ${icon}
-      </div>
-
-      <div class="category-title">
-        ${title}
-      </div>
-
-      <div class="category-desc">
-        ${desc}
-      </div>
-
-      <div class="category-actions">
-
-        <button
-          class="small-btn purple"
-          onclick="openCategory(${folder.id})"
-        >
-          Open
-        </button>
-
-        <button
-          class="small-btn"
-          onclick="editFolder(${folder.id})"
-        >
-          Edit
-        </button>
-
-        <button
-          class="small-btn"
-          onclick="moveFolder(${folder.id},-1)"
-        >
-          ↑
-        </button>
-
-        <button
-          class="small-btn"
-          onclick="moveFolder(${folder.id},1)"
-        >
-          ↓
-        </button>
-
-        <button
-          class="small-btn red"
-          onclick="deleteFolder(${folder.id})"
-        >
-          Delete
-        </button>
-
-      </div>
-
-    </div>
-
-  `;
-
-}
-
-/* =========================================================
-   CATEGORY FORM
-========================================================= */
-
-function openCategoryForm(rootId){
-
-  currentParentId =
-    Number(rootId);
-
-  editingFolderId = null;
-
-  const existing =
-    folders.filter(
-      f =>
-        Number(f.parent_id) ===
-        Number(rootId)
-    );
-
-  const hasFull =
-    existing.some(
-      x =>
-        normalizeType(x.folder_type) ===
-        "full"
-    );
-
-  const hasSectional =
-    existing.some(
-      x =>
-        normalizeType(x.folder_type) ===
-        "sectional"
-    );
-
-  const select =
-    document.getElementById("categoryType");
-
-  select.innerHTML = "";
-
-  if(!hasFull){
-
-    select.innerHTML += `
-      <option value="full">
-        FULL MOCKS
-      </option>
-    `;
-
-  }
-
-  if(!hasSectional){
-
-    select.innerHTML += `
-      <option value="sectional">
-        SECTIONAL MOCKS
-      </option>
-    `;
-
-  }
-
-  if(hasFull && hasSectional){
-
-    showToast(
-      "Both categories already exist.",
-      true
-    );
-
-    return;
-
-  }
-
-  document.getElementById("categoryModalTitle")
-    .textContent =
-      "Add Category";
-
-  openModal("categoryModal");
-
-}
-
-function closeCategoryForm(){
-
-  closeModal("categoryModal");
-
-}
-
-async function saveCategory(){
-
-  if(!selectedExam || !currentParentId){
-
-    showToast(
-      "Invalid parent folder.",
-      true
-    );
-
-    return;
-
-  }
-
-  const type =
-    normalizeType(
-      document.getElementById("categoryType").value
-    );
-
-  const duplicate =
-    folders.some(
-      f =>
-        Number(f.parent_id) ===
-          Number(currentParentId) &&
-        normalizeType(f.folder_type) === type
-    );
-
-  if(duplicate){
-
-    showToast(
-      "This category already exists.",
-      true
-    );
-
-    return;
-
-  }
-
-  const siblings =
-    folders.filter(
-      f =>
-        Number(f.parent_id) ===
-        Number(currentParentId)
-    );
-
-  const maxOrder =
-    siblings.reduce(
-      (m,x)=>
-        Math.max(
-          m,
-          Number(x.sort_order)||0
-        ),
-      -1
-    );
-
-  const title =
-    type === "full"
-      ? "FULL MOCKS"
-      : "SECTIONAL MOCKS";
-
-  const {error} =
-    await db
-      .from("mock_folders")
-      .insert({
-
-        exam_id:selectedExam.id,
-
-        parent_id:currentParentId,
-
-        name:title,
-
-        display_name:title,
-
-        folder_type:type,
-
-        sort_order:maxOrder + 1,
-
-        is_active:true
-
-      });
-
-  if(error){
-
-    showToast(
-      "MOCK_FOLDERS: " +
-      error.message,
-      true
-    );
-
-    return;
-
-  }
-
-  closeCategoryForm();
-
-  showToast(
-    title + " created."
-  );
-
-  await loadAll();
-
-}
-
-/* =========================================================
-   OPEN CATEGORY
-========================================================= */
-
-function openCategory(categoryId){
-
-  const category =
-    folders.find(
-      x => Number(x.id) === Number(categoryId)
-    );
-
-  if(!category) return;
-
-  const type =
-    normalizeType(category.folder_type);
-
-  if(type === "full"){
-
-    renderFullLevel(category);
-
-    return;
-
-  }
-
-  if(type === "sectional"){
-
-    renderSectionalLevel(category);
-
-    return;
-
-  }
-
-  renderLeafLevel(category);
-
-}
-
-/* =========================================================
-   FULL LEVEL
-========================================================= */
-
-function renderFullLevel(category){
-
-  const root =
-    folders.find(
-      x => Number(x.id) ===
-      Number(category.parent_id)
-    );
-
-  const rootType =
-    root
-      ? normalizeType(root.folder_type)
-      : "";
-
-  if(rootType === "pyq"){
-
-    renderPYQFull(category);
-
-    return;
-
-  }
-
-  renderNewFull(category);
-
-}
-
-/* =========================================================
-   NEW FULL
-========================================================= */
-
-function renderNewFull(folder){
-
-  const folderTests =
-    getTests(folder.id);
-
-  let html = `
-
-    <div style="margin-bottom:15px;">
-
-      <button
-        class="secondary-btn"
-        onclick="goToParentFolder(${folder.parent_id})"
-      >
-        ← Back
-      </button>
-
-    </div>
-
-    <div class="workspace-title">
-      NEW MOCKS / FULL MOCKS
-    </div>
-
-    <div class="workspace-subtitle" style="margin-bottom:16px;">
-      Tests are shown directly here.
-    </div>
-
-    <div class="tests-head">
-
-      <div class="tests-title">
-        Tests
-      </div>
-
-      <button
-        class="primary-btn"
-        onclick="openTestForm(${folder.id})"
-      >
-        + Add Test
-      </button>
-
-    </div>
-
-  `;
-
-  html += renderTestList(folderTests);
-
-  document.getElementById("rootArea")
-    .innerHTML = html;
-
-}
-
-/* =========================================================
-   PYQ FULL
-========================================================= */
-
-function renderPYQFull(folder){
-
-  const years =
-    folders
-      .filter(
-        f =>
-          Number(f.parent_id) ===
-          Number(folder.id) &&
-          normalizeType(f.folder_type) ===
-          "year"
-      )
-      .sort(sortByOrder);
-
-  let html = `
-
-    <div style="margin-bottom:15px;">
-
-      <button
-        class="secondary-btn"
-        onclick="goToParentFolder(${folder.parent_id})"
-      >
-        ← Back
-      </button>
-
-    </div>
-
-    <div class="workspace-title">
-      PYQ MOCKS / FULL MOCKS
-    </div>
-
-    <div class="workspace-subtitle" style="margin-bottom:16px;">
-      Add and manage PYQ years.
-    </div>
-
-    <div style="margin-bottom:14px;">
-
-      <button
-        class="secondary-btn"
-        onclick="openLeafForm(${folder.id},'year')"
-      >
-        + Add Year
-      </button>
-
-    </div>
-
-  `;
-
-  if(!years.length){
-
-    html += `
-      <div class="empty">
-        No years added yet.
-      </div>
-    `;
-
-  }else{
-
-    html += `
-      <div class="horizontal-scroll">
-    `;
-
-    html += years.map(year=>{
-
-      return `
-
-        <div class="choice-card">
-
-          <div class="choice-title">
-            ${esc(year.display_name || year.name)}
-          </div>
-
-          <div class="choice-meta">
-            ${getTests(year.id).length} tests
-          </div>
-
-          <div class="choice-actions">
-
-            <button
-              class="small-btn purple"
-              onclick="openYear(${year.id})"
-            >
-              Open
-            </button>
-
-            <button
-              class="reorder-btn"
-              onclick="moveFolder(${year.id},-1)"
-            >
-              ↑
-            </button>
-
-            <button
-              class="reorder-btn"
-              onclick="moveFolder(${year.id},1)"
-            >
-              ↓
-            </button>
-
-            <button
-              class="small-btn"
-              onclick="editFolder(${year.id})"
-            >
-              Edit
-            </button>
-
-            <button
-              class="small-btn red"
-              onclick="deleteFolder(${year.id})"
-            >
-              Delete
-            </button>
-
-          </div>
-
-        </div>
-
-      `;
-
-    }).join("");
-
-    html += `
-      </div>
-    `;
-
-  }
-
-  document.getElementById("rootArea")
-    .innerHTML = html;
-
-}
-
-/* =========================================================
-   OPEN YEAR
-========================================================= */
-
-function openYear(yearId){
-
-  const year =
-    folders.find(
-      x => Number(x.id) === Number(yearId)
-    );
-
-  if(!year) return;
-
-  renderYearTests(year);
-
-}
-
-/* =========================================================
-   YEAR TESTS
-========================================================= */
-
-function renderYearTests(year){
-
-  const parent =
-    folders.find(
-      x => Number(x.id) ===
-      Number(year.parent_id)
-    );
-
-  let html = `
-
-    <div style="margin-bottom:15px;">
-
-      <button
-        class="secondary-btn"
-        onclick="renderPYQFull(
-          folders.find(
-            x=>Number(x.id)===Number(${year.parent_id})
-          )
-        )"
-      >
-        ← Back
-      </button>
-
-    </div>
-
-    <div class="workspace-title">
-      PYQ FULL MOCKS / ${esc(year.display_name || year.name)}
-    </div>
-
-    <div class="workspace-subtitle" style="margin-bottom:16px;">
-      Test cards for this year.
-    </div>
-
-    <div class="tests-head">
-
-      <div class="tests-title">
-        Tests
-      </div>
-
-      <button
-        class="primary-btn"
-        onclick="openTestForm(${year.id})"
-      >
-        + Add Test
-      </button>
-
-    </div>
-
-  `;
-
-  html +=
-    renderTestList(
-      getTests(year.id)
-    );
-
-  document.getElementById("rootArea")
-    .innerHTML = html;
-
-}
-
-/* =========================================================
-   SECTIONAL LEVEL
-========================================================= */
-
-function renderSectionalLevel(folder){
-
-  const root =
-    folders.find(
-      x =>
-        Number(x.id) ===
-        Number(folder.parent_id)
-    );
-
-  const rootType =
-    root
-      ? normalizeType(root.folder_type)
-      : "";
-
-  const subjectsFolders =
-    folders
-      .filter(
-        f =>
-          Number(f.parent_id) ===
-          Number(folder.id) &&
-          normalizeType(f.folder_type) ===
-          "subject"
-      )
-      .sort(sortByOrder);
-
-  let html = `
-
-    <div style="margin-bottom:15px;">
-
-      <button
-        class="secondary-btn"
-        onclick="goToParentFolder(${folder.parent_id})"
-      >
-        ← Back
-      </button>
-
-    </div>
-
-    <div class="workspace-title">
-      ${rootType === "pyq" ? "PYQ" : "NEW"} MOCKS / SECTIONAL MOCKS
-    </div>
-
-    <div class="workspace-subtitle" style="margin-bottom:16px;">
-      Manage sectional subjects.
-    </div>
-
-    <div style="margin-bottom:14px;">
-
-      <button
-        class="secondary-btn"
-        onclick="openLeafForm(${folder.id},'subject')"
-      >
-        + Add Subject
-      </button>
-
-    </div>
-
-  `;
-
-  if(!subjectsFolders.length){
-
-    html += `
-      <div class="empty">
-        No sectional subjects added yet.
-      </div>
-    `;
-
-  }else{
-
-    html += `
-      <div class="horizontal-scroll">
-    `;
-
-    html += subjectsFolders.map(item=>{
-
-      return `
-
-        <div class="choice-card">
-
-          <div class="choice-title">
-            ${esc(
-              item.display_name ||
-              item.name
-            )}
-          </div>
-
-          <div class="choice-meta">
-            ${getTests(item.id).length} tests
-          </div>
-
-          <div class="choice-actions">
-
-            <button
-              class="small-btn purple"
-              onclick="openSubject(${item.id})"
-            >
-              Open
-            </button>
-
-            <button
-              class="reorder-btn"
-              onclick="moveFolder(${item.id},-1)"
-            >
-              ↑
-            </button>
-
-            <button
-              class="reorder-btn"
-              onclick="moveFolder(${item.id},1)"
-            >
-              ↓
-            </button>
-
-            <button
-              class="small-btn"
-              onclick="editFolder(${item.id})"
-            >
-              Edit
-            </button>
-
-            <button
-              class="small-btn red"
-              onclick="deleteFolder(${item.id})"
-            >
-              Delete
-            </button>
-
-          </div>
-
-        </div>
-
-      `;
-
-    }).join("");
-
-    html += `
-      </div>
-    `;
-
-  }
-
-  document.getElementById("rootArea")
-    .innerHTML = html;
-
-}
-
-/* =========================================================
-   OPEN SUBJECT
-========================================================= */
-
-function openSubject(id){
-
-  const subjectFolder =
-    folders.find(
-      x => Number(x.id) === Number(id)
-    );
-
-  if(!subjectFolder) return;
-
-  renderSubjectTests(subjectFolder);
-
-}
-
-/* =========================================================
-   SUBJECT TESTS
-========================================================= */
-
-function renderSubjectTests(folder){
-
-  const root =
-    getRootFolder(folder);
-
-  let html = `
-
-    <div style="margin-bottom:15px;">
-
-      <button
-        class="secondary-btn"
-        onclick="goToParentFolder(${folder.parent_id})"
-      >
-        ← Back
-      </button>
-
-    </div>
-
-    <div class="workspace-title">
-      ${esc(folder.display_name || folder.name)}
-    </div>
-
-    <div class="workspace-subtitle" style="margin-bottom:16px;">
-      Sectional tests for this subject.
-    </div>
-
-    <div class="tests-head">
-
-      <div class="tests-title">
-        Tests
-      </div>
-
-      <button
-        class="primary-btn"
-        onclick="openTestForm(${folder.id})"
-      >
-        + Add Test
-      </button>
-
-    </div>
-
-  `;
-
-  html +=
-    renderTestList(
-      getTests(folder.id)
-    );
-
-  document.getElementById("rootArea")
-    .innerHTML = html;
-
-}
-
-/* =========================================================
-   TEST LIST
-========================================================= */
-
-function getTests(folderId){
-
-  return tests
-    .filter(
-      t =>
-        Number(t.folder_id) ===
-        Number(folderId)
-    )
-    .sort(sortByOrder);
-
-}
-
-function renderTestList(list){
-
-  if(!list.length){
-
-    return `
-      <div class="empty">
-        No tests added yet.
-      </div>
-    `;
-
-  }
-
-  return `
-
-    <div class="test-list">
-
-      ${list.map(test=>{
-
-        const active =
-          test.is_active !== false;
-
-        return `
-
-          <div class="test-card">
-
-            <div class="test-top">
-
-              <div class="test-title">
-                ${esc(test.title)}
-              </div>
-
-              <div
-                class="test-status ${active ? "" : "off"}"
-              >
-                ${active ? "ACTIVE" : "INACTIVE"}
-              </div>
-
-            </div>
-
-            <div class="test-info">
-
-              <span>
-                ⏱ ${Number(test.duration_minutes)||0} min
-              </span>
-
-              <span>
-                ❓ ${Number(test.total_questions)||0} questions
-              </span>
-
-              <span>
-                TYPE: ${esc(test.test_type || "FULL")}
-              </span>
-
-            </div>
-
-            <div class="test-actions">
-
-              <button
-                class="small-btn"
-                onclick="editTest(${test.id})"
-              >
-                Edit
-              </button>
-
-              <button
-                class="small-btn"
-                onclick="moveTest(${test.id},-1)"
-              >
-                ↑
-              </button>
-
-              <button
-                class="small-btn"
-                onclick="moveTest(${test.id},1)"
-              >
-                ↓
-              </button>
-
-              <button
-                class="small-btn red"
-                onclick="deleteTest(${test.id})"
-              >
-                Delete
-              </button>
-
-              <button
-                class="small-btn purple"
-                onclick="openTest(${test.id})"
-              >
-                Open
-              </button>
-
-            </div>
-
-          </div>
-
-        `;
-
-      }).join("")}
-
-    </div>
-
-  `;
-
-}
-
-/* =========================================================
-   OPEN TEST
-========================================================= */
-
-function openTest(id){
-
-  location.href =
-    "test.html?id=" +
-    encodeURIComponent(id);
-
-}
-
-/* =========================================================
-   TEST FORM
-========================================================= */
-
-function openTestForm(folderId){
-
-  editingTestId = null;
-  currentParentId = Number(folderId);
-
-  document.getElementById("testModalTitle")
-    .textContent =
-      "Add Test";
-
-  document.getElementById("testTitle")
-    .value = "";
-
-  document.getElementById("testDuration")
-    .value = 60;
-
-  document.getElementById("testQuestions")
-    .value = 25;
-
-  document.getElementById("testActive")
-    .value = "true";
-
-  openModal("testModal");
-
-}
-
-function editTest(id){
-
-  const test =
-    tests.find(
-      x => Number(x.id) === Number(id)
-    );
-
-  if(!test) return;
-
-  editingTestId = Number(id);
-  currentParentId =
-    Number(test.folder_id);
-
-  document.getElementById("testModalTitle")
-    .textContent =
-      "Edit Test";
-
-  document.getElementById("testTitle")
-    .value =
-      test.title || "";
-
-  document.getElementById("testDuration")
-    .value =
-      Number(test.duration_minutes)||60;
-
-  document.getElementById("testQuestions")
-    .value =
-      Number(test.total_questions)||25;
-
-  document.getElementById("testActive")
-    .value =
-      test.is_active === false
-        ? "false"
-        : "true";
-
-  openModal("testModal");
-
-}
-
-function closeTestForm(){
-
-  closeModal("testModal");
-
-}
-
-/* =========================================================
-   INFER TEST TYPE
-========================================================= */
-
-function inferTestType(folder){
-
-  if(!folder){
-
-    return "FULL";
-
-  }
-
-  const type =
-    normalizeType(folder.folder_type);
-
-  if(type === "subject"){
-
-    return "SECTIONAL";
-
-  }
-
-  if(type === "sectional"){
-
-    return "SECTIONAL";
-
-  }
-
-  return "FULL";
-
-}
-
-/* =========================================================
-   SAVE TEST
-========================================================= */
-
-async function saveTest(){
-
-  const title =
-    document.getElementById("testTitle")
-      .value
-      .trim();
-
-  const duration =
-    Number(
-      document.getElementById("testDuration")
-        .value
-    );
-
-  const questions =
-    Number(
-      document.getElementById("testQuestions")
-        .value
-    );
-
-  const active =
-    document.getElementById("testActive")
-      .value === "true";
+  document
+  .getElementById("mockTitleInput")
+  .value
+  .trim();
 
   if(!title){
 
-    showToast(
-      "Enter test title.",
-      true
-    );
-
+    showToast("Enter mock title");
     return;
 
   }
 
-  if(!duration || duration < 1){
+  const duration =
+  Number(
+    document
+    .getElementById("mockDurationInput")
+    .value
+  ) || 0;
 
-    showToast(
-      "Enter valid duration.",
-      true
-    );
+  const totalQuestions =
+  Number(
+    document
+    .getElementById("mockQuestionsInput")
+    .value
+  ) || 0;
 
-    return;
+  const active =
+  document
+  .getElementById("mockActiveInput")
+  .value === "true";
 
-  }
+  const accessType =
+  document
+  .getElementById("mockAccessInput")
+  .value;
 
-  if(!questions || questions < 1){
+  const sectionalTiming =
+  document
+  .getElementById("sectionalTimingInput")
+  .checked;
 
-    showToast(
-      "Enter valid question count.",
-      true
-    );
+  const description =
+  document
+  .getElementById("mockDescriptionInput")
+  .value
+  .trim();
 
-    return;
+  const sectionData =
+  [...document.querySelectorAll(".ap-section-row")]
+  .map(row => ({
+    name:
+    row.querySelector(".section-name").value.trim(),
 
-  }
+    duration:
+    Number(
+      row.querySelector(".section-time").value
+    ) || 0,
 
-  const isEditing =
-    editingTestId !== null &&
-    editingTestId !== undefined;
+    questions:
+    Number(
+      row.querySelector(".section-questions").value
+    ) || 0
+  }))
+  .filter(section => section.name);
 
-  let folderId =
-    Number(currentParentId);
+  let testType =
+  selectedCategory === "SECTIONAL"
+  ? "SECTIONAL"
+  : "FULL";
 
-  /*
-    While editing, never depend only on currentParentId.
-    Fetch the actual test so its original folder is preserved.
-  */
+  if(editingMockId){
 
-  if(isEditing){
+    const updateData = {
+      title,
+      description,
+      duration_minutes:duration,
+      total_questions:totalQuestions,
+      is_active:active,
+      test_type:testType,
+      subject_wise_timing:sectionalTiming
+    };
 
-    const {data:existingTest,error:existingError} =
-      await db
-        .from("mock_tests")
-        .select("id,folder_id,exam_id")
-        .eq("id",Number(editingTestId))
-        .maybeSingle();
-
-    if(existingError || !existingTest){
-
-      showToast(
-        "Unable to load existing test.",
-        true
-      );
-
-      return;
-
+    if("access_type" in (tests.find(
+      x => String(x.id) === String(editingMockId)
+    ) || {})){
+      updateData.access_type = accessType;
     }
 
-    folderId =
-      Number(existingTest.folder_id);
-
-  }
-
-  const folder =
-    folders.find(
-      x =>
-        Number(x.id) ===
-        Number(folderId)
-    );
-
-  if(!folder){
-
-    showToast(
-      "Test folder not found.",
-      true
-    );
-
-    return;
-
-  }
-
-  const examId =
-    selectedExam && selectedExam.id
-      ? Number(selectedExam.id)
-      : null;
-
-  if(!examId){
-
-    showToast(
-      "Please select an exam.",
-      true
-    );
-
-    return;
-
-  }
-
-  const testType =
-    inferTestType(folder);
-
-  /*
-    mock_tests.test_type accepts only:
-    FULL
-    SECTIONAL
-    SUBJECT_WISE
-
-    We use:
-    FULL       -> Full mocks
-    SECTIONAL  -> Sectional mocks
-  */
-
-  if(isEditing){
-
     const {error} =
-      await db
-        .from("mock_tests")
-        .update({
-
-          exam_id:examId,
-          folder_id:Number(folder.id),
-          title:title,
-          test_type:testType,
-          subject_id:folder.subject_id ? Number(folder.subject_id) : null,
-          duration_minutes:duration,
-          total_questions:questions,
-          is_active:active
-
-        })
-        .eq("id",editingTestId);
+    await supabaseClient
+    .from("mock_tests")
+    .update(updateData)
+    .eq("id",editingMockId);
 
     if(error){
 
-      showToast(
-        "MOCK_TESTS: " +
-        error.message,
-        true
-      );
-
+      console.error(error);
+      showToast(error.message);
       return;
 
     }
 
-    showToast("Test updated.");
+    showToast("Mock updated successfully");
 
   }else{
 
-    const siblings =
-      getTests(folder.id);
+    const insertData = {
+      exam_id:selectedExam.id,
+      title,
+      description,
+      duration_minutes:duration,
+      total_questions:totalQuestions,
+      is_active:active,
+      test_type:testType,
+      subject_wise_timing:sectionalTiming
+    };
 
-    const maxOrder =
-      siblings.reduce(
-        (m,x)=>
-          Math.max(
-            m,
-            Number(x.sort_order)||0
-          ),
-        -1
-      );
+    if(selectedSubject)
+      insertData.subject_id =
+      selectedSubject.id;
 
-    /*
-      For sectional subject folders,
-      try to use the subject_id attached
-      to that folder.
-
-      If there is no subject_id, it remains null.
-    */
-
-    const subjectId =
-      folder.subject_id || null;
-
-    const {error} =
-      await db
-        .from("mock_tests")
-        .insert({
-
-          exam_id:selectedExam.id,
-
-          folder_id:folder.id,
-
-          title:title,
-
-          test_type:testType,
-
-          subject_id:subjectId,
-
-          duration_minutes:duration,
-
-          total_questions:questions,
-
-          is_active:active,
-
-          sort_order:maxOrder + 1
-
-        });
+    const {data,error} =
+    await supabaseClient
+    .from("mock_tests")
+    .insert(insertData)
+    .select()
+    .single();
 
     if(error){
 
-      showToast(
-        "MOCK_TESTS: " +
-        error.message,
-        true
-      );
-
+      console.error(error);
+      showToast(error.message);
       return;
 
     }
 
-    showToast("Test created.");
+    showToast("Mock created successfully");
 
   }
 
-  editingTestId = null;
+  closeModal("mockModal");
 
-  closeTestForm();
+  await loadAllData();
 
-  await loadAll();
-
-  /*
-    Re-open the same location.
-  */
-
-  const freshFolder =
-    folders.find(
-      x =>
-        Number(x.id) ===
-        Number(currentParentId)
-    );
-
-  if(freshFolder){
-
-    const type =
-      normalizeType(
-        freshFolder.folder_type
-      );
-
-    if(type === "year"){
-
-      renderYearTests(freshFolder);
-
-    }else if(type === "subject"){
-
-      renderSubjectTests(freshFolder);
-
-    }else if(type === "full"){
-
-      renderFullLevel(freshFolder);
-
-    }
-
-  }
+  if(selectedCategory === "FULL")
+    renderFullManagement();
+  else
+    renderSectionalManagement();
 
 }
 
-/* =========================================================
-   MOVE TEST
-========================================================= */
-
-async function moveTest(id,direction){
-
-  const test =
-    tests.find(
-      x => Number(x.id) === Number(id)
-    );
-
-  if(!test) return;
-
-  const siblings =
-    getTests(test.folder_id);
-
-  const index =
-    siblings.findIndex(
-      x => Number(x.id) === Number(id)
-    );
-
-  const target =
-    index + direction;
-
-  if(target < 0 || target >= siblings.length){
-
-    return;
-
-  }
-
-  const current =
-    siblings[index];
-
-  const other =
-    siblings[target];
-
-  const currentOrder =
-    Number(current.sort_order)||0;
-
-  const otherOrder =
-    Number(other.sort_order)||0;
-
-  const {error} =
-    await db
-      .from("mock_tests")
-      .update({
-        sort_order:otherOrder
-      })
-      .eq("id",current.id);
-
-  if(error){
-
-    showToast(
-      "MOCK_TESTS: " +
-      error.message,
-      true
-    );
-
-    return;
-
-  }
-
-  const {error:error2} =
-    await db
-      .from("mock_tests")
-      .update({
-        sort_order:currentOrder
-      })
-      .eq("id",other.id);
-
-  if(error2){
-
-    showToast(
-      "MOCK_TESTS: " +
-      error2.message,
-      true
-    );
-
-    return;
-
-  }
-
-  await loadAll();
-
-}
-
-/* =========================================================
-   DELETE TEST
-========================================================= */
-
-async function deleteTest(id){
-
-  const test =
-    tests.find(
-      x => Number(x.id) === Number(id)
-    );
-
-  if(!test) return;
-
-  if(
-    !confirm(
-      `Delete "${test.title}"?`
-    )
-  ){
-
-    return;
-
-  }
-
-  const {error} =
-    await db
-      .from("mock_tests")
-      .delete()
-      .eq("id",id);
-
-  if(error){
-
-    showToast(
-      "MOCK_TESTS: " +
-      error.message,
-      true
-    );
-
-    return;
-
-  }
-
-  showToast("Test deleted.");
-
-  await loadAll();
-
-}
-
-/* =========================================================
-   LEAF FORM
-========================================================= */
-
-function openLeafForm(parentId,type){
-
-  currentParentId =
-    Number(parentId);
-
-  currentLeafType =
-    normalizeType(type);
-
-  editingFolderId = null;
-
-  if(currentLeafType === "year"){
-
-    document.getElementById("leafModalTitle")
-      .textContent =
-        "Add PYQ Year";
-
-    document.getElementById("leafLabel")
-      .textContent =
-        "Year";
-
-    document.getElementById("leafName")
-      .placeholder =
-        "2025";
-
-  }else{
-
-    document.getElementById("leafModalTitle")
-      .textContent =
-        "Add Subject";
-
-    document.getElementById("leafLabel")
-      .textContent =
-        "Subject";
-
-    document.getElementById("leafName")
-      .placeholder =
-        "English";
-
-  }
-
-  document.getElementById("leafName")
-    .value = "";
-
-  openModal("leafModal");
-
-}
-
-function closeLeafForm(){
-
-  closeModal("leafModal");
-
-}
-
-async function saveLeaf(){
-
-  const name =
-    document.getElementById("leafName")
-      .value
-      .trim();
-
-  if(!name){
-
-    showToast(
-      "Enter a name.",
-      true
-    );
-
-    return;
-
-  }
-
-  const duplicate =
-    folders.some(
-      f =>
-        Number(f.parent_id) ===
-          Number(currentParentId) &&
-        normalizeType(f.folder_type) ===
-          currentLeafType &&
-        String(
-          f.display_name ||
-          f.name
-        ).trim().toLowerCase() ===
-        name.toLowerCase()
-    );
-
-  if(duplicate){
-
-    showToast(
-      "This item already exists.",
-      true
-    );
-
-    return;
-
-  }
-
-  const siblings =
-    folders.filter(
-      f =>
-        Number(f.parent_id) ===
-        Number(currentParentId)
-    );
-
-  const maxOrder =
-    siblings.reduce(
-      (m,x)=>
-        Math.max(
-          m,
-          Number(x.sort_order)||0
-        ),
-      -1
-    );
-
-  const {error} =
-    await db
-      .from("mock_folders")
-      .insert({
-
-        exam_id:selectedExam.id,
-
-        parent_id:currentParentId,
-
-        name:name,
-
-        display_name:name,
-
-        folder_type:currentLeafType,
-
-        sort_order:maxOrder + 1,
-
-        is_active:true,
-
-        subject_id:
-          currentLeafType === "subject"
-            ? findSubjectId(name)
-            : null
-
-      });
-
-  if(error){
-
-    showToast(
-      "MOCK_FOLDERS: " +
-      error.message,
-      true
-    );
-
-    return;
-
-  }
-
-  closeLeafForm();
-
-  showToast(
-    currentLeafType === "year"
-      ? "Year added."
-      : "Subject added."
+/* =====================================================
+   DELETE MOCK
+===================================================== */
+
+async function deleteMock(test){
+
+  const ok =
+  confirm(
+    `Delete "${getTestTitle(test)}"?`
   );
 
-  await loadAll();
-
-  const parent =
-    folders.find(
-      x =>
-        Number(x.id) ===
-        Number(currentParentId)
-    );
-
-  if(parent){
-
-    const type =
-      normalizeType(parent.folder_type);
-
-    if(type === "full"){
-
-      renderPYQFull(parent);
-
-    }else if(type === "sectional"){
-
-      renderSectionalLevel(parent);
-
-    }
-
-  }
-
-}
-
-/* =========================================================
-   FIND SUBJECT ID
-========================================================= */
-
-function findSubjectId(name){
-
-  const found =
-    subjects.find(
-      s =>
-        String(
-          s.name ||
-          s.title ||
-          s.subject_name ||
-          ""
-        )
-        .trim()
-        .toLowerCase() ===
-        String(name)
-          .trim()
-          .toLowerCase()
-    );
-
-  return found
-    ? found.id
-    : null;
-
-}
-
-/* =========================================================
-   EDIT FOLDER
-========================================================= */
-
-function editFolder(id){
-
-  const folder =
-    folders.find(
-      x => Number(x.id) === Number(id)
-    );
-
-  if(!folder) return;
-
-  editingFolderId =
-    Number(id);
-
-  const type =
-    normalizeType(folder.folder_type);
-
-  /*
-    Root/category/leaf all use the same
-    simple name editor.
-  */
-
-  currentParentId =
-    folder.parent_id
-      ? Number(folder.parent_id)
-      : null;
-
-  currentLeafType =
-    type;
-
-  document.getElementById("leafModalTitle")
-    .textContent =
-      "Edit " +
-      (
-        type === "year"
-          ? "Year"
-          : type === "subject"
-            ? "Subject"
-            : "Folder"
-      );
-
-  document.getElementById("leafLabel")
-    .textContent =
-      "Name";
-
-  document.getElementById("leafName")
-    .placeholder =
-      "Name";
-
-  document.getElementById("leafName")
-    .value =
-      folder.display_name ||
-      folder.name ||
-      "";
-
-  openModal("leafModal");
-
-}
-
-/* =========================================================
-   SAVE EDITED FOLDER
-========================================================= */
-
-async function saveEditedFolder(){
-
-  const name =
-    document.getElementById("leafName")
-      .value
-      .trim();
-
-  if(!name){
-
-    showToast(
-      "Enter a name.",
-      true
-    );
-
-    return;
-
-  }
-
-  const folder =
-    folders.find(
-      x =>
-        Number(x.id) ===
-        Number(editingFolderId)
-    );
-
-  if(!folder){
-
-    showToast(
-      "Folder not found.",
-      true
-    );
-
-    return;
-
-  }
+  if(!ok) return;
 
   const {error} =
-    await db
-      .from("mock_folders")
-      .update({
-
-        name:name,
-
-        display_name:name
-
-      })
-      .eq("id",editingFolderId);
+  await supabaseClient
+  .from("mock_tests")
+  .delete()
+  .eq("id",test.id);
 
   if(error){
 
-    showToast(
-      "MOCK_FOLDERS: " +
-      error.message,
-      true
-    );
-
+    console.error(error);
+    showToast(error.message);
     return;
 
   }
 
-  editingFolderId = null;
+  showToast("Mock deleted");
 
-  closeLeafForm();
+  await loadAllData();
 
-  showToast("Folder updated.");
-
-  await loadAll();
+  if(selectedCategory === "FULL")
+    renderFullManagement();
+  else
+    renderSectionalManagement();
 
 }
 
-/* =========================================================
-   OVERRIDE SAVE LEAF
-========================================================= */
+/* =====================================================
+   PRACTICE DRILL
+===================================================== */
 
-const originalSaveLeaf =
-  saveLeaf;
+function openPracticeDrill(){
 
-saveLeaf = async function(){
+  branchView.style.display = "none";
+  categoryView.classList.remove("visible");
+  mockManagementView.classList.remove("visible");
+  drillFolderView.classList.remove("visible");
+  practiceDrillView.classList.add("visible");
 
-  if(editingFolderId !== null){
-
-    await saveEditedFolder();
-
-    return;
-
-  }
-
-  await originalSaveLeaf();
-
-};
-
-/* =========================================================
-   MOVE FOLDER
-========================================================= */
-
-async function moveFolder(id,direction){
-
-  const folder =
-    folders.find(
-      x => Number(x.id) === Number(id)
-    );
-
-  if(!folder) return;
-
-  const siblings =
-    folders
-      .filter(
-        x =>
-          Number(x.exam_id) ===
-            Number(folder.exam_id) &&
-          (
-            Number(x.parent_id || 0) ===
-            Number(folder.parent_id || 0)
-          ) &&
-          normalizeType(x.folder_type) ===
-          normalizeType(folder.folder_type)
-      )
-      .sort(sortByOrder);
-
-  /*
-    For full/sectional categories we DO NOT
-    want to accidentally mix folder types.
-    Root children are therefore reordered
-    together separately below.
-  */
-
-  let orderedSiblings;
-
-  const parent =
-    folder.parent_id
-      ? folders.find(
-          x =>
-            Number(x.id) ===
-            Number(folder.parent_id)
-        )
-      : null;
-
-  if(
-    parent &&
-    ["new","pyq"].includes(
-      normalizeType(parent.folder_type)
-    )
-  ){
-
-    orderedSiblings =
-      folders
-        .filter(
-          x =>
-            Number(x.parent_id) ===
-            Number(folder.parent_id)
-        )
-        .sort(sortByOrder);
-
-  }else{
-
-    orderedSiblings =
-      folders
-        .filter(
-          x =>
-            Number(x.parent_id || 0) ===
-            Number(folder.parent_id || 0) &&
-            normalizeType(x.folder_type) ===
-            normalizeType(folder.folder_type)
-        )
-        .sort(sortByOrder);
-
-  }
-
-  const index =
-    orderedSiblings.findIndex(
-      x => Number(x.id) === Number(id)
-    );
-
-  if(index < 0) return;
-
-  const target =
-    index + direction;
-
-  if(
-    target < 0 ||
-    target >= orderedSiblings.length
-  ){
-
-    return;
-
-  }
-
-  const current =
-    orderedSiblings[index];
-
-  const other =
-    orderedSiblings[target];
-
-  const currentOrder =
-    Number(current.sort_order)||0;
-
-  const otherOrder =
-    Number(other.sort_order)||0;
-
-  const {error} =
-    await db
-      .from("mock_folders")
-      .update({
-        sort_order:otherOrder
-      })
-      .eq("id",current.id);
-
-  if(error){
-
-    showToast(
-      "MOCK_FOLDERS: " +
-      error.message,
-      true
-    );
-
-    return;
-
-  }
-
-  const {error:error2} =
-    await db
-      .from("mock_folders")
-      .update({
-        sort_order:currentOrder
-      })
-      .eq("id",other.id);
-
-  if(error2){
-
-    showToast(
-      "MOCK_FOLDERS: " +
-      error2.message,
-      true
-    );
-
-    return;
-
-  }
-
-  await loadAll();
+  renderDrillSubjects();
 
 }
 
-/* =========================================================
-   DELETE FOLDER
-========================================================= */
-
-async function deleteFolder(id){
-
-  const folder =
-    folders.find(
-      x => Number(x.id) === Number(id)
-    );
-
-  if(!folder) return;
-
-  const descendants =
-    getDescendants(id);
-
-  const allIds = [
-    Number(id),
-    ...descendants.map(x=>Number(x.id))
-  ];
-
-  if(
-    !confirm(
-      `Delete "${folder.display_name || folder.name}" and everything inside it?`
-    )
-  ){
-
-    return;
-
-  }
-
-  /*
-    Delete tests first.
-  */
-
-  const {error:testError} =
-    await db
-      .from("mock_tests")
-      .delete()
-      .in("folder_id",allIds);
-
-  if(testError){
-
-    showToast(
-      "MOCK_TESTS: " +
-      testError.message,
-      true
-    );
-
-    return;
-
-  }
-
-  /*
-    Delete deepest folders first.
-  */
-
-  const remaining =
-    folders.filter(
-      f => allIds.includes(Number(f.id))
-    );
-
-  while(remaining.length){
-
-    const leafFolders =
-      remaining.filter(folderItem=>{
-
-        return !remaining.some(
-          child =>
-            Number(child.parent_id) ===
-            Number(folderItem.id)
-        );
-
-      });
-
-    const batch =
-      leafFolders.length
-        ? leafFolders
-        : remaining;
-
-    const ids =
-      batch.map(
-        x=>Number(x.id)
-      );
-
-    const {error} =
-      await db
-        .from("mock_folders")
-        .delete()
-        .in("id",ids);
-
-    if(error){
-
-      showToast(
-        "MOCK_FOLDERS: " +
-        error.message,
-        true
-      );
-
-      return;
-
-    }
-
-    for(const item of batch){
-
-      const index =
-        remaining.indexOf(item);
-
-      if(index >= 0){
-
-        remaining.splice(index,1);
-
-      }
-
-    }
-
-  }
-
-  showToast("Folder deleted.");
-
-  await loadAll();
-
-}
-
-/* =========================================================
-   DESCENDANTS
-========================================================= */
-
-function getDescendants(parentId){
-
-  const result = [];
-
-  const queue = [
-    Number(parentId)
-  ];
-
-  while(queue.length){
-
-    const current =
-      queue.shift();
-
-    const children =
-      folders.filter(
-        f =>
-          Number(f.parent_id) ===
-          Number(current)
-      );
-
-    for(const child of children){
-
-      result.push(child);
-
-      queue.push(
-        Number(child.id)
-      );
-
-    }
-
-  }
-
-  return result;
-
-}
-
-/* =========================================================
-   PARENT NAVIGATION
-========================================================= */
-
-function goToParentFolder(id){
-
-  const parent =
-    folders.find(
-      x => Number(x.id) === Number(id)
-    );
-
-  if(!parent){
-
-    renderRootArea();
-
-    return;
-
-  }
-
-  const type =
-    normalizeType(parent.folder_type);
-
-  if(type === "new" || type === "pyq"){
-
-    renderFolderLevel(parent);
-
-    return;
-
-  }
-
-  if(type === "full"){
-
-    renderFullLevel(parent);
-
-    return;
-
-  }
-
-  if(type === "sectional"){
-
-    renderSectionalLevel(parent);
-
-    return;
-
-  }
-
-  if(type === "year"){
-
-    renderYearTests(parent);
-
-    return;
-
-  }
-
-  if(type === "subject"){
-
-    renderSubjectTests(parent);
-
-    return;
-
-  }
-
-  renderRootArea();
-
-}
-
-/* =========================================================
-   ROOT FINDER
-========================================================= */
-
-function getRootFolder(folder){
-
-  let current = folder;
-
-  let safety = 0;
-
-  while(
-    current &&
-    current.parent_id &&
-    safety < 20
-  ){
-
-    const parent =
-      folders.find(
-        x =>
-          Number(x.id) ===
-          Number(current.parent_id)
-      );
-
-    if(!parent) break;
-
-    current = parent;
-
-    safety++;
-
-  }
-
-  return current;
-
-}
-
-/* =========================================================
-   MODAL CLOSE WHEN CLICKING BACKGROUND
-========================================================= */
-
-document
-  .querySelectorAll(".modal-bg")
-  .forEach(modal=>{
-
-    modal.addEventListener(
-      "click",
-      event=>{
-
-        if(event.target === modal){
-
-          modal.classList.remove("show");
-
-        }
-
-      }
+function renderDrillSubjects(){
+
+  const drillSubjects =
+  subjects.filter(subject => {
+
+    const name =
+    (
+      subject.name ||
+      subject.subject_name ||
+      subject.title ||
+      ""
+    ).toLowerCase();
+
+    return (
+      name.includes("quant") ||
+      name.includes("math") ||
+      name.includes("reason") ||
+      name.includes("english") ||
+      name.includes("gk") ||
+      name.includes("general") ||
+      name.includes("awareness")
     );
 
   });
 
-/* =========================================================
-   INITIAL LOAD
-========================================================= */
+  if(!drillSubjects.length){
 
-loadAll();
+    drillSubjectGrid.innerHTML = `
+      <div class="ap-empty">
+        No Practice Drill subjects found.
+      </div>
+    `;
+
+    return;
+
+  }
+
+  drillSubjectGrid.innerHTML =
+  drillSubjects.map(subject => {
+
+    const count =
+    folders.filter(folder =>
+      String(folder.subject_id) ===
+      String(subject.id)
+    ).length;
+
+    return `
+      <button
+        class="ap-drill-subject"
+        data-drill-subject="${escapeHTML(subject.id)}"
+        type="button">
+
+        <div>
+          <div class="ap-drill-subject-name">
+            ${escapeHTML(
+              subject.name ||
+              subject.subject_name ||
+              subject.title ||
+              "Subject"
+            )}
+          </div>
+
+          <div class="ap-drill-subject-count">
+            ${count} folder${count === 1 ? "" : "s"}
+          </div>
+        </div>
+
+        <div class="ap-choice-arrow">›</div>
+
+      </button>
+    `;
+
+  }).join("");
+
+  document
+  .querySelectorAll("[data-drill-subject]")
+  .forEach(button => {
+
+    button.onclick = () => {
+
+      selectedSubject =
+      drillSubjects.find(
+        s => String(s.id) ===
+        String(button.dataset.drillSubject)
+      );
+
+      openDrillFolders();
+
+    };
+
+  });
+
+}
+
+function openDrillFolders(){
+
+  practiceDrillView.classList.remove("visible");
+  drillFolderView.classList.add("visible");
+
+  drillFolderTitle.textContent =
+  selectedSubject.name ||
+  selectedSubject.subject_name ||
+  selectedSubject.title ||
+  "Practice Drill";
+
+  renderDrillFolders();
+
+}
+
+function renderDrillFolders(){
+
+  drillFolderActions.innerHTML = `
+    <button
+      class="ap-primary-btn"
+      id="addDrillFolderBtn"
+      type="button">
+      + Add Folder
+    </button>
+  `;
+
+  document
+  .getElementById("addDrillFolderBtn")
+  .onclick = () => {
+
+    structureMode = "DRILL_FOLDER";
+
+    document
+    .getElementById("structureModalTitle")
+    .textContent = "Add Practice Drill Folder";
+
+    document
+    .getElementById("structureInputLabel")
+    .textContent = "Folder Name";
+
+    document
+    .getElementById("structureNameInput")
+    .value = "";
+
+    openModal("structureModal");
+
+  };
+
+  const subjectFolders =
+  folders.filter(folder =>
+    String(folder.subject_id) ===
+    String(selectedSubject.id)
+  );
+
+  if(!subjectFolders.length){
+
+    drillFolderList.innerHTML = `
+      <div class="ap-empty">
+        No folders created yet.
+      </div>
+    `;
+
+    return;
+
+  }
+
+  drillFolderList.innerHTML =
+  subjectFolders.map(folder => {
+
+    const folderTests =
+    tests.filter(
+      test => String(getTestFolderId(test)) ===
+      String(folder.id)
+    );
+
+    return `
+      <div class="ap-test-card">
+
+        <div class="ap-test-top">
+
+          <div>
+            <div class="ap-test-title">
+              ${escapeHTML(getFolderName(folder))}
+            </div>
+
+            <div class="ap-test-description">
+              ${folderTests.length} mock${
+                folderTests.length === 1 ? "" : "s"
+              }
+            </div>
+          </div>
+
+        </div>
+
+        <div class="ap-test-actions">
+
+          <button
+            class="ap-small-btn edit"
+            data-open-drill-folder="${escapeHTML(folder.id)}"
+            type="button">
+            Open
+          </button>
+
+          <button
+            class="ap-small-btn delete"
+            data-delete-drill-folder="${escapeHTML(folder.id)}"
+            type="button">
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+    `;
+
+  }).join("");
+
+  document
+  .querySelectorAll("[data-open-drill-folder]")
+  .forEach(button => {
+
+    button.onclick = () => {
+
+      selectedFolder =
+      subjectFolders.find(
+        f => String(f.id) ===
+        String(button.dataset.openDrillFolder)
+      );
+
+      openDrillFolderTests();
+
+    };
+
+  });
+
+  document
+  .querySelectorAll("[data-delete-drill-folder]")
+  .forEach(button => {
+
+    button.onclick = () => {
+
+      const folder =
+      subjectFolders.find(
+        f => String(f.id) ===
+        String(button.dataset.deleteDrillFolder)
+      );
+
+      if(folder)
+        deleteDrillFolder(folder);
+
+    };
+
+  });
+
+}
+
+async function deleteDrillFolder(folder){
+
+  const ok =
+  confirm(
+    `Delete folder "${getFolderName(folder)}"?`
+  );
+
+  if(!ok) return;
+
+  const {error} =
+  await supabaseClient
+  .from("mock_folders")
+  .delete()
+  .eq("id",folder.id);
+
+  if(error){
+
+    showToast(error.message);
+    return;
+
+  }
+
+  showToast("Folder deleted");
+
+  await loadAllData();
+
+  renderDrillFolders();
+
+}
+
+function openDrillFolderTests(){
+
+  drillFolderActions.innerHTML = `
+    <button
+      class="ap-secondary-btn"
+      id="backToDrillFoldersInner"
+      type="button">
+      Back to Folders
+    </button>
+
+    <button
+      class="ap-primary-btn"
+      id="addDrillMockBtn"
+      type="button">
+      + Add Mock
+    </button>
+  `;
+
+  document
+  .getElementById("backToDrillFoldersInner")
+  .onclick = renderDrillFolders;
+
+  document
+  .getElementById("addDrillMockBtn")
+  .onclick = () => openMockEditor("DRILL");
+
+  const list =
+  tests.filter(
+    test => String(getTestFolderId(test)) ===
+    String(selectedFolder.id)
+  );
+
+  renderTestList(list);
+
+}
+
+/* =====================================================
+   SAVE STRUCTURE
+===================================================== */
+
+async function saveStructure(){
+
+  const name =
+  document
+  .getElementById("structureNameInput")
+  .value
+  .trim();
+
+  if(!name){
+
+    showToast("Enter a name");
+    return;
+
+  }
+
+  if(structureMode === "DRILL_FOLDER"){
+
+    const insertData = {
+      exam_id:selectedExam.id,
+      subject_id:selectedSubject.id,
+      name,
+      display_name:name,
+      folder_type:"PRACTICE_DRILL",
+      sort_order:0,
+      is_active:true
+    };
+
+    const {error} =
+    await supabaseClient
+    .from("mock_folders")
+    .insert(insertData);
+
+    if(error){
+
+      console.error(error);
+      showToast(error.message);
+      return;
+
+    }
+
+    closeModal("structureModal");
+
+    showToast("Folder created");
+
+    await loadAllData();
+
+    renderDrillFolders();
+
+  }
+
+}
+
+/* =====================================================
+   ADD EXAM
+===================================================== */
+
+function openExamModal(exam=null){
+
+  editingExamId =
+  exam ? exam.id : null;
+
+  document
+  .getElementById("examBoardInput")
+  .value =
+  exam ? getExamBoard(exam) : activeBoard;
+
+  document
+  .getElementById("examNameInput")
+  .value =
+  exam ? getExamName(exam) : "";
+
+  document
+  .getElementById("examStageInput")
+  .value =
+  exam
+  ? (
+      exam.stage ||
+      exam.subtitle ||
+      exam.description ||
+      ""
+    )
+  : "";
+
+  openModal("examModal");
+
+}
+
+async function saveExam(){
+
+  const board =
+  document
+  .getElementById("examBoardInput")
+  .value;
+
+  const name =
+  document
+  .getElementById("examNameInput")
+  .value
+  .trim();
+
+  const stage =
+  document
+  .getElementById("examStageInput")
+  .value
+  .trim();
+
+  if(!name){
+
+    showToast("Enter exam name");
+    return;
+
+  }
+
+  const payload = {
+    name,
+    board,
+    stage
+  };
+
+  if(editingExamId){
+
+    const {error} =
+    await supabaseClient
+    .from("exams")
+    .update(payload)
+    .eq("id",editingExamId);
+
+    if(error){
+
+      showToast(error.message);
+      return;
+
+    }
+
+    showToast("Exam updated");
+
+  }else{
+
+    const {error} =
+    await supabaseClient
+    .from("exams")
+    .insert(payload);
+
+    if(error){
+
+      showToast(error.message);
+      return;
+
+    }
+
+    showToast("Exam added");
+
+  }
+
+  closeModal("examModal");
+
+  await loadAllData();
+
+}
+
+/* =====================================================
+   EVENTS
+===================================================== */
+
+document
+.querySelectorAll(".ap-board-tab")
+.forEach(tab => {
+
+  tab.onclick = () => {
+
+    activeBoard =
+    tab.dataset.board;
+
+    document
+    .querySelectorAll(".ap-board-tab")
+    .forEach(x =>
+      x.classList.toggle(
+        "active",
+        x === tab
+      )
+    );
+
+    renderExams();
+
+  };
+
+});
+
+document
+.querySelectorAll("[data-branch]")
+.forEach(button => {
+
+  button.onclick = () => {
+
+    openBranch(
+      button.dataset.branch
+    );
+
+  };
+
+});
+
+document
+.querySelectorAll("[data-category]")
+.forEach(button => {
+
+  button.onclick = () => {
+
+    openCategory(
+      button.dataset.category
+    );
+
+  };
+
+});
+
+document
+.getElementById("backToBranchesBtn")
+.onclick = () => {
+
+  resetWorkspace();
+
+};
+
+document
+.getElementById("backToCategoriesBtn")
+.onclick = () => {
+
+  mockManagementView.classList.remove("visible");
+  categoryView.classList.add("visible");
+
+  managementTestList.innerHTML = "";
+
+};
+
+document
+.getElementById("changeExamBtn")
+.onclick = () => {
+
+  workspace.classList.remove("visible");
+
+  selectedExam = null;
+
+  resetWorkspace();
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+};
+
+document
+.getElementById("backFromDrillBtn")
+.onclick = () => {
+
+  practiceDrillView.classList.remove("visible");
+  branchView.style.display = "block";
+
+};
+
+document
+.getElementById("backToDrillSubjectsBtn")
+.onclick = () => {
+
+  drillFolderView.classList.remove("visible");
+  practiceDrillView.classList.add("visible");
+
+  renderDrillSubjects();
+
+};
+
+document
+.getElementById("addExamBtn")
+.onclick = () => {
+
+  openExamModal();
+
+};
+
+document
+.getElementById("refreshBtn")
+.onclick = async () => {
+
+  await loadAllData();
+
+  showToast("Data refreshed");
+
+};
+
+document
+.getElementById("adminBackBtn")
+.onclick = () => {
+
+  window.location.href =
+  "practice.html";
+
+};
+
+document
+.getElementById("saveExamBtn")
+.onclick =
+saveExam;
+
+document
+.getElementById("saveMockBtn")
+.onclick =
+saveMock;
+
+document
+.getElementById("addSectionBtn")
+.onclick = () => {
+
+  addSectionRow();
+
+};
+
+document
+.getElementById("saveStructureBtn")
+.onclick =
+saveStructure;
+
+document
+.querySelectorAll("[data-close-modal]")
+.forEach(button => {
+
+  button.onclick = () => {
+
+    closeModal(
+      button.dataset.closeModal
+    );
+
+  };
+
+});
+
+document
+.querySelectorAll(".ap-modal-overlay")
+.forEach(overlay => {
+
+  overlay.addEventListener("click",event => {
+
+    if(event.target === overlay)
+      overlay.classList.remove("open");
+
+  });
+
+});
+
+/* =====================================================
+   INITIAL
+===================================================== */
+
+loadAllData();
 
 </script>
 
