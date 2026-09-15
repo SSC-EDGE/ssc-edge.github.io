@@ -1779,18 +1779,14 @@ async function saveTest(){
       await db
         .from("mock_tests")
         .update(payload)
-        .eq("id",editId)
-        .select()
-        .single();
+        .eq("id",editId);
 
   }else{
 
     result=
       await db
         .from("mock_tests")
-        .insert(payload)
-        .select()
-        .single();
+        .insert(payload);
 
   }
 
@@ -1806,8 +1802,56 @@ async function saveTest(){
   }
 
 
-  const savedTest=
-    result.data;
+  let savedTest;
+
+  if(editId){
+
+    const refreshed=
+      await db
+        .from("mock_tests")
+        .select("*")
+        .eq("id",editId)
+        .single();
+
+    if(refreshed.error){
+
+      showMessage(
+        "Test updated, but refresh failed: "+
+        refreshed.error.message
+      );
+
+      return;
+
+    }
+
+    savedTest=refreshed.data;
+
+  }else{
+
+    const created=
+      await db
+        .from("mock_tests")
+        .select("*")
+        .eq("title",title)
+        .eq("exam_id",Number(examId))
+        .order("created_at",{ascending:false})
+        .limit(1)
+        .single();
+
+    if(created.error){
+
+      showMessage(
+        "Test created, but could not reload it: "+
+        created.error.message
+      );
+
+      return;
+
+    }
+
+    savedTest=created.data;
+
+  }
 
 
   /* =======================================
