@@ -26,7 +26,12 @@ localStorage.getItem("ssc-edge-theme") || "dark";
     --p-muted:#aaa4b3;
     --p-purple:#9b5cff;
     --p-purple2:#b487ff;
-    --p-header:#111116;
+    --p-header:#21152f;
+    --p-header2:#17111f;
+    --p-nav:#21142f;
+    --p-nav-border:#3a2850;
+    --p-nav-text:#aaa1b5;
+    --p-nav-active:#b487ff;
 }
 
 :root[data-theme="light"]{
@@ -38,14 +43,20 @@ localStorage.getItem("ssc-edge-theme") || "dark";
     --p-muted:#716a7b;
     --p-purple:#8b45ee;
     --p-purple2:#7834db;
-    --p-header:#fff;
+    --p-header:#eee3ff;
+    --p-header2:#f8f4ff;
+    --p-nav:#21142f;
+    --p-nav-border:#3a2850;
+    --p-nav-text:#aaa1b5;
+    --p-nav-active:#c09aff;
 }
 
 *{
     box-sizing:border-box;
 }
 
-html,body{
+html,
+body{
     margin:0;
     padding:0;
     min-height:100%;
@@ -65,7 +76,11 @@ body{
     display:flex;
     align-items:center;
     padding:0 20px;
-    background:var(--p-header)!important;
+    background:linear-gradient(
+        100deg,
+        var(--p-header),
+        var(--p-header2)
+    )!important;
     border-bottom:1px solid var(--p-border);
 }
 
@@ -107,8 +122,7 @@ body{
     color:var(--p-text)!important;
 }
 
-.practice-options,
-.mock-category-grid{
+.practice-options{
     display:grid;
     grid-template-columns:repeat(2,minmax(0,1fr));
     gap:14px;
@@ -172,6 +186,18 @@ body{
     display:block;
 }
 
+.rrb-logo{
+    background:#fff!important;
+}
+
+.rrb-logo img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    padding:3px;
+    display:block;
+}
+
 .folder-icon,
 .subject-icon{
     width:54px;
@@ -193,17 +219,20 @@ body{
 }
 
 .exam-list{
-    display:flex;
-    flex-direction:column;
-    gap:11px;
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
 }
 
 .exam-card{
-    min-height:58px;
-    padding:13px 15px;
+    min-height:88px;
+    padding:14px 10px;
     display:flex;
     align-items:center;
-    justify-content:space-between;
+    justify-content:center;
+    gap:6px;
+    text-align:center;
+    flex-direction:column;
     border-radius:15px;
     background:var(--p-card);
     border:1px solid var(--p-border);
@@ -216,13 +245,16 @@ body{
 
 .exam-card-title{
     font-size:15px;
-    font-weight:800;
+    font-weight:900;
+    line-height:1.25;
     color:var(--p-text);
 }
 
-.exam-arrow{
+.exam-tier{
+    margin-top:2px;
+    font-size:11px;
+    font-weight:800;
     color:var(--p-purple2);
-    font-size:21px;
 }
 
 .practice-horizontal{
@@ -271,37 +303,6 @@ body{
 }
 
 .practice-tab.active{
-    background:var(--p-purple);
-    border-color:var(--p-purple);
-    color:#fff;
-}
-
-.filter-row{
-    display:flex;
-    gap:8px;
-    overflow-x:auto;
-    padding:2px 1px 14px;
-    scrollbar-width:none;
-}
-
-.filter-row::-webkit-scrollbar{
-    display:none;
-}
-
-.filter-chip{
-    flex:0 0 auto;
-    min-height:34px;
-    padding:7px 13px;
-    border-radius:20px;
-    border:1px solid var(--p-border);
-    background:var(--p-card);
-    color:var(--p-muted);
-    font-size:11px;
-    font-weight:850;
-    cursor:pointer;
-}
-
-.filter-chip.active{
     background:var(--p-purple);
     border-color:var(--p-purple);
     color:#fff;
@@ -393,6 +394,73 @@ body{
     display:none!important;
 }
 
+/* =========================================
+   NEW MOCKS / PYQ MOCKS ROW LIST
+========================================= */
+
+#mockCategoryArea{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+#mockCategoryArea .practice-card{
+    width:100%;
+    min-height:66px;
+    height:66px;
+    padding:10px 15px;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:flex-start;
+    text-align:left;
+    gap:12px;
+    border-radius:14px;
+}
+
+#mockCategoryArea .folder-icon{
+    width:42px;
+    height:42px;
+    min-width:42px;
+    margin:0;
+    border-radius:12px;
+    font-size:22px;
+}
+
+#mockCategoryArea .practice-card h3{
+    flex:1;
+    margin:0;
+    font-size:14px;
+    font-weight:900;
+}
+
+#mockCategoryArea .practice-card span{
+    display:none;
+}
+
+#mockCategoryArea .practice-card::after{
+    content:"➜";
+    margin-left:auto;
+    color:var(--p-purple2);
+    font-size:20px;
+    font-weight:900;
+}
+
+/* =========================================
+   MAIN SUBJECT CARDS
+========================================= */
+
+#mainSubjectGrid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:14px;
+}
+
+/* =========================================
+   BOTTOM NAV
+========================================= */
+
 .bottom-nav{
     position:fixed;
     left:0;
@@ -402,8 +470,8 @@ body{
     height:67px;
     display:grid;
     grid-template-columns:repeat(4,1fr);
-    background:#21142f;
-    border-top:1px solid #3a2850;
+    background:var(--p-nav);
+    border-top:1px solid var(--p-nav-border);
 }
 
 .bottom-nav a{
@@ -422,11 +490,11 @@ body{
 .bottom-nav small{
     font-size:9px;
     font-weight:800;
-    color:#aaa1b5;
+    color:var(--p-nav-text);
 }
 
 .bottom-nav a.active small{
-    color:#b487ff;
+    color:var(--p-nav-active);
 }
 
 @media(max-width:480px){
@@ -439,8 +507,7 @@ body{
         font-size:25px;
     }
 
-    .practice-options,
-    .mock-category-grid{
+    .practice-options{
         gap:12px;
     }
 
@@ -452,6 +519,23 @@ body{
         flex-basis:140px!important;
         width:140px!important;
         min-width:140px!important;
+    }
+
+    .exam-list{
+        gap:10px;
+    }
+
+    #mockCategoryArea .practice-card{
+        min-height:62px;
+        height:62px;
+        padding:9px 13px;
+    }
+
+    #mockCategoryArea .folder-icon{
+        width:40px;
+        height:40px;
+        min-width:40px;
+        font-size:21px;
     }
 
 }
@@ -469,6 +553,10 @@ body{
 
 <main class="page-container">
 
+<!-- =========================================
+     MAIN SCREEN
+========================================= -->
+
 <section id="mainScreen">
 
     <h1 class="page-title">Practice</h1>
@@ -482,84 +570,146 @@ body{
     <div class="practice-options">
 
         <div class="practice-card" onclick="openSSC()">
+
             <div class="practice-logo">
-                <img src="https://ssccr.gov.in/emblem.svg" alt="SSC">
+                <img
+                    src="https://ssccr.gov.in/emblem.svg"
+                    alt="SSC"
+                >
             </div>
+
             <h3>SSC</h3>
-            <span>Staff Selection Commission</span>
+
+            <span>
+                Staff Selection Commission
+            </span>
+
         </div>
 
         <div class="practice-card" onclick="openRRB()">
-            <div class="practice-logo">
-                <img src="rrb-logo.png" alt="RRB">
+
+            <div class="practice-logo rrb-logo">
+
+                <img
+                    src="./rrb-logo.png"
+                    alt="RRB Logo"
+                >
+
             </div>
+
             <h3>RRB</h3>
-            <span>Railway Recruitment Board</span>
+
+            <span>
+                Railway Recruitment Board
+            </span>
+
         </div>
 
     </div>
 
     <div class="practice-divider"></div>
 
-    <h2 class="practice-section-title">PRACTICE DRILL</h2>
+    <h2 class="practice-section-title">
+        PRACTICE DRILL
+    </h2>
 
-    <div id="mainSubjectGrid" class="practice-options"></div>
+    <div id="mainSubjectGrid"></div>
 
 </section>
 
+
+<!-- =========================================
+     SSC SCREEN
+========================================= -->
+
 <section id="sscScreen" class="hidden">
 
-    <div class="practice-back" onclick="showMain()">← Back</div>
+    <div class="practice-back" onclick="showMain()">
+        ← Back
+    </div>
 
     <h1 class="page-title">SSC</h1>
 
-    <p class="page-subtitle">Select an exam</p>
+    <p class="page-subtitle">
+        Select an exam
+    </p>
 
     <div id="sscList" class="exam-list"></div>
 
 </section>
 
+
+<!-- =========================================
+     RRB SCREEN
+========================================= -->
+
 <section id="rrbScreen" class="hidden">
 
-    <div class="practice-back" onclick="showMain()">← Back</div>
+    <div class="practice-back" onclick="showMain()">
+        ← Back
+    </div>
 
     <h1 class="page-title">RRB</h1>
 
-    <p class="page-subtitle">Select an exam</p>
+    <p class="page-subtitle">
+        Select an exam
+    </p>
 
     <div id="rrbList" class="exam-list"></div>
 
 </section>
 
+
+<!-- =========================================
+     EXAM MOCK SCREEN
+========================================= -->
+
 <section id="testScreen" class="hidden">
 
-    <div id="mockBack" class="practice-back" onclick="backToGateway()">
+    <!-- Back to SSC / RRB exam list -->
+    <div class="practice-back" onclick="backToExamList()">
         ← Back
     </div>
 
     <h1 id="examTitle" class="page-title"></h1>
 
-    <div id="mockCategoryArea" class="mock-category-grid"></div>
+    <!-- NEW MOCKS / PYQ MOCKS -->
+    <div
+        id="mockCategoryArea"
+        class="mock-category-grid"
+    ></div>
 
+
+    <!-- FULL / SECTIONAL -->
     <div id="mockTypeArea" class="hidden">
 
-        <div class="practice-back" onclick="backToMockBranches()">
+        <div
+            class="practice-back"
+            onclick="backToMockBranches()"
+        >
             ← Back
         </div>
 
-        <h2 id="mockBranchTitle" class="practice-section-title"></h2>
+        <h2
+            id="mockBranchTitle"
+            class="practice-section-title"
+        ></h2>
 
         <div class="practice-tabs">
 
-            <div id="tabFull"
-                 class="practice-tab active"
-                 onclick="showMockType('full')">
+            <div
+                id="tabFull"
+                class="practice-tab active"
+                onclick="showMockType('full')"
+            >
                 FULL MOCKS
             </div>
 
-            <div id="tabSectional"
-                 class="practice-tab"
-                 onclick="showMockType('sectional')">
+            <div
+                id="tabSectional"
+                class="practice-tab"
+                onclick="showMockType('sectional')"
+            >
                 SECTIONAL MOCKS
             </div>
 
@@ -567,45 +717,73 @@ body{
 
         <div id="fullMockArea">
 
-            <div id="fullFilterArea"></div>
-
-            <div id="fullMockFolders"
-                 class="practice-horizontal"></div>
+            <div
+                id="fullMockFolders"
+                class="practice-horizontal"
+            ></div>
 
         </div>
 
-        <div id="sectionalArea" class="hidden">
+        <div
+            id="sectionalArea"
+            class="hidden"
+        >
 
-            <div id="sectionFilterArea"></div>
-
-            <div id="sectionSubjectList"
-                 class="practice-horizontal"></div>
+            <div
+                id="sectionSubjectList"
+                class="practice-horizontal"
+            ></div>
 
         </div>
 
     </div>
 
-    <div id="examTestListArea" class="hidden">
 
-        <div class="practice-back" onclick="backToMockCategories()">
+    <!-- TEST LIST -->
+    <div
+        id="examTestListArea"
+        class="hidden"
+    >
+
+        <div
+            class="practice-back"
+            onclick="backToMockCategories()"
+        >
             ← Back
         </div>
 
-        <h2 id="examTestListTitle" class="practice-section-title"></h2>
+        <h2
+            id="examTestListTitle"
+            class="practice-section-title"
+        ></h2>
 
-        <div id="testFilterArea"></div>
-
-        <div id="testList" class="test-list"></div>
+        <div
+            id="testList"
+            class="test-list"
+        ></div>
 
     </div>
 
 </section>
 
+
+<!-- =========================================
+     CHAPTER PRACTICE SCREEN
+========================================= -->
+
 <section id="chapterScreen" class="hidden">
 
-    <div class="practice-back" onclick="showMain()">← Back</div>
+    <div
+        class="practice-back"
+        onclick="showMain()"
+    >
+        ← Back
+    </div>
 
-    <h1 id="chapterTitle" class="page-title">
+    <h1
+        id="chapterTitle"
+        class="page-title"
+    >
         Practice Drill
     </h1>
 
@@ -613,11 +791,19 @@ body{
         Select a practice test
     </p>
 
-    <div id="chapterList" class="test-list"></div>
+    <div
+        id="chapterList"
+        class="test-list"
+    ></div>
 
 </section>
 
 </main>
+
+
+<!-- =========================================
+     BOTTOM NAV
+========================================= -->
 
 <nav class="bottom-nav">
 
@@ -631,7 +817,10 @@ body{
         <small>Study Material</small>
     </a>
 
-    <a href="practice.html" class="active">
+    <a
+        href="practice.html"
+        class="active"
+    >
         <span class="nav-icon">📝</span>
         <small>Practice</small>
     </a>
@@ -642,6 +831,7 @@ body{
     </a>
 
 </nav>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -654,7 +844,10 @@ const SUPABASE_KEY =
 "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
 
 const supabaseClient =
-supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 
 let exams=[];
 let subjects=[];
@@ -668,35 +861,51 @@ let currentMockType="";
 let currentFolder=null;
 let currentSubject=null;
 
-let selectedFilter="all";
+
+/* =========================================
+   HELPERS
+========================================= */
 
 function normalize(v){
-    return String(v??"")
+
+    return String(v ?? "")
         .trim()
         .toLowerCase()
         .replace(/\s+/g," ");
+
 }
 
 function escapeHtml(v){
-    return String(v??"")
+
+    return String(v ?? "")
         .replace(/&/g,"&amp;")
         .replace(/</g,"&lt;")
         .replace(/>/g,"&gt;")
         .replace(/"/g,"&quot;")
         .replace(/'/g,"&#039;");
+
 }
 
 function folderName(f){
+
     return String(
         f?.display_name ||
         f?.name ||
         ""
     ).trim();
+
 }
 
 function folderType(f){
+
     return normalize(f?.folder_type);
+
 }
+
+
+/* =========================================
+   SCREEN CONTROL
+========================================= */
 
 function hideAll(){
 
@@ -707,17 +916,30 @@ function hideAll(){
         "testScreen",
         "chapterScreen"
     ].forEach(id=>{
-        document.getElementById(id)
-            .classList.add("hidden");
+
+        const el=document.getElementById(id);
+
+        if(el){
+            el.classList.add("hidden");
+        }
+
     });
 
 }
 
 function showMain(){
+
     hideAll();
+
     document.getElementById("mainScreen")
         .classList.remove("hidden");
+
 }
+
+
+/* =========================================
+   LOAD SUPABASE DATA
+========================================= */
 
 async function loadData(){
 
@@ -727,24 +949,35 @@ async function loadData(){
             .from("exams")
             .select(`
                 id,
-                board,
                 name,
                 mock_type,
                 is_active,
-                sort_order
+                sort_order,
+                stage,
+                created_at
             `)
             .eq("is_active",true)
             .order("sort_order",{ascending:true})
             .order("name",{ascending:true});
 
-        exams=e.data||[];
+        if(e.error){
+            console.error("EXAMS ERROR:",e.error);
+        }
+
+        exams=e.data || [];
+
 
         const s=await supabaseClient
             .from("subjects")
             .select("id,name")
             .order("name");
 
-        subjects=s.data||[];
+        if(s.error){
+            console.error("SUBJECTS ERROR:",s.error);
+        }
+
+        subjects=s.data || [];
+
 
         const t=await supabaseClient
             .from("mock_tests")
@@ -764,7 +997,12 @@ async function loadData(){
             .eq("is_active",true)
             .order("created_at",{ascending:false});
 
-        tests=t.data||[];
+        if(t.error){
+            console.error("MOCK TESTS ERROR:",t.error);
+        }
+
+        tests=t.data || [];
+
 
         const f=await supabaseClient
             .from("mock_folders")
@@ -782,33 +1020,54 @@ async function loadData(){
             .eq("is_active",true)
             .order("sort_order",{ascending:true});
 
-        folders=f.data||[];
+        if(f.error){
+            console.error("MOCK FOLDERS ERROR:",f.error);
+        }
+
+        folders=f.data || [];
+
 
         renderMainSubjects();
 
+        console.log("Practice data loaded:",{
+            exams,
+            subjects,
+            tests,
+            folders
+        });
+
     }catch(err){
+
         console.error("Practice load error:",err);
+
     }
 
 }
+
+
+/* =========================================
+   MAIN SUBJECTS
+========================================= */
 
 function renderMainSubjects(){
 
     const box=document.getElementById("mainSubjectGrid");
 
     if(!subjects.length){
+
         box.innerHTML=`
             <div class="practice-empty">
                 No subjects available yet.
             </div>`;
+
         return;
     }
 
     const order=[
         "quantitative aptitude",
         "general awareness",
-        "english",
-        "reasoning"
+        "reasoning",
+        "english"
     ];
 
     const list=[...subjects].sort((a,b)=>{
@@ -816,9 +1075,12 @@ function renderMainSubjects(){
         const ai=order.indexOf(normalize(a.name));
         const bi=order.indexOf(normalize(b.name));
 
-        if(ai===-1&&bi===-1)
+        if(ai===-1 && bi===-1){
+
             return normalize(a.name)
                 .localeCompare(normalize(b.name));
+
+        }
 
         if(ai===-1)return 1;
         if(bi===-1)return -1;
@@ -829,16 +1091,22 @@ function renderMainSubjects(){
 
     box.innerHTML=list.map(s=>`
 
-        <div class="practice-card"
-             onclick="openChapterById('${s.id}')">
+        <div
+            class="practice-card"
+            onclick="openChapterById('${s.id}')"
+        >
 
             <div class="subject-icon">
                 ${getSubjectIcon(s.name)}
             </div>
 
-            <h3>${escapeHtml(s.name)}</h3>
+            <h3>
+                ${escapeHtml(s.name)}
+            </h3>
 
-            <span>Chapter Wise</span>
+            <span>
+                Chapter Wise
+            </span>
 
         </div>
 
@@ -853,16 +1121,93 @@ function getSubjectIcon(name){
     if(n.includes("quant"))return "🔢";
 
     if(
-        n.includes("general")||
-        n==="gk"||
+        n.includes("general") ||
+        n==="gk" ||
         n.includes("awareness")
-    )return "🌐";
+    ){
+        return "🌐";
+    }
 
     if(n.includes("english"))return "📖";
+
     if(n.includes("reason"))return "🧩";
 
     return "📚";
+
 }
+
+
+/* =========================================
+   EXAM GROUP
+========================================= */
+
+function getExamGroup(exam){
+
+    const value=normalize(
+        exam?.name + " " +
+        exam?.stage + " " +
+        exam?.mock_type
+    );
+
+    if(
+        value.includes("rrb") ||
+        value.includes("railway") ||
+        value.includes("ntpc") ||
+        value.includes("group d") ||
+        value.includes("alp") ||
+        value.includes("technician")
+    ){
+        return "RRB";
+    }
+
+    return "SSC";
+
+}
+
+function getExamMainName(exam){
+
+    let name=String(
+        exam?.name || ""
+    ).trim();
+
+    name=name
+        .replace(/\(\s*tier\s*[- ]?\s*\d+\s*\)/ig,"")
+        .replace(/\bTIER\s*[- ]?\s*\d+\b/ig,"")
+        .replace(/\(\s*(pre|prelims|preliminary|mains|tier)\s*\)/ig,"")
+        .replace(/\s{2,}/g," ")
+        .trim();
+
+    return name || "Exam";
+
+}
+
+function getExamTier(exam){
+
+    const combined=
+        String(exam?.name || "") + " " +
+        String(exam?.stage || "");
+
+    const match=combined.match(
+        /\(?\s*(TIER\s*[- ]?\s*\d+|PRELIMS?|PRELIMINARY|MAINS)\s*\)?/i
+    );
+
+    if(match){
+
+        return match[1]
+            .replace(/\s+/g," ")
+            .toUpperCase()
+            .replace("TIER ","TIER - ");
+
+    }
+
+    return "";
+
+}
+
+
+/* =========================================
+   SSC / RRB OPEN
+========================================= */
 
 function openSSC(){
 
@@ -897,33 +1242,56 @@ function renderExams(board){
         :document.getElementById("rrbList");
 
     const list=exams.filter(e=>
-        normalize(e.board)===normalize(board)
+        getExamGroup(e)===board
     );
 
     if(!list.length){
+
         box.innerHTML=`
             <div class="practice-empty">
                 No ${board} exams available yet.
             </div>`;
+
         return;
     }
 
-    box.innerHTML=list.map(e=>`
+    box.innerHTML=list.map(e=>{
 
-        <div class="exam-card"
-             onclick="openExam('${e.id}')">
+        const mainName=getExamMainName(e);
+        const tier=getExamTier(e);
 
-            <div class="exam-card-title">
-                ${escapeHtml(e.name)}
+        return`
+
+            <div
+                class="exam-card"
+                onclick="openExam('${e.id}')"
+            >
+
+                <div class="exam-card-title">
+                    ${escapeHtml(mainName)}
+                </div>
+
+                ${
+                    tier
+                    ?`
+                    <div class="exam-tier">
+                        (${escapeHtml(tier)})
+                    </div>`
+                    :""
+                }
+
             </div>
 
-            <div class="exam-arrow">→</div>
+        `;
 
-        </div>
-
-    `).join("");
+    }).join("");
 
 }
+
+
+/* =========================================
+   OPEN EXAM
+========================================= */
 
 function openExam(id){
 
@@ -939,16 +1307,63 @@ function openExam(id){
         .classList.remove("hidden");
 
     document.getElementById("examTitle")
-        .textContent=currentExam.name;
+        .textContent=getExamMainName(currentExam);
 
     currentBranch="";
     currentMockType="";
     currentFolder=null;
     currentSubject=null;
 
+    document.getElementById("mockCategoryArea")
+        .classList.remove("hidden");
+
+    document.getElementById("mockTypeArea")
+        .classList.add("hidden");
+
+    document.getElementById("examTestListArea")
+        .classList.add("hidden");
+
     renderBranches();
 
 }
+
+
+/* =========================================
+   BACK TO SSC / RRB EXAM LIST
+========================================= */
+
+function backToExamList(){
+
+    currentExam=null;
+    currentBranch="";
+    currentMockType="";
+    currentFolder=null;
+    currentSubject=null;
+
+    hideAll();
+
+    if(currentGateway==="RRB"){
+
+        document.getElementById("rrbScreen")
+            .classList.remove("hidden");
+
+        renderExams("RRB");
+
+    }else{
+
+        document.getElementById("sscScreen")
+            .classList.remove("hidden");
+
+        renderExams("SSC");
+
+    }
+
+}
+
+
+/* =========================================
+   FOLDERS
+========================================= */
 
 function examFolders(){
 
@@ -966,8 +1381,8 @@ function getRoots(){
         .filter(f=>{
 
             const root=
-                f.parent_id===null||
-                f.parent_id===undefined||
+                f.parent_id===null ||
+                f.parent_id===undefined ||
                 f.parent_id==="";
 
             if(!root)return false;
@@ -976,13 +1391,13 @@ function getRoots(){
             const t=folderType(f);
 
             return(
-                t==="new"||
-                t==="new_mocks"||
-                t==="pyq"||
-                t==="pyq_mocks"||
-                n==="new"||
-                n==="new mocks"||
-                n==="pyq"||
+                t==="new" ||
+                t==="new_mocks" ||
+                t==="pyq" ||
+                t==="pyq_mocks" ||
+                n==="new" ||
+                n==="new mocks" ||
+                n==="pyq" ||
                 n==="pyq mocks"
             );
 
@@ -1000,13 +1415,18 @@ function isPyqFolder(f){
     const t=folderType(f);
 
     return(
-        t==="pyq"||
-        t==="pyq_mocks"||
-        n==="pyq"||
+        t==="pyq" ||
+        t==="pyq_mocks" ||
+        n==="pyq" ||
         n==="pyq mocks"
     );
 
 }
+
+
+/* =========================================
+   NEW MOCKS / PYQ MOCKS
+========================================= */
 
 function renderBranches(){
 
@@ -1014,34 +1434,53 @@ function renderBranches(){
 
     const roots=getRoots();
 
-    let newRoot=roots.find(r=>!isPyqFolder(r));
-    let pyqRoot=roots.find(r=>isPyqFolder(r));
+    const newRoot=roots.find(r=>
+        !isPyqFolder(r)
+    );
+
+    const pyqRoot=roots.find(r=>
+        isPyqFolder(r)
+    );
 
     box.innerHTML=`
 
-        <div class="practice-card"
-             onclick="openMockBranch(
-                '${newRoot?newRoot.id:""}','new'
-             )">
+        <div
+            class="practice-card"
+            onclick="openMockBranch(
+                '${newRoot ? newRoot.id : ""}',
+                'new'
+            )"
+        >
 
-            <div class="folder-icon">🚀</div>
+            <div class="folder-icon">
+                🚀
+            </div>
 
             <h3>NEW MOCKS</h3>
 
-            <span>Latest Mock Tests</span>
+            <span>
+                Latest Mock Tests
+            </span>
 
         </div>
 
-        <div class="practice-card"
-             onclick="openMockBranch(
-                '${pyqRoot?pyqRoot.id:""}','pyq'
-             )">
+        <div
+            class="practice-card"
+            onclick="openMockBranch(
+                '${pyqRoot ? pyqRoot.id : ""}',
+                'pyq'
+            )"
+        >
 
-            <div class="folder-icon">📚</div>
+            <div class="folder-icon">
+                📚
+            </div>
 
             <h3>PYQ MOCKS</h3>
 
-            <span>Previous Year Questions</span>
+            <span>
+                Previous Year Questions
+            </span>
 
         </div>
 
@@ -1054,7 +1493,9 @@ function openMockBranch(id,branch){
     currentBranch=branch;
 
     currentFolder=id
-        ?folders.find(f=>String(f.id)===String(id))||null
+        ?folders.find(f=>
+            String(f.id)===String(id)
+        ) || null
         :null;
 
     document.getElementById("mockCategoryArea")
@@ -1065,7 +1506,9 @@ function openMockBranch(id,branch){
 
     document.getElementById("mockBranchTitle")
         .textContent=
-        branch==="pyq"?"PYQ MOCKS":"NEW MOCKS";
+        branch==="pyq"
+        ? "PYQ MOCKS"
+        : "NEW MOCKS";
 
     showMockType("full");
 
@@ -1077,7 +1520,7 @@ function branchRoot(){
 
     return getRoots().find(f=>
         isPyqFolder(f)===(currentBranch==="pyq")
-    )||null;
+    ) || null;
 
 }
 
@@ -1087,64 +1530,99 @@ function childFolder(parent,type){
 
     return examFolders().find(f=>{
 
-        if(String(f.parent_id)!==String(parent.id))
+        if(
+            String(f.parent_id)!==
+            String(parent.id)
+        ){
             return false;
+        }
 
         const n=normalize(folderName(f));
         const t=folderType(f);
 
         if(type==="full"){
+
             return(
-                t==="full"||
-                t==="full_mocks"||
-                n==="full"||
+                t==="full" ||
+                t==="full_mocks" ||
+                n==="full" ||
                 n==="full mocks"
             );
+
         }
 
         return(
-            t==="sectional"||
-            t==="sectional_mocks"||
-            n==="sectional"||
+            t==="sectional" ||
+            t==="sectional_mocks" ||
+            n==="sectional" ||
             n==="sectional mocks"
         );
 
-    })||null;
+    }) || null;
 
 }
+
+
+/* =========================================
+   FULL / SECTIONAL TABS
+========================================= */
 
 function showMockType(type){
 
     currentMockType=type;
-    selectedFilter="all";
 
     document.getElementById("tabFull")
-        .classList.toggle("active",type==="full");
+        .classList.toggle(
+            "active",
+            type==="full"
+        );
 
     document.getElementById("tabSectional")
-        .classList.toggle("active",type==="sectional");
+        .classList.toggle(
+            "active",
+            type==="sectional"
+        );
 
     document.getElementById("fullMockArea")
-        .classList.toggle("hidden",type!=="full");
+        .classList.toggle(
+            "hidden",
+            type!=="full"
+        );
 
     document.getElementById("sectionalArea")
-        .classList.toggle("hidden",type!=="sectional");
+        .classList.toggle(
+            "hidden",
+            type!=="sectional"
+        );
 
     document.getElementById("examTestListArea")
         .classList.add("hidden");
 
-    if(type==="full")renderFull();
-    else renderSectional();
+    if(type==="full"){
+
+        renderFull();
+
+    }else{
+
+        renderSectional();
+
+    }
 
 }
+
+
+/* =========================================
+   FULL MOCKS
+========================================= */
 
 function renderFull(){
 
     const box=document.getElementById("fullMockFolders");
-    const filter=document.getElementById("fullFilterArea");
 
     const root=branchRoot();
     const full=childFolder(root,"full");
+
+    box.className="practice-horizontal";
 
     if(!full){
 
@@ -1153,22 +1631,41 @@ function renderFull(){
                 No Full Mock Tests available yet.
             </div>`;
 
-        filter.innerHTML="";
         return;
     }
+
+    /* NEW FULL MOCKS */
 
     if(currentBranch==="new"){
 
-        renderFilterChips(filter);
-
         const list=tests.filter(t=>
-            String(t.exam_id)===String(currentExam.id)&&
+            String(t.exam_id)===String(currentExam.id) &&
             String(t.folder_id)===String(full.id)
         );
 
-        renderDirectTestCards(box,list,"FULL MOCKS");
+        if(!list.length){
+
+            box.className="test-list";
+
+            box.innerHTML=`
+                <div class="practice-empty">
+                    No New Full Mock Tests available yet.
+                </div>`;
+
+            return;
+        }
+
+        box.className="test-list";
+
+        renderTests(
+            list,
+            "fullMockFolders"
+        );
+
         return;
     }
+
+    /* PYQ FULL MOCK YEARS */
 
     const years=examFolders()
         .filter(f=>
@@ -1180,8 +1677,8 @@ function renderFull(){
             const t=folderType(f);
 
             return(
-                t==="year"||
-                t==="full_year"||
+                t==="year" ||
+                t==="full_year" ||
                 /^\d{4}$/.test(n)
             );
 
@@ -1191,30 +1688,37 @@ function renderFull(){
             Number(folderName(a))
         );
 
-    filter.innerHTML="";
-
     if(!years.length){
 
         box.innerHTML=`
             <div class="practice-empty">
                 No PYQ years available yet.
             </div>`;
+
         return;
     }
 
     box.innerHTML=years.map(y=>`
 
-        <div class="practice-card"
-             onclick="openFolderTests(
+        <div
+            class="practice-card"
+            onclick="openFolderTests(
                 '${y.id}',
                 '${escapeHtml(folderName(y))}'
-             )">
+            )"
+        >
 
-            <div class="folder-icon">📅</div>
+            <div class="folder-icon">
+                📅
+            </div>
 
-            <h3>${escapeHtml(folderName(y))}</h3>
+            <h3>
+                ${escapeHtml(folderName(y))}
+            </h3>
 
-            <span>PYQ Full Mocks</span>
+            <span>
+                PYQ Full Mocks
+            </span>
 
         </div>
 
@@ -1222,13 +1726,77 @@ function renderFull(){
 
 }
 
+
+/* =========================================
+   SUBJECT HELPERS
+========================================= */
+
+function canonicalSubjectName(name){
+
+    const n=normalize(name);
+
+    if(
+        n.includes("quant") ||
+        n==="maths" ||
+        n==="math" ||
+        n.includes("mathematics")
+    ){
+        return "Quantitative Aptitude";
+    }
+
+    if(
+        n.includes("general awareness") ||
+        n==="gk" ||
+        n.includes("general knowledge") ||
+        n.includes("awareness")
+    ){
+        return "General Awareness";
+    }
+
+    if(n.includes("reason")){
+        return "Reasoning";
+    }
+
+    if(n.includes("english")){
+        return "English";
+    }
+
+    return String(name || "Subject").trim();
+
+}
+
+function subjectOrder(name){
+
+    const n=canonicalSubjectName(name);
+
+    const order=[
+        "Quantitative Aptitude",
+        "General Awareness",
+        "Reasoning",
+        "English"
+    ];
+
+    const index=order.indexOf(n);
+
+    return index===-1
+        ?999
+        :index;
+
+}
+
+
+/* =========================================
+   SECTIONAL MOCKS
+========================================= */
+
 function renderSectional(){
 
     const box=document.getElementById("sectionSubjectList");
-    const filter=document.getElementById("sectionFilterArea");
 
     const root=branchRoot();
     const sectional=childFolder(root,"sectional");
+
+    box.className="practice-horizontal";
 
     if(!sectional){
 
@@ -1237,7 +1805,6 @@ function renderSectional(){
                 No sectional subjects available yet.
             </div>`;
 
-        filter.innerHTML="";
         return;
     }
 
@@ -1245,15 +1812,52 @@ function renderSectional(){
         .filter(f=>
             String(f.parent_id)===String(sectional.id)
         )
-        .filter(f=>
-            folderType(f)==="subject"||!!f.subject_id
-        )
-        .sort((a,b)=>
-            Number(a.sort_order||0)-
-            Number(b.sort_order||0)
-        );
+        .filter(f=>{
 
-    filter.innerHTML="";
+            const s=subjects.find(x=>
+                String(x.id)===String(f.subject_id)
+            );
+
+            const name=canonicalSubjectName(
+                folderName(f) ||
+                s?.name ||
+                ""
+            );
+
+            return(
+                folderType(f)==="subject" ||
+                !!f.subject_id ||
+                [
+                    "Quantitative Aptitude",
+                    "General Awareness",
+                    "Reasoning",
+                    "English"
+                ].includes(name)
+            );
+
+        })
+        .sort((a,b)=>{
+
+            const sa=subjects.find(x=>
+                String(x.id)===String(a.subject_id)
+            );
+
+            const sb=subjects.find(x=>
+                String(x.id)===String(b.subject_id)
+            );
+
+            const na=folderName(a)||
+                sa?.name||
+                "";
+
+            const nb=folderName(b)||
+                sb?.name||
+                "";
+
+            return subjectOrder(na)-
+                subjectOrder(nb);
+
+        });
 
     if(!list.length){
 
@@ -1261,6 +1865,7 @@ function renderSectional(){
             <div class="practice-empty">
                 No sectional subjects available yet.
             </div>`;
+
         return;
     }
 
@@ -1270,23 +1875,34 @@ function renderSectional(){
             String(x.id)===String(f.subject_id)
         );
 
-        const name=folderName(f)||s?.name||"Subject";
+        const rawName=
+            folderName(f)||
+            s?.name||
+            "Subject";
+
+        const name=canonicalSubjectName(rawName);
 
         return`
 
-            <div class="practice-card"
-                 onclick="openFolderTests(
+            <div
+                class="practice-card"
+                onclick="openFolderTests(
                     '${f.id}',
                     '${escapeHtml(name)}'
-                 )">
+                )"
+            >
 
                 <div class="subject-icon">
-                    ${getSubjectIcon(s?.name||name)}
+                    ${getSubjectIcon(name)}
                 </div>
 
-                <h3>${escapeHtml(name)}</h3>
+                <h3>
+                    ${escapeHtml(name)}
+                </h3>
 
-                <span>Sectional Mocks</span>
+                <span>
+                    Sectional Mocks
+                </span>
 
             </div>
 
@@ -1296,141 +1912,16 @@ function renderSectional(){
 
 }
 
-function renderFilterChips(box){
 
-    box.innerHTML=`
-
-        <div class="filter-row">
-
-            <div class="filter-chip active"
-                 data-filter="all"
-                 onclick="setFilter('all')">
-                All
-            </div>
-
-            <div class="filter-chip"
-                 data-filter="free"
-                 onclick="setFilter('free')">
-                Free
-            </div>
-
-            <div class="filter-chip"
-                 data-filter="latest"
-                 onclick="setFilter('latest')">
-                Latest Tests
-            </div>
-
-        </div>
-
-    `;
-
-}
-
-function setFilter(filter){
-
-    selectedFilter=filter;
-
-    document.querySelectorAll(".filter-chip")
-        .forEach(x=>{
-            x.classList.toggle(
-                "active",
-                x.dataset.filter===filter
-            );
-        });
-
-    if(document.getElementById("examTestListArea")
-        .classList.contains("hidden")){
-
-        if(currentMockType==="full")renderFull();
-        else renderSectional();
-
-    }else{
-
-        const id=currentFolder?.id;
-
-        if(id){
-
-            const list=tests.filter(t=>
-                String(t.folder_id)===String(id)
-            );
-
-            renderTests(applyFilter(list));
-
-        }
-
-    }
-
-}
-
-function applyFilter(list){
-
-    if(selectedFilter==="all")return list;
-
-    if(selectedFilter==="free"){
-
-        return list.filter(t=>
-            t.is_free===true||
-            t.is_free==="true"||
-            normalize(t.access_type)==="free"
-        );
-
-    }
-
-    if(selectedFilter==="latest"){
-
-        return [...list].sort((a,b)=>
-            new Date(b.created_at||0)-
-            new Date(a.created_at||0)
-        );
-
-    }
-
-    return list;
-
-}
-
-function renderDirectTestCards(box,list,title){
-
-    if(!list.length){
-
-        box.innerHTML=`
-            <div class="practice-empty">
-                No ${title} available yet.
-            </div>`;
-        return;
-    }
-
-    box.className="test-list";
-
-    box.innerHTML=list.map(t=>`
-
-        <div class="test-card"
-             onclick="openFolderTests(
-                '${t.folder_id}',
-                '${escapeHtml(title)}'
-             )">
-
-            <div class="test-title">
-                ${escapeHtml(t.title||"Mock Test")}
-            </div>
-
-            <div class="test-info">
-                ⏱ ${escapeHtml(t.duration_minutes||"-")} minutes
-                <br>
-                📝 ${escapeHtml(t.total_questions||"-")} questions
-            </div>
-
-        </div>
-
-    `).join("");
-
-}
+/* =========================================
+   OPEN TEST LIST
+========================================= */
 
 function openFolderTests(id,title){
 
     currentFolder=folders.find(f=>
         String(f.id)===String(id)
-    )||null;
+    ) || null;
 
     currentSubject=null;
 
@@ -1446,18 +1937,22 @@ function openFolderTests(id,title){
     document.getElementById("examTestListTitle")
         .textContent=title;
 
-    renderFilterChips(
-        document.getElementById("testFilterArea")
-    );
-
     const list=tests.filter(t=>
-        String(t.exam_id)===String(currentExam.id)&&
+        String(t.exam_id)===String(currentExam.id) &&
         String(t.folder_id)===String(id)
     );
 
-    renderTests(applyFilter(list));
+    renderTests(
+        list,
+        "testList"
+    );
 
 }
+
+
+/* =========================================
+   ATTEMPT STATUS
+========================================= */
 
 async function getAttemptState(testId){
 
@@ -1478,17 +1973,22 @@ async function getAttemptState(testId){
             const saved=JSON.parse(raw);
 
             if(saved?.progressStarted){
+
                 result.state="resume";
+
                 return result;
+
             }
 
         }
 
     }catch(e){}
 
+
     try{
 
         const u=await supabaseClient.auth.getUser();
+
         const user=u?.data?.user;
 
         if(!user)return result;
@@ -1509,23 +2009,53 @@ async function getAttemptState(testId){
             .not("completed_at","is",null)
             .order("completed_at",{ascending:true});
 
-        if(r.error)return result;
+        if(r.error){
 
-        result.attempts=r.data||[];
-        result.completedCount=result.attempts.length;
+            console.error(
+                "ATTEMPT ERROR:",
+                r.error
+            );
 
-        if(result.completedCount)
+            return result;
+
+        }
+
+        result.attempts=r.data || [];
+        result.completedCount=
+            result.attempts.length;
+
+        if(result.completedCount){
+
             result.state="completed";
 
-    }catch(e){}
+        }
+
+    }catch(e){
+
+        console.error(
+            "Attempt state error:",
+            e
+        );
+
+    }
 
     return result;
 
 }
 
-async function renderTests(list){
 
-    const box=document.getElementById("testList");
+/* =========================================
+   RENDER MOCK TESTS
+========================================= */
+
+async function renderTests(
+    list,
+    targetId="testList"
+){
+
+    const box=document.getElementById(targetId);
+
+    if(!box)return;
 
     if(!list.length){
 
@@ -1533,6 +2063,7 @@ async function renderTests(list){
             <div class="practice-empty">
                 No tests available yet.
             </div>`;
+
         return;
     }
 
@@ -1545,59 +2076,69 @@ async function renderTests(list){
 
     for(const test of list){
 
-        const status=await getAttemptState(test.id);
+        const status=
+            await getAttemptState(test.id);
 
         let actions="";
 
         if(status.state==="resume"){
 
             actions=`
-                <a class="start-test"
-                   href="test.html?id=${encodeURIComponent(test.id)}">
-                   Resume →
+                <a
+                    class="start-test"
+                    href="test.html?id=${encodeURIComponent(test.id)}"
+                >
+                    Resume →
                 </a>`;
 
         }else if(!status.completedCount){
 
             actions=`
-                <a class="start-test"
-                   href="test.html?id=${encodeURIComponent(test.id)}">
-                   Start Test →
+                <a
+                    class="start-test"
+                    href="test.html?id=${encodeURIComponent(test.id)}"
+                >
+                    Start Test →
                 </a>`;
 
         }else{
 
-            /*
-             * First attempt + maximum 3 re-attempts.
-             * After 4 completed attempts Re-attempt disappears.
-             */
-
             if(status.completedCount<4){
 
                 actions+=`
-                    <a class="start-test"
-                       href="test.html?id=${encodeURIComponent(test.id)}&reattempt=1">
-                       Re-attempt
+                    <a
+                        class="start-test"
+                        href="test.html?id=${encodeURIComponent(test.id)}&reattempt=1"
+                    >
+                        Re-attempt
                     </a>`;
 
             }
 
-            const latest=status.attempts[
-                status.attempts.length-1
-            ];
+            const latest=
+                status.attempts[
+                    status.attempts.length-1
+                ];
 
             if(latest){
 
                 actions+=`
-                    <a class="secondary-test"
-                       href="analysis.html?attempt_id=${encodeURIComponent(latest.id)}">
-                       Analysis
+
+                    <a
+                        class="secondary-test"
+                        href="analysis.html?attempt_id=${encodeURIComponent(latest.id)}"
+                    >
+                        Analysis
                     </a>
 
-                    <a class="secondary-test"
-                       href="solutions.html?test_id=${encodeURIComponent(test.id)}">
-                       Solutions
-                    </a>`;
+                    <a
+                        class="secondary-test"
+                        href="solutions.html?test_id=${encodeURIComponent(test.id)}"
+                    >
+                        Solutions
+                    </a>
+
+                `;
 
             }
 
@@ -1608,20 +2149,30 @@ async function renderTests(list){
             <div class="test-card">
 
                 <div class="test-title">
-                    ${escapeHtml(test.title||"Mock Test")}
+                    ${escapeHtml(
+                        test.title ||
+                        "Mock Test"
+                    )}
                 </div>
 
                 <div class="test-info">
-                    ⏱ ${escapeHtml(test.duration_minutes||"-")} minutes
+                    ⏱ ${escapeHtml(
+                        test.duration_minutes || "-"
+                    )} minutes
+
                     <br>
-                    📝 ${escapeHtml(test.total_questions||"-")} questions
+
+                    📝 ${escapeHtml(
+                        test.total_questions || "-"
+                    )} questions
                 </div>
 
                 ${
                     status.completedCount
                     ?`
                     <div class="attempt-info">
-                        ${status.completedCount} completed
+                        ${status.completedCount}
+                        completed
                     </div>`
                     :""
                 }
@@ -1641,12 +2192,21 @@ async function renderTests(list){
 
 }
 
+
+/* =========================================
+   BACK: FULL/SECTIONAL → NEW/PYQ
+========================================= */
+
 function backToMockBranches(){
 
     currentFolder=null;
     currentSubject=null;
+    currentMockType="";
 
     document.getElementById("mockTypeArea")
+        .classList.add("hidden");
+
+    document.getElementById("examTestListArea")
         .classList.add("hidden");
 
     document.getElementById("mockCategoryArea")
@@ -1656,6 +2216,11 @@ function backToMockBranches(){
 
 }
 
+
+/* =========================================
+   BACK: TEST LIST → FULL/SECTIONAL
+========================================= */
+
 function backToMockCategories(){
 
     currentFolder=null;
@@ -1664,19 +2229,22 @@ function backToMockCategories(){
     document.getElementById("examTestListArea")
         .classList.add("hidden");
 
+    document.getElementById("mockCategoryArea")
+        .classList.add("hidden");
+
     document.getElementById("mockTypeArea")
         .classList.remove("hidden");
 
-    showMockType(currentMockType||"full");
+    showMockType(
+        currentMockType || "full"
+    );
 
 }
 
-function backToGateway(){
 
-    if(currentGateway==="SSC")openSSC();
-    else openRRB();
-
-}
+/* =========================================
+   CHAPTER PRACTICE
+========================================= */
 
 async function openChapterById(subjectId){
 
@@ -1698,27 +2266,37 @@ async function openChapterScreen(subject){
         .classList.remove("hidden");
 
     document.getElementById("chapterTitle")
-        .textContent=subject.name+" Practice Drill";
+        .textContent=
+        subject.name+" Practice Drill";
 
     const list=tests.filter(test=>{
 
-        const type=normalize(test.test_type);
+        const type=normalize(
+            test.test_type
+        );
 
         return(
-            String(test.subject_id)===String(subject.id)&&
+            String(test.subject_id)===
+            String(subject.id) &&
             (
-                type==="chapter_wise"||
+                type==="chapter_wise" ||
                 type==="subject_wise"
             )
         );
 
     });
 
-    await renderChapterTests(list,subject.name);
+    await renderChapterTests(
+        list,
+        subject.name
+    );
 
 }
 
-async function renderChapterTests(list,subjectName){
+async function renderChapterTests(
+    list,
+    subjectName
+){
 
     const box=document.getElementById("chapterList");
 
@@ -1729,6 +2307,7 @@ async function renderChapterTests(list,subjectName){
                 No ${escapeHtml(subjectName)}
                 practice available yet.
             </div>`;
+
         return;
     }
 
@@ -1741,24 +2320,29 @@ async function renderChapterTests(list,subjectName){
 
     for(const test of list){
 
-        const status=await getAttemptState(test.id);
+        const status=
+            await getAttemptState(test.id);
 
         let actions="";
 
         if(status.state==="resume"){
 
             actions=`
-                <a class="start-test"
-                   href="test.html?id=${encodeURIComponent(test.id)}">
-                   Resume Practice →
+                <a
+                    class="start-test"
+                    href="test.html?id=${encodeURIComponent(test.id)}"
+                >
+                    Resume Practice →
                 </a>`;
 
         }else if(!status.completedCount){
 
             actions=`
-                <a class="start-test"
-                   href="test.html?id=${encodeURIComponent(test.id)}">
-                   Start Practice →
+                <a
+                    class="start-test"
+                    href="test.html?id=${encodeURIComponent(test.id)}"
+                >
+                    Start Practice →
                 </a>`;
 
         }else{
@@ -1766,29 +2350,39 @@ async function renderChapterTests(list,subjectName){
             if(status.completedCount<4){
 
                 actions=`
-                    <a class="start-test"
-                       href="test.html?id=${encodeURIComponent(test.id)}&reattempt=1">
-                       Re-attempt
+                    <a
+                        class="start-test"
+                        href="test.html?id=${encodeURIComponent(test.id)}&reattempt=1"
+                    >
+                        Re-attempt
                     </a>`;
 
             }
 
-            const latest=status.attempts[
-                status.attempts.length-1
-            ];
+            const latest=
+                status.attempts[
+                    status.attempts.length-1
+                ];
 
             if(latest){
 
                 actions+=`
-                    <a class="secondary-test"
-                       href="analysis.html?attempt_id=${encodeURIComponent(latest.id)}">
-                       Analysis
+
+                    <a
+                        class="secondary-test"
+                        href="analysis.html?attempt_id=${encodeURIComponent(latest.id)}"
+                    >
+                        Analysis
                     </a>
 
-                    <a class="secondary-test"
-                       href="solutions.html?test_id=${encodeURIComponent(test.id)}">
-                       Solutions
-                    </a>`;
+                    <a
+                        class="secondary-test"
+                        href="solutions.html?test_id=${encodeURIComponent(test.id)}"
+                    >
+                        Solutions
+                    </a>
+
+                `;
 
             }
 
@@ -1799,20 +2393,30 @@ async function renderChapterTests(list,subjectName){
             <div class="test-card">
 
                 <div class="test-title">
-                    ${escapeHtml(test.title||"Practice Test")}
+                    ${escapeHtml(
+                        test.title ||
+                        "Practice Test"
+                    )}
                 </div>
 
                 <div class="test-info">
-                    ⏱ ${escapeHtml(test.duration_minutes||"-")} minutes
+                    ⏱ ${escapeHtml(
+                        test.duration_minutes || "-"
+                    )} minutes
+
                     <br>
-                    📝 ${escapeHtml(test.total_questions||"-")} questions
+
+                    📝 ${escapeHtml(
+                        test.total_questions || "-"
+                    )} questions
                 </div>
 
                 ${
                     status.completedCount
                     ?`
                     <div class="attempt-info">
-                        ${status.completedCount} completed
+                        ${status.completedCount}
+                        completed
                     </div>`
                     :""
                 }
@@ -1827,13 +2431,19 @@ async function renderChapterTests(list,subjectName){
 
     }
 
+    box.className="test-list";
     box.innerHTML=html;
 
 }
+
+
+/* =========================================
+   START
+========================================= */
 
 loadData();
 
 </script>
 
 </body>
-</html>
+    </html>
