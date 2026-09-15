@@ -1,16 +1,1444 @@
-document.documentElement.dataset.theme = localStorage.getItem("ssc-edge-theme") || "dark"; SSC EDGE - Practice Admin :root{ --purple:#9b5cff; --purple2:#7b35e8; --bg:#09090d; --card:#111117; --card2:#15151d; --border:#252530; --text:#f5f5f7; --muted:#92929e; --green:#28c76f; --red:#ff4d5e; --yellow:#ffbd4a; } :root[data-theme="light"]{ --bg:#f6f4fa; --card:#ffffff; --card2:#f1eef7; --border:#ddd8e8; --text:#17151c; --muted:#686473; } *{ box-sizing:border-box; } body{ margin:0; background:var(--bg); color:var(--text); font-family:Arial,Helvetica,sans-serif; } button,input,select{ font:inherit; } button{ cursor:pointer; } /* HEADER */ .admin-header{ height:72px; display:flex; align-items:center; justify-content:space-between; padding:0 18px; border-bottom:1px solid var(--border); background:var(--bg); position:sticky; top:0; z-index:50; } .brand{ font-size:23px; font-weight:800; letter-spacing:-.5px; } .brand span{ color:var(--purple); } .header-right{ display:flex; align-items:center; gap:9px; } .header-btn{ width:40px; height:40px; border:1px solid var(--border); background:var(--card); color:var(--text); border-radius:12px; font-size:18px; } /* PAGE */ .page{ width:min(1050px,100%); margin:auto; padding:20px 15px 50px; } .page-title{ font-size:25px; font-weight:800; margin:3px 0 5px; } .page-subtitle{ color:var(--muted); font-size:13px; margin-bottom:20px; } .top-actions{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; } .primary-btn, .secondary-btn, .danger-btn{ border-radius:11px; padding:11px 15px; font-weight:700; } .primary-btn{ background:var(--purple); color:white; border:1px solid var(--purple); } .secondary-btn{ background:var(--card2); color:var(--text); border:1px solid var(--border); } .danger-btn{ background:#3a151a; color:#ff6b79; border:1px solid #60222b; } /* LABEL */ .section-label{ font-size:12px; font-weight:800; color:var(--muted); letter-spacing:.8px; margin:22px 0 10px; text-transform:uppercase; } /* EXAMS */ .exam-list{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; } .exam-card{ background:var(--card); border:1px solid var(--border); border-radius:16px; padding:15px; } .exam-card.active{ border-color:var(--purple); box-shadow:0 0 0 1px rgba(155,92,255,.15); } .exam-main{ display:flex; align-items:center; gap:12px; } .exam-logo{ width:48px; height:48px; border-radius:13px; background:var(--card2); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; flex:none; overflow:hidden; } .exam-logo img{ width:100%; height:100%; object-fit:contain; } .ssc-logo{ font-size:17px; font-weight:900; color:var(--purple); } .exam-name{ font-size:17px; font-weight:800; } .exam-board{ color:var(--muted); font-size:12px; margin-top:4px; } .exam-actions{ display:flex; gap:7px; margin-top:13px; flex-wrap:wrap; } .small-btn{ border:1px solid var(--border); background:var(--card2); color:var(--text); border-radius:9px; padding:7px 10px; font-size:12px; font-weight:700; } .small-btn.purple{ background:var(--purple); border-color:var(--purple); color:white; } .small-btn.red{ color:#ff6674; } /* WORKSPACE */ .workspace{ margin-top:25px; } .workspace-head{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:14px; } .workspace-title{ font-size:21px; font-weight:800; } .workspace-subtitle{ color:var(--muted); font-size:12px; margin-top:4px; } /* ROOT */ .root-grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:13px; } .root-card{ background:var(--card); border:1px solid var(--border); border-radius:16px; padding:17px; } .root-icon{ width:44px; height:44px; border-radius:12px; background:rgba(155,92,255,.12); display:flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:12px; } .root-title{ font-size:18px; font-weight:800; } .root-desc{ color:var(--muted); font-size:12px; margin-top:5px; } .root-actions{ display:flex; gap:7px; margin-top:13px; flex-wrap:wrap; } /* CATEGORY */ .category-section{ background:var(--card); border:1px solid var(--border); border-radius:16px; padding:15px; margin-bottom:14px; } .category-section-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:13px; } .category-section-title{ display:flex; align-items:center; gap:9px; font-size:17px; font-weight:800; } .category-section-icon{ width:36px; height:36px; border-radius:10px; background:rgba(155,92,255,.12); display:flex; align-items:center; justify-content:center; font-size:18px; flex:none; } .category-section-actions{ display:flex; gap:6px; flex-wrap:wrap; } /* CHIPS */ .chip-list{ display:flex; gap:9px; overflow-x:auto; padding:3px 1px 7px; scrollbar-width:none; } .chip-list::-webkit-scrollbar{ display:none; } .chip{ padding:9px 16px; border-radius:22px; border:1px solid var(--border); background:var(--card2); color:var(--muted); font-size:13px; font-weight:700; white-space:nowrap; cursor:pointer; transition:.15s; flex:none; } .chip:hover{ border-color:var(--purple); } .chip.active{ background:var(--purple); color:white; border-color:var(--purple); } .leaf-toolbar{ display:flex; align-items:center; gap:7px; flex-wrap:wrap; padding:12px 0; margin-top:8px; border-top:1px dashed var(--border); } .leaf-name{ font-size:14px; font-weight:800; margin-right:auto; } /* TESTS */ .tests-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin:5px 0 11px; } .tests-title{ font-size:16px; font-weight:800; } .test-list{ display:grid; gap:10px; } .test-card{ background:var(--card2); border:1px solid var(--border); border-radius:14px; padding:14px; } .test-top{ display:flex; justify-content:space-between; gap:10px; } .test-title{ font-size:15px; font-weight:800; } .test-status{ font-size:10px; padding:4px 7px; border-radius:7px; background:rgba(40,199,111,.12); color:var(--green); white-space:nowrap; } .test-status.off{ background:rgba(255,77,94,.12); color:var(--red); } .test-info{ display:flex; gap:14px; flex-wrap:wrap; color:var(--muted); font-size:11px; margin-top:7px; } .test-actions{ display:flex; gap:7px; flex-wrap:wrap; margin-top:11px; } /* UNASSIGNED */ .unassigned{ margin-top:18px; border:1px solid rgba(255,189,74,.35); background:rgba(255,189,74,.05); border-radius:16px; padding:15px; } .unassigned-head{ display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:12px; } .unassigned-title{ font-size:16px; font-weight:800; } .unassigned-subtitle{ color:var(--muted); font-size:11px; margin-top:3px; } .unassigned-list{ display:grid; gap:9px; } .unassigned-card{ background:var(--card); border:1px solid var(--border); border-radius:12px; padding:11px; display:flex; align-items:center; justify-content:space-between; gap:10px; } .unassigned-name{ font-size:13px; font-weight:800; } .unassigned-meta{ color:var(--muted); font-size:10px; margin-top:4px; } /* EMPTY */ .empty{ border:1px dashed var(--border); background:var(--card); border-radius:14px; padding:22px; text-align:center; color:var(--muted); font-size:13px; } /* MODAL */ .modal-bg{ position:fixed; inset:0; background:rgba(0,0,0,.72); display:none; align-items:center; justify-content:center; padding:15px; z-index:100; } .modal-bg.show{ display:flex; } .modal{ width:min(500px,100%); max-height:90vh; overflow-y:auto; background:var(--card); border:1px solid var(--border); border-radius:18px; padding:19px; } .modal-title{ font-size:19px; font-weight:800; margin-bottom:16px; } .field{ margin-bottom:13px; } .field label{ display:block; color:var(--muted); font-size:12px; font-weight:700; margin-bottom:6px; } .field input, .field select{ width:100%; height:43px; border:1px solid var(--border); background:var(--card2); color:var(--text); border-radius:10px; padding:0 12px; outline:none; } .field input:focus, .field select:focus{ border-color:var(--purple); } .modal-actions{ display:flex; gap:8px; justify-content:flex-end; margin-top:17px; } .help-text{ font-size:11px; color:var(--muted); line-height:1.5; margin-top:4px; } /* TOAST */ .toast{ position:fixed; left:50%; bottom:22px; transform:translateX(-50%) translateY(20px); background:#191920; color:white; border:1px solid #33333e; padding:11px 15px; border-radius:11px; font-size:12px; opacity:0; pointer-events:none; transition:.2s; z-index:200; max-width:90%; text-align:center; } .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); } .toast.error{ border-color:#712631; color:#ff8290; } .hidden{ display:none!important; } .loading{ padding:30px; text-align:center; color:var(--muted); } /* MOBILE */ @media(max-width:650px){ .admin-header{ height:64px; padding:0 13px; } .brand{ font-size:21px; } .page{ padding:16px 12px 40px; } .page-title{ font-size:22px; } .exam-list, .root-grid{ grid-template-columns:1fr; } .workspace-head{ display:block; } .workspace-head .primary-btn{ margin-top:11px; } .category-section{ padding:13px; } .category-section-head{ align-items:flex-start; } .category-section-actions{ justify-content:flex-end; } .test-top{ align-items:flex-start; } .unassigned-card{ align-items:flex-start; flex-direction:column; } } 
-SSC EDGE 
-<button class="header-btn" onclick="location.href='practice.html'" > ← </button> 
-Practice Admin 
-Manage exams, mock categories, years, subjects and tests. 
-<button class="primary-btn" onclick="openExamForm()" > + Add Exam </button> <button class="secondary-btn" onclick="loadAll()" > ↻ Refresh </button> 
-Exams 
-<div class="loading"> Loading exams... </div> 
-<div class="workspace-head"> <div> <div id="workspaceTitle" class="workspace-title" > - </div> <div class="workspace-subtitle"> Practice structure </div> </div> <button class="primary-btn" onclick="openRootForm()" > + Add Mock Type </button> </div> <div id="rootArea"></div> <div id="unassignedArea"></div> 
-<div id="examModalTitle" class="modal-title" > Add Exam </div> <div class="field"> <label>Board</label> <select id="examBoard"> <option value="SSC"> SSC </option> <option value="RRB"> RRB </option> </select> </div> <div class="field"> <label>Exam Name</label> <input id="examName" type="text" placeholder="CGL" > </div> <div class="help-text"> Example: CGL, CHSL, CPO, MTS, NTPC etc. </div> <div class="modal-actions"> <button class="secondary-btn" onclick="closeExamForm()" > Cancel </button> <button class="primary-btn" onclick="saveExam()" > Save </button> </div> 
-<div class="modal-title"> Add Mock Type </div> <div class="field"> <label>Mock Type</label> <select id="rootType"> <option value="new"> NEW MOCKS </option> <option value="pyq"> PYQ MOCKS </option> </select> </div> <div class="modal-actions"> <button class="secondary-btn" onclick="closeRootForm()" > Cancel </button> <button class="primary-btn" onclick="saveRoot()" > Create </button> </div> 
-<div id="categoryModalTitle" class="modal-title" > Add Category </div> <div class="field"> <label>Category</label> <select id="categoryType"> <option value="full"> FULL MOCKS </option> <option value="sectional"> SECTIONAL MOCKS </option> </select> </div> <div class="modal-actions"> <button class="secondary-btn" onclick="closeCategoryForm()" > Cancel </button> <button class="primary-btn" onclick="saveCategory()" > Save </button> </div> 
-<div id="leafModalTitle" class="modal-title" > Add </div> <div class="field"> <label id="leafLabel"> Name </label> <input id="leafName" type="text" > </div> <div class="modal-actions"> <button class="secondary-btn" onclick="closeLeafForm()" > Cancel </button> <button class="primary-btn" onclick="saveLeaf()" > Save </button> </div> 
-<div id="testModalTitle" class="modal-title" > Add Test </div> <div class="field"> <label>Test Title</label> <input id="testTitle" type="text" placeholder="SSC CGL Mock Test 01" > </div> <div class="field"> <label>Duration (minutes)</label> <input id="testDuration" type="number" min="1" value="60" > </div> <div class="field"> <label>Total Questions</label> <input id="testQuestions" type="number" min="1" value="25" > </div> <div class="field"> <label>Active</label> <select id="testActive"> <option value="true"> Active </option> <option value="false"> Inactive </option> </select> </div> <div class="modal-actions"> <button class="secondary-btn" onclick="closeTestForm()" > Cancel </button> <button class="primary-btn" onclick="saveTest()" > Save </button> </div> 
-<div id="assignModalTitle" class="modal-title" > Assign Mock </div> <div class="help-text" style="margin-bottom:14px;"> Select where this existing mock should appear in Practice. </div> <div class="field"> <label>Folder / Chip</label> <select id="assignFolder"> </select> </div> <div class="modal-actions"> <button class="secondary-btn" onclick="closeAssignModal()" > Cancel </button> <button class="primary-btn" onclick="saveAssignment()" > Assign </button> </div> 
-/* ========================================================= SUPABASE ========================================================= */ const SUPABASE_URL = "https://dvvyoygahzzbnpqrfhen.supabase.co"; const SUPABASE_KEY = "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s"; const db = window.supabase.createClient( SUPABASE_URL, SUPABASE_KEY ); /* ========================================================= STATE ========================================================= */ let exams = []; let folders = []; let tests = []; let subjects = []; let selectedExam = null; let editingExamId = null; let editingFolderId = null; let editingTestId = null; let currentParentId = null; let currentLeafType = null; let currentActiveYearId = null; let currentActiveSubjectId = null; let assigningTestId = null; /* ========================================================= HELPERS ========================================================= */ function normalizeType(value){ return String(value || "") .trim() .toLowerCase(); } function esc(value){ return String(value ?? "") .replace(/&/g,"&amp;") .replace(/</g,"&lt;").replace(/>/g,"&gt;") .replace(/"/g,"&quot;") .replace(/'/g,"&#039;"); } function showToast(message,error=false){ const toast = document.getElementById("toast"); toast.textContent = message; toast.classList.toggle( "error", error ); toast.classList.add("show"); clearTimeout(window.toastTimer); window.toastTimer = setTimeout(()=>{ toast.classList.remove("show"); },2600); } function closeModal(id){ document .getElementById(id) .classList.remove("show"); } function openModal(id){ document .getElementById(id) .classList.add("show"); } function sortByOrder(a,b){ return (Number(a.sort_order)||0) - (Number(b.sort_order)||0); } /* ========================================================= LOAD ALL ========================================================= */ async function loadAll(){ if(!window.supabase){ showToast( "Supabase library failed to load.", true ); return; } const results = await Promise.all([ db .from("exams") .select("*") .order( "sort_order", {ascending:true} ) .order( "id", {ascending:true} ), db .from("mock_folders") .select("*") .order( "sort_order", {ascending:true} ) .order( "id", {ascending:true} ), db .from("mock_tests") .select("*") .order( "sort_order", {ascending:true} ) .order( "id", {ascending:true} ), db .from("subjects") .select("*") .order( "id", {ascending:true} ) ]); const names = [ "EXAMS", "MOCK_FOLDERS", "MOCK_TESTS", "SUBJECTS" ]; for(let i=0;i<results.length;i++){ if(results[i].error){ console.error( names[i], results[i].error ); showToast( names[i] + ": " + results[i].error.message, true ); return; } } exams = results[0].data || []; folders = results[1].data || []; tests = results[2].data || []; subjects = results[3].data || []; sortExams(); renderExams(); if(selectedExam){ const fresh = exams.find( x => Number(x.id) === Number(selectedExam.id) ); if(fresh){ selectedExam = fresh; renderWorkspace(); }else{ selectedExam = null; document .getElementById("workspace") .classList.add("hidden"); } } } /* ========================================================= EXAMS ========================================================= */ function sortExams(){ exams.sort((a,b)=>{ const boardA = String(a.board||""); const boardB = String(b.board||""); if(boardA !== boardB){ if(boardA === "SSC") return -1; if(boardB === "SSC") return 1; } return sortByOrder(a,b); }); } function renderExams(){ const box = document.getElementById("examList"); if(!exams.length){ box.innerHTML = ` <div class="empty"> No exams added yet. </div> `; return; } box.innerHTML = exams.map(exam=>{ const active = selectedExam && Number(selectedExam.id) === Number(exam.id); const board = String( exam.board||"SSC" ).toUpperCase(); const logo = board === "RRB" ? ` <img src="rrb-logo.png" alt="RRB" onerror=" this.style.display='none'; this.parentElement.innerHTML='🚆'; " > ` : ` <div class="ssc-logo"> SSC </div> `; return ` <div class="exam-card ${active ? "active":""}"> <div class="exam-main"> <div class="exam-logo"> ${logo} </div> <div> <div class="exam-name"> ${esc(exam.name)} </div> <div class="exam-board"> ${esc(board)} </div> </div> </div> <div class="exam-actions"> <button class="small-btn purple" onclick="selectExam(${exam.id})" > Manage </button> <button class="small-btn" onclick="editExam(${exam.id})" > Edit </button> <button class="small-btn" onclick="moveExam(${exam.id},-1)" > ↑ </button> <button class="small-btn" onclick="moveExam(${exam.id},1)" > ↓ </button> <button class="small-btn red" onclick="deleteExam(${exam.id})" > Delete </button> </div> </div> `; }).join(""); } function selectExam(id){ selectedExam = exams.find( x => Number(x.id) === Number(id) ); if(!selectedExam) return; currentActiveYearId = null; currentActiveSubjectId = null; renderExams(); renderWorkspace(); } /* ========================================================= EXAM FORM ========================================================= */ function openExamForm(){ editingExamId = null; document .getElementById("examModalTitle") .textContent = "Add Exam"; document .getElementById("examBoard") .value = "SSC"; document .getElementById("examName") .value = ""; openModal("examModal"); } function editExam(id){ const exam = exams.find( x => Number(x.id) === Number(id) ); if(!exam) return; editingExamId = Number(id); document .getElementById("examModalTitle") .textContent = "Edit Exam"; document .getElementById("examBoard") .value = exam.board || "SSC"; document .getElementById("examName") .value = exam.name || ""; openModal("examModal"); } function closeExamForm(){ closeModal("examModal"); } async function saveExam(){ const board = document .getElementById("examBoard") .value .trim() .toUpperCase(); const name = document .getElementById("examName") .value .trim(); if(!name){ showToast( "Enter exam name.", true ); return; } if(editingExamId !== null){ const {error} = await db .from("exams") .update({ board:board, name:name }) .eq( "id", editingExamId ); if(error){ showToast( "EXAMS: " + error.message, true ); return; } showToast("Exam updated."); }else{ const maxOrder = exams .filter( x => String(x.board||"").toUpperCase() === board ) .reduce( (m,x)=> Math.max( m, Number(x.sort_order)||0 ), -1 ); const {data,error} = await db .from("exams") .insert({ board:board, name:name, mock_type:"SECTIONAL", is_active:true, sort_order:maxOrder+1 }) .select() .single(); if(error){ showToast( "EXAMS: " + error.message, true ); return; } selectedExam = data; showToast("Exam created."); } editingExamId = null; closeExamForm(); await loadAll(); } /* ========================================================= MOVE EXAM ========================================================= */ async function moveExam(id,direction){ const exam = exams.find( e => Number(e.id) === Number(id) ); if(!exam) return; const siblings = exams .filter( e => String(e.board||"").toUpperCase() === String(exam.board||"").toUpperCase() ) .sort(sortByOrder); const index = siblings.findIndex( e => Number(e.id) === Number(id) ); const target = index + direction; if( target < 0 || target >= siblings.length ) return; const other = siblings[target]; const currentOrder = Number(exam.sort_order)||0; const otherOrder = Number(other.sort_order)||0; const {error} = await db .from("exams") .update({ sort_order:otherOrder }) .eq("id",exam.id); if(error){ showToast( "EXAMS: " + error.message, true ); return; } const {error:error2} = await db .from("exams") .update({ sort_order:currentOrder }) .eq("id",other.id); if(error2){ showToast( "EXAMS: " + error2.message, true ); return; } await loadAll(); } /* ========================================================= DELETE EXAM ========================================================= */ async function deleteExam(id){ const exam = exams.find( x => Number(x.id) === Number(id) ); if(!exam) return; if(!confirm( `Delete "${exam.name}" and all its practice folders/tests?` )) return; const examFolders = folders.filter( x => Number(x.exam_id) === Number(id) ); const folderIds = examFolders.map( x => Number(x.id) ); if(folderIds.length){ const {error} = await db .from("mock_tests") .delete() .in( "folder_id", folderIds ); if(error){ showToast( "MOCK_TESTS: " + error.message, true ); return; } } const remaining = [...examFolders]; while(remaining.length){ const leaf = remaining.filter( folder => !remaining.some( child => Number(child.parent_id) === Number(folder.id) ) ); const batch = leaf.length ? leaf : remaining; const ids = batch.map( x => Number(x.id) ); const {error} = await db .from("mock_folders") .delete() .in("id",ids); if(error){ showToast( "MOCK_FOLDERS: " + error.message, true ); return; } batch.forEach(item=>{ const i = remaining.indexOf(item); if(i >= 0) remaining.splice(i,1); }); } const {error} = await db .from("exams") .delete() .eq("id",id); if(error){ showToast( "EXAMS: " + error.message, true ); return; } selectedExam = null; showToast("Exam deleted."); await loadAll(); } /* ========================================================= WORKSPACE ========================================================= */ function renderWorkspace(){ const workspace = document.getElementById("workspace"); if(!selectedExam){ workspace.classList.add("hidden"); return; } workspace.classList.remove("hidden"); document .getElementById("workspaceTitle") .textContent = `${selectedExam.board} ${selectedExam.name}`; renderRootArea(); renderUnassigned(); } /* ========================================================= ROOT AREA ========================================================= */ function renderRootArea(){ if(!selectedExam) return; const roots = folders .filter( f => Number(f.exam_id) === Number(selectedExam.id) && !f.parent_id && ["new","pyq"].includes( normalizeType(f.folder_type) ) ) .sort(sortByOrder); let html = ""; if(roots.length < 2){ html += ` <div style="margin-bottom:14px;"> <button class="secondary-btn" onclick="openRootForm()" > + Add Missing Mock Type </button> </div> `; } if(!roots.length){ html += ` <div class="empty"> No mock structure added for this exam. </div> `; document .getElementById("rootArea") .innerHTML = html; return; } html += `<div class="root-grid">`; html += roots.map(root=>{ const type = normalizeType(root.folder_type); const title = type === "new" ? "NEW MOCKS" : "PYQ MOCKS"; const desc = type === "new" ? "Newly created mock tests." : "Previous Year Question mock tests."; const icon = type === "new" ? "⚡" : "📚"; return ` <div class="root-card"> <div class="root-icon"> ${icon} </div> <div class="root-title"> ${title} </div> <div class="root-desc"> ${desc} </div> <div class="root-actions"> <button class="small-btn purple" onclick="openRoot(${root.id})" > Manage </button> <button class="small-btn" onclick="editFolder(${root.id})" > Edit </button> <button class="small-btn" onclick="moveFolder(${root.id},-1)" > ↑ </button> <button class="small-btn" onclick="moveFolder(${root.id},1)" > ↓ </button> <button class="small-btn red" onclick="deleteFolder(${root.id})" > Delete </button> </div> </div> `; }).join(""); html += `</div>`; document .getElementById("rootArea") .innerHTML = html; } /* ========================================================= ROOT FORM ========================================================= */ function openRootForm(){ if(!selectedExam){ showToast( "Select an exam first.", true ); return; } const roots = folders.filter( f => Number(f.exam_id) === Number(selectedExam.id) && !f.parent_id ); const hasNew = roots.some( x => normalizeType(x.folder_type) === "new" ); const hasPyq = roots.some( x => normalizeType(x.folder_type) === "pyq" ); const select = document.getElementById("rootType"); select.innerHTML = ""; if(!hasNew){ select.innerHTML += ` <option value="new"> NEW MOCKS </option> `; } if(!hasPyq){ select.innerHTML += ` <option value="pyq"> PYQ MOCKS </option> `; } if(hasNew && hasPyq){ showToast( "Both NEW MOCKS and PYQ MOCKS already exist.", true ); return; } openModal("rootModal"); } function closeRootForm(){ closeModal("rootModal"); } async function saveRoot(){ if(!selectedExam) return; const type = normalizeType( document .getElementById("rootType") .value ); const roots = folders.filter( f => Number(f.exam_id) === Number(selectedExam.id) && !f.parent_id ); if( roots.some( f => normalizeType(f.folder_type) === type ) ){ showToast( "This mock type already exists.", true ); return; } const maxOrder = roots.reduce( (m,x)=> Math.max( m, Number(x.sort_order)||0 ), -1 ); const title = type === "new" ? "NEW MOCKS" : "PYQ MOCKS"; const {data,error} = await db .from("mock_folders") .insert({ exam_id:selectedExam.id, name:title, display_name:title, folder_type:type, sort_order:maxOrder+1, is_active:true, parent_id:null }) .select() .single(); if(error){ showToast( "MOCK_FOLDERS: " + error.message, true ); return; } await createRootChildren(data); closeRootForm(); showToast( title + " created." ); await loadAll(); } /* ========================================================= ROOT CHILDREN ========================================================= */ async function createRootChildren(root){ const children = [ { name:"FULL MOCKS", display_name:"FULL MOCKS", folder_type:"full", sort_order:0 }, { name:"SECTIONAL MOCKS", display_name:"SECTIONAL MOCKS", folder_type:"sectional", sort_order:1 } ]; for(const child of children){ const {error} = await db .from("mock_folders") .insert({ exam_id:selectedExam.id, name:child.name, display_name:child.display_name, folder_type:child.folder_type, sort_order:child.sort_order, is_active:true, parent_id:root.id }); if(error){ showToast( "Folder creation error: " + error.message, true ); return; } } } /* ========================================================= OPEN ROOT ========================================================= */ function openRoot(rootId){ const root = folders.find( x => Number(x.id) === Number(rootId) ); if(!root) return; renderFolderLevel(root); } /* ========================================================= FOLDER LEVEL ========================================================= */ function renderFolderLevel(root){ if(!root) return; const children = folders .filter( f => Number(f.parent_id) === Number(root.id) ) .sort(sortByOrder); const full = children.find( x => normalizeType(x.folder_type) === "full" ); const sectional = children.find( x => normalizeType(x.folder_type) === "sectional" ); const rootType = normalizeType(root.folder_type); let html = ` <div style="margin-bottom:15px;"> <button class="secondary-btn" onclick="renderRootArea();renderUnassigned();" > ← Back </button> </div> <div class="workspace-title" style="margin-bottom:14px;" > ${esc(root.display_name || root.name)} </div> `; if(full){ html += renderFullSection( full, rootType ); }else{ html += ` <div class="category-section"> <div class="category-section-head"> <div class="category-section-title"> <div class="category-section-icon"> 📝 </div> FULL MOCKS </div> <button class="small-btn purple" onclick="openCategoryForm(${root.id})" > + Add </button> </div> <div class="empty"> FULL MOCKS section not created yet. </div> </div> `; } if(sectional){ html += renderSectionalSection( sectional, rootType ); }else{ html += ` <div class="category-section"> <div class="category-section-head"> <div class="category-section-title"> <div class="category-section-icon"> 📖 </div> SECTIONAL MOCKS </div> <button class="small-btn purple" onclick="openCategoryForm(${root.id})" > + Add </button> </div> <div class="empty"> SECTIONAL MOCKS section not created yet. </div> </div> `; } document .getElementById("rootArea") .innerHTML = html; renderUnassigned(); } /* ========================================================= FULL ========================================================= */ function renderFullSection(folder,rootType){ if(rootType === "pyq") return renderPYQFullSection(folder); return renderNewFullSection(folder); } /* ========================================================= NEW FULL ========================================================= */ function renderNewFullSection(folder){ const list = getTests(folder.id); let html = ` <div class="category-section"> <div class="category-section-head"> <div class="category-section-title"> <div class="category-section-icon"> 📝 </div> FULL MOCKS </div> <div class="category-section-actions"> <button class="small-btn" onclick="editFolder(${folder.id})" > Edit </button> <button class="small-btn red" onclick="deleteFolder(${folder.id})" > Delete </button> <button class="small-btn purple" onclick="openTestForm(${folder.id})" > + Add Mock </button> </div> </div> <div class="tests-head"> <div class="tests-title"> Full Mock Tests </div> </div> ${renderTestList(list)} </div> `; return html; } /* ========================================================= PYQ FULL — YEARS ARE ONLY CHIPS ========================================================= */ function renderPYQFullSection(folder){ const years = folders .filter( f => Number(f.parent_id) === Number(folder.id) && normalizeType(f.folder_type) === "year" ) .sort(sortByOrder); if( years.length && ( !currentActiveYearId || !years.some( y => Number(y.id) === Number(currentActiveYearId) ) ) ){ currentActiveYearId = years[0].id; } let html = ` <div class="category-section"> <div class="category-section-head"> <div class="category-section-title"> <div class="category-section-icon"> 📝 </div> FULL MOCKS </div> <div class="category-section-actions"> <button class="small-btn" onclick="editFolder(${folder.id})" > Edit </button> <button class="small-btn red" onclick="deleteFolder(${folder.id})" > Delete </button> <button class="small-btn purple" onclick="openLeafForm(${folder.id},'year')" > + Add Year </button> </div> </div> `; if(!years.length){ html += ` <div class="empty"> No PYQ years added yet. </div> `; }else{ html += `<div class="chip-list">`; html += years.map(year=>{ const active = Number(year.id) === Number(currentActiveYearId); const count = getTests(year.id).length; return ` <div class="chip ${active ? "active":""}" onclick="selectYear(${year.id},${folder.id})" > ${esc(year.display_name || year.name)} (${count}) </div> `; }).join(""); html += `</div>`; const activeYear = years.find( y => Number(y.id) === Number(currentActiveYearId) ); if(activeYear){ html += ` <div class="leaf-toolbar"> <div class="leaf-name"> ${esc( activeYear.display_name || activeYear.name )} </div> <button class="small-btn" onclick="moveFolder(${activeYear.id},-1)" > ← </button> <button class="small-btn" onclick="moveFolder(${activeYear.id},1)" > → </button> <button class="small-btn" onclick="editFolder(${activeYear.id})" > Edit </button> <button class="small-btn red" onclick="deleteFolder(${activeYear.id})" > Delete </button> </div> <div class="tests-head"> <div class="tests-title"> ${esc( activeYear.display_name || activeYear.name )} Tests </div> <button class="small-btn purple" onclick="openTestForm(${activeYear.id})" > + Add Test </button> </div> ${renderTestList( getTests(activeYear.id) )} `; } } html += `</div>`; return html; } /* ========================================================= SECTIONAL — SUBJECTS ONLY AS CHIPS ========================================================= */ function renderSectionalSection(folder){ const subjectFolders = folders .filter( f => Number(f.parent_id) === Number(folder.id) && normalizeType(f.folder_type) === "subject" ) .sort(sortByOrder); if( subjectFolders.length && ( !currentActiveSubjectId || !subjectFolders.some( s => Number(s.id) === Number(currentActiveSubjectId) ) ) ){ currentActiveSubjectId = subjectFolders[0].id; } let html = ` <div class="category-section"> <div class="category-section-head"> <div class="category-section-title"> <div class="category-section-icon"> 📖 </div> SECTIONAL MOCKS </div> <div class="category-section-actions"> <button class="small-btn" onclick="editFolder(${folder.id})" > Edit </button> <button class="small-btn red" onclick="deleteFolder(${folder.id})" > Delete </button> <button class="small-btn purple" onclick="openLeafForm(${folder.id},'subject')" > + Add Subject </button> </div> </div> `; if(!subjectFolders.length){ html += ` <div class="empty"> No sectional subjects added yet. </div> `; }else{ html += `<div class="chip-list">`; html += subjectFolders.map(subj=>{ const active = Number(subj.id) === Number(currentActiveSubjectId); const count = getTests(subj.id).length; return ` <div class="chip ${active ? "active":""}" onclick="selectSubject(${subj.id},${folder.id})" > ${esc( subj.display_name || subj.name )} (${count}) </div> `; }).join(""); html += `</div>`; const activeSubject = subjectFolders.find( s => Number(s.id) === Number(currentActiveSubjectId) ); if(activeSubject){ html += ` <div class="leaf-toolbar"> <div class="leaf-name"> ${esc( activeSubject.display_name || activeSubject.name )} </div> <button class="small-btn" onclick="moveFolder(${activeSubject.id},-1)" > ← </button> <button class="small-btn" onclick="moveFolder(${activeSubject.id},1)" > → </button> <button class="small-btn" onclick="editFolder(${activeSubject.id})" > Edit </button> <button class="small-btn red" onclick="deleteFolder(${activeSubject.id})" > Delete </button> </div> <div class="tests-head"> <div class="tests-title"> ${esc( activeSubject.display_name || activeSubject.name )} Tests </div> <button class="small-btn purple" onclick="openTestForm(${activeSubject.id})" > + Add Test </button> </div> ${renderTestList( getTests(activeSubject.id) )} `; } } html += `</div>`; return html; } /* ========================================================= CHIP SELECT ========================================================= */ function selectYear(id,folderId){ currentActiveYearId = Number(id); const root = folders.find( f => Number(f.id) === Number( folders.find( x => Number(x.id) === Number(folderId) )?.parent_id ) ); if(root) renderFolderLevel(root); } function selectSubject(id,folderId){ currentActiveSubjectId = Number(id); const root = folders.find( f => Number(f.id) === Number( folders.find( x => Number(x.id) === Number(folderId) )?.parent_id ) ); if(root) renderFolderLevel(root); } /* ========================================================= TEST HELPERS ========================================================= */ function getTests(folderId){ return tests .filter( t => Number(t.folder_id) === Number(folderId) ) .sort(sortByOrder); } function renderTestList(list){ if(!list.length){ return ` <div class="empty"> No tests added yet. </div> `; } return ` <div class="test-list"> ${list.map(test=>{ const active = test.is_active !== false; return ` <div class="test-card"> <div class="test-top"> <div class="test-title"> ${esc(test.title)} </div> <div class="test-status ${active ? "" : "off"}" > ${active ? "ACTIVE":"INACTIVE"} </div> </div> <div class="test-info"> <span> ⏱ ${Number(test.duration_minutes)||0} min </span> <span> ❓ ${Number(test.total_questions)||0} questions </span> <span> TYPE: ${esc(test.test_type || "FULL")} </span> </div> <div class="test-actions"> <button class="small-btn" onclick="editTest(${test.id})" > Edit </button> <button class="small-btn" onclick="moveTest(${test.id},-1)" > ↑ </button> <button class="small-btn" onclick="moveTest(${test.id},1)" > ↓ </button> <button class="small-btn" onclick="openAssignModal(${test.id})" > Assign / Move </button> <button class="small-btn red" onclick="deleteTest(${test.id})" > Delete </button> <button class="small-btn purple" onclick="openTest(${test.id})" > Open </button> </div> </div> `; }).join("")} </div> `; } /* ========================================================= OPEN TEST ========================================================= */ function openTest(id){ location.href = "test.html?id=" + encodeURIComponent(id); } /* ========================================================= TEST FORM ========================================================= */ function openTestForm(folderId){ editingTestId = null; currentParentId = Number(folderId); document .getElementById("testModalTitle") .textContent = "Add Test"; document .getElementById("testTitle") .value = ""; document .getElementById("testDuration") .value = 60; document .getElementById("testQuestions") .value = 25; document .getElementById("testActive") .value = "true"; openModal("testModal"); } function editTest(id){ const test = tests.find( x => Number(x.id) === Number(id) ); if(!test) return; editingTestId = Number(id); currentParentId = Number(test.folder_id); document .getElementById("testModalTitle") .textContent = "Edit Test"; document .getElementById("testTitle") .value = test.title || ""; document .getElementById("testDuration") .value = Number(test.duration_minutes)||60; document .getElementById("testQuestions") .value = Number(test.total_questions)||25; document .getElementById("testActive") .value = test.is_active === false ? "false" : "true"; openModal("testModal"); } function closeTestForm(){ closeModal("testModal"); } /* ========================================================= TEST TYPE ========================================================= */ function inferTestType(folder){ if(!folder) return "FULL"; const type = normalizeType( folder.folder_type ); if( type === "subject" || type === "sectional" ) return "SECTIONAL"; return "FULL"; } /* ========================================================= SAVE TEST ========================================================= */ async function saveTest(){ const title = document .getElementById("testTitle") .value .trim(); const duration = Number( document .getElementById("testDuration") .value ); const questions = Number( document .getElementById("testQuestions") .value ); const active = document .getElementById("testActive") .value === "true"; if(!title){ showToast( "Enter test title.", true ); return; } if(!duration || duration < 1){ showToast( "Enter valid duration.", true ); return; } if(!questions || questions < 1){ showToast( "Enter valid question count.", true ); return; } const folder = folders.find( x => Number(x.id) === Number(currentParentId) ); if(!folder){ showToast( "Test folder not found.", true ); return; } const testType = inferTestType(folder); const subjectId = folder.subject_id || null; if(editingTestId !== null){ const {error} = await db .from("mock_tests") .update({ title:title, test_type:testType, folder_id:folder.id, subject_id:subjectId, exam_id:selectedExam.id, duration_minutes:duration, total_questions:questions, is_active:active }) .eq( "id", editingTestId ); if(error){ showToast( "MOCK_TESTS: " + error.message, true ); return; } showToast("Test updated."); }else{ const siblings = getTests(folder.id); const maxOrder = siblings.reduce( (m,x)=> Math.max( m, Number(x.sort_order)||0 ), -1 ); const {error} = await db .from("mock_tests") .insert({ exam_id:selectedExam.id, folder_id:folder.id, title:title, test_type:testType, subject_id:subjectId, duration_minutes:duration, total_questions:questions, is_active:active, sort_order:maxOrder+1 }); if(error){ showToast( "MOCK_TESTS: " + error.message, true ); return; } showToast("Test created."); } const folderId = currentParentId; editingTestId = null; closeTestForm(); await loadAll(); refreshFolderView(folderId); } /* ========================================================= REFRESH CURRENT VIEW ========================================================= */ function refreshFolderView(folderId){ const folder = folders.find( f => Number(f.id) === Number(folderId) ); if(!folder) return; const type = normalizeType(folder.folder_type); if( type === "year" || type === "subject" ){ const category = folders.find( f => Number(f.id) === Number(folder.parent_id) ); if(category){ const root = folders.find( f => Number(f.id) === Number(category.parent_id) ); if(root) renderFolderLevel(root); } return; } if( type === "full" || type === "sectional" ){ const root = folders.find( f => Number(f.id) === Number(folder.parent_id) ); if(root) renderFolderLevel(root); } } /* ========================================================= MOVE TEST ========================================================= */ async function moveTest(id,direction){ const test = tests.find( x => Number(x.id) === Number(id) ); if(!test) return; const siblings = getTests(test.folder_id); const index = siblings.findIndex( x => Number(x.id) === Number(id) ); const target = index + direction; if( target < 0 || target >= siblings.length ) return; const other = siblings[target]; const currentOrder = Number(test.sort_order)||0; const otherOrder = Number(other.sort_order)||0; const {error} = await db .from("mock_tests") .update({ sort_order:otherOrder }) .eq("id",test.id); if(error){ showToast( "MOCK_TESTS: " + error.message, true ); return; } const {error:error2} = await db .from("mock_tests") .update({ sort_order:currentOrder }) .eq("id",other.id); if(error2){ showToast( "MOCK_TESTS: " + error2.message, true ); return; } await loadAll(); } /* ========================================================= DELETE TEST ========================================================= */ async function deleteTest(id){ const test = tests.find( x => Number(x.id) === Number(id) ); if(!test) return; if(!confirm( `Delete "${test.title}"?` )) return; const {error} = await db .from("mock_tests") .delete() .eq("id",id); if(error){ showToast( "MOCK_TESTS: " + error.message, true ); return; } showToast("Test deleted."); await loadAll(); } /* ========================================================= ASSIGN / MOVE EXISTING TEST ========================================================= */ function getAssignableFolders(){ if(!selectedExam) return []; const result = []; const roots = folders.filter( f => Number(f.exam_id) === Number(selectedExam.id) ); const validTypes = ["full","year","subject"]; roots .filter( f => validTypes.includes( normalizeType(f.folder_type) ) ) .forEach(f=>{ result.push(f); }); return result.sort((a,b)=>{ const aName = getFolderPath(a); const bName = getFolderPath(b); return aName.localeCompare(bName); }); } function getFolderPath(folder){ if(!folder) return ""; const names = []; let current = folder; let safety = 0; while( current && safety < 10 ){ const type = normalizeType( current.folder_type ); if( type === "year" || type === "subject" || type === "full" ){ names.unshift( current.display_name || current.name ); } if(!current.parent_id) break; current = folders.find( f => Number(f.id) === Number(current.parent_id) ); safety++; } return names.join(" → "); } function openAssignModal(testId){ const test = tests.find( t => Number(t.id) === Number(testId) ); if(!test) return; assigningTestId = Number(testId); const select = document.getElementById( "assignFolder" ); const available = getAssignableFolders(); select.innerHTML = ""; if(!available.length){ showToast( "No FULL/Year/Subject destination available.", true ); return; } available.forEach(folder=>{ const option = document.createElement("option"); option.value = folder.id; option.textContent = getFolderPath(folder); if( Number(folder.id) === Number(test.folder_id) ){ option.selected = true; } select.appendChild(option); }); document .getElementById("assignModalTitle") .textContent = "Assign: " + (test.title || "Mock"); openModal("assignModal"); } function closeAssignModal(){ assigningTestId = null; closeModal("assignModal"); } async function saveAssignment(){ if(assigningTestId === null) return; const folderId = Number( document .getElementById("assignFolder") .value ); const folder = folders.find( f => Number(f.id) === folderId ); if(!folder){ showToast( "Select a valid destination.", true ); return; } const test = tests.find( t => Number(t.id) === Number(assigningTestId) ); if(!test){ showToast( "Test not found.", true ); return; } const testType = inferTestType(folder); const subjectId = folder.subject_id || null; const siblings = getTests(folder.id) .filter( t => Number(t.id) !== Number(test.id) ); const maxOrder = siblings.reduce( (m,x)=> Math.max( m, Number(x.sort_order)||0 ), -1 ); const {error} = await db .from("mock_tests") .update({ exam_id:selectedExam.id, folder_id:folder.id, test_type:testType, subject_id:subjectId, sort_order:maxOrder+1 }) .eq( "id", test.id ); if(error){ showToast( "MOCK_TESTS: " + error.message, true ); return; } closeAssignModal(); showToast( "Mock assigned successfully." ); await loadAll(); refreshFolderView(folder.id); } /* ========================================================= UNASSIGNED TESTS ========================================================= */ function renderUnassigned(){ const box = document.getElementById( "unassignedArea" ); if(!selectedExam){ box.innerHTML = ""; return; } const unassigned = tests.filter( t => Number(t.exam_id) === Number(selectedExam.id) && ( t.folder_id === null || t.folder_id === undefined ) ); if(!unassigned.length){ box.innerHTML = ""; return; } box.innerHTML = ` <div class="unassigned"> <div class="unassigned-head"> <div> <div class="unassigned-title"> Unassigned Mocks </div> <div class="unassigned-subtitle"> These mocks are not visible inside any Practice folder yet. </div> </div> <div class="small-btn"> ${unassigned.length} </div> </div> <div class="unassigned-list"> ${unassigned.map(test=>` <div class="unassigned-card"> <div> <div class="unassigned-name"> ${esc(test.title)} </div> <div class="unassigned-meta"> ${Number(test.duration_minutes)||0} min · ${Number(test.total_questions)||0} questions · ${esc(test.test_type || "FULL")} </div> </div> <button class="small-btn purple" onclick="openAssignModal(${test.id})" > Assign </button> </div> `).join("")} </div> </div> `; } /* ========================================================= LEAF FORM ========================================================= */ function openLeafForm(parentId,type){ currentParentId = Number(parentId); currentLeafType = normalizeType(type); editingFolderId = null; const title = currentLeafType === "year" ? "Add PYQ Year" : "Add Subject"; document .getElementById("leafModalTitle") .textContent = title; document .getElementById("leafLabel") .textContent = currentLeafType === "year" ? "Year" : "Subject"; document .getElementById("leafName") .placeholder = currentLeafType === "year" ? "2025" : "English"; document .getElementById("leafName") .value = ""; openModal("leafModal"); } function closeLeafForm(){ closeModal("leafModal"); } async function saveLeaf(){ if(editingFolderId !== null){ await saveEditedFolder(); return; } const name = document .getElementById("leafName") .value .trim(); if(!name){ showToast( "Enter a name.", true ); return; } const duplicate = folders.some( f => Number(f.parent_id) === Number(currentParentId) && normalizeType(f.folder_type) === currentLeafType && String( f.display_name || f.name ) .trim() .toLowerCase() === name.toLowerCase() ); if(duplicate){ showToast( "This item already exists.", true ); return; } const siblings = folders.filter( f => Number(f.parent_id) === Number(currentParentId) ); const maxOrder = siblings.reduce( (m,x)=> Math.max( m, Number(x.sort_order)||0 ), -1 ); const {error} = await db .from("mock_folders") .insert({ exam_id:selectedExam.id, parent_id:currentParentId, name:name, display_name:name, folder_type:currentLeafType, sort_order:maxOrder+1, is_active:true, subject_id: currentLeafType === "subject" ? findSubjectId(name) : null }); if(error){ showToast( "MOCK_FOLDERS: " + error.message, true ); return; } closeLeafForm(); showToast( currentLeafType === "year" ? "Year added." : "Subject added." ); const parentId = currentParentId; await loadAll(); refreshFolderView(parentId); } /* ========================================================= FIND SUBJECT ========================================================= */ function findSubjectId(name){ const found = subjects.find( s => String( s.name || s.title || s.subject_name || "" ) .trim() .toLowerCase() === String(name) .trim() .toLowerCase() ); return found ? found.id : null; } /* ========================================================= EDIT FOLDER ========================================================= */ function editFolder(id){ const folder = folders.find( x => Number(x.id) === Number(id) ); if(!folder) return; editingFolderId = Number(id); currentParentId = folder.parent_id ? Number(folder.parent_id) : null; currentLeafType = normalizeType( folder.folder_type ); document .getElementById("leafModalTitle") .textContent = "Edit " + ( currentLeafType === "year" ? "Year" : currentLeafType === "subject" ? "Subject" : "Folder" ); document .getElementById("leafLabel") .textContent = "Name"; document .getElementById("leafName") .value = folder.display_name || folder.name || ""; openModal("leafModal"); } async function saveEditedFolder(){ const name = document .getElementById("leafName") .value .trim(); if(!name){ showToast( "Enter a name.", true ); return; } const folder = folders.find( x => Number(x.id) === Number(editingFolderId) ); if(!folder){ showToast( "Folder not found.", true ); return; } const updateData = { name:name, display_name:name }; if( normalizeType(folder.folder_type) === "subject" ){ updateData.subject_id = findSubjectId(name); } const {error} = await db .from("mock_folders") .update(updateData) .eq( "id", editingFolderId ); if(error){ showToast( "MOCK_FOLDERS: " + error.message, true ); return; } const id = editingFolderId; editingFolderId = null; closeLeafForm(); showToast("Folder updated."); await loadAll(); refreshFolderView(id); } /* ========================================================= MOVE FOLDER ========================================================= */ async function moveFolder(id,direction){ const folder = folders.find( x => Number(x.id) === Number(id) ); if(!folder) return; const siblings = folders .filter( x => Number(x.parent_id || 0) === Number(folder.parent_id || 0) && normalizeType(x.folder_type) === normalizeType(folder.folder_type) ) .sort(sortByOrder); const index = siblings.findIndex( x => Number(x.id) === Number(id) ); const target = index + direction; if( target < 0 || target >= siblings.length ) return; const other = siblings[target]; const currentOrder = Number(folder.sort_order)||0; const otherOrder = Number(other.sort_order)||0; const {error} = await db .from("mock_folders") .update({ sort_order:otherOrder }) .eq("id",folder.id); if(error){ showToast( "MOCK_FOLDERS: " + error.message, true ); return; } const {error:error2} = await db .from("mock_folders") .update({ sort_order:currentOrder }) .eq("id",other.id); if(error2){ showToast( "MOCK_FOLDERS: " + error2.message, true ); return; } await loadAll(); } /* ========================================================= DELETE FOLDER ========================================================= */ async function deleteFolder(id){ const folder = folders.find( x => Number(x.id) === Number(id) ); if(!folder) return; const descendants = getDescendants(id); const allIds = [ Number(id), ...descendants.map( x => Number(x.id) ) ]; if(!confirm( `Delete "${folder.display_name || folder.name}" and everything inside it?` )) return; const {error:testError} = await db .from("mock_tests") .delete() .in( "folder_id", allIds ); if(testError){ showToast( "MOCK_TESTS: " + testError.message, true ); return; } const remaining = folders.filter( f => allIds.includes( Number(f.id) ) ); while(remaining.length){ const leaf = remaining.filter( item => !remaining.some( child => Number(child.parent_id) === Number(item.id) ) ); const batch = leaf.length ? leaf : remaining; const ids = batch.map( x => Number(x.id) ); const {error} = await db .from("mock_folders") .delete() .in("id",ids); if(error){ showToast( "MOCK_FOLDERS: " + error.message, true ); return; } batch.forEach(item=>{ const i = remaining.indexOf(item); if(i >= 0) remaining.splice(i,1); }); } showToast("Folder deleted."); await loadAll(); } /* ========================================================= DESCENDANTS ========================================================= */ function getDescendants(parentId){ const result = []; const queue = [ Number(parentId) ]; while(queue.length){ const current = queue.shift(); const children = folders.filter( f => Number(f.parent_id) === Number(current) ); children.forEach(child=>{ result.push(child); queue.push( Number(child.id) ); }); } return result; } /* ========================================================= CATEGORY ========================================================= */ function openCategoryForm(rootId){ currentParentId = Number(rootId); editingFolderId = null; const existing = folders.filter( f => Number(f.parent_id) === Number(rootId) ); const hasFull = existing.some( x => normalizeType(x.folder_type) === "full" ); const hasSectional = existing.some( x => normalizeType(x.folder_type) === "sectional" ); const select = document.getElementById( "categoryType" ); select.innerHTML = ""; if(!hasFull){ select.innerHTML += ` <option value="full"> FULL MOCKS </option> `; } if(!hasSectional){ select.innerHTML += ` <option value="sectional"> SECTIONAL MOCKS </option> `; } if( hasFull && hasSectional ){ showToast( "Both categories already exist.", true ); return; } openModal("categoryModal"); } function closeCategoryForm(){ closeModal("categoryModal"); } async function saveCategory(){ if( !selectedExam || !currentParentId ){ showToast( "Invalid parent folder.", true ); return; } const type = normalizeType( document .getElementById("categoryType") .value ); const title = type === "full" ? "FULL MOCKS" : "SECTIONAL MOCKS"; const siblings = folders.filter( f => Number(f.parent_id) === Number(currentParentId) ); const maxOrder = siblings.reduce( (m,x)=> Math.max( m, Number(x.sort_order)||0 ), -1 ); const {error} = await db .from("mock_folders") .insert({ exam_id:selectedExam.id, parent_id:currentParentId, name:title, display_name:title, folder_type:type, sort_order:maxOrder+1, is_active:true }); if(error){ showToast( "MOCK_FOLDERS: " + error.message, true ); return; } closeCategoryForm(); showToast( title + " created." ); await loadAll(); } /* ========================================================= MODAL CLOSE ========================================================= */ document .querySelectorAll(".modal-bg") .forEach(modal=>{ modal.addEventListener( "click", event=>{ if(event.target === modal){ modal.classList.remove( "show" ); } } ); }); /* ========================================================= INITIAL LOAD ========================================================= */ loadAll();
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+document.documentElement.dataset.theme =
+  localStorage.getItem("ssc-edge-theme") || "dark";
+</script>
+
+<title>SSC EDGE - Practice Admin</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+
+:root {
+  --pa-bg: #09090f;
+  --pa-card: #12121c;
+  --pa-card2: #181827;
+  --pa-border: rgba(255,255,255,.09);
+  --pa-text: #f5f5ff;
+  --pa-muted: #9292aa;
+  --pa-purple: #9b6cff;
+  --pa-purple2: #7545e8;
+  --pa-danger: #ff5f70;
+  --pa-green: #39d98a;
+}
+
+:root[data-theme="light"] {
+  --pa-bg: #f5f4fb;
+  --pa-card: #ffffff;
+  --pa-card2: #f0eef9;
+  --pa-border: rgba(0,0,0,.10);
+  --pa-text: #181522;
+  --pa-muted: #6e687d;
+  --pa-purple: #7042d9;
+  --pa-purple2: #5724bd;
+  --pa-danger: #e33d50;
+  --pa-green: #159b5b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--pa-bg);
+  color: var(--pa-text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.pa-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 18px;
+  background: var(--pa-card);
+  border-bottom: 1px solid var(--pa-border);
+}
+
+.pa-brand {
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: .3px;
+}
+
+.pa-brand span {
+  color: var(--pa-purple);
+}
+
+.pa-subtitle {
+  font-size: 11px;
+  color: var(--pa-muted);
+  margin-top: 3px;
+}
+
+.pa-header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.pa-icon-btn {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--pa-border);
+  border-radius: 10px;
+  color: var(--pa-text);
+  background: var(--pa-card2);
+  font-size: 17px;
+}
+
+.pa-container {
+  width: min(1180px, calc(100% - 24px));
+  margin: 18px auto 50px;
+}
+
+.pa-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.pa-page-title {
+  margin: 0;
+  font-size: 22px;
+}
+
+.pa-page-desc {
+  margin: 5px 0 0;
+  color: var(--pa-muted);
+  font-size: 13px;
+}
+
+.pa-btn {
+  border: 0;
+  border-radius: 10px;
+  padding: 11px 15px;
+  font-weight: 700;
+  color: white;
+  background: var(--pa-purple2);
+}
+
+.pa-btn:hover {
+  opacity: .9;
+}
+
+.pa-btn.secondary {
+  color: var(--pa-text);
+  background: var(--pa-card2);
+  border: 1px solid var(--pa-border);
+}
+
+.pa-btn.danger {
+  background: var(--pa-danger);
+}
+
+.pa-btn.small {
+  padding: 8px 11px;
+  font-size: 12px;
+  border-radius: 8px;
+}
+
+.pa-panel {
+  background: var(--pa-card);
+  border: 1px solid var(--pa-border);
+  border-radius: 15px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.pa-panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--pa-border);
+  flex-wrap: wrap;
+}
+
+.pa-panel-title {
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.pa-panel-body {
+  padding: 15px;
+}
+
+.pa-exam-card {
+  margin-bottom: 16px;
+  border: 1px solid var(--pa-border);
+  background: var(--pa-card);
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.pa-exam-head {
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  background: var(--pa-card2);
+  border-bottom: 1px solid var(--pa-border);
+  flex-wrap: wrap;
+}
+
+.pa-exam-name {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.pa-exam-meta {
+  color: var(--pa-muted);
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.pa-actions {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.pa-root-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 15px;
+}
+
+.pa-root-card {
+  border: 1px solid var(--pa-border);
+  background: var(--pa-card);
+  border-radius: 13px;
+  padding: 14px;
+}
+
+.pa-root-title {
+  font-weight: 800;
+  font-size: 15px;
+}
+
+.pa-root-desc {
+  font-size: 12px;
+  color: var(--pa-muted);
+  margin-top: 5px;
+}
+
+.pa-folder {
+  margin-top: 12px;
+  border: 1px solid var(--pa-border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--pa-card);
+}
+
+.pa-folder-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 13px;
+  background: var(--pa-card2);
+  flex-wrap: wrap;
+}
+
+.pa-folder-name {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.pa-folder-type {
+  display: inline-block;
+  margin-left: 7px;
+  color: var(--pa-purple);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .6px;
+}
+
+.pa-folder-body {
+  padding: 12px;
+}
+
+.pa-child-list {
+  display: grid;
+  gap: 9px;
+}
+
+.pa-child-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--pa-border);
+  border-radius: 10px;
+  padding: 11px;
+  background: var(--pa-card2);
+  flex-wrap: wrap;
+}
+
+.pa-child-name {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.pa-child-meta {
+  color: var(--pa-muted);
+  font-size: 11px;
+  margin-top: 3px;
+}
+
+.pa-tests {
+  margin-top: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.pa-test-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--pa-border);
+  border-radius: 10px;
+  padding: 10px;
+  flex-wrap: wrap;
+}
+
+.pa-test-name {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.pa-test-meta {
+  color: var(--pa-muted);
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.pa-status {
+  display: inline-block;
+  padding: 4px 7px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  margin-left: 5px;
+}
+
+.pa-status.active {
+  background: rgba(57,217,138,.13);
+  color: var(--pa-green);
+}
+
+.pa-status.inactive {
+  background: rgba(255,95,112,.13);
+  color: var(--pa-danger);
+}
+
+.pa-empty {
+  color: var(--pa-muted);
+  font-size: 13px;
+  padding: 10px 0;
+  text-align: center;
+}
+
+.pa-loading {
+  padding: 35px;
+  text-align: center;
+  color: var(--pa-muted);
+}
+
+.pa-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0,0,0,.65);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+}
+
+.pa-modal-backdrop.show {
+  display: flex;
+}
+
+.pa-modal {
+  width: min(460px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--pa-card);
+  border: 1px solid var(--pa-border);
+  border-radius: 16px;
+  padding: 18px;
+}
+
+.pa-modal h3 {
+  margin: 0 0 15px;
+  font-size: 18px;
+}
+
+.pa-field {
+  margin-bottom: 13px;
+}
+
+.pa-field label {
+  display: block;
+  font-size: 12px;
+  color: var(--pa-muted);
+  margin-bottom: 6px;
+}
+
+.pa-field input,
+.pa-field select {
+  width: 100%;
+  border: 1px solid var(--pa-border);
+  background: var(--pa-card2);
+  color: var(--pa-text);
+  border-radius: 9px;
+  padding: 11px;
+  outline: none;
+}
+
+.pa-field input:focus,
+.pa-field select:focus {
+  border-color: var(--pa-purple);
+}
+
+.pa-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.pa-divider {
+  height: 1px;
+  background: var(--pa-border);
+  margin: 14px 0;
+}
+
+@media (max-width: 650px) {
+  .pa-root-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pa-container {
+    width: min(100% - 16px, 1180px);
+    margin-top: 12px;
+  }
+
+  .pa-page-title {
+    font-size: 19px;
+  }
+
+  .pa-exam-name {
+    font-size: 16px;
+  }
+
+  .pa-header {
+    padding: 13px 12px;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="pa-header">
+  <div>
+    <div class="pa-brand">SSC <span>EDGE</span></div>
+    <div class="pa-subtitle">Practice Management</div>
+  </div>
+
+  <div class="pa-header-actions">
+    <button class="pa-icon-btn" onclick="toggleTheme()" title="Toggle Theme">☼</button>
+    <button class="pa-icon-btn" onclick="goBack()" title="Back">←</button>
+  </div>
+</header>
+
+<main class="pa-container">
+
+  <div class="pa-toolbar">
+    <div>
+      <h1 class="pa-page-title">Practice Admin</h1>
+      <p class="pa-page-desc">Manage exams, mock folders and mock tests.</p>
+    </div>
+
+    <button class="pa-btn" onclick="openExamModal()">
+      + Add Exam
+    </button>
+  </div>
+
+  <div id="mainArea">
+    <div class="pa-loading">Loading practice structure...</div>
+  </div>
+
+</main>
+
+<!-- EXAM MODAL -->
+<div class="pa-modal-backdrop" id="examModal">
+  <div class="pa-modal">
+    <h3 id="examModalTitle">Add Exam</h3>
+
+    <div class="pa-field">
+      <label>Board</label>
+      <select id="examBoard">
+        <option value="SSC">SSC</option>
+        <option value="RRB">RRB</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <div class="pa-field">
+      <label>Exam Name</label>
+      <input id="examName" placeholder="Example: CGL, CHSL, CPO, MTS">
+    </div>
+
+    <div class="pa-modal-actions">
+      <button class="pa-btn secondary" onclick="closeModal('examModal')">
+        Cancel
+      </button>
+
+      <button class="pa-btn" onclick="saveExam()">
+        Save Exam
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- FOLDER MODAL -->
+<div class="pa-modal-backdrop" id="folderModal">
+  <div class="pa-modal">
+    <h3 id="folderModalTitle">Add Folder</h3>
+
+    <div class="pa-field">
+      <label>Folder Name</label>
+      <input id="folderName" placeholder="Example: 2024, Quant, New Mock">
+    </div>
+
+    <div class="pa-field">
+      <label>Folder Type</label>
+      <select id="folderType">
+        <option value="new">New Mocks</option>
+        <option value="pyq">PYQ Mocks</option>
+        <option value="full">Full Mocks</option>
+        <option value="sectional">Sectional Mocks</option>
+        <option value="year">PYQ Year</option>
+        <option value="subject">Subject</option>
+        <option value="custom">Custom</option>
+      </select>
+    </div>
+
+    <div class="pa-modal-actions">
+      <button class="pa-btn secondary" onclick="closeModal('folderModal')">
+        Cancel
+      </button>
+
+      <button class="pa-btn" onclick="saveFolder()">
+        Save Folder
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+  "https://dvvyoygahzzbnpqrfhen.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
+const supabaseClient =
+  window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let exams = [];
+let folders = [];
+let tests = [];
+let subjects = [];
+
+let activeExamId = null;
+let activeParentId = null;
+let editingExamId = null;
+let editingFolderId = null;
+
+document.addEventListener("DOMContentLoaded", async () => {
+  await checkAdmin();
+});
+
+function toggleTheme() {
+  const current =
+    document.documentElement.dataset.theme || "dark";
+
+  const next = current === "dark" ? "light" : "dark";
+
+  document.documentElement.dataset.theme = next;
+  localStorage.setItem("ssc-edge-theme", next);
+}
+
+function goBack() {
+  if (history.length > 1) {
+    history.back();
+  } else {
+    location.href = "admin-dashboard.html";
+  }
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove("show");
+}
+
+function openModal(id) {
+  document.getElementById(id).classList.add("show");
+}
+
+async function checkAdmin() {
+  try {
+    const {
+      data: { user }
+    } = await supabaseClient.auth.getUser();
+
+    if (!user) {
+      document.getElementById("mainArea").innerHTML = `
+        <div class="pa-panel">
+          <div class="pa-panel-body">
+            <div class="pa-empty">Please login as admin first.</div>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    const { data: admin, error } = await supabaseClient
+      .from("admin_users")
+      .select("*")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (error || !admin) {
+      document.getElementById("mainArea").innerHTML = `
+        <div class="pa-panel">
+          <div class="pa-panel-body">
+            <div class="pa-empty">Access denied. You are not an admin.</div>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    await loadData();
+
+  } catch (error) {
+    console.error(error);
+
+    document.getElementById("mainArea").innerHTML = `
+      <div class="pa-panel">
+        <div class="pa-panel-body">
+          <div class="pa-empty">Unable to verify admin access.</div>
+        </div>
+      </div>
+    `;
+  }
+}
+
+async function loadData() {
+  document.getElementById("mainArea").innerHTML = `
+    <div class="pa-loading">Loading practice structure...</div>
+  `;
+
+  const [
+    examsResponse,
+    foldersResponse,
+    testsResponse,
+    subjectsResponse
+  ] = await Promise.all([
+    supabaseClient
+      .from("exams")
+      .select("*")
+      .order("sort_order", { ascending: true })
+      .order("id", { ascending: true }),
+
+    supabaseClient
+      .from("mock_folders")
+      .select("*")
+      .order("sort_order", { ascending: true })
+      .order("id", { ascending: true }),
+
+    supabaseClient
+      .from("mock_tests")
+      .select("*")
+      .order("sort_order", { ascending: true })
+      .order("id", { ascending: true }),
+
+    supabaseClient
+      .from("subjects")
+      .select("*")
+      .order("name", { ascending: true })
+  ]);
+
+  if (examsResponse.error) {
+    console.error(examsResponse.error);
+    showError(examsResponse.error.message);
+    return;
+  }
+
+  exams = examsResponse.data || [];
+  folders = foldersResponse.data || [];
+  tests = testsResponse.data || [];
+  subjects = subjectsResponse.data || [];
+
+  renderPage();
+}
+
+function showError(message) {
+  document.getElementById("mainArea").innerHTML = `
+    <div class="pa-panel">
+      <div class="pa-panel-body">
+        <div class="pa-empty">${escapeHtml(message)}</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderPage() {
+  const area = document.getElementById("mainArea");
+
+  if (!exams.length) {
+    area.innerHTML = `
+      <div class="pa-panel">
+        <div class="pa-panel-body">
+          <div class="pa-empty">
+            No exams added yet. Click "+ Add Exam" to begin.
+          </div>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  area.innerHTML = exams.map(exam => {
+    return renderExam(exam);
+  }).join("");
+}
+
+function renderExam(exam) {
+  const rootFolders = folders
+    .filter(folder =>
+      String(folder.exam_id) === String(exam.id) &&
+      !folder.parent_id
+    )
+    .sort(sortItems);
+
+  return `
+    <section class="pa-exam-card">
+
+      <div class="pa-exam-head">
+        <div>
+          <div class="pa-exam-name">
+            ${escapeHtml(exam.name || "Unnamed Exam")}
+          </div>
+
+          <div class="pa-exam-meta">
+            Board: ${escapeHtml(exam.board || "SSC")}
+            · ${rootFolders.length} main folder(s)
+          </div>
+        </div>
+
+        <div class="pa-actions">
+          <button
+            class="pa-btn small"
+            onclick="openRootFolderModal('${exam.id}')">
+            + Add Mock Type
+          </button>
+
+          <button
+            class="pa-btn small secondary"
+            onclick="editExam('${exam.id}')">
+            Edit
+          </button>
+
+          <button
+            class="pa-btn small danger"
+            onclick="deleteExam('${exam.id}')">
+            Delete
+          </button>
+        </div>
+      </div>
+
+      <div class="pa-root-grid">
+        ${
+          rootFolders.length
+            ? rootFolders.map(folder => renderRootFolder(folder)).join("")
+            : `
+              <div class="pa-empty">
+                No mock types added for this exam.
+              </div>
+            `
+        }
+      </div>
+
+    </section>
+  `;
+}
+
+function renderRootFolder(folder) {
+  const children = folders
+    .filter(item =>
+      String(item.parent_id) === String(folder.id)
+    )
+    .sort(sortItems);
+
+  const folderLabel =
+    folder.folder_type === "new"
+      ? "NEW MOCKS"
+      : folder.folder_type === "pyq"
+        ? "PYQ MOCKS"
+        : formatFolderType(folder.folder_type);
+
+  return `
+    <div class="pa-root-card">
+
+      <div class="pa-root-title">
+        ${escapeHtml(folder.name || folderLabel)}
+      </div>
+
+      <div class="pa-root-desc">
+        ${children.length} category folder(s)
+      </div>
+
+      <div class="pa-actions" style="margin-top:12px;">
+        <button
+          class="pa-btn small"
+          onclick="openChildFolderModal('${folder.id}')">
+          + Add Category
+        </button>
+
+        <button
+          class="pa-btn small secondary"
+          onclick="editFolder('${folder.id}')">
+          Edit
+        </button>
+
+        <button
+          class="pa-btn small danger"
+          onclick="deleteFolder('${folder.id}')">
+          Delete
+        </button>
+      </div>
+
+      ${
+        children.length
+          ? children.map(child => renderChildFolder(child)).join("")
+          : `
+            <div class="pa-empty" style="margin-top:12px;">
+              No categories added.
+            </div>
+          `
+      }
+
+    </div>
+  `;
+}
+
+function renderChildFolder(folder) {
+  const children = folders
+    .filter(item =>
+      String(item.parent_id) === String(folder.id)
+    )
+    .sort(sortItems);
+
+  const folderTests = tests
+    .filter(test =>
+      String(test.folder_id) === String(folder.id)
+    )
+    .sort(sortItems);
+
+  return `
+    <div class="pa-folder">
+
+      <div class="pa-folder-head">
+        <div>
+          <span class="pa-folder-name">
+            ${escapeHtml(folder.name || "Folder")}
+          </span>
+
+          <span class="pa-folder-type">
+            ${escapeHtml(formatFolderType(folder.folder_type))}
+          </span>
+        </div>
+
+        <div class="pa-actions">
+          <button
+            class="pa-btn small"
+            onclick="openTestForm('${folder.id}')">
+            + Add Test
+          </button>
+
+          <button
+            class="pa-btn small secondary"
+            onclick="openChildFolderModal('${folder.id}')">
+            + Subfolder
+          </button>
+
+          <button
+            class="pa-btn small secondary"
+            onclick="editFolder('${folder.id}')">
+            Edit
+          </button>
+
+          <button
+            class="pa-btn small danger"
+            onclick="deleteFolder('${folder.id}')">
+            Delete
+          </button>
+        </div>
+      </div>
+
+      <div class="pa-folder-body">
+
+        ${
+          children.length
+            ? `
+              <div class="pa-child-list">
+                ${children.map(child => renderChildFolder(child)).join("")}
+              </div>
+            `
+            : ""
+        }
+
+        ${
+          folderTests.length
+            ? `
+              <div class="pa-tests">
+                ${folderTests.map(test => renderTest(test)).join("")}
+              </div>
+            `
+            : `
+              <div class="pa-empty">
+                No tests in this folder.
+              </div>
+            `
+        }
+
+      </div>
+
+    </div>
+  `;
+}
+
+function renderTest(test) {
+  const statusClass = test.is_active ? "active" : "inactive";
+  const statusText = test.is_active ? "ACTIVE" : "INACTIVE";
+
+  return `
+    <div class="pa-test-row">
+
+      <div>
+        <div class="pa-test-name">
+          ${escapeHtml(test.title || "Untitled Test")}
+
+          <span class="pa-status ${statusClass}">
+            ${statusText}
+          </span>
+        </div>
+
+        <div class="pa-test-meta">
+          ${escapeHtml(test.test_type || "FULL")}
+          · ${test.duration_minutes || 0} min
+          · ${test.total_questions || 0} questions
+        </div>
+      </div>
+
+      <div class="pa-actions">
+
+        <button
+          class="pa-btn small secondary"
+          onclick="editTest('${test.id}')">
+          Edit
+        </button>
+
+        <button
+          class="pa-btn small secondary"
+          onclick="toggleTestStatus('${test.id}', ${test.is_active ? "false" : "true"})">
+          ${test.is_active ? "Disable" : "Activate"}
+        </button>
+
+        <button
+          class="pa-btn small danger"
+          onclick="deleteTest('${test.id}')">
+          Delete
+        </button>
+
+      </div>
+
+    </div>
+  `;
+}
+
+/* =========================
+   EXAM ACTIONS
+========================= */
+
+function openExamModal() {
+  editingExamId = null;
+
+  document.getElementById("examModalTitle").textContent = "Add Exam";
+  document.getElementById("examBoard").value = "SSC";
+  document.getElementById("examName").value = "";
+
+  openModal("examModal");
+}
+
+function editExam(id) {
+  const exam = exams.find(item => String(item.id) === String(id));
+  if (!exam) return;
+
+  editingExamId = id;
+
+  document.getElementById("examModalTitle").textContent = "Edit Exam";
+  document.getElementById("examBoard").value = exam.board || "SSC";
+  document.getElementById("examName").value = exam.name || "";
+
+  openModal("examModal");
+}
+
+async function saveExam() {
+  const board = document.getElementById("examBoard").value.trim();
+  const name = document.getElementById("examName").value.trim();
+
+  if (!name) {
+    alert("Enter exam name.");
+    return;
+  }
+
+  let response;
+
+  if (editingExamId) {
+    response = await supabaseClient
+      .from("exams")
+      .update({
+        board,
+        name
+      })
+      .eq("id", editingExamId);
+  } else {
+    response = await supabaseClient
+      .from("exams")
+      .insert({
+        board,
+        name,
+        sort_order: exams.length
+      });
+  }
+
+  if (response.error) {
+    alert(response.error.message);
+    return;
+  }
+
+  closeModal("examModal");
+  await loadData();
+}
+
+async function deleteExam(id) {
+  const exam = exams.find(item => String(item.id) === String(id));
+  if (!exam) return;
+
+  const ok = confirm(
+    `Delete "${exam.name}" and all its folders/tests?`
+  );
+
+  if (!ok) return;
+
+  const examFolders = folders.filter(folder =>
+    String(folder.exam_id) === String(id)
+  );
+
+  const folderIds = examFolders.map(folder => folder.id);
+
+  if (folderIds.length) {
+    const relatedTests = tests.filter(test =>
+      folderIds.some(folderId =>
+        String(folderId) === String(test.folder_id)
+      )
+    );
+
+    for (const test of relatedTests) {
+      await deleteTestById(test.id, false);
+    }
+
+    await supabaseClient
+      .from("mock_folders")
+      .delete()
+      .eq("exam_id", id);
+  }
+
+  const response = await supabaseClient
+    .from("exams")
+    .delete()
+    .eq("id", id);
+
+  if (response.error) {
+    alert(response.error.message);
+    return;
+  }
+
+  await loadData();
+}
+
+/* =========================
+   FOLDER ACTIONS
+========================= */
+
+function openRootFolderModal(examId) {
+  activeExamId = examId;
+  activeParentId = null;
+  editingFolderId = null;
+
+  document.getElementById("folderModalTitle").textContent =
+    "Add Mock Type";
+
+  document.getElementById("folderName").value = "";
+
+  document.getElementById("folderType").innerHTML = `
+    <option value="new">New Mocks</option>
+    <option value="pyq">PYQ Mocks</option>
+  `;
+
+  openModal("folderModal");
+}
+
+function openChildFolderModal(parentId) {
+  const parent = folders.find(item =>
+    String(item.id) === String(parentId)
+  );
+
+  if (!parent) return;
+
+  activeExamId = parent.exam_id;
+  activeParentId = parentId;
+  editingFolderId = null;
+
+  document.getElementById("folderModalTitle").textContent =
+    "Add Folder";
+
+  document.getElementById("folderName").value = "";
+
+  document.getElementById("folderType").innerHTML = `
+    <option value="full">Full Mocks</option>
+    <option value="sectional">Sectional Mocks</option>
+    <option value="year">PYQ Year</option>
+    <option value="subject">Subject</option>
+    <option value="custom">Custom</option>
+  `;
+
+  if (
+    parent.folder_type === "full" ||
+    parent.folder_type === "sectional"
+  ) {
+    document.getElementById("folderType").innerHTML = `
+      <option value="year">PYQ Year</option>
+      <option value="subject">Subject</option>
+      <option value="custom">Custom</option>
+    `;
+  }
+
+  openModal("folderModal");
+}
+
+function editFolder(id) {
+  const folder = folders.find(item =>
+    String(item.id) === String(id)
+  );
+
+  if (!folder) return;
+
+  editingFolderId = id;
+  activeExamId = folder.exam_id;
+  activeParentId = folder.parent_id || null;
+
+  document.getElementById("folderModalTitle").textContent =
+    "Edit Folder";
+
+  document.getElementById("folderName").value =
+    folder.name || "";
+
+  document.getElementById("folderType").innerHTML = `
+    <option value="new">New Mocks</option>
+    <option value="pyq">PYQ Mocks</option>
+    <option value="full">Full Mocks</option>
+    <option value="sectional">Sectional Mocks</option>
+    <option value="year">PYQ Year</option>
+    <option value="subject">Subject</option>
+    <option value="custom">Custom</option>
+  `;
+
+  document.getElementById("folderType").value =
+    folder.folder_type || "custom";
+
+  openModal("folderModal");
+}
+
+async function saveFolder() {
+  const name = document.getElementById("folderName")
+    .value.trim();
+
+  const folderType = document.getElementById("folderType")
+    .value;
+
+  if (!name) {
+    alert("Enter folder name.");
+    return;
+  }
+
+  let response;
+
+  if (editingFolderId) {
+    response = await supabaseClient
+      .from("mock_folders")
+      .update({
+        name,
+        folder_type: folderType
+      })
+      .eq("id", editingFolderId);
+  } else {
+    const siblingFolders = folders.filter(folder =>
+      String(folder.exam_id) === String(activeExamId) &&
+      String(folder.parent_id || "") === String(activeParentId || "")
+    );
+
+    response = await supabaseClient
+      .from("mock_folders")
+      .insert({
+        exam_id: activeExamId,
+        parent_id: activeParentId || null,
+        name,
+        folder_type: folderType,
+        sort_order: siblingFolders.length,
+        is_active: true
+      });
+  }
+
+  if (response.error) {
+    alert(response.error.message);
+    return;
+  }
+
+  closeModal("folderModal");
+  await loadData();
+}
+
+async function deleteFolder(id) {
+  const folder = folders.find(item =>
+    String(item.id) === String(id)
+  );
+
+  if (!folder) return;
+
+  const descendants = getAllDescendantFolders(id);
+  const allFolderIds = [id, ...descendants.map(item => item.id)];
+
+  const relatedTests = tests.filter(test =>
+    allFolderIds.some(folderId =>
+      String(folderId) === String(test.folder_id)
+    )
+  );
+
+  const ok = confirm(
+    `Delete "${folder.name}" and its folders/tests?`
+  );
+
+  if (!ok) return;
+
+  for (const test of relatedTests) {
+    await deleteTestById(test.id, false);
+  }
+
+  const response = await supabaseClient
+    .from("mock_folders")
+    .delete()
+    .in("id", allFolderIds);
+
+  if (response.error) {
+    alert(response.error.message);
+    return;
+  }
+
+  await loadData();
+}
+
+function getAllDescendantFolders(parentId) {
+  const result = [];
+
+  function collect(id) {
+    const children = folders.filter(folder =>
+      String(folder.parent_id) === String(id)
+    );
+
+    children.forEach(child => {
+      result.push(child);
+      collect(child.id);
+    });
+  }
+
+  collect(parentId);
+  return result;
+}
+
+/* =========================
+   TEST NAVIGATION
+========================= */
+
+function openTestForm(folderId) {
+  location.href =
+    "admin-mock-tests.html?folder_id=" +
+    encodeURIComponent(folderId);
+}
+
+function editTest(testId) {
+  location.href =
+    "admin-mock-tests.html?edit=" +
+    encodeURIComponent(testId);
+}
+
+/* =========================
+   TEST ACTIONS
+========================= */
+
+async function toggleTestStatus(id, status) {
+  const response = await supabaseClient
+    .from("mock_tests")
+    .update({
+      is_active: status
+    })
+    .eq("id", id);
+
+  if (response.error) {
+    alert(response.error.message);
+    return;
+  }
+
+  await loadData();
+}
+
+async function deleteTest(id) {
+  const test = tests.find(item =>
+    String(item.id) === String(id)
+  );
+
+  if (!test) return;
+
+  const ok = confirm(
+    `Delete test "${test.title}" permanently?`
+  );
+
+  if (!ok) return;
+
+  await deleteTestById(id, true);
+}
+
+async function deleteTestById(id, reload = true) {
+  await supabaseClient
+    .from("mock_test_questions")
+    .delete()
+    .eq("mock_test_id", id);
+
+  await supabaseClient
+    .from("mock_test_sections")
+    .delete()
+    .eq("mock_test_id", id);
+
+  const response = await supabaseClient
+    .from("mock_tests")
+    .delete()
+    .eq("id", id);
+
+  if (response.error) {
+    alert(response.error.message);
+    return;
+  }
+
+  if (reload) {
+    await loadData();
+  }
+}
+
+/* =========================
+   HELPERS
+========================= */
+
+function sortItems(a, b) {
+  const orderA = Number(a.sort_order || 0);
+  const orderB = Number(b.sort_order || 0);
+
+  if (orderA !== orderB) {
+    return orderA - orderB;
+  }
+
+  return Number(a.id || 0) - Number(b.id || 0);
+}
+
+function formatFolderType(type) {
+  const map = {
+    new: "New Mocks",
+    pyq: "PYQ Mocks",
+    full: "Full Mocks",
+    sectional: "Sectional Mocks",
+    year: "PYQ Year",
+    subject: "Subject",
+    custom: "Folder"
+  };
+
+  return map[type] || "Folder";
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+document.querySelectorAll(".pa-modal-backdrop")
+  .forEach(modal => {
+    modal.addEventListener("click", event => {
+      if (event.target === modal) {
+        modal.classList.remove("show");
+      }
+    });
+  });
+
+</script>
+
+</body>
+</html>
