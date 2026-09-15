@@ -590,8 +590,8 @@ let activeParentId = null;
 let editingExamId = null;
 let editingFolderId = null;
 
-document.addEventListener("DOMContentLoaded", async () => {
-  await checkAdmin();
+document.addEventListener("DOMContentLoaded", () => {
+  loadData();
 });
 
 function toggleTheme() {
