@@ -1326,12 +1326,39 @@ renderEmptyWorkspace();
 
 }catch(error){
 
-console.error(error);
+  console.error("LOAD ALL DATA ERROR:", error);
 
-showToast(
-"Data load error: " + getErrorMessage(error),
-"error"
-);
+  alert(
+    "LOAD ERROR:\n\n" +
+    (error?.message || error?.details || JSON.stringify(error))
+  );
+
+  showToast(
+    "Data load error: " + getErrorMessage(error),
+    "error"
+  );
+
+  renderExamList();
+
+  const workspace = document.getElementById("workspace");
+
+  if(workspace){
+
+    workspace.innerHTML = `
+      <div class="empty-state">
+        <strong>Unable to load data</strong>
+        <br><br>
+        ${escapeHtml(getErrorMessage(error))}
+        <br><br>
+        <button class="primary-btn" onclick="loadAllData()">
+          Retry
+        </button>
+      </div>
+    `;
+
+  }
+
+}
 
 renderExamList();
 
