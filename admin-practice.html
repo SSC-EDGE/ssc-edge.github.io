@@ -2205,7 +2205,7 @@ async function saveRoot(){
     await db
       .from("mock_folders")
       .insert({
-        exam_id:selectedExam.id,
+        exam_id:examId,
         name:type === "new"
           ? "NEW MOCKS"
           : "PYQ MOCKS",
@@ -3541,17 +3541,70 @@ async function saveTest(){
 
   }
 
+  const isEditing =
+    editingTestId !== null &&
+    editingTestId !== undefined;
+
+  let folderId =
+    Number(currentParentId);
+
+  /*
+    While editing, never depend only on currentParentId.
+    Fetch the actual test so its original folder is preserved.
+  */
+
+  if(isEditing){
+
+    const {data:existingTest,error:existingError} =
+      await db
+        .from("mock_tests")
+        .select("id,folder_id,exam_id")
+        .eq("id",Number(editingTestId))
+        .maybeSingle();
+
+    if(existingError || !existingTest){
+
+      showToast(
+        "Unable to load existing test.",
+        true
+      );
+
+      return;
+
+    }
+
+    folderId =
+      Number(existingTest.folder_id);
+
+  }
+
   const folder =
     folders.find(
       x =>
         Number(x.id) ===
-        Number(currentParentId)
+        Number(folderId)
     );
 
   if(!folder){
 
     showToast(
       "Test folder not found.",
+      true
+    );
+
+    return;
+
+  }
+
+  const examId =
+    selectedExam && selectedExam.id
+      ? Number(selectedExam.id)
+      : null;
+
+  if(!examId){
+
+    showToast(
+      "Please select an exam.",
       true
     );
 
@@ -3573,14 +3626,14 @@ async function saveTest(){
     SECTIONAL  -> Sectional mocks
   */
 
-  if(editingTestId !== null){
+  if(isEditing){
 
     const {error} =
       await db
         .from("mock_tests")
         .update({
 
-          exam_id:Number(selectedExam.id),
+          exam_id:examId,
           folder_id:Number(folder.id),
           title:title,
           test_type:testType,
