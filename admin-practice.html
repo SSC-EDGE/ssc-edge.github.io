@@ -2191,12 +2191,15 @@ function isPyqFolder(folder){
 if(!folder) return false;
 
 const type = getFolderType(folder);
-const name = getFolderName(folder).toUpperCase();
+
+/* Only year folders should appear as PYQ year clips.
+   The main PYQ Mocks folder is not a year. */
 
 return (
-type.includes("PYQ") ||
-name.includes("PYQ") ||
-type === "YEAR"
+type === "PYQ_YEAR" ||
+type === "YEAR" ||
+type === "PYQ-YEAR" ||
+type === "PYQYEAR"
 );
 
 }
