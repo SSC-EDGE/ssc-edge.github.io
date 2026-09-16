@@ -960,6 +960,10 @@ grid-template-columns:minmax(0,1fr) 95px 32px;
 
 </style>
 
+<style>
+.board-tab{width:auto!important;min-width:58px;padding:9px 14px!important;border:1px solid var(--border)!important;background:var(--card2)!important;color:var(--text)!important;border-radius:8px!important;cursor:pointer!important}
+.board-tab.active{background:var(--purple)!important;color:#fff!important;border-color:var(--purple)!important}
+</style>
 </head>
 
 <body>
@@ -1006,6 +1010,11 @@ Manage exams, mock series, PYQ years, sectional tests and question sets
 <aside class="sidebar">
 
 <div class="sidebar-title">Exams</div>
+
+<div id="boardTabs" style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px;">
+<button type="button" class="small-btn board-tab active" data-board="SSC" onclick="setActiveBoard('SSC')">SSC</button>
+<button type="button" class="small-btn board-tab" data-board="RRB" onclick="setActiveBoard('RRB')">RRB</button>
+</div>
 
 <div id="examList" class="exam-list">
 <div class="loading">Loading exams...</div>
@@ -1482,6 +1491,23 @@ return exam?.id;
 /* =========================
    EXAM LIST
 ========================= */
+
+function setActiveBoard(board){
+  activeBoard = String(board || "SSC").toUpperCase();
+  selectedExam = null;
+  selectedBranch = null;
+  selectedCategory = null;
+  selectedSubject = null;
+  selectedYear = null;
+  selectedFolder = null;
+
+  document.querySelectorAll(".board-tab").forEach(function(btn){
+    btn.classList.toggle("active", String(btn.dataset.board).toUpperCase() === activeBoard);
+  });
+
+  renderExamList();
+  renderWorkspace();
+}
 
 function renderExamList(){
 
@@ -4796,8 +4822,6 @@ document.documentElement.dataset.theme = theme;
 
 applySavedTheme();
 
-
-}
 </script>
 
 </body>
