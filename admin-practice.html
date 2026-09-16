@@ -645,12 +645,22 @@ return childrenOf(parentId,type)[0]||null;
 
 function isFolderUnderBranch(folder,branch){
 if(!folder)return false;
-const parent=getFolder(folder.parent_id);
-return parent&&folderType(parent)===branch;
+
+let current=folder;
+let guard=0;
+
+while(current&&guard<10){
+if(folderType(current)===branch)return true;
+current=getFolder(current.parent_id);
+guard++;
+}
+
+return false;
 }
 
 function getExamSubjects(){
 if(!selectedExam)return [];
+
 return subjects.filter(x=>
 x.exam_id==null ||
 String(x.exam_id)===String(selectedExam.id)
@@ -670,14 +680,28 @@ selectedFolder=null;
 }
 
 async function loadAllData(){
-$("examGrid").innerHTML=`<div class="ap-loading">Loading exams...</div>`;
+$("examGrid").innerHTML=
+`<div class="ap-loading">Loading exams...</div>`;
 
 try{
 const [er,sr,fr,tr]=await Promise.all([
-db.from("exams").select("*").order("sort_order",{ascending:true}).order("id",{ascending:true}),
-db.from("subjects").select("*").order("id",{ascending:true}),
-db.from("mock_folders").select("*").order("sort_order",{ascending:true}).order("id",{ascending:true}),
-db.from("mock_tests").select("*").order("id",{ascending:false})
+db.from("exams")
+.select("*")
+.order("sort_order",{ascending:true})
+.order("id",{ascending:true}),
+
+db.from("subjects")
+.select("*")
+.order("id",{ascending:true}),
+
+db.from("mock_folders")
+.select("*")
+.order("sort_order",{ascending:true})
+.order("id",{ascending:true}),
+
+db.from("mock_tests")
+.select("*")
+.order("id",{ascending:false})
 ]);
 
 if(er.error)throw er.error;
@@ -693,62 +717,107 @@ tests=tr.data||[];
 renderExams();
 
 if(selectedExam){
-const updated=exams.find(x=>String(x.id)===String(selectedExam.id));
+const updated=exams.find(x=>
+String(x.id)===String(selectedExam.id)
+);
+
 if(updated){
 selectedExam=updated;
 $("selectedExamName").textContent=examName(updated);
 }
 }
+
 }catch(error){
 console.error(error);
+
 $("examGrid").innerHTML=
-`<div class="ap-error">Unable to load data.<br>${escapeHTML(error.message)}</div>`;
+`<div class="ap-error">
+Unable to load data.<br>
+${escapeHTML(error.message)}
+</div>`;
 }
 }
 
 function renderExams(){
 const list=exams.filter(x=>
-boardOfExam(x)===activeBoard && x.is_active!==false
+boardOfExam(x)===activeBoard &&
+x.is_active!==false
 );
 
 if(!list.length){
-$("examGrid").innerHTML=`<div class="ap-empty">No exams found for ${activeBoard}.</div>`;
+$("examGrid").innerHTML=
+`<div class="ap-empty">No exams found for ${activeBoard}.</div>`;
 return;
 }
 
 $("examGrid").innerHTML=list.map(exam=>{
-const count=tests.filter(t=>String(t.exam_id)===String(exam.id)).length;
-const position=list.findIndex(x=>String(x.id)===String(exam.id));
+
+const count=tests.filter(t=>
+String(t.exam_id)===String(exam.id)
+).length;
+
+const position=list.findIndex(x=>
+String(x.id)===String(exam.id)
+);
 
 return `
 <div class="ap-exam-card ${
-selectedExam&&String(selectedExam.id)===String(exam.id)?"selected":""
+selectedExam&&String(selectedExam.id)===String(exam.id)
+?"selected":""
 }">
+
 <div class="ap-exam-main">
-<div class="ap-exam-select" data-select-exam="${escapeHTML(exam.id)}"
+
+<div class="ap-exam-select"
+data-select-exam="${escapeHTML(exam.id)}"
 style="flex:1;cursor:pointer">
-<div class="ap-exam-name">${escapeHTML(examName(exam))}</div>
+
+<div class="ap-exam-name">
+${escapeHTML(examName(exam))}
+</div>
+
 <div class="ap-exam-meta">
-${escapeHTML(exam.stage||"Exam")} • ${count} mock${count===1?"":"s"}
+${escapeHTML(exam.stage||"Exam")} •
+${count} mock${count===1?"":"s"}
 </div>
+
 </div>
-<div class="ap-exam-arrow" data-select-exam="${escapeHTML(exam.id)}">›</div>
+
+<div class="ap-exam-arrow"
+data-select-exam="${escapeHTML(exam.id)}">›</div>
+
 </div>
 
 <div class="ap-exam-actions">
-<button class="ap-small-btn edit" data-edit-exam="${escapeHTML(exam.id)}" type="button">Edit</button>
-<button class="ap-small-btn" data-up-exam="${escapeHTML(exam.id)}"
-type="button" ${position<=0?"disabled":""}>↑</button>
-<button class="ap-small-btn" data-down-exam="${escapeHTML(exam.id)}"
-type="button" ${position>=list.length-1?"disabled":""}>↓</button>
-<button class="ap-small-btn delete" data-delete-exam="${escapeHTML(exam.id)}" type="button">Delete</button>
+
+<button class="ap-small-btn edit"
+data-edit-exam="${escapeHTML(exam.id)}"
+type="button">Edit</button>
+
+<button class="ap-small-btn"
+data-up-exam="${escapeHTML(exam.id)}"
+type="button"
+${position<=0?"disabled":""}>↑</button>
+
+<button class="ap-small-btn"
+data-down-exam="${escapeHTML(exam.id)}"
+type="button"
+${position>=list.length-1?"disabled":""}>↓</button>
+
+<button class="ap-small-btn delete"
+data-delete-exam="${escapeHTML(exam.id)}"
+type="button">Delete</button>
+
 </div>
 </div>`;
 }).join("");
 
 document.querySelectorAll("[data-select-exam]").forEach(btn=>{
 btn.onclick=()=>{
-const exam=exams.find(x=>String(x.id)===String(btn.dataset.selectExam));
+const exam=exams.find(x=>
+String(x.id)===String(btn.dataset.selectExam)
+);
+
 if(exam)selectExam(exam);
 };
 });
@@ -756,7 +825,11 @@ if(exam)selectExam(exam);
 document.querySelectorAll("[data-edit-exam]").forEach(btn=>{
 btn.onclick=e=>{
 e.stopPropagation();
-const exam=exams.find(x=>String(x.id)===String(btn.dataset.editExam));
+
+const exam=exams.find(x=>
+String(x.id)===String(btn.dataset.editExam)
+);
+
 if(exam)openExamModal(exam);
 };
 });
@@ -764,7 +837,11 @@ if(exam)openExamModal(exam);
 document.querySelectorAll("[data-delete-exam]").forEach(btn=>{
 btn.onclick=e=>{
 e.stopPropagation();
-const exam=exams.find(x=>String(x.id)===String(btn.dataset.deleteExam));
+
+const exam=exams.find(x=>
+String(x.id)===String(btn.dataset.deleteExam)
+);
+
 if(exam)deleteExam(exam);
 };
 });
@@ -780,8 +857,10 @@ btn.onclick=()=>reorderExam(btn.dataset.downExam,1);
 
 function selectExam(exam){
 selectedExam=exam;
+
 $("selectedExamName").textContent=examName(exam);
 $("workspace").classList.add("visible");
+
 resetViews();
 renderExams();
 
@@ -795,6 +874,7 @@ function openBranch(branch){
 if(!selectedExam)return;
 
 selectedBranch=branch;
+
 $("branchView").style.display="none";
 $("categoryView").classList.add("visible");
 $("mockManagementView").classList.remove("visible");
@@ -828,14 +908,21 @@ category==="FULL"
 }
 
 async function ensureFolder({
-examId,parentId=null,name,displayName=name,type,
-subjectId=null,sortOrder=0
+examId,
+parentId=null,
+name,
+displayName=name,
+type,
+subjectId=null,
+sortOrder=0
 }){
+
 let found=folders.find(x=>
 String(x.exam_id)===String(examId)&&
 String(x.parent_id||"")===String(parentId||"")&&
 folderType(x)===type&&
-String(x.name||"").toLowerCase()===String(name).toLowerCase()&&
+String(x.name||"").toLowerCase()===
+String(name).toLowerCase()&&
 x.is_active!==false
 );
 
@@ -851,8 +938,9 @@ sort_order:sortOrder,
 is_active:true
 };
 
-if(subjectId!==null&&subjectId!==undefined)
+if(subjectId!==null&&subjectId!==undefined){
 payload.subject_id=subjectId;
+}
 
 const {data,error}=await db
 .from("mock_folders")
@@ -867,67 +955,111 @@ return data;
 }
 
 async function ensureExamStructure(examId){
+
 const newRoot=await ensureFolder({
-examId,name:"NEW",displayName:"New Mocks",type:"NEW",sortOrder:1
+examId,
+name:"NEW",
+displayName:"New Mocks",
+type:"NEW",
+sortOrder:1
 });
 
 const pyqRoot=await ensureFolder({
-examId,name:"PYQ",displayName:"PYQ Mocks",type:"PYQ",sortOrder:2
+examId,
+name:"PYQ",
+displayName:"PYQ Mocks",
+type:"PYQ",
+sortOrder:2
 });
 
 const newFull=await ensureFolder({
-examId,parentId:newRoot.id,name:"FULL",
-displayName:"FULL MOCKS",type:"FULL",sortOrder:1
+examId,
+parentId:newRoot.id,
+name:"FULL",
+displayName:"FULL MOCKS",
+type:"FULL",
+sortOrder:1
 });
 
 const newSectional=await ensureFolder({
-examId,parentId:newRoot.id,name:"SECTIONAL",
-displayName:"SECTIONAL MOCKS",type:"SECTIONAL",sortOrder:2
+examId,
+parentId:newRoot.id,
+name:"SECTIONAL",
+displayName:"SECTIONAL MOCKS",
+type:"SECTIONAL",
+sortOrder:2
 });
 
 const pyqFull=await ensureFolder({
-examId,parentId:pyqRoot.id,name:"FULL",
-displayName:"FULL MOCKS",type:"FULL",sortOrder:1
+examId,
+parentId:pyqRoot.id,
+name:"FULL",
+displayName:"FULL MOCKS",
+type:"FULL",
+sortOrder:1
 });
 
 const pyqSectional=await ensureFolder({
-examId,parentId:pyqRoot.id,name:"SECTIONAL",
-displayName:"SECTIONAL MOCKS",type:"SECTIONAL",sortOrder:2
+examId,
+parentId:pyqRoot.id,
+name:"SECTIONAL",
+displayName:"SECTIONAL MOCKS",
+type:"SECTIONAL",
+sortOrder:2
 });
 
 const examSubjects=getExamSubjects();
 
 for(let i=0;i<examSubjects.length;i++){
+
 const subject=examSubjects[i];
 
 await ensureFolder({
-examId,parentId:newSectional.id,
+examId,
+parentId:newSectional.id,
 name:nameOfSubject(subject),
 displayName:nameOfSubject(subject),
-type:"SUBJECT",subjectId:subject.id,sortOrder:i+1
+type:"SUBJECT",
+subjectId:subject.id,
+sortOrder:i+1
 });
 
 await ensureFolder({
-examId,parentId:pyqSectional.id,
+examId,
+parentId:pyqSectional.id,
 name:nameOfSubject(subject),
 displayName:nameOfSubject(subject),
-type:"SUBJECT",subjectId:subject.id,sortOrder:i+1
+type:"SUBJECT",
+subjectId:subject.id,
+sortOrder:i+1
 });
+
 }
 
-return {newRoot,pyqRoot,newFull,newSectional,pyqFull,pyqSectional};
+return {
+newRoot,
+pyqRoot,
+newFull,
+newSectional,
+pyqFull,
+pyqSectional
+};
 }
 
 async function syncStructure(){
+
 if(!selectedExam){
 toast("Select an exam first");
 return;
 }
 
 try{
+
 await ensureExamStructure(selectedExam.id);
 await loadAllData();
+
 toast("Structure synced successfully");
+
 }catch(error){
 console.error(error);
 toast(error.message);
@@ -936,67 +1068,103 @@ toast(error.message);
 
 async function getFullFolder(){
 const s=await ensureExamStructure(selectedExam.id);
-return selectedBranch==="NEW"?s.newFull:s.pyqFull;
+
+return selectedBranch==="NEW"
+?s.newFull
+:s.pyqFull;
 }
 
 async function getSectionalFolder(){
 const s=await ensureExamStructure(selectedExam.id);
-return selectedBranch==="NEW"?s.newSectional:s.pyqSectional;
+
+return selectedBranch==="NEW"
+?s.newSectional
+:s.pyqSectional;
 }
 
 function renderFullManagement(){
+
 $("managementChipsArea").style.display=
 selectedBranch==="PYQ"?"block":"none";
 
 $("managementExtraActions").innerHTML="";
+
 let fullFolder=null;
 let allowedIds=[];
 
 if(selectedBranch==="PYQ"){
+
 $("chipsTitle").textContent="PYQ Years";
 
 const pyqRoot=folders.find(x=>
 String(x.exam_id)===String(selectedExam.id)&&
 folderType(x)==="PYQ"&&
-!x.parent_id&&x.is_active!==false
+!x.parent_id&&
+x.is_active!==false
 );
 
-fullFolder=pyqRoot?directChild(pyqRoot.id,"FULL"):null;
+fullFolder=pyqRoot
+?directChild(pyqRoot.id,"FULL")
+:null;
 
-const years=fullFolder?childrenOf(fullFolder.id,"YEAR"):[];
+const years=fullFolder
+?childrenOf(fullFolder.id,"YEAR")
+:[];
 
 $("managementChips").innerHTML=`
+
 <div class="ap-chip-wrap">
 <button class="ap-chip ${!selectedYear?"active":""}"
-data-year-id="all" type="button">All Years</button>
+data-year-id="all"
+type="button">All Years</button>
 </div>
+
 ${years.map((year,index)=>`
+
 <div class="ap-chip-wrap">
+
 <button class="ap-chip ${
-selectedYear&&String(selectedYear.id)===String(year.id)?"active":""
-}" data-year-id="${escapeHTML(year.id)}" type="button">
+selectedYear&&String(selectedYear.id)===String(year.id)
+?"active":""
+}"
+data-year-id="${escapeHTML(year.id)}"
+type="button">
+
 ${escapeHTML(folderName(year))}
+
 </button>
 
 <button class="ap-chip-mini edit"
-data-edit-year="${escapeHTML(year.id)}" type="button">✎</button>
+data-edit-year="${escapeHTML(year.id)}"
+type="button">✎</button>
 
 <button class="ap-chip-mini move"
 data-year-up="${escapeHTML(year.id)}"
-type="button" ${index===0?"disabled":""}>↑</button>
+type="button"
+${index===0?"disabled":""}>↑</button>
 
 <button class="ap-chip-mini move"
 data-year-down="${escapeHTML(year.id)}"
-type="button" ${index===years.length-1?"disabled":""}>↓</button>
+type="button"
+${index===years.length-1?"disabled":""}>↓</button>
 
 <button class="ap-chip-mini delete"
-data-delete-year="${escapeHTML(year.id)}" type="button">×</button>
+data-delete-year="${escapeHTML(year.id)}"
+type="button">×</button>
+
 </div>
+
 `).join("")}`;
 
 $("managementExtraActions").innerHTML=`
-<button class="ap-primary-btn" id="addYearBtn" type="button">+ Add Year</button>
-<button class="ap-secondary-btn" id="addFullMockBtn" type="button">+ Add Full Mock</button>
+
+<button class="ap-primary-btn"
+id="addYearBtn"
+type="button">+ Add Year</button>
+
+<button class="ap-secondary-btn"
+id="addFullMockBtn"
+type="button">+ Add Full Mock</button>
 `;
 
 $("addYearBtn").onclick=addYear;
@@ -1006,7 +1174,10 @@ document.querySelectorAll("[data-year-id]").forEach(btn=>{
 btn.onclick=()=>{
 selectedYear=btn.dataset.yearId==="all"
 ?null
-:years.find(x=>String(x.id)===String(btn.dataset.yearId))||null;
+:years.find(x=>
+String(x.id)===String(btn.dataset.yearId)
+)||null;
+
 renderFullManagement();
 };
 });
@@ -1026,22 +1197,30 @@ if(year)deleteStructureFolder(year);
 });
 
 document.querySelectorAll("[data-year-up]").forEach(btn=>{
-btn.onclick=()=>reorderFolder(btn.dataset.yearUp,fullFolder.id,-1,"Year");
+btn.onclick=>
+reorderFolder(btn.dataset.yearUp,fullFolder.id,-1,"Year");
 });
 
 document.querySelectorAll("[data-year-down]").forEach(btn=>{
-btn.onclick=()=>reorderFolder(btn.dataset.yearDown,fullFolder.id,1,"Year");
+btn.onclick=>
+reorderFolder(btn.dataset.yearDown,fullFolder.id,1,"Year");
 });
 
 }else{
+
 $("managementExtraActions").innerHTML=`
-<button class="ap-primary-btn" id="addNewFullMockBtn" type="button">
+
+<button class="ap-primary-btn"
+id="addNewFullMockBtn"
+type="button">
 + Add Full Mock
 </button>`;
+
 $("addNewFullMockBtn").onclick=()=>openMockEditor("FULL");
 }
 
 if(!fullFolder){
+
 fullFolder=folders.find(x=>
 String(x.exam_id)===String(selectedExam.id)&&
 folderType(x)==="FULL"&&
@@ -1050,12 +1229,20 @@ isFolderUnderBranch(x,selectedBranch)
 }
 
 if(fullFolder){
+
 if(selectedBranch==="PYQ"){
-if(selectedYear)allowedIds=[String(selectedYear.id)];
-else allowedIds=childrenOf(fullFolder.id,"YEAR").map(x=>String(x.id));
+
+if(selectedYear){
+allowedIds=[String(selectedYear.id)];
+}else{
+allowedIds=childrenOf(fullFolder.id,"YEAR")
+.map(x=>String(x.id));
+}
+
 }else{
 allowedIds=[String(fullFolder.id)];
 }
+
 }
 
 const list=tests.filter(test=>
@@ -1068,6 +1255,7 @@ renderTestList(list);
 }
 
 function renderSectionalManagement(){
+
 $("managementChipsArea").style.display="block";
 $("chipsTitle").textContent="Subject Clips";
 
@@ -1082,42 +1270,62 @@ const clips=sectionalParent
 :[];
 
 $("managementChips").innerHTML=`
+
 ${clips.map((clip,index)=>`
+
 <div class="ap-chip-wrap">
+
 <button class="ap-chip ${
-selectedFolder&&String(selectedFolder.id)===String(clip.id)?"active":""
-}" data-folder-id="${escapeHTML(clip.id)}" type="button">
+selectedFolder&&String(selectedFolder.id)===String(clip.id)
+?"active":""
+}"
+data-folder-id="${escapeHTML(clip.id)}"
+type="button">
+
 ${escapeHTML(folderName(clip))}
+
 </button>
 
 <button class="ap-chip-mini edit"
-data-edit-subject="${escapeHTML(clip.id)}" type="button">✎</button>
+data-edit-subject="${escapeHTML(clip.id)}"
+type="button">✎</button>
 
 <button class="ap-chip-mini move"
 data-subject-up="${escapeHTML(clip.id)}"
-type="button" ${index===0?"disabled":""}>↑</button>
+type="button"
+${index===0?"disabled":""}>↑</button>
 
 <button class="ap-chip-mini move"
 data-subject-down="${escapeHTML(clip.id)}"
-type="button" ${index===clips.length-1?"disabled":""}>↓</button>
+type="button"
+${index===clips.length-1?"disabled":""}>↓</button>
 
 <button class="ap-chip-mini delete"
-data-delete-subject="${escapeHTML(clip.id)}" type="button">×</button>
+data-delete-subject="${escapeHTML(clip.id)}"
+type="button">×</button>
+
 </div>
+
 `).join("")}`;
 
 $("managementExtraActions").innerHTML=`
-<button class="ap-secondary-btn" id="addSubjectClipBtn" type="button">
+
+<button class="ap-secondary-btn"
+id="addSubjectClipBtn"
+type="button">
 + Add Subject Clip
 </button>
 `;
 
 $("addSubjectClipBtn").onclick=()=>{
+
 structureMode="SUBJECT";
 structureEditId=null;
+
 $("structureModalTitle").textContent="Add Sectional Subject";
 $("structureInputLabel").textContent="Subject Name";
 $("structureNameInput").value="";
+
 openModal("structureModal");
 };
 
@@ -1143,16 +1351,22 @@ if(folder)deleteStructureFolder(folder);
 });
 
 document.querySelectorAll("[data-subject-up]").forEach(btn=>{
-btn.onclick=()=>reorderFolder(btn.dataset.subjectUp,sectionalParent.id,-1,"Subject");
+btn.onclick=>
+reorderFolder(btn.dataset.subjectUp,sectionalParent.id,-1,"Subject");
 });
 
 document.querySelectorAll("[data-subject-down]").forEach(btn=>{
-btn.onclick=()=>reorderFolder(btn.dataset.subjectDown,sectionalParent.id,1,"Subject");
+btn.onclick=>
+reorderFolder(btn.dataset.subjectDown,sectionalParent.id,1,"Subject");
 });
 
 if(!selectedFolder){
+
 $("managementTestList").innerHTML=
-`<div class="ap-empty">Select a subject clip to view its mocks.</div>`;
+`<div class="ap-empty">
+Select a subject clip to view its mocks.
+</div>`;
+
 return;
 }
 
@@ -1160,12 +1374,18 @@ renderSubjectMockList();
 }
 
 function renderSubjectMockList(){
-$("managementExtraActions").innerHTML+=`
-<button class="ap-primary-btn" id="addSectionalMockBtn" type="button">
-+ Add Sectional Mock
-</button>`;
 
-$("addSectionalMockBtn").onclick=()=>openMockEditor("SECTIONAL");
+$("managementExtraActions").innerHTML+=`
+
+<button class="ap-primary-btn"
+id="addSectionalMockBtn"
+type="button">
++ Add Sectional Mock
+</button>
+`;
+
+$("addSectionalMockBtn").onclick=>
+openMockEditor("SECTIONAL");
 
 const list=tests.filter(test=>
 String(test.exam_id)===String(selectedExam.id)&&
@@ -1177,90 +1397,163 @@ renderTestList(list);
 }
 
 function renderTestList(list){
+
 if(!list.length){
+
 $("managementTestList").innerHTML=
 `<div class="ap-empty">No mock tests found here.</div>`;
+
 return;
 }
 
 $("managementTestList").innerHTML=list.map(test=>{
-const timing=Boolean(test.subject_wise_timing||test.sectional_timing);
+
+const timing=Boolean(
+test.subject_wise_timing||test.sectional_timing
+);
+
 const active=test.is_active!==false;
 
 return `
+
 <div class="ap-test-card">
+
 <div class="ap-test-top">
+
 <div>
-<div class="ap-test-title">${escapeHTML(test.title||"Untitled Mock")}</div>
-${test.description?`<div class="ap-test-description">${escapeHTML(test.description)}</div>`:""}
+<div class="ap-test-title">
+${escapeHTML(test.title||"Untitled Mock")}
+</div>
+
+${test.description
+?`<div class="ap-test-description">
+${escapeHTML(test.description)}
+</div>`
+:""}
+
 </div>
 </div>
 
 <div class="ap-test-badges">
-<span class="ap-test-badge">${test.duration_minutes||0} min</span>
-<span class="ap-test-badge">${test.total_questions||0} Questions</span>
-<span class="ap-test-badge">${timing?"Section Timing ON":"Overall Timing"}</span>
-<span class="ap-test-badge ${active?"active":"inactive"}">${active?"Active":"Inactive"}</span>
+
+<span class="ap-test-badge">
+${test.duration_minutes||0} min
+</span>
+
+<span class="ap-test-badge">
+${test.total_questions||0} Questions
+</span>
+
+<span class="ap-test-badge">
+${timing?"Section Timing ON":"Overall Timing"}
+</span>
+
+<span class="ap-test-badge ${
+active?"active":"inactive"
+}">
+${active?"Active":"Inactive"}
+</span>
+
 </div>
 
 <div class="ap-test-actions">
-<button class="ap-small-btn edit" data-edit-test="${escapeHTML(test.id)}" type="button">Edit</button>
-<button class="ap-small-btn" data-question-test="${escapeHTML(test.id)}" type="button">Questions</button>
-<button class="ap-small-btn delete" data-delete-test="${escapeHTML(test.id)}" type="button">Delete</button>
+
+<button class="ap-small-btn edit"
+data-edit-test="${escapeHTML(test.id)}"
+type="button">Edit</button>
+
+<button class="ap-small-btn"
+data-question-test="${escapeHTML(test.id)}"
+type="button">Questions</button>
+
+<button class="ap-small-btn delete"
+data-delete-test="${escapeHTML(test.id)}"
+type="button">Delete</button>
+
 </div>
-</div>`;
+</div>
+
+`;
 }).join("");
 
 document.querySelectorAll("[data-edit-test]").forEach(btn=>{
 btn.onclick=()=>{
-const test=tests.find(x=>String(x.id)===String(btn.dataset.editTest));
+const test=tests.find(x=>
+String(x.id)===String(btn.dataset.editTest)
+);
+
 if(test)openMockEditor(test.test_type,test);
 };
 });
 
 document.querySelectorAll("[data-question-test]").forEach(btn=>{
 btn.onclick=()=>{
-location.href=`admin-mock.html?test_id=${encodeURIComponent(btn.dataset.questionTest)}`;
+location.href=
+`admin-mock.html?test_id=${
+encodeURIComponent(btn.dataset.questionTest)
+}`;
 };
 });
 
 document.querySelectorAll("[data-delete-test]").forEach(btn=>{
 btn.onclick=()=>{
-const test=tests.find(x=>String(x.id)===String(btn.dataset.deleteTest));
+const test=tests.find(x=>
+String(x.id)===String(btn.dataset.deleteTest)
+);
+
 if(test)deleteMock(test);
 };
 });
 }
 
+/* FIXED: Correct columns according to Supabase schema */
 async function loadExistingSections(testId){
+
 const {data,error}=await db
 .from("mock_test_sections")
 .select("*")
 .eq("mock_test_id",testId)
-.order("sort_order",{ascending:true});
+.order("section_order",{ascending:true});
 
 if(error){
 console.warn("Sections load error:",error);
 return [];
 }
 
-return (data||[]).map(x=>({
-name:x.section_name||"",
-duration:x.duration_minutes||0,
-questions:x.total_questions||0
-}));
+return (data||[]).map(x=>{
+
+const subject=subjects.find(s=>
+String(s.id)===String(x.subject_id)
+);
+
+return {
+name:subject?nameOfSubject(subject):"",
+subject_id:x.subject_id||null,
+duration:Number(x.duration_minutes||0),
+questions:0
+};
+
+}).filter(x=>x.name);
+
 }
 
 async function openMockEditor(type,test=null){
+
 editorType=type;
 editingMockId=test?test.id:null;
 
 if(test){
+
 editorFolderId=test.folder_id||null;
+
 }else if(type==="SECTIONAL"){
+
 editorFolderId=selectedFolder?.id||null;
+
 }else{
+
 const fullFolder=await getFullFolder();
+
 editorFolderId=
 selectedBranch==="PYQ"&&selectedYear
 ?selectedYear.id
@@ -1268,63 +1561,88 @@ selectedBranch==="PYQ"&&selectedYear
 }
 
 if(!editorFolderId){
+
 toast("Please sync structure first");
 return;
 }
 
 $("mockModalTitle").textContent=test?"Edit Mock":"Add Mock";
+
 $("mockTitleInput").value=test?.title||"";
 $("mockDescriptionInput").value=test?.description||"";
 $("mockDurationInput").value=test?.duration_minutes||60;
 $("mockQuestionsInput").value=test?.total_questions||25;
-$("mockActiveInput").value=test&&test.is_active===false?"false":"true";
-$("sectionalTimingInput").checked=
-test?Boolean(test.subject_wise_timing||test.sectional_timing):false;
+$("mockActiveInput").value=
+test&&test.is_active===false?"false":"true";
 
-let sections=test?await loadExistingSections(test.id):[];
+$("sectionalTimingInput").checked=
+test
+?Boolean(test.subject_wise_timing||test.sectional_timing)
+:false;
+
+let sections=test
+?await loadExistingSections(test.id)
+:[];
 
 if(!sections.length){
+
 sections=[
 {name:"English",duration:15,questions:25},
 {name:"Reasoning",duration:15,questions:25},
 {name:"Quant",duration:15,questions:25},
 {name:"GK",duration:15,questions:25}
 ];
+
 }
 
 $("sectionRows").innerHTML="";
 sections.forEach(addSectionRow);
+
 openModal("mockModal");
 }
 
 function addSectionRow(data={}){
+
 const row=document.createElement("div");
 row.className="ap-section-row";
 
 row.innerHTML=`
-<input class="section-name" placeholder="Section"
+
+<input class="section-name"
+placeholder="Section"
 value="${escapeHTML(data.name||"")}">
 
-<input class="section-time" type="number" min="0"
-placeholder="Min" value="${escapeHTML(data.duration||"")}">
+<input class="section-time"
+type="number"
+min="0"
+placeholder="Min"
+value="${escapeHTML(data.duration||"")}">
 
-<input class="section-questions" type="number" min="0"
-placeholder="Ques" value="${escapeHTML(data.questions||"")}">
+<input class="section-questions"
+type="number"
+min="0"
+placeholder="Ques"
+value="${escapeHTML(data.questions||"")}">
 
-<button class="ap-remove-section" type="button">×</button>
+<button class="ap-remove-section"
+type="button">×</button>
 `;
 
-row.querySelector(".ap-remove-section").onclick=()=>row.remove();
+row.querySelector(".ap-remove-section").onclick=>
+row.remove();
+
 $("sectionRows").appendChild(row);
 }
 
 async function saveMock(){
+
 if(!selectedExam){
 toast("Select exam first");
 return;
 }
 
 const title=$("mockTitleInput").value.trim();
+
 if(!title){
 toast("Enter mock title");
 return;
@@ -1342,11 +1660,31 @@ const active=$("mockActiveInput").value==="true";
 const sectionalTiming=$("sectionalTimingInput").checked;
 
 const sections=[...document.querySelectorAll(".ap-section-row")]
-.map(row=>({
-name:row.querySelector(".section-name").value.trim(),
-duration:Number(row.querySelector(".section-time").value)||0,
-questions:Number(row.querySelector(".section-questions").value)||0
-}))
+.map(row=>{
+
+const name=row.querySelector(".section-name").value.trim();
+
+const duration=Number(
+row.querySelector(".section-time").value
+)||0;
+
+const questions=Number(
+row.querySelector(".section-questions").value
+)||0;
+
+const foundSubject=subjects.find(s=>
+nameOfSubject(s).trim().toLowerCase()===
+name.toLowerCase()
+);
+
+return {
+name,
+subject_id:foundSubject?foundSubject.id:null,
+duration,
+questions
+};
+
+})
 .filter(x=>x.name);
 
 if(!sections.length){
@@ -1362,17 +1700,22 @@ description,
 duration_minutes:duration,
 total_questions:totalQuestions,
 is_active:active,
-test_type:editorType==="SECTIONAL"?"SECTIONAL":"FULL",
+test_type:editorType==="SECTIONAL"
+?"SECTIONAL"
+:"FULL",
 subject_wise_timing:sectionalTiming
 };
 
-if(editorType==="SECTIONAL"&&selectedFolder)
+if(editorType==="SECTIONAL"&&selectedFolder){
 payload.subject_id=selectedFolder.subject_id||null;
+}
 
 try{
+
 let saved;
 
 if(editingMockId){
+
 const {data,error}=await db
 .from("mock_tests")
 .update(payload)
@@ -1381,8 +1724,11 @@ const {data,error}=await db
 .single();
 
 if(error)throw error;
+
 saved=data;
+
 }else{
+
 const {data,error}=await db
 .from("mock_tests")
 .insert(payload)
@@ -1390,26 +1736,39 @@ const {data,error}=await db
 .single();
 
 if(error)throw error;
+
 saved=data;
+
 }
 
 await saveMockSections(saved.id,sections);
 
 closeModal("mockModal");
-toast(editingMockId?"Mock updated successfully":"Mock created successfully");
+
+toast(
+editingMockId
+?"Mock updated successfully"
+:"Mock created successfully"
+);
 
 await loadAllData();
 
-if(selectedCategory==="FULL")renderFullManagement();
-else renderSectionalManagement();
+if(selectedCategory==="FULL")
+renderFullManagement();
+else
+renderSectionalManagement();
 
 }catch(error){
+
 console.error(error);
 toast(error.message);
+
 }
 }
 
+/* FIXED: Only actual columns from mock_test_sections are inserted */
 async function saveMockSections(testId,sections){
+
 const {error:deleteError}=await db
 .from("mock_test_sections")
 .delete()
@@ -1418,24 +1777,33 @@ const {error:deleteError}=await db
 if(deleteError)throw deleteError;
 
 const rows=sections.map((x,i)=>({
+
 mock_test_id:testId,
-section_name:x.name,
-duration_minutes:x.duration,
-total_questions:x.questions,
-sort_order:i+1
+
+subject_id:x.subject_id||null,
+
+duration_minutes:Number(x.duration||0),
+
+section_order:i+1
+
 }));
+
+if(!rows.length)return;
 
 const {error}=await db
 .from("mock_test_sections")
 .insert(rows);
 
 if(error)throw error;
+
 }
 
 async function deleteMock(test){
+
 if(!confirm(`Delete mock "${test.title}"?`))return;
 
 try{
+
 const {error:sectionError}=await db
 .from("mock_test_sections")
 .delete()
@@ -1451,10 +1819,13 @@ const {error}=await db
 if(error)throw error;
 
 toast("Mock deleted");
+
 await loadAllData();
 
-if(selectedCategory==="FULL")renderFullManagement();
-else renderSectionalManagement();
+if(selectedCategory==="FULL")
+renderFullManagement();
+else
+renderSectionalManagement();
 
 }catch(error){
 toast(error.message);
@@ -1462,6 +1833,7 @@ toast(error.message);
 }
 
 async function addYear(){
+
 const fullFolder=await getFullFolder();
 
 if(!fullFolder){
@@ -1475,24 +1847,32 @@ structureEditId=null;
 $("structureModalTitle").textContent="Add PYQ Year";
 $("structureInputLabel").textContent="Year";
 $("structureNameInput").value="";
+
 openModal("structureModal");
 }
 
 function openStructureEdit(mode,folder){
+
 structureMode=mode;
 structureEditId=folder.id;
 
 $("structureModalTitle").textContent=
-mode==="YEAR"?"Edit PYQ Year":"Edit Subject Clip";
+mode==="YEAR"
+?"Edit PYQ Year"
+:"Edit Subject Clip";
 
 $("structureInputLabel").textContent=
-mode==="YEAR"?"Year":"Subject Name";
+mode==="YEAR"
+?"Year"
+:"Subject Name";
 
 $("structureNameInput").value=folderName(folder);
+
 openModal("structureModal");
 }
 
 async function saveStructure(){
+
 const name=$("structureNameInput").value.trim();
 
 if(!name){
@@ -1501,7 +1881,9 @@ return;
 }
 
 try{
+
 if(structureMode==="YEAR"){
+
 const parent=await getFullFolder();
 
 if(!parent){
@@ -1510,8 +1892,12 @@ return;
 }
 
 if(!structureEditId){
+
 const duplicate=childrenOf(parent.id,"YEAR")
-.find(x=>String(folderName(x)).toLowerCase()===name.toLowerCase());
+.find(x=>
+String(folderName(x)).toLowerCase()===
+name.toLowerCase()
+);
 
 if(duplicate){
 toast("This year already exists");
@@ -1519,9 +1905,13 @@ return;
 }
 
 const max=childrenOf(parent.id,"YEAR")
-.reduce((m,x)=>Math.max(m,Number(x.sort_order)||0),0);
+.reduce((m,x)=>
+Math.max(m,Number(x.sort_order)||0),0
+);
 
-const {error}=await db.from("mock_folders").insert({
+const {error}=await db
+.from("mock_folders")
+.insert({
 exam_id:selectedExam.id,
 parent_id:parent.id,
 name,
@@ -1532,26 +1922,38 @@ is_active:true
 });
 
 if(error)throw error;
+
 toast("Year added successfully");
+
 }else{
+
 const duplicate=childrenOf(parent.id,"YEAR")
-.find(x=>String(x.id)!==String(structureEditId)&&
-String(folderName(x)).toLowerCase()===name.toLowerCase());
+.find(x=>
+String(x.id)!==String(structureEditId)&&
+String(folderName(x)).toLowerCase()===
+name.toLowerCase()
+);
 
 if(duplicate){
 toast("This year already exists");
 return;
 }
 
-const {error}=await db.from("mock_folders")
-.update({name,display_name:name})
+const {error}=await db
+.from("mock_folders")
+.update({
+name,
+display_name:name
+})
 .eq("id",structureEditId);
 
 if(error)throw error;
+
 toast("Year updated successfully");
 }
 
 }else if(structureMode==="SUBJECT"){
+
 const parent=await getSectionalFolder();
 
 if(!parent){
@@ -1560,8 +1962,12 @@ return;
 }
 
 if(!structureEditId){
+
 const duplicate=childrenOf(parent.id,"SUBJECT")
-.find(x=>String(folderName(x)).toLowerCase()===name.toLowerCase());
+.find(x=>
+String(folderName(x)).toLowerCase()===
+name.toLowerCase()
+);
 
 if(duplicate){
 toast("This subject clip already exists");
@@ -1569,9 +1975,13 @@ return;
 }
 
 const max=childrenOf(parent.id,"SUBJECT")
-.reduce((m,x)=>Math.max(m,Number(x.sort_order)||0),0);
+.reduce((m,x)=>
+Math.max(m,Number(x.sort_order)||0),0
+);
 
-const {error}=await db.from("mock_folders").insert({
+const {error}=await db
+.from("mock_folders")
+.insert({
 exam_id:selectedExam.id,
 parent_id:parent.id,
 name,
@@ -1582,105 +1992,163 @@ is_active:true
 });
 
 if(error)throw error;
+
 toast("Subject clip added successfully");
+
 }else{
+
 const duplicate=childrenOf(parent.id,"SUBJECT")
-.find(x=>String(x.id)!==String(structureEditId)&&
-String(folderName(x)).toLowerCase()===name.toLowerCase());
+.find(x=>
+String(x.id)!==String(structureEditId)&&
+String(folderName(x)).toLowerCase()===
+name.toLowerCase()
+);
 
 if(duplicate){
 toast("This subject clip already exists");
 return;
 }
 
-const {error}=await db.from("mock_folders")
-.update({name,display_name:name})
+const {error}=await db
+.from("mock_folders")
+.update({
+name,
+display_name:name
+})
 .eq("id",structureEditId);
 
 if(error)throw error;
+
 toast("Subject clip updated successfully");
 }
+
 }
 
 closeModal("structureModal");
+
 structureMode=null;
 structureEditId=null;
 
 await loadAllData();
 
-if(selectedCategory==="FULL")renderFullManagement();
-else renderSectionalManagement();
+if(selectedCategory==="FULL")
+renderFullManagement();
+else
+renderSectionalManagement();
 
 }catch(error){
+
 console.error(error);
 toast(error.message);
+
 }
 }
 
 async function reorderFolder(folderId,parentId,direction,label){
+
 const type=label==="Year"?"YEAR":"SUBJECT";
 
 const list=childrenOf(parentId,type);
-const index=list.findIndex(x=>String(x.id)===String(folderId));
+
+const index=list.findIndex(x=>
+String(x.id)===String(folderId)
+);
+
 const targetIndex=index+direction;
 
-if(index<0||targetIndex<0||targetIndex>=list.length)return;
+if(
+index<0||
+targetIndex<0||
+targetIndex>=list.length
+)return;
 
 const reordered=[...list];
+
 const temp=reordered[index];
 reordered[index]=reordered[targetIndex];
 reordered[targetIndex]=temp;
 
 try{
+
 for(let i=0;i<reordered.length;i++){
+
 const {error}=await db
 .from("mock_folders")
-.update({sort_order:i+1})
+.update({
+sort_order:i+1
+})
 .eq("id",reordered[i].id);
 
 if(error)throw error;
+
 }
 
 toast(`${label} order updated`);
+
 await loadAllData();
 
-if(selectedCategory==="FULL")renderFullManagement();
-else renderSectionalManagement();
+if(selectedCategory==="FULL")
+renderFullManagement();
+else
+renderSectionalManagement();
 
 }catch(error){
+
 console.error(error);
 toast(error.message);
+
 }
 }
 
 async function deleteStructureFolder(folder){
-const hasMocks=tests.some(x=>String(x.folder_id)===String(folder.id));
+
+const hasMocks=tests.some(x=>
+String(x.folder_id)===String(folder.id)
+);
+
 const hasChildren=folders.some(x=>
-String(x.parent_id)===String(folder.id)&&x.is_active!==false
+String(x.parent_id)===String(folder.id)&&
+x.is_active!==false
 );
 
 if(hasMocks||hasChildren){
+
 toast("Cannot delete: first remove its mocks or children");
 return;
+
 }
 
 if(!confirm(`Delete "${folderName(folder)}"?`))return;
 
 try{
-const {error}=await db.from("mock_folders").delete().eq("id",folder.id);
+
+const {error}=await db
+.from("mock_folders")
+.delete()
+.eq("id",folder.id);
+
 if(error)throw error;
 
-if(selectedFolder&&String(selectedFolder.id)===String(folder.id))
+if(
+selectedFolder&&
+String(selectedFolder.id)===String(folder.id)
+)
 selectedFolder=null;
 
-if(selectedYear&&String(selectedYear.id)===String(folder.id))
+if(
+selectedYear&&
+String(selectedYear.id)===String(folder.id)
+)
 selectedYear=null;
 
 toast("Deleted successfully");
+
 await loadAllData();
 
-if(selectedCategory==="FULL")renderFullManagement();
-else renderSectionalManagement();
+if(selectedCategory==="FULL")
+renderFullManagement();
+else
+renderSectionalManagement();
 
 }catch(error){
 toast(error.message);
@@ -1688,14 +2156,21 @@ toast(error.message);
 }
 
 async function deleteExam(exam){
-const examTests=tests.filter(x=>String(x.exam_id)===String(exam.id));
+
+const examTests=tests.filter(x=>
+String(x.exam_id)===String(exam.id)
+);
 
 if(examTests.length){
-if(!confirm(`This exam has ${examTests.length} mocks. Deactivate exam instead?`))
-return;
 
-const {error}=await db.from("exams")
-.update({is_active:false}).eq("id",exam.id);
+if(!confirm(
+`This exam has ${examTests.length} mocks. Deactivate exam instead?`
+))return;
+
+const {error}=await db
+.from("exams")
+.update({is_active:false})
+.eq("id",exam.id);
 
 if(error){
 toast(error.message);
@@ -1703,10 +2178,16 @@ return;
 }
 
 toast("Exam deactivated");
-}else{
-if(!confirm(`Delete exam "${examName(exam)}"?`))return;
 
-const {error}=await db.from("exams").delete().eq("id",exam.id);
+}else{
+
+if(!confirm(`Delete exam "${examName(exam)}"?`))
+return;
+
+const {error}=await db
+.from("exams")
+.delete()
+.eq("id",exam.id);
 
 if(error){
 toast(error.message);
@@ -1716,55 +2197,90 @@ return;
 toast("Exam deleted");
 }
 
-if(selectedExam&&String(selectedExam.id)===String(exam.id)){
+if(
+selectedExam&&
+String(selectedExam.id)===String(exam.id)
+){
+
 selectedExam=null;
 $("workspace").classList.remove("visible");
 resetViews();
+
 }
 
 await loadAllData();
 }
 
 async function reorderExam(id,direction){
-const list=exams
-.filter(x=>boardOfExam(x)===activeBoard&&x.is_active!==false)
-.sort((a,b)=>Number(a.sort_order||0)-Number(b.sort_order||0));
 
-const index=list.findIndex(x=>String(x.id)===String(id));
+const list=exams
+.filter(x=>
+boardOfExam(x)===activeBoard&&
+x.is_active!==false
+)
+.sort((a,b)=>
+Number(a.sort_order||0)-Number(b.sort_order||0)
+);
+
+const index=list.findIndex(x=>
+String(x.id)===String(id)
+);
+
 const targetIndex=index+direction;
 
-if(index<0||targetIndex<0||targetIndex>=list.length)return;
+if(
+index<0||
+targetIndex<0||
+targetIndex>=list.length
+)return;
 
 const reordered=[...list];
+
 const temp=reordered[index];
 reordered[index]=reordered[targetIndex];
 reordered[targetIndex]=temp;
 
 try{
+
 for(let i=0;i<reordered.length;i++){
-const {error}=await db.from("exams")
-.update({sort_order:i+1}).eq("id",reordered[i].id);
+
+const {error}=await db
+.from("exams")
+.update({
+sort_order:i+1
+})
+.eq("id",reordered[i].id);
+
 if(error)throw error;
+
 }
 
 toast("Exam order updated");
 await loadAllData();
+
 }catch(error){
 toast(error.message);
 }
 }
 
 function openExamModal(exam=null){
+
 editingExamId=exam?exam.id:null;
 
-$("examBoardInput").value=exam?boardOfExam(exam):activeBoard;
-$("examNameInput").value=exam?examName(exam):"";
-$("examStageInput").value=exam?exam.stage||"":"";
+$("examBoardInput").value=
+exam?boardOfExam(exam):activeBoard;
+
+$("examNameInput").value=
+exam?examName(exam):"";
+
+$("examStageInput").value=
+exam?exam.stage||:"";
 
 openModal("examModal");
 }
 
 async function saveExam(){
+
 const board=$("examBoardInput").value;
 const name=$("examNameInput").value.trim();
 const stage=$("examStageInput").value.trim();
@@ -1775,19 +2291,32 @@ return;
 }
 
 try{
+
 if(editingExamId){
-const {error}=await db.from("exams")
-.update({name,stage,is_active:true})
+
+const {error}=await db
+.from("exams")
+.update({
+name,
+stage,
+is_active:true
+})
 .eq("id",editingExamId);
 
 if(error)throw error;
+
 toast("Exam updated successfully");
+
 }else{
+
 const max=exams
 .filter(x=>boardOfExam(x)===board)
-.reduce((m,x)=>Math.max(m,Number(x.sort_order)||0),0);
+.reduce((m,x)=>
+Math.max(m,Number(x.sort_order)||0),0
+);
 
-const {data,error}=await db.from("exams")
+const {data,error}=await db
+.from("exams")
 .insert({
 name,
 stage,
@@ -1800,6 +2329,7 @@ is_active:true
 if(error)throw error;
 
 await ensureExamStructure(data.id);
+
 toast("Exam added successfully");
 }
 
@@ -1807,67 +2337,90 @@ closeModal("examModal");
 await loadAllData();
 
 }catch(error){
+
 console.error(error);
 toast(error.message);
+
 }
 }
 
 document.querySelectorAll(".ap-board-tab").forEach(tab=>{
 tab.onclick=()=>{
+
 activeBoard=tab.dataset.board;
 
 document.querySelectorAll(".ap-board-tab")
-.forEach(x=>x.classList.toggle("active",x===tab));
+.forEach(x=>
+x.classList.toggle("active",x===tab)
+);
 
 renderExams();
+
 };
 });
 
 document.querySelectorAll("[data-branch]").forEach(btn=>{
-btn.onclick=()=>openBranch(btn.dataset.branch);
+btn.onclick=>
+openBranch(btn.dataset.branch);
 });
 
 document.querySelectorAll("[data-category]").forEach(btn=>{
-btn.onclick=()=>openCategory(btn.dataset.category);
+btn.onclick=>
+openCategory(btn.dataset.category);
 });
 
-$("backToBranchesBtn").onclick=()=>resetViews();
+$("backToBranchesBtn").onclick=>
+resetViews();
 
-$("backToCategoriesBtn").onclick=()=>{
+$("backToCategoriesBtn").onclick=>
+{
 $("mockManagementView").classList.remove("visible");
 $("categoryView").classList.add("visible");
 };
 
-$("changeExamBtn").onclick=()=>{
+$("changeExamBtn").onclick=>
+{
 selectedExam=null;
 $("workspace").classList.remove("visible");
 resetViews();
-window.scrollTo({top:0,behavior:"smooth"});
+
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
 };
 
 $("syncStructureBtn").onclick=syncStructure;
-$("addExamBtn").onclick=()=>openExamModal();
+
+$("addExamBtn").onclick=>
+openExamModal();
+
 $("refreshBtn").onclick=async()=>{
 await loadAllData();
 toast("Data refreshed");
 };
 
-$("adminBackBtn").onclick=()=>{
+$("adminBackBtn").onclick=>
+{
 location.href="practice.html";
 };
 
 $("saveExamBtn").onclick=saveExam;
 $("saveMockBtn").onclick=saveMock;
-$("addSectionBtn").onclick=()=>addSectionRow();
+$("addSectionBtn").onclick=>
+addSectionRow();
+
 $("saveStructureBtn").onclick=saveStructure;
 
 document.querySelectorAll("[data-close-modal]").forEach(btn=>{
-btn.onclick=()=>closeModal(btn.dataset.closeModal);
+btn.onclick=>
+closeModal(btn.dataset.closeModal);
 });
 
 document.querySelectorAll(".ap-modal-overlay").forEach(overlay=>{
 overlay.addEventListener("click",e=>{
-if(e.target===overlay)overlay.classList.remove("open");
+if(e.target===overlay)
+overlay.classList.remove("open");
 });
 });
 
@@ -1875,4 +2428,4 @@ loadAllData();
 </script>
 
 </body>
-</html>
+  </html>
