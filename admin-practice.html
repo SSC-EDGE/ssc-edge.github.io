@@ -1186,7 +1186,7 @@ Save Mock
 
 <div id="toast" class="toast"></div>
 
-<script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
@@ -1265,25 +1265,21 @@ testResponse
 supabaseClient
 .from("exams")
 .select("*")
-.order("sort_order",{ascending:true})
 .order("id",{ascending:true}),
 
 supabaseClient
 .from("subjects")
 .select("*")
-.order("sort_order",{ascending:true})
 .order("id",{ascending:true}),
 
 supabaseClient
 .from("mock_folders")
 .select("*")
-.order("sort_order",{ascending:true})
 .order("id",{ascending:true}),
 
 supabaseClient
 .from("mock_tests")
 .select("*")
-.order("sort_order",{ascending:true})
 .order("id",{ascending:true})
 
 ]);
@@ -1357,19 +1353,6 @@ renderEmptyWorkspace();
     `;
 
   }
-
-}
-
-renderExamList();
-
-document.getElementById("workspace").innerHTML = `
-<div class="empty-state">
-<strong>Unable to load data</strong>
-${escapeHtml(getErrorMessage(error))}
-<br><br>
-<button class="primary-btn" onclick="loadAllData()">Retry</button>
-</div>
-`;
 
 }
 
@@ -4812,14 +4795,6 @@ document.documentElement.dataset.theme = theme;
 }
 
 applySavedTheme();
-
-/* =========================
-   FINAL INITIALIZATION
-========================= */
-
-loadAllData();
-
-</script>
 
 </script>
 
