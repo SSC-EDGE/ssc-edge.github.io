@@ -1267,41 +1267,27 @@ try{
 const [
 examResponse,
 subjectResponse,
-folderResponse,
 testResponse
 ] = await Promise.all([
-
-supabaseClient
-.from("exams")
-.select("*")
-.order("id",{ascending:true}),
-
-supabaseClient
-.from("subjects")
-.select("*")
-.order("id",{ascending:true}),
-
-supabaseClient
-.from("mock_folders")
-.select("*")
-.order("id",{ascending:true}),
-
-supabaseClient
-.from("mock_tests")
-.select("*")
-.order("id",{ascending:true})
-
+  supabaseClient.from("exams").select("*").order("id",{ascending:true}),
+  supabaseClient.from("subjects").select("*").order("id",{ascending:true}),
+  supabaseClient.from("mock_tests").select("*").order("id",{ascending:true})
 ]);
 
 if(examResponse.error) throw examResponse.error;
 if(subjectResponse.error) throw subjectResponse.error;
-if(folderResponse.error) throw folderResponse.error;
-if(testResponse.error) throw testResponse.error;
 
 exams = examResponse.data || [];
 subjects = subjectResponse.data || [];
-folders = folderResponse.data || [];
-tests = testResponse.data || [];
+tests = testResponse.error ? [] : (testResponse.data || []);
+
+/* mock_folders is optional in this version */
+try{
+  const folderResponse = await supabaseClient.from("mock_folders").select("*").order("id",{ascending:true});
+  folders = folderResponse.error ? [] : (folderResponse.data || []);
+}catch(folderError){
+  folders = [];
+}
 
 renderExamList();
 
@@ -1739,9 +1725,7 @@ const {error} = await supabaseClient
 name:name,
 board:board,
 code:code,
-description:description,
-sort_order:getNextSortOrder(boardExams),
-is_active:true
+description:description
 
 });
 
