@@ -1777,15 +1777,10 @@ const {error:deleteError}=await db
 if(deleteError)throw deleteError;
 
 const rows=sections.map((x,i)=>({
-
-mock_test_id:testId,
-
-subject_id:x.subject_id||null,
-
-duration_minutes:Number(x.duration||0),
-
-section_order:i+1
-
+  mock_test_id:testId,
+  subject_id:x.subject_id||null,
+  duration_minutes:Number(x.duration)||0,
+  section_order:i+1
 }));
 
 if(!rows.length)return;
@@ -2274,7 +2269,7 @@ $("examNameInput").value=
 exam?examName(exam):"";
 
 $("examStageInput").value=
-exam?exam.stage||:"";
+exam?exam.stage||"":"";
 
 openModal("examModal");
 }
