@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
@@ -18,38 +17,34 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 <style>
 
 :root{
---bg:#080b14;
---card:#111827;
---card2:#151d2d;
---border:#263247;
---text:#f3f4f6;
---muted:#9ca3af;
+--bg:#080811;
+--card:#11111d;
+--card2:#171727;
+--border:rgba(255,255,255,.11);
+--text:#fff;
+--muted:#9b9bad;
 --purple:#9b5cff;
---purple2:#7c3aed;
---green:#22c55e;
---red:#ef4444;
---yellow:#f59e0b;
---blue:#3b82f6;
+--purple2:#7435d8;
+--danger:#ff5577;
+--success:#31d49b;
+--warning:#ffc857;
 }
 
 :root[data-theme="light"]{
---bg:#f5f6fb;
---card:#ffffff;
---card2:#f0f1f7;
---border:#dfe2eb;
---text:#151827;
---muted:#667085;
---purple:#7c3aed;
---purple2:#6d28d9;
---green:#16a34a;
---red:#dc2626;
---yellow:#d97706;
---blue:#2563eb;
+--bg:#f6f4fb;
+--card:#fff;
+--card2:#f0edf8;
+--border:rgba(40,25,80,.14);
+--text:#171321;
+--muted:#777080;
+--purple:#7138d4;
+--purple2:#8e55ed;
+--danger:#e64264;
+--success:#159d70;
+--warning:#b67b00;
 }
 
-*{
-box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
 margin:0;
@@ -59,1154 +54,987 @@ font-family:Arial,Helvetica,sans-serif;
 min-height:100vh;
 }
 
-button,
-input,
-select,
-textarea{
-font:inherit;
-}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
 
-button{
-cursor:pointer;
-}
-
-.app-header{
+.ap-header{
 height:68px;
 display:flex;
 align-items:center;
 justify-content:space-between;
-padding:0 18px;
-border-bottom:1px solid var(--border);
+padding:0 15px;
 background:var(--card);
+border-bottom:1px solid var(--border);
 position:sticky;
 top:0;
-z-index:50;
-}
-
-.brand{
-font-size:22px;
-font-weight:800;
-letter-spacing:.5px;
-}
-
-.brand span{
-color:var(--purple);
-}
-
-.header-right{
-display:flex;
-align-items:center;
-gap:9px;
-}
-
-.header-btn{
-border:1px solid var(--border);
-background:var(--card2);
-color:var(--text);
-border-radius:9px;
-padding:9px 12px;
-font-size:13px;
-}
-
-.header-btn:hover{
-border-color:var(--purple);
-}
-
-.page{
-max-width:1250px;
-margin:auto;
-padding:18px;
-}
-
-.page-title{
-font-size:23px;
-font-weight:800;
-margin:0;
-}
-
-.page-subtitle{
-color:var(--muted);
-font-size:13px;
-margin-top:5px;
-}
-
-.top-row{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:12px;
-margin-bottom:18px;
-}
-
-.primary-btn{
-border:0;
-background:var(--purple);
-color:#fff;
-font-weight:700;
-border-radius:9px;
-padding:11px 15px;
-}
-
-.primary-btn:hover{
-background:var(--purple2);
-}
-
-.secondary-btn{
-border:1px solid var(--border);
-background:var(--card2);
-color:var(--text);
-border-radius:9px;
-padding:10px 14px;
-}
-
-.danger-btn{
-border:1px solid rgba(239,68,68,.35);
-background:rgba(239,68,68,.1);
-color:var(--red);
-border-radius:8px;
-padding:8px 11px;
-}
-
-.small-btn{
-border:1px solid var(--border);
-background:var(--card2);
-color:var(--text);
-border-radius:7px;
-padding:7px 9px;
-font-size:12px;
-}
-
-.small-btn:hover,
-.secondary-btn:hover{
-border-color:var(--purple);
-}
-
-.admin-layout{
-display:grid;
-grid-template-columns:245px minmax(0,1fr);
-gap:16px;
-align-items:start;
-}
-
-.sidebar{
-background:var(--card);
-border:1px solid var(--border);
-border-radius:13px;
-padding:13px;
-position:sticky;
-top:84px;
-}
-
-.sidebar-title{
-font-size:11px;
-font-weight:800;
-color:var(--muted);
-text-transform:uppercase;
-letter-spacing:1px;
-padding:5px 8px 10px;
-}
-
-.exam-list{
-display:flex;
-flex-direction:column;
-gap:6px;
-}
-
-.exam-item{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:6px;
-border:1px solid transparent;
-border-radius:9px;
-padding:10px;
-background:transparent;
-}
-
-.exam-item:hover{
-background:var(--card2);
-}
-
-.exam-item.active{
-background:rgba(155,92,255,.14);
-border-color:rgba(155,92,255,.4);
-}
-
-.exam-main{
-display:flex;
-align-items:center;
-gap:8px;
-min-width:0;
-flex:1;
-}
-
-.exam-name{
-font-size:13px;
-font-weight:700;
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis;
-}
-
-.exam-actions{
-display:flex;
-gap:3px;
-}
-
-.icon-btn{
-width:25px;
-height:25px;
-border:1px solid var(--border);
-background:var(--card2);
-color:var(--muted);
-border-radius:6px;
-font-size:11px;
-padding:0;
-}
-
-.icon-btn:hover{
-color:var(--text);
-border-color:var(--purple);
-}
-
-.content-card{
-background:var(--card);
-border:1px solid var(--border);
-border-radius:13px;
-padding:16px;
-min-width:0;
-}
-
-.empty-state{
-text-align:center;
-padding:45px 20px;
-color:var(--muted);
-border:1px dashed var(--border);
-border-radius:11px;
-}
-
-.empty-state strong{
-display:block;
-font-size:15px;
-color:var(--text);
-margin-bottom:7px;
-}
-
-.section-heading{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:10px;
-margin-bottom:13px;
-}
-
-.section-heading h2{
-font-size:17px;
-margin:0;
-}
-
-.section-heading p{
-margin:4px 0 0;
-font-size:12px;
-color:var(--muted);
-}
-
-.exam-topbar{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:10px;
-flex-wrap:wrap;
-margin-bottom:16px;
-}
-
-.selected-exam-title{
-font-size:19px;
-font-weight:800;
-}
-
-.selected-exam-title small{
-font-size:11px;
-font-weight:500;
-color:var(--muted);
-display:block;
-margin-top:4px;
-}
-
-.exam-tools{
-display:flex;
-gap:7px;
-flex-wrap:wrap;
-}
-
-.branch-grid{
-display:grid;
-grid-template-columns:repeat(3,minmax(0,1fr));
-gap:12px;
-margin-top:15px;
-}
-
-.branch-card{
-background:var(--card2);
-border:1px solid var(--border);
-border-radius:12px;
-padding:18px;
-min-height:110px;
-display:flex;
-flex-direction:column;
-justify-content:space-between;
-cursor:pointer;
-transition:.15s;
-}
-
-.branch-card:hover{
-border-color:var(--purple);
-transform:translateY(-1px);
-}
-
-.branch-card h3{
-margin:0;
-font-size:15px;
-}
-
-.branch-card p{
-margin:7px 0 0;
-font-size:12px;
-color:var(--muted);
-line-height:1.4;
-}
-
-.branch-card.add-card{
-border-style:dashed;
-}
-
-.branch-icon{
-font-size:22px;
-margin-bottom:10px;
-}
-
-.branch-toolbar{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:10px;
-margin:15px 0;
-flex-wrap:wrap;
-}
-
-.back-btn{
-border:1px solid var(--border);
-background:var(--card2);
-color:var(--text);
-border-radius:8px;
-padding:8px 11px;
-font-size:12px;
-}
-
-.breadcrumb{
-font-size:13px;
-color:var(--muted);
-}
-
-.breadcrumb b{
-color:var(--text);
-}
-
-.category-grid{
-display:grid;
-grid-template-columns:repeat(2,minmax(0,1fr));
-gap:12px;
-}
-
-.category-card{
-border:1px solid var(--border);
-background:var(--card2);
-border-radius:11px;
-padding:16px;
-cursor:pointer;
-}
-
-.category-card:hover{
-border-color:var(--purple);
-}
-
-.category-card h3{
-margin:0;
-font-size:15px;
-}
-
-.category-card p{
-margin:6px 0 0;
-font-size:12px;
-color:var(--muted);
-}
-
-.series-toolbar{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:10px;
-flex-wrap:wrap;
-margin-bottom:13px;
-}
-
-.series-list{
-display:flex;
-flex-direction:column;
-gap:9px;
-}
-
-.series-row{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:10px;
-background:var(--card2);
-border:1px solid var(--border);
-border-radius:10px;
-padding:12px;
-}
-
-.series-info{
-min-width:0;
-}
-
-.series-name{
-font-size:14px;
-font-weight:700;
-}
-
-.series-meta{
-font-size:11px;
-color:var(--muted);
-margin-top:4px;
-}
-
-.series-actions{
-display:flex;
-gap:6px;
-flex-wrap:wrap;
-}
-
-.year-grid{
-display:flex;
-flex-wrap:wrap;
-gap:9px;
-margin-top:12px;
-}
-
-.year-chip{
-border:1px solid var(--border);
-background:var(--card2);
-color:var(--text);
-border-radius:8px;
-padding:10px 14px;
-font-size:13px;
-font-weight:700;
-cursor:pointer;
-}
-
-.year-chip:hover{
-border-color:var(--purple);
-}
-
-.year-chip.add-year{
-border-style:dashed;
-color:var(--purple);
-}
-
-.subject-grid{
-display:grid;
-grid-template-columns:repeat(2,minmax(0,1fr));
-gap:10px;
-}
-
-.subject-card{
-border:1px solid var(--border);
-background:var(--card2);
-border-radius:10px;
-padding:13px;
-cursor:pointer;
-}
-
-.subject-card:hover{
-border-color:var(--purple);
-}
-
-.subject-card h3{
-font-size:14px;
-margin:0;
-}
-
-.subject-card p{
-font-size:11px;
-color:var(--muted);
-margin:5px 0 0;
-}
-
-.mock-list{
-display:flex;
-flex-direction:column;
-gap:9px;
-}
-
-.mock-row{
-border:1px solid var(--border);
-background:var(--card2);
-border-radius:10px;
-padding:12px;
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:10px;
-}
-
-.mock-info{
-min-width:0;
-flex:1;
-}
-
-.mock-title{
-font-size:14px;
-font-weight:700;
-word-break:break-word;
-}
-
-.mock-meta{
-font-size:11px;
-color:var(--muted);
-margin-top:5px;
-line-height:1.5;
-}
-
-.mock-actions{
-display:flex;
-gap:6px;
-flex-wrap:wrap;
-justify-content:flex-end;
-}
-
-.status-dot{
-display:inline-block;
-width:7px;
-height:7px;
-border-radius:50%;
-margin-right:4px;
-background:var(--green);
-}
-
-.status-dot.off{
-background:var(--red);
-}
-
-.modal-backdrop{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.68);
-display:none;
-align-items:center;
-justify-content:center;
-padding:15px;
 z-index:100;
 }
 
-.modal-backdrop.show{
-display:flex;
-}
-
-.modal{
-width:min(650px,100%);
-max-height:92vh;
-overflow:auto;
-background:var(--card);
-border:1px solid var(--border);
-border-radius:14px;
-padding:18px;
-box-shadow:0 20px 70px rgba(0,0,0,.35);
-}
-
-.modal.large{
-width:min(850px,100%);
-}
-
-.modal-header{
+.ap-header-left{
 display:flex;
 align-items:center;
-justify-content:space-between;
-gap:10px;
-margin-bottom:16px;
+gap:11px;
 }
 
-.modal-header h2{
-font-size:18px;
-margin:0;
-}
-
-.close-btn{
-width:30px;
-height:30px;
+.ap-back-btn,
+.ap-icon-btn{
+width:38px;
+height:38px;
 border:1px solid var(--border);
+border-radius:11px;
 background:var(--card2);
 color:var(--text);
-border-radius:7px;
-font-size:18px;
-}
-
-.form-grid{
-display:grid;
-grid-template-columns:repeat(2,minmax(0,1fr));
-gap:12px;
-}
-
-.form-group{
-display:flex;
-flex-direction:column;
-gap:6px;
-}
-
-.form-group.full{
-grid-column:1/-1;
-}
-
-.form-group label{
-font-size:12px;
-font-weight:700;
-color:var(--muted);
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea{
-width:100%;
-border:1px solid var(--border);
-background:var(--card2);
-color:var(--text);
-border-radius:8px;
-padding:10px;
-outline:none;
-}
-
-.form-group textarea{
-min-height:80px;
-resize:vertical;
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus{
-border-color:var(--purple);
-}
-
-.modal-footer{
-display:flex;
-justify-content:flex-end;
-gap:8px;
-margin-top:18px;
-padding-top:14px;
-border-top:1px solid var(--border);
-}
-
-.toggle-row{
+font-size:20px;
 display:flex;
 align-items:center;
-justify-content:space-between;
-gap:12px;
-border:1px solid var(--border);
-background:var(--card2);
-border-radius:9px;
-padding:11px;
+justify-content:center;
 }
 
-.toggle-info strong{
-display:block;
-font-size:13px;
+.ap-header-left>div:last-child{min-width:0}
+
+.ap-brand{
+font-size:18px;
+font-weight:900;
 }
 
-.toggle-info span{
-display:block;
-font-size:11px;
+.ap-brand span{color:var(--purple)}
+
+.ap-header-sub{
+font-size:10px;
 color:var(--muted);
 margin-top:3px;
 }
 
-.switch{
-position:relative;
-width:42px;
-height:23px;
-flex:none;
+.ap-header-actions{
+display:flex;
+gap:8px;
+align-items:center;
 }
 
-.switch input{
-display:none;
+.ap-primary-btn,
+.ap-secondary-btn,
+.ap-danger-btn,
+.ap-small-btn{
+border-radius:9px;
+font-size:11px;
+font-weight:800;
+padding:10px 12px;
 }
 
-.slider{
-position:absolute;
-inset:0;
-border-radius:20px;
-background:#4b5563;
-cursor:pointer;
-transition:.2s;
+.ap-primary-btn{
+border:0;
+background:linear-gradient(135deg,var(--purple),var(--purple2));
+color:#fff;
 }
 
-.slider:before{
-content:"";
-position:absolute;
-width:17px;
-height:17px;
-left:3px;
-top:3px;
-background:#fff;
-border-radius:50%;
-transition:.2s;
-}
-
-.switch input:checked + .slider{
-background:var(--purple);
-}
-
-.switch input:checked + .slider:before{
-transform:translateX(19px);
-}
-
-.section-box{
+.ap-secondary-btn,
+.ap-small-btn{
 border:1px solid var(--border);
 background:var(--card2);
-border-radius:10px;
-padding:12px;
+color:var(--text);
+}
+
+.ap-danger-btn,
+.ap-small-btn.delete{
+border:1px solid rgba(255,85,119,.3);
+background:rgba(255,85,119,.1);
+color:var(--danger);
+}
+
+.ap-small-btn.edit{color:var(--purple)}
+
+.ap-page{
+max-width:1100px;
+margin:auto;
+padding:18px 14px 45px;
+}
+
+.ap-page-title{
+font-size:22px;
+font-weight:900;
+margin:0 0 5px;
+}
+
+.ap-page-description{
+font-size:12px;
+color:var(--muted);
+line-height:1.5;
+margin-bottom:18px;
+}
+
+.ap-board-tabs{
+display:flex;
+gap:9px;
+margin-bottom:18px;
+}
+
+.ap-board-tab{
+flex:1;
+height:45px;
+border:1px solid var(--border);
+background:var(--card);
+color:var(--muted);
+border-radius:12px;
+font-size:13px;
+font-weight:900;
+}
+
+.ap-board-tab.active{
+background:linear-gradient(135deg,var(--purple),var(--purple2));
+border-color:transparent;
+color:#fff;
+}
+
+.ap-section-head{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:10px;
+margin:18px 0 11px;
+}
+
+.ap-section-title{
+font-size:15px;
+font-weight:900;
+}
+
+.ap-section-note{
+font-size:10px;
+color:var(--muted);
+margin-top:4px;
+}
+
+.ap-exam-grid{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:11px;
+}
+
+.ap-exam-card{
+border:1px solid var(--border);
+background:var(--card);
+border-radius:15px;
+padding:13px;
+min-height:95px;
+}
+
+.ap-exam-card.selected{
+border-color:var(--purple);
+box-shadow:0 0 0 1px rgba(155,92,255,.2);
+}
+
+.ap-exam-main{
+display:flex;
+justify-content:space-between;
+gap:8px;
+align-items:flex-start;
+}
+
+.ap-exam-name{
+font-size:13px;
+font-weight:900;
+line-height:1.35;
+}
+
+.ap-exam-meta{
+font-size:10px;
+color:var(--muted);
+margin-top:4px;
+}
+
+.ap-exam-arrow{
+font-size:20px;
+color:var(--purple);
+}
+
+.ap-exam-actions{
+display:flex;
+gap:5px;
+flex-wrap:wrap;
 margin-top:12px;
 }
 
-.section-box-header{
+.ap-exam-actions button{
+padding:6px 8px;
+font-size:9px;
+}
+
+.ap-workspace{
+display:none;
+margin-top:22px;
+}
+
+.ap-workspace.visible{display:block}
+
+.ap-selected-strip{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:10px;
+padding:13px;
+border:1px solid rgba(155,92,255,.3);
+background:rgba(155,92,255,.1);
+border-radius:14px;
+margin-bottom:16px;
+}
+
+.ap-selected-label{
+font-size:10px;
+color:var(--muted);
+margin-bottom:4px;
+}
+
+.ap-selected-name{
+font-size:15px;
+font-weight:900;
+}
+
+.ap-selected-actions{
+display:flex;
+gap:7px;
+}
+
+.ap-choice-grid{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:11px;
+}
+
+.ap-choice-card{
+min-height:85px;
+text-align:left;
+border:1px solid var(--border);
+background:var(--card);
+color:var(--text);
+border-radius:15px;
+padding:14px;
 display:flex;
 align-items:center;
 justify-content:space-between;
 gap:8px;
-margin-bottom:10px;
 }
 
-.section-box-header strong{
+.ap-choice-card:hover{
+border-color:var(--purple);
+background:rgba(155,92,255,.1);
+}
+
+.ap-choice-title{
 font-size:13px;
+font-weight:900;
 }
 
-.section-list{
-display:flex;
-flex-direction:column;
-gap:8px;
-}
-
-.section-item{
-display:grid;
-grid-template-columns:minmax(0,1fr) 120px 34px;
-gap:7px;
-align-items:center;
-}
-
-.section-item input{
-width:100%;
-border:1px solid var(--border);
-background:var(--card);
-color:var(--text);
-border-radius:7px;
-padding:8px;
-font-size:12px;
-}
-
-.remove-section{
-border:1px solid rgba(239,68,68,.3);
-background:transparent;
-color:var(--red);
-border-radius:7px;
-height:32px;
-}
-
-.notice{
-padding:11px 12px;
-border-radius:8px;
-font-size:12px;
-margin-bottom:13px;
-line-height:1.5;
-}
-
-.notice.info{
-background:rgba(59,130,246,.1);
-border:1px solid rgba(59,130,246,.25);
-color:#93c5fd;
-}
-
-.notice.warning{
-background:rgba(245,158,11,.1);
-border:1px solid rgba(245,158,11,.25);
-color:#fcd34d;
-}
-
-.loading{
-padding:30px;
-text-align:center;
+.ap-choice-sub{
+font-size:10px;
 color:var(--muted);
+margin-top:5px;
+line-height:1.4;
 }
 
-.toast{
-position:fixed;
-bottom:20px;
-left:50%;
-transform:translateX(-50%) translateY(20px);
-background:#111827;
-color:#fff;
-border:1px solid #374151;
-padding:11px 16px;
-border-radius:9px;
-font-size:13px;
-opacity:0;
-pointer-events:none;
-transition:.25s;
-z-index:200;
-max-width:90%;
-text-align:center;
-}
-
-.toast.show{
-opacity:1;
-transform:translateX(-50%) translateY(0);
-}
-
-.toast.success{
-border-color:var(--green);
-}
-
-.toast.error{
-border-color:var(--red);
-}
-
-.hidden{
-display:none!important;
-}
-
-@media(max-width:850px){
-
-.admin-layout{
-grid-template-columns:1fr;
-}
-
-.sidebar{
-position:static;
-}
-
-.exam-list{
-display:grid;
-grid-template-columns:repeat(2,minmax(0,1fr));
-}
-
-.branch-grid{
-grid-template-columns:repeat(2,minmax(0,1fr));
-}
-
-}
-
-@media(max-width:560px){
-
-.page{
-padding:12px;
-}
-
-.app-header{
-padding:0 12px;
-}
-
-.page-title{
+.ap-choice-arrow{
+color:var(--purple);
 font-size:20px;
 }
 
-.top-row{
-align-items:flex-start;
+.ap-inner-panel{
+display:none;
+margin-top:16px;
+}
+
+.ap-inner-panel.visible{display:block}
+
+.ap-panel{
+border:1px solid var(--border);
+background:var(--card);
+border-radius:16px;
+padding:14px;
+}
+
+.ap-panel-head{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:8px;
+margin-bottom:14px;
+}
+
+.ap-panel-title{
+font-size:14px;
+font-weight:900;
+}
+
+.ap-panel-subtitle{
+font-size:10px;
+color:var(--muted);
+margin-top:4px;
+}
+
+.ap-chip-row{
+display:flex;
+gap:8px;
+overflow-x:auto;
+padding:2px 0 8px;
+scrollbar-width:none;
+}
+
+.ap-chip-row::-webkit-scrollbar{display:none}
+
+.ap-chip{
+flex:0 0 auto;
+padding:9px 13px;
+border:1px solid var(--border);
+background:var(--card2);
+color:var(--muted);
+border-radius:999px;
+font-size:10px;
+font-weight:900;
+}
+
+.ap-chip.active{
+background:var(--purple);
+border-color:var(--purple);
+color:#fff;
+}
+
+.ap-chip-wrap{
+display:flex;
+align-items:center;
+gap:5px;
+flex:0 0 auto;
+}
+
+.ap-chip-wrap .ap-chip{
+border-radius:999px 0 0 999px;
+}
+
+.ap-chip-mini{
+height:30px;
+padding:0 7px;
+border:1px solid var(--border);
+background:var(--card2);
+color:var(--text);
+font-size:10px;
+border-radius:0;
+}
+
+.ap-chip-mini:last-child{
+border-radius:0 999px 999px 0;
+}
+
+.ap-chip-mini.delete{color:var(--danger)}
+
+.ap-actions{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+margin:10px 0 13px;
+}
+
+.ap-test-list{
+display:flex;
 flex-direction:column;
+gap:10px;
 }
 
-.exam-list{
-grid-template-columns:1fr;
+.ap-test-card{
+border:1px solid var(--border);
+background:var(--card);
+border-radius:13px;
+padding:13px;
 }
 
-.branch-grid,
-.category-grid,
-.subject-grid{
-grid-template-columns:1fr;
+.ap-test-top{
+display:flex;
+justify-content:space-between;
+gap:8px;
 }
 
-.form-grid{
-grid-template-columns:1fr;
+.ap-test-title{
+font-size:13px;
+font-weight:900;
+line-height:1.4;
 }
 
-.form-group.full{
-grid-column:auto;
+.ap-test-description{
+font-size:10px;
+color:var(--muted);
+margin-top:5px;
+line-height:1.4;
 }
 
-.mock-row,
-.series-row{
-align-items:flex-start;
+.ap-test-badges{
+display:flex;
+gap:5px;
+flex-wrap:wrap;
+margin-top:10px;
+}
+
+.ap-test-badge{
+font-size:9px;
+padding:5px 7px;
+border-radius:6px;
+background:var(--card2);
+border:1px solid var(--border);
+color:var(--muted);
+}
+
+.ap-test-badge.active{
+color:var(--success);
+}
+
+.ap-test-badge.inactive{
+color:var(--danger);
+}
+
+.ap-test-actions{
+display:flex;
+gap:7px;
+flex-wrap:wrap;
+margin-top:12px;
+}
+
+.ap-empty,
+.ap-loading{
+padding:27px 14px;
+text-align:center;
+border:1px dashed var(--border);
+border-radius:12px;
+font-size:11px;
+color:var(--muted);
+}
+
+.ap-error{
+padding:12px;
+border-radius:11px;
+background:rgba(255,85,119,.1);
+border:1px solid rgba(255,85,119,.3);
+color:var(--danger);
+font-size:11px;
+line-height:1.5;
+}
+
+.ap-form-grid{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:12px;
+}
+
+.ap-form-group{
+display:flex;
 flex-direction:column;
+gap:6px;
 }
 
-.mock-actions,
-.series-actions{
+.ap-form-group.full{grid-column:1/-1}
+
+.ap-form-label{
+font-size:10px;
+font-weight:800;
+color:var(--muted);
+}
+
+.ap-form-input,
+.ap-form-select,
+.ap-form-textarea{
 width:100%;
-justify-content:flex-start;
+padding:11px;
+border-radius:9px;
+border:1px solid var(--border);
+background:var(--card2);
+color:var(--text);
+outline:none;
+font-size:12px;
 }
 
-.section-item{
-grid-template-columns:minmax(0,1fr) 95px 32px;
+.ap-form-textarea{
+min-height:70px;
+resize:vertical;
 }
 
+.ap-form-input:focus,
+.ap-form-select:focus,
+.ap-form-textarea:focus{
+border-color:var(--purple);
 }
 
-</style>
+.ap-check-row{
+display:flex;
+gap:8px;
+align-items:center;
+margin-top:15px;
+font-size:11px;
+font-weight:800;
+}
 
-<style>
-.board-tab{width:auto!important;min-width:58px;padding:9px 14px!important;border:1px solid var(--border)!important;background:var(--card2)!important;color:var(--text)!important;border-radius:8px!important;cursor:pointer!important}
-.board-tab.active{background:var(--purple)!important;color:#fff!important;border-color:var(--purple)!important}
+.ap-check-row input{accent-color:var(--purple)}
+
+.ap-section-config{
+border-top:1px solid var(--border);
+margin-top:15px;
+padding-top:14px;
+}
+
+.ap-section-config-head{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:10px;
+}
+
+.ap-section-config-title{
+font-size:12px;
+font-weight:900;
+}
+
+.ap-section-row{
+display:grid;
+grid-template-columns:1.3fr .7fr .7fr 32px;
+gap:6px;
+margin-bottom:8px;
+}
+
+.ap-section-row input{
+width:100%;
+min-width:0;
+padding:9px;
+border:1px solid var(--border);
+background:var(--card2);
+color:var(--text);
+border-radius:8px;
+font-size:10px;
+outline:none;
+}
+
+.ap-remove-section{
+border:1px solid rgba(255,85,119,.3);
+background:rgba(255,85,119,.1);
+color:var(--danger);
+border-radius:8px;
+}
+
+.ap-modal-overlay{
+display:none;
+position:fixed;
+inset:0;
+z-index:500;
+background:rgba(0,0,0,.72);
+padding:12px;
+overflow:auto;
+align-items:flex-start;
+justify-content:center;
+}
+
+.ap-modal-overlay.open{display:flex}
+
+.ap-modal{
+width:100%;
+max-width:650px;
+background:var(--card);
+border:1px solid var(--border);
+border-radius:17px;
+overflow:hidden;
+margin:20px auto;
+}
+
+.ap-modal-head{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px;
+border-bottom:1px solid var(--border);
+}
+
+.ap-modal-title{
+font-size:15px;
+font-weight:900;
+}
+
+.ap-modal-close{
+width:32px;
+height:32px;
+border:1px solid var(--border);
+background:var(--card2);
+color:var(--text);
+border-radius:8px;
+font-size:18px;
+}
+
+.ap-modal-body{padding:15px}
+
+.ap-modal-footer{
+display:flex;
+justify-content:flex-end;
+gap:8px;
+padding:13px 15px;
+border-top:1px solid var(--border);
+}
+
+.ap-toast{
+position:fixed;
+left:50%;
+bottom:20px;
+transform:translate(-50%,20px);
+opacity:0;
+pointer-events:none;
+z-index:1000;
+background:#222231;
+color:#fff;
+padding:11px 15px;
+border-radius:10px;
+font-size:11px;
+font-weight:800;
+transition:.25s;
+max-width:calc(100% - 25px);
+text-align:center;
+}
+
+.ap-toast.show{
+opacity:1;
+transform:translate(-50%,0);
+}
+
+@media(max-width:600px){
+
+.ap-header{height:64px;padding:0 10px}
+.ap-brand{font-size:16px}
+.ap-header-sub{font-size:9px}
+.ap-page{padding:15px 10px 35px}
+.ap-page-title{font-size:20px}
+.ap-exam-grid,
+.ap-choice-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.ap-exam-card{padding:11px}
+.ap-exam-name{font-size:12px}
+.ap-selected-strip{align-items:flex-start;flex-direction:column}
+.ap-selected-actions{width:100%}
+.ap-selected-actions button{flex:1}
+.ap-form-grid{grid-template-columns:1fr}
+.ap-form-group.full{grid-column:auto}
+.ap-section-row{grid-template-columns:1.2fr .7fr .7fr 30px}
+.ap-modal{margin:10px auto}
+}
+
 </style>
 </head>
 
 <body>
 
-<header class="app-header">
+<header class="ap-header">
 
-<div class="brand">
-SSC <span>EDGE</span>
+<div class="ap-header-left">
+
+<button class="ap-back-btn" id="adminBackBtn" type="button">‹</button>
+
+<div>
+<div class="ap-brand">SSC <span>EDGE</span></div>
+<div class="ap-header-sub">Practice Management</div>
 </div>
 
-<div class="header-right">
+</div>
 
-<button class="header-btn" onclick="goHome()">
-← Dashboard
-</button>
-
-<button class="header-btn" onclick="reloadData()">
-↻ Refresh
-</button>
-
+<div class="ap-header-actions">
+<button class="ap-icon-btn" id="refreshBtn" type="button">↻</button>
+<button class="ap-primary-btn" id="addExamBtn" type="button">+ Exam</button>
 </div>
 
 </header>
 
-<main class="page">
+<main class="ap-page">
 
-<div class="top-row">
+<h1 class="ap-page-title">Practice Admin</h1>
 
+<div class="ap-page-description">
+Manage exams, branches, categories, years, subjects and mock tests.
+</div>
+
+<div class="ap-board-tabs">
+<button class="ap-board-tab active" data-board="SSC" type="button">SSC</button>
+<button class="ap-board-tab" data-board="RRB" type="button">RRB</button>
+</div>
+
+<section>
+
+<div class="ap-section-head">
 <div>
-<h1 class="page-title">Practice Admin</h1>
-<div class="page-subtitle">
-Manage exams, mock series, PYQ years, sectional tests and question sets
+<div class="ap-section-title">Exams</div>
+<div class="ap-section-note">Select an exam to manage its complete structure</div>
 </div>
 </div>
 
-<button class="primary-btn" onclick="openExamModal()">
-+ Add Exam
-</button>
-
-</div>
-
-<div class="admin-layout">
-
-<aside class="sidebar">
-
-<div class="sidebar-title">Exams</div>
-
-<div id="boardTabs" style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px;">
-<button type="button" class="small-btn board-tab active" data-board="SSC" onclick="setActiveBoard('SSC')">SSC</button>
-<button type="button" class="small-btn board-tab" data-board="RRB" onclick="setActiveBoard('RRB')">RRB</button>
-</div>
-
-<div id="examList" class="exam-list">
-<div class="loading">Loading exams...</div>
-</div>
-
-</aside>
-
-<section class="content-card">
-
-<div id="workspace">
-
-<div class="empty-state">
-
-<strong>Select an exam</strong>
-
-Select an exam from the left panel to manage its mocks and series.
-
-</div>
-
+<div class="ap-exam-grid" id="examGrid">
+<div class="ap-loading">Loading exams...</div>
 </div>
 
 </section>
 
+<section class="ap-workspace" id="workspace">
+
+<div class="ap-selected-strip">
+
+<div>
+<div class="ap-selected-label">Selected Exam</div>
+<div class="ap-selected-name" id="selectedExamName">—</div>
 </div>
+
+<div class="ap-selected-actions">
+<button class="ap-secondary-btn" id="syncStructureBtn" type="button">
+Sync Structure
+</button>
+
+<button class="ap-secondary-btn" id="changeExamBtn" type="button">
+Change
+</button>
+</div>
+
+</div>
+
+<div id="branchView">
+
+<div class="ap-section-head">
+<div>
+<div class="ap-section-title">Mock Branch</div>
+<div class="ap-section-note">New mocks and PYQ mocks are completely separate</div>
+</div>
+</div>
+
+<div class="ap-choice-grid">
+
+<button class="ap-choice-card" data-branch="NEW" type="button">
+<div>
+<div class="ap-choice-title">New Mocks</div>
+<div class="ap-choice-sub">Manage newly created mocks</div>
+</div>
+<div class="ap-choice-arrow">›</div>
+</button>
+
+<button class="ap-choice-card" data-branch="PYQ" type="button">
+<div>
+<div class="ap-choice-title">PYQ Mocks</div>
+<div class="ap-choice-sub">Manage previous year mocks</div>
+</div>
+<div class="ap-choice-arrow">›</div>
+</button>
+
+</div>
+</div>
+
+<div class="ap-inner-panel" id="categoryView">
+
+<div class="ap-section-head">
+<div>
+<div class="ap-section-title" id="branchHeading">New Mocks</div>
+<div class="ap-section-note">Select a category</div>
+</div>
+
+<button class="ap-secondary-btn" id="backToBranchesBtn" type="button">Back</button>
+</div>
+
+<div class="ap-choice-grid">
+
+<button class="ap-choice-card" data-category="FULL" type="button">
+<div>
+<div class="ap-choice-title">FULL MOCKS</div>
+<div class="ap-choice-sub">Complete exam mock tests</div>
+</div>
+<div class="ap-choice-arrow">›</div>
+</button>
+
+<button class="ap-choice-card" data-category="SECTIONAL" type="button">
+<div>
+<div class="ap-choice-title">SECTIONAL MOCKS</div>
+<div class="ap-choice-sub">Subject-wise mock tests</div>
+</div>
+<div class="ap-choice-arrow">›</div>
+</button>
+
+</div>
+</div>
+
+<div class="ap-inner-panel" id="mockManagementView">
+
+<div class="ap-panel">
+
+<div class="ap-panel-head">
+<div>
+<div class="ap-panel-title" id="managementTitle">Mock Management</div>
+<div class="ap-panel-subtitle" id="managementSubtitle"></div>
+</div>
+
+<button class="ap-secondary-btn" id="backToCategoriesBtn" type="button">Back</button>
+</div>
+
+<div id="managementChipsArea" style="display:none">
+
+<div class="ap-section-head">
+<div class="ap-section-title" id="chipsTitle">Select</div>
+</div>
+
+<div class="ap-chip-row" id="managementChips"></div>
+
+</div>
+
+<div class="ap-actions" id="managementExtraActions"></div>
+
+<div id="managementTestList" class="ap-test-list"></div>
+
+</div>
+</div>
+
+</section>
 
 </main>
 
 <!-- EXAM MODAL -->
 
-<div class="modal-backdrop" id="examModal">
+<div class="ap-modal-overlay" id="examModal">
 
-<div class="modal">
+<div class="ap-modal">
 
-<div class="modal-header">
-
-<h2 id="examModalTitle">Add Exam</h2>
-
-<button class="close-btn" onclick="closeModal('examModal')">
-×
-</button>
-
+<div class="ap-modal-head">
+<div class="ap-modal-title">Add / Edit Exam</div>
+<button class="ap-modal-close" data-close-modal="examModal" type="button">×</button>
 </div>
 
-<div class="form-grid">
+<div class="ap-modal-body">
 
-<div class="form-group full">
+<div class="ap-form-grid">
 
-<label>Exam Name</label>
-
-<input
-id="examNameInput"
-type="text"
-placeholder="Example: SSC CGL"
-/>
-
+<div class="ap-form-group">
+<label class="ap-form-label">Exam Board</label>
+<select class="ap-form-select" id="examBoardInput">
+<option value="SSC">SSC</option>
+<option value="RRB">RRB</option>
+</select>
 </div>
 
-<div class="form-group">
-
-<label>Board / Organization</label>
-
-<input
-id="examBoardInput"
-type="text"
-placeholder="Example: SSC"
-/>
-
+<div class="ap-form-group">
+<label class="ap-form-label">Exam Name</label>
+<input class="ap-form-input" id="examNameInput" placeholder="Example: CGL">
 </div>
 
-<div class="form-group">
-
-<label>Exam Code</label>
-
-<input
-id="examCodeInput"
-type="text"
-placeholder="Example: CGL"
-/>
-
-</div>
-
-<div class="form-group full">
-
-<label>Description</label>
-
-<textarea
-id="examDescriptionInput"
-placeholder="Optional exam description"
-></textarea>
-
-</div>
-
-</div>
-
-<div class="modal-footer">
-
-<button class="secondary-btn" onclick="closeModal('examModal')">
-Cancel
-</button>
-
-<button class="primary-btn" onclick="saveExam()">
-Save Exam
-</button>
-
+<div class="ap-form-group full">
+<label class="ap-form-label">Exam Stage / Subtitle</label>
+<input class="ap-form-input" id="examStageInput" placeholder="Example: Tier 1">
 </div>
 
 </div>
 
 </div>
 
-<!-- STRUCTURE MODAL -->
-
-<div class="modal-backdrop" id="structureModal">
-
-<div class="modal">
-
-<div class="modal-header">
-
-<h2 id="structureModalTitle">Add Structure</h2>
-
-<button class="close-btn" onclick="closeModal('structureModal')">
-×
-</button>
-
-</div>
-
-<div id="structureModalBody"></div>
-
-<div class="modal-footer">
-
-<button class="secondary-btn" onclick="closeModal('structureModal')">
-Cancel
-</button>
-
-<button class="primary-btn" onclick="saveStructure()">
-Save
-</button>
-
+<div class="ap-modal-footer">
+<button class="ap-secondary-btn" data-close-modal="examModal" type="button">Cancel</button>
+<button class="ap-primary-btn" id="saveExamBtn" type="button">Save Exam</button>
 </div>
 
 </div>
-
 </div>
 
 <!-- MOCK MODAL -->
 
-<div class="modal-backdrop" id="mockModal">
+<div class="ap-modal-overlay" id="mockModal">
 
-<div class="modal large">
+<div class="ap-modal">
 
-<div class="modal-header">
+<div class="ap-modal-head">
+<div class="ap-modal-title" id="mockModalTitle">Add Mock</div>
+<button class="ap-modal-close" data-close-modal="mockModal" type="button">×</button>
+</div>
 
-<h2 id="mockModalTitle">Add Mock</h2>
+<div class="ap-modal-body">
 
-<button class="close-btn" onclick="closeModal('mockModal')">
-×
-</button>
+<div class="ap-form-grid">
+
+<div class="ap-form-group full">
+<label class="ap-form-label">Mock Title</label>
+<input class="ap-form-input" id="mockTitleInput" placeholder="Example: CGL Tier 1 Mock 01">
+</div>
+
+<div class="ap-form-group full">
+<label class="ap-form-label">Description</label>
+<textarea class="ap-form-textarea" id="mockDescriptionInput"></textarea>
+</div>
+
+<div class="ap-form-group">
+<label class="ap-form-label">Duration Minutes</label>
+<input class="ap-form-input" id="mockDurationInput" type="number" min="1" value="60">
+</div>
+
+<div class="ap-form-group">
+<label class="ap-form-label">Total Questions</label>
+<input class="ap-form-input" id="mockQuestionsInput" type="number" min="1" value="25">
+</div>
+
+<div class="ap-form-group">
+<label class="ap-form-label">Status</label>
+<select class="ap-form-select" id="mockActiveInput">
+<option value="true">Active</option>
+<option value="false">Inactive</option>
+</select>
+</div>
 
 </div>
 
-<div id="mockModalBody"></div>
+<div class="ap-check-row">
+<input id="sectionalTimingInput" type="checkbox">
+<label for="sectionalTimingInput">
+Enable sectional timing
+</label>
+</div>
 
-<div class="modal-footer">
+<div class="ap-section-config">
 
-<button class="secondary-btn" onclick="closeModal('mockModal')">
-Cancel
-</button>
+<div class="ap-section-config-head">
+<div class="ap-section-config-title">Test Sections</div>
+<button class="ap-secondary-btn" id="addSectionBtn" type="button">+ Section</button>
+</div>
 
-<button class="primary-btn" onclick="saveMock()">
-Save Mock
-</button>
+<div id="sectionRows"></div>
 
 </div>
 
 </div>
 
+<div class="ap-modal-footer">
+<button class="ap-secondary-btn" data-close-modal="mockModal" type="button">Cancel</button>
+<button class="ap-primary-btn" id="saveMockBtn" type="button">Save Mock</button>
 </div>
 
-<div id="toast" class="toast"></div>
+</div>
+</div>
+
+<!-- STRUCTURE MODAL -->
+
+<div class="ap-modal-overlay" id="structureModal">
+
+<div class="ap-modal">
+
+<div class="ap-modal-head">
+<div class="ap-modal-title" id="structureModalTitle">Add Item</div>
+<button class="ap-modal-close" data-close-modal="structureModal" type="button">×</button>
+</div>
+
+<div class="ap-modal-body">
+
+<div class="ap-form-group">
+<label class="ap-form-label" id="structureInputLabel">Name</label>
+<input class="ap-form-input" id="structureNameInput" placeholder="Enter name">
+</div>
+
+</div>
+
+<div class="ap-modal-footer">
+<button class="ap-secondary-btn" data-close-modal="structureModal" type="button">Cancel</button>
+<button class="ap-primary-btn" id="saveStructureBtn" type="button">Save</button>
+</div>
+
+</div>
+</div>
+
+<div class="ap-toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-
-/* =========================================================
-   SSC EDGE PRACTICE ADMIN
-   PART 2 - DATABASE, EXAMS, BRANCHES, SERIES, YEARS
-========================================================= */
-
-/* =========================
-   SUPABASE CONFIG
-========================= */
 
 const SUPABASE_URL =
 "https://dvvyoygahzzbnpqrfhen.supabase.co";
@@ -1214,14 +1042,10 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
 
-const supabaseClient = window.supabase.createClient(
+const db = window.supabase.createClient(
 SUPABASE_URL,
 SUPABASE_KEY
 );
-
-/* =========================
-   GLOBAL STATE
-========================= */
 
 let exams = [];
 let subjects = [];
@@ -1230,7 +1054,6 @@ let tests = [];
 
 let activeBoard = "SSC";
 let selectedExam = null;
-
 let selectedBranch = null;
 let selectedCategory = null;
 let selectedSubject = null;
@@ -1238,163 +1061,38 @@ let selectedYear = null;
 let selectedFolder = null;
 
 let editingExamId = null;
-let editingFolderId = null;
 let editingMockId = null;
 
-let currentMockContext = {
-type: null,
-branch: null,
-category: null,
-folderId: null,
-subjectId: null,
-year: null
-};
+let structureMode = null;
+let structureEditId = null;
 
-/* =========================
-   INITIAL LOAD
-========================= */
+let editorFolderId = null;
+let editorType = null;
 
-document.addEventListener("DOMContentLoaded", () => {
-loadAllData();
-});
+const $ = id => document.getElementById(id);
 
-async function loadAllData(){
+function toast(message){
 
-showWorkspaceLoading();
+$("toast").textContent = message;
+$("toast").classList.add("show");
 
-try{
+clearTimeout(window.toastTimer);
 
-const [
-examResponse,
-subjectResponse,
-testResponse
-] = await Promise.all([
-  supabaseClient.from("exams").select("*").order("id",{ascending:true}),
-  supabaseClient.from("subjects").select("*").order("id",{ascending:true}),
-  supabaseClient.from("mock_tests").select("*").order("id",{ascending:true})
-]);
-
-if(examResponse.error) throw examResponse.error;
-if(subjectResponse.error) throw subjectResponse.error;
-
-exams = examResponse.data || [];
-subjects = subjectResponse.data || [];
-tests = testResponse.error ? [] : (testResponse.data || []);
-
-/* mock_folders is optional in this version */
-try{
-  const folderResponse = await supabaseClient.from("mock_folders").select("*").order("id",{ascending:true});
-  folders = folderResponse.error ? [] : (folderResponse.data || []);
-}catch(folderError){
-  folders = [];
-}
-
-renderExamList();
-
-if(selectedExam){
-
-const stillExists = exams.find(
-x => String(x.id) === String(selectedExam.id)
-);
-
-if(stillExists){
-
-selectedExam = stillExists;
-renderWorkspace();
-
-}else{
-
-selectedExam = null;
-renderEmptyWorkspace();
+window.toastTimer = setTimeout(() => {
+$("toast").classList.remove("show");
+},2600);
 
 }
 
-}else{
-
-renderEmptyWorkspace();
-
+function openModal(id){
+$(id).classList.add("open");
 }
 
-}catch(error){
-
-  console.error("LOAD ALL DATA ERROR:", error);
-
-  alert(
-    "LOAD ERROR:\n\n" +
-    (error?.message || error?.details || JSON.stringify(error))
-  );
-
-  showToast(
-    "Data load error: " + getErrorMessage(error),
-    "error"
-  );
-
-  renderExamList();
-
-  const workspace = document.getElementById("workspace");
-
-  if(workspace){
-
-    workspace.innerHTML = `
-      <div class="empty-state">
-        <strong>Unable to load data</strong>
-        <br><br>
-        ${escapeHtml(getErrorMessage(error))}
-        <br><br>
-        <button class="primary-btn" onclick="loadAllData()">
-          Retry
-        </button>
-      </div>
-    `;
-
-  }
-
+function closeModal(id){
+$(id).classList.remove("open");
 }
 
-}
-
-async function reloadData(){
-await loadAllData();
-showToast("Data refreshed","success");
-}
-
-function showWorkspaceLoading(){
-
-document.getElementById("workspace").innerHTML = `
-<div class="loading">Loading practice data...</div>
-`;
-
-}
-
-function renderEmptyWorkspace(){
-
-document.getElementById("workspace").innerHTML = `
-<div class="empty-state">
-<strong>Select an exam</strong>
-Select an exam from the left panel to manage its mocks and series.
-</div>
-`;
-
-}
-
-/* =========================
-   BASIC HELPERS
-========================= */
-
-function getErrorMessage(error){
-
-if(!error) return "Unknown error";
-
-return (
-error.message ||
-error.details ||
-error.hint ||
-JSON.stringify(error)
-);
-
-}
-
-function escapeHtml(value){
+function escapeHTML(value){
 
 return String(value ?? "")
 .replaceAll("&","&amp;")
@@ -1405,201 +1103,137 @@ return String(value ?? "")
 
 }
 
-function closeModal(id){
+function nameOfSubject(subject){
 
-document.getElementById(id)?.classList.remove("show");
-
-}
-
-function openModal(id){
-
-document.getElementById(id)?.classList.add("show");
+return subject?.name ||
+subject?.subject_name ||
+subject?.title ||
+"Subject";
 
 }
 
-function showToast(message,type="success"){
+function examName(exam){
 
-const toast = document.getElementById("toast");
-
-toast.textContent = message;
-
-toast.className = "toast show " + type;
-
-clearTimeout(window.toastTimer);
-
-window.toastTimer = setTimeout(() => {
-
-toast.className = "toast";
-
-},3000);
-
-}
-
-function goHome(){
-
-window.location.href = "home.html";
-
-}
-
-/* =========================
-   EXAM HELPERS
-========================= */
-
-function getExamBoard(exam){
-
-return String(
-exam?.board ||
-exam?.exam_board ||
-exam?.category ||
-exam?.organization ||
-"SSC"
-).toUpperCase();
-
-}
-
-function getExamName(exam){
-
-return (
-exam?.name ||
+return exam?.name ||
 exam?.exam_name ||
 exam?.title ||
-"Unnamed Exam"
-);
+"Unnamed Exam";
 
 }
 
-function getExamId(exam){
+function boardOfExam(exam){
 
-return exam?.id;
+if(exam?.board) return String(exam.board).toUpperCase();
+if(exam?.exam_board) return String(exam.exam_board).toUpperCase();
+
+const n = examName(exam).toLowerCase();
+
+if(
+n.includes("rrb") ||
+n.includes("ntpc") ||
+n.includes("group d") ||
+n.includes("group-d") ||
+n.includes("alp") ||
+n.includes("technician")
+){
+return "RRB";
+}
+
+return "SSC";
 
 }
 
-/* =========================
-   EXAM LIST
-========================= */
+function folderName(folder){
 
-function setActiveBoard(board){
-  activeBoard = String(board || "SSC").toUpperCase();
-  selectedExam = null;
-  selectedBranch = null;
-  selectedCategory = null;
-  selectedSubject = null;
-  selectedYear = null;
-  selectedFolder = null;
-
-  document.querySelectorAll(".board-tab").forEach(function(btn){
-    btn.classList.toggle("active", String(btn.dataset.board).toUpperCase() === activeBoard);
-  });
-
-  renderExamList();
-  renderWorkspace();
-}
-
-function renderExamList(){
-
-const container = document.getElementById("examList");
-
-if(!container) return;
-
-let filtered = exams.filter(exam => {
-
-return getExamBoard(exam) === activeBoard;
-
-});
-
-if(!filtered.length){
-
-container.innerHTML = `
-<div class="empty-state" style="padding:20px 10px">
-<strong>No exams found</strong>
-<button
-class="small-btn"
-onclick="openExamModal()"
->
-+ Add Exam
-</button>
-</div>
-`;
-
-return;
+return folder?.display_name ||
+folder?.name ||
+"Unnamed";
 
 }
 
-container.innerHTML = filtered.map((exam,index) => {
+function folderType(folder){
 
-const isActive =
-selectedExam &&
-String(selectedExam.id) === String(exam.id);
-
-return `
-
-<div class="exam-item ${isActive ? "active" : ""}">
-
-<div
-class="exam-main"
-onclick="selectExam('${exam.id}')"
-style="cursor:pointer"
->
-
-<div class="exam-name">
-${escapeHtml(getExamName(exam))}
-</div>
-
-</div>
-
-<div class="exam-actions">
-
-<button
-class="icon-btn"
-title="Move Up"
-onclick="event.stopPropagation();moveExam('${exam.id}',-1)"
->
-↑
-</button>
-
-<button
-class="icon-btn"
-title="Move Down"
-onclick="event.stopPropagation();moveExam('${exam.id}',1)"
->
-↓
-</button>
-
-<button
-class="icon-btn"
-title="Edit Exam"
-onclick="event.stopPropagation();openExamModal('${exam.id}')"
->
-✎
-</button>
-
-<button
-class="icon-btn"
-title="Delete Exam"
-onclick="event.stopPropagation();deleteExam('${exam.id}')"
->
-×
-</button>
-
-</div>
-
-</div>
-
-`;
-
-}).join("");
+return String(folder?.folder_type || "")
+.toUpperCase()
+.replaceAll("-","")
+.replaceAll(" ","");
 
 }
 
-async function selectExam(id){
+function testType(test){
 
-const exam = exams.find(
-x => String(x.id) === String(id)
-);
+return String(test?.test_type || "")
+.toUpperCase()
+.replaceAll("-","")
+.replaceAll(" ","");
 
-if(!exam) return;
+}
 
-selectedExam = exam;
+function isFull(test){
+
+return [
+"FULL",
+"FULLMOCK",
+"FULLMOCKS"
+].includes(testType(test));
+
+}
+
+function isSectional(test){
+
+return [
+"SECTIONAL",
+"SUBJECTWISE",
+"CHAPTERWISE"
+].includes(testType(test));
+
+}
+
+function getFolder(id){
+
+return folders.find(x => String(x.id) === String(id));
+
+}
+
+function getTestFolder(test){
+
+return getFolder(test.folder_id);
+
+}
+
+function isFolder(folder,type){
+
+return folderType(folder) === type;
+
+}
+
+function folderMatches(folder,branch,category){
+
+if(!folder) return false;
+
+const fType = folderType(folder);
+
+if(category === "FULL" && fType !== "FULL") return false;
+if(category === "SECTIONAL" && fType !== "SECTIONAL") return false;
+
+const parent = getFolder(folder.parent_id);
+
+if(!parent) return false;
+
+if(branch === "PYQ"){
+return folderType(parent) === "PYQ";
+}
+
+return folderType(parent) === "NEW";
+
+}
+
+function resetViews(){
+
+$("branchView").style.display = "block";
+
+$("categoryView").classList.remove("visible");
+$("mockManagementView").classList.remove("visible");
 
 selectedBranch = null;
 selectedCategory = null;
@@ -1607,532 +1241,255 @@ selectedSubject = null;
 selectedYear = null;
 selectedFolder = null;
 
-renderExamList();
-renderWorkspace();
-
 }
 
-function getNextSortOrder(list){
+async function loadAllData(){
 
-if(!list.length) return 0;
-
-return Math.max(
-...list.map(x => Number(x.sort_order || 0))
-) + 1;
-
-}
-
-/* =========================
-   EXAM MODAL
-========================= */
-
-function openExamModal(id=null){
-
-editingExamId = id || null;
-
-const exam = id
-? exams.find(x => String(x.id) === String(id))
-: null;
-
-document.getElementById("examModalTitle").textContent =
-exam ? "Edit Exam" : "Add Exam";
-
-document.getElementById("examNameInput").value =
-exam ? getExamName(exam) : "";
-
-document.getElementById("examBoardInput").value =
-exam
-? (
-exam.board ||
-exam.exam_board ||
-exam.organization ||
-"SSC"
-)
-: activeBoard;
-
-document.getElementById("examCodeInput").value =
-exam
-? (
-exam.code ||
-exam.exam_code ||
-""
-)
-: "";
-
-document.getElementById("examDescriptionInput").value =
-exam
-? (
-exam.description ||
-""
-)
-: "";
-
-openModal("examModal");
-
-}
-
-async function saveExam(){
-
-const name =
-document.getElementById("examNameInput").value.trim();
-
-const board =
-document.getElementById("examBoardInput").value.trim() || "SSC";
-
-const code =
-document.getElementById("examCodeInput").value.trim();
-
-const description =
-document.getElementById("examDescriptionInput").value.trim();
-
-if(!name){
-
-showToast("Exam name required","error");
-return;
-
-}
+$("examGrid").innerHTML =
+`<div class="ap-loading">Loading exams...</div>`;
 
 try{
 
-if(editingExamId){
+const [
+examRes,
+subjectRes,
+folderRes,
+testRes
+] = await Promise.all([
 
-const {error} = await supabaseClient
-.from("exams")
-.update({
+db.from("exams")
+.select("*")
+.order("sort_order",{ascending:true})
+.order("id",{ascending:true}),
 
-name:name,
-board:board,
-code:code,
-description:description
+db.from("subjects")
+.select("*")
+.order("id",{ascending:true}),
 
-})
-.eq("id",editingExamId);
+db.from("mock_folders")
+.select("*")
+.order("sort_order",{ascending:true})
+.order("id",{ascending:true}),
 
-if(error) throw error;
-
-showToast("Exam updated","success");
-
-}else{
-
-const boardExams = exams.filter(
-x => getExamBoard(x) === board.toUpperCase()
-);
-
-const {error} = await supabaseClient
-.from("exams")
-.insert({
-
-name:name,
-board:board,
-code:code,
-description:description
-
-});
-
-if(error) throw error;
-
-showToast("Exam created","success");
-
-}
-
-closeModal("examModal");
-
-editingExamId = null;
-
-await loadAllData();
-
-}catch(error){
-
-console.error(error);
-
-showToast(
-"Exam save failed: " + getErrorMessage(error),
-"error"
-);
-
-}
-
-}
-
-async function deleteExam(id){
-
-const exam = exams.find(
-x => String(x.id) === String(id)
-);
-
-if(!exam) return;
-
-const ok = confirm(
-`Delete "${getExamName(exam)}"?\n\nAll related mocks may also become unavailable.`
-);
-
-if(!ok) return;
-
-try{
-
-const {error} = await supabaseClient
-.from("exams")
-.delete()
-.eq("id",id);
-
-if(error) throw error;
-
-if(selectedExam && String(selectedExam.id) === String(id)){
-selectedExam = null;
-}
-
-showToast("Exam deleted","success");
-
-await loadAllData();
-
-}catch(error){
-
-console.error(error);
-
-showToast(
-"Exam delete failed: " + getErrorMessage(error),
-"error"
-);
-
-}
-
-}
-
-async function moveExam(id,direction){
-
-const boardExams = exams
-.filter(x => getExamBoard(x) === activeBoard)
-.sort((a,b) =>
-Number(a.sort_order || 0) - Number(b.sort_order || 0)
-);
-
-const index = boardExams.findIndex(
-x => String(x.id) === String(id)
-);
-
-const targetIndex = index + direction;
-
-if(index < 0 || targetIndex < 0 || targetIndex >= boardExams.length){
-return;
-}
-
-const current = boardExams[index];
-const target = boardExams[targetIndex];
-
-try{
-
-await Promise.all([
-
-supabaseClient
-.from("exams")
-.update({sort_order:Number(target.sort_order || targetIndex)})
-.eq("id",current.id),
-
-supabaseClient
-.from("exams")
-.update({sort_order:Number(current.sort_order || index)})
-.eq("id",target.id)
+db.from("mock_tests")
+.select("*")
+.order("id",{ascending:false})
 
 ]);
 
-await loadAllData();
+if(examRes.error) throw examRes.error;
+if(subjectRes.error) throw subjectRes.error;
+if(folderRes.error) throw folderRes.error;
+if(testRes.error) throw testRes.error;
+
+exams = examRes.data || [];
+subjects = subjectRes.data || [];
+folders = folderRes.data || [];
+tests = testRes.data || [];
+
+renderExams();
+
+if(selectedExam){
+
+const updated = exams.find(
+x => String(x.id) === String(selectedExam.id)
+);
+
+if(updated){
+selectedExam = updated;
+$("selectedExamName").textContent = examName(updated);
+}
+
+}
 
 }catch(error){
 
-showToast(
-"Exam reorder failed: " + getErrorMessage(error),
-"error"
+console.error(error);
+
+$("examGrid").innerHTML =
+`<div class="ap-error">
+Unable to load data.<br>
+${escapeHTML(error.message)}
+</div>`;
+
+}
+
+}
+
+function renderExams(){
+
+const list = exams.filter(
+x => boardOfExam(x) === activeBoard && x.is_active !== false
 );
 
-}
+if(!list.length){
 
-}
+$("examGrid").innerHTML =
+`<div class="ap-empty">No exams found for ${activeBoard}.</div>`;
 
-/* =========================
-   WORKSPACE ROOT
-========================= */
-
-function renderWorkspace(){
-
-if(!selectedExam){
-
-renderEmptyWorkspace();
 return;
 
 }
 
-if(selectedBranch){
+$("examGrid").innerHTML = list.map((exam,index) => {
 
-renderBranchWorkspace();
-return;
+const count = tests.filter(
+t => String(t.exam_id) === String(exam.id)
+).length;
 
-}
+const position = exams
+.filter(x => boardOfExam(x) === activeBoard && x.is_active !== false)
+.findIndex(x => String(x.id) === String(exam.id));
 
-renderExamHome();
+return `
+<div class="ap-exam-card ${
+selectedExam &&
+String(selectedExam.id) === String(exam.id)
+? "selected" : ""
+}">
 
-}
+<div class="ap-exam-main">
 
-function renderExamHome(){
+<div
+class="ap-exam-select"
+data-select-exam="${escapeHTML(exam.id)}"
+style="flex:1;cursor:pointer">
 
-const examName = getExamName(selectedExam);
+<div class="ap-exam-name">${escapeHTML(examName(exam))}</div>
 
-const examTests = tests.filter(
-x => String(x.exam_id) === String(selectedExam.id)
-);
-
-const pyqCount = examTests.filter(test => {
-
-const folder = getTestFolder(test);
-
-return isPyqFolder(folder);
-
-}).length;
-
-const newCount = examTests.filter(test => {
-
-const folder = getTestFolder(test);
-
-return !isPyqFolder(folder) && !isCustomFolder(folder);
-
-}).length;
-
-const customCount = examTests.filter(test => {
-
-const folder = getTestFolder(test);
-
-return isCustomFolder(folder);
-
-}).length;
-
-document.getElementById("workspace").innerHTML = `
-
-<div class="exam-topbar">
-
-<div>
-
-<div class="selected-exam-title">
-${escapeHtml(examName)}
-<small>
-Manage all mock branches and custom series
-</small>
+<div class="ap-exam-meta">
+${escapeHTML(exam.stage || "Exam")} • ${count} mock${count === 1 ? "" : "s"}
 </div>
 
 </div>
 
-<div class="exam-tools">
+<div class="ap-exam-arrow"
+data-select-exam="${escapeHTML(exam.id)}">›</div>
+
+</div>
+
+<div class="ap-exam-actions">
 
 <button
-class="secondary-btn"
-onclick="openExamModal('${selectedExam.id}')"
->
-Edit Exam
-</button>
+class="ap-small-btn edit"
+data-edit-exam="${escapeHTML(exam.id)}"
+type="button">Edit</button>
 
 <button
-class="danger-btn"
-onclick="deleteExam('${selectedExam.id}')"
->
-Delete Exam
-</button>
-
-</div>
-
-</div>
-
-<div class="notice info">
-Choose a branch. New Mocks and PYQ Mocks are fixed branches.
-Custom series will remain separately visible at the same level.
-</div>
-
-<div class="branch-grid">
-
-<div
-class="branch-card"
-onclick="openBranch('NEW')"
->
-
-<div>
-<div class="branch-icon">🆕</div>
-<h3>New Mocks</h3>
-<p>
-${newCount} new mock(s). Includes full and sectional mocks.
-</p>
-</div>
-
-</div>
-
-<div
-class="branch-card"
-onclick="openBranch('PYQ')"
->
-
-<div>
-<div class="branch-icon">📚</div>
-<h3>PYQ Mocks</h3>
-<p>
-${pyqCount} PYQ mock(s). Manage years and subject-wise sets.
-</p>
-</div>
-
-</div>
-
-<div
-class="branch-card"
-onclick="openCustomSeriesRoot()"
->
-
-<div>
-<div class="branch-icon">📦</div>
-<h3>Custom Series</h3>
-<p>
-${customCount} mock(s) inside custom series.
-</p>
-</div>
-
-</div>
-
-<div
-class="branch-card add-card"
-onclick="openStructureModal('CUSTOM_FOLDER')"
->
-
-<div>
-<div class="branch-icon">＋</div>
-<h3>Add Custom Series</h3>
-<p>
-Create a separate series at root level.
-</p>
-</div>
-
-</div>
-
-</div>
-
-<div style="margin-top:18px">
-
-<div class="section-heading">
-
-<div>
-<h2>Quick Management</h2>
-<p>Directly manage all mocks for this exam.</p>
-</div>
+class="ap-small-btn"
+data-up-exam="${escapeHTML(exam.id)}"
+type="button"
+${position <= 0 ? "disabled" : ""}>↑</button>
 
 <button
-class="secondary-btn"
-onclick="openAllMocksView()"
->
-View All Mocks
-</button>
+class="ap-small-btn"
+data-down-exam="${escapeHTML(exam.id)}"
+type="button"
+${position >= list.length - 1 ? "disabled" : ""}>↓</button>
+
+<button
+class="ap-small-btn delete"
+data-delete-exam="${escapeHTML(exam.id)}"
+type="button">Delete</button>
 
 </div>
 
 </div>
-
 `;
+
+}).join("");
+
+document.querySelectorAll("[data-select-exam]").forEach(btn => {
+
+btn.onclick = () => {
+
+const exam = exams.find(
+x => String(x.id) === String(btn.dataset.selectExam)
+);
+
+if(exam) selectExam(exam);
+
+};
+
+});
+
+document.querySelectorAll("[data-edit-exam]").forEach(btn => {
+
+btn.onclick = event => {
+
+event.stopPropagation();
+
+const exam = exams.find(
+x => String(x.id) === String(btn.dataset.editExam)
+);
+
+if(exam) openExamModal(exam);
+
+};
+
+});
+
+document.querySelectorAll("[data-delete-exam]").forEach(btn => {
+
+btn.onclick = event => {
+
+event.stopPropagation();
+
+const exam = exams.find(
+x => String(x.id) === String(btn.dataset.deleteExam)
+);
+
+if(exam) deleteExam(exam);
+
+};
+
+});
+
+document.querySelectorAll("[data-up-exam]").forEach(btn => {
+
+btn.onclick = () => reorderExam(btn.dataset.upExam,-1);
+
+});
+
+document.querySelectorAll("[data-down-exam]").forEach(btn => {
+
+btn.onclick = () => reorderExam(btn.dataset.downExam,1);
+
+});
+
+}
+
+function selectExam(exam){
+
+selectedExam = exam;
+
+$("selectedExamName").textContent = examName(exam);
+
+$("workspace").classList.add("visible");
+
+resetViews();
+
+renderExams();
+
+window.scrollTo({
+top:$("workspace").offsetTop - 75,
+behavior:"smooth"
+});
 
 }
 
 function openBranch(branch){
 
+if(!selectedExam) return;
+
 selectedBranch = branch;
-selectedCategory = null;
-selectedSubject = null;
-selectedYear = null;
-selectedFolder = null;
 
-renderWorkspace();
+$("branchView").style.display = "none";
+$("categoryView").classList.add("visible");
+$("mockManagementView").classList.remove("visible");
 
-}
-
-function openCustomSeriesRoot(){
-
-selectedBranch = "CUSTOM";
-selectedCategory = null;
-selectedSubject = null;
-selectedYear = null;
-selectedFolder = null;
-
-renderWorkspace();
-
-}
-
-/* =========================
-   BRANCH WORKSPACE
-========================= */
-
-function renderBranchWorkspace(){
-
-if(selectedBranch === "CUSTOM"){
-
-renderCustomSeriesRoot();
-return;
-
-}
-
-document.getElementById("workspace").innerHTML = `
-
-<div class="branch-toolbar">
-
-<div class="breadcrumb">
-
-<button
-class="back-btn"
-onclick="goBackToExamHome()"
->
-← Back
-</button>
-
-&nbsp; / &nbsp;
-
-<b>${selectedBranch === "PYQ" ? "PYQ Mocks" : "New Mocks"}</b>
-
-</div>
-
-</div>
-
-<div class="category-grid">
-
-<div
-class="category-card"
-onclick="openCategory('FULL')"
->
-
-<h3>Full Mocks</h3>
-
-<p>
-Manage full-length mocks, years and complete tests.
-</p>
-
-</div>
-
-<div
-class="category-card"
-onclick="openCategory('SECTIONAL')"
->
-
-<h3>Sectional Mocks</h3>
-
-<p>
-Manage subject-wise and sectional mocks.
-</p>
-
-</div>
-
-</div>
-
-`;
-
-}
-
-function goBackToExamHome(){
-
-selectedBranch = null;
-selectedCategory = null;
-selectedSubject = null;
-selectedYear = null;
-selectedFolder = null;
-
-renderWorkspace();
+$("branchHeading").textContent =
+branch === "PYQ" ? "PYQ Mocks" : "New Mocks";
 
 }
 
@@ -2143,1462 +1500,1136 @@ selectedSubject = null;
 selectedYear = null;
 selectedFolder = null;
 
-renderWorkspace();
-
-}
-
-/* =========================
-   FOLDER HELPERS
-========================= */
-
-function getTestFolder(test){
-
-const folderId =
-test?.folder_id ||
-test?.mock_folder_id ||
-null;
-
-if(!folderId) return null;
-
-return folders.find(
-x => String(x.id) === String(folderId)
-) || null;
-
-}
-
-function getFolderName(folder){
-
-return (
-folder?.display_name ||
-folder?.name ||
-"Unnamed Series"
-);
-
-}
-
-function getFolderType(folder){
-
-return String(
-folder?.folder_type ||
-folder?.type ||
-""
-).toUpperCase();
-
-}
-
-function isPyqFolder(folder){
-
-if(!folder) return false;
-
-const type = getFolderType(folder);
-
-/* Only year folders should appear as PYQ year clips.
-   The main PYQ Mocks folder is not a year. */
-
-return (
-type === "PYQ_YEAR" ||
-type === "YEAR" ||
-type === "PYQ-YEAR" ||
-type === "PYQYEAR"
-);
-
-}
-
-function isFixedNewFolder(folder){
-
-if(!folder) return false;
-
-const type = getFolderType(folder);
-const name = getFolderName(folder).toUpperCase();
-
-return (
-type === "NEW" ||
-type === "NEW_MOCK" ||
-name === "NEW MOCKS" ||
-name === "NEW MOCK"
-);
-
-}
-
-function isCustomFolder(folder){
-
-if(!folder) return false;
-
-if(isPyqFolder(folder)) return false;
-if(isFixedNewFolder(folder)) return false;
-
-const type = getFolderType(folder);
-
-return (
-type === "SERIES" ||
-type === "CUSTOM" ||
-type === "CUSTOM_SERIES" ||
-type === "DRILL" ||
-type === "PRACTICE"
-);
-
-}
-
-function getExamFolders(){
-
-if(!selectedExam) return [];
-
-return folders
-.filter(x =>
-String(x.exam_id) === String(selectedExam.id)
-)
-.sort((a,b) =>
-Number(a.sort_order || 0) - Number(b.sort_order || 0)
-);
-
-}
-
-function getBranchTests(branch){
-
-if(!selectedExam) return [];
-
-return tests.filter(test => {
-
-if(String(test.exam_id) !== String(selectedExam.id)){
-return false;
-}
-
-const folder = getTestFolder(test);
-
-if(branch === "PYQ"){
-
-return isPyqFolder(folder) ||
-String(test.access_type || "").toUpperCase() === "PYQ";
-
-}
-
-if(branch === "NEW"){
-
-return !isPyqFolder(folder) &&
-!isCustomFolder(folder) &&
-String(test.access_type || "").toUpperCase() !== "PYQ";
-
-}
-
-if(branch === "CUSTOM"){
-
-return isCustomFolder(folder);
-
-}
-
-return false;
-
-});
-
-}
-
-function getCategoryTests(branch,category){
-
-return getBranchTests(branch).filter(test => {
-
-const type = String(
-test.test_type ||
-test.mock_type ||
-""
-).toUpperCase();
+$("categoryView").classList.remove("visible");
+$("mockManagementView").classList.add("visible");
 
 if(category === "FULL"){
 
-return (
-type === "FULL" ||
-type === "FULL_MOCK" ||
-type === "FULL_MOCKS" ||
-!type
-);
-
-}
-
-if(category === "SECTIONAL"){
-
-return (
-type === "SECTIONAL" ||
-type === "SUBJECT_WISE" ||
-type === "CHAPTER_WISE"
-);
-
-}
-
-return true;
-
-});
-
-function getFolderTests(folderId){
-
-return tests.filter(test => {
-
-return (
-String(test.exam_id) === String(selectedExam.id) &&
-String(
-test.folder_id ||
-test.mock_folder_id ||
-""
-) === String(folderId)
-);
-
-});
-
-}
-
-/* =========================
-   CUSTOM SERIES ROOT
-========================= */
-
-function renderCustomSeriesRoot(){
-
-const customFolders = getExamFolders()
-.filter(folder => isCustomFolder(folder));
-
-document.getElementById("workspace").innerHTML = `
-
-<div class="branch-toolbar">
-
-<div class="breadcrumb">
-
-<button
-class="back-btn"
-onclick="goBackToExamHome()"
->
-← Back
-</button>
-
-&nbsp; / &nbsp;
-
-<b>Custom Series</b>
-
-</div>
-
-<button
-class="primary-btn"
-onclick="openStructureModal('CUSTOM_FOLDER')"
->
-+ Add Series
-</button>
-
-</div>
-
-<div class="notice info">
-Custom series are independent root-level folders. They do not appear inside New Mocks or PYQ Mocks.
-</div>
-
-<div class="series-list">
-
-${
-customFolders.length
-? customFolders.map((folder,index) => renderSeriesRow(folder,index)).join("")
-: `
-<div class="empty-state">
-<strong>No custom series</strong>
-Create your first custom series using the button above.
-</div>
-`
-}
-
-</div>
-
-`;
-
-}
-
-function renderSeriesRow(folder,index){
-
-const folderTests = getFolderTests(folder.id);
-
-const fullCount = folderTests.filter(test =>
-isFullTest(test)
-).length;
-
-const sectionalCount = folderTests.filter(test =>
-isSectionalTest(test)
-).length;
-
-return `
-
-<div class="series-row">
-
-<div class="series-info">
-
-<div class="series-name">
-${escapeHtml(getFolderName(folder))}
-</div>
-
-<div class="series-meta">
-${fullCount} Full • ${sectionalCount} Sectional • ${folderTests.length} Total
-</div>
-
-</div>
-
-<div class="series-actions">
-
-<button
-class="small-btn"
-onclick="moveFolder('${folder.id}',-1)"
->
-↑
-</button>
-
-<button
-class="small-btn"
-onclick="moveFolder('${folder.id}',1)"
->
-↓
-</button>
-
-<button
-class="small-btn"
-onclick="openCustomFolder('${folder.id}')"
->
-Open
-</button>
-
-<button
-class="small-btn"
-onclick="openStructureModal('EDIT_FOLDER','${folder.id}')"
->
-Edit
-</button>
-
-<button
-class="danger-btn"
-onclick="deleteFolder('${folder.id}')"
->
-Delete
-</button>
-
-</div>
-
-</div>
-
-`;
-
-}
-
-function openCustomFolder(folderId){
-
-selectedFolder = folders.find(
-x => String(x.id) === String(folderId)
-);
-
-selectedBranch = "CUSTOM";
-selectedCategory = null;
-selectedSubject = null;
-selectedYear = null;
-
-renderCustomFolderWorkspace();
-
-}
-
-function renderCustomFolderWorkspace(){
-
-if(!selectedFolder){
-
-renderCustomSeriesRoot();
-return;
-
-}
-
-const folderTests = getFolderTests(selectedFolder.id);
-
-document.getElementById("workspace").innerHTML = `
-
-<div class="branch-toolbar">
-
-<div class="breadcrumb">
-
-<button
-class="back-btn"
-onclick="openCustomSeriesRoot()"
->
-← Series
-</button>
-
-&nbsp; / &nbsp;
-
-<b>${escapeHtml(getFolderName(selectedFolder))}</b>
-
-</div>
-
-<div class="exam-tools">
-
-<button
-class="secondary-btn"
-onclick="openMockEditor('FULL')"
->
-+ Full Mock
-</button>
-
-<button
-class="secondary-btn"
-onclick="openMockEditor('SECTIONAL')"
->
-+ Sectional Mock
-</button>
-
-</div>
-
-</div>
-
-<div class="category-grid">
-
-<div
-class="category-card"
-onclick="renderCustomFolderTests('FULL')"
->
-
-<h3>Full Mocks</h3>
-
-<p>
-${
-folderTests.filter(test => isFullTest(test)).length
-} mock(s)
-</p>
-
-</div>
-
-<div
-class="category-card"
-onclick="renderCustomFolderTests('SECTIONAL')"
->
-
-<h3>Sectional Mocks</h3>
-
-<p>
-${
-folderTests.filter(test => isSectionalTest(test)).length
-} mock(s)
-</p>
-
-</div>
-
-</div>
-
-`;
-
-}
-
-function renderCustomFolderTests(category){
-
-const list = getFolderTests(selectedFolder.id)
-.filter(test => {
-
-if(category === "FULL") return isFullTest(test);
-return isSectionalTest(test);
-
-});
-
-document.getElementById("workspace").innerHTML = `
-
-<div class="branch-toolbar">
-
-<div class="breadcrumb">
-
-<button
-class="back-btn"
-onclick="renderCustomFolderWorkspace()"
->
-← Series
-</button>
-
-&nbsp; / &nbsp;
-
-<b>${escapeHtml(getFolderName(selectedFolder))}</b>
-&nbsp; / &nbsp;
-<b>${category}</b>
-
-</div>
-
-<button
-class="primary-btn"
-onclick="openMockEditor(category)"
->
-+ Add Mock
-</button>
-
-</div>
-
-${renderMockList(list)}
-
-`;
-
-}
-
-/* =========================
-   FULL MANAGEMENT
-========================= */
-
-function renderFullManagement(){
-
-if(selectedBranch === "CUSTOM" && selectedFolder){
-
-renderCustomFolderTests("FULL");
-return;
-
-}
-
-const list = getCategoryTests(
-selectedBranch,
-"FULL"
-);
-
-document.getElementById("workspace").innerHTML = `
-
-<div class="branch-toolbar">
-
-<div class="breadcrumb">
-
-<button
-class="back-btn"
-onclick="openBranch('${selectedBranch}')"
->
-← Back
-</button>
-
-&nbsp; / &nbsp;
-
-<b>${selectedBranch === "PYQ" ? "PYQ" : "New"} Full Mocks</b>
-
-</div>
-
-<div class="exam-tools">
-
-<button
-class="secondary-btn"
-onclick="openMockEditor('FULL')"
->
-+ Add Full Mock
-</button>
-
-${
+$("managementTitle").textContent =
 selectedBranch === "PYQ"
-? `
-<button
-class="secondary-btn"
-onclick="openStructureModal('PYQ_YEAR')"
->
-+ Add Year
-</button>
-`
-: ""
-}
-
-</div>
-
-</div>
-
-${
-selectedBranch === "PYQ"
-? renderPyqYearPanel()
-: ""
-}
-
-${renderMockList(list)}
-
-`;
-
-}
-
-function renderPyqYearPanel(){
-
-const yearFolders = getExamFolders()
-.filter(folder => isPyqFolder(folder));
-
-if(!yearFolders.length){
-
-return `
-<div class="notice warning">
-No PYQ years created yet. Click "+ Add Year" to create one.
-</div>
-`;
-
-}
-
-return `
-
-<div class="section-heading">
-
-<div>
-<h2>PYQ Years</h2>
-<p>Open a year to manage its full mocks.</p>
-</div>
-
-</div>
-
-<div class="year-grid">
-
-${
-yearFolders.map(folder => `
-
-<button
-class="year-chip"
-onclick="openPyqYear('${folder.id}')"
->
-${escapeHtml(getFolderName(folder))}
-</button>
-
-`).join("")
-}
-
-<button
-class="year-chip add-year"
-onclick="openStructureModal('PYQ_YEAR')"
->
-+ Add Year
-</button>
-
-</div>
-
-`;
-
-}
-
-function openPyqYear(folderId){
-
-selectedFolder = folders.find(
-x => String(x.id) === String(folderId)
-);
-
-selectedYear = getFolderName(selectedFolder);
-
-const list = getFolderTests(folderId)
-.filter(test => isFullTest(test));
-
-document.getElementById("workspace").innerHTML = `
-
-<div class="branch-toolbar">
-
-<div class="breadcrumb">
-
-<button
-class="back-btn"
-onclick="renderFullManagement()"
->
-← PYQ Full
-</button>
-
-&nbsp; / &nbsp;
-
-<b>${escapeHtml(selectedYear)}</b>
-
-</div>
-
-<button
-class="primary-btn"
-onclick="openMockEditor('FULL')"
->
-+ Add Mock
-</button>
-
-</div>
-
-${renderMockList(list)}
-
-`;
-
-}
-
-/* =========================
-   SECTIONAL MANAGEMENT
-========================= */
-
-function renderSectionalManagement(){
-
-if(selectedBranch === "CUSTOM" && selectedFolder){
-
-renderCustomFolderTests("SECTIONAL");
-return;
-
-}
-
-const list = getCategoryTests(
-selectedBranch,
-"SECTIONAL"
-);
-
-const subjectList = subjects.filter(subject => {
-
-return (
-String(subject.exam_id || "") === String(selectedExam.id) ||
-!subject.exam_id
-);
-
-});
-
-document.getElementById("workspace").innerHTML = `
-
-<div class="branch-toolbar">
-
-<div class="breadcrumb">
-
-<button
-class="back-btn"
-onclick="openBranch('${selectedBranch}')"
->
-← Back
-</button>
-
-&nbsp; / &nbsp;
-
-<b>${selectedBranch === "PYQ" ? "PYQ" : "New"} Sectional Mocks</b>
-
-</div>
-
-<button
-class="primary-btn"
-onclick="openMockEditor('SECTIONAL')"
->
-+ Add Sectional Mock
-</button>
-
-</div>
-
-<div class="notice info">
-You can manage general sectional mocks or open a specific subject.
-</div>
-
-<div class="subject-grid">
-
-${
-subjectList.length
-? subjectList.map(subject => {
-
-const count = list.filter(test =>
-String(test.subject_id || "") === String(subject.id)
-).length;
-
-return `
-
-<div
-class="subject-card"
-onclick="openSubject('${subject.id}')"
->
-
-<h3>${escapeHtml(
-subject.name ||
-subject.title ||
-subject.subject_name ||
-"Subject"
-)}</h3>
-
-<p>${count} sectional mock(s)</p>
-
-</div>
-
-`;
-
-}).join("")
-: `
-<div class="empty-state">
-<strong>No subjects found</strong>
-Add subjects from your subject management.
-</div>
-`
-}
-
-</div>
-
-<div style="margin-top:18px">
-
-<div class="section-heading">
-
-<div>
-<h2>All Sectional Mocks</h2>
-<p>Includes subject-wise mock sets.</p>
-</div>
-
-</div>
-
-${renderMockList(list)}
-
-</div>
-
-`;
-
-}
-
-function openSubject(subjectId){
-
-selectedSubject = subjects.find(
-x => String(x.id) === String(subjectId)
-);
-
-if(!selectedSubject) return;
-
-const list = getCategoryTests(
-selectedBranch,
-"SECTIONAL"
-).filter(test =>
-String(test.subject_id || "") === String(subjectId)
-);
-
-document.getElementById("workspace").innerHTML = `
-
-<div class="branch-toolbar">
-
-<div class="breadcrumb">
-
-<button
-class="back-btn"
-onclick="renderSectionalManagement()"
->
-← Sectional
-</button>
-
-&nbsp; / &nbsp;
-
-<b>${escapeHtml(
-selectedSubject.name ||
-selectedSubject.title ||
-selectedSubject.subject_name ||
-"Subject"
-)}</b>
-
-</div>
-
-<button
-class="primary-btn"
-onclick="openMockEditor('SECTIONAL')"
->
-+ Add Subject Mock
-</button>
-
-</div>
-
-${renderMockList(list)}
-
-`;
-
-}
-
-/* =========================
-   OPEN CATEGORY ROUTING
-========================= */
-
-function renderCategoryWorkspace(){
-
-if(selectedCategory === "FULL"){
+? "PYQ Full Mocks"
+: "New Full Mocks";
+
+$("managementSubtitle").textContent =
+"Manage full mock folders and tests";
 
 renderFullManagement();
-return;
-
-}
-
-if(selectedCategory === "SECTIONAL"){
-
-renderSectionalManagement();
-return;
-
-}
-
-renderBranchWorkspace();
-
-}
-
-/* Override central renderer routing */
-
-const originalRenderWorkspace = renderWorkspace;
-
-renderWorkspace = function(){
-
-if(!selectedExam){
-
-renderEmptyWorkspace();
-return;
-
-}
-
-if(selectedBranch === "CUSTOM"){
-
-if(selectedFolder){
-
-renderCustomFolderWorkspace();
 
 }else{
 
-renderCustomSeriesRoot();
+$("managementTitle").textContent =
+selectedBranch === "PYQ"
+? "PYQ Sectional Mocks"
+: "New Sectional Mocks";
+
+$("managementSubtitle").textContent =
+"Select a subject clip to manage sectional mocks";
+
+renderSectionalManagement();
 
 }
 
-return;
+}
+
+function directChild(parentId,type){
+
+return folders.find(folder =>
+String(folder.parent_id) === String(parentId) &&
+folderType(folder) === type &&
+folder.is_active !== false
+);
 
 }
 
-if(selectedBranch && selectedCategory){
+function childrenOf(parentId,type=null){
 
-renderCategoryWorkspace();
-return;
-
-}
-
-if(selectedBranch){
-
-renderBranchWorkspace();
-return;
+return folders.filter(folder =>
+String(folder.parent_id) === String(parentId) &&
+folder.is_active !== false &&
+(type ? folderType(folder) === type : true)
+);
 
 }
 
-renderExamHome();
+async function ensureFolder({
+examId,
+parentId=null,
+name,
+displayName=name,
+type,
+subjectId=null,
+sortOrder=0
+}){
 
+let found = folders.find(folder =>
+
+String(folder.exam_id) === String(examId) &&
+String(folder.parent_id || "") === String(parentId || "") &&
+folderType(folder) === type &&
+String(folder.name || "").toLowerCase() === String(name).toLowerCase() &&
+folder.is_active !== false
+
+);
+
+if(found) return found;
+
+const payload = {
+exam_id:examId,
+parent_id:parentId,
+name,
+display_name:displayName,
+folder_type:type,
+sort_order:sortOrder,
+is_active:true
 };
 
-/* =========================
-   MOCK TYPE HELPERS
-========================= */
-
-function isFullTest(test){
-
-const type = String(
-test?.test_type ||
-test?.mock_type ||
-""
-).toUpperCase();
-
-return (
-type === "FULL" ||
-type === "FULL_MOCK" ||
-type === "FULL_MOCKS" ||
-type === ""
-);
-
+if(subjectId !== null && subjectId !== undefined){
+payload.subject_id = subjectId;
 }
 
-function isSectionalTest(test){
-
-const type = String(
-test?.test_type ||
-test?.mock_type ||
-""
-).toUpperCase();
-
-return (
-type === "SECTIONAL" ||
-type === "SUBJECT_WISE" ||
-type === "CHAPTER_WISE"
-);
-
-}
-
-/* =========================
-   MOCK LIST
-========================= */
-
-function renderMockList(list){
-
-if(!list.length){
-
-return `
-<div class="empty-state">
-<strong>No mocks found</strong>
-Create a mock using the button above.
-</div>
-`;
-
-}
-
-const sorted = [...list].sort((a,b) =>
-Number(a.sort_order || 0) - Number(b.sort_order || 0)
-);
-
-return `
-
-<div class="mock-list">
-
-${
-sorted.map((test,index) => {
-
-const active = test.is_active !== false;
-
-const type = isSectionalTest(test)
-? "Sectional"
-: "Full";
-
-const subject = subjects.find(
-x => String(x.id) === String(test.subject_id)
-);
-
-const subjectName = subject
-? (
-subject.name ||
-subject.title ||
-subject.subject_name
-)
-: "";
-
-const folder = getTestFolder(test);
-
-return `
-
-<div class="mock-row">
-
-<div class="mock-info">
-
-<div class="mock-title">
-${escapeHtml(
-test.title ||
-test.name ||
-"Untitled Mock"
-)}
-</div>
-
-<div class="mock-meta">
-
-<span class="status-dot ${active ? "" : "off"}"></span>
-
-${active ? "Active" : "Inactive"}
-
-&nbsp; • &nbsp;
-
-${type}
-
-&nbsp; • &nbsp;
-
-${Number(test.total_questions || 0)} Questions
-
-&nbsp; • &nbsp;
-
-${Number(test.duration_minutes || 0)} Minutes
-
-${
-subjectName
-? `&nbsp; • &nbsp; ${escapeHtml(subjectName)}`
-: ""
-}
-
-${
-folder
-? `&nbsp; • &nbsp; ${escapeHtml(getFolderName(folder))}`
-: ""
-}
-
-</div>
-
-</div>
-
-<div class="mock-actions">
-
-<button
-class="small-btn"
-onclick="moveMock('${test.id}',-1)"
->
-↑
-</button>
-
-<button
-class="small-btn"
-onclick="moveMock('${test.id}',1)"
->
-↓
-</button>
-
-<button
-class="small-btn"
-onclick="openMockEditor(null,'${test.id}')"
->
-Edit
-</button>
-
-<button
-class="small-btn"
-onclick="openQuestionManager('${test.id}')"
->
-Questions
-</button>
-
-<button
-class="danger-btn"
-onclick="deleteMock('${test.id}')"
->
-Delete
-</button>
-
-</div>
-
-</div>
-
-`;
-
-}).join("")
-}
-
-</div>
-
-`;
-
-}
-
-/* =========================
-   ALL MOCKS VIEW
-========================= */
-
-function openAllMocksView(){
-
-const list = tests.filter(test =>
-String(test.exam_id) === String(selectedExam.id)
-);
-
-document.getElementById("workspace").innerHTML = `
-
-<div class="branch-toolbar">
-
-<div class="breadcrumb">
-
-<button
-class="back-btn"
-onclick="goBackToExamHome()"
->
-← Back
-</button>
-
-&nbsp; / &nbsp;
-
-<b>All Mocks</b>
-
-</div>
-
-</div>
-
-${renderMockList(list)}
-
-`;
-
-}
-
-/* =========================
-   FOLDER MOVE / DELETE
-========================= */
-
-async function moveFolder(folderId,direction){
-
-const list = getExamFolders()
-.filter(folder => isCustomFolder(folder));
-
-const index = list.findIndex(
-x => String(x.id) === String(folderId)
-);
-
-const targetIndex = index + direction;
-
-if(
-index < 0 ||
-targetIndex < 0 ||
-targetIndex >= list.length
-){
-return;
-}
-
-const current = list[index];
-const target = list[targetIndex];
-
-try{
-
-await Promise.all([
-
-supabaseClient
+const {data,error} = await db
 .from("mock_folders")
-.update({
-sort_order:Number(target.sort_order || targetIndex)
-})
-.eq("id",current.id),
-
-supabaseClient
-.from("mock_folders")
-.update({
-sort_order:Number(current.sort_order || index)
-})
-.eq("id",target.id)
-
-]);
-
-await loadAllData();
-
-}catch(error){
-
-showToast(
-"Series reorder failed: " + getErrorMessage(error),
-"error"
-);
-
-}
-
-}
-
-async function deleteFolder(folderId){
-
-const folder = folders.find(
-x => String(x.id) === String(folderId)
-);
-
-if(!folder) return;
-
-const folderTests = getFolderTests(folderId);
-
-const ok = confirm(
-`Delete "${getFolderName(folder)}"?\n\nContained mocks: ${folderTests.length}`
-);
-
-if(!ok) return;
-
-try{
-
-const {error} = await supabaseClient
-.from("mock_folders")
-.delete()
-.eq("id",folderId);
+.insert(payload)
+.select()
+.single();
 
 if(error) throw error;
 
-selectedFolder = null;
+folders.push(data);
 
-showToast("Series deleted","success");
+return data;
+
+}
+
+async function ensureExamStructure(examId){
+
+const newRoot = await ensureFolder({
+examId,
+name:"NEW",
+displayName:"New Mocks",
+type:"NEW",
+sortOrder:1
+});
+
+const pyqRoot = await ensureFolder({
+examId,
+name:"PYQ",
+displayName:"PYQ Mocks",
+type:"PYQ",
+sortOrder:2
+});
+
+const newFull = await ensureFolder({
+examId,
+parentId:newRoot.id,
+name:"FULL",
+displayName:"FULL MOCKS",
+type:"FULL",
+sortOrder:1
+});
+
+const newSectional = await ensureFolder({
+examId,
+parentId:newRoot.id,
+name:"SECTIONAL",
+displayName:"SECTIONAL MOCKS",
+type:"SECTIONAL",
+sortOrder:2
+});
+
+const pyqFull = await ensureFolder({
+examId,
+parentId:pyqRoot.id,
+name:"FULL",
+displayName:"FULL MOCKS",
+type:"FULL",
+sortOrder:1
+});
+
+const pyqSectional = await ensureFolder({
+examId,
+parentId:pyqRoot.id,
+name:"SECTIONAL",
+displayName:"SECTIONAL MOCKS",
+type:"SECTIONAL",
+sortOrder:2
+});
+
+const examSubjects = subjects.filter(subject => {
+
+if(subject.exam_id == null) return true;
+
+return String(subject.exam_id) === String(examId);
+
+});
+
+for(const subject of examSubjects){
+
+await ensureFolder({
+examId,
+parentId:newSectional.id,
+name:nameOfSubject(subject),
+displayName:nameOfSubject(subject),
+type:"SUBJECT",
+subjectId:subject.id,
+sortOrder:subject.id
+});
+
+await ensureFolder({
+examId,
+parentId:pyqSectional.id,
+name:nameOfSubject(subject),
+displayName:nameOfSubject(subject),
+type:"SUBJECT",
+subjectId:subject.id,
+sortOrder:subject.id
+});
+
+}
+
+return {
+newRoot,
+pyqRoot,
+newFull,
+newSectional,
+pyqFull,
+pyqSectional
+};
+
+}
+
+async function syncStructure(){
+
+if(!selectedExam){
+toast("Select an exam first");
+return;
+}
+
+try{
+
+await ensureExamStructure(selectedExam.id);
+
+toast("Structure synced successfully");
 
 await loadAllData();
 
 }catch(error){
 
-showToast(
-"Series delete failed: " + getErrorMessage(error),
-"error"
-);
+console.error(error);
+toast(error.message);
 
 }
 
 }
 
-/* =========================
-   MOCK MOVE / DELETE
-========================= */
+async function getMainFolder(){
 
-async function moveMock(testId,direction){
+const structure = await ensureExamStructure(selectedExam.id);
 
-let list = tests.filter(test => {
+if(selectedCategory === "FULL"){
 
-if(String(test.exam_id) !== String(selectedExam.id)){
-return false;
+if(selectedBranch === "NEW"){
+return structure.newFull;
 }
 
-if(selectedFolder){
-
-return String(
-test.folder_id ||
-test.mock_folder_id ||
-""
-) === String(selectedFolder.id);
-
-}
-
-if(selectedBranch){
-
-const folder = getTestFolder(test);
-
-if(selectedBranch === "PYQ"){
-
-if(!isPyqFolder(folder)) return false;
+return structure.pyqFull;
 
 }
 
 if(selectedBranch === "NEW"){
+return structure.newSectional;
+}
 
-if(isPyqFolder(folder) || isCustomFolder(folder)){
-return false;
+return structure.pyqSectional;
+
+}
+
+async function getFullFolder(){
+
+const structure = await ensureExamStructure(selectedExam.id);
+
+if(selectedBranch === "NEW"){
+return structure.newFull;
+}
+
+return structure.pyqFull;
+
+}
+
+async function getSectionalSubjectFolder(subject){
+
+const structure = await ensureExamStructure(selectedExam.id);
+
+const parent =
+selectedBranch === "NEW"
+? structure.newSectional
+: structure.pyqSectional;
+
+return await ensureFolder({
+examId:selectedExam.id,
+parentId:parent.id,
+name:nameOfSubject(subject),
+displayName:nameOfSubject(subject),
+type:"SUBJECT",
+subjectId:subject.id,
+sortOrder:subject.id
+});
+
+}
+
+function getExamSubjects(){
+
+return subjects.filter(subject => {
+
+if(subject.exam_id == null) return true;
+
+return String(subject.exam_id) === String(selectedExam.id);
+
+});
+
+}
+
+async function addYear(){
+
+const parent = await getFullFolder();
+
+structureMode = "YEAR";
+structureEditId = null;
+
+$("structureModalTitle").textContent = "Add PYQ Year";
+$("structureInputLabel").textContent = "Year";
+$("structureNameInput").value = "";
+
+openModal("structureModal");
+
+}
+
+function renderFullManagement(){
+
+$("managementChipsArea").style.display =
+selectedBranch === "PYQ" ? "block" : "none";
+
+$("managementExtraActions").innerHTML = "";
+
+if(selectedBranch === "PYQ"){
+
+$("chipsTitle").textContent = "PYQ Years";
+
+const fullFolder = folders.find(folder =>
+String(folder.exam_id) === String(selectedExam.id) &&
+folderType(folder) === "FULL" &&
+isFolderUnderBranch(folder,"PYQ")
+);
+
+const years = fullFolder
+? childrenOf(fullFolder.id,"YEAR")
+: [];
+
+$("managementChips").innerHTML = `
+
+<div class="ap-chip-wrap">
+
+<button
+class="ap-chip ${
+!selectedYear ? "active" : ""
+}"
+data-year-id="all"
+type="button">All Years</button>
+
+</div>
+
+${years.map(year => `
+
+<div class="ap-chip-wrap">
+
+<button
+class="ap-chip ${
+selectedYear &&
+String(selectedYear.id) === String(year.id)
+? "active" : ""
+}"
+data-year-id="${escapeHTML(year.id)}"
+type="button">
+${escapeHTML(folderName(year))}
+</button>
+
+<button
+class="ap-chip-mini"
+data-edit-year="${escapeHTML(year.id)}"
+type="button">✎</button>
+
+<button
+class="ap-chip-mini delete"
+data-delete-year="${escapeHTML(year.id)}"
+type="button">×</button>
+
+</div>
+
+`).join("")}
+
+`;
+
+$("managementExtraActions").innerHTML = `
+<button class="ap-primary-btn" id="addYearBtn" type="button">+ Add Year</button>
+<button class="ap-secondary-btn" id="addFullMockBtn" type="button">+ Add Full Mock</button>
+`;
+
+$("addYearBtn").onclick = addYear;
+
+$("addFullMockBtn").onclick = () => openMockEditor("FULL");
+
+document.querySelectorAll("[data-year-id]").forEach(btn => {
+
+btn.onclick = () => {
+
+if(btn.dataset.yearId === "all"){
+selectedYear = null;
+}else{
+selectedYear = years.find(
+x => String(x.id) === String(btn.dataset.yearId)
+);
+}
+
+renderFullManagement();
+
+};
+
+});
+
+document.querySelectorAll("[data-edit-year]").forEach(btn => {
+
+btn.onclick = () => {
+
+const year = years.find(
+x => String(x.id) === String(btn.dataset.editYear)
+);
+
+if(year) openStructureEdit("YEAR",year);
+
+};
+
+});
+
+document.querySelectorAll("[data-delete-year]").forEach(btn => {
+
+btn.onclick = () => {
+
+const year = years.find(
+x => String(x.id) === String(btn.dataset.deleteYear)
+);
+
+if(year) deleteStructureFolder(year);
+
+};
+
+});
+
+}else{
+
+$("managementExtraActions").innerHTML = `
+<button class="ap-primary-btn" id="addNewFullMockBtn" type="button">
++ Add Full Mock
+</button>
+`;
+
+$("addNewFullMockBtn").onclick = () => openMockEditor("FULL");
+
+}
+
+let fullFolder = folders.find(folder =>
+String(folder.exam_id) === String(selectedExam.id) &&
+folderType(folder) === "FULL" &&
+isFolderUnderBranch(folder,selectedBranch)
+);
+
+let allowedFolderIds = [];
+
+if(fullFolder){
+
+if(selectedBranch === "PYQ" && selectedYear){
+
+allowedFolderIds = [String(selectedYear.id)];
+
+}else if(selectedBranch === "PYQ"){
+
+allowedFolderIds = childrenOf(fullFolder.id,"YEAR")
+.map(x => String(x.id));
+
+}else{
+
+allowedFolderIds = [String(fullFolder.id)];
+
 }
 
 }
 
+const list = tests.filter(test => {
+
+if(String(test.exam_id) !== String(selectedExam.id)) return false;
+if(!isFull(test)) return false;
+
+const folderId = String(test.folder_id || "");
+
+return allowedFolderIds.includes(folderId);
+
+});
+
+renderTestList(list);
+
 }
 
-if(selectedCategory === "FULL" && !isFullTest(test)){
-return false;
+function isFolderUnderBranch(folder,branch){
+
+const parent = getFolder(folder.parent_id);
+
+if(!parent) return false;
+
+return folderType(parent) === branch;
 
 }
 
-if(selectedCategory === "SECTIONAL" && !isSectionalTest(test)){
-return false;
+function renderSectionalManagement(){
+
+$("managementChipsArea").style.display = "block";
+$("chipsTitle").textContent = "Subjects";
+
+const examSubjects = getExamSubjects();
+
+$("managementChips").innerHTML = examSubjects.map(subject => {
+
+const subjectFolder = folders.find(folder =>
+String(folder.exam_id) === String(selectedExam.id) &&
+String(folder.subject_id) === String(subject.id) &&
+folderType(folder) === "SUBJECT" &&
+isFolderUnderBranch(folder,selectedBranch)
+);
+
+return `
+
+<div class="ap-chip-wrap">
+
+<button
+class="ap-chip ${
+selectedSubject &&
+String(selectedSubject.id) === String(subject.id)
+? "active" : ""
+}"
+data-subject-id="${escapeHTML(subject.id)}"
+type="button">
+${escapeHTML(nameOfSubject(subject))}
+</button>
+
+${
+subjectFolder
+? `
+<button
+class="ap-chip-mini"
+data-edit-subject="${escapeHTML(subjectFolder.id)}"
+type="button">✎</button>
+
+<button
+class="ap-chip-mini delete"
+data-delete-subject="${escapeHTML(subjectFolder.id)}"
+type="button">×</button>
+`
+: ""
+}
+
+</div>
+
+`;
+
+}).join("");
+
+$("managementExtraActions").innerHTML = `
+<button class="ap-secondary-btn" id="addSubjectClipBtn" type="button">
++ Add Subject Clip
+</button>
+`;
+
+$("addSubjectClipBtn").onclick = () => {
+
+structureMode = "SUBJECT";
+structureEditId = null;
+
+$("structureModalTitle").textContent = "Add Sectional Subject";
+$("structureInputLabel").textContent = "Subject Name";
+$("structureNameInput").value = "";
+
+openModal("structureModal");
+
+};
+
+document.querySelectorAll("[data-subject-id]").forEach(btn => {
+
+btn.onclick = () => {
+
+selectedSubject = examSubjects.find(
+x => String(x.id) === String(btn.dataset.subjectId)
+);
+
+renderSectionalManagement();
+
+};
+
+});
+
+document.querySelectorAll("[data-edit-subject]").forEach(btn => {
+
+btn.onclick = () => {
+
+const folder = getFolder(btn.dataset.editSubject);
+
+if(folder) openStructureEdit("SUBJECT",folder);
+
+};
+
+});
+
+document.querySelectorAll("[data-delete-subject]").forEach(btn => {
+
+btn.onclick = () => {
+
+const folder = getFolder(btn.dataset.deleteSubject);
+
+if(folder) deleteStructureFolder(folder);
+
+};
+
+});
+
+if(!selectedSubject){
+
+$("managementTestList").innerHTML =
+`<div class="ap-empty">Select a subject clip to view its mocks.</div>`;
+
+return;
 
 }
+
+renderSubjectMockList();
+
+}
+
+function renderSubjectMockList(){
+
+const subjectFolder = folders.find(folder =>
+String(folder.exam_id) === String(selectedExam.id) &&
+String(folder.subject_id) === String(selectedSubject.id) &&
+folderType(folder) === "SUBJECT" &&
+isFolderUnderBranch(folder,selectedBranch)
+);
+
+$("managementExtraActions").innerHTML += `
+<button class="ap-primary-btn" id="addSectionalMockBtn" type="button">
++ Add Sectional Mock
+</button>
+`;
+
+$("addSectionalMockBtn").onclick = () => {
+
+if(!subjectFolder){
+toast("Sync structure first");
+return;
+}
+
+openMockEditor("SECTIONAL");
+
+};
+
+const list = tests.filter(test => {
+
+if(String(test.exam_id) !== String(selectedExam.id)) return false;
+if(!isSectional(test)) return false;
+if(String(test.folder_id || "") !== String(subjectFolder?.id || "")) return false;
 
 return true;
 
 });
 
-list.sort((a,b) =>
-Number(a.sort_order || 0) - Number(b.sort_order || 0)
+renderTestList(list);
+
+}
+
+function renderTestList(list){
+
+if(!list.length){
+
+$("managementTestList").innerHTML =
+`<div class="ap-empty">No mock tests found here.</div>`;
+
+return;
+
+}
+
+$("managementTestList").innerHTML = list.map(test => {
+
+const timing =
+test.subject_wise_timing === true ||
+test.sectional_timing === true;
+
+const active = test.is_active !== false;
+
+return `
+
+<div class="ap-test-card">
+
+<div class="ap-test-top">
+
+<div>
+
+<div class="ap-test-title">
+${escapeHTML(test.title || "Untitled Mock")}
+</div>
+
+${
+test.description
+? `<div class="ap-test-description">
+${escapeHTML(test.description)}
+</div>`
+: ""
+}
+
+</div>
+
+</div>
+
+<div class="ap-test-badges">
+
+<span class="ap-test-badge">
+${test.duration_minutes || 0} min
+</span>
+
+<span class="ap-test-badge">
+${test.total_questions || 0} Questions
+</span>
+
+<span class="ap-test-badge">
+${timing ? "Section Timing ON" : "Overall Timing"}
+</span>
+
+<span class="ap-test-badge ${
+active ? "active" : "inactive"
+}">
+${active ? "Active" : "Inactive"}
+</span>
+
+</div>
+
+<div class="ap-test-actions">
+
+<button
+class="ap-small-btn edit"
+data-edit-test="${escapeHTML(test.id)}"
+type="button">Edit</button>
+
+<button
+class="ap-small-btn"
+data-question-test="${escapeHTML(test.id)}"
+type="button">Questions</button>
+
+<button
+class="ap-small-btn delete"
+data-delete-test="${escapeHTML(test.id)}"
+type="button">Delete</button>
+
+</div>
+
+</div>
+
+`;
+
+}).join("");
+
+document.querySelectorAll("[data-edit-test]").forEach(btn => {
+
+btn.onclick = () => {
+
+const test = tests.find(
+x => String(x.id) === String(btn.dataset.editTest)
 );
 
-const index = list.findIndex(
-x => String(x.id) === String(testId)
+if(test) openMockEditor(test.test_type,test);
+
+};
+
+});
+
+document.querySelectorAll("[data-question-test]").forEach(btn => {
+
+btn.onclick = () => {
+
+window.location.href =
+`admin-mock.html?test_id=${encodeURIComponent(btn.dataset.questionTest)}`;
+
+};
+
+});
+
+document.querySelectorAll("[data-delete-test]").forEach(btn => {
+
+btn.onclick = () => {
+
+const test = tests.find(
+x => String(x.id) === String(btn.dataset.deleteTest)
 );
 
-const targetIndex = index + direction;
+if(test) deleteMock(test);
 
-if(
-index < 0 ||
-targetIndex < 0 ||
-targetIndex >= list.length
-){
+};
+
+});
+
+}
+
+async function openMockEditor(type,test=null){
+
+editorType = type;
+editingMockId = test ? test.id : null;
+
+if(test){
+
+editorFolderId = test.folder_id || null;
+
+}else{
+
+if(type === "SECTIONAL"){
+
+const subjectFolder = folders.find(folder =>
+String(folder.exam_id) === String(selectedExam.id) &&
+String(folder.subject_id) === String(selectedSubject?.id) &&
+folderType(folder) === "SUBJECT" &&
+isFolderUnderBranch(folder,selectedBranch)
+);
+
+editorFolderId = subjectFolder?.id || null;
+
+}else{
+
+const fullFolder = await getFullFolder();
+
+if(selectedBranch === "PYQ" && selectedYear){
+editorFolderId = selectedYear.id;
+}else{
+editorFolderId = fullFolder.id;
+}
+
+}
+
+}
+
+$("mockModalTitle").textContent =
+test ? "Edit Mock" : "Add Mock";
+
+$("mockTitleInput").value =
+test ? test.title || "" : "";
+
+$("mockDescriptionInput").value =
+test ? test.description || "" : "";
+
+$("mockDurationInput").value =
+test ? test.duration_minutes || 60 : 60;
+
+$("mockQuestionsInput").value =
+test ? test.total_questions || 25 : 25;
+
+$("mockActiveInput").value =
+test && test.is_active === false
+? "false"
+: "true";
+
+$("sectionalTimingInput").checked =
+test
+? Boolean(test.subject_wise_timing || test.sectional_timing)
+: false;
+
+renderSectionRows(test);
+
+openModal("mockModal");
+
+}
+
+function renderSectionRows(test=null){
+
+$("sectionRows").innerHTML = "";
+
+let sections = [];
+
+if(test && Array.isArray(test.sections)){
+sections = test.sections;
+}
+
+if(!sections.length){
+
+sections = [
+{name:"English",duration:15,questions:25},
+{name:"Reasoning",duration:15,questions:25},
+{name:"Quant",duration:15,questions:25},
+{name:"GK",duration:15,questions:25}
+];
+
+}
+
+sections.forEach(addSectionRow);
+
+}
+
+function addSectionRow(data={}){
+
+const row = document.createElement("div");
+
+row.className = "ap-section-row";
+
+row.innerHTML = `
+
+<input
+class="section-name"
+placeholder="Section"
+value="${escapeHTML(data.name || "")}">
+
+<input
+class="section-time"
+type="number"
+min="0"
+placeholder="Min"
+value="${escapeHTML(data.duration || "")}">
+
+<input
+class="section-questions"
+type="number"
+min="0"
+placeholder="Ques"
+value="${escapeHTML(data.questions || "")}">
+
+<button class="ap-remove-section" type="button">×</button>
+
+`;
+
+row.querySelector(".ap-remove-section").onclick =
+() => row.remove();
+
+$("sectionRows").appendChild(row);
+
+}
+
+async function saveMock(){
+
+if(!selectedExam){
+toast("Select exam first");
 return;
 }
 
-const current = list[index];
-const target = list[targetIndex];
+const title = $("mockTitleInput").value.trim();
 
-try{
+if(!title){
+toast("Enter mock title");
+return;
+}
 
-await Promise.all([
+if(!editorFolderId){
 
-supabaseClient
-.from("mock_tests")
-.update({
-sort_order:Number(target.sort_order || targetIndex)
-})
-.eq("id",current.id),
-
-supabaseClient
-.from("mock_tests")
-.update({
-sort_order:Number(current.sort_order || index)
-})
-.eq("id",target.id)
-
-]);
-
-await loadAllData();
-
-}catch(error){
-
-showToast(
-"Mock reorder failed: " + getErrorMessage(error),
-"error"
-);
+toast("Mock folder missing. Click Sync Structure first.");
+return;
 
 }
 
+const description =
+$("mockDescriptionInput").value.trim();
+
+const duration =
+Number($("mockDurationInput").value) || 0;
+
+const totalQuestions =
+Number($("mockQuestionsInput").value) || 0;
+
+const active =
+$("mockActiveInput").value === "true";
+
+const sectionalTiming =
+$("sectionalTimingInput").checked;
+
+const sections = [
+...document.querySelectorAll(".ap-section-row")
+].map(row => ({
+
+name:row.querySelector(".section-name").value.trim(),
+
+duration:Number(
+row.querySelector(".section-time").value
+) || 0,
+
+questions:Number(
+row.querySelector(".section-questions").value
+) || 0
+
+})).filter(x => x.name);
+
+if(!sections.length){
+toast("Add at least one section");
+return;
 }
 
-async function deleteMock(testId){
+const payload = {
 
-const test = tests.find(
-x => String(x.id) === String(testId)
-);
+exam_id:selectedExam.id,
 
-if(!test) return;
+folder_id:editorFolderId,
 
-const ok = confirm(
-`Delete "${test.title || test.name || "this mock"}"?`
-);
+title,
 
-if(!ok) return;
+description,
+
+duration_minutes:duration,
+
+total_questions:totalQuestions,
+
+is_active:active,
+
+test_type:
+editorType === "SECTIONAL"
+? "SECTIONAL"
+: "FULL",
+
+subject_wise_timing:sectionalTiming
+
+};
+
+if(editorType === "SECTIONAL" && selectedSubject){
+payload.subject_id = selectedSubject.id;
+}
 
 try{
 
-const {error} = await supabaseClient
+let savedTest;
+
+if(editingMockId){
+
+const {data,error} = await db
 .from("mock_tests")
-.delete()
-.eq("id",testId);
+.update(payload)
+.eq("id",editingMockId)
+.select()
+.single();
 
 if(error) throw error;
 
-showToast("Mock deleted","success");
+savedTest = data;
+
+}else{
+
+const {data,error} = await db
+.from("mock_tests")
+.insert(payload)
+.select()
+.single();
+
+if(error) throw error;
+
+savedTest = data;
+
+}
+
+try{
+
+await saveMockSections(savedTest.id,sections);
+
+}catch(sectionError){
+
+console.warn("Sections could not be saved:",sectionError);
+
+}
+
+toast(editingMockId
+? "Mock updated successfully"
+: "Mock created successfully");
+
+closeModal("mockModal");
 
 await loadAllData();
 
+if(selectedCategory === "FULL"){
+renderFullManagement();
+}else{
+renderSectionalManagement();
+}
+
 }catch(error){
 
-showToast(
-"Mock delete failed: " + getErrorMessage(error),
-"error"
-);
+console.error(error);
+toast(error.message);
 
 }
 
 }
 
-/* =========================
-   STRUCTURE MODAL
-========================= */
+async function saveMockSections(testId,sections){
 
-function openStructureModal(mode,folderId=null){
+const {error:deleteError} = await db
+.from("mock_test_sections")
+.delete()
+.eq("mock_test_id",testId);
 
-editingFolderId = folderId || null;
+if(deleteError) throw deleteError;
 
-const title = document.getElementById("structureModalTitle");
-const body = document.getElementById("structureModalBody");
+const rows = sections.map((section,index) => ({
 
-let currentFolder = folderId
-? folders.find(x => String(x.id) === String(folderId))
-: null;
+mock_test_id:testId,
+section_name:section.name,
+duration_minutes:section.duration,
+total_questions:section.questions,
+sort_order:index + 1
 
-if(mode === "CUSTOM_FOLDER" || mode === "EDIT_FOLDER"){
+}));
 
-title.textContent =
-mode === "EDIT_FOLDER"
-? "Edit Custom Series"
-: "Add Custom Series";
+const {error} = await db
+.from("mock_test_sections")
+.insert(rows);
 
-body.innerHTML = `
-
-<div class="notice info">
-This series will appear at root level beside New Mocks and PYQ Mocks.
-</div>
-
-<div class="form-group">
-
-<label>Series Name</label>
-
-<input
-id="structureNameInput"
-type="text"
-placeholder="Example: Booster Series"
-value="${escapeHtml(currentFolder ? getFolderName(currentFolder) : "")}"
->
-
-</div>
-
-`;
-
-window.currentStructureMode = mode;
+if(error) throw error;
 
 }
 
-else if(mode === "PYQ_YEAR"){
+async function deleteMock(test){
 
-title.textContent = "Add PYQ Year";
+if(!confirm(`Delete mock "${test.title}"?`)) return;
 
-body.innerHTML = `
+const {error} = await db
+.from("mock_tests")
+.delete()
+.eq("id",test.id);
 
-<div class="notice info">
-Create a year such as 2024, 2025 or 2026. You can later add multiple full mocks inside it.
-</div>
+if(error){
+toast(error.message);
+return;
+}
 
-<div class="form-group">
+toast("Mock deleted");
 
-<label>Year</label>
+await loadAllData();
 
-<input
-id="structureNameInput"
-type="text"
-placeholder="Example: 2026"
->
-
-</div>
-
-`;
-
-window.currentStructureMode = mode;
+if(selectedCategory === "FULL"){
+renderFullManagement();
+}else{
+renderSectionalManagement();
+}
 
 }
 
-else{
+function openStructureEdit(mode,folder){
 
-title.textContent = "Add Structure";
+structureMode = mode;
+structureEditId = folder.id;
 
-body.innerHTML = "";
+$("structureModalTitle").textContent =
+mode === "YEAR"
+? "Edit PYQ Year"
+: "Edit Subject Clip";
 
-window.currentStructureMode = mode;
+$("structureInputLabel").textContent =
+mode === "YEAR" ? "Year" : "Subject Name";
 
-}
+$("structureNameInput").value =
+folder.display_name || folder.name || "";
 
 openModal("structureModal");
 
@@ -3606,1211 +2637,408 @@ openModal("structureModal");
 
 async function saveStructure(){
 
-const mode = window.currentStructureMode;
-
-const name =
-document.getElementById("structureNameInput")?.value.trim();
+const name = $("structureNameInput").value.trim();
 
 if(!name){
-
-showToast("Name required","error");
+toast("Enter name");
 return;
-
-}
-
-if(!selectedExam){
-
-showToast("Select exam first","error");
-return;
-
 }
 
 try{
 
-if(mode === "EDIT_FOLDER"){
+if(structureMode === "YEAR"){
 
-const {error} = await supabaseClient
+const {error} = await db
 .from("mock_folders")
 .update({
-
-name:name,
+name,
 display_name:name
-
 })
-.eq("id",editingFolderId);
+.eq("id",structureEditId);
 
 if(error) throw error;
 
-showToast("Series updated","success");
+toast("Year saved");
 
-}
+}else if(structureMode === "SUBJECT"){
 
-else{
+const parent = await getMainFolder();
 
-let folderType = "CUSTOM_SERIES";
-
-if(mode === "PYQ_YEAR"){
-
-folderType = "PYQ_YEAR";
-
-}
-
-const existing = getExamFolders();
-
-const {error} = await supabaseClient
-.from("mock_folders")
-.insert({
-
-exam_id:selectedExam.id,
-name:name,
-display_name:name,
-folder_type:folderType,
-sort_order:getNextSortOrder(existing),
-is_active:true
-
+const subjectFolder = await ensureFolder({
+examId:selectedExam.id,
+parentId:parent.id,
+name,
+displayName:name,
+type:"SUBJECT",
+sortOrder:999
 });
 
+if(structureEditId){
+
+const {error} = await db
+.from("mock_folders")
+.update({
+name,
+display_name:name
+})
+.eq("id",structureEditId);
+
 if(error) throw error;
 
-showToast(
-mode === "PYQ_YEAR"
-? "PYQ year added"
-: "Custom series added",
-"success"
-);
+toast("Subject updated");
+
+}else{
+
+toast("Subject clip added");
+
+}
 
 }
 
 closeModal("structureModal");
 
-editingFolderId = null;
+await loadAllData();
+
+if(selectedCategory === "FULL"){
+renderFullManagement();
+}else{
+renderSectionalManagement();
+}
+
+}catch(error){
+
+console.error(error);
+toast(error.message);
+
+}
+
+}
+
+async function deleteStructureFolder(folder){
+
+const hasMocks = tests.some(
+test => String(test.folder_id) === String(folder.id)
+);
+
+const hasChildren = folders.some(
+x => String(x.parent_id) === String(folder.id)
+);
+
+if(hasMocks || hasChildren){
+
+toast("Cannot delete: first remove its mocks/children");
+return;
+
+}
+
+if(!confirm(`Delete "${folderName(folder)}"?`)) return;
+
+const {error} = await db
+.from("mock_folders")
+.delete()
+.eq("id",folder.id);
+
+if(error){
+toast(error.message);
+return;
+}
+
+toast("Deleted");
+
+await loadAllData();
+
+if(selectedCategory === "FULL"){
+renderFullManagement();
+}else{
+renderSectionalManagement();
+}
+
+}
+
+async function deleteExam(exam){
+
+const examTests = tests.filter(
+x => String(x.exam_id) === String(exam.id)
+);
+
+if(examTests.length){
+
+if(!confirm(
+`This exam has ${examTests.length} mocks. Deactivate exam instead?`
+)) return;
+
+const {error} = await db
+.from("exams")
+.update({is_active:false})
+.eq("id",exam.id);
+
+if(error){
+toast(error.message);
+return;
+}
+
+toast("Exam deactivated");
+
+}else{
+
+if(!confirm(`Delete exam "${examName(exam)}"?`)) return;
+
+const {error} = await db
+.from("exams")
+.delete()
+.eq("id",exam.id);
+
+if(error){
+toast(error.message);
+return;
+}
+
+toast("Exam deleted");
+
+}
+
+if(selectedExam &&
+String(selectedExam.id) === String(exam.id)){
+
+selectedExam = null;
+$("workspace").classList.remove("visible");
+
+}
+
+await loadAllData();
+
+}
+
+async function reorderExam(id,direction){
+
+const list = exams
+.filter(x => boardOfExam(x) === activeBoard && x.is_active !== false)
+.sort((a,b) => Number(a.sort_order || 0) - Number(b.sort_order || 0));
+
+const index = list.findIndex(
+x => String(x.id) === String(id)
+);
+
+const targetIndex = index + direction;
+
+if(index < 0 || targetIndex < 0 || targetIndex >= list.length){
+return;
+}
+
+const current = list[index];
+const target = list[targetIndex];
+
+const currentOrder = current.sort_order ?? index + 1;
+const targetOrder = target.sort_order ?? targetIndex + 1;
+
+const {error:firstError} = await db
+.from("exams")
+.update({sort_order:targetOrder})
+.eq("id",current.id);
+
+if(firstError){
+toast(firstError.message);
+return;
+}
+
+const {error:secondError} = await db
+.from("exams")
+.update({sort_order:currentOrder})
+.eq("id",target.id);
+
+if(secondError){
+toast(secondError.message);
+return;
+}
+
+toast("Exam order updated");
+
+await loadAllData();
+
+}
+
+function openExamModal(exam=null){
+
+editingExamId = exam ? exam.id : null;
+
+$("examBoardInput").value =
+exam ? boardOfExam(exam) : activeBoard;
+
+$("examNameInput").value =
+exam ? examName(exam) : "";
+
+$("examStageInput").value =
+exam ? exam.stage || "" : "";
+
+openModal("examModal");
+
+}
+
+async function saveExam(){
+
+const board = $("examBoardInput").value;
+const name = $("examNameInput").value.trim();
+const stage = $("examStageInput").value.trim();
+
+if(!name){
+toast("Enter exam name");
+return;
+}
+
+try{
+
+if(editingExamId){
+
+const {error} = await db
+.from("exams")
+.update({
+name,
+stage,
+is_active:true
+})
+.eq("id",editingExamId);
+
+if(error) throw error;
+
+toast("Exam updated");
+
+}else{
+
+const maxOrder = exams
+.filter(x => boardOfExam(x) === board)
+.reduce(
+(max,x) => Math.max(max,Number(x.sort_order || 0)),
+0
+);
+
+const {data,error} = await db
+.from("exams")
+.insert({
+name,
+stage,
+sort_order:maxOrder + 1,
+is_active:true
+})
+.select()
+.single();
+
+if(error) throw error;
+
+try{
+await ensureExamStructure(data.id);
+}catch(structureError){
+console.warn(structureError);
+}
+
+toast("Exam added");
+
+}
+
+closeModal("examModal");
 
 await loadAllData();
 
 }catch(error){
 
 console.error(error);
-
-showToast(
-"Structure save failed: " + getErrorMessage(error),
-"error"
-);
+toast(error.message);
 
 }
 
 }
 
-/* =========================
-   SUBJECT / CATEGORY CLICK
-========================= */
+document.querySelectorAll(".ap-board-tab").forEach(tab => {
 
-document.addEventListener("click",event => {
+tab.onclick = () => {
 
-const target = event.target;
+activeBoard = tab.dataset.board;
 
-if(
-target.closest(".category-card") &&
-selectedBranch &&
-!selectedCategory
-){
-return;
+document.querySelectorAll(".ap-board-tab")
+.forEach(x => x.classList.toggle(
+"active",
+x === tab
+));
+
+renderExams();
+
+};
+
+});
+
+document.querySelectorAll("[data-branch]").forEach(btn => {
+
+btn.onclick = () => openBranch(btn.dataset.branch);
+
+});
+
+document.querySelectorAll("[data-category]").forEach(btn => {
+
+btn.onclick = () => openCategory(btn.dataset.category);
+
+});
+
+$("backToBranchesBtn").onclick = () => resetViews();
+
+$("backToCategoriesBtn").onclick = () => {
+
+$("mockManagementView").classList.remove("visible");
+$("categoryView").classList.add("visible");
+
+};
+
+$("changeExamBtn").onclick = () => {
+
+selectedExam = null;
+$("workspace").classList.remove("visible");
+resetViews();
+
+window.scrollTo({top:0,behavior:"smooth"});
+
+};
+
+$("syncStructureBtn").onclick = syncStructure;
+
+$("addExamBtn").onclick = () => openExamModal();
+
+$("refreshBtn").onclick = async () => {
+
+await loadAllData();
+toast("Data refreshed");
+
+};
+
+$("adminBackBtn").onclick = () => {
+window.location.href = "practice.html";
+};
+
+$("saveExamBtn").onclick = saveExam;
+$("saveMockBtn").onclick = saveMock;
+
+$("addSectionBtn").onclick = () => addSectionRow();
+
+$("saveStructureBtn").onclick = saveStructure;
+
+document.querySelectorAll("[data-close-modal]").forEach(btn => {
+
+btn.onclick = () => closeModal(btn.dataset.closeModal);
+
+});
+
+document.querySelectorAll(".ap-modal-overlay").forEach(overlay => {
+
+overlay.addEventListener("click",event => {
+
+if(event.target === overlay){
+overlay.classList.remove("open");
 }
 
 });
 
-/* =========================
-   PATCH BRANCH CATEGORY CLICK
-========================= */
-
-const oldOpenCategory = openCategory;
-
-openCategory = function(category){
-
-selectedCategory = category;
-selectedSubject = null;
-selectedYear = null;
-
-renderWorkspace();
-
-};
-
-/* =========================================================
-   PART 3 — COMPLETE MOCK EDITOR + SAVE SYSTEM
-========================================================= */
-
-let editorMode = "NEW";
-let editorTestId = null;
-
-/* =========================================================
-   BASIC HELPERS
-========================================================= */
-
-function esc(value) {
-  return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
-
-function getCurrentExamId() {
-  return selectedExam ? selectedExam.id : null;
-}
-
-function getTestById(id) {
-  return tests.find(t => String(t.id) === String(id)) || null;
-}
-
-function getFolderById(id) {
-  return folders.find(f => String(f.id) === String(id)) || null;
-}
-
-function getSubjectById(id) {
-  return subjects.find(s => String(s.id) === String(id)) || null;
-}
-
-function getFolderExamId(folder) {
-  return folder?.exam_id ?? folder?.exam ?? null;
-}
-
-function folderBelongsToExam(folder, examId) {
-  return String(getFolderExamId(folder)) === String(examId);
-}
-
-/* =========================================================
-   ROOT SYSTEM FOLDERS
-========================================================= */
-
-async function ensureSystemFolder(folderType) {
-  const examId = getCurrentExamId();
-
-  if (!examId) {
-    throw new Error("Please select an exam first.");
-  }
-
-  const isNew = folderType === "NEW";
-  const folderName = isNew ? "New Mocks" : "PYQ Mocks";
-
-  let existing = folders.find(f =>
-    folderBelongsToExam(f, examId) &&
-    (
-      String(f.folder_type || "").toUpperCase() === folderType ||
-      String(f.name || "").toLowerCase() === folderName.toLowerCase() ||
-      String(f.display_name || "").toLowerCase() === folderName.toLowerCase()
-    )
-  );
-
-  if (existing) return existing;
-
-  const payload = {
-    exam_id: examId,
-    name: folderName,
-    display_name: folderName,
-    folder_type: folderType,
-    sort_order: isNew ? 0 : 1,
-    is_active: true
-  };
-
-  const { data, error } = await supabaseClient
-    .from("mock_folders")
-    .insert(payload)
-    .select()
-    .single();
-
-  if (error) {
-    console.error(error);
-    throw new Error("System folder create nahi ho saka: " + error.message);
-  }
-
-  folders.push(data);
-  return data;
-}
-
-/* =========================================================
-   EDITOR CONTEXT
-========================================================= */
-
-function getEditorBranch(test = null) {
-  if (test) {
-    const access = String(test.access_type || "").toUpperCase();
-
-    if (access === "PYQ") return "PYQ";
-    if (access === "CUSTOM") return "CUSTOM";
-    if (access === "NEW") return "NEW";
-
-    const folder = getFolderById(test.folder_id);
-
-    if (folder) {
-      if (isPyqFolder(folder)) return "PYQ";
-      if (isCustomFolder(folder)) return "CUSTOM";
-      if (
-        String(folder.folder_type || "").toUpperCase() === "NEW" ||
-        String(folder.name || "").toLowerCase() === "new mocks"
-      ) {
-        return "NEW";
-      }
-    }
-  }
-
-  if (selectedBranch) return selectedBranch;
-
-  return "NEW";
-}
-
-function getEditorFolders(branch, test = null) {
-  const examId = getCurrentExamId();
-
-  let list = folders.filter(f => folderBelongsToExam(f, examId));
-
-  if (branch === "NEW") {
-    return list.filter(f => {
-      const type = String(f.folder_type || "").toUpperCase();
-      const name = String(f.name || "").toLowerCase();
-
-      return (
-        type === "NEW" ||
-        type === "NEW_ROOT" ||
-        name === "new mocks" ||
-        name === "new mock"
-      );
-    });
-  }
-
-  if (branch === "PYQ") {
-    return list.filter(f => {
-      const type = String(f.folder_type || "").toUpperCase();
-      const name = String(f.name || "").toLowerCase();
-
-      return (
-        isPyqFolder(f) ||
-        type.includes("PYQ") ||
-        name === "pyq mocks" ||
-        name.includes("pyq")
-      );
-    });
-  }
-
-  if (branch === "CUSTOM") {
-    return list.filter(f => isCustomFolder(f));
-  }
-
-  return [];
-}
-
-function getDefaultEditorFolder(branch, test = null) {
-  if (test?.folder_id) {
-    const existing = getFolderById(test.folder_id);
-    if (existing) return existing.id;
-  }
-
-  const list = getEditorFolders(branch, test);
-
-  if (list.length) {
-    return list[0].id;
-  }
-
-  return "";
-}
-
-/* =========================================================
-   SECTION DATA
-========================================================= */
-
-function normalizeSections(test) {
-  if (!test) return [];
-
-  let sections = test.sections;
-
-  if (typeof sections === "string") {
-    try {
-      sections = JSON.parse(sections);
-    } catch {
-      sections = [];
-    }
-  }
-
-  if (Array.isArray(sections) && sections.length) {
-    return sections.map((s, index) => ({
-      name: s.name || s.title || `Section ${index + 1}`,
-      time_minutes: Number(
-        s.time_minutes ??
-        s.duration_minutes ??
-        s.time ??
-        15
-      )
-    }));
-  }
-
-  let timing = test.subject_wise_timing;
-
-  if (typeof timing === "string") {
-    try {
-      timing = JSON.parse(timing);
-    } catch {
-      timing = null;
-    }
-  }
-
-  if (timing?.sections && Array.isArray(timing.sections)) {
-    return timing.sections.map((s, index) => ({
-      name: s.name || `Section ${index + 1}`,
-      time_minutes: Number(s.time_minutes || s.time || 15)
-    }));
-  }
-
-  return [];
-}
-
-function getTimingConfig(test) {
-  let timing = test?.subject_wise_timing;
-
-  if (typeof timing === "string") {
-    try {
-      timing = JSON.parse(timing);
-    } catch {
-      timing = null;
-    }
-  }
-
-  return timing || {};
-}
-
-/* =========================================================
-   OPEN COMPLETE MOCK EDITOR
-========================================================= */
-
-async function openCompleteMockEditor(type = "FULL", testId = null) {
-  editorMode = testId ? "EDIT" : "NEW";
-  editorTestId = testId;
-
-  const test = testId ? getTestById(testId) : null;
-  const testType = String(
-    test?.test_type ||
-    test?.type ||
-    type ||
-    "FULL"
-  ).toUpperCase();
-
-  const branch = getEditorBranch(test);
-  const examId = getCurrentExamId();
-
-  if (!examId && !test) {
-    showToast("Pehle exam select karo", "error");
-    return;
-  }
-
-  let editorFolders = getEditorFolders(branch, test);
-
-  if (branch === "NEW" && !editorFolders.length) {
-    try {
-      await ensureSystemFolder("NEW");
-      editorFolders = getEditorFolders(branch, test);
-    } catch (error) {
-      showToast(error.message, "error");
-      return;
-    }
-  }
-
-  if (branch === "PYQ" && !editorFolders.length) {
-    try {
-      await ensureSystemFolder("PYQ");
-      editorFolders = getEditorFolders(branch, test);
-    } catch (error) {
-      showToast(error.message, "error");
-      return;
-    }
-  }
-
-  const selectedFolderId =
-    test?.folder_id ||
-    selectedFolder ||
-    getDefaultEditorFolder(branch, test);
-
-  const selectedSubjectId =
-    test?.subject_id ||
-    selectedSubject ||
-    "";
-
-  const sections = normalizeSections(test);
-
-  const timingConfig = getTimingConfig(test);
-
-  const timingEnabled =
-    timingConfig.enabled === true ||
-    timingConfig.enabled === "true" ||
-    sections.length > 0;
-
-  const lockSections =
-    timingConfig.allow_switch === false ||
-    timingConfig.locked === true ||
-    timingConfig.section_switch === false;
-
-  const subjectOptions = subjects
-    .filter(s => {
-      if (!examId) return true;
-
-      return (
-        String(s.exam_id ?? "") === String(examId) ||
-        String(s.exam_id ?? "") === "" ||
-        s.exam_id == null
-      );
-    })
-    .sort((a, b) =>
-      String(a.name || "").localeCompare(String(b.name || ""))
-    )
-    .map(s => `
-      <option value="${esc(s.id)}"
-        ${String(selectedSubjectId) === String(s.id) ? "selected" : ""}>
-        ${esc(s.name || s.title || "Subject")}
-      </option>
-    `)
-    .join("");
-
-  const folderOptions = editorFolders
-    .sort((a, b) =>
-      Number(a.sort_order || 0) - Number(b.sort_order || 0)
-    )
-    .map(f => `
-      <option value="${esc(f.id)}"
-        ${String(selectedFolderId) === String(f.id) ? "selected" : ""}>
-        ${esc(getFolderName(f))}
-      </option>
-    `)
-    .join("");
-
-  const title = test?.title || test?.name || "";
-  const description = test?.description || "";
-  const duration = test?.duration_minutes ?? test?.duration ?? 60;
-  const totalQuestions = test?.total_questions ?? 25;
-  const active = test?.is_active !== false;
-
-  const modalTitle = test
-    ? "Edit Mock Test"
-    : "Create New Mock Test";
-
-  document.getElementById("mockModalTitle").textContent = modalTitle;
-
-  document.getElementById("mockModalBody").innerHTML = `
-    <div class="editor-form">
-
-      <div class="form-group">
-        <label>Mock Title</label>
-        <input
-          id="editorMockTitle"
-          type="text"
-          placeholder="Example: SSC CGL Tier 1 Mock 01"
-          value="${esc(title)}"
-        >
-      </div>
-
-      <div class="form-group">
-        <label>Description</label>
-        <textarea
-          id="editorMockDescription"
-          placeholder="Optional description"
-        >${esc(description)}</textarea>
-      </div>
-
-      <div class="form-grid">
-
-        <div class="form-group">
-          <label>Mock Type</label>
-          <select id="editorMockType">
-            <option value="FULL" ${testType === "FULL" ? "selected" : ""}>
-              Full Mock
-            </option>
-            <option value="SECTIONAL" ${testType === "SECTIONAL" ? "selected" : ""}>
-              Sectional Mock
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>Access Category</label>
-          <select id="editorMockBranch">
-            <option value="NEW" ${branch === "NEW" ? "selected" : ""}>
-              New Mocks
-            </option>
-            <option value="PYQ" ${branch === "PYQ" ? "selected" : ""}>
-              PYQ Mocks
-            </option>
-            <option value="CUSTOM" ${branch === "CUSTOM" ? "selected" : ""}>
-              Custom Series
-            </option>
-          </select>
-        </div>
-
-      </div>
-
-      <div class="form-grid">
-
-        <div class="form-group">
-          <label>Folder / Year / Series</label>
-          <select id="editorMockFolder">
-            ${folderOptions || `
-              <option value="">No folder available</option>
-            `}
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>Subject</label>
-          <select id="editorMockSubject">
-            <option value="">All Subjects / General</option>
-            ${subjectOptions}
-          </select>
-        </div>
-
-      </div>
-
-      <div class="form-grid">
-
-        <div class="form-group">
-          <label>Total Questions</label>
-          <input
-            id="editorMockQuestions"
-            type="number"
-            min="1"
-            value="${esc(totalQuestions)}"
-          >
-        </div>
-
-        <div class="form-group">
-          <label>Total Duration (Minutes)</label>
-          <input
-            id="editorMockDuration"
-            type="number"
-            min="1"
-            value="${esc(duration)}"
-          >
-        </div>
-
-      </div>
-
-      <div class="toggle-row">
-        <label class="switch-label">
-          <input
-            id="editorMockActive"
-            type="checkbox"
-            ${active ? "checked" : ""}
-          >
-          <span>Publish / Active</span>
-        </label>
-      </div>
-
-      <div id="sectionTimingBox" class="section-timing-box">
-
-        <div class="timing-heading">
-          <div>
-            <strong>Section-wise Timing</strong>
-            <small>Sectional mock ke liye optional</small>
-          </div>
-
-          <label class="switch-label">
-            <input
-              id="editorTimingEnabled"
-              type="checkbox"
-              ${timingEnabled ? "checked" : ""}
-            >
-            <span>Enable</span>
-          </label>
-        </div>
-
-        <div id="timingOptions" style="${timingEnabled ? "" : "display:none;"}">
-
-          <label class="switch-label">
-            <input
-              id="editorLockSections"
-              type="checkbox"
-              ${lockSections ? "checked" : ""}
-            >
-            <span>Lock Section Navigation</span>
-          </label>
-
-          <small class="help-text">
-            ON hone par student manually doosri section par switch nahi kar payega.
-          </small>
-
-          <div id="editorSectionsList"></div>
-
-          <button
-            type="button"
-            class="secondary-btn"
-            onclick="addEditorSection()"
-          >
-            + Add Section
-          </button>
-
-        </div>
-
-      </div>
-
-      <div class="editor-note">
-        Save karne ke baad mock selected branch/folder me show hoga.
-      </div>
-
-    </div>
-  `;
-
-  renderEditorSections(
-    sections.length
-      ? sections
-      : [{ name: "", time_minutes: 15 }]
-  );
-
-  const typeSelect = document.getElementById("editorMockType");
-  const timingEnabledInput =
-    document.getElementById("editorTimingEnabled");
-
-  const timingBox =
-    document.getElementById("sectionTimingBox");
-
-  function refreshTimingVisibility() {
-    const currentType = typeSelect.value;
-
-    timingBox.style.display =
-      currentType === "SECTIONAL" ? "block" : "none";
-  }
-
-  typeSelect.addEventListener("change", refreshTimingVisibility);
-
-  timingEnabledInput.addEventListener("change", () => {
-    document.getElementById("timingOptions").style.display =
-      timingEnabledInput.checked ? "block" : "none";
-  });
-
-  refreshTimingVisibility();
-
-  openModal("mockModal");
-}
-
-/* =========================================================
-   SECTION ROW RENDER
-========================================================= */
-
-function renderEditorSections(sectionData = []) {
-  const box = document.getElementById("editorSectionsList");
-
-  if (!box) return;
-
-  box.innerHTML = "";
-
-  sectionData.forEach((section, index) => {
-    addEditorSection(section.name, section.time_minutes, false);
-  });
-
-  if (!sectionData.length) {
-    addEditorSection("", 15, false);
-  }
-}
-
-function addEditorSection(name = "", time = 15, focus = true) {
-  const box = document.getElementById("editorSectionsList");
-
-  if (!box) return;
-
-  const row = document.createElement("div");
-  row.className = "editor-section-row";
-
-  row.innerHTML = `
-    <input
-      class="editor-section-name"
-      type="text"
-      placeholder="Section name"
-      value="${esc(name)}"
-    >
-
-    <input
-      class="editor-section-time"
-      type="number"
-      min="1"
-      placeholder="Minutes"
-      value="${esc(time)}"
-    >
-
-    <button
-      type="button"
-      class="danger-small-btn"
-      onclick="this.parentElement.remove()"
-    >
-      ×
-    </button>
-  `;
-
-  box.appendChild(row);
-
-  if (focus) {
-    row.querySelector(".editor-section-name").focus();
-  }
-}
-
-/* =========================================================
-   DYNAMIC BRANCH CHANGE
-========================================================= */
-
-async function refreshEditorBranchFolders() {
-  const branchEl = document.getElementById("editorMockBranch");
-  const folderEl = document.getElementById("editorMockFolder");
-
-  if (!branchEl || !folderEl) return;
-
-  const branch = branchEl.value;
-
-  let list = getEditorFolders(branch);
-
-  if (branch === "NEW" && !list.length) {
-    try {
-      await ensureSystemFolder("NEW");
-      list = getEditorFolders(branch);
-    } catch (error) {
-      showToast(error.message, "error");
-    }
-  }
-
-  if (branch === "PYQ" && !list.length) {
-    try {
-      await ensureSystemFolder("PYQ");
-      list = getEditorFolders(branch);
-    } catch (error) {
-      showToast(error.message, "error");
-    }
-  }
-
-  folderEl.innerHTML = list
-    .sort((a, b) =>
-      Number(a.sort_order || 0) - Number(b.sort_order || 0)
-    )
-    .map(f => `
-      <option value="${esc(f.id)}">
-        ${esc(getFolderName(f))}
-      </option>
-    `)
-    .join("");
-
-  if (!list.length) {
-    folderEl.innerHTML =
-      `<option value="">No folder available</option>`;
-  }
-}
-
-/* =========================================================
-   SAVE MOCK
-========================================================= */
-
-async function saveMock() {
-  const titleEl = document.getElementById("editorMockTitle");
-  const descEl = document.getElementById("editorMockDescription");
-  const typeEl = document.getElementById("editorMockType");
-  const branchEl = document.getElementById("editorMockBranch");
-  const folderEl = document.getElementById("editorMockFolder");
-  const subjectEl = document.getElementById("editorMockSubject");
-  const questionsEl = document.getElementById("editorMockQuestions");
-  const durationEl = document.getElementById("editorMockDuration");
-  const activeEl = document.getElementById("editorMockActive");
-  const timingEl = document.getElementById("editorTimingEnabled");
-  const lockEl = document.getElementById("editorLockSections");
-
-  if (!titleEl) return;
-
-  const title = titleEl.value.trim();
-  const description = descEl.value.trim();
-  const testType = typeEl.value;
-  const branch = branchEl.value;
-  const folderId = folderEl.value || null;
-  const subjectId = subjectEl.value || null;
-  const totalQuestions = Number(questionsEl.value || 0);
-  const durationMinutes = Number(durationEl.value || 0);
-  const isActive = activeEl.checked;
-
-  if (!title) {
-    showToast("Mock title required hai", "error");
-    titleEl.focus();
-    return;
-  }
-
-  if (totalQuestions < 1) {
-    showToast("Questions 1 ya usse zyada hone chahiye", "error");
-    return;
-  }
-
-  if (durationMinutes < 1) {
-    showToast("Duration required hai", "error");
-    return;
-  }
-
-  if (!folderId) {
-    showToast("Folder / Year / Series select karo", "error");
-    return;
-  }
-
-  let sections = [];
-
-  if (testType === "SECTIONAL" && timingEl?.checked) {
-    const rows = [
-      ...document.querySelectorAll(".editor-section-row")
-    ];
-
-    rows.forEach((row, index) => {
-      const name =
-        row.querySelector(".editor-section-name")?.value.trim();
-
-      const time = Number(
-        row.querySelector(".editor-section-time")?.value || 0
-      );
-
-      if (name && time > 0) {
-        sections.push({
-          name,
-          time_minutes: time,
-          order: index + 1
-        });
-      }
-    });
-
-    if (!sections.length) {
-      showToast("Kam se kam ek section add karo", "error");
-      return;
-    }
-  }
-
-  const timingConfig = {
-    enabled:
-      testType === "SECTIONAL" &&
-      Boolean(timingEl?.checked),
-
-    allow_switch:
-      !(
-        testType === "SECTIONAL" &&
-        Boolean(timingEl?.checked) &&
-        Boolean(lockEl?.checked)
-      ),
-
-    locked:
-      testType === "SECTIONAL" &&
-      Boolean(timingEl?.checked) &&
-      Boolean(lockEl?.checked),
-
-    section_switch:
-      !(
-        testType === "SECTIONAL" &&
-        Boolean(timingEl?.checked) &&
-        Boolean(lockEl?.checked)
-      ),
-
-    sections
-  };
-
-  let sortOrder = 0;
-
-  const sameFolderTests = tests.filter(t =>
-    String(t.folder_id || "") === String(folderId)
-  );
-
-  if (editorMode === "NEW") {
-    sortOrder = sameFolderTests.length;
-  } else {
-    const oldTest = getTestById(editorTestId);
-    sortOrder = Number(oldTest?.sort_order || 0);
-  }
-
-  const payload = {
-    title,
-    description,
-    test_type: testType,
-    folder_id: folderId,
-    subject_id: subjectId,
-    duration_minutes: durationMinutes,
-    total_questions: totalQuestions,
-    is_active: isActive,
-    access_type: branch,
-    sort_order: sortOrder,
-    subject_wise_timing: timingConfig,
-    sections
-  };
-
-  let result;
-
-  try {
-    if (editorMode === "EDIT" && editorTestId) {
-      result = await supabaseClient
-        .from("mock_tests")
-        .update(payload)
-        .eq("id", editorTestId)
-        .select()
-        .single();
-    } else {
-      result = await supabaseClient
-        .from("mock_tests")
-        .insert(payload)
-        .select()
-        .single();
-    }
-
-    /*
-      Agar database me sections column nahi hai,
-      to fallback me sections remove karke save karega.
-    */
-    if (
-      result.error &&
-      String(result.error.message || "")
-        .toLowerCase()
-        .includes("sections")
-    ) {
-      const fallbackPayload = { ...payload };
-      delete fallbackPayload.sections;
-
-      if (editorMode === "EDIT" && editorTestId) {
-        result = await supabaseClient
-          .from("mock_tests")
-          .update(fallbackPayload)
-          .eq("id", editorTestId)
-          .select()
-          .single();
-      } else {
-        result = await supabaseClient
-          .from("mock_tests")
-          .insert(fallbackPayload)
-          .select()
-          .single();
-      }
-    }
-
-    if (result.error) {
-      throw result.error;
-    }
-
-    showToast(
-      editorMode === "EDIT"
-        ? "Mock successfully updated"
-        : "Mock successfully created",
-      "success"
-    );
-
-    closeModal("mockModal");
-
-    editorTestId = null;
-    editorMode = "NEW";
-
-    await loadAllData();
-
-  } catch (error) {
-    console.error("SAVE MOCK ERROR:", error);
-    showToast(
-      "Mock save nahi hua: " + (error.message || "Unknown error"),
-      "error"
-    );
-  }
-}
-
-/* =========================================================
-   GLOBAL FUNCTION CONNECTION
-========================================================= */
-
-window.openCompleteMockEditor = openCompleteMockEditor;
-window.addEditorSection = addEditorSection;
-window.saveMock = saveMock;
-window.refreshEditorBranchFolders = refreshEditorBranchFolders;
-
-/* =========================================================
-   OVERRIDE OLD PLACEHOLDER
-========================================================= */
-
-openMockEditor = function(type = "FULL", testId = null) {
-  openCompleteMockEditor(type, testId);
-};
-
-/* =========================================================
-   AUTO BRANCH REFRESH EVENT
-========================================================= */
-
-document.addEventListener("change", function(event) {
-  if (event.target?.id === "editorMockBranch") {
-    refreshEditorBranchFolders();
-  }
 });
 
-/* =========================================================
-   EXTRA EDITOR STYLES
-========================================================= */
-
-const editorExtraStyle = document.createElement("style");
-
-editorExtraStyle.textContent = `
-.editor-form{
-  display:flex;
-  flex-direction:column;
-  gap:15px;
-}
-
-.form-group{
-  display:flex;
-  flex-direction:column;
-  gap:7px;
-}
-
-.form-group label{
-  font-size:13px;
-  font-weight:700;
-  color:var(--text-secondary,#aaa);
-}
-
-.form-group input,
-.form-group textarea,
-.form-group select{
-  width:100%;
-  box-sizing:border-box;
-  border:1px solid var(--border,#333);
-  background:var(--input-bg,#17131f);
-  color:var(--text,#fff);
-  border-radius:10px;
-  padding:12px;
-  font-size:14px;
-  outline:none;
-}
-
-.form-group textarea{
-  min-height:75px;
-  resize:vertical;
-}
-
-.form-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-
-.toggle-row{
-  padding:10px 0;
-}
-
-.switch-label{
-  display:flex;
-  align-items:center;
-  gap:9px;
-  font-size:13px;
-  cursor:pointer;
-}
-
-.switch-label input{
-  width:17px;
-  height:17px;
-  accent-color:#9b5cff;
-}
-
-.section-timing-box{
-  border:1px solid var(--border,#333);
-  border-radius:12px;
-  padding:13px;
-  background:rgba(155,92,255,.05);
-}
-
-.timing-heading{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:12px;
-}
-
-.timing-heading strong{
-  display:block;
-  font-size:14px;
-}
-
-.timing-heading small,
-.help-text{
-  display:block;
-  color:var(--text-secondary,#999);
-  font-size:11px;
-  margin-top:4px;
-}
-
-.editor-section-row{
-  display:grid;
-  grid-template-columns:1fr 85px 34px;
-  gap:7px;
-  margin:9px 0;
-}
-
-.editor-section-row input{
-  min-width:0;
-  border:1px solid var(--border,#333);
-  background:var(--input-bg,#17131f);
-  color:var(--text,#fff);
-  border-radius:8px;
-  padding:9px;
-}
-
-.danger-small-btn{
-  border:0;
-  border-radius:8px;
-  background:#55202a;
-  color:#ff9ca9;
-  font-size:20px;
-  cursor:pointer;
-}
-
-.secondary-btn{
-  width:100%;
-  border:1px dashed #7651b5;
-  background:transparent;
-  color:#b991ff;
-  border-radius:9px;
-  padding:10px;
-  cursor:pointer;
-  font-weight:700;
-}
-
-.editor-note{
-  border-radius:9px;
-  background:rgba(155,92,255,.1);
-  color:#bda2ed;
-  font-size:12px;
-  padding:10px;
-  line-height:1.5;
-}
-
-@media(max-width:600px){
-  .form-grid{
-    grid-template-columns:1fr;
-  }
-
-  .editor-section-row{
-    grid-template-columns:1fr 75px 32px;
-  }
-}
-`;
-
-document.head.appendChild(editorExtraStyle);
-
-/* =========================
-   QUESTION MANAGER PLACEHOLDER
-========================= */
-
-function openQuestionManager(testId){
-
-window.location.href =
-"admin-questions.html?mock_id=" + encodeURIComponent(testId);
-
-}
-
-/* =========================
-   THEME SUPPORT
-========================= */
-
-function applySavedTheme(){
-
-const theme =
-localStorage.getItem("ssc-edge-theme") || "dark";
-
-document.documentElement.dataset.theme = theme;
-
-}
-
-applySavedTheme();
+loadAllData();
 
 </script>
 
 </body>
-
-</html>
+   </html>
