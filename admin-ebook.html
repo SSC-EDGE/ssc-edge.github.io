@@ -4,8 +4,7 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>SSC EDGE - E-Books</title>
 
@@ -73,6 +72,15 @@ border-radius:10px;
 border:1px solid var(--border);
 background:var(--bg);
 color:var(--text);
+}
+
+input[type="radio"]{
+width:auto;
+margin:0 6px 0 0;
+}
+
+input[type="file"]{
+padding:10px;
 }
 
 textarea{
@@ -154,12 +162,10 @@ flex-wrap:wrap;
 }
 
 .hidden{
-display:none;
+display:none !important;
 }
 
-/* =========================
-   COVER PREVIEW
-========================= */
+/* COVER PREVIEW */
 
 .cover-preview{
 width:100%;
@@ -208,9 +214,7 @@ opacity:.75;
 margin-top:5px;
 }
 
-/* =========================
-   BOOK LIST COVER
-========================= */
+/* BOOK LIST */
 
 .book-item{
 display:flex;
@@ -303,7 +307,6 @@ checked
 onchange="changeSource()">
 
 📁 Upload E-Book
-
 </label>
 
 <br><br>
@@ -316,7 +319,6 @@ value="url"
 onchange="changeSource()">
 
 🔗 E-Book URL
-
 </label>
 
 </div>
@@ -349,7 +351,17 @@ placeholder="Description"
 ></textarea>
 
 
-<label>Cover Image URL</label>
+<label>Cover Image Upload</label>
+
+<input
+id="thumbnailFile"
+type="file"
+accept="image/*"
+onchange="previewUploadedCover()"
+>
+
+
+<label>Or Cover Image URL</label>
 
 <input
 id="thumbnailUrl"
@@ -357,6 +369,7 @@ type="url"
 placeholder="https://example.com/book-cover.jpg"
 oninput="updateCoverPreview()"
 >
+
 
 <div class="cover-preview" id="coverPreview">
 
@@ -446,11 +459,11 @@ SUPABASE_KEY
 
 let editingId = null;
 let editingOldUrl = null;
+let editingOldThumbnailUrl = null;
+let editingOldThumbnailPath = null;
 
 
-/* =========================
-   ADMIN CHECK
-========================= */
+/* ADMIN CHECK */
 
 async function checkAdmin(){
 
@@ -494,9 +507,7 @@ return true;
 }
 
 
-/* =========================
-   ESCAPE HTML
-========================= */
+/* ESCAPE HTML */
 
 function escapeHtml(value){
 
@@ -511,9 +522,7 @@ return String(value ?? "")
 }
 
 
-/* =========================
-   SAFE JS STRING
-========================= */
+/* SAFE JS STRING */
 
 function safeJs(value){
 
@@ -524,9 +533,7 @@ String(value ?? "")
 }
 
 
-/* =========================
-   LOAD SUBJECTS
-========================= */
+/* LOAD SUBJECTS */
 
 async function loadSubjects(){
 
@@ -567,9 +574,7 @@ ${escapeHtml(x.name)}
 }
 
 
-/* =========================
-   CHANGE SOURCE
-========================= */
+/* CHANGE SOURCE */
 
 function changeSource(){
 
@@ -593,9 +598,7 @@ source !== "url"
 }
 
 
-/* =========================
-   COVER PLACEHOLDER
-========================= */
+/* COVER PLACEHOLDER */
 
 function coverPlaceholder(){
 
@@ -618,20 +621,12 @@ Learn • Practice • Improve
 }
 
 
-/* =========================
-   COVER PREVIEW
-========================= */
+/* SHOW COVER IMAGE */
 
-function updateCoverPreview(){
-
-const input =
-document.getElementById("thumbnailUrl");
+function showCoverImage(url){
 
 const preview =
 document.getElementById("coverPreview");
-
-const url =
-input.value.trim();
 
 if(!url){
 
@@ -642,117 +637,115 @@ return;
 
 }
 
-preview.innerHTML = `
+preview.innerHTML = "";
 
-<img
-src="${escapeHtml(url)}"
-alt="Cover Preview"
-onerror="this.parentElement.innerHTML =
-coverPlaceholder().replace(/"/g,'&quot;')"
->
+const img =
+document.createElement("img");
 
-`;
+img.src = url;
+img.alt = "Cover Preview";
+
+img.onerror = function(){
+
+preview.innerHTML =
+coverPlaceholder();
+
+};
+
+preview.appendChild(img);
 
 }
 
 
-/* =========================
-   SAVE BOOK
-========================= */
+/* URL PREVIEW */
 
-async function saveBook(){
+function updateCoverPreview(){
 
-const title =
-document.getElementById("title")
-.value.trim();
+const file =
+document.getElementById("thumbnailFile")
+.files[0];
 
-const subject =
-document.getElementById("subject")
-.value;
+if(file){
 
-const description =
-document.getElementById("description")
-.value.trim();
+return;
 
-const thumbnailUrl =
+}
+
+const url =
 document.getElementById("thumbnailUrl")
 .value.trim();
 
-const source =
-document.querySelector(
-'input[name="source"]:checked'
-).value;
+showCoverImage(url);
+
+}
+
+
+/* UPLOADED COVER PREVIEW */
+
+function previewUploadedCover(){
 
 const file =
-document.getElementById("file")
+document.getElementById("thumbnailFile")
 .files[0];
 
-const url =
-document.getElementById("url")
-.value.trim();
+if(!file){
 
-const status =
-document.getElementById("status");
-
-const saveBtn =
-document.getElementById("saveBtn");
-
-
-if(!title || !subject){
-
-status.textContent =
-"Please enter title and select subject.";
+updateCoverPreview();
 
 return;
 
 }
 
+if(!file.type.startsWith("image/")){
 
-if(
-!editingId &&
-source === "upload" &&
-!file
-){
+alert("Please select a valid image file.");
 
-status.textContent =
-"Please select an E-Book file.";
+document.getElementById("thumbnailFile")
+.value = "";
 
-return;
-
-}
-
-
-if(
-source === "url" &&
-!url
-){
-
-status.textContent =
-"Please enter the E-Book URL.";
+updateCoverPreview();
 
 return;
 
 }
 
+const objectUrl =
+URL.createObjectURL(file);
 
-status.textContent = "Saving...";
+showCoverImage(objectUrl);
 
-saveBtn.disabled = true;
-
-
-try{
-
-let finalUrl = url;
+}
 
 
-/* =========================
-   UPLOAD FILE
-========================= */
+/* GET STORAGE PATH */
 
-if(
-source === "upload" &&
-file
-){
+function getStoragePath(publicUrl,bucket){
+
+if(!publicUrl || !bucket){
+
+return null;
+
+}
+
+const marker =
+"/storage/v1/object/public/" +
+bucket +
+"/";
+
+if(!publicUrl.includes(marker)){
+
+return null;
+
+}
+
+return publicUrl.split(marker)[1] || null;
+
+}
+
+
+/* UPLOAD E-BOOK FILE */
+
+async function uploadBookFile(file){
 
 const ext =
 file.name
@@ -787,22 +780,197 @@ upsert:false
 if(error) throw error;
 
 const {
-data:urlData
+data
 } = db.storage
 
 .from("ssc-edge-ebooks")
 
 .getPublicUrl(path);
 
-finalUrl =
-urlData.publicUrl;
+return data.publicUrl;
 
 }
 
 
-/* =========================
-   UPDATE BOOK
-========================= */
+/* UPLOAD COVER IMAGE */
+
+async function uploadCoverImage(file){
+
+const ext =
+file.name
+.split(".")
+.pop()
+.toLowerCase();
+
+const path =
+"thumbnails/" +
+Date.now() +
+"-" +
+Math.random()
+.toString(36)
+.substring(2) +
+"." +
+ext;
+
+const {
+error
+} = await db.storage
+
+.from("ssc-edge-ebooks")
+
+.upload(
+path,
+file,
+{
+upsert:false,
+contentType:file.type
+}
+);
+
+if(error) throw error;
+
+const {
+data
+} = db.storage
+
+.from("ssc-edge-ebooks")
+
+.getPublicUrl(path);
+
+return {
+url:data.publicUrl,
+path:path
+};
+
+}
+
+
+/* SAVE BOOK */
+
+async function saveBook(){
+
+const title =
+document.getElementById("title")
+.value.trim();
+
+const subject =
+document.getElementById("subject")
+.value;
+
+const description =
+document.getElementById("description")
+.value.trim();
+
+const thumbnailUrl =
+document.getElementById("thumbnailUrl")
+.value.trim();
+
+const thumbnailFile =
+document.getElementById("thumbnailFile")
+.files[0];
+
+const source =
+document.querySelector(
+'input[name="source"]:checked'
+).value;
+
+const file =
+document.getElementById("file")
+.files[0];
+
+const url =
+document.getElementById("url")
+.value.trim();
+
+const status =
+document.getElementById("status");
+
+const saveBtn =
+document.getElementById("saveBtn");
+
+
+if(!title || !subject){
+
+status.textContent =
+"Please enter title and select subject.";
+
+return;
+
+}
+
+if(
+!editingId &&
+source === "upload" &&
+!file
+){
+
+status.textContent =
+"Please select an E-Book file.";
+
+return;
+
+}
+
+if(
+source === "url" &&
+!url
+){
+
+status.textContent =
+"Please enter the E-Book URL.";
+
+return;
+
+}
+
+status.textContent = "Saving...";
+saveBtn.disabled = true;
+
+let uploadedBookUrl = null;
+let uploadedCoverUrl = null;
+let uploadedCoverPath = null;
+
+try{
+
+let finalUrl = url;
+let finalThumbnailUrl = thumbnailUrl;
+
+
+/* UPLOAD BOOK */
+
+if(
+source === "upload" &&
+file
+){
+
+finalUrl =
+await uploadBookFile(file);
+
+uploadedBookUrl = finalUrl;
+
+}
+
+
+/* UPLOAD COVER IMAGE */
+
+if(thumbnailFile){
+
+const cover =
+await uploadCoverImage(thumbnailFile);
+
+finalThumbnailUrl =
+cover.url;
+
+uploadedCoverUrl =
+cover.url;
+
+uploadedCoverPath =
+cover.path;
+
+}
+
+
+/* UPDATE */
 
 if(editingId){
 
@@ -825,7 +993,7 @@ material_type:"EBOOK",
 file_url:finalUrl,
 
 thumbnail_url:
-thumbnailUrl || null,
+finalThumbnailUrl || null,
 
 is_active:true
 
@@ -836,34 +1004,46 @@ is_active:true
 if(error) throw error;
 
 
-/* Delete old uploaded file */
+/* DELETE OLD BOOK FILE ONLY IF NEW FILE UPLOADED */
 
 if(
-
-source === "upload" &&
-
-editingOldUrl &&
-
-editingOldUrl.includes(
-"/storage/v1/object/public/ssc-edge-ebooks/"
-)
-
+uploadedBookUrl &&
+editingOldUrl
 ){
 
-const oldPath =
-editingOldUrl.split(
-"/storage/v1/object/public/ssc-edge-ebooks/"
-)[1];
+const oldBookPath =
+getStoragePath(
+editingOldUrl,
+"ssc-edge-ebooks"
+);
 
-if(oldPath){
+if(oldBookPath){
 
 await db.storage
 
 .from("ssc-edge-ebooks")
 
-.remove([oldPath]);
+.remove([oldBookPath]);
 
 }
+
+}
+
+
+/* DELETE OLD COVER IF NEW COVER UPLOADED */
+
+if(
+uploadedCoverUrl &&
+editingOldThumbnailPath
+){
+
+await db.storage
+
+.from("ssc-edge-ebooks")
+
+.remove([
+editingOldThumbnailPath
+]);
 
 }
 
@@ -873,9 +1053,7 @@ status.textContent =
 }else{
 
 
-/* =========================
-   INSERT BOOK
-========================= */
+/* INSERT */
 
 const {
 error
@@ -896,7 +1074,7 @@ material_type:"EBOOK",
 file_url:finalUrl,
 
 thumbnail_url:
-thumbnailUrl || null,
+finalThumbnailUrl || null,
 
 is_active:true
 
@@ -908,7 +1086,6 @@ status.textContent =
 "E-Book added successfully.";
 
 }
-
 
 resetForm();
 
@@ -932,9 +1109,7 @@ saveBtn.disabled = false;
 }
 
 
-/* =========================
-   LOAD BOOKS
-========================= */
+/* LOAD BOOKS */
 
 async function loadBooks(){
 
@@ -1034,18 +1209,14 @@ ${thumbHtml}
 <div class="book-details">
 
 <div class="item-title">
-
 ${escapeHtml(book.title)}
-
 </div>
 
 <div class="item-meta">
-
 ${escapeHtml(
 book.subjects?.name ||
 "No subject"
 )}
-
 </div>
 
 <div class="actions">
@@ -1072,7 +1243,8 @@ onclick="editBook(${Number(book.id)})">
 class="danger"
 onclick="deleteBook(
 ${Number(book.id)},
-'${safeJs(book.file_url)}'
+'${safeJs(book.file_url)}',
+'${safeJs(book.thumbnail_url || "")}'
 )">
 
 🗑 Delete
@@ -1094,9 +1266,7 @@ ${Number(book.id)},
 }
 
 
-/* =========================
-   OPEN BOOK URL
-========================= */
+/* OPEN BOOK */
 
 function openUrl(encoded){
 
@@ -1108,9 +1278,7 @@ decodeURIComponent(encoded),
 }
 
 
-/* =========================
-   EDIT BOOK
-========================= */
+/* EDIT BOOK */
 
 async function editBook(id){
 
@@ -1140,6 +1308,15 @@ editingId = id;
 editingOldUrl =
 data.file_url || null;
 
+editingOldThumbnailUrl =
+data.thumbnail_url || null;
+
+editingOldThumbnailPath =
+getStoragePath(
+editingOldThumbnailUrl,
+"ssc-edge-ebooks"
+);
+
 document.getElementById("title")
 .value =
 data.title || "";
@@ -1156,8 +1333,10 @@ document.getElementById("thumbnailUrl")
 .value =
 data.thumbnail_url || "";
 
-updateCoverPreview();
+document.getElementById("thumbnailFile")
+.value = "";
 
+updateCoverPreview();
 
 document.querySelector(
 'input[name="source"][value="url"]'
@@ -1184,13 +1363,12 @@ behavior:"smooth"
 }
 
 
-/* =========================
-   DELETE BOOK
-========================= */
+/* DELETE BOOK */
 
 async function deleteBook(
 id,
-encodedUrl
+encodedUrl,
+encodedThumbnail
 ){
 
 if(
@@ -1203,6 +1381,9 @@ return;
 
 const url =
 decodeURIComponent(encodedUrl);
+
+const thumbnail =
+decodeURIComponent(encodedThumbnail);
 
 const {
 error
@@ -1223,30 +1404,40 @@ return;
 }
 
 
-/* Delete uploaded file */
+/* DELETE BOOK FILE */
 
-if(
+const bookPath =
+getStoragePath(
+url,
+"ssc-edge-ebooks"
+);
 
-url.includes(
-"/storage/v1/object/public/ssc-edge-ebooks/"
-)
-
-){
-
-const path =
-url.split(
-"/storage/v1/object/public/ssc-edge-ebooks/"
-)[1];
-
-if(path){
+if(bookPath){
 
 await db.storage
 
 .from("ssc-edge-ebooks")
 
-.remove([path]);
+.remove([bookPath]);
 
 }
+
+
+/* DELETE COVER IMAGE */
+
+const coverPath =
+getStoragePath(
+thumbnail,
+"ssc-edge-ebooks"
+);
+
+if(coverPath){
+
+await db.storage
+
+.from("ssc-edge-ebooks")
+
+.remove([coverPath]);
 
 }
 
@@ -1255,15 +1446,17 @@ await loadBooks();
 }
 
 
-/* =========================
-   RESET FORM
-========================= */
+/* RESET FORM */
 
 function resetForm(){
 
 editingId = null;
 
 editingOldUrl = null;
+
+editingOldThumbnailUrl = null;
+
+editingOldThumbnailPath = null;
 
 document.getElementById("title")
 .value = "";
@@ -1272,6 +1465,9 @@ document.getElementById("description")
 .value = "";
 
 document.getElementById("thumbnailUrl")
+.value = "";
+
+document.getElementById("thumbnailFile")
 .value = "";
 
 document.getElementById("url")
@@ -1303,9 +1499,7 @@ coverPlaceholder();
 }
 
 
-/* =========================
-   INITIAL LOAD
-========================= */
+/* INITIAL LOAD */
 
 (async function(){
 
