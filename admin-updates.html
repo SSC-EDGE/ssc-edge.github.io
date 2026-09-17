@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+document.documentElement.dataset.theme =
+  localStorage.getItem("ssc-edge-theme") || "dark";
+</script>
+
+<title>SSC EDGE - Manage Updates</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+:root{
+  --bg:#0d0d14;
+  --card:#171722;
+  --card2:#20202d;
+  --text:#ffffff;
+  --muted:#aaaabd;
+  --border:#303044;
+  --purple:#a970ff;
+  --purple2:#7c3aed;
+  --danger:#ff5f6d;
+  --success:#54d68c;
+}
+
+:root[data-theme="light"]{
+  --bg:#f5f3fa;
+  --card:#ffffff;
+  --card2:#f0edf8;
+  --text:#171421;
+  --muted:#686477;
+  --border:#ddd7eb;
+  --purple:#7c3aed;
+  --purple2:#6d28d9;
+  --danger:#dc2626;
+  --success:#159957;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  padding:20px;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial, sans-serif;
+}
+
+.container{
+  max-width:850px;
+  margin:auto;
+}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:22px;
+}
+
+.header h1{
+  margin:0;
+  font-size:24px;
+}
+
+.header h1 span{
+  color:var(--purple);
+}
+
+.back-btn{
+  text-decoration:none;
+  color:var(--text);
+  border:1px solid var(--border);
+  background:var(--card);
+  padding:10px 14px;
+  border-radius:10px;
+  font-size:13px;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:22px;
+}
+
+.card h2{
+  margin:0 0 18px;
+  font-size:18px;
+}
+
+label{
+  display:block;
+  margin:13px 0 7px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+input,
+textarea,
+select{
+  width:100%;
+  border:1px solid var(--border);
+  background:var(--card2);
+  color:var(--text);
+  border-radius:10px;
+  padding:12px;
+  outline:none;
+  font-size:14px;
+}
+
+textarea{
+  min-height:120px;
+  resize:vertical;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+  border-color:var(--purple);
+}
+
+.row{
+  display:flex;
+  gap:12px;
+}
+
+.row > div{
+  flex:1;
+}
+
+.check-row{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin-top:15px;
+  color:var(--text);
+  font-size:14px;
+}
+
+.check-row input{
+  width:auto;
+  accent-color:var(--purple);
+}
+
+.buttons{
+  display:flex;
+  gap:10px;
+  margin-top:18px;
+}
+
+button{
+  border:0;
+  cursor:pointer;
+  border-radius:10px;
+  padding:11px 16px;
+  font-weight:bold;
+  font-size:13px;
+}
+
+.save-btn{
+  background:var(--purple);
+  color:#fff;
+}
+
+.cancel-btn{
+  background:var(--card2);
+  color:var(--text);
+  border:1px solid var(--border);
+}
+
+.edit-btn{
+  background:#2563eb;
+  color:#fff;
+}
+
+.delete-btn{
+  background:var(--danger);
+  color:#fff;
+}
+
+.toggle-btn{
+  background:#64748b;
+  color:#fff;
+}
+
+.status{
+  display:none;
+  margin-bottom:15px;
+  padding:12px;
+  border-radius:10px;
+  font-size:13px;
+}
+
+.status.success{
+  display:block;
+  background:rgba(84,214,140,.15);
+  color:var(--success);
+}
+
+.status.error{
+  display:block;
+  background:rgba(255,95,109,.15);
+  color:var(--danger);
+}
+
+.update-item{
+  border:1px solid var(--border);
+  background:var(--card2);
+  border-radius:13px;
+  padding:15px;
+  margin-bottom:13px;
+}
+
+.update-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+}
+
+.update-title{
+  font-size:16px;
+  font-weight:bold;
+  margin-bottom:6px;
+}
+
+.update-message{
+  color:var(--muted);
+  white-space:pre-wrap;
+  line-height:1.5;
+  font-size:14px;
+  margin-top:8px;
+}
+
+.update-meta{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:11px;
+  font-size:11px;
+}
+
+.badge{
+  padding:5px 8px;
+  border-radius:6px;
+  background:rgba(169,112,255,.15);
+  color:var(--purple);
+}
+
+.inactive-badge{
+  background:rgba(255,95,109,.15);
+  color:var(--danger);
+}
+
+.active-badge{
+  background:rgba(84,214,140,.15);
+  color:var(--success);
+}
+
+.update-actions{
+  display:flex;
+  gap:7px;
+  margin-top:13px;
+  flex-wrap:wrap;
+}
+
+.update-actions button{
+  padding:8px 11px;
+  font-size:12px;
+}
+
+.empty{
+  text-align:center;
+  color:var(--muted);
+  padding:25px 10px;
+}
+
+.loading{
+  text-align:center;
+  color:var(--muted);
+  padding:20px;
+}
+
+@media(max-width:600px){
+
+  body{
+    padding:13px;
+  }
+
+  .header h1{
+    font-size:20px;
+  }
+
+  .row{
+    flex-direction:column;
+    gap:0;
+  }
+
+  .card{
+    padding:15px;
+  }
+
+  .update-top{
+    flex-direction:column;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>Manage <span>Updates</span></h1>
+    <a href="javascript:history.back()" class="back-btn">← Back</a>
+  </div>
+
+  <div id="statusBox" class="status"></div>
+
+  <div class="card">
+
+    <h2 id="formHeading">Add New Update</h2>
+
+    <label for="updateTitle">Update Title</label>
+    <input
+      type="text"
+      id="updateTitle"
+      placeholder="Example: New Mock Tests Added"
+    >
+
+    <label for="updateMessage">Update Message</label>
+    <textarea
+      id="updateMessage"
+      placeholder="Write your update message here..."
+    ></textarea>
+
+    <div class="row">
+
+      <div>
+        <label for="updateType">Update Type</label>
+        <select id="updateType">
+          <option value="GENERAL">General</option>
+          <option value="NEW">New</option>
+          <option value="IMPORTANT">Important</option>
+          <option value="NOTICE">Notice</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="updateStatus">Status</label>
+        <select id="updateStatus">
+          <option value="true">Active</option>
+          <option value="false">Inactive</option>
+        </select>
+      </div>
+
+    </div>
+
+    <div class="buttons">
+      <button class="save-btn" id="saveBtn" onclick="saveUpdate()">
+        Add Update
+      </button>
+
+      <button
+        class="cancel-btn"
+        id="cancelBtn"
+        onclick="cancelEdit()"
+        style="display:none;"
+      >
+        Cancel Edit
+      </button>
+    </div>
+
+  </div>
+
+  <div class="card">
+
+    <h2>All Updates</h2>
+
+    <div id="updatesList" class="loading">
+      Loading updates...
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+const SUPABASE_URL =
+  "https://dvvyoygahzzbnpqrfhen.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+let editingId = null;
+
+function showStatus(message, type){
+
+  const box = document.getElementById("statusBox");
+
+  box.textContent = message;
+  box.className = "status " + type;
+
+  setTimeout(function(){
+    box.className = "status";
+  }, 4000);
+
+}
+
+async function checkAdmin(){
+
+  const {
+    data: { user },
+    error: userError
+  } = await supabaseClient.auth.getUser();
+
+  if(userError || !user){
+
+    document.body.innerHTML = `
+      <div style="
+        color:white;
+        background:#0d0d14;
+        min-height:100vh;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        text-align:center;
+        padding:20px;
+        font-family:Arial;
+      ">
+        <div>
+          <h2>Admin Login Required</h2>
+          <p>Please login as admin first.</p>
+          <a href="admin-login.html"
+             style="color:#a970ff;">
+             Go to Admin Login
+          </a>
+        </div>
+      </div>
+    `;
+
+    return false;
+  }
+
+  const { data: admin, error } =
+    await supabaseClient
+      .from("admin_users")
+      .select("id")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+  if(error || !admin){
+
+    document.body.innerHTML = `
+      <div style="
+        color:white;
+        background:#0d0d14;
+        min-height:100vh;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        text-align:center;
+        padding:20px;
+        font-family:Arial;
+      ">
+        <div>
+          <h2>Access Denied</h2>
+          <p>You are not registered as an admin.</p>
+        </div>
+      </div>
+    `;
+
+    return false;
+  }
+
+  return true;
+
+}
+
+async function loadUpdates(){
+
+  const list = document.getElementById("updatesList");
+
+  list.className = "loading";
+  list.textContent = "Loading updates...";
+
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from("updates")
+    .select("*")
+    .order("created_at", { ascending:false });
+
+  if(error){
+
+    list.className = "empty";
+    list.textContent = "Error loading updates: " + error.message;
+
+    return;
+  }
+
+  if(!data || data.length === 0){
+
+    list.className = "empty";
+    list.textContent = "No updates added yet.";
+
+    return;
+  }
+
+  list.className = "";
+  list.innerHTML = "";
+
+  data.forEach(function(update){
+
+    const item = document.createElement("div");
+    item.className = "update-item";
+
+    const date = update.created_at
+      ? new Date(update.created_at).toLocaleString("en-IN", {
+          day:"2-digit",
+          month:"short",
+          year:"numeric",
+          hour:"2-digit",
+          minute:"2-digit"
+        })
+      : "";
+
+    const statusClass = update.is_active
+      ? "active-badge"
+      : "inactive-badge";
+
+    const statusText = update.is_active
+      ? "Active"
+      : "Inactive";
+
+    item.innerHTML = `
+      <div class="update-top">
+
+        <div>
+          <div class="update-title">
+            ${escapeHTML(update.title || "")}
+          </div>
+
+          <div class="update-message">
+            ${escapeHTML(update.message || "")}
+          </div>
+        </div>
+
+      </div>
+
+      <div class="update-meta">
+
+        <span class="badge">
+          ${escapeHTML(update.type || "GENERAL")}
+        </span>
+
+        <span class="badge ${statusClass}">
+          ${statusText}
+        </span>
+
+        <span class="badge">
+          ${date}
+        </span>
+
+      </div>
+
+      <div class="update-actions">
+
+        <button
+          class="edit-btn"
+          onclick='editUpdate(${JSON.stringify(update)})'>
+          Edit
+        </button>
+
+        <button
+          class="toggle-btn"
+          onclick="toggleUpdate(${update.id}, ${update.is_active})">
+          ${update.is_active ? "Deactivate" : "Activate"}
+        </button>
+
+        <button
+          class="delete-btn"
+          onclick="deleteUpdate(${update.id})">
+          Delete
+        </button>
+
+      </div>
+    `;
+
+    list.appendChild(item);
+
+  });
+
+}
+
+function escapeHTML(value){
+
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+async function saveUpdate(){
+
+  const title =
+    document.getElementById("updateTitle").value.trim();
+
+  const message =
+    document.getElementById("updateMessage").value.trim();
+
+  const type =
+    document.getElementById("updateType").value;
+
+  const isActive =
+    document.getElementById("updateStatus").value === "true";
+
+  if(!title){
+
+    showStatus("Please enter update title.", "error");
+    return;
+  }
+
+  if(!message){
+
+    showStatus("Please enter update message.", "error");
+    return;
+  }
+
+  const saveBtn =
+    document.getElementById("saveBtn");
+
+  saveBtn.disabled = true;
+  saveBtn.textContent = "Saving...";
+
+  let result;
+
+  if(editingId){
+
+    result = await supabaseClient
+      .from("updates")
+      .update({
+        title:title,
+        message:message,
+        type:type,
+        is_active:isActive
+      })
+      .eq("id", editingId);
+
+  }else{
+
+    result = await supabaseClient
+      .from("updates")
+      .insert({
+        title:title,
+        message:message,
+        type:type,
+        is_active:isActive
+      });
+
+  }
+
+  saveBtn.disabled = false;
+  saveBtn.textContent =
+    editingId ? "Update Save" : "Add Update";
+
+  if(result.error){
+
+    showStatus(
+      "Error: " + result.error.message,
+      "error"
+    );
+
+    return;
+  }
+
+  showStatus(
+    editingId
+      ? "Update successfully edited."
+      : "Update successfully added.",
+    "success"
+  );
+
+  cancelEdit();
+  loadUpdates();
+
+}
+
+function editUpdate(update){
+
+  editingId = update.id;
+
+  document.getElementById("updateTitle").value =
+    update.title || "";
+
+  document.getElementById("updateMessage").value =
+    update.message || "";
+
+  document.getElementById("updateType").value =
+    update.type || "GENERAL";
+
+  document.getElementById("updateStatus").value =
+    update.is_active ? "true" : "false";
+
+  document.getElementById("formHeading").textContent =
+    "Edit Update";
+
+  document.getElementById("saveBtn").textContent =
+    "Update Save";
+
+  document.getElementById("cancelBtn").style.display =
+    "block";
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+function cancelEdit(){
+
+  editingId = null;
+
+  document.getElementById("updateTitle").value = "";
+  document.getElementById("updateMessage").value = "";
+  document.getElementById("updateType").value = "GENERAL";
+  document.getElementById("updateStatus").value = "true";
+
+  document.getElementById("formHeading").textContent =
+    "Add New Update";
+
+  document.getElementById("saveBtn").textContent =
+    "Add Update";
+
+  document.getElementById("cancelBtn").style.display =
+    "none";
+
+}
+
+async function toggleUpdate(id, currentStatus){
+
+  const { error } =
+    await supabaseClient
+      .from("updates")
+      .update({
+        is_active: !currentStatus
+      })
+      .eq("id", id);
+
+  if(error){
+
+    showStatus(
+      "Error: " + error.message,
+      "error"
+    );
+
+    return;
+  }
+
+  showStatus(
+    currentStatus
+      ? "Update deactivated."
+      : "Update activated.",
+    "success"
+  );
+
+  loadUpdates();
+
+}
+
+async function deleteUpdate(id){
+
+  const confirmDelete =
+    confirm("Are you sure you want to delete this update?");
+
+  if(!confirmDelete){
+    return;
+  }
+
+  const { error } =
+    await supabaseClient
+      .from("updates")
+      .delete()
+      .eq("id", id);
+
+  if(error){
+
+    showStatus(
+      "Error: " + error.message,
+      "error"
+    );
+
+    return;
+  }
+
+  showStatus(
+    "Update deleted successfully.",
+    "success"
+  );
+
+  loadUpdates();
+
+}
+
+async function init(){
+
+  const allowed = await checkAdmin();
+
+  if(!allowed){
+    return;
+  }
+
+  loadUpdates();
+
+}
+
+init();
+
+</script>
+
+</body>
+</html>
