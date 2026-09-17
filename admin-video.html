@@ -76,6 +76,31 @@ textarea{
   resize:vertical;
 }
 
+.help-text{
+  color:#aaa2b9;
+  font-size:12px;
+  line-height:1.5;
+  margin-top:7px;
+}
+
+.thumbnail-preview{
+  width:100%;
+  aspect-ratio:16/9;
+  margin-top:12px;
+  border:1px solid #302044;
+  border-radius:12px;
+  overflow:hidden;
+  background:#08050e;
+  display:none;
+}
+
+.thumbnail-preview img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
 .source-box{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -103,7 +128,7 @@ textarea{
 }
 
 .hidden{
-  display:none;
+  display:none !important;
 }
 
 button{
@@ -116,10 +141,12 @@ button{
   color:#fff;
   font-size:15px;
   font-weight:bold;
+  cursor:pointer;
 }
 
 button:disabled{
   opacity:.6;
+  cursor:not-allowed;
 }
 
 .cancel-btn{
@@ -154,6 +181,44 @@ button:disabled{
   color:#aaa2b9;
   font-size:14px;
   line-height:1.5;
+}
+
+.video-thumbnail-small{
+  width:100%;
+  aspect-ratio:16/9;
+  border-radius:10px;
+  overflow:hidden;
+  background:#08050e;
+  margin-bottom:12px;
+}
+
+.video-thumbnail-small img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.thumbnail-fallback-small{
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,#171225,#30204f);
+  color:#fff;
+  text-align:center;
+}
+
+.thumbnail-fallback-small strong{
+  font-size:24px;
+}
+
+.thumbnail-fallback-small span{
+  margin-top:5px;
+  font-size:11px;
+  opacity:.8;
 }
 
 .video-actions{
@@ -197,14 +262,11 @@ button:disabled{
 
 <body>
 
-
 <div class="container">
-
 
 <a href="admin-study.html" class="back">
 ← Back
 </a>
-
 
 <h1>Manage Videos</h1>
 
@@ -252,11 +314,33 @@ Loading subjects...
 ></textarea>
 
 
+<!-- =========================
+     THUMBNAIL
+========================= -->
+
+<label>Thumbnail URL (Optional)</label>
+
+<input
+  type="url"
+  id="thumbnailUrl"
+  placeholder="https://example.com/thumbnail.jpg"
+>
+
+<div class="help-text">
+Custom thumbnail do to. Blank chhodne par YouTube URL se thumbnail automatically generate hoga.
+</div>
+
+<div
+  id="thumbnailPreview"
+  class="thumbnail-preview"
+>
+<img id="thumbnailPreviewImage" src="" alt="Thumbnail Preview">
+</div>
+
+
 <label>Video Source</label>
 
-
 <div class="source-box">
-
 
 <label
   class="source-option active"
@@ -292,7 +376,6 @@ Loading subjects...
 
 </label>
 
-
 </div>
 
 
@@ -323,8 +406,13 @@ Loading subjects...
 <input
   type="url"
   id="videoUrl"
-  placeholder="https://..."
+  placeholder="https://youtube.com/watch?v=..."
+  oninput="updateThumbnailPreview()"
 >
+
+<div class="help-text">
+YouTube URL hone par thumbnail automatically generate hoga, agar custom thumbnail blank hai.
+</div>
 
 </div>
 
@@ -351,7 +439,6 @@ Cancel Edit
 </div>
 
 
-
 <!-- =========================
      EXISTING VIDEOS
 ========================= -->
@@ -359,7 +446,6 @@ Cancel Edit
 <h2 class="section-title">
 Existing Videos
 </h2>
-
 
 <div id="videoList">
 
@@ -369,13 +455,10 @@ Loading videos...
 
 </div>
 
-
 </div>
 
 
-
 <script>
-
 
 // =========================
 // SUPABASE
@@ -433,7 +516,7 @@ async function checkAdmin(){
   const {
     data: { user }
   } =
-    await supabaseClient.auth.getUser();
+  await supabaseClient.auth.getUser();
 
 
   if(!user){
@@ -448,15 +531,15 @@ async function checkAdmin(){
 
 
   const { data, error } =
-    await supabaseClient
+  await supabaseClient
 
-      .from("admin_users")
+    .from("admin_users")
 
-      .select("user_id")
+    .select("user_id")
 
-      .eq("user_id", user.id)
+    .eq("user_id", user.id)
 
-      .maybeSingle();
+    .maybeSingle();
 
 
   if(error || !data){
@@ -486,15 +569,15 @@ async function loadSubjects(){
 
 
   const { data, error } =
-    await supabaseClient
+  await supabaseClient
 
-      .from("subjects")
+    .from("subjects")
 
-      .select("id,name")
+    .select("id,name")
 
-      .eq("is_active",true)
+    .eq("is_active",true)
 
-      .order("name");
+    .order("name");
 
 
   if(error){
@@ -512,7 +595,7 @@ async function loadSubjects(){
     '<option value="">Select Subject</option>';
 
 
-  data.forEach(subject => {
+  (data || []).forEach(subject => {
 
     const option =
       document.createElement("option");
@@ -570,6 +653,8 @@ function changeSource(source){
 
     urlOption.classList.add("active");
 
+    updateThumbnailPreview();
+
   }
 
 }
@@ -581,9 +666,175 @@ function changeSource(source){
 
 function getSource(){
 
-  return document.querySelector(
-    'input[name="source"]:checked'
-  ).value;
+  const selected =
+    document.querySelector(
+      'input[name="source"]:checked'
+    );
+
+  return selected
+    ? selected.value
+    : "upload";
+
+}
+
+
+// =========================
+// YOUTUBE VIDEO ID
+// =========================
+
+function getYouTubeVideoId(url){
+
+  if(!url){
+    return null;
+  }
+
+  try{
+
+    const parsed =
+      new URL(url);
+
+    const host =
+      parsed.hostname.toLowerCase();
+
+    if(
+      host === "youtu.be" ||
+      host === "www.youtu.be"
+    ){
+
+      return parsed.pathname
+        .replace("/","")
+        .split("/")[0] || null;
+
+    }
+
+    if(
+      host.includes("youtube.com") ||
+      host.includes("youtube-nocookie.com")
+    ){
+
+      const queryId =
+        parsed.searchParams.get("v");
+
+      if(queryId){
+        return queryId;
+      }
+
+      const parts =
+        parsed.pathname
+          .split("/")
+          .filter(Boolean);
+
+      const index =
+        parts.findIndex(
+          part =>
+            part === "shorts" ||
+            part === "embed" ||
+            part === "live"
+        );
+
+      if(index !== -1 && parts[index + 1]){
+        return parts[index + 1];
+      }
+
+    }
+
+  }
+  catch(error){
+
+    return null;
+
+  }
+
+  return null;
+
+}
+
+
+// =========================
+// AUTO THUMBNAIL URL
+// =========================
+
+function getAutomaticThumbnail(videoUrl){
+
+  const videoId =
+    getYouTubeVideoId(videoUrl);
+
+  if(!videoId){
+    return "";
+  }
+
+  return
+    "https://img.youtube.com/vi/" +
+    videoId +
+    "/hqdefault.jpg";
+
+}
+
+
+// =========================
+// FINAL THUMBNAIL
+// =========================
+
+function getFinalThumbnail(customThumbnail, videoUrl){
+
+  const custom =
+    String(customThumbnail || "").trim();
+
+  if(custom){
+    return custom;
+  }
+
+  return getAutomaticThumbnail(videoUrl);
+
+}
+
+
+// =========================
+// THUMBNAIL PREVIEW
+// =========================
+
+function updateThumbnailPreview(){
+
+  const custom =
+    document
+      .getElementById("thumbnailUrl")
+      .value
+      .trim();
+
+  const videoUrl =
+    document
+      .getElementById("videoUrl")
+      .value
+      .trim();
+
+  const finalThumbnail =
+    getFinalThumbnail(
+      custom,
+      videoUrl
+    );
+
+  const preview =
+    document.getElementById("thumbnailPreview");
+
+  const image =
+    document.getElementById("thumbnailPreviewImage");
+
+
+  if(!finalThumbnail){
+
+    preview.style.display = "none";
+
+    image.src = "";
+
+    return;
+  }
+
+
+  image.src =
+    finalThumbnail;
+
+  preview.style.display =
+    "block";
 
 }
 
@@ -610,6 +861,13 @@ async function saveVideo(){
   const description =
     document
       .getElementById("description")
+      .value
+      .trim();
+
+
+  const customThumbnail =
+    document
+      .getElementById("thumbnailUrl")
       .value
       .trim();
 
@@ -644,6 +902,20 @@ async function saveVideo(){
   }
 
 
+  if(
+    customThumbnail &&
+    !isValidURL(customThumbnail)
+  ){
+
+    showStatus(
+      "Please enter a valid thumbnail URL.",
+      false
+    );
+
+    return;
+  }
+
+
   // =========================
   // EDIT EXISTING VIDEO
   // =========================
@@ -654,6 +926,7 @@ async function saveVideo(){
       title,
       subjectId,
       description,
+      customThumbnail,
       source,
       button
     );
@@ -697,6 +970,13 @@ async function saveVideo(){
     }
 
 
+    const finalThumbnail =
+      getFinalThumbnail(
+        customThumbnail,
+        videoUrl
+      );
+
+
     button.disabled = true;
 
     button.textContent =
@@ -704,31 +984,34 @@ async function saveVideo(){
 
 
     const { error } =
-      await supabaseClient
+    await supabaseClient
 
-        .from("study_material")
+      .from("study_material")
 
-        .insert({
+      .insert({
 
-          subject_id:
-            Number(subjectId),
+        subject_id:
+          Number(subjectId),
 
-          title:
-            title,
+        title:
+          title,
 
-          description:
-            description || null,
+        description:
+          description || null,
 
-          material_type:
-            "VIDEO",
+        material_type:
+          "VIDEO",
 
-          file_url:
-            videoUrl,
+        file_url:
+          videoUrl,
 
-          is_active:
-            true
+        thumbnail_url:
+          finalThumbnail || null,
 
-        });
+        is_active:
+          true
+
+      });
 
 
     if(error){
@@ -831,22 +1114,22 @@ async function saveVideo(){
 
 
   const { error: uploadError } =
-    await supabaseClient
+  await supabaseClient
 
-      .storage
+    .storage
 
-      .from("ssc-edge-videos")
+    .from("ssc-edge-videos")
 
-      .upload(
-        filePath,
-        file,
-        {
-          contentType:
-            file.type,
+    .upload(
+      filePath,
+      file,
+      {
+        contentType:
+          file.type,
 
-          upsert:false
-        }
-      );
+        upsert:false
+      }
+    );
 
 
   if(uploadError){
@@ -882,32 +1165,42 @@ async function saveVideo(){
     publicData.publicUrl;
 
 
+  const finalThumbnail =
+    getFinalThumbnail(
+      customThumbnail,
+      ""
+    );
+
+
   const { error: dbError } =
-    await supabaseClient
+  await supabaseClient
 
-      .from("study_material")
+    .from("study_material")
 
-      .insert({
+    .insert({
 
-        subject_id:
-          Number(subjectId),
+      subject_id:
+        Number(subjectId),
 
-        title:
-          title,
+      title:
+        title,
 
-        description:
-          description || null,
+      description:
+        description || null,
 
-        material_type:
-          "VIDEO",
+      material_type:
+        "VIDEO",
 
-        file_url:
-          videoUrl,
+      file_url:
+        videoUrl,
 
-        is_active:
-          true
+      thumbnail_url:
+        finalThumbnail || null,
 
-      });
+      is_active:
+        true
+
+    });
 
 
   if(dbError){
@@ -960,6 +1253,7 @@ async function updateVideo(
   title,
   subjectId,
   description,
+  customThumbnail,
   source,
   button
 ){
@@ -1020,7 +1314,8 @@ async function updateVideo(
     }
 
 
-    newVideoUrl = url;
+    newVideoUrl =
+      url;
 
   }
 
@@ -1085,22 +1380,22 @@ async function updateVideo(
 
 
       const { error } =
-        await supabaseClient
+      await supabaseClient
 
-          .storage
+        .storage
 
-          .from("ssc-edge-videos")
+        .from("ssc-edge-videos")
 
-          .upload(
-            newFilePath,
-            file,
-            {
-              contentType:
-                file.type,
+        .upload(
+          newFilePath,
+          file,
+          {
+            contentType:
+              file.type,
 
-              upsert:false
-            }
-          );
+            upsert:false
+          }
+        );
 
 
       if(error){
@@ -1140,10 +1435,6 @@ async function updateVideo(
   }
 
 
-  // =========================
-  // UPDATE DATABASE
-  // =========================
-
   const updateData = {
 
     subject_id:
@@ -1153,7 +1444,17 @@ async function updateVideo(
       title,
 
     description:
-      description || null
+      description || null,
+
+    thumbnail_url:
+      getFinalThumbnail(
+        customThumbnail,
+        newVideoUrl ||
+        document
+          .getElementById("videoUrl")
+          .value
+          .trim()
+      ) || null
 
   };
 
@@ -1167,13 +1468,13 @@ async function updateVideo(
 
 
   const { error } =
-    await supabaseClient
+  await supabaseClient
 
-      .from("study_material")
+    .from("study_material")
 
-      .update(updateData)
+    .update(updateData)
 
-      .eq("id",editingId);
+    .eq("id",editingId);
 
 
   if(error){
@@ -1275,6 +1576,11 @@ async function editVideo(video){
       video.description || "";
 
 
+  document.getElementById("thumbnailUrl")
+    .value =
+      video.thumbnail_url || "";
+
+
   document.getElementById("subject")
     .value =
       video.subject_id || "";
@@ -1284,10 +1590,6 @@ async function editVideo(video){
     .value =
       video.file_url || "";
 
-
-  // Default edit source to URL
-  // unless the old video is from
-  // our Supabase Storage.
 
   if(editingOldFilePath){
 
@@ -1307,6 +1609,9 @@ async function editVideo(video){
     changeSource("url");
 
   }
+
+
+  updateThumbnailPreview();
 
 
   document.getElementById("saveBtn")
@@ -1353,13 +1658,13 @@ async function deleteVideo(video){
 
 
   const { error } =
-    await supabaseClient
+  await supabaseClient
 
-      .from("study_material")
+    .from("study_material")
 
-      .delete()
+    .delete()
 
-      .eq("id",video.id);
+    .eq("id",video.id);
 
 
   if(error){
@@ -1375,20 +1680,18 @@ async function deleteVideo(video){
   }
 
 
-  // Delete actual uploaded file
-
   if(storagePath){
 
     const { error: storageError } =
-      await supabaseClient
+    await supabaseClient
 
-        .storage
+      .storage
 
-        .from("ssc-edge-videos")
+      .from("ssc-edge-videos")
 
-        .remove([
-          storagePath
-        ]);
+      .remove([
+        storagePath
+      ]);
 
 
     if(storageError){
@@ -1426,27 +1729,28 @@ async function loadVideos(){
 
 
   const { data, error } =
-    await supabaseClient
+  await supabaseClient
 
-      .from("study_material")
+    .from("study_material")
 
-      .select(`
-        id,
-        title,
-        description,
-        file_url,
-        subject_id,
-        created_at,
-        subjects (
-          name
-        )
-      `)
+    .select(`
+      id,
+      title,
+      description,
+      file_url,
+      thumbnail_url,
+      subject_id,
+      created_at,
+      subjects (
+        name
+      )
+    `)
 
-      .eq("material_type","VIDEO")
+    .eq("material_type","VIDEO")
 
-      .order("created_at",{
-        ascending:false
-      });
+    .order("created_at",{
+      ascending:false
+    });
 
 
   if(error){
@@ -1491,7 +1795,41 @@ async function loadVideos(){
       "General";
 
 
+    const thumbnail =
+      video.thumbnail_url ||
+      getAutomaticThumbnail(video.file_url);
+
+
+    const thumbnailHtml =
+      thumbnail
+
+      ?
+
+      `
+      <div class="video-thumbnail-small">
+        <img
+          src="${escapeHTML(thumbnail)}"
+          alt="${escapeHTML(video.title || "Video")}"
+          onerror="this.parentElement.innerHTML='<div class=&quot;thumbnail-fallback-small&quot;><strong>SSC EDGE</strong><span>Learn • Practice • Improve</span></div>'"
+        >
+      </div>
+      `
+
+      :
+
+      `
+      <div class="video-thumbnail-small">
+        <div class="thumbnail-fallback-small">
+          <strong>SSC EDGE</strong>
+          <span>Learn • Practice • Improve</span>
+        </div>
+      </div>
+      `;
+
+
     item.innerHTML = `
+
+      ${thumbnailHtml}
 
       <div class="video-title">
         ${escapeHTML(video.title)}
@@ -1673,6 +2011,10 @@ function resetForm(){
     .value = "";
 
 
+  document.getElementById("thumbnailUrl")
+    .value = "";
+
+
   document.getElementById("videoFile")
     .value = "";
 
@@ -1689,9 +2031,23 @@ function resetForm(){
   changeSource("upload");
 
 
+  document.getElementById("thumbnailPreview")
+    .style.display =
+      "none";
+
+
+  document.getElementById("thumbnailPreviewImage")
+    .src = "";
+
+
   document.getElementById("saveBtn")
     .textContent =
       "Save Video";
+
+
+  document.getElementById("saveBtn")
+    .disabled =
+      false;
 
 
   document.getElementById("cancelBtn")
@@ -1724,7 +2080,6 @@ function resetForm(){
 })();
 
 </script>
-
 
 </body>
 
