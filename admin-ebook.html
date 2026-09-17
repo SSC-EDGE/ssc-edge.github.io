@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
@@ -92,6 +93,11 @@ font-weight:bold;
 cursor:pointer;
 }
 
+button:disabled{
+opacity:.6;
+cursor:not-allowed;
+}
+
 .primary{
 background:var(--purple);
 color:white;
@@ -118,11 +124,16 @@ margin-bottom:15px;
 .status{
 margin-top:12px;
 color:var(--muted);
+line-height:1.5;
 }
 
 .item{
 padding:15px 0;
 border-bottom:1px solid var(--border);
+}
+
+.item:last-child{
+border-bottom:0;
 }
 
 .item-title{
@@ -146,6 +157,116 @@ flex-wrap:wrap;
 display:none;
 }
 
+/* =========================
+   COVER PREVIEW
+========================= */
+
+.cover-preview{
+width:100%;
+aspect-ratio:16/9;
+border-radius:12px;
+overflow:hidden;
+background:linear-gradient(
+135deg,
+#171225,
+#30204f
+);
+border:1px solid var(--border);
+display:flex;
+align-items:center;
+justify-content:center;
+margin:-2px 0 15px;
+}
+
+.cover-preview img{
+width:100%;
+height:100%;
+object-fit:cover;
+display:block;
+}
+
+.cover-placeholder{
+text-align:center;
+color:#fff;
+padding:20px;
+}
+
+.cover-placeholder .icon{
+font-size:40px;
+margin-bottom:8px;
+}
+
+.cover-placeholder .logo{
+font-size:24px;
+font-weight:800;
+letter-spacing:1px;
+}
+
+.cover-placeholder .text{
+font-size:12px;
+opacity:.75;
+margin-top:5px;
+}
+
+/* =========================
+   BOOK LIST COVER
+========================= */
+
+.book-item{
+display:flex;
+gap:13px;
+align-items:flex-start;
+}
+
+.book-thumb{
+width:105px;
+height:70px;
+border-radius:9px;
+overflow:hidden;
+background:linear-gradient(
+135deg,
+#171225,
+#30204f
+);
+flex-shrink:0;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.book-thumb img{
+width:100%;
+height:100%;
+object-fit:cover;
+display:block;
+}
+
+.thumb-fallback{
+font-size:27px;
+}
+
+.book-details{
+flex:1;
+min-width:0;
+}
+
+@media(max-width:430px){
+
+body{
+padding:14px;
+}
+
+.card{
+padding:16px;
+}
+
+.book-thumb{
+width:88px;
+height:62px;
+}
+
+}
+
 </style>
 
 </head>
@@ -154,9 +275,12 @@ display:none;
 
 <div class="container">
 
-<button class="secondary"
+<button
+class="secondary"
 onclick="location.href='admin-study.html'">
+
 ← Back
+
 </button>
 
 <h1>📚 E-Book Management</h1>
@@ -171,22 +295,28 @@ Upload E-Books or use an external URL.
 <div class="source">
 
 <label>
-<input type="radio"
+<input
+type="radio"
 name="source"
 value="upload"
 checked
 onchange="changeSource()">
+
 📁 Upload E-Book
+
 </label>
 
 <br><br>
 
 <label>
-<input type="radio"
+<input
+type="radio"
 name="source"
 value="url"
 onchange="changeSource()">
+
 🔗 E-Book URL
+
 </label>
 
 </div>
@@ -194,41 +324,78 @@ onchange="changeSource()">
 
 <label>Title</label>
 
-<input id="title"
-placeholder="E-Book title">
+<input
+id="title"
+placeholder="E-Book title"
+>
 
 
 <label>Subject</label>
 
 <select id="subject">
-<option value="">Loading...</option>
+
+<option value="">
+Loading...
+</option>
+
 </select>
 
 
 <label>Description</label>
 
-<textarea id="description"
-placeholder="Description"></textarea>
+<textarea
+id="description"
+placeholder="Description"
+></textarea>
+
+
+<label>Cover Image URL</label>
+
+<input
+id="thumbnailUrl"
+type="url"
+placeholder="https://example.com/book-cover.jpg"
+oninput="updateCoverPreview()"
+>
+
+<div class="cover-preview" id="coverPreview">
+
+<div class="cover-placeholder">
+
+<div class="icon">📚</div>
+
+<div class="logo">SSC EDGE</div>
+
+<div class="text">
+Learn • Practice • Improve
+</div>
+
+</div>
+
+</div>
 
 
 <div id="uploadBox">
 
 <label>E-Book File</label>
 
-<input id="file"
+<input
+id="file"
 type="file"
-accept=".pdf,.epub,.mobi">
+accept=".pdf,.epub,.mobi"
+>
 
 </div>
 
 
-<div id="urlBox"
-class="hidden">
+<div id="urlBox" class="hidden">
 
 <label>E-Book URL</label>
 
-<input id="url"
-placeholder="https://example.com/book.pdf">
+<input
+id="url"
+placeholder="https://example.com/book.pdf"
+>
 
 </div>
 
@@ -242,9 +409,10 @@ Save E-Book
 
 </button>
 
-<div id="status"
-class="status">
-</div>
+<div
+id="status"
+class="status"
+></div>
 
 </div>
 
@@ -276,34 +444,49 @@ SUPABASE_URL,
 SUPABASE_KEY
 );
 
-let editingId=null;
-let editingOldUrl=null;
+let editingId = null;
+let editingOldUrl = null;
 
+
+/* =========================
+   ADMIN CHECK
+========================= */
 
 async function checkAdmin(){
 
 const {
 data:{user}
-}=await db.auth.getUser();
+} = await db.auth.getUser();
 
 if(!user){
-location.href="admin.html";
+
+location.href = "admin.html";
+
 return false;
+
 }
 
-const {data,error}=await db
+const {
+data,
+error
+} = await db
+
 .from("admin_users")
+
 .select("user_id")
+
 .eq("user_id",user.id)
+
 .maybeSingle();
 
 if(error || !data){
 
 await db.auth.signOut();
 
-location.href="admin.html";
+location.href = "admin.html";
 
 return false;
+
 }
 
 return true;
@@ -311,37 +494,86 @@ return true;
 }
 
 
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHtml(value){
+
+return String(value ?? "")
+
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+
+}
+
+
+/* =========================
+   SAFE JS STRING
+========================= */
+
+function safeJs(value){
+
+return encodeURIComponent(
+String(value ?? "")
+);
+
+}
+
+
+/* =========================
+   LOAD SUBJECTS
+========================= */
+
 async function loadSubjects(){
 
-const {data,error}=await db
+const {
+data,
+error
+} = await db
+
 .from("subjects")
+
 .select("id,name")
+
 .eq("is_active",true)
+
 .order("name");
 
 if(error){
 
-document.getElementById("subject").innerHTML=
+document.getElementById("subject").innerHTML =
 "<option value=''>Unable to load</option>";
 
 return;
 
 }
 
-document.getElementById("subject").innerHTML=
-"<option value=''>Select Subject</option>"+
-data.map(x=>
-`<option value="${x.id}">
+document.getElementById("subject").innerHTML =
+
+"<option value=''>Select Subject</option>" +
+
+(data || []).map(x =>
+
+`<option value="${escapeHtml(x.id)}">
 ${escapeHtml(x.name)}
 </option>`
+
 ).join("");
 
 }
 
 
+/* =========================
+   CHANGE SOURCE
+========================= */
+
 function changeSource(){
 
-const source=
+const source =
 document.querySelector(
 'input[name="source"]:checked'
 ).value;
@@ -349,52 +581,126 @@ document.querySelector(
 document.getElementById("uploadBox")
 .classList.toggle(
 "hidden",
-source!=="upload"
+source !== "upload"
 );
 
 document.getElementById("urlBox")
 .classList.toggle(
 "hidden",
-source!=="url"
+source !== "url"
 );
 
 }
 
 
+/* =========================
+   COVER PLACEHOLDER
+========================= */
+
+function coverPlaceholder(){
+
+return `
+
+<div class="cover-placeholder">
+
+<div class="icon">📚</div>
+
+<div class="logo">SSC EDGE</div>
+
+<div class="text">
+Learn • Practice • Improve
+</div>
+
+</div>
+
+`;
+
+}
+
+
+/* =========================
+   COVER PREVIEW
+========================= */
+
+function updateCoverPreview(){
+
+const input =
+document.getElementById("thumbnailUrl");
+
+const preview =
+document.getElementById("coverPreview");
+
+const url =
+input.value.trim();
+
+if(!url){
+
+preview.innerHTML =
+coverPlaceholder();
+
+return;
+
+}
+
+preview.innerHTML = `
+
+<img
+src="${escapeHtml(url)}"
+alt="Cover Preview"
+onerror="this.parentElement.innerHTML =
+coverPlaceholder().replace(/"/g,'&quot;')"
+>
+
+`;
+
+}
+
+
+/* =========================
+   SAVE BOOK
+========================= */
+
 async function saveBook(){
 
-const title=
+const title =
 document.getElementById("title")
 .value.trim();
 
-const subject=
+const subject =
 document.getElementById("subject")
 .value;
 
-const description=
+const description =
 document.getElementById("description")
 .value.trim();
 
-const source=
+const thumbnailUrl =
+document.getElementById("thumbnailUrl")
+.value.trim();
+
+const source =
 document.querySelector(
 'input[name="source"]:checked'
 ).value;
 
-const file=
+const file =
 document.getElementById("file")
 .files[0];
 
-const url=
+const url =
 document.getElementById("url")
 .value.trim();
 
-const status=
+const status =
 document.getElementById("status");
+
+const saveBtn =
+document.getElementById("saveBtn");
 
 
 if(!title || !subject){
 
-status.textContent=
+status.textContent =
 "Please enter title and select subject.";
 
 return;
@@ -402,22 +708,26 @@ return;
 }
 
 
-if(!editingId &&
-source==="upload" &&
-!file){
+if(
+!editingId &&
+source === "upload" &&
+!file
+){
 
-status.textContent=
-"Please select an E-Book.";
+status.textContent =
+"Please select an E-Book file.";
 
 return;
 
 }
 
 
-if(source==="url" &&
-!url){
+if(
+source === "url" &&
+!url
+){
 
-status.textContent=
+status.textContent =
 "Please enter the E-Book URL.";
 
 return;
@@ -425,88 +735,122 @@ return;
 }
 
 
-status.textContent="Saving...";
+status.textContent = "Saving...";
 
-document.getElementById("saveBtn")
-.disabled=true;
+saveBtn.disabled = true;
 
 
 try{
 
-let finalUrl=url;
+let finalUrl = url;
 
 
-if(source==="upload" && file){
+/* =========================
+   UPLOAD FILE
+========================= */
 
-const ext=
+if(
+source === "upload" &&
+file
+){
+
+const ext =
 file.name
 .split(".")
 .pop()
 .toLowerCase();
 
-const path=
-"ebooks/"+
-Date.now()+
-"-"+
+const path =
+"ebooks/" +
+Date.now() +
+"-" +
 Math.random()
 .toString(36)
-.substring(2)+
-"."+
+.substring(2) +
+"." +
 ext;
 
+const {
+error
+} = await db.storage
 
-const {error}=
-await db.storage
 .from("ssc-edge-ebooks")
+
 .upload(
 path,
 file,
-{upsert:false}
+{
+upsert:false
+}
 );
 
 if(error) throw error;
 
+const {
+data:urlData
+} = db.storage
 
-const {data:urlData}=
-db.storage
 .from("ssc-edge-ebooks")
+
 .getPublicUrl(path);
 
-finalUrl=
+finalUrl =
 urlData.publicUrl;
 
 }
 
 
+/* =========================
+   UPDATE BOOK
+========================= */
+
 if(editingId){
 
-const {error}=
-await db
+const {
+error
+} = await db
+
 .from("study_material")
+
 .update({
 
 subject_id:Number(subject),
+
 title:title,
+
 description:description,
+
 material_type:"EBOOK",
+
 file_url:finalUrl,
+
+thumbnail_url:
+thumbnailUrl || null,
+
 is_active:true
 
 })
+
 .eq("id",editingId);
 
 if(error) throw error;
 
 
+/* Delete old uploaded file */
+
 if(
-source==="upload" &&
+
+source === "upload" &&
+
 editingOldUrl &&
+
 editingOldUrl.includes(
 "/storage/v1/object/public/ssc-edge-ebooks/"
 )
+
 ){
 
-const oldPath=
+const oldPath =
 editingOldUrl.split(
 "/storage/v1/object/public/ssc-edge-ebooks/"
 )[1];
@@ -514,38 +858,53 @@ editingOldUrl.split(
 if(oldPath){
 
 await db.storage
+
 .from("ssc-edge-ebooks")
+
 .remove([oldPath]);
 
 }
 
 }
 
-
-status.textContent=
+status.textContent =
 "E-Book updated successfully.";
 
 }else{
 
 
-const {error}=
-await db
+/* =========================
+   INSERT BOOK
+========================= */
+
+const {
+error
+} = await db
+
 .from("study_material")
+
 .insert({
 
 subject_id:Number(subject),
+
 title:title,
+
 description:description,
+
 material_type:"EBOOK",
+
 file_url:finalUrl,
+
+thumbnail_url:
+thumbnailUrl || null,
+
 is_active:true
 
 });
 
 if(error) throw error;
 
-
-status.textContent=
+status.textContent =
 "E-Book added successfully.";
 
 }
@@ -559,75 +918,134 @@ await loadBooks();
 
 console.error(error);
 
-status.textContent=
-"Error: "+
-(error.message ||
-"Unable to save.");
+status.textContent =
+"Error: " +
+(
+error.message ||
+"Unable to save E-Book."
+);
+
+}
+
+saveBtn.disabled = false;
 
 }
 
 
-document.getElementById("saveBtn")
-.disabled=false;
-
-}
-
+/* =========================
+   LOAD BOOKS
+========================= */
 
 async function loadBooks(){
 
-const box=
+const box =
 document.getElementById("books");
 
-const {data,error}=
-await db
+const {
+data,
+error
+} = await db
+
 .from("study_material")
+
 .select(`
+
 id,
 title,
 description,
 file_url,
+thumbnail_url,
 subject_id,
+created_at,
 subjects(name)
-`)
-.eq("material_type","EBOOK")
-.eq("is_active",true)
-.order("created_at",{ascending:false});
 
+`)
+
+.eq("material_type","EBOOK")
+
+.eq("is_active",true)
+
+.order(
+"created_at",
+{
+ascending:false
+}
+);
 
 if(error){
 
-box.textContent=
+console.error(error);
+
+box.textContent =
 "Unable to load E-Books.";
 
 return;
 
 }
 
+if(!data || !data.length){
 
-if(!data.length){
-
-box.textContent=
+box.textContent =
 "No E-Books added yet.";
 
 return;
 
 }
 
+box.innerHTML = data.map(book => {
 
-box.innerHTML=
-data.map(book=>`
+const thumb =
+book.thumbnail_url || "";
+
+const thumbHtml = thumb
+
+? `
+
+<img
+src="${escapeHtml(thumb)}"
+alt="Book Cover"
+onerror="this.parentElement.innerHTML =
+'<div class=&quot;thumb-fallback&quot;>📚</div>'"
+>
+
+`
+
+: `
+
+<div class="thumb-fallback">
+📚
+</div>
+
+`;
+
+return `
 
 <div class="item">
 
+<div class="book-item">
+
+<div class="book-thumb">
+
+${thumbHtml}
+
+</div>
+
+
+<div class="book-details">
+
 <div class="item-title">
+
 ${escapeHtml(book.title)}
+
 </div>
 
 <div class="item-meta">
+
 ${escapeHtml(
 book.subjects?.name ||
 "No subject"
 )}
+
 </div>
 
 <div class="actions">
@@ -635,34 +1053,50 @@ book.subjects?.name ||
 <button
 class="secondary"
 onclick="openUrl(
-'${encodeURIComponent(book.file_url)}'
+'${safeJs(book.file_url)}'
 )">
+
 📖 Open
+
 </button>
 
 <button
 class="secondary"
-onclick="editBook(${book.id})">
+onclick="editBook(${Number(book.id)})">
+
 ✏️ Edit
+
 </button>
 
 <button
 class="danger"
 onclick="deleteBook(
-${book.id},
-'${encodeURIComponent(book.file_url)}'
+${Number(book.id)},
+'${safeJs(book.file_url)}'
 )">
+
 🗑 Delete
+
 </button>
 
 </div>
 
 </div>
 
-`).join("");
+</div>
+
+</div>
+
+`;
+
+}).join("");
 
 }
 
+
+/* =========================
+   OPEN BOOK URL
+========================= */
 
 function openUrl(encoded){
 
@@ -674,13 +1108,23 @@ decodeURIComponent(encoded),
 }
 
 
+/* =========================
+   EDIT BOOK
+========================= */
+
 async function editBook(id){
 
-const {data,error}=
-await db
+const {
+data,
+error
+} = await db
+
 .from("study_material")
+
 .select("*")
+
 .eq("id",id)
+
 .single();
 
 if(error){
@@ -691,52 +1135,83 @@ return;
 
 }
 
+editingId = id;
 
-editingId=id;
-editingOldUrl=data.file_url;
+editingOldUrl =
+data.file_url || null;
 
 document.getElementById("title")
-.value=data.title || "";
+.value =
+data.title || "";
 
 document.getElementById("description")
-.value=data.description || "";
+.value =
+data.description || "";
 
 document.getElementById("subject")
-.value=data.subject_id || "";
+.value =
+data.subject_id || "";
+
+document.getElementById("thumbnailUrl")
+.value =
+data.thumbnail_url || "";
+
+updateCoverPreview();
+
 
 document.querySelector(
 'input[name="source"][value="url"]'
-).checked=true;
+).checked = true;
 
 changeSource();
 
 document.getElementById("url")
-.value=data.file_url || "";
+.value =
+data.file_url || "";
 
 document.getElementById("saveBtn")
-.textContent="Update E-Book";
+.textContent =
+"Update E-Book";
 
 window.scrollTo({
+
 top:0,
+
 behavior:"smooth"
+
 });
 
 }
 
 
-async function deleteBook(id,encodedUrl){
+/* =========================
+   DELETE BOOK
+========================= */
 
-if(!confirm("Delete this E-Book?"))
+async function deleteBook(
+id,
+encodedUrl
+){
+
+if(
+!confirm("Delete this E-Book?")
+){
+
 return;
 
-const url=
+}
+
+const url =
 decodeURIComponent(encodedUrl);
 
+const {
+error
+} = await db
 
-const {error}=
-await db
 .from("study_material")
+
 .delete()
+
 .eq("id",id);
 
 if(error){
@@ -748,13 +1223,17 @@ return;
 }
 
 
+/* Delete uploaded file */
+
 if(
+
 url.includes(
 "/storage/v1/object/public/ssc-edge-ebooks/"
 )
+
 ){
 
-const path=
+const path =
 url.split(
 "/storage/v1/object/public/ssc-edge-ebooks/"
 )[1];
@@ -762,70 +1241,81 @@ url.split(
 if(path){
 
 await db.storage
+
 .from("ssc-edge-ebooks")
+
 .remove([path]);
 
 }
 
 }
 
-
-loadBooks();
+await loadBooks();
 
 }
 
 
+/* =========================
+   RESET FORM
+========================= */
+
 function resetForm(){
 
-editingId=null;
-editingOldUrl=null;
+editingId = null;
+
+editingOldUrl = null;
 
 document.getElementById("title")
-.value="";
+.value = "";
 
 document.getElementById("description")
-.value="";
+.value = "";
+
+document.getElementById("thumbnailUrl")
+.value = "";
 
 document.getElementById("url")
-.value="";
+.value = "";
 
 document.getElementById("file")
-.value="";
+.value = "";
 
 document.getElementById("subject")
-.value="";
+.value = "";
 
 document.querySelector(
 'input[name="source"][value="upload"]'
-).checked=true;
+).checked = true;
 
 changeSource();
 
 document.getElementById("saveBtn")
-.textContent="Save E-Book";
+.textContent =
+"Save E-Book";
+
+document.getElementById("status")
+.textContent = "";
+
+document.getElementById("coverPreview")
+.innerHTML =
+coverPlaceholder();
 
 }
 
 
-function escapeHtml(value){
+/* =========================
+   INITIAL LOAD
+========================= */
 
-return String(value || "")
-.replaceAll("&","&amp;")
-.replaceAll("<","&lt;")
-.replaceAll(">","&gt;")
-.replaceAll('"',"&quot;")
-.replaceAll("'","&#039;");
+(async function(){
 
-}
-
-
-(async()=>{
-
-const ok=await checkAdmin();
+const ok =
+await checkAdmin();
 
 if(!ok) return;
 
 await loadSubjects();
+
 await loadBooks();
 
 })();
@@ -833,4 +1323,5 @@ await loadBooks();
 </script>
 
 </body>
+
 </html>
