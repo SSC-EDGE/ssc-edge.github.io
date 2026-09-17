@@ -2377,70 +2377,55 @@ toast("Mock save failed: "+error.message);
    FIXED SECTION SAVER
 ========================= */
 
-async function saveMockSections(testId,sections){
+async function saveMockSections(testId, sections) {
+  try {
+    // Delete old sections
+    const deleteResponse = await db
+      .from("mock_test_sections")
+      .delete()
+      .eq("mock_test_id", testId);
 
-try{
+    if (deleteResponse.error) {
+      throw new Error(deleteResponse.error.message);
+    }
 
-const deleteResponse=await db
-.from("mock_test_sections")
-.delete()
-.eq("mock_test_id",testId);
+    if (!sections || !sections.length) {
+      return true;
+    }
 
-if(deleteResponse.error){
-throw deleteResponse.error;
+    // Only save sections having valid subject_id
+    const rows = sections
+      .filter(section => section.subject_id)
+      .map((section, index) => ({
+        mock_test_id: testId,
+        subject_id: section.subject_id,
+        section_name: section.name || "",
+        duration_minutes: Number(section.duration || 0),
+        section_order: index + 1
+      }));
+
+    if (!rows.length) {
+      throw new Error(
+        "No valid subject found. Section names must match subjects table."
+      );
+    }
+
+    const insertResponse = await db
+      .from("mock_test_sections")
+      .insert(rows);
+
+    if (insertResponse.error) {
+      throw new Error(insertResponse.error.message);
+    }
+
+    return true;
+
+  } catch (error) {
+    console.error("Sections save failed:", error);
+    throw error;
+  }
 }
 
-const rows=sections.map((section,index)=>({
-mock_test_id:testId,
-section_name:section.name,
-subject_id:section.subject_id||null,
-duration_minutes:Number(section.duration||0),
-question_count:Number(section.questions||0),
-section_order:index+1
-}));
-
-if(!rows.length)return true;
-
-let response=await db
-.from("mock_test_sections")
-.insert(rows);
-
-if(response.error){
-
-/*
-Fallback only for databases where question_count
-column has not yet been added.
-*/
-
-if(/question_count|column|schema cache/i.test(response.error.message)){
-
-const fallbackRows=rows.map(row=>({
-mock_test_id:row.mock_test_id,
-section_name:row.section_name,
-subject_id:row.subject_id,
-duration_minutes:row.duration_minutes,
-section_order:row.section_order
-}));
-
-response=await db
-.from("mock_test_sections")
-.insert(fallbackRows);
-}
-
-}
-
-if(response.error){
-throw response.error;
-}
-
-return true;
-
-}catch(error){
-
-console.error("Section save error:",error);
-throw new Error("Sections save failed: "+error.message);
-}
-}
 
 /* =========================
    DELETE MOCK
