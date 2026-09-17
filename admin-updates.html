@@ -3,98 +3,66 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<script>
-document.documentElement.dataset.theme =
-  localStorage.getItem("ssc-edge-theme") || "dark";
-</script>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>SSC EDGE - Manage Updates</title>
 
+<script>
+document.documentElement.dataset.theme =
+localStorage.getItem("ssc-edge-theme") || "dark";
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<link rel="stylesheet" href="css/style.css">
 
 <style>
 
-:root{
-  --bg:#0d0d14;
-  --card:#171722;
-  --card2:#20202d;
-  --text:#ffffff;
-  --muted:#aaaabd;
-  --border:#303044;
-  --purple:#a970ff;
-  --purple2:#7c3aed;
-  --danger:#ff5f6d;
-  --success:#54d68c;
-}
-
-:root[data-theme="light"]{
-  --bg:#f5f3fa;
-  --card:#ffffff;
-  --card2:#f0edf8;
-  --text:#171421;
-  --muted:#686477;
-  --border:#ddd7eb;
-  --purple:#7c3aed;
-  --purple2:#6d28d9;
-  --danger:#dc2626;
-  --success:#159957;
-}
-
-*{
-  box-sizing:border-box;
-}
-
 body{
-  margin:0;
   padding:20px;
-  background:var(--bg);
-  color:var(--text);
-  font-family:Arial, sans-serif;
 }
 
-.container{
-  max-width:850px;
+.updates-admin{
+  max-width:800px;
   margin:auto;
 }
 
-.header{
+.page-header{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  gap:15px;
-  margin-bottom:22px;
+  gap:12px;
+  margin-bottom:20px;
 }
 
-.header h1{
+.page-header h1{
   margin:0;
   font-size:24px;
 }
 
-.header h1 span{
-  color:var(--purple);
+.page-header h1 span{
+  color:#a970ff;
 }
 
 .back-btn{
-  text-decoration:none;
-  color:var(--text);
-  border:1px solid var(--border);
   background:var(--card);
+  border:1px solid var(--border);
+  color:var(--text);
   padding:10px 14px;
   border-radius:10px;
+  text-decoration:none;
   font-size:13px;
 }
 
-.card{
+.admin-box{
   background:var(--card);
   border:1px solid var(--border);
   border-radius:16px;
   padding:20px;
-  margin-bottom:22px;
+  margin-bottom:20px;
 }
 
-.card h2{
+.admin-box h2{
   margin:0 0 18px;
   font-size:18px;
 }
@@ -110,13 +78,13 @@ input,
 textarea,
 select{
   width:100%;
-  border:1px solid var(--border);
-  background:var(--card2);
-  color:var(--text);
-  border-radius:10px;
   padding:12px;
-  outline:none;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--bg);
+  color:var(--text);
   font-size:14px;
+  outline:none;
 }
 
 textarea{
@@ -127,112 +95,68 @@ textarea{
 input:focus,
 textarea:focus,
 select:focus{
-  border-color:var(--purple);
+  border-color:#a970ff;
 }
 
-.row{
-  display:flex;
-  gap:12px;
-}
-
-.row > div{
-  flex:1;
-}
-
-.check-row{
-  display:flex;
-  align-items:center;
-  gap:9px;
-  margin-top:15px;
-  color:var(--text);
-  font-size:14px;
-}
-
-.check-row input{
-  width:auto;
-  accent-color:var(--purple);
-}
-
-.buttons{
+.form-buttons{
   display:flex;
   gap:10px;
   margin-top:18px;
 }
 
 button{
-  border:0;
   cursor:pointer;
+  border:0;
   border-radius:10px;
   padding:11px 16px;
   font-weight:bold;
-  font-size:13px;
 }
 
 .save-btn{
-  background:var(--purple);
-  color:#fff;
+  background:#a970ff;
+  color:white;
 }
 
 .cancel-btn{
-  background:var(--card2);
+  background:var(--bg);
   color:var(--text);
   border:1px solid var(--border);
 }
 
-.edit-btn{
-  background:#2563eb;
-  color:#fff;
-}
-
-.delete-btn{
-  background:var(--danger);
-  color:#fff;
-}
-
-.toggle-btn{
-  background:#64748b;
-  color:#fff;
-}
-
 .status{
   display:none;
-  margin-bottom:15px;
   padding:12px;
   border-radius:10px;
+  margin-bottom:15px;
   font-size:13px;
 }
 
-.status.success{
+.status.show{
   display:block;
+}
+
+.status.success{
   background:rgba(84,214,140,.15);
-  color:var(--success);
+  color:#54d68c;
 }
 
 .status.error{
-  display:block;
   background:rgba(255,95,109,.15);
-  color:var(--danger);
+  color:#ff5f6d;
 }
 
-.update-item{
+.update-card{
+  background:var(--bg);
   border:1px solid var(--border);
-  background:var(--card2);
   border-radius:13px;
   padding:15px;
   margin-bottom:13px;
 }
 
-.update-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:10px;
-}
-
 .update-title{
   font-size:16px;
   font-weight:bold;
-  margin-bottom:6px;
+  margin-bottom:7px;
 }
 
 .update-message{
@@ -240,52 +164,59 @@ button{
   white-space:pre-wrap;
   line-height:1.5;
   font-size:14px;
-  margin-top:8px;
 }
 
-.update-meta{
+.update-info{
   display:flex;
-  gap:8px;
+  gap:7px;
   flex-wrap:wrap;
-  margin-top:11px;
-  font-size:11px;
+  margin-top:12px;
 }
 
 .badge{
+  font-size:11px;
   padding:5px 8px;
   border-radius:6px;
   background:rgba(169,112,255,.15);
-  color:var(--purple);
+  color:#a970ff;
 }
 
-.inactive-badge{
-  background:rgba(255,95,109,.15);
-  color:var(--danger);
-}
-
-.active-badge{
+.active{
   background:rgba(84,214,140,.15);
-  color:var(--success);
+  color:#54d68c;
 }
 
-.update-actions{
+.inactive{
+  background:rgba(255,95,109,.15);
+  color:#ff5f6d;
+}
+
+.actions{
   display:flex;
-  gap:7px;
-  margin-top:13px;
+  gap:8px;
   flex-wrap:wrap;
+  margin-top:13px;
 }
 
-.update-actions button{
-  padding:8px 11px;
+.actions button{
   font-size:12px;
+  padding:8px 11px;
+  color:white;
 }
 
-.empty{
-  text-align:center;
-  color:var(--muted);
-  padding:25px 10px;
+.edit-btn{
+  background:#2563eb;
 }
 
+.toggle-btn{
+  background:#64748b;
+}
+
+.delete-btn{
+  background:#dc2626;
+}
+
+.empty,
 .loading{
   text-align:center;
   color:var(--muted);
@@ -298,21 +229,12 @@ button{
     padding:13px;
   }
 
-  .header h1{
+  .page-header h1{
     font-size:20px;
   }
 
-  .row{
-    flex-direction:column;
-    gap:0;
-  }
-
-  .card{
+  .admin-box{
     padding:15px;
-  }
-
-  .update-top{
-    flex-direction:column;
   }
 
 }
@@ -322,56 +244,52 @@ button{
 
 <body>
 
-<div class="container">
+<div class="updates-admin">
 
-  <div class="header">
+  <div class="page-header">
     <h1>Manage <span>Updates</span></h1>
     <a href="javascript:history.back()" class="back-btn">← Back</a>
   </div>
 
   <div id="statusBox" class="status"></div>
 
-  <div class="card">
+  <div class="admin-box">
 
-    <h2 id="formHeading">Add New Update</h2>
+    <h2 id="formTitle">Add New Update</h2>
 
-    <label for="updateTitle">Update Title</label>
+    <label for="title">Update Title</label>
     <input
       type="text"
-      id="updateTitle"
-      placeholder="Example: New Mock Tests Added"
+      id="title"
+      placeholder="Example: New Mock Test Added"
     >
 
-    <label for="updateMessage">Update Message</label>
+    <label for="message">Update Message</label>
     <textarea
-      id="updateMessage"
-      placeholder="Write your update message here..."
+      id="message"
+      placeholder="Write update details..."
     ></textarea>
 
-    <div class="row">
+    <label for="type">Update Type</label>
+    <select id="type">
+      <option value="GENERAL">General</option>
+      <option value="NEW">New</option>
+      <option value="IMPORTANT">Important</option>
+      <option value="NOTICE">Notice</option>
+    </select>
 
-      <div>
-        <label for="updateType">Update Type</label>
-        <select id="updateType">
-          <option value="GENERAL">General</option>
-          <option value="NEW">New</option>
-          <option value="IMPORTANT">Important</option>
-          <option value="NOTICE">Notice</option>
-        </select>
-      </div>
+    <label for="active">Status</label>
+    <select id="active">
+      <option value="true">Active</option>
+      <option value="false">Inactive</option>
+    </select>
 
-      <div>
-        <label for="updateStatus">Status</label>
-        <select id="updateStatus">
-          <option value="true">Active</option>
-          <option value="false">Inactive</option>
-        </select>
-      </div>
+    <div class="form-buttons">
 
-    </div>
-
-    <div class="buttons">
-      <button class="save-btn" id="saveBtn" onclick="saveUpdate()">
+      <button
+        class="save-btn"
+        id="saveBtn"
+        onclick="saveUpdate()">
         Add Update
       </button>
 
@@ -379,15 +297,15 @@ button{
         class="cancel-btn"
         id="cancelBtn"
         onclick="cancelEdit()"
-        style="display:none;"
-      >
-        Cancel Edit
+        style="display:none;">
+        Cancel
       </button>
+
     </div>
 
   </div>
 
-  <div class="card">
+  <div class="admin-box">
 
     <h2>All Updates</h2>
 
@@ -402,105 +320,87 @@ button{
 <script>
 
 const SUPABASE_URL =
-  "https://dvvyoygahzzbnpqrfhen.supabase.co";
+"https://dvvyoygahzzbnpqrfhen.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
 
-const supabaseClient =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
+const db =
+supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
 let editingId = null;
 
-function showStatus(message, type){
 
-  const box = document.getElementById("statusBox");
+/* =========================
+   STATUS MESSAGE
+========================= */
+
+function showStatus(message,type){
+
+  const box =
+  document.getElementById("statusBox");
 
   box.textContent = message;
-  box.className = "status " + type;
+  box.className = "status show " + type;
 
   setTimeout(function(){
     box.className = "status";
-  }, 4000);
+  },4000);
 
 }
 
-async function checkAdmin(){
+
+/* =========================
+   ADMIN CHECK
+========================= */
+
+(async()=>{
 
   const {
-    data: { user },
-    error: userError
-  } = await supabaseClient.auth.getUser();
+    data:{user}
+  } = await db.auth.getUser();
 
-  if(userError || !user){
+  if(!user){
 
-    document.body.innerHTML = `
-      <div style="
-        color:white;
-        background:#0d0d14;
-        min-height:100vh;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        text-align:center;
-        padding:20px;
-        font-family:Arial;
-      ">
-        <div>
-          <h2>Admin Login Required</h2>
-          <p>Please login as admin first.</p>
-          <a href="admin-login.html"
-             style="color:#a970ff;">
-             Go to Admin Login
-          </a>
-        </div>
-      </div>
-    `;
+    location.href="admin.html";
+    return;
 
-    return false;
   }
 
-  const { data: admin, error } =
-    await supabaseClient
-      .from("admin_users")
-      .select("id")
-      .eq("user_id", user.id)
-      .maybeSingle();
+  const {
+    data,
+    error
+  } = await db
+    .from("admin_users")
+    .select("user_id")
+    .eq("user_id",user.id)
+    .maybeSingle();
 
-  if(error || !admin){
+  if(error || !data){
 
-    document.body.innerHTML = `
-      <div style="
-        color:white;
-        background:#0d0d14;
-        min-height:100vh;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        text-align:center;
-        padding:20px;
-        font-family:Arial;
-      ">
-        <div>
-          <h2>Access Denied</h2>
-          <p>You are not registered as an admin.</p>
-        </div>
-      </div>
-    `;
+    await db.auth.signOut();
 
-    return false;
+    location.href="admin.html";
+    return;
+
   }
 
-  return true;
+  loadUpdates();
 
-}
+})();
+
+
+/* =========================
+   LOAD UPDATES
+========================= */
 
 async function loadUpdates(){
 
-  const list = document.getElementById("updatesList");
+  const list =
+  document.getElementById("updatesList");
 
   list.className = "loading";
   list.textContent = "Loading updates...";
@@ -508,17 +408,19 @@ async function loadUpdates(){
   const {
     data,
     error
-  } = await supabaseClient
+  } = await db
     .from("updates")
     .select("*")
-    .order("created_at", { ascending:false });
+    .order("created_at",{ascending:false});
 
   if(error){
 
     list.className = "empty";
-    list.textContent = "Error loading updates: " + error.message;
+    list.textContent =
+      "Error: " + error.message;
 
     return;
+
   }
 
   if(!data || data.length === 0){
@@ -527,6 +429,7 @@ async function loadUpdates(){
     list.textContent = "No updates added yet.";
 
     return;
+
   }
 
   list.className = "";
@@ -534,11 +437,13 @@ async function loadUpdates(){
 
   data.forEach(function(update){
 
-    const item = document.createElement("div");
-    item.className = "update-item";
+    const card =
+    document.createElement("div");
+
+    card.className = "update-card";
 
     const date = update.created_at
-      ? new Date(update.created_at).toLocaleString("en-IN", {
+      ? new Date(update.created_at).toLocaleString("en-IN",{
           day:"2-digit",
           month:"short",
           year:"numeric",
@@ -547,37 +452,26 @@ async function loadUpdates(){
         })
       : "";
 
-    const statusClass = update.is_active
-      ? "active-badge"
-      : "inactive-badge";
+    card.innerHTML = `
 
-    const statusText = update.is_active
-      ? "Active"
-      : "Inactive";
-
-    item.innerHTML = `
-      <div class="update-top">
-
-        <div>
-          <div class="update-title">
-            ${escapeHTML(update.title || "")}
-          </div>
-
-          <div class="update-message">
-            ${escapeHTML(update.message || "")}
-          </div>
-        </div>
-
+      <div class="update-title">
+        ${escapeHTML(update.title || "")}
       </div>
 
-      <div class="update-meta">
+      <div class="update-message">
+        ${escapeHTML(update.message || "")}
+      </div>
+
+      <div class="update-info">
 
         <span class="badge">
-          ${escapeHTML(update.type || "GENERAL")}
+          ${escapeHTML(update.update_type || "GENERAL")}
         </span>
 
-        <span class="badge ${statusClass}">
-          ${statusText}
+        <span class="badge ${
+          update.is_active ? "active" : "inactive"
+        }">
+          ${update.is_active ? "Active" : "Inactive"}
         </span>
 
         <span class="badge">
@@ -586,7 +480,7 @@ async function loadUpdates(){
 
       </div>
 
-      <div class="update-actions">
+      <div class="actions">
 
         <button
           class="edit-btn"
@@ -596,7 +490,7 @@ async function loadUpdates(){
 
         <button
           class="toggle-btn"
-          onclick="toggleUpdate(${update.id}, ${update.is_active})">
+          onclick="toggleUpdate(${update.id},${update.is_active})">
           ${update.is_active ? "Deactivate" : "Activate"}
         </button>
 
@@ -607,87 +501,100 @@ async function loadUpdates(){
         </button>
 
       </div>
+
     `;
 
-    list.appendChild(item);
+    list.appendChild(card);
 
   });
 
 }
 
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
 function escapeHTML(value){
 
   return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
+
+
+/* =========================
+   SAVE / UPDATE
+========================= */
 
 async function saveUpdate(){
 
   const title =
-    document.getElementById("updateTitle").value.trim();
+  document.getElementById("title").value.trim();
 
   const message =
-    document.getElementById("updateMessage").value.trim();
+  document.getElementById("message").value.trim();
 
   const type =
-    document.getElementById("updateType").value;
+  document.getElementById("type").value;
 
   const isActive =
-    document.getElementById("updateStatus").value === "true";
+  document.getElementById("active").value === "true";
 
   if(!title){
 
-    showStatus("Please enter update title.", "error");
+    showStatus("Please enter update title.","error");
     return;
+
   }
 
   if(!message){
 
-    showStatus("Please enter update message.", "error");
+    showStatus("Please enter update message.","error");
     return;
+
   }
 
-  const saveBtn =
-    document.getElementById("saveBtn");
+  const btn =
+  document.getElementById("saveBtn");
 
-  saveBtn.disabled = true;
-  saveBtn.textContent = "Saving...";
+  btn.disabled = true;
+  btn.textContent = "Saving...";
 
   let result;
 
   if(editingId){
 
-    result = await supabaseClient
+    result = await db
       .from("updates")
       .update({
         title:title,
         message:message,
-        type:type,
+        update_type:type,
         is_active:isActive
       })
-      .eq("id", editingId);
+      .eq("id",editingId);
 
   }else{
 
-    result = await supabaseClient
+    result = await db
       .from("updates")
       .insert({
         title:title,
         message:message,
-        type:type,
+        update_type:type,
         is_active:isActive
       });
 
   }
 
-  saveBtn.disabled = false;
-  saveBtn.textContent =
-    editingId ? "Update Save" : "Add Update";
+  btn.disabled = false;
+  btn.textContent =
+    editingId ? "Save Changes" : "Add Update";
 
   if(result.error){
 
@@ -697,12 +604,13 @@ async function saveUpdate(){
     );
 
     return;
+
   }
 
   showStatus(
     editingId
-      ? "Update successfully edited."
-      : "Update successfully added.",
+      ? "Update saved successfully."
+      : "Update added successfully.",
     "success"
   );
 
@@ -711,27 +619,32 @@ async function saveUpdate(){
 
 }
 
+
+/* =========================
+   EDIT
+========================= */
+
 function editUpdate(update){
 
   editingId = update.id;
 
-  document.getElementById("updateTitle").value =
+  document.getElementById("title").value =
     update.title || "";
 
-  document.getElementById("updateMessage").value =
+  document.getElementById("message").value =
     update.message || "";
 
-  document.getElementById("updateType").value =
-    update.type || "GENERAL";
+  document.getElementById("type").value =
+    update.update_type || "GENERAL";
 
-  document.getElementById("updateStatus").value =
+  document.getElementById("active").value =
     update.is_active ? "true" : "false";
 
-  document.getElementById("formHeading").textContent =
+  document.getElementById("formTitle").textContent =
     "Edit Update";
 
   document.getElementById("saveBtn").textContent =
-    "Update Save";
+    "Save Changes";
 
   document.getElementById("cancelBtn").style.display =
     "block";
@@ -743,16 +656,21 @@ function editUpdate(update){
 
 }
 
+
+/* =========================
+   CANCEL EDIT
+========================= */
+
 function cancelEdit(){
 
   editingId = null;
 
-  document.getElementById("updateTitle").value = "";
-  document.getElementById("updateMessage").value = "";
-  document.getElementById("updateType").value = "GENERAL";
-  document.getElementById("updateStatus").value = "true";
+  document.getElementById("title").value = "";
+  document.getElementById("message").value = "";
+  document.getElementById("type").value = "GENERAL";
+  document.getElementById("active").value = "true";
 
-  document.getElementById("formHeading").textContent =
+  document.getElementById("formTitle").textContent =
     "Add New Update";
 
   document.getElementById("saveBtn").textContent =
@@ -763,15 +681,20 @@ function cancelEdit(){
 
 }
 
-async function toggleUpdate(id, currentStatus){
 
-  const { error } =
-    await supabaseClient
+/* =========================
+   TOGGLE
+========================= */
+
+async function toggleUpdate(id,currentStatus){
+
+  const {error} =
+    await db
       .from("updates")
       .update({
-        is_active: !currentStatus
+        is_active:!currentStatus
       })
-      .eq("id", id);
+      .eq("id",id);
 
   if(error){
 
@@ -781,33 +704,29 @@ async function toggleUpdate(id, currentStatus){
     );
 
     return;
-  }
 
-  showStatus(
-    currentStatus
-      ? "Update deactivated."
-      : "Update activated.",
-    "success"
-  );
+  }
 
   loadUpdates();
 
 }
 
+
+/* =========================
+   DELETE
+========================= */
+
 async function deleteUpdate(id){
 
-  const confirmDelete =
-    confirm("Are you sure you want to delete this update?");
-
-  if(!confirmDelete){
+  if(!confirm("Delete this update?")){
     return;
   }
 
-  const { error } =
-    await supabaseClient
+  const {error} =
+    await db
       .from("updates")
       .delete()
-      .eq("id", id);
+      .eq("id",id);
 
   if(error){
 
@@ -817,6 +736,7 @@ async function deleteUpdate(id){
     );
 
     return;
+
   }
 
   showStatus(
@@ -827,20 +747,6 @@ async function deleteUpdate(id){
   loadUpdates();
 
 }
-
-async function init(){
-
-  const allowed = await checkAdmin();
-
-  if(!allowed){
-    return;
-  }
-
-  loadUpdates();
-
-}
-
-init();
 
 </script>
 
