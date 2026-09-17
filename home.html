@@ -12,6 +12,7 @@ document.documentElement.dataset.theme =
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <meta name="theme-color" content="#160d22">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <title>SSC EDGE - Home</title>
 
@@ -3060,94 +3061,230 @@ updatesOverlay.classList.remove("show");
    LOAD UPDATES
    ================================================== */
 
-function loadUpdates(){
+  /* ==================================================
+   SUPABASE UPDATES CONNECTION
+   ================================================== */
 
-let savedUpdates = [];
+const SUPABASE_URL =
+"https://dvvyoygahzzbnpqrfhen.supabase.co";
 
-try{
+const SUPABASE_KEY =
+"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
 
-savedUpdates =
-JSON.parse(
-localStorage.getItem(
-"sscEdgeUpdates"
-) || "[]"
+const updatesDb =
+supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
 );
 
-}catch(error){
 
-savedUpdates = [];
+/* ==================================================
+   LOAD UPDATES FROM SUPABASE
+   ================================================== */
+
+async function loadUpdates(){
+
+  updateDot.style.display = "none";
+
+  updatesContent.innerHTML = `
+
+    <div class="no-updates">
+
+      <div class="no-updates-icon">
+
+        <svg viewBox="0 0 24 24">
+
+          <path d="M4 5h16v14H4z"/>
+
+          <path d="M8 9h8M8 13h5"/>
+
+        </svg>
+
+      </div>
+
+      <strong>
+        Loading updates...
+      </strong>
+
+      <span>
+        Please wait
+      </span>
+
+    </div>
+
+  `;
+
+
+  const {
+    data,
+    error
+  } = await updatesDb
+
+    .from("updates")
+
+    .select("*")
+
+    .eq("is_active", true)
+
+    .order("created_at", {
+      ascending: false
+    });
+
+
+  if(error){
+
+    console.error(
+      "Supabase Updates Error:",
+      error
+    );
+
+    showNoUpdates();
+
+    return;
+
+  }
+
+
+  if(
+    !data ||
+    data.length === 0
+  ){
+
+    showNoUpdates();
+
+    return;
+
+  }
+
+
+  updateDot.style.display = "block";
+
+  updatesContent.innerHTML = "";
+
+
+  data.forEach(function(update){
+
+    const item =
+    document.createElement("div");
+
+    item.className =
+    "update-item";
+
+
+    const formattedDate =
+    update.created_at
+
+      ? new Date(
+          update.created_at
+        ).toLocaleDateString(
+          "en-IN",
+          {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+          }
+        )
+
+      : "";
+
+
+    item.innerHTML = `
+
+      <div class="update-item-icon">
+
+        <svg viewBox="0 0 24 24">
+
+          <path d="M5 4h14v16H5z"/>
+
+          <path d="M8 9h8M8 13h6M8 17h4"/>
+
+        </svg>
+
+      </div>
+
+
+      <div class="update-item-text">
+
+        <strong>
+          ${escapeHtml(
+            update.title ||
+            "SSC EDGE Update"
+          )}
+        </strong>
+
+
+        <span>
+          ${escapeHtml(
+            update.message ||
+            ""
+          )}
+        </span>
+
+
+        <small>
+          ${escapeHtml(
+            formattedDate
+          )}
+        </small>
+
+      </div>
+
+    `;
+
+
+    updatesContent.appendChild(item);
+
+  });
 
 }
 
-if(
-!Array.isArray(savedUpdates) ||
-savedUpdates.length === 0
-){
 
-updateDot.style.display =
-"none";
+/* ==================================================
+   NO UPDATES MESSAGE
+   ================================================== */
 
-return;
+function showNoUpdates(){
 
-}
+  updateDot.style.display =
+  "none";
 
-updateDot.style.display =
-"block";
 
-updatesContent.innerHTML = "";
+  updatesContent.innerHTML = `
 
-savedUpdates.forEach(function(update){
+    <div class="no-updates">
 
-const item =
-document.createElement("div");
+      <div class="no-updates-icon">
 
-item.className =
-"update-item";
+        <svg viewBox="0 0 24 24">
 
-item.innerHTML = `
+          <path d="M4 5h16v14H4z"/>
 
-<div class="update-item-icon">
+          <path d="M8 9h8M8 13h5"/>
 
-<svg viewBox="0 0 24 24">
+        </svg>
 
-<path d="M5 4h14v16H5z"/>
+      </div>
 
-<path d="M8 9h8M8 13h6M8 17h4"/>
 
-</svg>
+      <strong>
+        Currently no updates
+      </strong>
 
-</div>
 
-<div class="update-item-text">
+      <span>
+        New SSC EDGE updates will appear here.
+      </span>
 
-<strong>
-${escapeHtml(
-update.title ||
-"SSC EDGE Update"
-)}
-</strong>
+    </div>
 
-<span>
-${escapeHtml(
-update.text || ""
-)}
-</span>
-
-<small>
-${escapeHtml(
-update.date || ""
-)}
-</small>
-
-</div>
-
-`;
-
-updatesContent.appendChild(item);
-
-});
+  `;
 
 }
+
+
+/* ==================================================
+   INITIAL LOAD
+   ================================================== */
 
 loadUpdates();
 
