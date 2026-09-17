@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
@@ -11,7 +10,6 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 </script>
 
 <title>SSC EDGE - Practice Admin</title>
-
 <link rel="stylesheet" href="css/style.css">
 
 <style>
@@ -43,9 +41,7 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 --warning:#b67b00;
 }
 
-*{
-box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
 margin:0;
@@ -55,23 +51,9 @@ font-family:Arial,Helvetica,sans-serif;
 min-height:100vh;
 }
 
-button,
-input,
-select,
-textarea{
-font:inherit;
-}
-
-button{
-cursor:pointer;
-}
-
-button:disabled{
-opacity:.45;
-cursor:not-allowed;
-}
-
-/* HEADER */
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.45;cursor:not-allowed}
 
 .ap-header{
 height:68px;
@@ -94,9 +76,7 @@ align-items:center;
 gap:8px;
 }
 
-.ap-header-left{
-gap:11px;
-}
+.ap-header-left{gap:11px}
 
 .ap-back-btn,
 .ap-icon-btn{
@@ -117,17 +97,13 @@ font-size:18px;
 font-weight:900;
 }
 
-.ap-brand span{
-color:var(--purple);
-}
+.ap-brand span{color:var(--purple)}
 
 .ap-header-sub{
 font-size:10px;
 color:var(--muted);
 margin-top:3px;
 }
-
-/* BUTTONS */
 
 .ap-primary-btn,
 .ap-secondary-btn,
@@ -159,15 +135,8 @@ background:rgba(255,85,119,.1);
 color:var(--danger);
 }
 
-.ap-small-btn.edit{
-color:var(--purple);
-}
-
-.ap-small-btn.move{
-color:var(--warning);
-}
-
-/* PAGE */
+.ap-small-btn.edit{color:var(--purple)}
+.ap-small-btn.move{color:var(--warning)}
 
 .ap-page{
 max-width:1100px;
@@ -187,8 +156,6 @@ color:var(--muted);
 line-height:1.5;
 margin-bottom:18px;
 }
-
-/* BOARD */
 
 .ap-board-tabs{
 display:flex;
@@ -213,8 +180,6 @@ border-color:transparent;
 color:#fff;
 }
 
-/* SECTION */
-
 .ap-section-head{
 display:flex;
 align-items:center;
@@ -233,8 +198,6 @@ font-size:10px;
 color:var(--muted);
 margin-top:4px;
 }
-
-/* EXAMS */
 
 .ap-exam-grid,
 .ap-choice-grid{
@@ -287,7 +250,8 @@ line-height:1.4;
 }
 
 .ap-exam-arrow,
-.ap-choice-arrow{
+.ap-choice-arrow,
+.ap-folder-arrow{
 font-size:20px;
 color:var(--purple);
 }
@@ -307,16 +271,12 @@ padding:6px 8px;
 font-size:9px;
 }
 
-/* WORKSPACE */
-
 .ap-workspace{
 display:none;
 margin-top:22px;
 }
 
-.ap-workspace.visible{
-display:block;
-}
+.ap-workspace.visible{display:block}
 
 .ap-selected-strip{
 display:flex;
@@ -340,8 +300,6 @@ margin-bottom:4px;
 font-size:15px;
 font-weight:900;
 }
-
-/* CHOICES */
 
 .ap-choice-card{
 min-height:85px;
@@ -372,8 +330,6 @@ margin-top:5px;
 line-height:1.4;
 }
 
-/* FOLDER CARDS */
-
 .ap-folder-card{
 min-height:85px;
 padding:14px;
@@ -401,32 +357,16 @@ margin-top:5px;
 line-height:1.4;
 }
 
-.ap-folder-arrow{
-font-size:20px;
-color:var(--purple);
-cursor:pointer;
-}
-
 .ap-folder-actions{
 display:flex;
 align-items:center;
 gap:5px;
 }
 
-/* INNER */
+.ap-inner-panel{display:none;margin-top:16px}
+.ap-inner-panel.visible{display:block}
 
-.ap-inner-panel{
-display:none;
-margin-top:16px;
-}
-
-.ap-inner-panel.visible{
-display:block;
-}
-
-.ap-panel{
-padding:14px;
-}
+.ap-panel{padding:14px}
 
 .ap-panel-head{
 display:flex;
@@ -447,8 +387,6 @@ color:var(--muted);
 margin-top:4px;
 }
 
-/* CHIPS */
-
 .ap-chip-row{
 display:flex;
 gap:8px;
@@ -458,9 +396,7 @@ scrollbar-width:none;
 align-items:center;
 }
 
-.ap-chip-row::-webkit-scrollbar{
-display:none;
-}
+.ap-chip-row::-webkit-scrollbar{display:none}
 
 .ap-chip-wrap{
 display:flex;
@@ -495,17 +431,9 @@ color:var(--text);
 font-size:10px;
 }
 
-.ap-chip-mini.edit{
-color:var(--purple);
-}
-
-.ap-chip-mini.move{
-color:var(--warning);
-}
-
-.ap-chip-mini.delete{
-color:var(--danger);
-}
+.ap-chip-mini.edit{color:var(--purple)}
+.ap-chip-mini.move{color:var(--warning)}
+.ap-chip-mini.delete{color:var(--danger)}
 
 .ap-chip-wrap .ap-chip{
 border-radius:999px 0 0 999px;
@@ -515,17 +443,13 @@ border-radius:999px 0 0 999px;
 border-radius:0 999px 999px 0;
 }
 
-/* TEST */
-
 .ap-test-list{
 display:flex;
 flex-direction:column;
 gap:10px;
 }
 
-.ap-test-card{
-padding:13px;
-}
+.ap-test-card{padding:13px}
 
 .ap-test-badges{
 display:flex;
@@ -543,15 +467,8 @@ border:1px solid var(--border);
 color:var(--muted);
 }
 
-.ap-test-badge.active{
-color:var(--success);
-}
-
-.ap-test-badge.inactive{
-color:var(--danger);
-}
-
-/* STATES */
+.ap-test-badge.active{color:var(--success)}
+.ap-test-badge.inactive{color:var(--danger)}
 
 .ap-empty,
 .ap-loading{
@@ -574,8 +491,6 @@ font-size:11px;
 line-height:1.5;
 }
 
-/* FORMS */
-
 .ap-form-grid{
 display:grid;
 grid-template-columns:repeat(2,minmax(0,1fr));
@@ -588,9 +503,7 @@ flex-direction:column;
 gap:6px;
 }
 
-.ap-form-group.full{
-grid-column:1/-1;
-}
+.ap-form-group.full{grid-column:1/-1}
 
 .ap-form-label{
 font-size:10px;
@@ -631,9 +544,7 @@ font-size:11px;
 font-weight:800;
 }
 
-.ap-check-row input{
-accent-color:var(--purple);
-}
+.ap-check-row input{accent-color:var(--purple)}
 
 .ap-section-config{
 border-top:1px solid var(--border);
@@ -679,8 +590,6 @@ color:var(--danger);
 border-radius:8px;
 }
 
-/* MODAL */
-
 .ap-modal-overlay{
 display:none;
 position:fixed;
@@ -693,9 +602,7 @@ align-items:flex-start;
 justify-content:center;
 }
 
-.ap-modal-overlay.open{
-display:flex;
-}
+.ap-modal-overlay.open{display:flex}
 
 .ap-modal{
 width:100%;
@@ -730,9 +637,7 @@ border-radius:8px;
 font-size:18px;
 }
 
-.ap-modal-body{
-padding:15px;
-}
+.ap-modal-body{padding:15px}
 
 .ap-modal-footer{
 display:flex;
@@ -767,74 +672,22 @@ transform:translate(-50%,0);
 }
 
 @media(max-width:600px){
-
-.ap-header{
-height:64px;
-padding:0 10px;
-}
-
-.ap-brand{
-font-size:16px;
-}
-
-.ap-header-sub{
-font-size:9px;
-}
-
-.ap-page{
-padding:15px 10px 35px;
-}
-
-.ap-page-title{
-font-size:20px;
-}
-
-.ap-exam-grid,
-.ap-choice-grid{
-grid-template-columns:repeat(2,minmax(0,1fr));
-}
-
-.ap-exam-card{
-padding:11px;
-}
-
-.ap-exam-name{
-font-size:12px;
-}
-
-.ap-selected-strip{
-align-items:flex-start;
-flex-direction:column;
-}
-
-.ap-selected-actions{
-width:100%;
-}
-
-.ap-selected-actions button{
-flex:1;
-}
-
-.ap-form-grid{
-grid-template-columns:1fr;
-}
-
-.ap-form-group.full{
-grid-column:auto;
-}
-
-.ap-section-row{
-grid-template-columns:1.2fr .7fr .7fr 30px;
-}
-
-.ap-modal{
-margin:10px auto;
-}
-
-.ap-folder-card{
-padding:11px;
-}
-
+.ap-header{height:64px;padding:0 10px}
+.ap-brand{font-size:16px}
+.ap-header-sub{font-size:9px}
+.ap-page{padding:15px 10px 35px}
+.ap-page-title{font-size:20px}
+.ap-exam-grid,.ap-choice-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.ap-exam-card{padding:11px}
+.ap-exam-name{font-size:12px}
+.ap-selected-strip{align-items:flex-start;flex-direction:column}
+.ap-selected-actions{width:100%}
+.ap-selected-actions button{flex:1}
+.ap-form-grid{grid-template-columns:1fr}
+.ap-form-group.full{grid-column:auto}
+.ap-section-row{grid-template-columns:1.2fr .7fr .7fr 30px}
+.ap-modal{margin:10px auto}
+.ap-folder-card{padding:11px}
 }
 </style>
 </head>
@@ -842,38 +695,18 @@ padding:11px;
 <body>
 
 <header class="ap-header">
-
 <div class="ap-header-left">
-
-<button
-class="ap-back-btn"
-id="adminBackBtn"
-type="button"
->‹</button>
-
+<button class="ap-back-btn" id="adminBackBtn" type="button">‹</button>
 <div>
 <div class="ap-brand">SSC <span>EDGE</span></div>
 <div class="ap-header-sub">Practice Management</div>
 </div>
-
 </div>
 
 <div class="ap-header-actions">
-
-<button
-class="ap-icon-btn"
-id="refreshBtn"
-type="button"
->↻</button>
-
-<button
-class="ap-primary-btn"
-id="addExamBtn"
-type="button"
->+ Exam</button>
-
+<button class="ap-icon-btn" id="refreshBtn" type="button">↻</button>
+<button class="ap-primary-btn" id="addExamBtn" type="button">+ Exam</button>
 </div>
-
 </header>
 
 <main class="ap-page">
@@ -885,17 +718,8 @@ Manage exams, branches, custom folders, categories, years, subjects and mock tes
 </div>
 
 <div class="ap-board-tabs">
-<button
-class="ap-board-tab active"
-data-board="SSC"
-type="button"
->SSC</button>
-
-<button
-class="ap-board-tab"
-data-board="RRB"
-type="button"
->RRB</button>
+<button class="ap-board-tab active" data-board="SSC" type="button">SSC</button>
+<button class="ap-board-tab" data-board="RRB" type="button">RRB</button>
 </div>
 
 <section>
@@ -903,325 +727,153 @@ type="button"
 <div class="ap-section-head">
 <div>
 <div class="ap-section-title">Exams</div>
-<div class="ap-section-note">
-Select an exam to manage its complete structure
-</div>
+<div class="ap-section-note">Select an exam to manage its complete structure</div>
 </div>
 </div>
 
-<div
-class="ap-exam-grid"
-id="examGrid"
->
+<div class="ap-exam-grid" id="examGrid">
 <div class="ap-loading">Loading exams...</div>
 </div>
 
 </section>
 
-<section
-class="ap-workspace"
-id="workspace"
->
+<section class="ap-workspace" id="workspace">
 
 <div class="ap-selected-strip">
-
 <div>
 <div class="ap-selected-label">Selected Exam</div>
-<div
-class="ap-selected-name"
-id="selectedExamName"
->—</div>
+<div class="ap-selected-name" id="selectedExamName">—</div>
 </div>
 
 <div class="ap-selected-actions">
-
-<button
-class="ap-secondary-btn"
-id="syncStructureBtn"
-type="button"
->Sync Structure</button>
-
-<button
-class="ap-secondary-btn"
-id="changeExamBtn"
-type="button"
->Change</button>
-
+<button class="ap-secondary-btn" id="syncStructureBtn" type="button">Sync Structure</button>
+<button class="ap-secondary-btn" id="changeExamBtn" type="button">Change</button>
 </div>
-
 </div>
-
-<!-- ROOT BRANCH VIEW -->
 
 <div id="branchView">
 
 <div class="ap-section-head">
-
 <div>
 <div class="ap-section-title">Mock Branch</div>
-<div class="ap-section-note">
-New, PYQ and custom folders
-</div>
+<div class="ap-section-note">New, PYQ and custom folders</div>
 </div>
 
-<button
-class="ap-primary-btn"
-id="addRootFolderBtn"
-type="button"
->+ Add Folder</button>
-
+<button class="ap-primary-btn" id="addRootFolderBtn" type="button">+ Add Folder</button>
 </div>
 
-<div
-class="ap-choice-grid"
-id="branchCards"
-></div>
-
+<div class="ap-choice-grid" id="branchCards"></div>
 </div>
 
-<!-- CATEGORY VIEW -->
-
-<div
-class="ap-inner-panel"
-id="categoryView"
->
+<div class="ap-inner-panel" id="categoryView">
 
 <div class="ap-section-head">
-
 <div>
-<div
-class="ap-section-title"
-id="branchHeading"
->Mock Branch</div>
-
-<div class="ap-section-note">
-Select a category
-</div>
+<div class="ap-section-title" id="branchHeading">Mock Branch</div>
+<div class="ap-section-note">Select a category</div>
 </div>
 
-<button
-class="ap-secondary-btn"
-id="backToBranchesBtn"
-type="button"
->Back</button>
-
+<button class="ap-secondary-btn" id="backToBranchesBtn" type="button">Back</button>
 </div>
 
 <div class="ap-choice-grid">
 
-<button
-class="ap-choice-card"
-data-category="FULL"
-type="button"
->
-
+<button class="ap-choice-card" data-category="FULL" type="button">
 <div>
 <div class="ap-choice-title">FULL MOCKS</div>
-<div class="ap-choice-sub">
-Complete exam mock tests
+<div class="ap-choice-sub">Complete exam mock tests</div>
 </div>
-</div>
-
 <div class="ap-choice-arrow">›</div>
-
 </button>
 
-<button
-class="ap-choice-card"
-data-category="SECTIONAL"
-type="button"
->
-
+<button class="ap-choice-card" data-category="SECTIONAL" type="button">
 <div>
 <div class="ap-choice-title">SECTIONAL MOCKS</div>
-<div class="ap-choice-sub">
-Subject-wise mock tests
+<div class="ap-choice-sub">Subject-wise mock tests</div>
 </div>
-</div>
-
 <div class="ap-choice-arrow">›</div>
-
 </button>
 
 </div>
-
 </div>
 
-<!-- MANAGEMENT VIEW -->
-
-<div
-class="ap-inner-panel"
-id="mockManagementView"
->
+<div class="ap-inner-panel" id="mockManagementView">
 
 <div class="ap-panel">
 
 <div class="ap-panel-head">
-
 <div>
-<div
-class="ap-panel-title"
-id="managementTitle"
->Mock Management</div>
-
-<div
-class="ap-panel-subtitle"
-id="managementSubtitle"
-></div>
+<div class="ap-panel-title" id="managementTitle">Mock Management</div>
+<div class="ap-panel-subtitle" id="managementSubtitle"></div>
 </div>
 
-<button
-class="ap-secondary-btn"
-id="backToCategoriesBtn"
-type="button"
->Back</button>
-
+<button class="ap-secondary-btn" id="backToCategoriesBtn" type="button">Back</button>
 </div>
 
-<div
-id="managementChipsArea"
-style="display:none"
->
-
+<div id="managementChipsArea" style="display:none">
 <div class="ap-section-head">
-<div
-class="ap-section-title"
-id="chipsTitle"
->Select</div>
+<div class="ap-section-title" id="chipsTitle">Select</div>
+</div>
+<div class="ap-chip-row" id="managementChips"></div>
 </div>
 
-<div
-class="ap-chip-row"
-id="managementChips"
-></div>
+<div class="ap-actions" id="managementExtraActions"></div>
+<div id="managementTestList" class="ap-test-list"></div>
 
 </div>
-
-<div
-class="ap-actions"
-id="managementExtraActions"
-></div>
-
-<div
-id="managementTestList"
-class="ap-test-list"
-></div>
-
-</div>
-
 </div>
 
 </section>
-
 </main>
 
 <!-- EXAM MODAL -->
-
-<div
-class="ap-modal-overlay"
-id="examModal"
->
-
+<div class="ap-modal-overlay" id="examModal">
 <div class="ap-modal">
 
 <div class="ap-modal-head">
 <div class="ap-modal-title">Add / Edit Exam</div>
-
-<button
-class="ap-modal-close"
-data-close-modal="examModal"
-type="button"
->×</button>
+<button class="ap-modal-close" data-close-modal="examModal" type="button">×</button>
 </div>
 
 <div class="ap-modal-body">
-
 <div class="ap-form-grid">
 
 <div class="ap-form-group">
-
 <label class="ap-form-label">Exam Board</label>
-
-<select
-class="ap-form-select"
-id="examBoardInput"
->
+<select class="ap-form-select" id="examBoardInput">
 <option value="SSC">SSC</option>
 <option value="RRB">RRB</option>
 </select>
-
 </div>
 
 <div class="ap-form-group">
-
 <label class="ap-form-label">Exam Name</label>
-
-<input
-class="ap-form-input"
-id="examNameInput"
-placeholder="Example: CGL"
->
-
+<input class="ap-form-input" id="examNameInput" placeholder="Example: CGL">
 </div>
 
 <div class="ap-form-group full">
-
 <label class="ap-form-label">Exam Stage / Subtitle</label>
-
-<input
-class="ap-form-input"
-id="examStageInput"
-placeholder="Example: Tier 1"
->
-
+<input class="ap-form-input" id="examStageInput" placeholder="Example: Tier 1">
 </div>
 
 </div>
-
 </div>
 
 <div class="ap-modal-footer">
-
-<button
-class="ap-secondary-btn"
-data-close-modal="examModal"
-type="button"
->Cancel</button>
-
-<button
-class="ap-primary-btn"
-id="saveExamBtn"
-type="button"
->Save Exam</button>
-
+<button class="ap-secondary-btn" data-close-modal="examModal" type="button">Cancel</button>
+<button class="ap-primary-btn" id="saveExamBtn" type="button">Save Exam</button>
 </div>
 
 </div>
-
 </div>
 
 <!-- MOCK MODAL -->
-
-<div
-class="ap-modal-overlay"
-id="mockModal"
->
-
+<div class="ap-modal-overlay" id="mockModal">
 <div class="ap-modal">
 
 <div class="ap-modal-head">
-
-<div
-class="ap-modal-title"
-id="mockModalTitle"
->Add Mock</div>
-
-<button
-class="ap-modal-close"
-data-close-modal="mockModal"
-type="button"
->×</button>
-
+<div class="ap-modal-title" id="mockModalTitle">Add Mock</div>
+<button class="ap-modal-close" data-close-modal="mockModal" type="button">×</button>
 </div>
 
 <div class="ap-modal-body">
@@ -1229,285 +881,149 @@ type="button"
 <div class="ap-form-grid">
 
 <div class="ap-form-group full">
-
 <label class="ap-form-label">Mock Title</label>
-
-<input
-class="ap-form-input"
-id="mockTitleInput"
-placeholder="Example: CGL Tier 1 Mock 01"
->
-
+<input class="ap-form-input" id="mockTitleInput" placeholder="Example: CGL Tier 1 Mock 01">
 </div>
 
 <div class="ap-form-group full">
-
 <label class="ap-form-label">Description</label>
-
-<textarea
-class="ap-form-textarea"
-id="mockDescriptionInput"
-></textarea>
-
+<textarea class="ap-form-textarea" id="mockDescriptionInput"></textarea>
 </div>
 
 <div class="ap-form-group">
-
 <label class="ap-form-label">Duration Minutes</label>
-
-<input
-class="ap-form-input"
-id="mockDurationInput"
-type="number"
-min="1"
-value="60"
->
-
+<input class="ap-form-input" id="mockDurationInput" type="number" min="1" value="60">
 </div>
 
 <div class="ap-form-group">
-
 <label class="ap-form-label">Total Questions</label>
-
-<input
-class="ap-form-input"
-id="mockQuestionsInput"
-type="number"
-min="1"
-value="25"
->
-
+<input class="ap-form-input" id="mockQuestionsInput" type="number" min="1" value="25">
 </div>
 
 <div class="ap-form-group">
-
 <label class="ap-form-label">Status</label>
-
-<select
-class="ap-form-select"
-id="mockActiveInput"
->
+<select class="ap-form-select" id="mockActiveInput">
 <option value="true">Active</option>
 <option value="false">Inactive</option>
 </select>
-
 </div>
 
 </div>
 
 <div class="ap-check-row">
-
-<input
-id="sectionalTimingInput"
-type="checkbox"
->
-
-<label for="sectionalTimingInput">
-Enable sectional timing
-</label>
-
+<input id="sectionalTimingInput" type="checkbox">
+<label for="sectionalTimingInput">Enable sectional timing</label>
 </div>
 
 <div class="ap-section-config">
 
 <div class="ap-section-config-head">
-
-<div class="ap-section-config-title">
-Test Sections
-</div>
-
-<button
-class="ap-secondary-btn"
-id="addSectionBtn"
-type="button"
->+ Section</button>
-
+<div class="ap-section-config-title">Test Sections</div>
+<button class="ap-secondary-btn" id="addSectionBtn" type="button">+ Section</button>
 </div>
 
 <div id="sectionRows"></div>
 
 </div>
-
 </div>
 
 <div class="ap-modal-footer">
-
-<button
-class="ap-secondary-btn"
-data-close-modal="mockModal"
-type="button"
->Cancel</button>
-
-<button
-class="ap-primary-btn"
-id="saveMockBtn"
-type="button"
->Save Mock</button>
-
+<button class="ap-secondary-btn" data-close-modal="mockModal" type="button">Cancel</button>
+<button class="ap-primary-btn" id="saveMockBtn" type="button">Save Mock</button>
 </div>
 
 </div>
-
 </div>
 
 <!-- STRUCTURE MODAL -->
-
-<div
-class="ap-modal-overlay"
-id="structureModal"
->
-
+<div class="ap-modal-overlay" id="structureModal">
 <div class="ap-modal">
 
 <div class="ap-modal-head">
-
-<div
-class="ap-modal-title"
-id="structureModalTitle"
->Add Item</div>
-
-<button
-class="ap-modal-close"
-data-close-modal="structureModal"
-type="button"
->×</button>
-
+<div class="ap-modal-title" id="structureModalTitle">Add Item</div>
+<button class="ap-modal-close" data-close-modal="structureModal" type="button">×</button>
 </div>
 
 <div class="ap-modal-body">
-
 <div class="ap-form-group">
-
-<label
-class="ap-form-label"
-id="structureInputLabel"
->Name</label>
-
-<input
-class="ap-form-input"
-id="structureNameInput"
-placeholder="Enter name"
->
-
+<label class="ap-form-label" id="structureInputLabel">Name</label>
+<input class="ap-form-input" id="structureNameInput" placeholder="Enter name">
 </div>
-
 </div>
 
 <div class="ap-modal-footer">
-
-<button
-class="ap-secondary-btn"
-data-close-modal="structureModal"
-type="button"
->Cancel</button>
-
-<button
-class="ap-primary-btn"
-id="saveStructureBtn"
-type="button"
->Save</button>
-
+<button class="ap-secondary-btn" data-close-modal="structureModal" type="button">Cancel</button>
+<button class="ap-primary-btn" id="saveStructureBtn" type="button">Save</button>
 </div>
 
 </div>
-
 </div>
 
-<div
-class="ap-toast"
-id="toast"
-></div>
+<div class="ap-toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
+const SUPABASE_URL="https://dvvyoygahzzbnpqrfhen.supabase.co";
+const SUPABASE_KEY="sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
 
-const SUPABASE_URL =
-"https://dvvyoygahzzbnpqrfhen.supabase.co";
-
-const SUPABASE_KEY =
-"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
-
-const db = window.supabase.createClient(
+const db=window.supabase.createClient(
 SUPABASE_URL,
 SUPABASE_KEY
 );
 
-/* =========================
-   STATE
-========================= */
+let exams=[];
+let subjects=[];
+let folders=[];
+let tests=[];
 
-let exams = [];
-let subjects = [];
-let folders = [];
-let tests = [];
+let activeBoard="SSC";
+let selectedExam=null;
+let selectedBranch=null;
+let selectedCategory=null;
+let selectedFolder=null;
+let selectedYear=null;
+let selectedRootFolder=null;
 
-let activeBoard = "SSC";
+let editingExamId=null;
+let editingMockId=null;
 
-let selectedExam = null;
-let selectedBranch = null;
-let selectedCategory = null;
-let selectedSubject = null;
-let selectedYear = null;
-let selectedFolder = null;
-let selectedRootFolder = null;
+let structureMode=null;
+let structureEditId=null;
 
-let editingExamId = null;
-let editingMockId = null;
+let editorFolderId=null;
+let editorType=null;
 
-let structureMode = null;
-let structureEditId = null;
+const $=id=>document.getElementById(id);
 
-let editorFolderId = null;
-let editorType = null;
-
-const $ = id => document.getElementById(id);
-
-/* =========================
-   BASIC HELPERS
-========================= */
-
-function bindClick(id, handler){
-const element = $(id);
-
-if(element){
-element.onclick = handler;
-}
+function bindClick(id,handler){
+const el=$(id);
+if(el) el.onclick=handler;
 }
 
 function toast(message){
-const element = $("toast");
-
-if(!element) return;
-
-element.textContent = message;
-element.classList.add("show");
-
+const el=$("toast");
+if(!el)return;
+el.textContent=message;
+el.classList.add("show");
 clearTimeout(window.toastTimer);
-
-window.toastTimer = setTimeout(()=>{
-element.classList.remove("show");
+window.toastTimer=setTimeout(()=>{
+el.classList.remove("show");
 },2800);
 }
 
 function openModal(id){
-const element = $(id);
-
-if(element){
-element.classList.add("open");
-}
+const el=$(id);
+if(el)el.classList.add("open");
 }
 
 function closeModal(id){
-const element = $(id);
-
-if(element){
-element.classList.remove("open");
-}
+const el=$(id);
+if(el)el.classList.remove("open");
 }
 
 function escapeHTML(value){
-return String(value ?? "")
+return String(value??"")
 .replaceAll("&","&amp;")
 .replaceAll("<","&lt;")
 .replaceAll(">","&gt;")
@@ -1516,205 +1032,140 @@ return String(value ?? "")
 }
 
 function nameOfSubject(subject){
-return subject?.name ||
-subject?.subject_name ||
-subject?.title ||
+return subject?.name||
+subject?.subject_name||
+subject?.title||
 "Subject";
 }
 
 function examName(exam){
-return exam?.name ||
-exam?.exam_name ||
-exam?.title ||
+return exam?.name||
+exam?.exam_name||
+exam?.title||
 "Unnamed Exam";
 }
 
 function boardOfExam(exam){
+if(exam?.board)return String(exam.board).toUpperCase();
+if(exam?.exam_board)return String(exam.exam_board).toUpperCase();
 
-if(exam?.board){
-return String(exam.board).toUpperCase();
-}
-
-if(exam?.exam_board){
-return String(exam.exam_board).toUpperCase();
-}
-
-const name = examName(exam).toLowerCase();
+const name=examName(exam).toLowerCase();
 
 if(
-name.includes("rrb") ||
-name.includes("ntpc") ||
-name.includes("group d") ||
-name.includes("group-d") ||
-name.includes("alp") ||
+name.includes("rrb")||
+name.includes("ntpc")||
+name.includes("group d")||
+name.includes("group-d")||
+name.includes("alp")||
 name.includes("technician")
-){
-return "RRB";
-}
+)return "RRB";
 
 return "SSC";
 }
 
 function folderName(folder){
-return folder?.display_name ||
-folder?.name ||
+return folder?.display_name||
+folder?.name||
 "Unnamed Folder";
 }
 
 function folderType(folder){
-return String(folder?.folder_type || "")
+return String(folder?.folder_type||"")
 .toUpperCase()
 .replaceAll("-","")
 .replaceAll(" ","");
 }
 
 function testType(test){
-return String(test?.test_type || "")
+return String(test?.test_type||"")
 .toUpperCase()
 .replaceAll("-","")
 .replaceAll(" ","");
 }
 
 function isFull(test){
-return [
-"FULL",
-"FULLMOCK",
-"FULLMOCKS"
-].includes(testType(test));
+return ["FULL","FULLMOCK","FULLMOCKS"].includes(testType(test));
 }
 
 function isSectional(test){
-return [
-"SECTIONAL",
-"SUBJECTWISE",
-"CHAPTERWISE"
-].includes(testType(test));
+return ["SECTIONAL","SUBJECTWISE","CHAPTERWISE"].includes(testType(test));
 }
 
 function getFolder(id){
-return folders.find(folder =>
-String(folder.id) === String(id)
+return folders.find(folder=>
+String(folder.id)===String(id)
 );
 }
 
 function childrenOf(parentId,type=null){
-
 return folders
 .filter(folder=>{
+const sameParent=
+String(folder.parent_id||"")===String(parentId||"");
 
-const sameParent =
-String(folder.parent_id || "") ===
-String(parentId || "");
+const active=folder.is_active!==false;
 
-const active =
-folder.is_active !== false;
+const sameType=type
+?folderType(folder)===type
+:true;
 
-const sameType = type
-? folderType(folder) === type
-: true;
-
-return sameParent && active && sameType;
-
+return sameParent&&active&&sameType;
 })
 .sort((a,b)=>{
-
-const orderA = Number(a.sort_order || 0);
-const orderB = Number(b.sort_order || 0);
-
-if(orderA !== orderB){
-return orderA - orderB;
-}
-
-return folderName(a).localeCompare(
-folderName(b)
-);
-
+const oa=Number(a.sort_order||0);
+const ob=Number(b.sort_order||0);
+return oa!==ob
+?oa-ob
+:folderName(a).localeCompare(folderName(b));
 });
-
 }
 
 function directChild(parentId,type){
-return childrenOf(parentId,type)[0] || null;
+return childrenOf(parentId,type)[0]||null;
 }
 
 function isFolderUnderBranch(folder,branch){
+if(!folder)return false;
 
-if(!folder) return false;
+let current=folder;
+let guard=0;
 
-let current = folder;
-let guard = 0;
-
-while(current && guard < 20){
-
-if(folderType(current) === branch){
-return true;
-}
-
-current = getFolder(current.parent_id);
+while(current&&guard<20){
+if(folderType(current)===branch)return true;
+current=getFolder(current.parent_id);
 guard++;
-
 }
 
 return false;
 }
 
 function getExamSubjects(){
+if(!selectedExam)return [];
 
-if(!selectedExam) return [];
-
-return subjects.filter(subject =>
-subject.exam_id == null ||
-String(subject.exam_id) ===
-String(selectedExam.id)
+return subjects.filter(subject=>
+subject.exam_id==null||
+String(subject.exam_id)===String(selectedExam.id)
 );
-
 }
-
-/* =========================
-   VIEW RESET
-========================= */
 
 function resetViews(){
+$("branchView").style.display="block";
+$("categoryView").classList.remove("visible");
+$("mockManagementView").classList.remove("visible");
 
-const branchView = $("branchView");
-const categoryView = $("categoryView");
-const managementView = $("mockManagementView");
-
-if(branchView){
-branchView.style.display = "block";
-}
-
-if(categoryView){
-categoryView.classList.remove("visible");
-}
-
-if(managementView){
-managementView.classList.remove("visible");
-}
-
-selectedBranch = null;
-selectedCategory = null;
-selectedSubject = null;
-selectedYear = null;
-selectedFolder = null;
-selectedRootFolder = null;
+selectedBranch=null;
+selectedCategory=null;
+selectedFolder=null;
+selectedYear=null;
+selectedRootFolder=null;
 
 renderRootBranches();
-
 }
-
-/* =========================
-   LOAD DATA
-========================= */
 
 async function loadAllData(){
 
-const grid = $("examGrid");
-
-if(grid){
-grid.innerHTML =
-`<div class="ap-loading">Loading exams...</div>`;
-}
+const grid=$("examGrid");
+if(grid)grid.innerHTML='<div class="ap-loading">Loading exams...</div>';
 
 try{
 
@@ -1723,557 +1174,303 @@ examsResponse,
 subjectsResponse,
 foldersResponse,
 testsResponse
-] = await Promise.all([
-
+]=await Promise.all([
 db.from("exams").select("*"),
-
 db.from("subjects").select("*"),
-
 db.from("mock_folders").select("*"),
-
 db.from("mock_tests").select("*")
-
 ]);
 
-if(examsResponse.error){
-throw examsResponse.error;
-}
+if(examsResponse.error)throw examsResponse.error;
+if(subjectsResponse.error)throw subjectsResponse.error;
+if(foldersResponse.error)throw foldersResponse.error;
+if(testsResponse.error)throw testsResponse.error;
 
-if(subjectsResponse.error){
-throw subjectsResponse.error;
-}
-
-if(foldersResponse.error){
-throw foldersResponse.error;
-}
-
-if(testsResponse.error){
-throw testsResponse.error;
-}
-
-exams = (examsResponse.data || []).sort((a,b)=>
-Number(a.sort_order || 0) -
-Number(b.sort_order || 0)
+exams=(examsResponse.data||[]).sort((a,b)=>
+Number(a.sort_order||0)-Number(b.sort_order||0)
 );
 
-subjects = (subjectsResponse.data || []).sort((a,b)=>
-nameOfSubject(a).localeCompare(
-nameOfSubject(b)
-)
+subjects=(subjectsResponse.data||[]).sort((a,b)=>
+nameOfSubject(a).localeCompare(nameOfSubject(b))
 );
 
-folders = (foldersResponse.data || []).sort((a,b)=>
-Number(a.sort_order || 0) -
-Number(b.sort_order || 0)
+folders=(foldersResponse.data||[]).sort((a,b)=>
+Number(a.sort_order||0)-Number(b.sort_order||0)
 );
 
-tests = (testsResponse.data || []).sort((a,b)=>
-Number(b.id || 0) -
-Number(a.id || 0)
+tests=(testsResponse.data||[]).sort((a,b)=>
+Number(b.id||0)-Number(a.id||0)
 );
 
 renderExams();
 
 if(selectedExam){
-
-const updatedExam = exams.find(exam =>
-String(exam.id) ===
-String(selectedExam.id)
+const updated=exams.find(exam=>
+String(exam.id)===String(selectedExam.id)
 );
 
-if(updatedExam){
-
-selectedExam = updatedExam;
-
-const selectedName = $("selectedExamName");
-
-if(selectedName){
-selectedName.textContent =
-examName(updatedExam);
+if(updated){
+selectedExam=updated;
+$("selectedExamName").textContent=examName(updated);
 }
-
-}
-
 }
 
 renderRootBranches();
 
 }catch(error){
 
-console.error("Load error:",error);
+console.error(error);
 
 if(grid){
-
-grid.innerHTML = `
+grid.innerHTML=`
 <div class="ap-error">
-Unable to load data.<br>
-${escapeHTML(error.message)}
-</div>
-`;
-
+Unable to load data.<br>${escapeHTML(error.message)}
+</div>`;
 }
 
 }
-
 }
-
-/* =========================
-   EXAM RENDER
-========================= */
 
 function renderExams(){
 
-const grid = $("examGrid");
+const grid=$("examGrid");
+if(!grid)return;
 
-if(!grid) return;
-
-const list = exams.filter(exam =>
-boardOfExam(exam) === activeBoard &&
-exam.is_active !== false
+const list=exams.filter(exam=>
+boardOfExam(exam)===activeBoard&&
+exam.is_active!==false
 );
 
 if(!list.length){
-
-grid.innerHTML =
-`<div class="ap-empty">
-No exams found for ${escapeHTML(activeBoard)}.
-</div>`;
-
+grid.innerHTML=
+`<div class="ap-empty">No exams found for ${escapeHTML(activeBoard)}.</div>`;
 return;
-
 }
 
-grid.innerHTML = list.map((exam,index)=>{
+grid.innerHTML=list.map((exam,index)=>{
 
-const count = tests.filter(test =>
-String(test.exam_id) ===
-String(exam.id)
+const count=tests.filter(test=>
+String(test.exam_id)===String(exam.id)
 ).length;
 
 return `
-
 <div class="ap-exam-card ${
-selectedExam &&
-String(selectedExam.id) === String(exam.id)
-? "selected"
-: ""
+selectedExam&&String(selectedExam.id)===String(exam.id)
+?"selected":""
 }">
-
 <div class="ap-exam-main">
 
-<div
-class="ap-exam-select"
-data-select-exam="${escapeHTML(exam.id)}"
-style="flex:1;cursor:pointer"
->
+<div data-select-exam="${escapeHTML(exam.id)}"
+style="flex:1;cursor:pointer">
 
 <div class="ap-exam-name">
 ${escapeHTML(examName(exam))}
 </div>
 
 <div class="ap-exam-meta">
-${escapeHTML(exam.stage || "Exam")}
-•
-${count} mock${count === 1 ? "" : "s"}
+${escapeHTML(exam.stage||"Exam")} •
+${count} mock${count===1?"":"s"}
 </div>
 
 </div>
 
-<div
-class="ap-exam-arrow"
-data-select-exam="${escapeHTML(exam.id)}"
->›</div>
+<div class="ap-exam-arrow"
+data-select-exam="${escapeHTML(exam.id)}">›</div>
 
 </div>
 
 <div class="ap-exam-actions">
 
-<button
-class="ap-small-btn edit"
+<button class="ap-small-btn edit"
 data-edit-exam="${escapeHTML(exam.id)}"
-type="button"
->Edit</button>
+type="button">Edit</button>
 
-<button
-class="ap-small-btn"
+<button class="ap-small-btn"
 data-up-exam="${escapeHTML(exam.id)}"
 type="button"
-${index <= 0 ? "disabled" : ""}
->↑</button>
+${index<=0?"disabled":""}>↑</button>
 
-<button
-class="ap-small-btn"
+<button class="ap-small-btn"
 data-down-exam="${escapeHTML(exam.id)}"
 type="button"
-${index >= list.length - 1 ? "disabled" : ""}
->↓</button>
+${index>=list.length-1?"disabled":""}>↓</button>
 
-<button
-class="ap-small-btn delete"
+<button class="ap-small-btn delete"
 data-delete-exam="${escapeHTML(exam.id)}"
-type="button"
->Delete</button>
+type="button">Delete</button>
 
 </div>
-
-</div>
-
-`;
-
+</div>`;
 }).join("");
 
-document.querySelectorAll("[data-select-exam]")
-.forEach(button=>{
-
-button.onclick=()=>{
-
-const exam = exams.find(item =>
-String(item.id) ===
-String(button.dataset.selectExam)
+document.querySelectorAll("[data-select-exam]").forEach(el=>{
+el.onclick=()=>{
+const exam=exams.find(item=>
+String(item.id)===String(el.dataset.selectExam)
 );
-
-if(exam){
-selectExam(exam);
-}
-
+if(exam)selectExam(exam);
 };
-
 });
 
-document.querySelectorAll("[data-edit-exam]")
-.forEach(button=>{
-
-button.onclick=event=>{
-
-event.stopPropagation();
-
-const exam = exams.find(item =>
-String(item.id) ===
-String(button.dataset.editExam)
+document.querySelectorAll("[data-edit-exam]").forEach(btn=>{
+btn.onclick=e=>{
+e.stopPropagation();
+const exam=exams.find(item=>
+String(item.id)===String(btn.dataset.editExam)
 );
-
-if(exam){
-openExamModal(exam);
-}
-
+if(exam)openExamModal(exam);
 };
-
 });
 
-document.querySelectorAll("[data-delete-exam]")
-.forEach(button=>{
-
-button.onclick=event=>{
-
-event.stopPropagation();
-
-const exam = exams.find(item =>
-String(item.id) ===
-String(button.dataset.deleteExam)
+document.querySelectorAll("[data-delete-exam]").forEach(btn=>{
+btn.onclick=e=>{
+e.stopPropagation();
+const exam=exams.find(item=>
+String(item.id)===String(btn.dataset.deleteExam)
 );
-
-if(exam){
-deleteExam(exam);
-}
-
+if(exam)deleteExam(exam);
 };
-
 });
 
-document.querySelectorAll("[data-up-exam]")
-.forEach(button=>{
-
-button.onclick=()=>{
-reorderExam(
-button.dataset.upExam,
--1
-);
-};
-
+document.querySelectorAll("[data-up-exam]").forEach(btn=>{
+btn.onclick=()=>reorderExam(btn.dataset.upExam,-1);
 });
 
-document.querySelectorAll("[data-down-exam]")
-.forEach(button=>{
-
-button.onclick=()=>{
-reorderExam(
-button.dataset.downExam,
-1
-);
-};
-
+document.querySelectorAll("[data-down-exam]").forEach(btn=>{
+btn.onclick=()=>reorderExam(btn.dataset.downExam,1);
 });
 
 }
-
-/* =========================
-   SELECT EXAM
-========================= */
 
 function selectExam(exam){
 
-selectedExam = exam;
-
-const selectedName = $("selectedExamName");
-
-if(selectedName){
-selectedName.textContent =
-examName(exam);
-}
-
-const workspace = $("workspace");
-
-if(workspace){
-workspace.classList.add("visible");
-}
+selectedExam=exam;
+$("selectedExamName").textContent=examName(exam);
+$("workspace").classList.add("visible");
 
 resetViews();
 renderRootBranches();
 renderExams();
 
-if(workspace){
-
 window.scrollTo({
-top:workspace.offsetTop - 75,
+top:$("workspace").offsetTop-75,
 behavior:"smooth"
 });
-
 }
-
-}
-
-/* =========================
-   ROOT FOLDERS
-========================= */
 
 function getRootFoldersForExam(){
 
-if(!selectedExam) return [];
+if(!selectedExam)return [];
 
 return folders
 .filter(folder=>
-String(folder.exam_id) ===
-String(selectedExam.id) &&
-!folder.parent_id &&
-folder.is_active !== false
+String(folder.exam_id)===String(selectedExam.id)&&
+!folder.parent_id&&
+folder.is_active!==false
 )
-.sort((a,b)=>{
-
-const orderA = Number(a.sort_order || 0);
-const orderB = Number(b.sort_order || 0);
-
-if(orderA !== orderB){
-return orderA - orderB;
-}
-
-return folderName(a).localeCompare(
-folderName(b)
+.sort((a,b)=>
+Number(a.sort_order||0)-Number(b.sort_order||0)
 );
-
-});
-
 }
 
 function renderRootBranches(){
 
-const container = $("branchCards");
-
-if(!container) return;
+const container=$("branchCards");
+if(!container)return;
 
 if(!selectedExam){
-
-container.innerHTML = `
-<div class="ap-empty">
-Select an exam first.
-</div>
-`;
-
+container.innerHTML='<div class="ap-empty">Select an exam first.</div>';
 return;
-
 }
 
-const rootFolders = getRootFoldersForExam();
+const roots=getRootFoldersForExam();
 
-if(!rootFolders.length){
-
-container.innerHTML = `
-<div class="ap-empty">
-No folders found. Click + Add Folder.
-</div>
-`;
-
+if(!roots.length){
+container.innerHTML=
+'<div class="ap-empty">No folders found. Click + Add Folder.</div>';
 return;
-
 }
 
-container.innerHTML = rootFolders.map(folder=>{
+container.innerHTML=roots.map(folder=>{
 
-const type = folderType(folder);
-
-const systemFolder =
-type === "NEW" ||
-type === "PYQ";
-
-const childCount =
-childrenOf(folder.id).length;
+const type=folderType(folder);
+const system=type==="NEW"||type==="PYQ";
+const childCount=childrenOf(folder.id).length;
 
 return `
-
 <div class="ap-folder-card">
 
-<div
-class="ap-folder-main"
-data-root-folder="${escapeHTML(folder.id)}"
->
-
-<div class="ap-folder-title">
-${escapeHTML(folderName(folder))}
-</div>
-
+<div class="ap-folder-main" data-root-folder="${escapeHTML(folder.id)}">
+<div class="ap-folder-title">${escapeHTML(folderName(folder))}</div>
 <div class="ap-folder-sub">
-${
-systemFolder
-? "System mock branch"
-: `${childCount} sub-folder${childCount === 1 ? "" : "s"}`
-}
+${system?"System mock branch":
+`${childCount} sub-folder${childCount===1?"":"s"}`}
 </div>
-
 </div>
 
 <div class="ap-folder-actions">
 
-${
-systemFolder
-? ""
-: `
-<button
-class="ap-small-btn edit"
+${system?"":`
+<button class="ap-small-btn edit"
 data-edit-root-folder="${escapeHTML(folder.id)}"
-type="button"
->Edit</button>
+type="button">Edit</button>
 
-<button
-class="ap-small-btn delete"
+<button class="ap-small-btn delete"
 data-delete-root-folder="${escapeHTML(folder.id)}"
-type="button"
->×</button>
-`
-}
+type="button">×</button>
+`}
 
-<div
-class="ap-folder-arrow"
-data-root-folder="${escapeHTML(folder.id)}"
->›</div>
+<div class="ap-folder-arrow"
+data-root-folder="${escapeHTML(folder.id)}">›</div>
 
 </div>
-
-</div>
-
-`;
-
+</div>`;
 }).join("");
 
-document.querySelectorAll("[data-root-folder]")
-.forEach(element=>{
-
-element.onclick=()=>{
-
-const folder = getFolder(
-element.dataset.rootFolder
-);
-
-if(folder){
-openRootFolder(folder);
-}
-
+document.querySelectorAll("[data-root-folder]").forEach(el=>{
+el.onclick=()=>{
+const folder=getFolder(el.dataset.rootFolder);
+if(folder)openRootFolder(folder);
 };
-
 });
 
-document.querySelectorAll("[data-edit-root-folder]")
-.forEach(button=>{
-
-button.onclick=event=>{
-
-event.stopPropagation();
-
-const folder = getFolder(
-button.dataset.editRootFolder
-);
-
-if(folder){
-openCustomFolderEdit(folder);
-}
-
+document.querySelectorAll("[data-edit-root-folder]").forEach(btn=>{
+btn.onclick=e=>{
+e.stopPropagation();
+const folder=getFolder(btn.dataset.editRootFolder);
+if(folder)openCustomFolderEdit(folder);
 };
-
 });
 
-document.querySelectorAll("[data-delete-root-folder]")
-.forEach(button=>{
-
-button.onclick=event=>{
-
-event.stopPropagation();
-
-const folder = getFolder(
-button.dataset.deleteRootFolder
-);
-
-if(folder){
-deleteCustomRootFolder(folder);
-}
-
+document.querySelectorAll("[data-delete-root-folder]").forEach(btn=>{
+btn.onclick=e=>{
+e.stopPropagation();
+const folder=getFolder(btn.dataset.deleteRootFolder);
+if(folder)deleteCustomRootFolder(folder);
 };
-
 });
-
 }
 
 function openRootFolder(folder){
 
-selectedRootFolder = folder;
+selectedRootFolder=folder;
+const type=folderType(folder);
 
-const type = folderType(folder);
-
-if(type === "NEW" || type === "PYQ"){
-
+if(type==="NEW"||type==="PYQ"){
 openBranch(type);
 return;
-
 }
 
-selectedBranch = "CUSTOM";
-selectedCategory = null;
-selectedFolder = null;
-selectedYear = null;
+selectedBranch="CUSTOM";
+selectedCategory=null;
+selectedFolder=null;
+selectedYear=null;
 
-const branchView = $("branchView");
-const categoryView = $("categoryView");
-const managementView = $("mockManagementView");
-const heading = $("branchHeading");
-
-if(branchView){
-branchView.style.display = "none";
+$("branchView").style.display="none";
+$("categoryView").classList.add("visible");
+$("mockManagementView").classList.remove("visible");
+$("branchHeading").textContent=folderName(folder);
 }
-
-if(categoryView){
-categoryView.classList.add("visible");
-}
-
-if(managementView){
-managementView.classList.remove("visible");
-}
-
-if(heading){
-heading.textContent = folderName(folder);
-}
-
-}
-
-/* =========================
-   BRANCH / CATEGORY
-========================= */
 
 function openBranch(branch){
 
@@ -2282,126 +1479,59 @@ toast("Select an exam first");
 return;
 }
 
-selectedBranch = branch;
-selectedRootFolder =
-getRootFoldersForExam().find(folder =>
-folderType(folder) === branch
-) || null;
+selectedBranch=branch;
 
-const branchView = $("branchView");
-const categoryView = $("categoryView");
-const managementView = $("mockManagementView");
-const heading = $("branchHeading");
+selectedRootFolder=getRootFoldersForExam().find(folder=>
+folderType(folder)===branch
+)||null;
 
-if(branchView){
-branchView.style.display = "none";
-}
+$("branchView").style.display="none";
+$("categoryView").classList.add("visible");
+$("mockManagementView").classList.remove("visible");
 
-if(categoryView){
-categoryView.classList.add("visible");
-}
-
-if(managementView){
-managementView.classList.remove("visible");
-}
-
-if(heading){
-
-heading.textContent =
-branch === "PYQ"
-? "PYQ Mocks"
-: "New Mocks";
-
-}
-
+$("branchHeading").textContent=
+branch==="PYQ"?"PYQ Mocks":"New Mocks";
 }
 
 function openCategory(category){
 
-if(!selectedExam || !selectedBranch){
-
+if(!selectedExam||!selectedBranch){
 toast("Select branch first");
 return;
-
 }
 
-if(
-selectedBranch === "CUSTOM" &&
-!selectedRootFolder
-){
-
+if(selectedBranch==="CUSTOM"&&!selectedRootFolder){
 toast("Custom folder missing");
 return;
-
 }
 
-selectedCategory = category;
-selectedSubject = null;
-selectedYear = null;
-selectedFolder = null;
+selectedCategory=category;
+selectedFolder=null;
+selectedYear=null;
 
-const categoryView = $("categoryView");
-const managementView = $("mockManagementView");
+$("categoryView").classList.remove("visible");
+$("mockManagementView").classList.add("visible");
 
-if(categoryView){
-categoryView.classList.remove("visible");
-}
-
-if(managementView){
-managementView.classList.add("visible");
-}
-
-const title = $("managementTitle");
-const subtitle = $("managementSubtitle");
-
-if(title){
-
-if(selectedBranch === "CUSTOM"){
-
-title.textContent =
-category === "FULL"
-? `${folderName(selectedRootFolder)} - Full Mocks`
-: `${folderName(selectedRootFolder)} - Sectional Mocks`;
-
+if(selectedBranch==="CUSTOM"){
+$("managementTitle").textContent=
+`${folderName(selectedRootFolder)} - ${
+category==="FULL"?"Full Mocks":"Sectional Mocks"
+}`;
 }else{
-
-title.textContent =
-category === "FULL"
-? (
-selectedBranch === "PYQ"
-? "PYQ Full Mocks"
-: "New Full Mocks"
-)
-: (
-selectedBranch === "PYQ"
-? "PYQ Sectional Mocks"
-: "New Sectional Mocks"
-);
-
+$("managementTitle").textContent=
+`${selectedBranch==="PYQ"?"PYQ":"New"} ${
+category==="FULL"?"Full Mocks":"Sectional Mocks"
+}`;
 }
 
+$("managementSubtitle").textContent=
+category==="FULL"
+?"Manage full mock folders and tests"
+:"Manage subject clips and sectional mocks";
+
+if(category==="FULL")renderFullManagement();
+else renderSectionalManagement();
 }
-
-if(subtitle){
-
-subtitle.textContent =
-category === "FULL"
-? "Manage full mock folders and tests"
-: "Manage subject clips and sectional mocks";
-
-}
-
-if(category === "FULL"){
-renderFullManagement();
-}else{
-renderSectionalManagement();
-}
-
-}
-
-/* =========================
-   FOLDER HELPERS
-========================= */
 
 async function ensureFolder({
 examId,
@@ -2413,21 +1543,17 @@ subjectId=null,
 sortOrder=0
 }){
 
-const found = folders.find(folder=>
-String(folder.exam_id) === String(examId) &&
-String(folder.parent_id || "") ===
-String(parentId || "") &&
-folderType(folder) === type &&
-String(folder.name || "").toLowerCase() ===
-String(name).toLowerCase() &&
-folder.is_active !== false
+const found=folders.find(folder=>
+String(folder.exam_id)===String(examId)&&
+String(folder.parent_id||"")===String(parentId||"")&&
+folderType(folder)===type&&
+String(folder.name||"").toLowerCase()===String(name).toLowerCase()&&
+folder.is_active!==false
 );
 
-if(found){
-return found;
-}
+if(found)return found;
 
-const payload = {
+const payload={
 exam_id:examId,
 parent_id:parentId,
 name,
@@ -2437,47 +1563,39 @@ sort_order:sortOrder,
 is_active:true
 };
 
-if(subjectId !== null && subjectId !== undefined){
-payload.subject_id = subjectId;
+if(subjectId!==null&&subjectId!==undefined){
+payload.subject_id=subjectId;
 }
 
-let response = await db
+let response=await db
 .from("mock_folders")
 .insert(payload)
 .select()
 .single();
 
 if(
-response.error &&
-payload.subject_id !== undefined &&
-/subject_id|column|schema cache/i.test(
-response.error.message
-)
+response.error&&
+payload.subject_id!==undefined&&
+/subject_id|column|schema cache/i.test(response.error.message)
 ){
-
 delete payload.subject_id;
 
-response = await db
+response=await db
 .from("mock_folders")
 .insert(payload)
 .select()
 .single();
-
 }
 
-if(response.error){
-throw response.error;
-}
+if(response.error)throw response.error;
 
 folders.push(response.data);
-
 return response.data;
-
 }
 
 async function ensureExamStructure(examId){
 
-const newRoot = await ensureFolder({
+const newRoot=await ensureFolder({
 examId,
 name:"NEW",
 displayName:"New Mocks",
@@ -2485,7 +1603,7 @@ type:"NEW",
 sortOrder:1
 });
 
-const pyqRoot = await ensureFolder({
+const pyqRoot=await ensureFolder({
 examId,
 name:"PYQ",
 displayName:"PYQ Mocks",
@@ -2493,7 +1611,7 @@ type:"PYQ",
 sortOrder:2
 });
 
-const newFull = await ensureFolder({
+const newFull=await ensureFolder({
 examId,
 parentId:newRoot.id,
 name:"FULL",
@@ -2502,7 +1620,7 @@ type:"FULL",
 sortOrder:1
 });
 
-const newSectional = await ensureFolder({
+const newSectional=await ensureFolder({
 examId,
 parentId:newRoot.id,
 name:"SECTIONAL",
@@ -2511,7 +1629,7 @@ type:"SECTIONAL",
 sortOrder:2
 });
 
-const pyqFull = await ensureFolder({
+const pyqFull=await ensureFolder({
 examId,
 parentId:pyqRoot.id,
 name:"FULL",
@@ -2520,7 +1638,7 @@ type:"FULL",
 sortOrder:1
 });
 
-const pyqSectional = await ensureFolder({
+const pyqSectional=await ensureFolder({
 examId,
 parentId:pyqRoot.id,
 name:"SECTIONAL",
@@ -2529,11 +1647,11 @@ type:"SECTIONAL",
 sortOrder:2
 });
 
-const examSubjects = getExamSubjects();
+const examSubjects=getExamSubjects();
 
-for(let index=0;index<examSubjects.length;index++){
+for(let i=0;i<examSubjects.length;i++){
 
-const subject = examSubjects[index];
+const subject=examSubjects[i];
 
 await ensureFolder({
 examId,
@@ -2542,7 +1660,7 @@ name:nameOfSubject(subject),
 displayName:nameOfSubject(subject),
 type:"SUBJECT",
 subjectId:subject.id,
-sortOrder:index+1
+sortOrder:i+1
 });
 
 await ensureFolder({
@@ -2552,12 +1670,11 @@ name:nameOfSubject(subject),
 displayName:nameOfSubject(subject),
 type:"SUBJECT",
 subjectId:subject.id,
-sortOrder:index+1
+sortOrder:i+1
 });
-
 }
 
-return {
+return{
 newRoot,
 pyqRoot,
 newFull,
@@ -2565,7 +1682,6 @@ newSectional,
 pyqFull,
 pyqSectional
 };
-
 }
 
 async function syncStructure(){
@@ -2576,37 +1692,25 @@ return;
 }
 
 try{
-
 await ensureExamStructure(selectedExam.id);
 await loadAllData();
-
 toast("Structure synced successfully");
-
 }catch(error){
-
 console.error(error);
 toast(error.message);
-
 }
-
 }
 
 async function getFullFolder(){
 
-if(selectedBranch === "CUSTOM"){
+if(selectedBranch==="CUSTOM"){
 
-if(!selectedRootFolder){
-throw new Error("Custom folder missing");
-}
+if(!selectedRootFolder)throw new Error("Custom folder missing");
 
-let full = directChild(
-selectedRootFolder.id,
-"FULL"
-);
+let full=directChild(selectedRootFolder.id,"FULL");
 
 if(!full){
-
-full = await ensureFolder({
+full=await ensureFolder({
 examId:selectedExam.id,
 parentId:selectedRootFolder.id,
 name:"FULL",
@@ -2614,38 +1718,28 @@ displayName:"FULL MOCKS",
 type:"FULL",
 sortOrder:1
 });
-
 }
 
 return full;
-
 }
 
-const structure =
-await ensureExamStructure(selectedExam.id);
+const structure=await ensureExamStructure(selectedExam.id);
 
-return selectedBranch === "NEW"
-? structure.newFull
-: structure.pyqFull;
-
+return selectedBranch==="NEW"
+?structure.newFull
+:structure.pyqFull;
 }
 
 async function getSectionalFolder(){
 
-if(selectedBranch === "CUSTOM"){
+if(selectedBranch==="CUSTOM"){
 
-if(!selectedRootFolder){
-throw new Error("Custom folder missing");
-}
+if(!selectedRootFolder)throw new Error("Custom folder missing");
 
-let sectional = directChild(
-selectedRootFolder.id,
-"SECTIONAL"
-);
+let sectional=directChild(selectedRootFolder.id,"SECTIONAL");
 
 if(!sectional){
-
-sectional = await ensureFolder({
+sectional=await ensureFolder({
 examId:selectedExam.id,
 parentId:selectedRootFolder.id,
 name:"SECTIONAL",
@@ -2653,1360 +1747,699 @@ displayName:"SECTIONAL MOCKS",
 type:"SECTIONAL",
 sortOrder:2
 });
-
 }
 
 return sectional;
-
 }
 
-const structure =
-await ensureExamStructure(selectedExam.id);
+const structure=await ensureExamStructure(selectedExam.id);
 
-return selectedBranch === "NEW"
-? structure.newSectional
-: structure.pyqSectional;
-
+return selectedBranch==="NEW"
+?structure.newSectional
+:structure.pyqSectional;
 }
-
-/* =========================
-   FULL MANAGEMENT
-========================= */
 
 function renderFullManagement(){
 
-const chipsArea = $("managementChipsArea");
-const extraActions = $("managementExtraActions");
-const chips = $("managementChips");
+const chipsArea=$("managementChipsArea");
+const extra=$("managementExtraActions");
+const chips=$("managementChips");
 
-if(chipsArea){
+chipsArea.style.display=selectedBranch==="PYQ"?"block":"none";
+extra.innerHTML="";
 
-chipsArea.style.display =
-selectedBranch === "PYQ"
-? "block"
-: "none";
+let fullFolder=null;
+let allowedIds=[];
 
-}
+if(selectedBranch==="PYQ"){
 
-if(extraActions){
-extraActions.innerHTML = "";
-}
+$("chipsTitle").textContent="PYQ Years";
 
-let fullFolder = null;
-let allowedIds = [];
-
-if(selectedBranch === "PYQ"){
-
-const chipsTitle = $("chipsTitle");
-
-if(chipsTitle){
-chipsTitle.textContent = "PYQ Years";
-}
-
-const pyqRoot = folders.find(folder=>
-String(folder.exam_id) ===
-String(selectedExam.id) &&
-folderType(folder) === "PYQ" &&
-!folder.parent_id &&
-folder.is_active !== false
+const root=folders.find(folder=>
+String(folder.exam_id)===String(selectedExam.id)&&
+folderType(folder)==="PYQ"&&
+!folder.parent_id&&
+folder.is_active!==false
 );
 
-fullFolder = pyqRoot
-? directChild(pyqRoot.id,"FULL")
-: null;
+fullFolder=root?directChild(root.id,"FULL"):null;
 
-const years = fullFolder
-? childrenOf(fullFolder.id,"YEAR")
-: [];
+const years=fullFolder?childrenOf(fullFolder.id,"YEAR"):[];
 
-if(chips){
-
-chips.innerHTML = `
-
+chips.innerHTML=`
 <div class="ap-chip-wrap">
-
-<button
-class="ap-chip ${!selectedYear ? "active" : ""}"
-data-year-id="all"
-type="button"
->All Years</button>
-
+<button class="ap-chip ${!selectedYear?"active":""}"
+data-year-id="all" type="button">All Years</button>
 </div>
-
 ${years.map((year,index)=>`
-
 <div class="ap-chip-wrap">
-
-<button
-class="ap-chip ${
-selectedYear &&
-String(selectedYear.id) === String(year.id)
-? "active"
-: ""
+<button class="ap-chip ${
+selectedYear&&String(selectedYear.id)===String(year.id)
+?"active":""
 }"
 data-year-id="${escapeHTML(year.id)}"
-type="button"
->${escapeHTML(folderName(year))}</button>
+type="button">${escapeHTML(folderName(year))}</button>
 
-<button
-class="ap-chip-mini edit"
+<button class="ap-chip-mini edit"
 data-edit-year="${escapeHTML(year.id)}"
-type="button"
->✎</button>
+type="button">✎</button>
 
-<button
-class="ap-chip-mini move"
+<button class="ap-chip-mini move"
 data-year-up="${escapeHTML(year.id)}"
 type="button"
-${index === 0 ? "disabled" : ""}
->↑</button>
+${index===0?"disabled":""}>↑</button>
 
-<button
-class="ap-chip-mini move"
+<button class="ap-chip-mini move"
 data-year-down="${escapeHTML(year.id)}"
 type="button"
-${index === years.length-1 ? "disabled" : ""}
->↓</button>
+${index===years.length-1?"disabled":""}>↓</button>
 
-<button
-class="ap-chip-mini delete"
+<button class="ap-chip-mini delete"
 data-delete-year="${escapeHTML(year.id)}"
-type="button"
->×</button>
-
+type="button">×</button>
 </div>
-
 `).join("")}
-
 `;
 
-}
-
-if(extraActions){
-
-extraActions.innerHTML = `
-
-<button
-class="ap-primary-btn"
-id="addYearBtn"
-type="button"
->+ Add Year</button>
-
-<button
-class="ap-secondary-btn"
-id="addFullMockBtn"
-type="button"
->+ Add Full Mock</button>
-
+extra.innerHTML=`
+<button class="ap-primary-btn" id="addYearBtn" type="button">+ Add Year</button>
+<button class="ap-secondary-btn" id="addFullMockBtn" type="button">+ Add Full Mock</button>
 `;
-
-}
 
 bindClick("addYearBtn",addYear);
 bindClick("addFullMockBtn",()=>openMockEditor("FULL"));
 
-document.querySelectorAll("[data-year-id]")
-.forEach(button=>{
-
-button.onclick=()=>{
-
-selectedYear =
-button.dataset.yearId === "all"
-? null
-: years.find(year =>
-String(year.id) ===
-String(button.dataset.yearId)
-) || null;
-
+document.querySelectorAll("[data-year-id]").forEach(btn=>{
+btn.onclick=()=>{
+selectedYear=btn.dataset.yearId==="all"
+?null
+:years.find(year=>String(year.id)===String(btn.dataset.yearId))||null;
 renderFullManagement();
-
 };
-
 });
 
-document.querySelectorAll("[data-edit-year]")
-.forEach(button=>{
-
-button.onclick=()=>{
-
-const year = getFolder(
-button.dataset.editYear
-);
-
-if(year){
-openStructureEdit("YEAR",year);
-}
-
+document.querySelectorAll("[data-edit-year]").forEach(btn=>{
+btn.onclick=()=>{
+const folder=getFolder(btn.dataset.editYear);
+if(folder)openStructureEdit("YEAR",folder);
 };
-
 });
 
-document.querySelectorAll("[data-delete-year]")
-.forEach(button=>{
-
-button.onclick=()=>{
-
-const year = getFolder(
-button.dataset.deleteYear
-);
-
-if(year){
-deleteStructureFolder(year);
-}
-
+document.querySelectorAll("[data-delete-year]").forEach(btn=>{
+btn.onclick=()=>{
+const folder=getFolder(btn.dataset.deleteYear);
+if(folder)deleteStructureFolder(folder);
 };
-
 });
 
-document.querySelectorAll("[data-year-up]")
-.forEach(button=>{
-
-button.onclick=()=>{
-
-if(fullFolder){
-
-reorderFolder(
-button.dataset.yearUp,
-fullFolder.id,
--1,
-"Year"
-);
-
-}
-
+document.querySelectorAll("[data-year-up]").forEach(btn=>{
+btn.onclick=()=>{
+if(fullFolder)reorderFolder(btn.dataset.yearUp,fullFolder.id,-1,"Year");
 };
-
 });
 
-document.querySelectorAll("[data-year-down]")
-.forEach(button=>{
-
-button.onclick=()=>{
-
-if(fullFolder){
-
-reorderFolder(
-button.dataset.yearDown,
-fullFolder.id,
-1,
-"Year"
-);
-
-}
-
+document.querySelectorAll("[data-year-down]").forEach(btn=>{
+btn.onclick=()=>{
+if(fullFolder)reorderFolder(btn.dataset.yearDown,fullFolder.id,1,"Year");
 };
-
 });
 
 }else{
 
-if(extraActions){
-
-extraActions.innerHTML = `
-
-<button
-class="ap-primary-btn"
-id="addNewFullMockBtn"
-type="button"
->+ Add Full Mock</button>
-
+extra.innerHTML=`
+<button class="ap-primary-btn" id="addNewFullMockBtn" type="button">
++ Add Full Mock
+</button>
 `;
 
-}
-
-bindClick(
-"addNewFullMockBtn",
-()=>openMockEditor("FULL")
-);
-
+bindClick("addNewFullMockBtn",()=>openMockEditor("FULL"));
 }
 
 if(!fullFolder){
 
-if(selectedBranch === "CUSTOM"){
-
-fullFolder = directChild(
-selectedRootFolder?.id,
-"FULL"
-);
-
+if(selectedBranch==="CUSTOM"){
+fullFolder=directChild(selectedRootFolder?.id,"FULL");
 }else{
-
-fullFolder = folders.find(folder=>
-String(folder.exam_id) ===
-String(selectedExam.id) &&
-folderType(folder) === "FULL" &&
+fullFolder=folders.find(folder=>
+String(folder.exam_id)===String(selectedExam.id)&&
+folderType(folder)==="FULL"&&
 isFolderUnderBranch(folder,selectedBranch)
 );
-
 }
-
 }
 
 if(fullFolder){
 
-if(selectedBranch === "PYQ"){
-
-if(selectedYear){
-
-allowedIds = [
-String(selectedYear.id)
-];
-
-}else{
-
-allowedIds = childrenOf(
-fullFolder.id,
-"YEAR"
-).map(year=>String(year.id));
-
-}
-
-}else{
-
-allowedIds = [
-String(fullFolder.id)
-];
-
-}
-
-}
-
-const list = tests.filter(test=>
-String(test.exam_id) ===
-String(selectedExam.id) &&
-isFull(test) &&
-allowedIds.includes(
-String(test.folder_id || "")
+allowedIds=selectedBranch==="PYQ"
+?(
+selectedYear
+?[String(selectedYear.id)]
+:childrenOf(fullFolder.id,"YEAR").map(y=>String(y.id))
 )
+:[String(fullFolder.id)];
+}
+
+const list=tests.filter(test=>
+String(test.exam_id)===String(selectedExam.id)&&
+isFull(test)&&
+allowedIds.includes(String(test.folder_id||""))
 );
 
 renderTestList(list);
-
 }
-
-/* =========================
-   SECTIONAL MANAGEMENT
-========================= */
 
 function renderSectionalManagement(){
 
-const chipsArea = $("managementChipsArea");
-const chipsTitle = $("chipsTitle");
-const chips = $("managementChips");
-const extraActions = $("managementExtraActions");
+$("managementChipsArea").style.display="block";
+$("chipsTitle").textContent="Subject Clips";
 
-if(chipsArea){
-chipsArea.style.display = "block";
-}
+const chips=$("managementChips");
+const extra=$("managementExtraActions");
 
-if(chipsTitle){
-chipsTitle.textContent = "Subject Clips";
-}
+let parent=null;
 
-let sectionalParent = null;
-
-if(selectedBranch === "CUSTOM"){
-
-sectionalParent = directChild(
-selectedRootFolder?.id,
-"SECTIONAL"
-);
-
+if(selectedBranch==="CUSTOM"){
+parent=directChild(selectedRootFolder?.id,"SECTIONAL");
 }else{
-
-sectionalParent = folders.find(folder=>
-String(folder.exam_id) ===
-String(selectedExam.id) &&
-folderType(folder) === "SECTIONAL" &&
+parent=folders.find(folder=>
+String(folder.exam_id)===String(selectedExam.id)&&
+folderType(folder)==="SECTIONAL"&&
 isFolderUnderBranch(folder,selectedBranch)
 );
-
 }
 
-const clips = sectionalParent
-? childrenOf(sectionalParent.id,"SUBJECT")
-: [];
+const clips=parent?childrenOf(parent.id,"SUBJECT"):[];
 
-if(chips){
-
-chips.innerHTML = clips.map((clip,index)=>`
-
+chips.innerHTML=clips.map((clip,index)=>`
 <div class="ap-chip-wrap">
 
-<button
-class="ap-chip ${
-selectedFolder &&
-String(selectedFolder.id) === String(clip.id)
-? "active"
-: ""
+<button class="ap-chip ${
+selectedFolder&&String(selectedFolder.id)===String(clip.id)
+?"active":""
 }"
 data-folder-id="${escapeHTML(clip.id)}"
-type="button"
->${escapeHTML(folderName(clip))}</button>
+type="button">${escapeHTML(folderName(clip))}</button>
 
-<button
-class="ap-chip-mini edit"
+<button class="ap-chip-mini edit"
 data-edit-subject="${escapeHTML(clip.id)}"
-type="button"
->✎</button>
+type="button">✎</button>
 
-<button
-class="ap-chip-mini move"
+<button class="ap-chip-mini move"
 data-subject-up="${escapeHTML(clip.id)}"
 type="button"
-${index === 0 ? "disabled" : ""}
->↑</button>
+${index===0?"disabled":""}>↑</button>
 
-<button
-class="ap-chip-mini move"
+<button class="ap-chip-mini move"
 data-subject-down="${escapeHTML(clip.id)}"
 type="button"
-${index === clips.length-1 ? "disabled" : ""}
->↓</button>
+${index===clips.length-1?"disabled":""}>↓</button>
 
-<button
-class="ap-chip-mini delete"
+<button class="ap-chip-mini delete"
 data-delete-subject="${escapeHTML(clip.id)}"
-type="button"
->×</button>
+type="button">×</button>
 
 </div>
-
 `).join("");
 
-}
-
-if(extraActions){
-
-extraActions.innerHTML = `
-
-<button
-class="ap-secondary-btn"
-id="addSubjectClipBtn"
-type="button"
->+ Add Subject Clip</button>
-
+extra.innerHTML=`
+<button class="ap-secondary-btn" id="addSubjectClipBtn" type="button">
++ Add Subject Clip
+</button>
 `;
 
-}
-
 bindClick("addSubjectClipBtn",()=>{
-
-structureMode = "SUBJECT";
-structureEditId = null;
-
-const title = $("structureModalTitle");
-const label = $("structureInputLabel");
-const input = $("structureNameInput");
-
-if(title){
-title.textContent = "Add Sectional Subject";
-}
-
-if(label){
-label.textContent = "Subject Name";
-}
-
-if(input){
-input.value = "";
-}
-
+structureMode="SUBJECT";
+structureEditId=null;
+$("structureModalTitle").textContent="Add Sectional Subject";
+$("structureInputLabel").textContent="Subject Name";
+$("structureNameInput").value="";
 openModal("structureModal");
-
 });
 
-document.querySelectorAll("[data-folder-id]")
-.forEach(button=>{
-
-button.onclick=()=>{
-
-selectedFolder = getFolder(
-button.dataset.folderId
-);
-
+document.querySelectorAll("[data-folder-id]").forEach(btn=>{
+btn.onclick=()=>{
+selectedFolder=getFolder(btn.dataset.folderId);
 renderSectionalManagement();
-
 };
-
 });
 
-document.querySelectorAll("[data-edit-subject]")
-.forEach(button=>{
-
-button.onclick=()=>{
-
-const folder = getFolder(
-button.dataset.editSubject
-);
-
-if(folder){
-openStructureEdit("SUBJECT",folder);
-}
-
+document.querySelectorAll("[data-edit-subject]").forEach(btn=>{
+btn.onclick=()=>{
+const folder=getFolder(btn.dataset.editSubject);
+if(folder)openStructureEdit("SUBJECT",folder);
 };
-
 });
 
-document.querySelectorAll("[data-delete-subject]")
-.forEach(button=>{
-
-button.onclick=()=>{
-
-const folder = getFolder(
-button.dataset.deleteSubject
-);
-
-if(folder){
-deleteStructureFolder(folder);
-}
-
+document.querySelectorAll("[data-delete-subject]").forEach(btn=>{
+btn.onclick=()=>{
+const folder=getFolder(btn.dataset.deleteSubject);
+if(folder)deleteStructureFolder(folder);
 };
-
 });
 
-document.querySelectorAll("[data-subject-up]")
-.forEach(button=>{
-
-button.onclick=()=>{
-
-if(sectionalParent){
-
-reorderFolder(
-button.dataset.subjectUp,
-sectionalParent.id,
--1,
-"Subject"
-);
-
-}
-
+document.querySelectorAll("[data-subject-up]").forEach(btn=>{
+btn.onclick=()=>{
+if(parent)reorderFolder(btn.dataset.subjectUp,parent.id,-1,"Subject");
 };
-
 });
 
-document.querySelectorAll("[data-subject-down]")
-.forEach(button=>{
-
-button.onclick=()=>{
-
-if(sectionalParent){
-
-reorderFolder(
-button.dataset.subjectDown,
-sectionalParent.id,
-1,
-"Subject"
-);
-
-}
-
+document.querySelectorAll("[data-subject-down]").forEach(btn=>{
+btn.onclick=()=>{
+if(parent)reorderFolder(btn.dataset.subjectDown,parent.id,1,"Subject");
 };
-
 });
 
 if(!selectedFolder){
-
-const listElement = $("managementTestList");
-
-if(listElement){
-
-listElement.innerHTML = `
-<div class="ap-empty">
-Select a subject clip to view its mocks.
-</div>
-`;
-
-}
-
+$("managementTestList").innerHTML=
+'<div class="ap-empty">Select a subject clip to view its mocks.</div>';
 return;
-
 }
 
 renderSubjectMockList();
-
 }
 
 function renderSubjectMockList(){
 
-const extraActions = $("managementExtraActions");
-
-if(extraActions){
-
-extraActions.innerHTML += `
-
-<button
-class="ap-primary-btn"
-id="addSectionalMockBtn"
-type="button"
->+ Add Sectional Mock</button>
-
+$("managementExtraActions").innerHTML+=`
+<button class="ap-primary-btn" id="addSectionalMockBtn" type="button">
++ Add Sectional Mock
+</button>
 `;
 
-}
+bindClick("addSectionalMockBtn",()=>openMockEditor("SECTIONAL"));
 
-bindClick(
-"addSectionalMockBtn",
-()=>openMockEditor("SECTIONAL")
-);
-
-const list = tests.filter(test=>
-String(test.exam_id) ===
-String(selectedExam.id) &&
-isSectional(test) &&
-String(test.folder_id || "") ===
-String(selectedFolder.id)
+const list=tests.filter(test=>
+String(test.exam_id)===String(selectedExam.id)&&
+isSectional(test)&&
+String(test.folder_id||"")===String(selectedFolder.id)
 );
 
 renderTestList(list);
-
 }
-
-/* =========================
-   TEST LIST
-========================= */
 
 function renderTestList(list){
 
-const listElement = $("managementTestList");
-
-if(!listElement) return;
+const el=$("managementTestList");
 
 if(!list.length){
-
-listElement.innerHTML =
-`<div class="ap-empty">No mock tests found here.</div>`;
-
+el.innerHTML='<div class="ap-empty">No mock tests found here.</div>';
 return;
-
 }
 
-listElement.innerHTML = list.map(test=>{
+el.innerHTML=list.map(test=>{
 
-const timing = Boolean(
-test.subject_wise_timing ||
+const timing=Boolean(
+test.subject_wise_timing||
 test.sectional_timing
 );
 
-const active = test.is_active !== false;
+const active=test.is_active!==false;
 
 return `
-
 <div class="ap-test-card">
 
 <div class="ap-test-top">
-
 <div>
-
-<div class="ap-test-title">
-${escapeHTML(test.title || "Untitled Mock")}
+<div class="ap-test-title">${escapeHTML(test.title||"Untitled Mock")}</div>
+${test.description?
+`<div class="ap-test-description">${escapeHTML(test.description)}</div>`
+:""}
 </div>
-
-${
-test.description
-? `
-<div class="ap-test-description">
-${escapeHTML(test.description)}
-</div>
-`
-: ""
-}
-
-</div>
-
 </div>
 
 <div class="ap-test-badges">
-
-<span class="ap-test-badge">
-${test.duration_minutes || 0} min
+<span class="ap-test-badge">${test.duration_minutes||0} min</span>
+<span class="ap-test-badge">${test.total_questions||0} Questions</span>
+<span class="ap-test-badge">${timing?"Section Timing ON":"Overall Timing"}</span>
+<span class="ap-test-badge ${active?"active":"inactive"}">
+${active?"Active":"Inactive"}
 </span>
-
-<span class="ap-test-badge">
-${test.total_questions || 0} Questions
-</span>
-
-<span class="ap-test-badge">
-${timing ? "Section Timing ON" : "Overall Timing"}
-</span>
-
-<span class="ap-test-badge ${
-active ? "active" : "inactive"
-}">
-${active ? "Active" : "Inactive"}
-</span>
-
 </div>
 
 <div class="ap-test-actions">
 
-<button
-class="ap-small-btn edit"
+<button class="ap-small-btn edit"
 data-edit-test="${escapeHTML(test.id)}"
-type="button"
->Edit</button>
+type="button">Edit</button>
 
-<button
-class="ap-small-btn"
+<button class="ap-small-btn"
 data-question-test="${escapeHTML(test.id)}"
-type="button"
->Questions</button>
+type="button">Questions</button>
 
-<button
-class="ap-small-btn delete"
+<button class="ap-small-btn delete"
 data-delete-test="${escapeHTML(test.id)}"
-type="button"
->Delete</button>
+type="button">Delete</button>
 
 </div>
-
-</div>
-
-`;
-
+</div>`;
 }).join("");
 
-document.querySelectorAll("[data-edit-test]")
-.forEach(button=>{
-
-button.onclick=()=>{
-
-const test = tests.find(item =>
-String(item.id) ===
-String(button.dataset.editTest)
+document.querySelectorAll("[data-edit-test]").forEach(btn=>{
+btn.onclick=()=>{
+const test=tests.find(item=>
+String(item.id)===String(btn.dataset.editTest)
 );
-
-if(test){
-openMockEditor(test.test_type,test);
-}
-
+if(test)openMockEditor(test.test_type,test);
 };
-
 });
 
-document.querySelectorAll("[data-question-test]")
-.forEach(button=>{
-
-button.onclick=()=>{
-
-location.href =
-`admin-mock.html?test_id=${
-encodeURIComponent(button.dataset.questionTest)
-}`;
-
+document.querySelectorAll("[data-question-test]").forEach(btn=>{
+btn.onclick=()=>{
+location.href=
+`admin-mock.html?test_id=${encodeURIComponent(btn.dataset.questionTest)}`;
 };
-
 });
 
-document.querySelectorAll("[data-delete-test]")
-.forEach(button=>{
-
-button.onclick=()=>{
-
-const test = tests.find(item =>
-String(item.id) ===
-String(button.dataset.deleteTest)
+document.querySelectorAll("[data-delete-test]").forEach(btn=>{
+btn.onclick=()=>{
+const test=tests.find(item=>
+String(item.id)===String(btn.dataset.deleteTest)
 );
-
-if(test){
-deleteMock(test);
-}
-
+if(test)deleteMock(test);
 };
-
 });
-
 }
 
 /* =========================
-   MOCK EDITOR
+   FIXED SECTION LOADER
 ========================= */
 
 async function loadExistingSections(testId){
 
-const response = await db
+const response=await db
 .from("mock_test_sections")
 .select("*")
 .eq("mock_test_id",testId)
 .order("section_order",{ascending:true});
 
 if(response.error){
-
-console.warn(
-"Sections load warning:",
-response.error.message
-);
-
+console.warn("Sections load warning:",response.error.message);
 return [];
-
 }
 
-return (response.data || [])
-.map(section=>{
+return(response.data||[]).map((section,index)=>{
 
-const subject = subjects.find(item=>
-String(item.id) ===
-String(section.subject_id)
+const subject=subjects.find(item=>
+String(item.id)===String(section.subject_id)
 );
 
-return {
+const savedName=
+section.section_name||
+section.name||
+(subject?nameOfSubject(subject):"")||
+`Section ${index+1}`;
 
-name:subject
-? nameOfSubject(subject)
-: "",
-
-subject_id:section.subject_id || null,
-
-duration:Number(
-section.duration_minutes || 0
-),
-
-questions:0
-
+return{
+name:savedName,
+subject_id:section.subject_id||null,
+duration:Number(section.duration_minutes||0),
+questions:Number(section.question_count||0)
 };
-
-})
-.filter(section=>section.name);
-
+});
 }
 
 async function openMockEditor(type,test=null){
 
-editorType = type;
-editingMockId = test ? test.id : null;
+editorType=type;
+editingMockId=test?test.id:null;
 
 try{
 
 if(test){
-
-editorFolderId =
-test.folder_id || null;
-
-}else if(type === "SECTIONAL"){
-
-editorFolderId =
-selectedFolder?.id || null;
-
+editorFolderId=test.folder_id||null;
+}else if(type==="SECTIONAL"){
+editorFolderId=selectedFolder?.id||null;
 }else{
-
-const fullFolder =
-await getFullFolder();
-
-editorFolderId =
-selectedBranch === "PYQ" && selectedYear
-? selectedYear.id
-: fullFolder.id;
-
+const full=await getFullFolder();
+editorFolderId=
+selectedBranch==="PYQ"&&selectedYear
+?selectedYear.id
+:full.id;
 }
 
 }catch(error){
-
 toast(error.message);
 return;
-
 }
 
 if(!editorFolderId){
-
 toast("Mock folder missing. Sync structure first.");
 return;
-
 }
 
-const modalTitle = $("mockModalTitle");
-const titleInput = $("mockTitleInput");
-const descriptionInput = $("mockDescriptionInput");
-const durationInput = $("mockDurationInput");
-const questionsInput = $("mockQuestionsInput");
-const activeInput = $("mockActiveInput");
-const timingInput = $("sectionalTimingInput");
-const rows = $("sectionRows");
+$("mockModalTitle").textContent=test?"Edit Mock":"Add Mock";
+$("mockTitleInput").value=test?.title||"";
+$("mockDescriptionInput").value=test?.description||"";
+$("mockDurationInput").value=test?.duration_minutes||60;
+$("mockQuestionsInput").value=test?.total_questions||25;
 
-if(modalTitle){
+$("mockActiveInput").value=
+test&&test.is_active===false?"false":"true";
 
-modalTitle.textContent =
-test ? "Edit Mock" : "Add Mock";
+$("sectionalTimingInput").checked=test
+?Boolean(test.subject_wise_timing||test.sectional_timing)
+:false;
 
-}
-
-if(titleInput){
-titleInput.value = test?.title || "";
-}
-
-if(descriptionInput){
-descriptionInput.value =
-test?.description || "";
-}
-
-if(durationInput){
-durationInput.value =
-test?.duration_minutes || 60;
-}
-
-if(questionsInput){
-questionsInput.value =
-test?.total_questions || 25;
-}
-
-if(activeInput){
-
-activeInput.value =
-test && test.is_active === false
-? "false"
-: "true";
-
-}
-
-if(timingInput){
-
-timingInput.checked = test
-? Boolean(
-test.subject_wise_timing ||
-test.sectional_timing
-)
-: false;
-
-}
-
-let sections = test
-? await loadExistingSections(test.id)
-: [];
+let sections=test
+?await loadExistingSections(test.id)
+:[];
 
 if(!sections.length){
 
-sections = [
-
-{
-name:"English",
-duration:15,
-questions:25
-},
-
-{
-name:"Reasoning",
-duration:15,
-questions:25
-},
-
-{
-name:"Quant",
-duration:15,
-questions:25
-},
-
-{
-name:"GK",
-duration:15,
-questions:25
-}
-
+sections=[
+{name:"English",duration:15,questions:25},
+{name:"Reasoning",duration:15,questions:25},
+{name:"Quant",duration:15,questions:25},
+{name:"GK",duration:15,questions:25}
 ];
 
 }
 
-if(rows){
-
-rows.innerHTML = "";
-
+$("sectionRows").innerHTML="";
 sections.forEach(addSectionRow);
 
-}
-
 openModal("mockModal");
-
 }
 
 function addSectionRow(data={}){
 
-const rows = $("sectionRows");
+const rows=$("sectionRows");
+if(!rows)return;
 
-if(!rows) return;
+const row=document.createElement("div");
+row.className="ap-section-row";
 
-const row = document.createElement("div");
-
-row.className = "ap-section-row";
-
-row.innerHTML = `
-
-<input
-class="section-name"
+row.innerHTML=`
+<input class="section-name"
 placeholder="Section"
-value="${escapeHTML(data.name || "")}"
->
+value="${escapeHTML(data.name||"")}">
 
-<input
-class="section-time"
+<input class="section-time"
 type="number"
 min="0"
 placeholder="Min"
-value="${escapeHTML(data.duration || "")}"
->
+value="${escapeHTML(data.duration??"")}">
 
-<input
-class="section-questions"
+<input class="section-questions"
 type="number"
 min="0"
 placeholder="Ques"
-value="${escapeHTML(data.questions || "")}"
->
+value="${escapeHTML(data.questions??"")}">
 
-<button
-class="ap-remove-section"
-type="button"
->×</button>
-
+<button class="ap-remove-section" type="button">×</button>
 `;
 
-const removeButton =
-row.querySelector(".ap-remove-section");
-
-if(removeButton){
-
-removeButton.onclick=()=>{
+row.querySelector(".ap-remove-section").onclick=()=>{
 row.remove();
 };
 
-}
-
 rows.appendChild(row);
-
 }
 
 /* =========================
-   SAVE MOCK
+   MOCK SAVE
 ========================= */
 
 async function saveMock(){
 
 if(!selectedExam){
-
 toast("Select exam first");
 return;
-
 }
 
-const titleInput = $("mockTitleInput");
-const descriptionInput = $("mockDescriptionInput");
-const durationInput = $("mockDurationInput");
-const questionsInput = $("mockQuestionsInput");
-const activeInput = $("mockActiveInput");
-const timingInput = $("sectionalTimingInput");
-
-const title = titleInput
-? titleInput.value.trim()
-: "";
+const title=$("mockTitleInput").value.trim();
 
 if(!title){
-
 toast("Enter mock title");
 return;
-
 }
 
 if(!editorFolderId){
-
 toast("Mock folder missing");
 return;
-
 }
 
-const description = descriptionInput
-? descriptionInput.value.trim()
-: "";
-
-const duration = durationInput
-? Number(durationInput.value) || 0
-: 0;
-
-const totalQuestions = questionsInput
-? Number(questionsInput.value) || 0
-: 0;
-
-const active = activeInput
-? activeInput.value === "true"
-: true;
-
-const sectionalTiming = timingInput
-? timingInput.checked
-: false;
-
-const sections = [
-...document.querySelectorAll(".ap-section-row")
-]
+const sections=[...document.querySelectorAll(".ap-section-row")]
 .map(row=>{
 
-const nameElement =
-row.querySelector(".section-name");
+const name=row.querySelector(".section-name").value.trim();
+const duration=Number(row.querySelector(".section-time").value)||0;
+const questions=Number(row.querySelector(".section-questions").value)||0;
 
-const timeElement =
-row.querySelector(".section-time");
+const normalized=name.toLowerCase();
 
-const questionsElement =
-row.querySelector(".section-questions");
-
-const name = nameElement
-? nameElement.value.trim()
-: "";
-
-const sectionDuration = timeElement
-? Number(timeElement.value) || 0
-: 0;
-
-const questions = questionsElement
-? Number(questionsElement.value) || 0
-: 0;
-
-const subject = subjects.find(item=>
-nameOfSubject(item).trim().toLowerCase() ===
-name.toLowerCase()
+const subject=subjects.find(item=>
+nameOfSubject(item).trim().toLowerCase()===normalized
 );
 
-return {
+return{
 name,
-subject_id:subject ? subject.id : null,
-duration:sectionDuration,
+subject_id:subject?subject.id:null,
+duration,
 questions
 };
-
 })
 .filter(section=>section.name);
 
 if(!sections.length){
-
 toast("Add at least one section");
 return;
-
 }
 
-const payload = {
-
+const payload={
 exam_id:selectedExam.id,
-
 folder_id:editorFolderId,
-
 title,
-
-description,
-
-duration_minutes:duration,
-
-total_questions:totalQuestions,
-
-is_active:active,
-
-test_type:
-editorType === "SECTIONAL"
-? "SECTIONAL"
-: "FULL",
-
-subject_wise_timing:sectionalTiming
-
+description:$("mockDescriptionInput").value.trim(),
+duration_minutes:Number($("mockDurationInput").value)||0,
+total_questions:Number($("mockQuestionsInput").value)||0,
+is_active:$("mockActiveInput").value==="true",
+test_type:editorType==="SECTIONAL"?"SECTIONAL":"FULL",
+subject_wise_timing:$("sectionalTimingInput").checked
 };
 
-if(
-editorType === "SECTIONAL" &&
-selectedFolder
-){
-
-payload.subject_id =
-selectedFolder.subject_id || null;
-
+if(editorType==="SECTIONAL"&&selectedFolder){
+payload.subject_id=selectedFolder.subject_id||null;
 }
 
 try{
 
-let saved = null;
+let saved;
 
 if(editingMockId){
 
-const response = await db
+const response=await db
 .from("mock_tests")
 .update(payload)
 .eq("id",editingMockId)
 .select()
 .single();
 
-if(response.error){
-throw response.error;
-}
-
-saved = response.data;
+if(response.error)throw response.error;
+saved=response.data;
 
 }else{
 
-const response = await db
+const response=await db
 .from("mock_tests")
 .insert(payload)
 .select()
 .single();
 
-if(response.error){
-throw response.error;
+if(response.error)throw response.error;
+saved=response.data;
 }
 
-saved = response.data;
-
-}
-
-/*
-  Important:
-  Mock save successful hone ke baad section save
-  fail ho to main mock ko failed nahi dikhayenge.
-*/
-
-const sectionsSaved =
-await saveMockSections(
-saved.id,
-sections
-);
+await saveMockSections(saved.id,sections);
 
 closeModal("mockModal");
 
-if(sectionsSaved){
-
-toast(
-editingMockId
-? "Mock updated successfully"
-: "Mock created successfully"
+toast(editingMockId
+?"Mock updated successfully"
+:"Mock created successfully"
 );
 
-}else{
-
-toast(
-editingMockId
-? "Mock updated successfully"
-: "Mock created successfully"
-);
-
-}
+editingMockId=null;
 
 await loadAllData();
 
-if(selectedCategory === "FULL"){
-
-renderFullManagement();
-
-}else{
-
-renderSectionalManagement();
-
-}
-
-editingMockId = null;
+if(selectedCategory==="FULL")renderFullManagement();
+else renderSectionalManagement();
 
 }catch(error){
 
 console.error("Mock save error:",error);
-
-toast(
-"Mock save failed: " +
-(error.message || "Unknown error")
-);
-
+toast("Mock save failed: "+error.message);
 }
-
 }
 
 /* =========================
-   SAFE SECTION SAVE
+   FIXED SECTION SAVER
 ========================= */
 
 async function saveMockSections(testId,sections){
 
 try{
 
-const deleteResponse = await db
+const deleteResponse=await db
 .from("mock_test_sections")
 .delete()
 .eq("mock_test_id",testId);
 
-if(
-deleteResponse.error &&
-!/column|schema cache|does not exist|relation/i.test(
-deleteResponse.error.message
-)
-){
-
-console.warn(
-"Section delete warning:",
-deleteResponse.error.message
-);
-
+if(deleteResponse.error){
+throw deleteResponse.error;
 }
 
-const rows = sections.map((section,index)=>({
-
+const rows=sections.map((section,index)=>({
 mock_test_id:testId,
-
-subject_id:section.subject_id || null,
-
-duration_minutes:
-Number(section.duration || 0),
-
+section_name:section.name,
+subject_id:section.subject_id||null,
+duration_minutes:Number(section.duration||0),
+question_count:Number(section.questions||0),
 section_order:index+1
-
 }));
 
-if(!rows.length){
-return true;
-}
+if(!rows.length)return true;
 
-let insertResponse = await db
+let response=await db
 .from("mock_test_sections")
 .insert(rows);
 
-if(
-insertResponse.error &&
-/subject_id|column|schema cache/i.test(
-insertResponse.error.message
-)
-){
+if(response.error){
 
-const fallbackRows = rows.map(row=>({
+/*
+Fallback only for databases where question_count
+column has not yet been added.
+*/
 
+if(/question_count|column|schema cache/i.test(response.error.message)){
+
+const fallbackRows=rows.map(row=>({
 mock_test_id:row.mock_test_id,
-
+section_name:row.section_name,
+subject_id:row.subject_id,
 duration_minutes:row.duration_minutes,
-
 section_order:row.section_order
-
 }));
 
-insertResponse = await db
+response=await db
 .from("mock_test_sections")
 .insert(fallbackRows);
+}
 
 }
 
-if(insertResponse.error){
-
-console.warn(
-"Sections were not saved:",
-insertResponse.error.message
-);
-
-/*
-  Deliberately return true.
-  Main mock already saved successfully.
-*/
-
-return true;
-
+if(response.error){
+throw response.error;
 }
 
 return true;
 
 }catch(error){
 
-console.warn(
-"Non-blocking section error:",
-error.message
-);
-
-return true;
-
+console.error("Section save error:",error);
+throw new Error("Sections save failed: "+error.message);
 }
-
 }
 
 /* =========================
@@ -4015,45 +2448,35 @@ return true;
 
 async function deleteMock(test){
 
-if(!confirm(
-`Delete mock "${test.title}"?`
-)){
-return;
-}
+if(!confirm(`Delete mock "${test.title}"?`))return;
 
 try{
 
-await db
+const sectionResponse=await db
 .from("mock_test_sections")
 .delete()
 .eq("mock_test_id",test.id);
 
-const testResponse = await db
+if(sectionResponse.error)throw sectionResponse.error;
+
+const response=await db
 .from("mock_tests")
 .delete()
 .eq("id",test.id);
 
-if(testResponse.error){
-throw testResponse.error;
-}
+if(response.error)throw response.error;
 
 toast("Mock deleted");
 
 await loadAllData();
 
-if(selectedCategory === "FULL"){
-renderFullManagement();
-}else{
-renderSectionalManagement();
-}
+if(selectedCategory==="FULL")renderFullManagement();
+else renderSectionalManagement();
 
 }catch(error){
-
 console.error(error);
 toast(error.message);
-
 }
-
 }
 
 /* =========================
@@ -4062,1250 +2485,643 @@ toast(error.message);
 
 function openCustomFolderCreate(){
 
-structureMode = "CUSTOM_ROOT";
-structureEditId = null;
+structureMode="CUSTOM_ROOT";
+structureEditId=null;
 
-const title = $("structureModalTitle");
-const label = $("structureInputLabel");
-const input = $("structureNameInput");
-
-if(title){
-title.textContent = "Add Custom Folder";
-}
-
-if(label){
-label.textContent = "Folder Name";
-}
-
-if(input){
-input.value = "";
-}
+$("structureModalTitle").textContent="Add Custom Folder";
+$("structureInputLabel").textContent="Folder Name";
+$("structureNameInput").value="";
 
 openModal("structureModal");
-
 }
 
 function openCustomFolderEdit(folder){
 
-structureMode = "CUSTOM_ROOT";
-structureEditId = folder.id;
+structureMode="CUSTOM_ROOT";
+structureEditId=folder.id;
 
-const title = $("structureModalTitle");
-const label = $("structureInputLabel");
-const input = $("structureNameInput");
-
-if(title){
-title.textContent = "Edit Folder";
-}
-
-if(label){
-label.textContent = "Folder Name";
-}
-
-if(input){
-input.value = folderName(folder);
-}
+$("structureModalTitle").textContent="Edit Folder";
+$("structureInputLabel").textContent="Folder Name";
+$("structureNameInput").value=folderName(folder);
 
 openModal("structureModal");
-
 }
 
 async function addYear(){
 
 try{
 
-const fullFolder = await getFullFolder();
+const full=await getFullFolder();
 
-if(!fullFolder){
-
+if(!full){
 toast("PYQ Full folder missing");
 return;
-
 }
 
-structureMode = "YEAR";
-structureEditId = null;
+structureMode="YEAR";
+structureEditId=null;
 
-const title = $("structureModalTitle");
-const label = $("structureInputLabel");
-const input = $("structureNameInput");
-
-if(title){
-title.textContent = "Add PYQ Year";
-}
-
-if(label){
-label.textContent = "Year";
-}
-
-if(input){
-input.value = "";
-}
+$("structureModalTitle").textContent="Add PYQ Year";
+$("structureInputLabel").textContent="Year";
+$("structureNameInput").value="";
 
 openModal("structureModal");
 
 }catch(error){
-
 toast(error.message);
-
 }
-
 }
 
 function openStructureEdit(mode,folder){
 
-structureMode = mode;
-structureEditId = folder.id;
+structureMode=mode;
+structureEditId=folder.id;
 
-const title = $("structureModalTitle");
-const label = $("structureInputLabel");
-const input = $("structureNameInput");
+$("structureModalTitle").textContent=
+mode==="YEAR"?"Edit PYQ Year":"Edit Subject Clip";
 
-if(title){
+$("structureInputLabel").textContent=
+mode==="YEAR"?"Year":"Subject Name";
 
-title.textContent =
-mode === "YEAR"
-? "Edit PYQ Year"
-: "Edit Subject Clip";
-
-}
-
-if(label){
-
-label.textContent =
-mode === "YEAR"
-? "Year"
-: "Subject Name";
-
-}
-
-if(input){
-input.value = folderName(folder);
-}
+$("structureNameInput").value=folderName(folder);
 
 openModal("structureModal");
-
 }
-
-/* =========================
-   SAVE STRUCTURE
-========================= */
 
 async function saveStructure(){
 
-const input = $("structureNameInput");
-
-const name = input
-? input.value.trim()
-: "";
+const name=$("structureNameInput").value.trim();
 
 if(!name){
-
 toast("Enter name");
 return;
-
 }
 
 try{
 
-/* CUSTOM ROOT FOLDER */
+if(structureMode==="CUSTOM_ROOT"){
 
-if(structureMode === "CUSTOM_ROOT"){
-
-const rootFolders =
-getRootFoldersForExam();
+const roots=getRootFoldersForExam();
 
 if(!structureEditId){
 
-const duplicate = rootFolders.find(folder=>
-folderName(folder).toLowerCase() ===
-name.toLowerCase()
+const duplicate=roots.find(folder=>
+folderName(folder).toLowerCase()===name.toLowerCase()
 );
 
 if(duplicate){
-
 toast("This folder already exists");
 return;
-
 }
 
-const max = rootFolders.reduce(
-(maximum,folder)=>
-Math.max(
-maximum,
-Number(folder.sort_order || 0)
-),
-0
+const max=roots.reduce((m,f)=>
+Math.max(m,Number(f.sort_order||0)),0
 );
 
-const response = await db
+const response=await db
 .from("mock_folders")
 .insert({
-
 exam_id:selectedExam.id,
-
 parent_id:null,
-
 name,
-
 display_name:name,
-
 folder_type:"CUSTOM",
-
 sort_order:max+1,
-
 is_active:true
-
 })
 .select()
 .single();
 
-if(response.error){
-throw response.error;
-}
+if(response.error)throw response.error;
 
 await ensureFolder({
-
 examId:selectedExam.id,
-
 parentId:response.data.id,
-
 name:"FULL",
-
 displayName:"FULL MOCKS",
-
 type:"FULL",
-
 sortOrder:1
-
 });
 
 await ensureFolder({
-
 examId:selectedExam.id,
-
 parentId:response.data.id,
-
 name:"SECTIONAL",
-
 displayName:"SECTIONAL MOCKS",
-
 type:"SECTIONAL",
-
 sortOrder:2
-
 });
 
 toast("Custom folder added successfully");
 
 }else{
 
-const duplicate = rootFolders.find(folder=>
-String(folder.id) !==
-String(structureEditId) &&
-folderName(folder).toLowerCase() ===
-name.toLowerCase()
-);
-
-if(duplicate){
-
-toast("This folder already exists");
-return;
-
-}
-
-const response = await db
+const response=await db
 .from("mock_folders")
 .update({
-
 name,
 display_name:name
-
 })
 .eq("id",structureEditId);
 
-if(response.error){
-throw response.error;
-}
+if(response.error)throw response.error;
 
 toast("Folder updated successfully");
-
 }
 
 closeModal("structureModal");
-
-structureMode = null;
-structureEditId = null;
+structureMode=null;
+structureEditId=null;
 
 await loadAllData();
 renderRootBranches();
-
 return;
-
 }
 
-/* PYQ YEAR */
+if(structureMode==="YEAR"){
 
-if(structureMode === "YEAR"){
-
-const parent = await getFullFolder();
-
-if(!parent){
-
-toast("PYQ Full folder missing");
-return;
-
-}
-
-const years = childrenOf(
-parent.id,
-"YEAR"
-);
+const parent=await getFullFolder();
+const years=childrenOf(parent.id,"YEAR");
 
 if(!structureEditId){
 
-const duplicate = years.find(year=>
-folderName(year).toLowerCase() ===
-name.toLowerCase()
+const max=years.reduce((m,f)=>
+Math.max(m,Number(f.sort_order||0)),0
 );
 
-if(duplicate){
-
-toast("This year already exists");
-return;
-
-}
-
-const max = years.reduce(
-(maximum,year)=>
-Math.max(
-maximum,
-Number(year.sort_order || 0)
-),
-0
-);
-
-const response = await db
+const response=await db
 .from("mock_folders")
 .insert({
-
 exam_id:selectedExam.id,
-
 parent_id:parent.id,
-
 name,
-
 display_name:name,
-
 folder_type:"YEAR",
-
 sort_order:max+1,
-
 is_active:true
-
 });
 
-if(response.error){
-throw response.error;
-}
+if(response.error)throw response.error;
 
 toast("Year added successfully");
 
 }else{
 
-const duplicate = years.find(year=>
-String(year.id) !==
-String(structureEditId) &&
-folderName(year).toLowerCase() ===
-name.toLowerCase()
-);
-
-if(duplicate){
-
-toast("This year already exists");
-return;
-
-}
-
-const response = await db
+const response=await db
 .from("mock_folders")
 .update({
-
 name,
 display_name:name
-
 })
 .eq("id",structureEditId);
 
-if(response.error){
-throw response.error;
-}
+if(response.error)throw response.error;
 
 toast("Year updated successfully");
-
+}
 }
 
-}
+else if(structureMode==="SUBJECT"){
 
-/* SUBJECT CLIP */
-
-else if(structureMode === "SUBJECT"){
-
-const parent = await getSectionalFolder();
-
-if(!parent){
-
-toast("Sectional folder missing");
-return;
-
-}
-
-const clips = childrenOf(
-parent.id,
-"SUBJECT"
-);
+const parent=await getSectionalFolder();
+const clips=childrenOf(parent.id,"SUBJECT");
 
 if(!structureEditId){
 
-const duplicate = clips.find(clip=>
-folderName(clip).toLowerCase() ===
-name.toLowerCase()
+const max=clips.reduce((m,f)=>
+Math.max(m,Number(f.sort_order||0)),0
 );
 
-if(duplicate){
-
-toast("This subject clip already exists");
-return;
-
-}
-
-const max = clips.reduce(
-(maximum,clip)=>
-Math.max(
-maximum,
-Number(clip.sort_order || 0)
-),
-0
-);
-
-const response = await db
+const response=await db
 .from("mock_folders")
 .insert({
-
 exam_id:selectedExam.id,
-
 parent_id:parent.id,
-
 name,
-
 display_name:name,
-
 folder_type:"SUBJECT",
-
 sort_order:max+1,
-
 is_active:true
-
 });
 
-if(response.error){
-throw response.error;
-}
+if(response.error)throw response.error;
 
 toast("Subject clip added successfully");
 
 }else{
 
-const duplicate = clips.find(clip=>
-String(clip.id) !==
-String(structureEditId) &&
-folderName(clip).toLowerCase() ===
-name.toLowerCase()
-);
-
-if(duplicate){
-
-toast("This subject clip already exists");
-return;
-
-}
-
-const response = await db
+const response=await db
 .from("mock_folders")
 .update({
-
 name,
 display_name:name
-
 })
 .eq("id",structureEditId);
 
-if(response.error){
-throw response.error;
-}
+if(response.error)throw response.error;
 
 toast("Subject clip updated successfully");
-
 }
-
 }
 
 closeModal("structureModal");
-
-structureMode = null;
-structureEditId = null;
+structureMode=null;
+structureEditId=null;
 
 await loadAllData();
 
-if(selectedCategory === "FULL"){
-renderFullManagement();
-}else if(selectedCategory === "SECTIONAL"){
-renderSectionalManagement();
-}else{
-renderRootBranches();
-}
+if(selectedCategory==="FULL")renderFullManagement();
+else if(selectedCategory==="SECTIONAL")renderSectionalManagement();
+else renderRootBranches();
 
 }catch(error){
 
 console.error(error);
 toast(error.message);
-
 }
-
 }
-
-/* =========================
-   DELETE CUSTOM ROOT
-========================= */
 
 async function deleteCustomRootFolder(folder){
 
-const allChildren = folders.filter(child=>
-String(child.parent_id) ===
-String(folder.id) &&
-child.is_active !== false
+const children=folders.filter(child=>
+String(child.parent_id)===String(folder.id)&&
+child.is_active!==false
 );
 
-const childIds = allChildren.map(child =>
-String(child.id)
-);
+const childIds=children.map(child=>String(child.id));
 
-const hasMocks = tests.some(test=>
-childIds.includes(
-String(test.folder_id || "")
-) ||
-String(test.folder_id || "") ===
-String(folder.id)
+const hasMocks=tests.some(test=>
+childIds.includes(String(test.folder_id||""))||
+String(test.folder_id||"")===String(folder.id)
 );
 
 if(hasMocks){
-
 toast("First delete mocks inside this folder");
 return;
-
 }
 
-if(!confirm(
-`Delete "${folderName(folder)}" folder?`
-)){
-return;
-}
+if(!confirm(`Delete "${folderName(folder)}" folder?`))return;
 
 try{
 
-const response = await db
+const response=await db
 .from("mock_folders")
 .delete()
 .eq("id",folder.id);
 
-if(response.error){
-throw response.error;
-}
+if(response.error)throw response.error;
 
 toast("Folder deleted successfully");
-
-if(
-selectedRootFolder &&
-String(selectedRootFolder.id) ===
-String(folder.id)
-){
-
-selectedRootFolder = null;
-
-}
 
 await loadAllData();
 renderRootBranches();
 
 }catch(error){
-
 console.error(error);
 toast(error.message);
-
 }
-
 }
-
-/* =========================
-   DELETE STRUCTURE FOLDER
-========================= */
 
 async function deleteStructureFolder(folder){
 
-const hasMocks = tests.some(test=>
-String(test.folder_id) ===
-String(folder.id)
+const hasMocks=tests.some(test=>
+String(test.folder_id)===String(folder.id)
 );
 
-const hasChildren = folders.some(child=>
-String(child.parent_id) ===
-String(folder.id) &&
-child.is_active !== false
+const hasChildren=folders.some(child=>
+String(child.parent_id)===String(folder.id)&&
+child.is_active!==false
 );
 
-if(hasMocks || hasChildren){
-
-toast(
-"Cannot delete: first remove its mocks or children"
-);
-
-return;
-
-}
-
-if(!confirm(
-`Delete "${folderName(folder)}"?`
-)){
+if(hasMocks||hasChildren){
+toast("Cannot delete: first remove its mocks or children");
 return;
 }
+
+if(!confirm(`Delete "${folderName(folder)}"?`))return;
 
 try{
 
-const response = await db
+const response=await db
 .from("mock_folders")
 .delete()
 .eq("id",folder.id);
 
-if(response.error){
-throw response.error;
-}
-
-if(
-selectedFolder &&
-String(selectedFolder.id) ===
-String(folder.id)
-){
-
-selectedFolder = null;
-
-}
-
-if(
-selectedYear &&
-String(selectedYear.id) ===
-String(folder.id)
-){
-
-selectedYear = null;
-
-}
+if(response.error)throw response.error;
 
 toast("Deleted successfully");
 
 await loadAllData();
 
-if(selectedCategory === "FULL"){
-renderFullManagement();
-}else{
-renderSectionalManagement();
-}
+if(selectedCategory==="FULL")renderFullManagement();
+else renderSectionalManagement();
 
 }catch(error){
-
 console.error(error);
 toast(error.message);
-
+}
 }
 
-}
+async function reorderFolder(folderId,parentId,direction,label){
 
-/* =========================
-   REORDER FOLDER
-========================= */
+const type=label==="Year"?"YEAR":"SUBJECT";
+const list=childrenOf(parentId,type);
 
-async function reorderFolder(
-folderId,
-parentId,
-direction,
-label
-){
-
-const type =
-label === "Year"
-? "YEAR"
-: "SUBJECT";
-
-const list = childrenOf(parentId,type);
-
-const index = list.findIndex(folder=>
-String(folder.id) ===
-String(folderId)
+const index=list.findIndex(folder=>
+String(folder.id)===String(folderId)
 );
 
-const targetIndex = index + direction;
+const target=index+direction;
 
-if(
-index < 0 ||
-targetIndex < 0 ||
-targetIndex >= list.length
-){
-return;
-}
+if(index<0||target<0||target>=list.length)return;
 
-const reordered = [...list];
-
-const temporary = reordered[index];
-
-reordered[index] =
-reordered[targetIndex];
-
-reordered[targetIndex] =
-temporary;
+[list[index],list[target]]=[list[target],list[index]];
 
 try{
 
-for(let index=0;index<reordered.length;index++){
+for(let i=0;i<list.length;i++){
 
-const response = await db
+const response=await db
 .from("mock_folders")
-.update({
-sort_order:index+1
-})
-.eq("id",reordered[index].id);
+.update({sort_order:i+1})
+.eq("id",list[i].id);
 
-if(response.error){
-throw response.error;
-}
-
+if(response.error)throw response.error;
 }
 
 toast(`${label} order updated`);
 
 await loadAllData();
 
-if(selectedCategory === "FULL"){
-renderFullManagement();
-}else{
-renderSectionalManagement();
-}
+if(selectedCategory==="FULL")renderFullManagement();
+else renderSectionalManagement();
 
 }catch(error){
-
 console.error(error);
 toast(error.message);
-
 }
-
 }
-
-/* =========================
-   EXAM MANAGEMENT
-========================= */
 
 async function deleteExam(exam){
 
-const examTests = tests.filter(test=>
-String(test.exam_id) ===
-String(exam.id)
+const examTests=tests.filter(test=>
+String(test.exam_id)===String(exam.id)
 );
 
 if(examTests.length){
 
-const deactivate = confirm(
+const deactivate=confirm(
 `This exam has ${examTests.length} mocks. Deactivate exam instead?`
 );
 
-if(!deactivate) return;
+if(!deactivate)return;
 
-const response = await db
+const response=await db
 .from("exams")
-.update({
-is_active:false
-})
+.update({is_active:false})
 .eq("id",exam.id);
 
 if(response.error){
-
 toast(response.error.message);
 return;
-
 }
 
 toast("Exam deactivated");
 
 }else{
 
-if(!confirm(
-`Delete exam "${examName(exam)}"?`
-)){
-return;
-}
+if(!confirm(`Delete exam "${examName(exam)}"?`))return;
 
-const response = await db
+const response=await db
 .from("exams")
 .delete()
 .eq("id",exam.id);
 
 if(response.error){
-
 toast(response.error.message);
 return;
-
 }
 
 toast("Exam deleted");
-
 }
 
-if(
-selectedExam &&
-String(selectedExam.id) ===
-String(exam.id)
-){
-
-selectedExam = null;
-
-const workspace = $("workspace");
-
-if(workspace){
-workspace.classList.remove("visible");
-}
-
+if(selectedExam&&String(selectedExam.id)===String(exam.id)){
+selectedExam=null;
+$("workspace").classList.remove("visible");
 resetViews();
-
 }
 
 await loadAllData();
-
 }
 
 async function reorderExam(id,direction){
 
-const list = exams
+const list=exams
 .filter(exam=>
-boardOfExam(exam) === activeBoard &&
-exam.is_active !== false
+boardOfExam(exam)===activeBoard&&
+exam.is_active!==false
 )
 .sort((a,b)=>
-Number(a.sort_order || 0) -
-Number(b.sort_order || 0)
+Number(a.sort_order||0)-Number(b.sort_order||0)
 );
 
-const index = list.findIndex(exam=>
-String(exam.id) ===
-String(id)
+const index=list.findIndex(exam=>
+String(exam.id)===String(id)
 );
 
-const targetIndex = index + direction;
+const target=index+direction;
 
-if(
-index < 0 ||
-targetIndex < 0 ||
-targetIndex >= list.length
-){
-return;
-}
+if(index<0||target<0||target>=list.length)return;
 
-const reordered = [...list];
-
-const temporary = reordered[index];
-
-reordered[index] =
-reordered[targetIndex];
-
-reordered[targetIndex] =
-temporary;
+[list[index],list[target]]=[list[target],list[index]];
 
 try{
 
-for(let index=0;index<reordered.length;index++){
+for(let i=0;i<list.length;i++){
 
-const response = await db
+const response=await db
 .from("exams")
-.update({
-sort_order:index+1
-})
-.eq("id",reordered[index].id);
+.update({sort_order:i+1})
+.eq("id",list[i].id);
 
-if(response.error){
-throw response.error;
-}
-
+if(response.error)throw response.error;
 }
 
 toast("Exam order updated");
-
 await loadAllData();
 
 }catch(error){
-
 console.error(error);
 toast(error.message);
-
 }
-
 }
 
 function openExamModal(exam=null){
 
-editingExamId = exam
-? exam.id
-: null;
+editingExamId=exam?exam.id:null;
 
-const boardInput = $("examBoardInput");
-const nameInput = $("examNameInput");
-const stageInput = $("examStageInput");
-
-if(boardInput){
-
-boardInput.value =
-exam
-? boardOfExam(exam)
-: activeBoard;
-
-}
-
-if(nameInput){
-
-nameInput.value =
-exam
-? examName(exam)
-: "";
-
-}
-
-if(stageInput){
-
-stageInput.value =
-exam
-? exam.stage || ""
-: "";
-
-}
+$("examBoardInput").value=exam?boardOfExam(exam):activeBoard;
+$("examNameInput").value=exam?examName(exam):"";
+$("examStageInput").value=exam?exam.stage||"":"";
 
 openModal("examModal");
-
 }
 
 async function saveExam(){
 
-const boardInput = $("examBoardInput");
-const nameInput = $("examNameInput");
-const stageInput = $("examStageInput");
-
-const board = boardInput
-? boardInput.value
-: "SSC";
-
-const name = nameInput
-? nameInput.value.trim()
-: "";
-
-const stage = stageInput
-? stageInput.value.trim()
-: "";
+const board=$("examBoardInput").value;
+const name=$("examNameInput").value.trim();
+const stage=$("examStageInput").value.trim();
 
 if(!name){
-
 toast("Enter exam name");
 return;
-
 }
 
 try{
 
 if(editingExamId){
 
-const response = await db
+const response=await db
 .from("exams")
 .update({
-
 name,
 stage,
 is_active:true
-
 })
 .eq("id",editingExamId);
 
-if(response.error){
-throw response.error;
-}
+if(response.error)throw response.error;
 
 toast("Exam updated successfully");
 
 }else{
 
-const max = exams
-.filter(exam=>
-boardOfExam(exam) === board
-)
-.reduce(
-(maximum,exam)=>
-Math.max(
-maximum,
-Number(exam.sort_order || 0)
-),
-0
+const max=exams
+.filter(exam=>boardOfExam(exam)===board)
+.reduce((m,e)=>
+Math.max(m,Number(e.sort_order||0)),0
 );
 
-let response = await db
+let response=await db
 .from("exams")
 .insert({
-
 name,
 stage,
 board,
 sort_order:max+1,
 is_active:true
-
 })
 .select()
 .single();
 
 if(
-response.error &&
-/board|column|schema cache/i.test(
-response.error.message
-)
+response.error&&
+/board|column|schema cache/i.test(response.error.message)
 ){
 
-response = await db
+response=await db
 .from("exams")
 .insert({
-
 name,
 stage,
 sort_order:max+1,
 is_active:true
-
 })
 .select()
 .single();
-
 }
 
-if(response.error){
-throw response.error;
-}
+if(response.error)throw response.error;
 
-await ensureExamStructure(
-response.data.id
-);
-
+await ensureExamStructure(response.data.id);
 toast("Exam added successfully");
-
 }
 
 closeModal("examModal");
-
-editingExamId = null;
+editingExamId=null;
 
 await loadAllData();
 
 }catch(error){
-
 console.error(error);
 toast(error.message);
-
+}
 }
 
-}
+/* EVENTS */
 
-/* =========================
-   EVENT LISTENERS
-========================= */
-
-document.querySelectorAll(".ap-board-tab")
-.forEach(tab=>{
-
+document.querySelectorAll(".ap-board-tab").forEach(tab=>{
 tab.onclick=()=>{
+activeBoard=tab.dataset.board;
 
-activeBoard = tab.dataset.board;
-
-document.querySelectorAll(".ap-board-tab")
-.forEach(item=>{
-
-item.classList.toggle(
-"active",
-item === tab
+document.querySelectorAll(".ap-board-tab").forEach(item=>
+item.classList.toggle("active",item===tab)
 );
-
-});
 
 renderExams();
-
 };
-
 });
 
-document.querySelectorAll("[data-category]")
-.forEach(button=>{
-
-button.onclick=()=>{
-openCategory(
-button.dataset.category
-);
-};
-
+document.querySelectorAll("[data-category]").forEach(btn=>{
+btn.onclick=()=>openCategory(btn.dataset.category);
 });
 
-bindClick(
-"backToBranchesBtn",
-()=>resetViews()
-);
+bindClick("backToBranchesBtn",resetViews);
 
-bindClick(
-"backToCategoriesBtn",
-()=>{
+bindClick("backToCategoriesBtn",()=>{
+$("mockManagementView").classList.remove("visible");
+$("categoryView").classList.add("visible");
+});
 
-const managementView =
-$("mockManagementView");
-
-const categoryView =
-$("categoryView");
-
-if(managementView){
-managementView.classList.remove("visible");
-}
-
-if(categoryView){
-categoryView.classList.add("visible");
-}
-
-}
-);
-
-bindClick(
-"changeExamBtn",
-()=>{
-
-selectedExam = null;
-
-const workspace = $("workspace");
-
-if(workspace){
-workspace.classList.remove("visible");
-}
-
+bindClick("changeExamBtn",()=>{
+selectedExam=null;
+$("workspace").classList.remove("visible");
 resetViews();
 
 window.scrollTo({
 top:0,
 behavior:"smooth"
 });
+});
 
-}
-);
+bindClick("syncStructureBtn",syncStructure);
 
-bindClick(
-"syncStructureBtn",
-syncStructure
-);
-
-bindClick(
-"addRootFolderBtn",
-()=>{
-
+bindClick("addRootFolderBtn",()=>{
 if(!selectedExam){
-
 toast("Select an exam first");
 return;
-
 }
-
 openCustomFolderCreate();
+});
 
-}
-);
+bindClick("addExamBtn",()=>openExamModal());
 
-bindClick(
-"addExamBtn",
-()=>openExamModal()
-);
-
-bindClick(
-"refreshBtn",
-async()=>{
-
+bindClick("refreshBtn",async()=>{
 await loadAllData();
 toast("Data refreshed");
-
-}
-);
-
-bindClick(
-"adminBackBtn",
-()=>{
-
-location.href = "practice.html";
-
-}
-);
-
-bindClick(
-"saveExamBtn",
-saveExam
-);
-
-bindClick(
-"saveMockBtn",
-saveMock
-);
-
-bindClick(
-"addSectionBtn",
-()=>addSectionRow()
-);
-
-bindClick(
-"saveStructureBtn",
-saveStructure
-);
-
-document.querySelectorAll("[data-close-modal]")
-.forEach(button=>{
-
-button.onclick=()=>{
-
-closeModal(
-button.dataset.closeModal
-);
-
-};
-
 });
 
-document.querySelectorAll(".ap-modal-overlay")
-.forEach(overlay=>{
+bindClick("adminBackBtn",()=>{
+location.href="practice.html";
+});
 
+bindClick("saveExamBtn",saveExam);
+bindClick("saveMockBtn",saveMock);
+bindClick("addSectionBtn",()=>addSectionRow());
+bindClick("saveStructureBtn",saveStructure);
+
+document.querySelectorAll("[data-close-modal]").forEach(btn=>{
+btn.onclick=()=>closeModal(btn.dataset.closeModal);
+});
+
+document.querySelectorAll(".ap-modal-overlay").forEach(overlay=>{
 overlay.addEventListener("click",event=>{
-
-if(event.target === overlay){
-
-overlay.classList.remove("open");
-
-}
-
+if(event.target===overlay)overlay.classList.remove("open");
 });
-
 });
-
-/* =========================
-   INITIAL LOAD
-========================= */
 
 loadAllData();
-
 </script>
 
 </body>
