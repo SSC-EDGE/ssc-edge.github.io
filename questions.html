@@ -13,15 +13,13 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 </script>
 
 <link rel="stylesheet" href="css/style.css">
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
 .page{
   min-height:100vh;
   padding:22px 16px 100px;
-  max-width:950px;
+  max-width:1000px;
   margin:auto;
 }
 
@@ -52,12 +50,12 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 }
 
 .card h2{
-  margin:0 0 12px;
+  margin:0 0 14px;
 }
 
 label{
   display:block;
-  margin:10px 0 6px;
+  margin:11px 0 6px;
   color:var(--muted);
   font-size:14px;
 }
@@ -76,8 +74,9 @@ textarea{
 }
 
 textarea{
-  min-height:100px;
+  min-height:105px;
   resize:vertical;
+  white-space:pre-wrap;
 }
 
 .grid{
@@ -86,21 +85,79 @@ textarea{
   gap:12px;
 }
 
+.language-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.language-box{
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px;
+  margin-top:8px;
+}
+
+.language-title{
+  font-weight:bold;
+  margin-bottom:8px;
+  color:var(--purple2);
+}
+
 .option-row{
-  display:flex;
+  display:grid;
+  grid-template-columns:40px 1fr 1fr;
   gap:8px;
   margin-bottom:9px;
+  align-items:center;
 }
 
 .option-label{
-  width:42px;
-  min-width:42px;
+  height:42px;
   display:flex;
   align-items:center;
   justify-content:center;
   border-radius:8px;
   background:var(--card2);
   font-weight:bold;
+}
+
+.correct-box{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  margin-top:8px;
+}
+
+.check-item{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:11px;
+  border:1px solid var(--border);
+  border-radius:9px;
+  background:var(--bg);
+  cursor:pointer;
+}
+
+.check-item input{
+  width:auto;
+  accent-color:var(--purple);
+}
+
+.checkbox-line{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin-top:15px;
+  padding:12px;
+  border:1px solid var(--border);
+  border-radius:10px;
+}
+
+.checkbox-line input{
+  width:auto;
+  accent-color:var(--purple);
 }
 
 button{
@@ -128,6 +185,13 @@ button.danger{
   margin-top:14px;
 }
 
+.status{
+  padding:12px;
+  border-radius:10px;
+  background:var(--card2);
+  margin-bottom:15px;
+}
+
 .question{
   border:1px solid var(--border);
   border-radius:12px;
@@ -137,29 +201,59 @@ button.danger{
 
 .question-title{
   font-weight:bold;
-  line-height:1.5;
+  line-height:1.6;
+  white-space:pre-wrap;
+}
+
+.question-hi{
+  margin-top:7px;
+  color:var(--muted);
+  line-height:1.6;
+  white-space:pre-wrap;
 }
 
 .meta{
   color:var(--muted);
   font-size:13px;
-  margin-top:6px;
+  margin-top:7px;
 }
 
 .option{
   padding:6px 0;
   font-size:14px;
+  white-space:pre-wrap;
 }
 
 .correct{
   font-weight:bold;
+  color:#22c55e;
 }
 
-.status{
-  padding:12px;
-  border-radius:10px;
+.bonus{
+  display:inline-block;
+  margin-top:8px;
+  padding:4px 8px;
+  border-radius:6px;
+  background:#a855f7;
+  color:white;
+  font-size:12px;
+  font-weight:bold;
+}
+
+.solution-preview{
+  margin-top:10px;
+  padding:10px;
+  border-radius:9px;
   background:var(--card2);
-  margin-bottom:15px;
+  white-space:pre-wrap;
+  line-height:1.7;
+}
+
+.solution-image-preview{
+  max-width:180px;
+  max-height:130px;
+  border-radius:8px;
+  margin-top:10px;
 }
 
 .empty{
@@ -168,16 +262,27 @@ button.danger{
   padding:25px;
 }
 
-@media(max-width:600px){
+.small-note{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:5px;
+}
 
-  .grid{
+@media(max-width:650px){
+  .grid,
+  .language-grid{
     grid-template-columns:1fr;
   }
 
+  .option-row{
+    grid-template-columns:34px 1fr 1fr;
+  }
+
+  .correct-box{
+    grid-template-columns:1fr 1fr;
+  }
 }
-
 </style>
-
 </head>
 
 <body>
@@ -185,202 +290,143 @@ button.danger{
 <div class="page">
 
   <div class="header">
-
     <h1>❓ Question Bank</h1>
-
-    <a
-      class="back"
-      href="admin.html"
-    >
-      ← Admin
-    </a>
-
+    <a class="back" href="admin.html">← Admin</a>
   </div>
 
-
-  <div
-    id="status"
-    class="status"
-  >
+  <div id="status" class="status">
     Checking admin access...
   </div>
 
-
   <div id="app" style="display:none;">
-
-
-    <!-- ADD QUESTION -->
 
     <div class="card">
 
-      <h2 id="formTitle">
-        Add Question
-      </h2>
-
+      <h2 id="formTitle">Add Question</h2>
 
       <label>Subject</label>
-
       <select id="subject">
-        <option value="">
-          Select Subject
-        </option>
+        <option value="">Select Subject</option>
       </select>
-
 
       <label>Chapter</label>
-
       <select id="chapter">
-
-        <option value="">
-          Select Chapter
-        </option>
-
+        <option value="">Select Chapter</option>
       </select>
 
+      <div class="language-grid">
 
-      <label>Question</label>
-
-      <textarea
-        id="questionText"
-        placeholder="Enter question..."
-      ></textarea>
-
-
-      <label>Options</label>
-
-
-      <div class="option-row">
-
-        <div class="option-label">
-          A
+        <div class="language-box">
+          <div class="language-title">🇬🇧 English Question</div>
+          <textarea id="questionText" placeholder="Enter English question..."></textarea>
         </div>
 
-        <input
-          id="optionA"
-          placeholder="Option A"
-        >
+        <div class="language-box">
+          <div class="language-title">🇮🇳 Hindi Question</div>
+          <textarea id="questionTextHi" placeholder="प्रश्न हिंदी में लिखें..."></textarea>
+        </div>
 
       </div>
 
+      <label>Options — English / Hindi</label>
 
       <div class="option-row">
-
-        <div class="option-label">
-          B
-        </div>
-
-        <input
-          id="optionB"
-          placeholder="Option B"
-        >
-
+        <div class="option-label">A</div>
+        <input id="optionA" placeholder="Option A English">
+        <input id="optionAHi" placeholder="विकल्प A हिंदी">
       </div>
-
 
       <div class="option-row">
-
-        <div class="option-label">
-          C
-        </div>
-
-        <input
-          id="optionC"
-          placeholder="Option C"
-        >
-
+        <div class="option-label">B</div>
+        <input id="optionB" placeholder="Option B English">
+        <input id="optionBHi" placeholder="विकल्प B हिंदी">
       </div>
-
 
       <div class="option-row">
-
-        <div class="option-label">
-          D
-        </div>
-
-        <input
-          id="optionD"
-          placeholder="Option D"
-        >
-
+        <div class="option-label">C</div>
+        <input id="optionC" placeholder="Option C English">
+        <input id="optionCHi" placeholder="विकल्प C हिंदी">
       </div>
 
+      <div class="option-row">
+        <div class="option-label">D</div>
+        <input id="optionD" placeholder="Option D English">
+        <input id="optionDHi" placeholder="विकल्प D हिंदी">
+      </div>
 
-      <label>
-        Correct Option
-      </label>
+      <label>Correct Options — select one or more</label>
 
-      <select id="correctOption">
+      <div class="correct-box">
+        <label class="check-item">
+          <input type="checkbox" class="correctOption" value="A">
+          Correct A
+        </label>
 
-        <option value="">
-          Select Correct Option
-        </option>
+        <label class="check-item">
+          <input type="checkbox" class="correctOption" value="B">
+          Correct B
+        </label>
 
-        <option value="A">A</option>
-        <option value="B">B</option>
-        <option value="C">C</option>
-        <option value="D">D</option>
+        <label class="check-item">
+          <input type="checkbox" class="correctOption" value="C">
+          Correct C
+        </label>
 
-      </select>
+        <label class="check-item">
+          <input type="checkbox" class="correctOption" value="D">
+          Correct D
+        </label>
+      </div>
 
+      <div class="checkbox-line">
+        <input type="checkbox" id="isBonus">
+        <label for="isBonus" style="margin:0;color:var(--text);">
+          Bonus Question — attempted students receive marks
+        </label>
+      </div>
 
       <div class="grid">
 
         <div>
-
-          <label>
-            Marks
-          </label>
-
-          <input
-            id="marks"
-            type="number"
-            step="0.01"
-            value="2"
-          >
-
+          <label>Marks</label>
+          <input id="marks" type="number" step="0.01" value="2">
         </div>
 
-
         <div>
-
-          <label>
-            Negative Marks
-          </label>
-
-          <input
-            id="negativeMarks"
-            type="number"
-            step="0.01"
-            value="0.5"
-          >
-
+          <label>Negative Marks</label>
+          <input id="negativeMarks" type="number" step="0.01" value="0.5">
         </div>
 
       </div>
 
-
-      <label>
-        Explanation
-      </label>
-
+      <label>Common Solution / Explanation</label>
       <textarea
         id="explanation"
-        placeholder="Optional explanation..."
+        placeholder="Write solution. Line breaks will be preserved exactly..."
       ></textarea>
 
+      <label>Solution Image — optional</label>
+      <input id="solutionImage" type="file" accept="image/*">
+      <div class="small-note">
+        Upload an image of handwritten solution, diagram, chart, etc.
+      </div>
+
+      <div id="existingImageBox"></div>
+
+      <label>Solution Video Link — optional</label>
+      <input
+        id="solutionVideo"
+        type="url"
+        placeholder="https://youtube.com/... or video link"
+      >
 
       <div class="actions">
 
-        <button
-          onclick="saveQuestion()"
-        >
+        <button onclick="saveQuestion()">
           Save Question
         </button>
 
-        <button
-          class="secondary"
-          onclick="resetForm()"
-        >
+        <button class="secondary" onclick="resetForm()">
           Clear
         </button>
 
@@ -389,73 +435,36 @@ button.danger{
     </div>
 
 
-    <!-- FILTER -->
-
     <div class="card">
 
-      <h2>
-        Question Bank
-      </h2>
-
+      <h2>Question Bank</h2>
 
       <div class="grid">
 
         <div>
-
-          <label>
-            Subject
-          </label>
-
-          <select
-            id="filterSubject"
-          >
-
-            <option value="">
-              All Subjects
-            </option>
-
+          <label>Subject</label>
+          <select id="filterSubject">
+            <option value="">All Subjects</option>
           </select>
-
         </div>
 
-
         <div>
-
-          <label>
-            Chapter
-          </label>
-
-          <select
-            id="filterChapter"
-          >
-
-            <option value="">
-              All Chapters
-            </option>
-
+          <label>Chapter</label>
+          <select id="filterChapter">
+            <option value="">All Chapters</option>
           </select>
-
         </div>
 
       </div>
 
-
-      <label>
-        Search
-      </label>
-
-      <input
-        id="search"
-        placeholder="Search question..."
-      >
+      <label>Search</label>
+      <input id="search" placeholder="Search English or Hindi question...">
 
     </div>
-
 
     <div id="questionList"></div>
 
   </div>
-
 </div>
 
 
@@ -467,578 +476,341 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
 
-const db =
-supabase.createClient(
+const db = supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
 );
 
-
 let subjects = [];
 let chapters = [];
 let questions = [];
-
 let editingId = null;
+let existingImageUrl = "";
 
 
-/* =========================
-   ADMIN CHECK
-========================= */
+/* ADMIN CHECK */
 
 async function checkAdmin(){
 
-  const {
-    data:{user}
-  } =
-    await db.auth.getUser();
-
+  const { data:{user} } = await db.auth.getUser();
 
   if(!user){
-
-    showStatus(
-      "Admin access required."
-    );
-
+    showStatus("Admin access required.");
     return false;
   }
 
-
-  const {
-    data,
-    error
-  } =
-    await db
-      .from("admin_users")
-      .select("user_id")
-      .eq(
-        "user_id",
-        user.id
-      )
-      .maybeSingle();
-
+  const { data,error } = await db
+    .from("admin_users")
+    .select("user_id")
+    .eq("user_id",user.id)
+    .maybeSingle();
 
   if(error){
-
     console.error(error);
-
-    showStatus(
-      "Unable to verify admin access."
-    );
-
+    showStatus("Unable to verify admin access.");
     return false;
   }
-
 
   if(!data){
-
     await db.auth.signOut();
-
-    showStatus(
-      "Access denied. Admin account required."
-    );
-
+    showStatus("Access denied. Admin account required.");
     return false;
   }
 
-
-  document.getElementById(
-    "status"
-  ).style.display =
-    "none";
-
-
-  document.getElementById(
-    "app"
-  ).style.display =
-    "block";
-
+  document.getElementById("status").style.display = "none";
+  document.getElementById("app").style.display = "block";
 
   return true;
-
 }
 
-
-/* STATUS */
 
 function showStatus(text){
-
-  document.getElementById(
-    "status"
-  ).textContent =
-    text;
-
+  document.getElementById("status").textContent = text;
 }
 
 
-/* =========================
-   SUBJECTS
-========================= */
+/* SUBJECTS */
 
 async function loadSubjects(){
 
-  const {
-    data,
-    error
-  } =
-    await db
-      .from("subjects")
-      .select("*")
-      .order("name");
-
+  const { data,error } = await db
+    .from("subjects")
+    .select("*")
+    .order("name");
 
   if(error){
-
-    alert(
-      "Could not load subjects:\n" +
-      error.message
-    );
-
+    alert("Could not load subjects:\n" + error.message);
     return;
   }
 
+  subjects = data || [];
 
-  subjects =
-    data || [];
+  const subject = document.getElementById("subject");
+  const filter = document.getElementById("filterSubject");
 
-
-  const subject =
-    document.getElementById(
-      "subject"
-    );
-
-  const filter =
-    document.getElementById(
-      "filterSubject"
-    );
-
-
-  subject.innerHTML =
-    `<option value="">
-      Select Subject
-    </option>`;
-
-
-  filter.innerHTML =
-    `<option value="">
-      All Subjects
-    </option>`;
-
+  subject.innerHTML = `<option value="">Select Subject</option>`;
+  filter.innerHTML = `<option value="">All Subjects</option>`;
 
   subjects.forEach(s => {
 
-    subject.innerHTML +=
-      `<option value="${s.id}">
+    subject.innerHTML += `
+      <option value="${s.id}">
         ${escapeHtml(s.name)}
       </option>`;
 
-
-    filter.innerHTML +=
-      `<option value="${s.id}">
+    filter.innerHTML += `
+      <option value="${s.id}">
         ${escapeHtml(s.name)}
       </option>`;
 
   });
-
 }
 
 
-/* =========================
-   CHAPTERS
-========================= */
+/* CHAPTERS */
 
 async function loadChapters(){
 
-  const {
-    data,
-    error
-  } =
-    await db
-      .from("chapters")
-      .select("*")
-      .order("name");
-
+  const { data,error } = await db
+    .from("chapters")
+    .select("*")
+    .order("name");
 
   if(error){
-
-    alert(
-      "Could not load chapters:\n" +
-      error.message
-    );
-
+    alert("Could not load chapters:\n" + error.message);
     return;
   }
 
-
-  chapters =
-    data || [];
-
+  chapters = data || [];
 
   updateChapterSelect();
-
   updateFilterChapter();
-
 }
 
-
-/* FORM CHAPTERS */
 
 function updateChapterSelect(){
 
-  const subjectId =
-    document.getElementById(
-      "subject"
-    ).value;
+  const subjectId = document.getElementById("subject").value;
+  const select = document.getElementById("chapter");
 
-
-  const select =
-    document.getElementById(
-      "chapter"
-    );
-
-
-  select.innerHTML =
-    `<option value="">
-      Select Chapter
-    </option>`;
-
+  select.innerHTML = `<option value="">Select Chapter</option>`;
 
   chapters
-    .filter(c => {
-
-      if(!subjectId){
-        return false;
-      }
-
-      return String(c.subject_id) ===
-        String(subjectId);
-
-    })
+    .filter(c =>
+      subjectId &&
+      String(c.subject_id) === String(subjectId)
+    )
     .forEach(c => {
-
-      select.innerHTML +=
-        `<option value="${c.id}">
+      select.innerHTML += `
+        <option value="${c.id}">
           ${escapeHtml(c.name)}
         </option>`;
-
     });
-
 }
 
-
-/* FILTER CHAPTERS */
 
 function updateFilterChapter(){
 
-  const subjectId =
-    document.getElementById(
-      "filterSubject"
-    ).value;
+  const subjectId = document.getElementById("filterSubject").value;
+  const select = document.getElementById("filterChapter");
 
-
-  const select =
-    document.getElementById(
-      "filterChapter"
-    );
-
-
-  select.innerHTML =
-    `<option value="">
-      All Chapters
-    </option>`;
-
+  select.innerHTML = `<option value="">All Chapters</option>`;
 
   chapters
-    .filter(c => {
-
-      if(!subjectId){
-        return true;
-      }
-
-      return String(c.subject_id) ===
-        String(subjectId);
-
-    })
+    .filter(c =>
+      !subjectId ||
+      String(c.subject_id) === String(subjectId)
+    )
     .forEach(c => {
-
-      select.innerHTML +=
-        `<option value="${c.id}">
+      select.innerHTML += `
+        <option value="${c.id}">
           ${escapeHtml(c.name)}
         </option>`;
-
     });
 
-
   renderQuestions();
-
 }
 
 
-/* =========================
-   LOAD QUESTIONS
-========================= */
+/* LOAD QUESTIONS */
 
 async function loadQuestions(){
 
-  const {
-    data,
-    error
-  } =
-    await db
-      .from("questions")
-      .select(`
-        *,
-        subjects(name),
-        chapters(name)
-      `)
-      .is(
-        "mock_test_id",
-        null
-      )
-      .order("id",{
-        ascending:false
-      });
-
+  const { data,error } = await db
+    .from("questions")
+    .select(`
+      *,
+      subjects(name),
+      chapters(name)
+    `)
+    .order("id",{ascending:false});
 
   if(error){
-
-    alert(
-      "Could not load questions:\n" +
-      error.message
-    );
-
+    alert("Could not load questions:\n" + error.message);
     return;
   }
 
-
-  questions =
-    data || [];
-
-
+  questions = data || [];
   renderQuestions();
-
 }
 
 
-/* =========================
-   RENDER
-========================= */
+/* RENDER */
 
 async function renderQuestions(){
 
-  const list =
-    document.getElementById(
-      "questionList"
-    );
+  const list = document.getElementById("questionList");
 
+  const subjectId = document.getElementById("filterSubject").value;
+  const chapterId = document.getElementById("filterChapter").value;
+  const search = document.getElementById("search").value.trim().toLowerCase();
 
-  const subjectId =
-    document.getElementById(
-      "filterSubject"
-    ).value;
+  const filtered = questions.filter(q => {
 
+    if(
+      subjectId &&
+      String(q.subject_id) !== String(subjectId)
+    ) return false;
 
-  const chapterId =
-    document.getElementById(
-      "filterChapter"
-    ).value;
+    if(
+      chapterId &&
+      String(q.chapter_id) !== String(chapterId)
+    ) return false;
 
+    if(search){
 
-  const search =
-    document.getElementById(
-      "search"
-    ).value
-      .trim()
-      .toLowerCase();
+      const combined = (
+        String(q.question_text || "") + " " +
+        String(q.question_text_hi || "") + " " +
+        String(q.explanation || "")
+      ).toLowerCase();
 
+      if(!combined.includes(search)) return false;
+    }
 
-  const filtered =
-    questions.filter(q => {
-
-      if(
-        subjectId &&
-        String(q.subject_id) !==
-        String(subjectId)
-      ){
-        return false;
-      }
-
-
-      if(
-        chapterId &&
-        String(q.chapter_id) !==
-        String(chapterId)
-      ){
-        return false;
-      }
-
-
-      if(
-        search &&
-        !String(
-          q.question_text || ""
-        )
-        .toLowerCase()
-        .includes(search)
-      ){
-        return false;
-      }
-
-
-      return true;
-
-    });
-
+    return true;
+  });
 
   if(!filtered.length){
-
-    list.innerHTML =
-      `<div class="card empty">
+    list.innerHTML = `
+      <div class="card empty">
         No questions found.
       </div>`;
-
     return;
   }
 
+  const ids = filtered.map(q => q.id);
 
-  const ids =
-    filtered.map(q => q.id);
-
-
-  const {
-    data:options,
-    error
-  } =
-    await db
-      .from("question_options")
-      .select("*")
-      .in(
-        "question_id",
-        ids
-      )
-      .order("option_label");
-
+  const { data:options,error } = await db
+    .from("question_options")
+    .select("*")
+    .in("question_id",ids)
+    .order("option_label");
 
   if(error){
-
-    list.innerHTML =
-      `<div class="card empty">
+    list.innerHTML = `
+      <div class="card empty">
         Questions loaded, but options could not be loaded.
       </div>`;
-
     return;
   }
-
 
   const optionMap = {};
 
-
   (options || []).forEach(o => {
-
     if(!optionMap[o.question_id]){
       optionMap[o.question_id] = [];
     }
-
-    optionMap[o.question_id]
-      .push(o);
-
+    optionMap[o.question_id].push(o);
   });
-
 
   list.innerHTML = "";
 
-
   filtered.forEach((q,index) => {
 
-    const opts =
-      optionMap[q.id] || [];
-
-
+    const opts = optionMap[q.id] || [];
     let optionHtml = "";
-
 
     opts.forEach(o => {
 
-      optionHtml +=
-        `<div class="option ${
-          o.is_correct
-          ? "correct"
-          : ""
-        }">
-
-          ${escapeHtml(
-            o.option_label
-          )}.
-
-          ${escapeHtml(
-            o.option_text
-          )}
-
+      optionHtml += `
+        <div class="option ${o.is_correct ? "correct" : ""}">
+          ${escapeHtml(o.option_label)}.
+          ${escapeHtml(o.option_text || "")}
           ${
-            o.is_correct
-            ? " ✓"
+            o.option_text_hi
+            ? " | " + escapeHtml(o.option_text_hi)
             : ""
           }
-
+          ${o.is_correct ? " ✓" : ""}
         </div>`;
-
     });
 
+    const correctList = opts
+      .filter(o => o.is_correct)
+      .map(o => o.option_label)
+      .join(", ");
 
-    list.innerHTML +=
-
-      `<div class="question">
+    list.innerHTML += `
+      <div class="question">
 
         <div class="question-title">
-
-          ${index+1}.
-          ${escapeHtml(
-            q.question_text
-          )}
-
+          ${index+1}. ${escapeHtml(q.question_text || "")}
         </div>
 
+        ${
+          q.question_text_hi
+          ? `<div class="question-hi">
+              🇮🇳 ${escapeHtml(q.question_text_hi)}
+             </div>`
+          : ""
+        }
 
         <div class="meta">
-
-          ${escapeHtml(
-            q.subjects?.name ||
-            "No Subject"
-          )}
-
+          ${escapeHtml(q.subjects?.name || "No Subject")}
           •
-          
-          ${escapeHtml(
-            q.chapters?.name ||
-            "No Chapter"
-          )}
-
-          • Marks:
-          ${q.marks ?? 0}
-
-          • Negative:
-          ${q.negative_marks ?? 0}
-
+          ${escapeHtml(q.chapters?.name || "No Chapter")}
+          • Marks: ${q.marks ?? 0}
+          • Negative: ${q.negative_marks ?? 0}
+          • Correct: ${escapeHtml(correctList || "Not set")}
         </div>
 
+        ${
+          q.is_bonus
+          ? `<span class="bonus">BONUS QUESTION</span>`
+          : ""
+        }
 
-        <div>
+        <div style="margin-top:8px;">
           ${optionHtml}
         </div>
 
-
         ${
           q.explanation
-          ?
-          `<div class="meta">
-            Explanation:
-            ${escapeHtml(
-              q.explanation
-            )}
-          </div>`
-          :
-          ""
+          ? `<div class="solution-preview">
+              <b>Solution:</b><br>
+              ${escapeHtml(q.explanation)}
+             </div>`
+          : ""
         }
 
+        ${
+          q.solution_image_url
+          ? `<img
+              class="solution-image-preview"
+              src="${escapeHtml(q.solution_image_url)}"
+              alt="Solution image"
+             >`
+          : ""
+        }
+
+        ${
+          q.solution_video_url
+          ? `<div class="meta">
+              🎥 Video solution added
+             </div>`
+          : ""
+        }
 
         <div class="actions">
 
@@ -1048,7 +820,6 @@ async function renderQuestions(){
           >
             Edit
           </button>
-
 
           <button
             class="danger"
@@ -1060,297 +831,253 @@ async function renderQuestions(){
         </div>
 
       </div>`;
-
   });
-
 }
 
 
-/* =========================
-   SAVE QUESTION
-========================= */
+/* IMAGE UPLOAD */
+
+async function uploadSolutionImage(file,questionId){
+
+  if(!file) return existingImageUrl || null;
+
+  const extension =
+    file.name.split(".").pop().toLowerCase();
+
+  const fileName =
+    `${questionId}_${Date.now()}.${extension}`;
+
+  const filePath = fileName;
+
+  const { error:uploadError } = await db.storage
+    .from("solution-images")
+    .upload(filePath,file,{
+      upsert:true,
+      contentType:file.type
+    });
+
+  if(uploadError){
+    throw uploadError;
+  }
+
+  const { data } = db.storage
+    .from("solution-images")
+    .getPublicUrl(filePath);
+
+  return data.publicUrl;
+}
+
+
+/* SAVE QUESTION */
 
 async function saveQuestion(){
 
-  const subjectId =
-    document.getElementById(
-      "subject"
-    ).value;
+  const subjectId = document.getElementById("subject").value;
+  const chapterId = document.getElementById("chapter").value;
 
+  const text = document.getElementById("questionText").value.trim();
+  const textHi = document.getElementById("questionTextHi").value.trim();
 
-  const chapterId =
-    document.getElementById(
-      "chapter"
-    ).value;
+  const A = document.getElementById("optionA").value.trim();
+  const B = document.getElementById("optionB").value.trim();
+  const C = document.getElementById("optionC").value.trim();
+  const D = document.getElementById("optionD").value.trim();
 
+  const AHi = document.getElementById("optionAHi").value.trim();
+  const BHi = document.getElementById("optionBHi").value.trim();
+  const CHi = document.getElementById("optionCHi").value.trim();
+  const DHi = document.getElementById("optionDHi").value.trim();
 
-  const text =
-    document.getElementById(
-      "questionText"
-    ).value.trim();
+  const correctOptions = [
+    ...document.querySelectorAll(".correctOption:checked")
+  ].map(x => x.value);
 
-
-  const A =
-    document.getElementById(
-      "optionA"
-    ).value.trim();
-
-
-  const B =
-    document.getElementById(
-      "optionB"
-    ).value.trim();
-
-
-  const C =
-    document.getElementById(
-      "optionC"
-    ).value.trim();
-
-
-  const D =
-    document.getElementById(
-      "optionD"
-    ).value.trim();
-
-
-  const correct =
-    document.getElementById(
-      "correctOption"
-    ).value;
-
+  const isBonus = document.getElementById("isBonus").checked;
 
   const marks =
-    parseFloat(
-      document.getElementById(
-        "marks"
-      ).value
-    ) || 0;
-
+    parseFloat(document.getElementById("marks").value) || 0;
 
   const negative =
-    parseFloat(
-      document.getElementById(
-        "negativeMarks"
-      ).value
-    ) || 0;
-
+    parseFloat(document.getElementById("negativeMarks").value) || 0;
 
   const explanation =
-    document.getElementById(
-      "explanation"
-    ).value.trim();
+    document.getElementById("explanation").value;
 
+  const videoUrl =
+    document.getElementById("solutionVideo").value.trim();
+
+  const imageFile =
+    document.getElementById("solutionImage").files[0];
 
   if(!subjectId){
-
-    alert(
-      "Please select a subject."
-    );
-
+    alert("Please select a subject.");
     return;
   }
-
 
   if(!chapterId){
-
-    alert(
-      "Please select a chapter."
-    );
-
+    alert("Please select a chapter.");
     return;
   }
-
 
   if(!text){
-
-    alert(
-      "Please enter the question."
-    );
-
+    alert("Please enter English question.");
     return;
   }
 
+  if(!textHi){
+    alert("Please enter Hindi question.");
+    return;
+  }
 
   if(!A || !B || !C || !D){
-
-    alert(
-      "Please enter all four options."
-    );
-
+    alert("Please enter all English options.");
     return;
   }
 
-
-  if(!correct){
-
-    alert(
-      "Please select the correct option."
-    );
-
+  if(!AHi || !BHi || !CHi || !DHi){
+    alert("Please enter all Hindi options.");
     return;
   }
 
+  if(!correctOptions.length){
+    alert("Please select at least one correct option.");
+    return;
+  }
 
   try{
 
     let questionId;
 
+    const questionData = {
+      subject_id:subjectId,
+      chapter_id:chapterId,
+      question_text:text,
+      question_text_hi:textHi,
+      explanation:explanation,
+      marks:marks,
+      negative_marks:negative,
+      correct_options:correctOptions,
+      is_bonus:isBonus,
+      solution_video_url:videoUrl || null
+    };
 
     /* UPDATE */
 
     if(editingId){
 
-      const {
-        error
-      } =
-        await db
+      const { error } = await db
+        .from("questions")
+        .update(questionData)
+        .eq("id",editingId);
+
+      if(error) throw error;
+
+      questionId = editingId;
+
+      if(imageFile){
+        const imageUrl =
+          await uploadSolutionImage(imageFile,questionId);
+
+        const { error:imageError } = await db
           .from("questions")
           .update({
-
-            subject_id:subjectId,
-            chapter_id:chapterId,
-            question_text:text,
-            explanation:explanation,
-            marks:marks,
-            negative_marks:negative
-
+            solution_image_url:imageUrl
           })
-          .eq(
-            "id",
-            editingId
-          );
+          .eq("id",questionId);
 
-
-      if(error){
-        throw error;
+        if(imageError) throw imageError;
       }
 
+      const { error:deleteError } = await db
+        .from("question_options")
+        .delete()
+        .eq("question_id",questionId);
 
-      questionId =
-        editingId;
-
-
-      const {
-        error:deleteError
-      } =
-        await db
-          .from("question_options")
-          .delete()
-          .eq(
-            "question_id",
-            questionId
-          );
-
-
-      if(deleteError){
-        throw deleteError;
-      }
+      if(deleteError) throw deleteError;
 
     }
-
 
     /* INSERT */
 
     else{
 
-      const {
-        data,
-        error
-      } =
-        await db
+      questionData.mock_test_id = null;
+
+      const { data,error } = await db
+        .from("questions")
+        .insert(questionData)
+        .select("id")
+        .single();
+
+      if(error) throw error;
+
+      questionId = data.id;
+
+      if(imageFile){
+
+        const imageUrl =
+          await uploadSolutionImage(imageFile,questionId);
+
+        const { error:imageError } = await db
           .from("questions")
-          .insert({
-
-            mock_test_id:null,
-            subject_id:subjectId,
-            chapter_id:chapterId,
-            question_text:text,
-            explanation:explanation,
-            marks:marks,
-            negative_marks:negative
-
+          .update({
+            solution_image_url:imageUrl
           })
-          .select("id")
-          .single();
+          .eq("id",questionId);
 
-
-      if(error){
-        throw error;
+        if(imageError) throw imageError;
       }
-
-
-      questionId =
-        data.id;
-
     }
-
-
-    /* OPTIONS */
 
     const optionRows = [
 
       {
         question_id:questionId,
-        option_text:A,
         option_label:"A",
-        is_correct:
-          correct === "A"
+        option_text:A,
+        option_text_hi:AHi,
+        is_correct:correctOptions.includes("A")
       },
 
       {
         question_id:questionId,
-        option_text:B,
         option_label:"B",
-        is_correct:
-          correct === "B"
+        option_text:B,
+        option_text_hi:BHi,
+        is_correct:correctOptions.includes("B")
       },
 
       {
         question_id:questionId,
-        option_text:C,
         option_label:"C",
-        is_correct:
-          correct === "C"
+        option_text:C,
+        option_text_hi:CHi,
+        is_correct:correctOptions.includes("C")
       },
 
       {
         question_id:questionId,
-        option_text:D,
         option_label:"D",
-        is_correct:
-          correct === "D"
+        option_text:D,
+        option_text_hi:DHi,
+        is_correct:correctOptions.includes("D")
       }
 
     ];
 
+    const { error:optionError } = await db
+      .from("question_options")
+      .insert(optionRows);
 
-    const {
-      error:optionError
-    } =
-      await db
-        .from("question_options")
-        .insert(
-          optionRows
-        );
-
-
-    if(optionError){
-      throw optionError;
-    }
-
+    if(optionError) throw optionError;
 
     alert(
       editingId
-      ?
-      "Question updated successfully."
-      :
-      "Question added successfully."
+      ? "Question updated successfully."
+      : "Question added successfully."
     );
 
-
     resetForm();
-
     await loadQuestions();
 
   }catch(error){
@@ -1361,290 +1088,188 @@ async function saveQuestion(){
       "Could not save question:\n" +
       error.message
     );
-
   }
-
 }
 
 
-/* =========================
-   EDIT
-========================= */
+/* EDIT QUESTION */
 
 async function editQuestion(id){
 
-  const q =
-    questions.find(
-      x =>
-        String(x.id) ===
-        String(id)
-    );
+  const q = questions.find(
+    x => String(x.id) === String(id)
+  );
 
+  if(!q) return;
 
-  if(!q){
-    return;
-  }
+  editingId = q.id;
+  existingImageUrl = q.solution_image_url || "";
 
-
-  editingId =
-    q.id;
-
-
-  document.getElementById(
-    "formTitle"
-  ).textContent =
+  document.getElementById("formTitle").textContent =
     "Edit Question";
 
-
-  document.getElementById(
-    "subject"
-  ).value =
+  document.getElementById("subject").value =
     q.subject_id || "";
-
 
   updateChapterSelect();
 
-
-  document.getElementById(
-    "chapter"
-  ).value =
+  document.getElementById("chapter").value =
     q.chapter_id || "";
 
-
-  document.getElementById(
-    "questionText"
-  ).value =
+  document.getElementById("questionText").value =
     q.question_text || "";
 
+  document.getElementById("questionTextHi").value =
+    q.question_text_hi || "";
 
-  document.getElementById(
-    "marks"
-  ).value =
+  document.getElementById("marks").value =
     q.marks ?? 0;
 
-
-  document.getElementById(
-    "negativeMarks"
-  ).value =
+  document.getElementById("negativeMarks").value =
     q.negative_marks ?? 0;
 
-
-  document.getElementById(
-    "explanation"
-  ).value =
+  document.getElementById("explanation").value =
     q.explanation || "";
 
+  document.getElementById("solutionVideo").value =
+    q.solution_video_url || "";
 
-  const {
-    data,
-    error
-  } =
-    await db
-      .from("question_options")
-      .select("*")
-      .eq(
-        "question_id",
-        id
-      )
-      .order("option_label");
+  document.getElementById("isBonus").checked =
+    q.is_bonus === true;
 
+  document.querySelectorAll(".correctOption")
+    .forEach(cb => {
+      cb.checked =
+        Array.isArray(q.correct_options) &&
+        q.correct_options.includes(cb.value);
+    });
+
+  document.getElementById("existingImageBox").innerHTML =
+    existingImageUrl
+    ? `
+      <div class="small-note">Current solution image:</div>
+      <img
+        class="solution-image-preview"
+        src="${escapeHtml(existingImageUrl)}"
+        alt="Current solution"
+      >
+    `
+    : "";
+
+  const { data,error } = await db
+    .from("question_options")
+    .select("*")
+    .eq("question_id",id)
+    .order("option_label");
 
   if(error){
-
-    alert(
-      "Could not load options."
-    );
-
+    alert("Could not load options.");
     return;
   }
 
-
   const map = {};
 
-
   (data || []).forEach(o => {
-
-    map[o.option_label] =
-      o;
-
+    map[o.option_label] = o;
   });
 
-
-  document.getElementById(
-    "optionA"
-  ).value =
+  document.getElementById("optionA").value =
     map.A?.option_text || "";
 
-
-  document.getElementById(
-    "optionB"
-  ).value =
+  document.getElementById("optionB").value =
     map.B?.option_text || "";
 
-
-  document.getElementById(
-    "optionC"
-  ).value =
+  document.getElementById("optionC").value =
     map.C?.option_text || "";
 
-
-  document.getElementById(
-    "optionD"
-  ).value =
+  document.getElementById("optionD").value =
     map.D?.option_text || "";
 
+  document.getElementById("optionAHi").value =
+    map.A?.option_text_hi || "";
 
-  const correct =
-    (data || []).find(
-      o => o.is_correct
-    );
+  document.getElementById("optionBHi").value =
+    map.B?.option_text_hi || "";
 
+  document.getElementById("optionCHi").value =
+    map.C?.option_text_hi || "";
 
-  document.getElementById(
-    "correctOption"
-  ).value =
-    correct?.option_label || "";
-
+  document.getElementById("optionDHi").value =
+    map.D?.option_text_hi || "";
 
   window.scrollTo({
     top:0,
     behavior:"smooth"
   });
-
 }
 
 
-/* =========================
-   DELETE
-========================= */
+/* DELETE */
 
 async function deleteQuestion(id){
 
-  if(
-    !confirm(
-      "Delete this question permanently?"
-    )
-  ){
+  if(!confirm("Delete this question permanently?")){
     return;
   }
 
-
-  const {
-    error
-  } =
-    await db
-      .from("questions")
-      .delete()
-      .eq(
-        "id",
-        id
-      );
-
+  const { error } = await db
+    .from("questions")
+    .delete()
+    .eq("id",id);
 
   if(error){
-
-    alert(
-      "Could not delete question:\n" +
-      error.message
-    );
-
+    alert("Could not delete question:\n" + error.message);
     return;
   }
 
-
-  alert(
-    "Question deleted."
-  );
-
-
+  alert("Question deleted.");
   await loadQuestions();
-
 }
 
 
-/* =========================
-   RESET
-========================= */
+/* RESET */
 
 function resetForm(){
 
   editingId = null;
+  existingImageUrl = "";
 
-
-  document.getElementById(
-    "formTitle"
-  ).textContent =
+  document.getElementById("formTitle").textContent =
     "Add Question";
 
-
-  document.getElementById(
-    "subject"
-  ).value =
-    "";
-
-
+  document.getElementById("subject").value = "";
   updateChapterSelect();
 
+  document.getElementById("questionText").value = "";
+  document.getElementById("questionTextHi").value = "";
 
-  document.getElementById(
-    "questionText"
-  ).value =
-    "";
+  document.getElementById("optionA").value = "";
+  document.getElementById("optionB").value = "";
+  document.getElementById("optionC").value = "";
+  document.getElementById("optionD").value = "";
 
+  document.getElementById("optionAHi").value = "";
+  document.getElementById("optionBHi").value = "";
+  document.getElementById("optionCHi").value = "";
+  document.getElementById("optionDHi").value = "";
 
-  document.getElementById(
-    "optionA"
-  ).value =
-    "";
+  document.querySelectorAll(".correctOption")
+    .forEach(cb => cb.checked = false);
 
+  document.getElementById("isBonus").checked = false;
 
-  document.getElementById(
-    "optionB"
-  ).value =
-    "";
+  document.getElementById("marks").value = "2";
+  document.getElementById("negativeMarks").value = "0.5";
 
+  document.getElementById("explanation").value = "";
+  document.getElementById("solutionVideo").value = "";
+  document.getElementById("solutionImage").value = "";
 
-  document.getElementById(
-    "optionC"
-  ).value =
-    "";
-
-
-  document.getElementById(
-    "optionD"
-  ).value =
-    "";
-
-
-  document.getElementById(
-    "correctOption"
-  ).value =
-    "";
-
-
-  document.getElementById(
-    "marks"
-  ).value =
-    "2";
-
-
-  document.getElementById(
-    "negativeMarks"
-  ).value =
-    "0.5";
-
-
-  document.getElementById(
-    "explanation"
-  ).value =
-    "";
-
+  document.getElementById("existingImageBox").innerHTML = "";
 }
 
 
-/* =========================
-   ESCAPE
-========================= */
+/* ESCAPE */
 
 function escapeHtml(value){
 
@@ -1654,63 +1279,34 @@ function escapeHtml(value){
     .replace(/>/g,"&gt;")
     .replace(/"/g,"&quot;")
     .replace(/'/g,"&#039;");
-
 }
 
 
-/* =========================
-   EVENTS
-========================= */
+/* EVENTS */
 
-document
-  .getElementById("subject")
-  .addEventListener(
-    "change",
-    updateChapterSelect
-  );
+document.getElementById("subject")
+  .addEventListener("change",updateChapterSelect);
 
+document.getElementById("filterSubject")
+  .addEventListener("change",updateFilterChapter);
 
-document
-  .getElementById("filterSubject")
-  .addEventListener(
-    "change",
-    updateFilterChapter
-  );
+document.getElementById("filterChapter")
+  .addEventListener("change",renderQuestions);
+
+document.getElementById("search")
+  .addEventListener("input",renderQuestions);
 
 
-document
-  .getElementById("filterChapter")
-  .addEventListener(
-    "change",
-    renderQuestions
-  );
-
-
-document
-  .getElementById("search")
-  .addEventListener(
-    "input",
-    renderQuestions
-  );
-
-
-/* =========================
-   START
-========================= */
+/* START */
 
 (async function(){
 
-  const admin =
-    await checkAdmin();
+  const admin = await checkAdmin();
 
-  if(!admin){
-    return;
-  }
+  if(!admin) return;
 
   await loadSubjects();
-
   await loadChapters();
-
   await loadQuestions();
 
 })();
