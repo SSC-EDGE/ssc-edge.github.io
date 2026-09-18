@@ -3,72 +3,564 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<script>document.documentElement.dataset.theme=localStorage.getItem("ssc-edge-theme")||"dark";</script>
+
+<script>
+document.documentElement.dataset.theme =
+  localStorage.getItem("ssc-edge-theme") || "dark";
+</script>
+
 <title>SSC EDGE - Practice Drill</title>
 <link rel="stylesheet" href="css/style.css">
+
 <style>
-:root{--pd-bg:#080811;--pd-card:#11111d;--pd-card2:#171727;--pd-border:#292943;--pd-text:#f5f5ff;--pd-muted:#9b9bb5;--pd-purple:#8b5cf6;--pd-purple2:#a78bfa}
-:root[data-theme=light]{--pd-bg:#f5f6fb;--pd-card:#fff;--pd-card2:#f0f0f8;--pd-border:#dcdceb;--pd-text:#171725;--pd-muted:#68687d;--pd-purple:#6d3ee8;--pd-purple2:#7c4dff}
-*{box-sizing:border-box}body{margin:0;background:var(--pd-bg);color:var(--pd-text);font-family:Arial,Helvetica,sans-serif}.pd-head{height:58px;display:flex;align-items:center;gap:12px;padding:0 15px;background:var(--pd-card);border-bottom:1px solid var(--pd-border);position:sticky;top:0;z-index:10}.pd-back{width:36px;height:36px;border:1px solid var(--pd-border);border-radius:10px;background:var(--pd-card2);color:var(--pd-text);font-size:21px}.pd-brand{font-size:17px;font-weight:800}.pd-brand span{color:var(--pd-purple2)}.pd-sub{margin-left:auto;color:var(--pd-muted);font-size:11px}.pd-wrap{max-width:900px;margin:auto;padding:15px}.pd-title{font-size:20px;font-weight:800;margin:5px 0 5px}.pd-muted{font-size:12px;color:var(--pd-muted)}.pd-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:11px;margin-top:15px}.pd-card{border:1px solid var(--pd-border);background:var(--pd-card);border-radius:15px;padding:16px;cursor:pointer;transition:.15s}.pd-card:hover{border-color:var(--pd-purple)}.pd-icon{font-size:26px;margin-bottom:9px}.pd-card h3{font-size:14px;margin:0 0 6px}.pd-card p{font-size:11px;color:var(--pd-muted);margin:0}.pd-panel{background:var(--pd-card);border:1px solid var(--pd-border);border-radius:15px;padding:14px;margin-top:14px}.pd-panel-head{display:flex;align-items:center;justify-content:space-between;gap:8px}.pd-panel h2{font-size:16px;margin:0}.pd-list{display:grid;gap:9px;margin-top:12px}.pd-row{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--pd-border);background:var(--pd-card2);border-radius:11px;padding:12px;cursor:pointer}.pd-row strong{font-size:13px}.pd-row small{display:block;color:var(--pd-muted);font-size:11px;margin-top:4px}.pd-arrow{color:var(--pd-purple2);font-size:18px}.pd-empty{text-align:center;color:var(--pd-muted);padding:25px 8px;font-size:13px}.pd-btn{border:0;border-radius:9px;padding:9px 12px;background:var(--pd-purple);color:#fff;font-weight:800;font-size:12px}.pd-btn.alt{background:var(--pd-card2);border:1px solid var(--pd-border);color:var(--pd-text)}.pd-breadcrumb{font-size:12px;color:var(--pd-muted);margin:4px 0 12px}.pd-test{display:flex;align-items:center;justify-content:space-between;gap:10px}.pd-test-meta{font-size:11px;color:var(--pd-muted);margin-top:5px}.pd-tag{font-size:10px;color:var(--pd-purple2);border:1px solid var(--pd-purple);border-radius:6px;padding:4px 6px;white-space:nowrap}
+:root{
+  --pd-bg:#080811;
+  --pd-card:#11111d;
+  --pd-card2:#181827;
+  --pd-border:#292943;
+  --pd-text:#f5f5ff;
+  --pd-muted:#9999b2;
+  --pd-purple:#8b5cf6;
+  --pd-purple2:#a78bfa;
+}
+:root[data-theme="light"]{
+  --pd-bg:#f5f6fb;
+  --pd-card:#ffffff;
+  --pd-card2:#f0f1f8;
+  --pd-border:#dddded;
+  --pd-text:#171725;
+  --pd-muted:#68687d;
+  --pd-purple:#6d3ee8;
+  --pd-purple2:#7c4dff;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--pd-bg);
+  color:var(--pd-text);
+  font-family:Arial,Helvetica,sans-serif;
+}
+button{font:inherit;cursor:pointer}
+.top{
+  position:sticky;
+  top:0;
+  z-index:10;
+  height:58px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:0 15px;
+  background:var(--pd-card);
+  border-bottom:1px solid var(--pd-border);
+}
+.back{
+  width:36px;
+  height:36px;
+  border-radius:10px;
+  border:1px solid var(--pd-border);
+  background:var(--pd-card2);
+  color:var(--pd-text);
+  font-size:20px;
+}
+.logo{
+  font-size:16px;
+  font-weight:900;
+}
+.logo span{color:var(--pd-purple2)}
+.top small{
+  margin-left:auto;
+  color:var(--pd-muted);
+  font-size:11px;
+}
+.wrap{
+  max-width:900px;
+  margin:auto;
+  padding:14px;
+}
+.hero{
+  padding:17px;
+  border-radius:16px;
+  background:linear-gradient(135deg,#17112c,#11111d);
+  border:1px solid var(--pd-border);
+  margin-bottom:14px;
+}
+:root[data-theme="light"] .hero{
+  background:linear-gradient(135deg,#eee8ff,#fff);
+}
+.hero h1{
+  margin:0;
+  font-size:21px;
+}
+.hero p{
+  margin:7px 0 0;
+  color:var(--pd-muted);
+  font-size:12px;
+}
+.subjects{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:9px;
+  margin-bottom:14px;
+}
+.subject{
+  padding:12px;
+  border-radius:12px;
+  border:1px solid var(--pd-border);
+  background:var(--pd-card);
+  color:var(--pd-text);
+  text-align:left;
+}
+.subject.active{
+  border-color:var(--pd-purple);
+  box-shadow:0 0 0 1px var(--pd-purple);
+}
+.subject b{
+  display:block;
+  font-size:13px;
+}
+.subject small{
+  display:block;
+  color:var(--pd-muted);
+  margin-top:4px;
+  font-size:10px;
+}
+.section{
+  background:var(--pd-card);
+  border:1px solid var(--pd-border);
+  border-radius:15px;
+  padding:13px;
+  margin-bottom:12px;
+}
+.section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:10px;
+}
+.section-head h2{
+  margin:0;
+  font-size:15px;
+}
+.muted{
+  color:var(--pd-muted);
+  font-size:11px;
+}
+.folder{
+  border:1px solid var(--pd-border);
+  border-radius:12px;
+  overflow:hidden;
+  margin-bottom:9px;
+  background:var(--pd-card2);
+}
+.folder-title{
+  padding:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  cursor:pointer;
+}
+.folder-title b{font-size:13px}
+.folder-title small{
+  color:var(--pd-muted);
+  font-size:10px;
+}
+.arrow{
+  color:var(--pd-purple2);
+  font-size:17px;
+}
+.folder-body{
+  display:none;
+  padding:0 10px 10px;
+}
+.folder.open .folder-body{display:block}
+.child{
+  margin-top:8px;
+  border:1px solid var(--pd-border);
+  border-radius:10px;
+  overflow:hidden;
+}
+.child-title{
+  padding:10px;
+  cursor:pointer;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.child-title b{font-size:12px}
+.child-body{
+  display:none;
+  padding:0 8px 8px;
+}
+.child.open .child-body{display:block}
+.mock{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:11px;
+  margin-top:7px;
+  background:var(--pd-card);
+  border:1px solid var(--pd-border);
+  border-radius:10px;
+}
+.mock-info{
+  min-width:0;
+  flex:1;
+}
+.mock-info b{
+  display:block;
+  font-size:12px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.mock-info small{
+  display:block;
+  color:var(--pd-muted);
+  margin-top:4px;
+  font-size:10px;
+}
+.start{
+  border:0;
+  background:var(--pd-purple);
+  color:#fff;
+  border-radius:8px;
+  padding:8px 11px;
+  font-size:11px;
+  font-weight:800;
+  white-space:nowrap;
+}
+.empty{
+  text-align:center;
+  color:var(--pd-muted);
+  padding:24px 8px;
+  font-size:12px;
+}
+.loader{
+  text-align:center;
+  color:var(--pd-muted);
+  padding:25px;
+  font-size:12px;
+}
+@media(max-width:560px){
+  .subjects{grid-template-columns:1fr 1fr}
+  .top small{display:none}
+  .mock{align-items:flex-start}
+}
 </style>
 </head>
+
 <body>
-<header class="pd-head"><button class="pd-back" onclick="goBack()">‹</button><div class="pd-brand">SSC <span>EDGE</span></div><div class="pd-sub">Practice Drill</div></header>
-<main class="pd-wrap">
-<div id="app"><div class="pd-empty">Loading...</div></div>
+
+<header class="top">
+  <button class="back" onclick="history.back()">‹</button>
+  <div class="logo">SSC <span>EDGE</span></div>
+  <small>Practice Drill</small>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <h1>Practice Drill</h1>
+    <p>Choose a subject and practice topic-wise questions.</p>
+  </section>
+
+  <div class="subjects" id="subjectTabs">
+    <div class="loader">Loading subjects...</div>
+  </div>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2 id="pageTitle">Practice Folders</h2>
+        <div class="muted">Select a mock to start practice.</div>
+      </div>
+    </div>
+
+    <div id="folderContainer">
+      <div class="loader">Loading...</div>
+    </div>
+  </section>
+
 </main>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-const SUPABASE_URL="https://dvvyoygahzzbnpqrfhen.supabase.co";
-const SUPABASE_KEY="sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
-const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-let subjects=[],chapters=[],folders=[],tests=[],currentSubject=null,currentFolder=null,currentChapter=null;
-const icons=["🔢","🌍","🧠","📘","📝","🎯"];
-function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
-function iconFor(n){n=String(n).toLowerCase();if(n.includes("quant"))return"🔢";if(n.includes("general")||n.includes("aware")||n.includes("gk"))return"🌍";if(n.includes("reason"))return"🧠";if(n.includes("english"))return"📘";return"📚"}
-function goBack(){if(currentChapter){currentChapter=null;renderFolderContents();return}if(currentFolder){currentFolder=null;renderFolders();return}if(currentSubject){location.href="practice.html";return}location.href="practice.html"}
-async function load(){
- const [s,c,f,t]=await Promise.all([
-  db.from("subjects").select("*").order("name"),
-  db.from("chapters").select("*").eq("is_active",true).order("display_order").order("name"),
-  db.from("mock_folders").select("*").eq("is_active",true).order("sort_order").order("name"),
-  db.from("mock_tests").select("*").eq("is_active",true).eq("test_type","PRACTICE_DRILL").order("sort_order").order("created_at",{ascending:false})
- ]);
- if(s.error||c.error||f.error||t.error) throw(s.error||c.error||f.error||t.error);
- subjects=s.data||[];chapters=c.data||[];folders=f.data||[];tests=(t.data||[]).filter(x=>String(x.test_type||"").toUpperCase()==="PRACTICE_DRILL");
- const sid=new URLSearchParams(location.search).get("subject_id");
- if(sid) openSubject(sid); else renderSubjects();
+const SUPABASE_URL =
+  "https://dvvyoygahzzbnpqrfhen.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
+const db = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+let subjects = [];
+let folders = [];
+let tests = [];
+
+let selectedSubject = null;
+
+const $ = id => document.getElementById(id);
+
+function esc(value){
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 }
+
+function isPracticeTest(test){
+  return String(
+    test.test_type ||
+    test.type ||
+    test.mock_type ||
+    ""
+  ).toUpperCase() === "PRACTICE_DRILL";
+}
+
+function folderName(folder){
+  return folder.display_name ||
+    folder.name ||
+    folder.title ||
+    "Folder";
+}
+
+function testName(test){
+  return test.title ||
+    test.name ||
+    "Practice Mock";
+}
+
+async function loadData(){
+  const [
+    subjectResult,
+    folderResult,
+    testResult
+  ] = await Promise.all([
+    db
+      .from("subjects")
+      .select("*")
+      .order("name"),
+
+    db
+      .from("mock_folders")
+      .select("*")
+      .eq("is_active",true)
+      .order("sort_order")
+      .order("name"),
+
+    db
+      .from("mock_tests")
+      .select("*")
+      .eq("is_active",true)
+      .eq("test_type","PRACTICE_DRILL")
+      .order("sort_order")
+      .order("created_at",{ascending:false})
+  ]);
+
+  if(subjectResult.error) throw subjectResult.error;
+  if(folderResult.error) throw folderResult.error;
+  if(testResult.error) throw testResult.error;
+
+  subjects = subjectResult.data || [];
+  folders = folderResult.data || [];
+  tests = (testResult.data || []).filter(isPracticeTest);
+
+  renderSubjects();
+
+  if(subjects.length){
+    selectSubject(subjects[0].id);
+  }else{
+    $("folderContainer").innerHTML =
+      `<div class="empty">No subjects available.</div>`;
+  }
+}
+
 function renderSubjects(){
- currentSubject=null;currentFolder=null;currentChapter=null;
- document.getElementById("app").innerHTML=`<div class="pd-title">Practice Drill</div><div class="pd-muted">Choose a subject to continue practice.</div><div class="pd-grid">${
- subjects.map(s=>`<div class="pd-card" onclick="openSubject('${s.id}')"><div class="pd-icon">${iconFor(s.name)}</div><h3>${esc(s.name)}</h3><p>Practice categories</p></div>`).join("")||`<div class="pd-empty">No subjects found.</div>`}</div>`;
+  $("subjectTabs").innerHTML =
+    subjects.map(subject => `
+      <button
+        class="subject ${
+          selectedSubject &&
+          String(selectedSubject.id) === String(subject.id)
+          ? "active"
+          : ""
+        }"
+        onclick="selectSubject('${subject.id}')"
+      >
+        <b>${esc(subject.name)}</b>
+        <small>Practice Drill</small>
+      </button>
+    `).join("") ||
+    `<div class="empty">No subjects found.</div>`;
 }
-function openSubject(id){currentSubject=subjects.find(s=>String(s.id)===String(id));if(!currentSubject){renderSubjects();return}currentFolder=null;currentChapter=null;renderFolders()}
-function subjectFolders(){return folders.filter(f=>String(f.subject_id||"")===String(currentSubject.id)&&!f.parent_id)}
+
+function selectSubject(id){
+  selectedSubject =
+    subjects.find(
+      subject => String(subject.id) === String(id)
+    ) || null;
+
+  if(!selectedSubject) return;
+
+  $("pageTitle").textContent =
+    selectedSubject.name + " Practice Drill";
+
+  renderSubjects();
+  renderFolders();
+}
+
+function rootFolders(){
+  if(!selectedSubject) return [];
+
+  return folders
+    .filter(folder =>
+      String(folder.subject_id || "") ===
+      String(selectedSubject.id) &&
+      !folder.parent_id
+    )
+    .sort((a,b) =>
+      Number(a.sort_order || 0) -
+      Number(b.sort_order || 0)
+    );
+}
+
+function childFolders(parentId){
+  return folders
+    .filter(folder =>
+      String(folder.parent_id || "") ===
+      String(parentId)
+    )
+    .sort((a,b) =>
+      Number(a.sort_order || 0) -
+      Number(b.sort_order || 0)
+    );
+}
+
+function folderMocks(folderId){
+  return tests
+    .filter(test =>
+      String(test.folder_id || "") ===
+      String(folderId)
+    )
+    .sort((a,b) =>
+      Number(a.sort_order || 0) -
+      Number(b.sort_order || 0)
+    );
+}
+
 function renderFolders(){
- const fs=subjectFolders();
- document.getElementById("app").innerHTML=`<div class="pd-breadcrumb">Practice Drill › ${esc(currentSubject.name)}</div><div class="pd-title">${esc(currentSubject.name)}</div><div class="pd-muted">Select a practice category.</div><div class="pd-list">${
- fs.map(f=>`<div class="pd-row" onclick="openFolder('${f.id}')"><div><strong>${esc(f.display_name||f.name)}</strong><small>${folderHint(f)}</small></div><div class="pd-arrow">›</div></div>`).join("")||`<div class="pd-empty">No practice categories available for this subject.</div>`}</div>`;
+  const roots = rootFolders();
+
+  if(!roots.length){
+    $("folderContainer").innerHTML =
+      `<div class="empty">No Practice Drill folders available.</div>`;
+    return;
+  }
+
+  $("folderContainer").innerHTML =
+    roots.map(root => {
+      const children = childFolders(root.id);
+      const directMocks = folderMocks(root.id);
+
+      return `
+        <div class="folder">
+          <div class="folder-title" onclick="toggleBox(this.parentElement)">
+            <div>
+              <b>${esc(folderName(root))}</b>
+              <small>
+                ${children.length} topics · ${directMocks.length} mocks
+              </small>
+            </div>
+            <span class="arrow">⌄</span>
+          </div>
+
+          <div class="folder-body">
+
+            ${
+              children.map(child => `
+                <div class="child">
+                  <div
+                    class="child-title"
+                    onclick="toggleBox(this.parentElement)"
+                  >
+                    <b>${esc(folderName(child))}</b>
+                    <span class="arrow">⌄</span>
+                  </div>
+
+                  <div class="child-body">
+                    ${renderMocks(child.id)}
+                  </div>
+                </div>
+              `).join("")
+            }
+
+            ${
+              directMocks.length
+                ? renderMocks(root.id)
+                : ""
+            }
+
+            ${
+              !children.length && !directMocks.length
+                ? `<div class="empty">No mocks in this folder.</div>`
+                : ""
+            }
+
+          </div>
+        </div>
+      `;
+    }).join("");
 }
-function folderHint(f){let x=String(f.folder_type||"").toUpperCase();if(x.includes("CHAPTER"))return"Chapter-wise practice";if(x.includes("QUIZ"))return"Topic quizzes";if(x.includes("REVISION")||x.includes("BOOST"))return"Revision booster";return"Practice tests"}
-function openFolder(id){currentFolder=folders.find(f=>String(f.id)===String(id));if(!currentFolder)return;currentChapter=null;renderFolderContents()}
-function childFolders(){return folders.filter(f=>String(f.parent_id||"")===String(currentFolder.id)&&f.is_active!==false).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0))}
-function folderTests(fid){return tests.filter(t=>String(t.folder_id||"")===String(fid))}
-function renderFolderContents(){
- const children=childFolders();
- const direct=folderTests(currentFolder.id);
- const isChapter=String(currentFolder.folder_type||"").toUpperCase().includes("CHAPTER");
- let html=`<div class="pd-breadcrumb">Practice Drill › ${esc(currentSubject.name)} › ${esc(currentFolder.display_name||currentFolder.name)}</div><div class="pd-title">${esc(currentFolder.display_name||currentFolder.name)}</div>`;
- if(children.length) html+=`<div class="pd-panel"><div class="pd-panel-head"><h2>${isChapter?"Chapters":"Topics"}</h2></div><div class="pd-list">${children.map(c=>`<div class="pd-row" onclick="openChapter('${c.id}')"><div><strong>${esc(c.display_name||c.name)}</strong><small>Open chapter practice</small></div><div class="pd-arrow">›</div></div>`).join("")}</div></div>`;
- if(direct.length) html+=testList(direct);
- if(!children.length&&!direct.length) html+=`<div class="pd-panel"><div class="pd-empty">No practice tests available yet.</div></div>`;
- document.getElementById("app").innerHTML=html;
+
+function renderMocks(folderId){
+  const list = folderMocks(folderId);
+
+  return list.map(test => `
+    <div class="mock">
+      <div class="mock-info">
+        <b>${esc(testName(test))}</b>
+        <small>
+          ${Number(test.total_questions || 0)} Questions
+          ·
+          ${Number(test.duration_minutes || 0)} Minutes
+        </small>
+      </div>
+
+      <button
+        class="start"
+        onclick="startMock('${test.id}')"
+      >
+        Start
+      </button>
+    </div>
+  `).join("");
 }
-function openChapter(id){currentChapter=folders.find(f=>String(f.id)===String(id));if(!currentChapter)return;const ts=folderTests(currentChapter.id);document.getElementById("app").innerHTML=`<div class="pd-breadcrumb">Practice Drill › ${esc(currentSubject.name)} › ${esc(currentFolder.display_name||currentFolder.name)} › ${esc(currentChapter.display_name||currentChapter.name)}</div><div class="pd-title">${esc(currentChapter.display_name||currentChapter.name)}</div>${testList(ts)||`<div class="pd-panel"><div class="pd-empty">No practice mocks available in this clip yet.</div></div>`}`}
-function testList(ts){if(!ts.length)return"";return`<div class="pd-panel"><div class="pd-panel-head"><h2>Available Tests</h2></div><div class="pd-list">${ts.map(t=>`<div class="pd-row" onclick="openTest('${t.id}')"><div class="pd-test"><div><strong>${esc(t.title)}</strong><div class="pd-test-meta">${esc(t.description||"Practice Test")} · ${t.duration_minutes||0} min · ${t.total_questions||0} questions</div></div></div><span class="pd-tag">START</span></div>`).join("")}</div></div>`}
-function openTest(id){location.href="test.html?id="+encodeURIComponent(id)}
-load().catch(e=>document.getElementById("app").innerHTML=`<div class="pd-panel"><div class="pd-empty">Error loading practice drill: ${esc(e.message)}</div></div>`);
+
+function toggleBox(element){
+  element.classList.toggle("open");
+}
+
+function startMock(testId){
+  location.href =
+    "mock-test.html?test_id=" +
+    encodeURIComponent(testId) +
+    "&mode=practice";
+}
+
+loadData().catch(error => {
+  $("folderContainer").innerHTML =
+    `<div class="empty">${esc(error.message)}</div>`;
+});
 </script>
+
 </body>
 </html>
