@@ -32,24 +32,24 @@ async function load(){
   db.from("subjects").select("*").order("name"),
   db.from("chapters").select("*").eq("is_active",true).order("display_order").order("name"),
   db.from("mock_folders").select("*").eq("is_active",true).order("sort_order").order("name"),
-  db.from("mock_tests").select("*").eq("is_active",true).order("sort_order").order("created_at",{ascending:false})
+  db.from("mock_tests").select("*").eq("is_active",true).eq("test_type","PRACTICE_DRILL").order("sort_order").order("created_at",{ascending:false})
  ]);
  if(s.error||c.error||f.error||t.error) throw(s.error||c.error||f.error||t.error);
- subjects=s.data||[];chapters=c.data||[];folders=f.data||[];tests=t.data||[];
+ subjects=s.data||[];chapters=c.data||[];folders=f.data||[];tests=(t.data||[]).filter(x=>String(x.test_type||"").toUpperCase()==="PRACTICE_DRILL");
  const sid=new URLSearchParams(location.search).get("subject_id");
  if(sid) openSubject(sid); else renderSubjects();
 }
 function renderSubjects(){
  currentSubject=null;currentFolder=null;currentChapter=null;
  document.getElementById("app").innerHTML=`<div class="pd-title">Practice Drill</div><div class="pd-muted">Choose a subject to continue practice.</div><div class="pd-grid">${
- subjects.map(s=>`<div class="pd-card" onclick="openSubject('${s.id}')"><div class="pd-icon">${iconFor(s.name)}</div><h3>${esc(s.name)}</h3><p>Practice folders</p></div>`).join("")||`<div class="pd-empty">No subjects found.</div>`}</div>`;
+ subjects.map(s=>`<div class="pd-card" onclick="openSubject('${s.id}')"><div class="pd-icon">${iconFor(s.name)}</div><h3>${esc(s.name)}</h3><p>Practice categories</p></div>`).join("")||`<div class="pd-empty">No subjects found.</div>`}</div>`;
 }
 function openSubject(id){currentSubject=subjects.find(s=>String(s.id)===String(id));if(!currentSubject){renderSubjects();return}currentFolder=null;currentChapter=null;renderFolders()}
 function subjectFolders(){return folders.filter(f=>String(f.subject_id||"")===String(currentSubject.id)&&!f.parent_id)}
 function renderFolders(){
  const fs=subjectFolders();
- document.getElementById("app").innerHTML=`<div class="pd-breadcrumb">Practice Drill › ${esc(currentSubject.name)}</div><div class="pd-title">${esc(currentSubject.name)}</div><div class="pd-muted">Select a practice folder.</div><div class="pd-list">${
- fs.map(f=>`<div class="pd-row" onclick="openFolder('${f.id}')"><div><strong>${esc(f.display_name||f.name)}</strong><small>${folderHint(f)}</small></div><div class="pd-arrow">›</div></div>`).join("")||`<div class="pd-empty">No folders available for this subject.</div>`}</div>`;
+ document.getElementById("app").innerHTML=`<div class="pd-breadcrumb">Practice Drill › ${esc(currentSubject.name)}</div><div class="pd-title">${esc(currentSubject.name)}</div><div class="pd-muted">Select a practice category.</div><div class="pd-list">${
+ fs.map(f=>`<div class="pd-row" onclick="openFolder('${f.id}')"><div><strong>${esc(f.display_name||f.name)}</strong><small>${folderHint(f)}</small></div><div class="pd-arrow">›</div></div>`).join("")||`<div class="pd-empty">No practice categories available for this subject.</div>`}</div>`;
 }
 function folderHint(f){let x=String(f.folder_type||"").toUpperCase();if(x.includes("CHAPTER"))return"Chapter-wise practice";if(x.includes("QUIZ"))return"Topic quizzes";if(x.includes("REVISION")||x.includes("BOOST"))return"Revision booster";return"Practice tests"}
 function openFolder(id){currentFolder=folders.find(f=>String(f.id)===String(id));if(!currentFolder)return;currentChapter=null;renderFolderContents()}
@@ -60,12 +60,12 @@ function renderFolderContents(){
  const direct=folderTests(currentFolder.id);
  const isChapter=String(currentFolder.folder_type||"").toUpperCase().includes("CHAPTER");
  let html=`<div class="pd-breadcrumb">Practice Drill › ${esc(currentSubject.name)} › ${esc(currentFolder.display_name||currentFolder.name)}</div><div class="pd-title">${esc(currentFolder.display_name||currentFolder.name)}</div>`;
- if(children.length) html+=`<div class="pd-panel"><div class="pd-panel-head"><h2>${isChapter?"Chapters":"Topics"}</h2></div><div class="pd-list">${children.map(c=>`<div class="pd-row" onclick="openChapter('${c.id}')"><div><strong>${esc(c.display_name||c.name)}</strong><small>Open practice</small></div><div class="pd-arrow">›</div></div>`).join("")}</div></div>`;
+ if(children.length) html+=`<div class="pd-panel"><div class="pd-panel-head"><h2>${isChapter?"Chapters":"Topics"}</h2></div><div class="pd-list">${children.map(c=>`<div class="pd-row" onclick="openChapter('${c.id}')"><div><strong>${esc(c.display_name||c.name)}</strong><small>Open chapter practice</small></div><div class="pd-arrow">›</div></div>`).join("")}</div></div>`;
  if(direct.length) html+=testList(direct);
  if(!children.length&&!direct.length) html+=`<div class="pd-panel"><div class="pd-empty">No practice tests available yet.</div></div>`;
  document.getElementById("app").innerHTML=html;
 }
-function openChapter(id){currentChapter=folders.find(f=>String(f.id)===String(id));if(!currentChapter)return;const ts=folderTests(currentChapter.id);document.getElementById("app").innerHTML=`<div class="pd-breadcrumb">Practice Drill › ${esc(currentSubject.name)} › ${esc(currentFolder.display_name||currentFolder.name)} › ${esc(currentChapter.display_name||currentChapter.name)}</div><div class="pd-title">${esc(currentChapter.display_name||currentChapter.name)}</div>${testList(ts)||`<div class="pd-panel"><div class="pd-empty">No tests in this chapter yet.</div></div>`}`}
+function openChapter(id){currentChapter=folders.find(f=>String(f.id)===String(id));if(!currentChapter)return;const ts=folderTests(currentChapter.id);document.getElementById("app").innerHTML=`<div class="pd-breadcrumb">Practice Drill › ${esc(currentSubject.name)} › ${esc(currentFolder.display_name||currentFolder.name)} › ${esc(currentChapter.display_name||currentChapter.name)}</div><div class="pd-title">${esc(currentChapter.display_name||currentChapter.name)}</div>${testList(ts)||`<div class="pd-panel"><div class="pd-empty">No practice mocks available in this clip yet.</div></div>`}`}
 function testList(ts){if(!ts.length)return"";return`<div class="pd-panel"><div class="pd-panel-head"><h2>Available Tests</h2></div><div class="pd-list">${ts.map(t=>`<div class="pd-row" onclick="openTest('${t.id}')"><div class="pd-test"><div><strong>${esc(t.title)}</strong><div class="pd-test-meta">${esc(t.description||"Practice Test")} · ${t.duration_minutes||0} min · ${t.total_questions||0} questions</div></div></div><span class="pd-tag">START</span></div>`).join("")}</div></div>`}
 function openTest(id){location.href="test.html?id="+encodeURIComponent(id)}
 load().catch(e=>document.getElementById("app").innerHTML=`<div class="pd-panel"><div class="pd-empty">Error loading practice drill: ${esc(e.message)}</div></div>`);
