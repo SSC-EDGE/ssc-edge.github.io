@@ -1161,8 +1161,8 @@ function renderMainSubjects(){
             </h3>
 
             <span>
-                Chapter Wise
-            </span>
+                  Practice Folders
+           </span>
 
         </div>
 
@@ -2367,16 +2367,8 @@ function backToMockCategories(){
    CHAPTER PRACTICE
 ========================================= */
 
-async function openChapterById(subjectId){
-
-    const subject=subjects.find(s=>
-        String(s.id)===String(subjectId)
-    );
-
-    if(!subject)return;
-
-    openChapterScreen(subject);
-
+function openChapterById(subjectId){
+  location.href = "practice-drill.html?subject_id=" + encodeURIComponent(subjectId);
 }
 
 async function openChapterScreen(subject){
