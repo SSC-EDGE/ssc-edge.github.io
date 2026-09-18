@@ -1,232 +1,107 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0"><title>SSC EDGE Admin Dashboard</title><script>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"><title>SSC EDGE Admin</title><script>
 document.documentElement.dataset.theme =
 localStorage.getItem("ssc-edge-theme") || "dark";
 </script><link rel="stylesheet" href="css/style.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
 
-*{
-  box-sizing:border-box;
-}
-
-body{
-  margin:0;
-}
-
-/* ================= ADMIN PAGE ================= */
-
 .admin-page{
   min-height:100vh;
-  padding:24px 16px 80px;
-  max-width:850px;
-  margin:auto;
+  padding:24px 18px 100px;
 }
 
 .admin-header{
-  padding:8px 4px 24px;
+  margin-bottom:25px;
 }
 
 .admin-header h1{
   margin:0;
-  font-size:27px;
-  font-weight:800;
-  letter-spacing:-.5px;
-}
-
-.admin-header h1 span{
-  color:var(--purple);
+  font-size:28px;
 }
 
 .admin-header p{
-  margin:7px 0 0;
-  color:var(--muted);
-  font-size:14px;
-}
-
-/* ================= SECTION TITLE ================= */
-
-.section-title{
-  margin:25px 4px 11px;
-  font-size:13px;
-  font-weight:800;
-  letter-spacing:.8px;
-  text-transform:uppercase;
+  margin:6px 0 0;
   color:var(--muted);
 }
-
-/* ================= ADMIN CARD ================= */
 
 .admin-card{
   background:var(--card);
   border:1px solid var(--border);
-  border-radius:17px;
-  padding:17px;
-  margin-bottom:12px;
-}
-
-.admin-card-top{
-  display:flex;
-  align-items:center;
-  gap:13px;
-}
-
-.admin-icon{
-  width:44px;
-  height:44px;
-  border-radius:13px;
-  background:rgba(155,89,255,.15);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:22px;
-  flex-shrink:0;
-}
-
-.admin-card-info{
-  flex:1;
+  border-radius:18px;
+  padding:20px;
+  margin-bottom:16px;
 }
 
 .admin-card h2{
-  margin:0;
-  font-size:16px;
-  font-weight:700;
-  color:var(--text);
+  margin:0 0 8px;
+  font-size:19px;
 }
 
 .admin-card p{
-  margin:4px 0 0;
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.4;
-}
-
-/* ================= OPEN BUTTON ================= */
-
-.admin-open{
-  display:block !important;
-  visibility:visible !important;
-  opacity:1 !important;
-  width:100% !important;
-  margin-top:14px !important;
-  padding:12px 13px !important;
-  border:0 !important;
-  border-radius:10px !important;
-  background:var(--purple) !important;
-  color:#ffffff !important;
-  font-size:14px !important;
-  font-weight:700 !important;
-  cursor:pointer !important;
-  text-align:center !important;
-}
-
-/* ================= LOGOUT ================= */
-
-.logout-btn{
-  display:block !important;
-  visibility:visible !important;
-  opacity:1 !important;
-  width:100% !important;
-  margin-top:26px !important;
-  padding:13px !important;
-  border-radius:12px !important;
-  border:1px solid var(--border) !important;
-  background:transparent !important;
-  color:var(--text) !important;
-  font-size:14px !important;
-  font-weight:700 !important;
-  cursor:pointer !important;
-  text-align:center !important;
-}
-
-/* ================= LOGIN BOX ================= */
-
-.login-box{
-  display:block;
-  width:calc(100% - 32px);
-  max-width:420px;
-  margin:70px auto;
-  padding:22px;
-}
-
-.login-box h1{
-  margin:0 0 7px;
-  font-size:25px;
-  color:var(--text);
-}
-
-.login-box h1 span{
-  color:var(--purple);
-}
-
-.login-box p{
   margin:0;
   color:var(--muted);
   font-size:14px;
+  line-height:1.5;
 }
 
-/* ================= LOGIN INPUT ================= */
+.admin-btn,
+.login-btn,
+.logout-btn{
+  width:100%;
+  margin-top:16px;
+  padding:13px;
+  border:0;
+  border-radius:12px;
+  background:var(--purple);
+  color:white;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.login-box{
+  max-width:420px;
+  margin:60px auto;
+}
 
 .login-box input{
-  display:block !important;
-  visibility:visible !important;
-  opacity:1 !important;
-  width:100% !important;
-  height:auto !important;
-  margin-top:13px !important;
-  padding:14px !important;
-  border-radius:11px !important;
-  border:1px solid var(--border) !important;
-  background:var(--card) !important;
-  color:var(--text) !important;
-  font-size:15px !important;
-  outline:none !important;
+  width:100%;
+  box-sizing:border-box;
+  margin-top:12px;
+  padding:14px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+  font-size:15px;
 }
-
-.login-box input::placeholder{
-  color:var(--muted);
-}
-
-.login-box input:focus{
-  border-color:var(--purple) !important;
-}
-
-/* ================= LOGIN BUTTON ================= */
-
-.login-btn{
-  display:block !important;
-  visibility:visible !important;
-  opacity:1 !important;
-  width:100% !important;
-  height:auto !important;
-  min-height:46px !important;
-  margin-top:17px !important;
-  padding:13px !important;
-  border:0 !important;
-  border-radius:11px !important;
-  background:var(--purple) !important;
-  color:#ffffff !important;
-  font-size:15px !important;
-  font-weight:700 !important;
-  cursor:pointer !important;
-  text-align:center !important;
-}
-
-/* ================= ERROR ================= */
 
 .error{
-  display:block;
   color:#ff6b6b;
   margin-top:12px;
-  font-size:13px;
-  line-height:1.4;
+  font-size:14px;
 }
 
-/* ================= PANEL ================= */
+.logout-btn{
+  background:transparent;
+  border:1px solid var(--border);
+  color:var(--text);
+  margin-bottom:25px;
+}
 
 #adminPanel{
   display:none;
 }
 
-</style></head><body><!-- ================= LOGIN SCREEN ================= --><div id="loginScreen" class="login-box admin-card">  <h1>SSC <span>EDGE</span></h1>  <p>Admin Login</p><input
+.section-title{
+  margin:28px 2px 12px;
+  font-size:14px;
+  font-weight:700;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+
+</style></head><body><!-- ================= LOGIN ================= --><div id="loginScreen" class="login-box admin-card">  <h1>SSC EDGE Admin</h1>  <p>Admin Login</p><input
 type="email"
 id="email"
 placeholder="Email"
@@ -243,7 +118,6 @@ autocomplete="current-password"
 «»
 
 <button
-type="button"
 class="login-btn"
 onclick="login()"
 
@@ -251,75 +125,50 @@ onclick="login()"
 
 Login
 
-  </button>  <div id="loginError" class="error"></div></div><!-- ================= ADMIN DASHBOARD ================= --><main id="adminPanel" class="admin-page">  <!-- HEADER -->  <div class="admin-header"><h1>SSC <span>EDGE</span> Admin</h1>
+  </button>  <div id="loginError" class="error"></div></div><!-- ================= ADMIN PANEL ================= --><main id="adminPanel" class="admin-page">  <div class="admin-header"><h1>SSC EDGE Admin</h1>
 
-<p>Manage your preparation platform</p>
+<p>
+  Manage your SSC EDGE platform
+</p>
 
   </div>  <!-- ================= DASHBOARD OVERVIEW ================= -->  <div class="section-title">
     Dashboard Overview
   </div>  <!-- ================= HOME ================= -->  <div class="section-title">
     🏡 Home
-  </div>  <!-- DAILY SCHEDULE -->  <div class="admin-card"><div class="admin-card-top">
+  </div>  <div class="admin-card"><h2>📅 Daily Schedule</h2>
 
-  <div class="admin-icon">📅</div>
-
-  <div class="admin-card-info">
-
-    <h2>Daily Schedule</h2>
-
-    <p>Manage preparation schedules and day-wise planning.</p>
-
-  </div>
-
-</div>
+<p>
+  Manage preparation schedules and day-wise planning.
+</p>
 
 <button
-  type="button"
-  class="admin-open"
+  class="admin-btn"
   onclick="openPage('admin-daily-schedule.html')"
 >
   Manage Daily Schedule
 </button>
 
-  </div>  <!-- DAILY TASKS -->  <div class="admin-card"><div class="admin-card-top">
+  </div>  <div class="admin-card"><h2>🎯 Daily Tasks</h2>
 
-  <div class="admin-icon">🎯</div>
-
-  <div class="admin-card-info">
-
-    <h2>Daily Tasks</h2>
-
-    <p>Create and manage daily preparation tasks.</p>
-
-  </div>
-
-</div>
+<p>
+  Create and manage daily preparation tasks.
+</p>
 
 <button
-  type="button"
-  class="admin-open"
+  class="admin-btn"
   onclick="openPage('admin-daily-task.html')"
 >
   Manage Daily Tasks
 </button>
 
-  </div>  <!-- UPDATES -->  <div class="admin-card"><div class="admin-card-top">
+  </div>  <div class="admin-card"><h2>🔔 Updates</h2>
 
-  <div class="admin-icon">🔔</div>
-
-  <div class="admin-card-info">
-
-    <h2>Updates</h2>
-
-    <p>Publish announcements and platform updates.</p>
-
-  </div>
-
-</div>
+<p>
+  Publish announcements and platform updates.
+</p>
 
 <button
-  type="button"
-  class="admin-open"
+  class="admin-btn"
   onclick="openPage('admin-updates.html')"
 >
   Manage Updates
@@ -327,23 +176,14 @@ Login
 
   </div>  <!-- ================= STUDY MATERIAL ================= -->  <div class="section-title">
     📚 Study Material
-  </div>  <div class="admin-card"><div class="admin-card-top">
+  </div>  <div class="admin-card"><h2>📚 Study Material</h2>
 
-  <div class="admin-icon">📚</div>
-
-  <div class="admin-card-info">
-
-    <h2>Study Material</h2>
-
-    <p>Manage videos, e-books, PDFs and learning resources.</p>
-
-  </div>
-
-</div>
+<p>
+  Manage videos, e-books, PDFs and learning resources.
+</p>
 
 <button
-  type="button"
-  class="admin-open"
+  class="admin-btn"
   onclick="openPage('admin-study.html')"
 >
   Manage Study Material
@@ -351,67 +191,40 @@ Login
 
   </div>  <!-- ================= PRACTICE & TESTS ================= -->  <div class="section-title">
     📝 Practice & Tests
-  </div>  <!-- PRACTICE -->  <div class="admin-card"><div class="admin-card-top">
+  </div>  <div class="admin-card"><h2>🗂️ Practice Management</h2>
 
-  <div class="admin-icon">🗂️</div>
-
-  <div class="admin-card-info">
-
-    <h2>Practice Management</h2>
-
-    <p>Manage exams, categories and practice structure.</p>
-
-  </div>
-
-</div>
+<p>
+  Manage exams, categories and practice structure.
+</p>
 
 <button
-  type="button"
-  class="admin-open"
+  class="admin-btn"
   onclick="openPage('admin-practice.html')"
 >
   Manage Practice
 </button>
 
-  </div>  <!-- PRACTICE DRILL -->  <div class="admin-card"><div class="admin-card-top">
+  </div>  <div class="admin-card"><h2>🎯 Practice Drill</h2>
 
-  <div class="admin-icon">🎯</div>
-
-  <div class="admin-card-info">
-
-    <h2>Practice Drill</h2>
-
-    <p>Create and manage practice drill tests.</p>
-
-  </div>
-
-</div>
+<p>
+  Create and manage practice drill tests.
+</p>
 
 <button
-  type="button"
-  class="admin-open"
+  class="admin-btn"
   onclick="openPage('admin-practice-drill.html')"
 >
   Manage Practice Drill
 </button>
 
-  </div>  <!-- MOCK TESTS -->  <div class="admin-card"><div class="admin-card-top">
+  </div>  <div class="admin-card"><h2>📝 Mock Tests</h2>
 
-  <div class="admin-icon">📝</div>
-
-  <div class="admin-card-info">
-
-    <h2>Mock Tests</h2>
-
-    <p>Create tests, configure sections, timing and questions.</p>
-
-  </div>
-
-</div>
+<p>
+  Create tests, configure sections, timing and questions.
+</p>
 
 <button
-  type="button"
-  class="admin-open"
+  class="admin-btn"
   onclick="openPage('admin-mock.html')"
 >
   Manage Mock Tests
@@ -419,45 +232,27 @@ Login
 
   </div>  <!-- ================= QUESTION MANAGEMENT ================= -->  <div class="section-title">
     ❔ Question Management
-  </div>  <!-- QUESTION BANK -->  <div class="admin-card"><div class="admin-card-top">
+  </div>  <div class="admin-card"><h2>❓ Question Bank</h2>
 
-  <div class="admin-icon">❓</div>
-
-  <div class="admin-card-info">
-
-    <h2>Question Bank</h2>
-
-    <p>Create, edit and manage reusable questions.</p>
-
-  </div>
-
-</div>
+<p>
+  Create, edit and manage reusable questions.
+</p>
 
 <button
-  type="button"
-  class="admin-open"
+  class="admin-btn"
   onclick="openPage('questions.html')"
 >
   Manage Question Bank
 </button>
 
-  </div>  <!-- CHAPTERS -->  <div class="admin-card"><div class="admin-card-top">
+  </div>  <div class="admin-card"><h2>📖 Chapters</h2>
 
-  <div class="admin-icon">📖</div>
-
-  <div class="admin-card-info">
-
-    <h2>Chapters</h2>
-
-    <p>Manage subject-wise chapters and topics.</p>
-
-  </div>
-
-</div>
+<p>
+  Manage subject-wise chapters and topics.
+</p>
 
 <button
-  type="button"
-  class="admin-open"
+  class="admin-btn"
   onclick="openPage('admin-chapters.html')"
 >
   Manage Chapters
@@ -466,7 +261,6 @@ Login
   </div>  <!-- ================= SYSTEM ================= -->  <div class="section-title">
     ⚙️ System
   </div><button
-type="button"
 class="logout-btn"
 onclick="logout()"
 
@@ -475,8 +269,6 @@ onclick="logout()"
 Logout
 
   </button></main><script>
-
-/* ================= SUPABASE ================= */
 
 const SUPABASE_URL =
 "https://dvvyoygahzzbnpqrfhen.supabase.co";
@@ -557,6 +349,7 @@ async function checkAdmin(){
 
     return;
   }
+
 
   const {
     data,
