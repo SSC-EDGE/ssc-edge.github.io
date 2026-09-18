@@ -3,69 +3,1234 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<script>document.documentElement.dataset.theme=localStorage.getItem("ssc-edge-theme")||"dark";</script>
+
+<script>
+document.documentElement.dataset.theme =
+localStorage.getItem("ssc-edge-theme") || "dark";
+</script>
+
 <title>SSC EDGE - Practice Drill Admin</title>
 <link rel="stylesheet" href="css/style.css">
+
 <style>
-:root{--a-bg:#080811;--a-card:#11111d;--a-card2:#171727;--a-border:#292943;--a-text:#f5f5ff;--a-muted:#9b9bb5;--a-p:#8b5cf6;--a-p2:#a78bfa;--a-red:#ef4444}
-:root[data-theme=light]{--a-bg:#f5f6fb;--a-card:#fff;--a-card2:#f0f0f8;--a-border:#dcdceb;--a-text:#171725;--a-muted:#68687d;--a-p:#6d3ee8;--a-p2:#7c4dff}
-*{box-sizing:border-box}body{margin:0;background:var(--a-bg);color:var(--a-text);font-family:Arial,Helvetica,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}.head{height:58px;display:flex;align-items:center;gap:12px;padding:0 15px;background:var(--a-card);border-bottom:1px solid var(--a-border);position:sticky;top:0;z-index:5}.back{width:36px;height:36px;border:1px solid var(--a-border);border-radius:10px;background:var(--a-card2);color:var(--a-text);font-size:20px}.brand{font-weight:800}.brand span{color:var(--a-p2)}.sub{margin-left:auto;color:var(--a-muted);font-size:11px}.wrap{max-width:1100px;margin:auto;padding:14px}.panel{background:var(--a-card);border:1px solid var(--a-border);border-radius:15px;padding:14px;margin-bottom:14px}.headrow{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}.headrow h2{font-size:16px;margin:0}.muted{color:var(--a-muted);font-size:12px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:9px}.btn{border:0;border-radius:9px;padding:9px 12px;font-size:12px;font-weight:800}.primary{background:var(--a-p);color:#fff}.secondary{background:var(--a-card2);color:var(--a-text);border:1px solid var(--a-border)}.danger{background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.3)}.exam,.item,.folder{border:1px solid var(--a-border);background:var(--a-card2);color:var(--a-text);border-radius:11px;padding:11px;text-align:left}.exam.active,.folder.active{border-color:var(--a-p);box-shadow:0 0 0 1px var(--a-p)}.exam small,.item small,.folder small{display:block;color:var(--a-muted);font-size:10px;margin-top:4px}.row{display:flex;align-items:center;justify-content:space-between;gap:8px}.list{display:grid;gap:8px}.actions{display:flex;gap:6px;flex-wrap:wrap}.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.field{display:flex;flex-direction:column;gap:5px}.field.full{grid-column:1/-1}.field label{font-size:11px;color:var(--a-muted);font-weight:700}.field input,.field select,.field textarea{width:100%;padding:10px;border:1px solid var(--a-border);background:var(--a-card2);color:var(--a-text);border-radius:9px;outline:none}.field textarea{min-height:70px}.check{display:flex;gap:7px;align-items:center;font-size:12px;color:var(--a-muted)}.empty{text-align:center;color:var(--a-muted);padding:22px 8px;font-size:13px}.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;padding:14px;z-index:50}.modal.show{display:flex}.box{width:min(700px,100%);max-height:92vh;overflow:auto;background:var(--a-card);border:1px solid var(--a-border);border-radius:15px;padding:15px}.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#222232;color:#fff;padding:11px 15px;border-radius:9px;display:none;z-index:100;font-size:12px}.toast.show{display:block}@media(max-width:600px){.form{grid-template-columns:1fr}.field.full{grid-column:auto}.sub{display:none}}
+:root{
+  --a-bg:#080811;
+  --a-card:#11111d;
+  --a-card2:#171727;
+  --a-border:#292943;
+  --a-text:#f5f5ff;
+  --a-muted:#9b9bb5;
+  --a-p:#8b5cf6;
+  --a-p2:#a78bfa;
+}
+:root[data-theme="light"]{
+  --a-bg:#f5f6fb;
+  --a-card:#fff;
+  --a-card2:#f0f0f8;
+  --a-border:#dcdceb;
+  --a-text:#171725;
+  --a-muted:#68687d;
+  --a-p:#6d3ee8;
+  --a-p2:#7c4dff;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--a-bg);
+  color:var(--a-text);
+  font-family:Arial,Helvetica,sans-serif;
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.head{
+  height:58px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:0 15px;
+  background:var(--a-card);
+  border-bottom:1px solid var(--a-border);
+  position:sticky;
+  top:0;
+  z-index:5;
+}
+.back{
+  width:36px;
+  height:36px;
+  border:1px solid var(--a-border);
+  border-radius:10px;
+  background:var(--a-card2);
+  color:var(--a-text);
+  font-size:20px;
+}
+.brand{font-weight:800}
+.brand span{color:var(--a-p2)}
+.sub{
+  margin-left:auto;
+  color:var(--a-muted);
+  font-size:11px;
+}
+.wrap{
+  max-width:1100px;
+  margin:auto;
+  padding:14px;
+}
+.panel{
+  background:var(--a-card);
+  border:1px solid var(--a-border);
+  border-radius:15px;
+  padding:14px;
+  margin-bottom:14px;
+}
+.headrow{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:12px;
+}
+.headrow h2{
+  font-size:16px;
+  margin:0;
+}
+.muted{
+  color:var(--a-muted);
+  font-size:12px;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
+  gap:9px;
+}
+.btn{
+  border:0;
+  border-radius:9px;
+  padding:9px 12px;
+  font-size:12px;
+  font-weight:800;
+}
+.primary{
+  background:var(--a-p);
+  color:#fff;
+}
+.secondary{
+  background:var(--a-card2);
+  color:var(--a-text);
+  border:1px solid var(--a-border);
+}
+.danger{
+  background:rgba(239,68,68,.15);
+  color:#f87171;
+  border:1px solid rgba(239,68,68,.3);
+}
+.exam,.item,.folder{
+  border:1px solid var(--a-border);
+  background:var(--a-card2);
+  color:var(--a-text);
+  border-radius:11px;
+  padding:11px;
+  text-align:left;
+}
+.exam.active,.folder.active{
+  border-color:var(--a-p);
+  box-shadow:0 0 0 1px var(--a-p);
+}
+.exam small,.item small,.folder small{
+  display:block;
+  color:var(--a-muted);
+  font-size:10px;
+  margin-top:4px;
+}
+.row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+.list{
+  display:grid;
+  gap:8px;
+}
+.actions{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+}
+.form{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:9px;
+}
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+.field.full{grid-column:1/-1}
+.field label{
+  font-size:11px;
+  color:var(--a-muted);
+  font-weight:700;
+}
+.field input,
+.field select,
+.field textarea{
+  width:100%;
+  padding:10px;
+  border:1px solid var(--a-border);
+  background:var(--a-card2);
+  color:var(--a-text);
+  border-radius:9px;
+  outline:none;
+}
+.field textarea{min-height:70px}
+.empty{
+  text-align:center;
+  color:var(--a-muted);
+  padding:22px 8px;
+  font-size:13px;
+}
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.72);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:14px;
+  z-index:50;
+}
+.modal.show{display:flex}
+.box{
+  width:min(700px,100%);
+  max-height:92vh;
+  overflow:auto;
+  background:var(--a-card);
+  border:1px solid var(--a-border);
+  border-radius:15px;
+  padding:15px;
+}
+.toast{
+  position:fixed;
+  bottom:18px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#222232;
+  color:#fff;
+  padding:11px 15px;
+  border-radius:9px;
+  display:none;
+  z-index:100;
+  font-size:12px;
+}
+.toast.show{display:block}
+@media(max-width:600px){
+  .form{grid-template-columns:1fr}
+  .field.full{grid-column:auto}
+  .sub{display:none}
+}
 </style>
 </head>
+
 <body>
-<header class="head"><button class="back" onclick="location.href='admin.html'">‹</button><div class="brand">SSC <span>EDGE</span></div><div class="sub">Practice Drill Manager</div></header>
+
+<header class="head">
+  <button class="back" onclick="location.href='admin.html'">‹</button>
+  <div class="brand">SSC <span>EDGE</span></div>
+  <div class="sub">Practice Drill Manager</div>
+</header>
+
 <main class="wrap">
-<section class="panel"><div class="headrow"><h2>Practice Drill Manager</h2><span class="muted" id="authStatus">Checking admin...</span></div><div class="muted">Subject-based Practice Drill. Exam selection is not required.</div></section>
-<section class="panel" id="subjectPanel" style="display:none"><div class="headrow"><h2>Select Subject</h2><button class="btn secondary" onclick="openSubjectModal()">＋ Subject</button></div><div class="grid" id="subjectGrid"></div></section>
-<section class="panel" id="folderPanel" style="display:none"><div class="headrow"><div><h2>Practice Categories / Clips</h2><div class="muted">Add, edit, delete and reorder folders.</div></div><button class="btn primary" onclick="openFolderModal()">＋ Folder</button></div><div class="list" id="folderList"></div></section>
-<section class="panel" id="contentPanel" style="display:none"><div class="headrow"><div><h2 id="contentTitle">Folder</h2><div class="muted">Manage chapter clips and Practice Drill mocks.</div></div><div class="actions"><button class="btn secondary" onclick="openChildFolderModal()">＋ Chapter Clip</button><button class="btn primary" onclick="openTestModal()">＋ Test</button></div></div><div class="list" id="childList"></div><div style="height:12px"></div><div class="list" id="testList"></div></section>
+
+<section class="panel">
+  <div class="headrow">
+    <div>
+      <h2>Select Subject</h2>
+      <div class="muted">Practice Drill is independent from Exam selection.</div>
+    </div>
+    <span class="muted" id="authStatus">Checking admin...</span>
+  </div>
+  <div class="grid" id="subjectGrid">
+    <div class="empty">Loading...</div>
+  </div>
+</section>
+
+<section class="panel" id="folderPanel" style="display:none">
+  <div class="headrow">
+    <div>
+      <h2>Practice Folders</h2>
+      <div class="muted">Create folders such as Chapter Wise, Quizzes and Revision Booster.</div>
+    </div>
+    <button class="btn primary" onclick="openFolderModal()">＋ Folder</button>
+  </div>
+  <div class="list" id="folderList"></div>
+</section>
+
+<section class="panel" id="contentPanel" style="display:none">
+  <div class="headrow">
+    <div>
+      <h2 id="contentTitle">Folder</h2>
+      <div class="muted">Manage child folders and Practice Drill mocks.</div>
+    </div>
+
+    <div class="actions">
+      <button class="btn secondary" onclick="openChildFolderModal()">
+        ＋ Chapter/Child Folder
+      </button>
+      <button class="btn primary" onclick="openTestModal()">
+        ＋ Add Mock
+      </button>
+    </div>
+  </div>
+
+  <div class="list" id="childList"></div>
+
+  <div style="height:12px"></div>
+
+  <div class="list" id="testList"></div>
+</section>
+
 </main>
-<div class="modal" id="modal"><div class="box"><div class="headrow"><h2 id="modalTitle">Edit</h2><button class="btn secondary" onclick="closeModal()">×</button></div><div id="modalBody"></div><div class="actions" style="margin-top:14px"><button class="btn secondary" onclick="closeModal()">Cancel</button><button class="btn primary" id="saveBtn">Save</button></div></div></div>
+
+<div class="modal" id="modal">
+  <div class="box">
+    <div class="headrow">
+      <h2 id="modalTitle">Edit</h2>
+      <button class="btn secondary" onclick="closeModal()">×</button>
+    </div>
+
+    <div id="modalBody"></div>
+
+    <div class="actions" style="margin-top:14px">
+      <button class="btn secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn primary" id="saveBtn">Save</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-const SUPABASE_URL="https://dvvyoygahzzbnpqrfhen.supabase.co",SUPABASE_KEY="sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s",db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-let exams=[],subjects=[],folders=[],tests=[],selectedExam=null,selectedSubject=null,selectedFolder=null,editing=null,mode="";
-const $=id=>document.getElementById(id);
-function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
-function toast(x){$("toast").textContent=x;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),2600)}
-async function checkAdmin(){const {data:{user}}=await db.auth.getUser();if(!user){location.href="admin.html";return false}const r=await db.from("admin_users").select("user_id").eq("user_id",user.id).maybeSingle();if(r.error||!r.data){await db.auth.signOut();location.href="admin.html";return false}$("authStatus").textContent="Admin verified";return true}
-async function load(){if(!(await checkAdmin()))return;const [e,s,f,t]=await Promise.all([db.from("exams").select("*").order("name"),db.from("subjects").select("*").order("name"),db.from("mock_folders").select("*").order("sort_order").order("name"),db.from("mock_tests").select("*").eq("test_type","PRACTICE_DRILL").order("sort_order").order("created_at",{ascending:false})]);let er=e.error||s.error||f.error||t.error;if(er)throw er;exams=e.data||[];subjects=s.data||[];folders=f.data||[];tests=(t.data||[]).filter(x=>String(x.test_type||"").toUpperCase()==="PRACTICE_DRILL");selectedExam=exams[0]||null;renderSubjects()}
-function renderExams(){$("examGrid").innerHTML=exams.map(e=>`<button class="exam ${selectedExam&&selectedExam.id===e.id?"active":""}" onclick="selectExam('${e.id}')">${esc(e.name||e.title)}<small>${esc(e.board||"Exam")}</small></button>`).join("")||`<div class="empty">No exams found.</div>`}
-function selectExam(id){selectedExam=exams.find(e=>String(e.id)===String(id));selectedSubject=null;selectedFolder=null;$("subjectPanel").style.display="block";$("folderPanel").style.display="none";$("contentPanel").style.display="none";renderExams();renderSubjects()}
-function renderSubjects(){$("subjectGrid").innerHTML=subjects.map(s=>`<button class="exam ${selectedSubject&&selectedSubject.id===s.id?"active":""}" onclick="selectSubject('${s.id}')">${esc(s.name)}<small>Manage drill folders</small></button>`).join("")}
-function selectSubject(id){selectedSubject=subjects.find(s=>String(s.id)===String(id));selectedFolder=null;$("folderPanel").style.display="block";$("contentPanel").style.display="none";renderSubjects();renderFolders()}
-function subjectFolders(){return folders.filter(f=>String(f.subject_id||"")===String(selectedSubject.id)&&!f.parent_id)}
-function renderFolders(){const fs=subjectFolders();$("folderList").innerHTML=fs.map(f=>`<div class="folder ${selectedFolder&&selectedFolder.id===f.id?"active":""}"><div class="row"><div onclick="selectFolder('${f.id}')" style="flex:1"><b>${esc(f.display_name||f.name)}</b><small>${esc(f.folder_type||"DRILL")} · ${f.is_active===false?"Inactive":"Active"}</small></div><div class="actions"><button class="btn secondary" onclick="moveFolder('${f.id}',-1)">↑</button><button class="btn secondary" onclick="moveFolder('${f.id}',1)">↓</button><button class="btn secondary" onclick="editFolder('${f.id}')">Edit</button><button class="btn danger" onclick="deleteFolder('${f.id}')">Delete</button></div></div></div>`).join("")||`<div class="empty">No folders created for this subject.</div>`}
-function selectFolder(id){selectedFolder=folders.find(f=>String(f.id)===String(id));$("contentPanel").style.display="block";$("contentTitle").textContent=selectedFolder?(selectedFolder.display_name||selectedFolder.name):"Folder";renderFolders();renderContents()}
-function children(){return folders.filter(f=>String(f.parent_id||"")===String(selectedFolder.id)).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0))}
-function renderContents(){if(!selectedFolder)return;const cs=children(),ts=tests.filter(t=>String(t.folder_id||"")===String(selectedFolder.id)&&String(t.test_type||"").toUpperCase()==="PRACTICE_DRILL");$("childList").innerHTML=cs.map(c=>`<div class="item"><div class="row"><div><b>${esc(c.display_name||c.name)}</b><small>Chapter clip · ${c.is_active===false?"Inactive":"Active"}</small></div><div class="actions"><button class="btn secondary" onclick="editChild('${c.id}')">Edit</button><button class="btn danger" onclick="deleteFolder('${c.id}')">Delete</button></div></div></div>`).join("")||"";$("testList").innerHTML=ts.map(t=>`<div class="item"><div class="row"><div><b>${esc(t.title)}</b><small>${t.duration_minutes||0} min · ${t.total_questions||0} questions · ${t.is_active===false?"Inactive":"Active"}</small></div><div class="actions"><button class="btn secondary" onclick="editTest('${t.id}')">Edit</button><button class="btn secondary" onclick="location.href='admin-mock.html?test_id=${t.id}'">Questions</button><button class="btn danger" onclick="deleteTest('${t.id}')">Delete</button></div></div></div>`).join("")||`<div class="empty">No tests in this folder.</div>`}
-function openFolderModal(){editing=null;mode="folder";showModal("Add Folder",`<div class="form"><div class="field"><label>Folder Name *</label><input id="fName"></div><div class="field"><label>Folder Type</label><select id="fType"><option value="DRILL">Practice Folder</option><option value="CHAPTER_WISE">Chapter Wise Practice</option><option value="QUIZZES">Quizzes</option><option value="REVISION_BOOSTER">Revision Booster</option></select></div><div class="field"><label>Display Name</label><input id="fDisplay"></div><div class="field"><label>Active</label><select id="fActive"><option value="true">Active</option><option value="false">Inactive</option></select></div></div>`,saveFolder)}
-function openChildFolderModal(){if(!selectedFolder)return toast("Select a parent folder");editing=null;mode="child";showModal("Add Chapter Clip",`<div class="form"><div class="field"><label>Name *</label><input id="fName"></div><div class="field"><label>Display Name</label><input id="fDisplay"></div><div class="field"><label>Active</label><select id="fActive"><option value="true">Active</option><option value="false">Inactive</option></select></div></div>`,saveChild)}
-function editFolder(id){editing=folders.find(f=>String(f.id)===String(id));mode="folder";showModal("Edit Folder",`<div class="form"><div class="field"><label>Folder Name *</label><input id="fName" value="${esc(editing.name)}"></div><div class="field"><label>Folder Type</label><select id="fType"><option value="DRILL">Practice Folder</option><option value="CHAPTER_WISE">Chapter Wise Practice</option><option value="QUIZZES">Quizzes</option><option value="REVISION_BOOSTER">Revision Booster</option></select></div><div class="field"><label>Display Name</label><input id="fDisplay" value="${esc(editing.display_name||"")}"></div><div class="field"><label>Active</label><select id="fActive"><option value="true">Active</option><option value="false">Inactive</option></select></div></div>`,saveFolder)}
-function editChild(id){editing=folders.find(f=>String(f.id)===String(id));mode="child";showModal("Edit Chapter Clip",`<div class="form"><div class="field"><label>Name *</label><input id="fName" value="${esc(editing.name)}"></div><div class="field"><label>Display Name</label><input id="fDisplay" value="${esc(editing.display_name||"")}"></div><div class="field"><label>Active</label><select id="fActive"><option value="true">Active</option><option value="false">Inactive</option></select></div></div>`,saveChild)}
-function showModal(title,body,fn){$("modalTitle").textContent=title;$("modalBody").innerHTML=body;$("modal").classList.add("show");$("saveBtn").onclick=fn}
-function closeModal(){$("modal").classList.remove("show")}
-async function saveFolder(){const name=$("fName").value.trim();if(!name)return toast("Folder name required");const payload={exam_id:selectedExam?.id||null,subject_id:selectedSubject.id,name,display_name:$("fDisplay").value.trim()||null,folder_type:$("fType").value,sort_order:editing?.sort_order??0,is_active:$("fActive").value==="true",parent_id:null};let r=editing?await db.from("mock_folders").update(payload).eq("id",editing.id):await db.from("mock_folders").insert(payload);if(r.error)return toast(r.error.message);closeModal();await reload();toast("Folder saved")}
-async function saveChild(){const name=$("fName").value.trim();if(!name)return toast("Name required");const payload={exam_id:selectedExam?.id||null,subject_id:selectedSubject.id,name,display_name:$("fDisplay").value.trim()||null,folder_type:"CHAPTER",sort_order:editing?.sort_order??0,is_active:$("fActive").value==="true",parent_id:selectedFolder.id};let r=editing?await db.from("mock_folders").update(payload).eq("id",editing.id):await db.from("mock_folders").insert(payload);if(r.error)return toast(r.error.message);closeModal();await reload();toast("Child folder saved")}
-async function reload(){const [f,t]=await Promise.all([db.from("mock_folders").select("*").order("sort_order").order("name"),db.from("mock_tests").select("*").order("sort_order").order("created_at",{ascending:false})]);if(f.error||t.error)return toast((f.error||t.error).message);folders=f.data||[];tests=t.data||[];renderFolders();if(selectedFolder){selectedFolder=folders.find(x=>String(x.id)===String(selectedFolder.id));renderContents()}}
-async function deleteFolder(id){if(!confirm("Delete this folder? Child folders/tests may become inaccessible."))return;const r=await db.from("mock_folders").delete().eq("id",id);if(r.error)return toast(r.error.message);if(selectedFolder&&String(selectedFolder.id)===String(id)){$("contentPanel").style.display="none";selectedFolder=null}await reload();toast("Folder deleted")}
-async function moveFolder(id,dir){const fs=subjectFolders(),i=fs.findIndex(x=>String(x.id)===String(id)),j=i+dir;if(i<0||j<0||j>=fs.length)return;const a=fs[i],b=fs[j];await db.from("mock_folders").update({sort_order:b.sort_order??j}).eq("id",a.id);await db.from("mock_folders").update({sort_order:a.sort_order??i}).eq("id",b.id);await reload()}
-function openTestModal(){if(!selectedFolder)return toast("Select folder");editing=null;showModal("Add Practice Test",testForm(),saveTest)}
-function editTest(id){editing=tests.find(t=>String(t.id)===String(id));showModal("Edit Practice Test",testForm(editing),saveTest)}
-function testForm(t={}){return`<div class="form"><div class="field full"><label>Title *</label><input id="tTitle" value="${esc(t.title||"")}"></div><div class="field full"><label>Description</label><textarea id="tDesc">${esc(t.description||"")}</textarea></div><div class="field"><label>Duration Minutes</label><input id="tDuration" type="number" value="${t.duration_minutes??15}"></div><div class="field"><label>Total Questions</label><input id="tTotal" type="number" value="${t.total_questions??0}"></div><div class="field"><label>Marks / Question</label><input id="tMarks" type="number" step="0.01" value="${t.marks_per_question??1}"></div><div class="field"><label>Negative Marks</label><input id="tNeg" type="number" step="0.01" value="${t.negative_marks??0}"></div><div class="field"><label>Active</label><select id="tActive"><option value="true" ${t.is_active!==false?"selected":""}>Active</option><option value="false" ${t.is_active===false?"selected":""}>Inactive</option></select></div></div>`}
-async function saveTest(){const title=$("tTitle").value.trim();if(!title)return toast("Title required");const payload={exam_id:selectedExam?.id||null,folder_id:selectedFolder.id,subject_id:selectedSubject.id,title,description:$("tDesc").value.trim()||null,test_type:"PRACTICE_DRILL",duration_minutes:Number($("tDuration").value)||15,total_questions:Number($("tTotal").value)||0,marks_per_question:Number($("tMarks").value)||1,negative_marks:Number($("tNeg").value)||0,is_active:$("tActive").value==="true",sort_order:editing?.sort_order??0};let r=editing?await db.from("mock_tests").update(payload).eq("id",editing.id).select().single():await db.from("mock_tests").insert(payload).select().single();if(r.error)return toast(r.error.message);
-const savedTest=r.data;
-if(savedTest){
-  const existingSection=await db.from("mock_test_sections").select("id").eq("mock_test_id",savedTest.id).limit(1);
-  if(!existingSection.error && (!existingSection.data||!existingSection.data.length)){
-    await db.from("mock_test_sections").insert({mock_test_id:savedTest.id,subject_id:selectedSubject.id,section_name:selectedSubject.name,duration_minutes:Number($("tDuration").value)||15,section_order:1});
+const SUPABASE_URL =
+  "https://dvvyoygahzzbnpqrfhen.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
+const db = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+let subjects = [];
+let folders = [];
+let tests = [];
+
+let selectedSubject = null;
+let selectedFolder = null;
+let editing = null;
+let mode = "";
+
+const $ = id => document.getElementById(id);
+
+function esc(value){
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function toast(message){
+  $("toast").textContent = message;
+  $("toast").classList.add("show");
+
+  setTimeout(() => {
+    $("toast").classList.remove("show");
+  }, 2800);
+}
+
+function isPracticeTest(test){
+  return String(
+    test.test_type ||
+    test.type ||
+    test.mock_type ||
+    ""
+  ).toUpperCase() === "PRACTICE_DRILL";
+}
+
+async function checkAdmin(){
+  const {
+    data:{user}
+  } = await db.auth.getUser();
+
+  if(!user){
+    location.href = "admin.html";
+    return false;
+  }
+
+  const result = await db
+    .from("admin_users")
+    .select("user_id")
+    .eq("user_id",user.id)
+    .maybeSingle();
+
+  if(result.error || !result.data){
+    await db.auth.signOut();
+    location.href = "admin.html";
+    return false;
+  }
+
+  $("authStatus").textContent = "Admin verified";
+  return true;
+}
+
+async function load(){
+  if(!(await checkAdmin())) return;
+
+  const [
+    subjectResult,
+    folderResult,
+    testResult
+  ] = await Promise.all([
+    db
+      .from("subjects")
+      .select("*")
+      .order("name"),
+
+    db
+      .from("mock_folders")
+      .select("*")
+      .order("sort_order")
+      .order("name"),
+
+    db
+      .from("mock_tests")
+      .select("*")
+      .order("sort_order")
+      .order("created_at",{ascending:false})
+  ]);
+
+  const error =
+    subjectResult.error ||
+    folderResult.error ||
+    testResult.error;
+
+  if(error) throw error;
+
+  subjects = subjectResult.data || [];
+  folders = folderResult.data || [];
+
+  tests = (testResult.data || [])
+    .filter(isPracticeTest);
+
+  renderSubjects();
+}
+
+function renderSubjects(){
+  $("subjectGrid").innerHTML =
+    subjects.map(subject => `
+      <button
+        class="exam ${
+          selectedSubject &&
+          String(selectedSubject.id) === String(subject.id)
+          ? "active"
+          : ""
+        }"
+        onclick="selectSubject('${subject.id}')"
+      >
+        ${esc(subject.name)}
+        <small>Manage Practice Drill folders</small>
+      </button>
+    `).join("") ||
+    `<div class="empty">No subjects found.</div>`;
+}
+
+function selectSubject(id){
+  selectedSubject =
+    subjects.find(
+      subject => String(subject.id) === String(id)
+    ) || null;
+
+  selectedFolder = null;
+
+  $("folderPanel").style.display = "block";
+  $("contentPanel").style.display = "none";
+
+  renderSubjects();
+  renderFolders();
+}
+
+function subjectFolders(){
+  if(!selectedSubject) return [];
+
+  return folders
+    .filter(folder =>
+      String(folder.subject_id || "") ===
+      String(selectedSubject.id) &&
+      !folder.parent_id
+    )
+    .sort((a,b) =>
+      Number(a.sort_order || 0) -
+      Number(b.sort_order || 0)
+    );
+}
+
+function renderFolders(){
+  const list = subjectFolders();
+
+  $("folderList").innerHTML =
+    list.map(folder => `
+      <div class="folder ${
+        selectedFolder &&
+        String(selectedFolder.id) === String(folder.id)
+        ? "active"
+        : ""
+      }">
+        <div class="row">
+          <div
+            style="flex:1;cursor:pointer"
+            onclick="selectFolder('${folder.id}')"
+          >
+            <b>${esc(folder.display_name || folder.name)}</b>
+            <small>
+              ${esc(folder.folder_type || "DRILL")}
+              ·
+              ${folder.is_active === false ? "Inactive" : "Active"}
+            </small>
+          </div>
+
+          <div class="actions">
+            <button
+              class="btn secondary"
+              onclick="moveFolder('${folder.id}',-1)"
+            >↑</button>
+
+            <button
+              class="btn secondary"
+              onclick="moveFolder('${folder.id}',1)"
+            >↓</button>
+
+            <button
+              class="btn secondary"
+              onclick="editFolder('${folder.id}')"
+            >Edit</button>
+
+            <button
+              class="btn danger"
+              onclick="deleteFolder('${folder.id}')"
+            >Delete</button>
+          </div>
+        </div>
+      </div>
+    `).join("") ||
+    `<div class="empty">No folders created for this subject.</div>`;
+}
+
+function selectFolder(id){
+  selectedFolder =
+    folders.find(
+      folder => String(folder.id) === String(id)
+    ) || null;
+
+  if(!selectedFolder) return;
+
+  $("contentPanel").style.display = "block";
+
+  $("contentTitle").textContent =
+    selectedFolder.display_name ||
+    selectedFolder.name ||
+    "Folder";
+
+  renderFolders();
+  renderContents();
+}
+
+function children(){
+  if(!selectedFolder) return [];
+
+  return folders
+    .filter(folder =>
+      String(folder.parent_id || "") ===
+      String(selectedFolder.id)
+    )
+    .sort((a,b) =>
+      Number(a.sort_order || 0) -
+      Number(b.sort_order || 0)
+    );
+}
+
+function folderTests(){
+  if(!selectedFolder) return [];
+
+  return tests
+    .filter(test =>
+      String(test.folder_id || "") ===
+      String(selectedFolder.id)
+    )
+    .sort((a,b) =>
+      Number(a.sort_order || 0) -
+      Number(b.sort_order || 0)
+    );
+}
+
+function renderContents(){
+  if(!selectedFolder) return;
+
+  const childFolders = children();
+  const mockTests = folderTests();
+
+  $("childList").innerHTML =
+    childFolders.map(child => `
+      <div class="item">
+        <div class="row">
+          <div>
+            <b>${esc(child.display_name || child.name)}</b>
+            <small>
+              Child folder ·
+              ${child.is_active === false ? "Inactive" : "Active"}
+            </small>
+          </div>
+
+          <div class="actions">
+            <button
+              class="btn secondary"
+              onclick="editChild('${child.id}')"
+            >Edit</button>
+
+            <button
+              class="btn danger"
+              onclick="deleteFolder('${child.id}')"
+            >Delete</button>
+          </div>
+        </div>
+      </div>
+    `).join("") || "";
+
+  $("testList").innerHTML =
+    mockTests.map(test => `
+      <div class="item">
+        <div class="row">
+          <div>
+            <b>${esc(test.title)}</b>
+            <small>
+              ${test.duration_minutes || 0} min
+              ·
+              ${test.total_questions || 0} questions
+              ·
+              ${test.is_active === false ? "Inactive" : "Active"}
+            </small>
+          </div>
+
+          <div class="actions">
+            <button
+              class="btn secondary"
+              onclick="editTest('${test.id}')"
+            >Edit</button>
+
+            <button
+              class="btn secondary"
+              onclick="location.href='admin-mock.html?mode=practice&test_id=${encodeURIComponent(test.id)}'"
+            >Questions</button>
+
+            <button
+              class="btn danger"
+              onclick="deleteTest('${test.id}')"
+            >Delete</button>
+          </div>
+        </div>
+      </div>
+    `).join("") ||
+    `<div class="empty">No Practice Drill mocks in this folder.</div>`;
+}
+
+function openFolderModal(){
+  editing = null;
+  mode = "folder";
+
+  showModal(
+    "Add Practice Folder",
+    `
+      <div class="form">
+        <div class="field full">
+          <label>Folder Name *</label>
+          <input id="fName" placeholder="Example: Chapter Wise">
+        </div>
+
+        <div class="field">
+          <label>Folder Type</label>
+          <select id="fType">
+            <option value="DRILL">Practice Folder</option>
+            <option value="CHAPTER_WISE">Chapter Wise Practice</option>
+            <option value="QUIZZES">Quizzes</option>
+            <option value="REVISION_BOOSTER">Revision Booster</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Display Name</label>
+          <input id="fDisplay" placeholder="Optional">
+        </div>
+
+        <div class="field">
+          <label>Status</label>
+          <select id="fActive">
+            <option value="true">Active</option>
+            <option value="false">Inactive</option>
+          </select>
+        </div>
+      </div>
+    `,
+    saveFolder
+  );
+}
+
+function editFolder(id){
+  editing =
+    folders.find(
+      folder => String(folder.id) === String(id)
+    ) || null;
+
+  if(!editing) return;
+
+  mode = "folder";
+
+  showModal(
+    "Edit Practice Folder",
+    `
+      <div class="form">
+        <div class="field full">
+          <label>Folder Name *</label>
+          <input id="fName" value="${esc(editing.name)}">
+        </div>
+
+        <div class="field">
+          <label>Folder Type</label>
+          <select id="fType">
+            <option value="DRILL">Practice Folder</option>
+            <option value="CHAPTER_WISE">Chapter Wise Practice</option>
+            <option value="QUIZZES">Quizzes</option>
+            <option value="REVISION_BOOSTER">Revision Booster</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Display Name</label>
+          <input id="fDisplay" value="${esc(editing.display_name || "")}">
+        </div>
+
+        <div class="field">
+          <label>Status</label>
+          <select id="fActive">
+            <option value="true" ${editing.is_active !== false ? "selected" : ""}>Active</option>
+            <option value="false" ${editing.is_active === false ? "selected" : ""}>Inactive</option>
+          </select>
+        </div>
+      </div>
+    `,
+    saveFolder
+  );
+
+  const typeSelect = $("fType");
+  if(typeSelect && editing.folder_type){
+    typeSelect.value = editing.folder_type;
   }
 }
-closeModal();await reload();toast("Test saved. Use Questions button to assign questions.")}
-async function deleteTest(id){if(!confirm("Delete this test?"))return;const r=await db.from("mock_tests").delete().eq("id",id);if(r.error)return toast(r.error.message);await reload();toast("Test deleted")}
-function openSubjectModal(){toast("Subjects are managed from existing subject/admin system")}
-load().catch(e=>{$("authStatus").textContent="Error";$("examGrid").innerHTML=`<div class="empty">${esc(e.message)}</div>`});
+
+function openChildFolderModal(){
+  if(!selectedFolder){
+    toast("Select a parent folder first");
+    return;
+  }
+
+  editing = null;
+  mode = "child";
+
+  showModal(
+    "Add Chapter / Child Folder",
+    `
+      <div class="form">
+        <div class="field full">
+          <label>Name *</label>
+          <input id="fName" placeholder="Example: Tense">
+        </div>
+
+        <div class="field full">
+          <label>Display Name</label>
+          <input id="fDisplay" placeholder="Optional">
+        </div>
+
+        <div class="field">
+          <label>Status</label>
+          <select id="fActive">
+            <option value="true">Active</option>
+            <option value="false">Inactive</option>
+          </select>
+        </div>
+      </div>
+    `,
+    saveChild
+  );
+}
+
+function editChild(id){
+  editing =
+    folders.find(
+      folder => String(folder.id) === String(id)
+    ) || null;
+
+  if(!editing) return;
+
+  mode = "child";
+
+  showModal(
+    "Edit Child Folder",
+    `
+      <div class="form">
+        <div class="field full">
+          <label>Name *</label>
+          <input id="fName" value="${esc(editing.name)}">
+        </div>
+
+        <div class="field full">
+          <label>Display Name</label>
+          <input id="fDisplay" value="${esc(editing.display_name || "")}">
+        </div>
+
+        <div class="field">
+          <label>Status</label>
+          <select id="fActive">
+            <option value="true" ${editing.is_active !== false ? "selected" : ""}>Active</option>
+            <option value="false" ${editing.is_active === false ? "selected" : ""}>Inactive</option>
+          </select>
+        </div>
+      </div>
+    `,
+    saveChild
+  );
+}
+
+function showModal(title,body,callback){
+  $("modalTitle").textContent = title;
+  $("modalBody").innerHTML = body;
+  $("modal").classList.add("show");
+  $("saveBtn").onclick = callback;
+}
+
+function closeModal(){
+  $("modal").classList.remove("show");
+}
+
+async function saveFolder(){
+  if(!selectedSubject){
+    toast("Select subject first");
+    return;
+  }
+
+  const name = $("fName").value.trim();
+
+  if(!name){
+    toast("Folder name required");
+    return;
+  }
+
+  const payload = {
+    subject_id:selectedSubject.id,
+    name:name,
+    display_name:$("fDisplay").value.trim() || null,
+    folder_type:$("fType").value,
+    sort_order:editing?.sort_order ?? 0,
+    is_active:$("fActive").value === "true",
+    parent_id:null
+  };
+
+  const result = editing
+    ? await db
+        .from("mock_folders")
+        .update(payload)
+        .eq("id",editing.id)
+    : await db
+        .from("mock_folders")
+        .insert(payload);
+
+  if(result.error){
+    toast(result.error.message);
+    return;
+  }
+
+  closeModal();
+  await reload();
+
+  toast("Folder saved");
+}
+
+async function saveChild(){
+  if(!selectedSubject || !selectedFolder){
+    toast("Select parent folder first");
+    return;
+  }
+
+  const name = $("fName").value.trim();
+
+  if(!name){
+    toast("Child folder name required");
+    return;
+  }
+
+  const payload = {
+    subject_id:selectedSubject.id,
+    name:name,
+    display_name:$("fDisplay").value.trim() || null,
+    folder_type:"CHAPTER",
+    sort_order:editing?.sort_order ?? 0,
+    is_active:$("fActive").value === "true",
+    parent_id:selectedFolder.id
+  };
+
+  const result = editing
+    ? await db
+        .from("mock_folders")
+        .update(payload)
+        .eq("id",editing.id)
+    : await db
+        .from("mock_folders")
+        .insert(payload);
+
+  if(result.error){
+    toast(result.error.message);
+    return;
+  }
+
+  closeModal();
+  await reload();
+
+  toast("Child folder saved");
+}
+
+async function reload(){
+  const [
+    folderResult,
+    testResult
+  ] = await Promise.all([
+    db
+      .from("mock_folders")
+      .select("*")
+      .order("sort_order")
+      .order("name"),
+
+    db
+      .from("mock_tests")
+      .select("*")
+      .order("sort_order")
+      .order("created_at",{ascending:false})
+  ]);
+
+  const error =
+    folderResult.error ||
+    testResult.error;
+
+  if(error){
+    toast(error.message);
+    return;
+  }
+
+  folders = folderResult.data || [];
+
+  tests = (testResult.data || [])
+    .filter(isPracticeTest);
+
+  renderFolders();
+
+  if(selectedFolder){
+    selectedFolder =
+      folders.find(
+        folder => String(folder.id) === String(selectedFolder.id)
+      ) || null;
+
+    if(selectedFolder){
+      renderContents();
+    }
+  }
+}
+
+async function deleteFolder(id){
+  if(!confirm(
+    "Delete this folder? Child folders may also become inaccessible."
+  )) return;
+
+  const result = await db
+    .from("mock_folders")
+    .delete()
+    .eq("id",id);
+
+  if(result.error){
+    toast(result.error.message);
+    return;
+  }
+
+  if(
+    selectedFolder &&
+    String(selectedFolder.id) === String(id)
+  ){
+    selectedFolder = null;
+    $("contentPanel").style.display = "none";
+  }
+
+  await reload();
+  toast("Folder deleted");
+}
+
+async function moveFolder(id,direction){
+  const list = subjectFolders();
+
+  const index = list.findIndex(
+    folder => String(folder.id) === String(id)
+  );
+
+  const nextIndex = index + direction;
+
+  if(
+    index < 0 ||
+    nextIndex < 0 ||
+    nextIndex >= list.length
+  ) return;
+
+  const current = list[index];
+  const next = list[nextIndex];
+
+  const currentOrder = Number(current.sort_order || index);
+  const nextOrder = Number(next.sort_order || nextIndex);
+
+  const first = await db
+    .from("mock_folders")
+    .update({sort_order:nextOrder})
+    .eq("id",current.id);
+
+  if(first.error){
+    toast(first.error.message);
+    return;
+  }
+
+  const second = await db
+    .from("mock_folders")
+    .update({sort_order:currentOrder})
+    .eq("id",next.id);
+
+  if(second.error){
+    toast(second.error.message);
+    return;
+  }
+
+  await reload();
+}
+
+function openTestModal(){
+  if(!selectedFolder){
+    toast("Select a folder first");
+    return;
+  }
+
+  editing = null;
+
+  showModal(
+    "Add Practice Drill Mock",
+    testForm(),
+    saveTest
+  );
+}
+
+function editTest(id){
+  editing =
+    tests.find(
+      test => String(test.id) === String(id)
+    ) || null;
+
+  if(!editing) return;
+
+  showModal(
+    "Edit Practice Drill Mock",
+    testForm(editing),
+    saveTest
+  );
+}
+
+function testForm(test = {}){
+  return `
+    <div class="form">
+
+      <div class="field full">
+        <label>Mock Title *</label>
+        <input
+          id="tTitle"
+          value="${esc(test.title || "")}"
+          placeholder="Example: Tense Practice Set 01"
+        >
+      </div>
+
+      <div class="field full">
+        <label>Description</label>
+        <textarea id="tDesc">${esc(test.description || "")}</textarea>
+      </div>
+
+      <div class="field">
+        <label>Duration Minutes</label>
+        <input
+          id="tDuration"
+          type="number"
+          min="1"
+          value="${test.duration_minutes ?? 15}"
+        >
+      </div>
+
+      <div class="field">
+        <label>Total Questions</label>
+        <input
+          id="tTotal"
+          type="number"
+          min="0"
+          value="${test.total_questions ?? 0}"
+        >
+      </div>
+
+      <div class="field">
+        <label>Marks / Question</label>
+        <input
+          id="tMarks"
+          type="number"
+          step="0.01"
+          value="${test.marks_per_question ?? 1}"
+        >
+      </div>
+
+      <div class="field">
+        <label>Negative Marks</label>
+        <input
+          id="tNeg"
+          type="number"
+          step="0.01"
+          value="${test.negative_marks ?? 0}"
+        >
+      </div>
+
+      <div class="field">
+        <label>Status</label>
+        <select id="tActive">
+          <option value="true" ${test.is_active !== false ? "selected" : ""}>Active</option>
+          <option value="false" ${test.is_active === false ? "selected" : ""}>Inactive</option>
+        </select>
+      </div>
+
+    </div>
+  `;
+}
+
+async function saveTest(){
+  if(!selectedSubject || !selectedFolder){
+    toast("Select subject and folder first");
+    return;
+  }
+
+  const title = $("tTitle").value.trim();
+
+  if(!title){
+    toast("Mock title required");
+    return;
+  }
+
+  const payload = {
+    folder_id:selectedFolder.id,
+    subject_id:selectedSubject.id,
+
+    title:title,
+    description:$("tDesc").value.trim() || null,
+
+    test_type:"PRACTICE_DRILL",
+
+    duration_minutes:Number($("tDuration").value) || 15,
+    total_questions:Number($("tTotal").value) || 0,
+
+    marks_per_question:Number($("tMarks").value) || 1,
+    negative_marks:Number($("tNeg").value) || 0,
+
+    is_active:$("tActive").value === "true",
+    sort_order:editing?.sort_order ?? 0
+  };
+
+  const result = editing
+    ? await db
+        .from("mock_tests")
+        .update(payload)
+        .eq("id",editing.id)
+        .select()
+        .single()
+    : await db
+        .from("mock_tests")
+        .insert(payload)
+        .select()
+        .single();
+
+  if(result.error){
+    toast(result.error.message);
+    return;
+  }
+
+  const savedTest = result.data;
+
+  if(savedTest){
+    const sectionResult = await db
+      .from("mock_test_sections")
+      .select("id")
+      .eq("mock_test_id",savedTest.id)
+      .limit(1);
+
+    if(
+      !sectionResult.error &&
+      (!sectionResult.data || !sectionResult.data.length)
+    ){
+      await db
+        .from("mock_test_sections")
+        .insert({
+          mock_test_id:savedTest.id,
+          subject_id:selectedSubject.id,
+          section_name:selectedSubject.name,
+          duration_minutes:Number($("tDuration").value) || 15,
+          section_order:1
+        });
+    }
+  }
+
+  closeModal();
+  await reload();
+
+  toast("Practice Drill mock saved");
+}
+
+async function deleteTest(id){
+  if(!confirm("Delete this Practice Drill mock?")) return;
+
+  const result = await db
+    .from("mock_tests")
+    .delete()
+    .eq("id",id);
+
+  if(result.error){
+    toast(result.error.message);
+    return;
+  }
+
+  await reload();
+  toast("Mock deleted");
+}
+
+load().catch(error => {
+  $("authStatus").textContent = "Error";
+  $("subjectGrid").innerHTML =
+    `<div class="empty">${esc(error.message)}</div>`;
+});
 </script>
+
 </body>
 </html>
