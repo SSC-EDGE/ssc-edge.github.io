@@ -1,359 +1,431 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-
-<title>SSC EDGE Admin</title>
-
-<script>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0"><title>SSC EDGE Admin Dashboard</title><script>
 document.documentElement.dataset.theme =
 localStorage.getItem("ssc-edge-theme") || "dark";
-</script>
+</script><link rel="stylesheet" href="css/style.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
 
-<link rel="stylesheet" href="css/style.css">
+*{
+  box-sizing:border-box;
+}
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
+body{
+  margin:0;
+}
 
 .admin-page{
   min-height:100vh;
-  padding:24px 18px 100px;
+  padding:24px 16px 80px;
+  max-width:850px;
+  margin:auto;
 }
 
 .admin-header{
-  margin-bottom:25px;
+  padding:8px 4px 24px;
 }
 
 .admin-header h1{
   margin:0;
-  font-size:28px;
+  font-size:27px;
+  font-weight:800;
+  letter-spacing:-.5px;
+}
+
+.admin-header h1 span{
+  color:var(--purple);
 }
 
 .admin-header p{
-  margin:6px 0 0;
+  margin:7px 0 0;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.section-title{
+  margin:25px 4px 11px;
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:.8px;
+  text-transform:uppercase;
   color:var(--muted);
 }
 
 .admin-card{
   background:var(--card);
   border:1px solid var(--border);
-  border-radius:18px;
-  padding:20px;
-  margin-bottom:16px;
+  border-radius:17px;
+  padding:17px;
+  margin-bottom:12px;
+  transition:.2s;
+}
+
+.admin-card:hover{
+  border-color:var(--purple);
+}
+
+.admin-card-top{
+  display:flex;
+  align-items:center;
+  gap:13px;
+}
+
+.admin-icon{
+  width:44px;
+  height:44px;
+  border-radius:13px;
+  background:color-mix(
+    in srgb,
+    var(--purple) 15%,
+    transparent
+  );
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  flex-shrink:0;
+}
+
+.admin-card-info{
+  flex:1;
 }
 
 .admin-card h2{
-  margin:0 0 8px;
-  font-size:19px;
+  margin:0;
+  font-size:16px;
+  font-weight:700;
 }
 
 .admin-card p{
-  margin:0;
+  margin:4px 0 0;
   color:var(--muted);
-  font-size:14px;
-  line-height:1.5;
+  font-size:13px;
+  line-height:1.4;
 }
 
-.admin-btn,
-.login-btn,
-.logout-btn{
+.admin-open{
+  margin-top:14px;
   width:100%;
-  margin-top:16px;
-  padding:13px;
+  padding:11px 13px;
   border:0;
-  border-radius:12px;
+  border-radius:10px;
   background:var(--purple);
   color:white;
-  font-size:15px;
-  font-weight:600;
+  font-size:14px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.admin-open:active{
+  transform:scale(.98);
+}
+
+.logout-btn{
+  width:100%;
+  margin-top:26px;
+  padding:13px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--text);
+  font-size:14px;
+  font-weight:700;
   cursor:pointer;
 }
 
 .login-box{
   max-width:420px;
-  margin:60px auto;
+  margin:70px auto;
+  padding:22px;
+}
+
+.login-box h1{
+  margin:0 0 7px;
+  font-size:25px;
+}
+
+.login-box p{
+  margin:0;
+  color:var(--muted);
+  font-size:14px;
 }
 
 .login-box input{
   width:100%;
-  box-sizing:border-box;
-  margin-top:12px;
+  margin-top:13px;
   padding:14px;
-  border-radius:12px;
+  border-radius:11px;
   border:1px solid var(--border);
   background:var(--card);
   color:var(--text);
   font-size:15px;
+  outline:none;
+}
+
+.login-box input:focus{
+  border-color:var(--purple);
+}
+
+.login-btn{
+  width:100%;
+  margin-top:17px;
+  padding:13px;
+  border:0;
+  border-radius:11px;
+  background:var(--purple);
+  color:white;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
 }
 
 .error{
   color:#ff6b6b;
   margin-top:12px;
-  font-size:14px;
-}
-
-.logout-btn{
-  background:transparent;
-  border:1px solid var(--border);
-  color:var(--text);
-  margin-bottom:25px;
+  font-size:13px;
+  line-height:1.4;
 }
 
 #adminPanel{
   display:none;
 }
 
-</style>
+</style></head><body><!-- ================= LOGIN SCREEN ================= --><div id="loginScreen" class="login-box admin-card">  <h1>SSC <span style="color:var(--purple)">EDGE</span></h1>  <p>Admin Login</p><input
+type="email"
+id="email"
+placeholder="Email"
+autocomplete="email"
 
-</head>
+«»
 
-<body>
+<input
+type="password"
+id="password"
+placeholder="Password"
+autocomplete="current-password"
 
+«»
 
-<!-- ================= LOGIN ================= -->
+<button
+class="login-btn"
+onclick="login()"
 
-<div id="loginScreen" class="login-box admin-card">
+«»
 
-  <h1>SSC EDGE Admin</h1>
+Login
 
-  <p>Admin Login</p>
+  </button>  <div id="loginError" class="error"></div></div><!-- ================= ADMIN DASHBOARD ================= --><main id="adminPanel" class="admin-page">  <!-- HEADER -->  <div class="admin-header"><h1>SSC <span>EDGE</span> Admin</h1>
 
-  <input
-    type="email"
-    id="email"
-    placeholder="Email"
-    autocomplete="email"
-  >
+<p>Manage your preparation platform</p>
 
-  <input
-    type="password"
-    id="password"
-    placeholder="Password"
-    autocomplete="current-password"
-  >
+  </div>  <!-- ================= DASHBOARD OVERVIEW ================= -->  <div class="section-title">
+    Dashboard Overview
+  </div>  <!-- ================= HOME ================= -->  <div class="section-title">
+    🏡 Home
+  </div>  <div class="admin-card"><div class="admin-card-top">
 
-  <button
-    class="login-btn"
-    onclick="login()"
-  >
-    Login
-  </button>
+  <div class="admin-icon">📅</div>
 
-  <div id="loginError" class="error"></div>
+  <div class="admin-card-info">
+
+    <h2>Daily Schedule</h2>
+
+    <p>Manage preparation schedules and day-wise planning.</p>
+
+  </div>
 
 </div>
 
+<button
+  class="admin-open"
+  onclick="openPage('admin-daily-schedule.html')"
+>
+  Manage Daily Schedule
+</button>
 
-<!-- ================= ADMIN PANEL ================= -->
+  </div>  <div class="admin-card"><div class="admin-card-top">
 
-<main id="adminPanel" class="admin-page">
+  <div class="admin-icon">🎯</div>
 
-  <div class="admin-header">
+  <div class="admin-card-info">
 
-    <h1>SSC EDGE Admin</h1>
+    <h2>Daily Tasks</h2>
 
-    <p>
-      Manage your SSC EDGE platform
-    </p>
-
-  </div>
-
-
-  <button
-    class="logout-btn"
-    onclick="logout()"
-  >
-    Logout
-  </button>
-
-
-  <!-- STUDY MATERIAL -->
-
-  <div class="admin-card">
-
-    <h2>📚 Study Material</h2>
-
-    <p>
-      Manage videos, e-books and PDFs.
-    </p>
-
-    <button
-      class="admin-btn"
-      onclick="openPage('admin-study.html')"
-    >
-      Manage Study Material
-    </button>
+    <p>Create and manage daily preparation tasks.</p>
 
   </div>
 
+</div>
 
-  <!-- VIDEOS -->
+<button
+  class="admin-open"
+  onclick="openPage('admin-daily-task.html')"
+>
+  Manage Daily Tasks
+</button>
 
-  <div class="admin-card">
+  </div>  <div class="admin-card"><div class="admin-card-top">
 
-    <h2>🎥 Videos</h2>
+  <div class="admin-icon">🔔</div>
 
-    <p>
-      Upload and manage study videos.
-    </p>
+  <div class="admin-card-info">
 
-    <button
-      class="admin-btn"
-      onclick="openPage('admin-video.html')"
-    >
-      Manage Videos
-    </button>
+    <h2>Updates</h2>
 
-  </div>
-
-
-  <!-- EBOOKS -->
-
-  <div class="admin-card">
-
-    <h2>📕 E-Books</h2>
-
-    <p>
-      Add and manage SSC EDGE e-books.
-    </p>
-
-    <button
-      class="admin-btn"
-      onclick="openPage('admin-ebook.html')"
-    >
-      Manage E-Books
-    </button>
+    <p>Publish announcements and platform updates.</p>
 
   </div>
 
+</div>
 
-  <!-- PDF -->
+<button
+  class="admin-open"
+  onclick="openPage('admin-updates.html')"
+>
+  Manage Updates
+</button>
 
-  <div class="admin-card">
+  </div>  <!-- ================= STUDY MATERIAL ================= -->  <div class="section-title">
+    📚 Study Material
+  </div>  <div class="admin-card"><div class="admin-card-top">
 
-    <h2>📄 PDFs</h2>
+  <div class="admin-icon">📚</div>
 
-    <p>
-      Upload and manage subject-wise PDFs.
-    </p>
+  <div class="admin-card-info">
 
-    <button
-      class="admin-btn"
-      onclick="openPage('admin-pdf.html')"
-    >
-      Manage PDFs
-    </button>
+    <h2>Study Material</h2>
 
-  </div>
-
-
-  <!-- MOCK TEST -->
-
-  <div class="admin-card">
-
-    <h2>📝 Mock Tests</h2>
-
-    <p>
-      Create tests, sections, timing and assign questions.
-    </p>
-
-    <button
-      class="admin-btn"
-      onclick="openPage('admin-mock.html')"
-    >
-      Manage Mock Tests
-    </button>
+    <p>Manage videos, e-books, PDFs and learning resources.</p>
 
   </div>
 
+</div>
 
-  <!-- DAILY TASK -->
+<button
+  class="admin-open"
+  onclick="openPage('admin-study.html')"
+>
+  Manage Study Material
+</button>
 
-  <div class="admin-card">
+  </div>  <!-- ================= PRACTICE & TESTS ================= -->  <div class="section-title">
+    📝 Practice & Tests
+  </div>  <div class="admin-card"><div class="admin-card-top">
 
-    <h2>🎯 Daily Tasks</h2>
+  <div class="admin-icon">🗂️</div>
 
-    <p>
-      Create daily tasks and assign mock tests.
-    </p>
+  <div class="admin-card-info">
 
-    <button
-      class="admin-btn"
-      onclick="openPage('admin-daily-task.html')"
-    >
-      Manage Daily Tasks
-    </button>
+    <h2>Practice Management</h2>
 
-  </div>
-
-
-  <!-- DAILY SCHEDULE -->
-
-  <div class="admin-card">
-
-    <h2>📅 Daily Schedule</h2>
-
-    <p>
-      Manage Day 1 to Day 60 preparation schedules.
-    </p>
-
-    <button
-      class="admin-btn"
-      onclick="openPage('admin-daily-schedule.html')"
-    >
-      Manage Daily Schedule
-    </button>
+    <p>Manage exams, categories and practice structure.</p>
 
   </div>
 
+</div>
 
-  <!-- QUESTION BANK -->
+<button
+  class="admin-open"
+  onclick="openPage('admin-practice.html')"
+>
+  Manage Practice
+</button>
 
-  <div class="admin-card">
+  </div>  <div class="admin-card"><div class="admin-card-top">
 
-    <h2>❓ Question Bank</h2>
+  <div class="admin-icon">🎯</div>
 
-    <p>
-      Create and manage reusable questions.
-    </p>
+  <div class="admin-card-info">
 
-    <button
-      class="admin-btn"
-      onclick="openPage('questions.html')"
-    >
-      Manage Questions
-    </button>
+    <h2>Practice Drill</h2>
 
-  </div>
-
-
-  <!-- CHAPTERS -->
-
-  <div class="admin-card">
-
-    <h2>📖 Chapters</h2>
-
-    <p>
-      Manage subject-wise chapters.
-    </p>
-
-    <button
-      class="admin-btn"
-      onclick="openPage('admin-chapters.html')"
-    >
-      Manage Chapters
-    </button>
+    <p>Create and manage practice drill tests.</p>
 
   </div>
 
-</main>
+</div>
 
+<button
+  class="admin-open"
+  onclick="openPage('admin-practice-drill.html')"
+>
+  Manage Practice Drill
+</button>
 
-<script>
+  </div>  <div class="admin-card"><div class="admin-card-top">
+
+  <div class="admin-icon">📝</div>
+
+  <div class="admin-card-info">
+
+    <h2>Mock Tests</h2>
+
+    <p>Create tests, configure sections, timing and questions.</p>
+
+  </div>
+
+</div>
+
+<button
+  class="admin-open"
+  onclick="openPage('admin-mock.html')"
+>
+  Manage Mock Tests
+</button>
+
+  </div>  <!-- ================= QUESTION MANAGEMENT ================= -->  <div class="section-title">
+    ❔ Question Management
+  </div>  <div class="admin-card"><div class="admin-card-top">
+
+  <div class="admin-icon">❓</div>
+
+  <div class="admin-card-info">
+
+    <h2>Question Bank</h2>
+
+    <p>Create, edit and manage reusable questions.</p>
+
+  </div>
+
+</div>
+
+<button
+  class="admin-open"
+  onclick="openPage('questions.html')"
+>
+  Manage Question Bank
+</button>
+
+  </div>  <div class="admin-card"><div class="admin-card-top">
+
+  <div class="admin-icon">📖</div>
+
+  <div class="admin-card-info">
+
+    <h2>Chapters</h2>
+
+    <p>Manage subject-wise chapters and topics.</p>
+
+  </div>
+
+</div>
+
+<button
+  class="admin-open"
+  onclick="openPage('admin-chapters.html')"
+>
+  Manage Chapters
+</button>
+
+  </div>  <!-- ================= SYSTEM ================= -->  <div class="section-title">
+    ⚙️ System
+  </div><button
+class="logout-btn"
+onclick="logout()"
+
+«»
+
+Logout
+
+  </button></main><script>
 
 const SUPABASE_URL =
 "https://dvvyoygahzzbnpqrfhen.supabase.co";
@@ -536,7 +608,5 @@ async function logout(){
 
 checkAdmin();
 
-</script>
-
-</body>
+</script></body>
 </html>
