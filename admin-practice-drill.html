@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
@@ -27,7 +26,7 @@ document.documentElement.dataset.theme =
   --a-red:#ef4444;
 }
 
-:root[data-theme="light"]{
+:root[data-theme=light]{
   --a-bg:#f5f6fb;
   --a-card:#fff;
   --a-card2:#f0f0f8;
@@ -186,69 +185,28 @@ button{
   margin-top:4px;
 }
 
-.list{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-
 .row{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:10px;
+  gap:8px;
+}
+
+.list{
+  display:grid;
+  gap:8px;
 }
 
 .actions{
   display:flex;
-  align-items:center;
   gap:6px;
   flex-wrap:wrap;
 }
 
-.actions .btn{
-  padding:7px 9px;
-  font-size:11px;
-}
-
-.empty{
-  color:var(--a-muted);
-  text-align:center;
-  padding:22px 10px;
-  font-size:13px;
-  border:1px dashed var(--a-border);
-  border-radius:10px;
-}
-
-.modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.65);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:15px;
-  z-index:50;
-}
-
-.modal.show{
-  display:flex;
-}
-
-.box{
-  width:min(600px,100%);
-  max-height:90vh;
-  overflow:auto;
-  background:var(--a-card);
-  border:1px solid var(--a-border);
-  border-radius:16px;
-  padding:15px;
-}
-
 .form{
   display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:9px;
 }
 
 .field{
@@ -262,8 +220,8 @@ button{
 }
 
 .field label{
-  color:var(--a-muted);
   font-size:11px;
+  color:var(--a-muted);
   font-weight:700;
 }
 
@@ -271,47 +229,105 @@ button{
 .field select,
 .field textarea{
   width:100%;
+  padding:10px;
   border:1px solid var(--a-border);
   background:var(--a-card2);
   color:var(--a-text);
   border-radius:9px;
-  padding:10px;
   outline:none;
 }
 
 .field textarea{
-  min-height:75px;
-  resize:vertical;
+  min-height:70px;
 }
 
-.field input:focus,
-.field select:focus,
-.field textarea:focus{
-  border-color:var(--a-p);
+.check{
+  display:flex;
+  gap:7px;
+  align-items:center;
+  font-size:12px;
+  color:var(--a-muted);
+}
+
+.empty{
+  text-align:center;
+  color:var(--a-muted);
+  padding:22px 8px;
+  font-size:13px;
+}
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.72);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:14px;
+  z-index:50;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.box{
+  width:min(700px,100%);
+  max-height:92vh;
+  overflow:auto;
+  background:var(--a-card);
+  border:1px solid var(--a-border);
+  border-radius:15px;
+  padding:15px;
 }
 
 .toast{
   position:fixed;
+  bottom:18px;
   left:50%;
-  bottom:22px;
   transform:translateX(-50%);
-  background:#22222f;
+  background:#222232;
   color:#fff;
   padding:11px 15px;
   border-radius:9px;
   display:none;
   z-index:100;
   font-size:12px;
-  max-width:90%;
-  text-align:center;
 }
 
 .toast.show{
   display:block;
 }
 
-.hidden{
-  display:none!important;
+/* Folder first-letter icon */
+.folder-icon{
+  width:36px;
+  height:36px;
+  border-radius:10px;
+  background:rgba(139,92,246,.16);
+  color:var(--a-p2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:17px;
+  font-weight:900;
+  flex:none;
+}
+
+/* Breadcrumb */
+.breadcrumb{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  flex-wrap:wrap;
+  color:var(--a-muted);
+  font-size:11px;
+  margin-bottom:10px;
+}
+
+.breadcrumb span{
+  color:var(--a-text);
+  font-weight:700;
 }
 
 @media(max-width:600px){
@@ -327,17 +343,16 @@ button{
     display:none;
   }
 
-  .headrow{
+  .row{
     align-items:flex-start;
   }
 
   .actions .btn{
-    font-size:10px;
-    padding:7px 8px;
+    padding:8px 9px;
+    font-size:11px;
   }
 }
 </style>
-
 </head>
 
 <body>
@@ -356,67 +371,80 @@ button{
 
 <main class="wrap">
 
-  <!-- EXAM IS HIDDEN INTENTIONALLY -->
-
-  <section class="panel" id="subjectPanel">
-
+  <!-- EXAMS -->
+  <section class="panel">
     <div class="headrow">
-      <div>
-        <h2>Select Subject</h2>
-        <div class="muted">
-          Manage Practice Drill folders subject-wise.
-        </div>
-      </div>
-
+      <h2>Select Exam</h2>
       <span class="muted" id="authStatus">
         Checking admin...
       </span>
     </div>
 
-    <div class="grid" id="subjectGrid">
-      <div class="empty">Loading subjects...</div>
+    <div class="grid" id="examGrid">
+      <div class="empty">Loading...</div>
     </div>
-
   </section>
 
-
-  <section class="panel hidden" id="folderPanel">
-
+  <!-- SUBJECTS -->
+  <section
+    class="panel"
+    id="subjectPanel"
+    style="display:none"
+  >
     <div class="headrow">
+      <h2>Select Subject</h2>
 
+      <button
+        class="btn secondary"
+        onclick="openSubjectModal()"
+      >
+        ＋ Subject
+      </button>
+    </div>
+
+    <div class="grid" id="subjectGrid"></div>
+  </section>
+
+  <!-- ROOT FOLDERS -->
+  <section
+    class="panel"
+    id="folderPanel"
+    style="display:none"
+  >
+    <div class="headrow">
       <div>
-        <h2 id="folderHeading">Practice Folders</h2>
-
+        <h2>Practice Folders</h2>
         <div class="muted">
-          Create CHAPTER_WISE PRACTICE or REVISION BOOSTER folders.
+          Add, edit, delete and reorder folders.
         </div>
       </div>
 
-      <div class="actions">
-        <button
-          class="btn primary"
-          onclick="openFolderModal()"
-        >
-          ＋ Folder
-        </button>
-      </div>
-
+      <button
+        class="btn primary"
+        onclick="openFolderModal()"
+      >
+        ＋ Folder
+      </button>
     </div>
 
     <div class="list" id="folderList"></div>
-
   </section>
 
+  <!-- CURRENT FOLDER CONTENT -->
+  <section
+    class="panel"
+    id="contentPanel"
+    style="display:none"
+  >
 
-  <section class="panel hidden" id="contentPanel">
+    <div id="folderBreadcrumb"></div>
 
     <div class="headrow">
-
       <div>
         <h2 id="contentTitle">Folder</h2>
 
         <div class="muted">
-          Add child folders or mock tests inside this folder.
+          Manage child folders and tests.
         </div>
       </div>
 
@@ -424,20 +452,28 @@ button{
 
         <button
           class="btn secondary"
+          id="parentBtn"
+          onclick="goToParent()"
+          style="display:none"
+        >
+          ← Parent
+        </button>
+
+        <button
+          class="btn secondary"
           onclick="openChildFolderModal()"
         >
-          ＋ Chapter/Child Folder
+          ＋ Child Folder
         </button>
 
         <button
           class="btn primary"
           onclick="openTestModal()"
         >
-          ＋ Mock Test
+          ＋ Test
         </button>
 
       </div>
-
     </div>
 
     <div class="list" id="childList"></div>
@@ -450,7 +486,7 @@ button{
 
 </main>
 
-
+<!-- MODAL -->
 <div class="modal" id="modal">
 
   <div class="box">
@@ -472,7 +508,6 @@ button{
       class="actions"
       style="margin-top:14px"
     >
-
       <button
         class="btn secondary"
         onclick="closeModal()"
@@ -486,16 +521,13 @@ button{
       >
         Save
       </button>
-
     </div>
 
   </div>
 
 </div>
 
-
 <div class="toast" id="toast"></div>
-
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -507,11 +539,11 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
   "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
 
-const db = supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
-
+const db =
+  supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
 
 let exams = [];
 let subjects = [];
@@ -525,12 +557,11 @@ let selectedFolder = null;
 let editing = null;
 let mode = "";
 
+const $ = id =>
+  document.getElementById(id);
 
-const $ = id => document.getElementById(id);
-
-
-function esc(value){
-  return String(value ?? "")
+function esc(v){
+  return String(v ?? "")
     .replaceAll("&","&amp;")
     .replaceAll("<","&lt;")
     .replaceAll(">","&gt;")
@@ -538,27 +569,23 @@ function esc(value){
     .replaceAll("'","&#039;");
 }
 
+function firstLetter(v){
+  return String(v || "F")
+    .trim()
+    .charAt(0)
+    .toUpperCase();
+}
 
-function toast(message){
-
-  $("toast").textContent = message;
+function toast(x){
+  $("toast").textContent = x;
   $("toast").classList.add("show");
 
   setTimeout(() => {
     $("toast").classList.remove("show");
-  }, 2800);
-
+  },2600);
 }
 
-
-function normalize(value){
-  return String(value || "")
-    .trim()
-    .toUpperCase()
-    .replaceAll("-","_")
-    .replaceAll(" ","_");
-}
-
+/* ADMIN CHECK */
 
 async function checkAdmin(){
 
@@ -571,13 +598,14 @@ async function checkAdmin(){
     return false;
   }
 
-  const result = await db
-    .from("admin_users")
-    .select("user_id")
-    .eq("user_id",user.id)
-    .maybeSingle();
+  const r =
+    await db
+      .from("admin_users")
+      .select("user_id")
+      .eq("user_id",user.id)
+      .maybeSingle();
 
-  if(result.error || !result.data){
+  if(r.error || !r.data){
 
     await db.auth.signOut();
 
@@ -592,16 +620,17 @@ async function checkAdmin(){
   return true;
 }
 
+/* LOAD DATA */
 
 async function load(){
 
   if(!(await checkAdmin())) return;
 
   const [
-    examResponse,
-    subjectResponse,
-    folderResponse,
-    testResponse
+    e,
+    s,
+    f,
+    t
   ] = await Promise.all([
 
     db
@@ -624,391 +653,557 @@ async function load(){
       .from("mock_tests")
       .select("*")
       .order("sort_order")
-      .order("created_at",{ascending:false})
+      .order("created_at",{
+        ascending:false
+      })
 
   ]);
 
-  const error =
-    examResponse.error ||
-    subjectResponse.error ||
-    folderResponse.error ||
-    testResponse.error;
+  const er =
+    e.error ||
+    s.error ||
+    f.error ||
+    t.error;
 
-  if(error) throw error;
+  if(er) throw er;
 
-  exams = examResponse.data || [];
-  subjects = subjectResponse.data || [];
-  folders = folderResponse.data || [];
-  tests = testResponse.data || [];
+  exams = e.data || [];
+  subjects = s.data || [];
+  folders = f.data || [];
+  tests = t.data || [];
 
-
-  /*
-    Exam automatically selected.
-    Exam selector is not shown in UI.
-  */
-
-  selectedExam =
-    exams.find(e => e.is_active !== false) ||
-    exams[0] ||
-    null;
-
-
-  renderSubjects();
-
+  renderExams();
 }
 
+/* EXAMS */
+
+function renderExams(){
+
+  $("examGrid").innerHTML =
+
+    exams.map(e => `
+
+      <button
+        class="exam ${
+          selectedExam &&
+          selectedExam.id === e.id
+            ? "active"
+            : ""
+        }"
+        onclick="selectExam('${e.id}')"
+      >
+
+        ${esc(e.name || e.title)}
+
+        <small>
+          ${esc(e.board || "Exam")}
+        </small>
+
+      </button>
+
+    `).join("")
+
+    ||
+
+    `<div class="empty">
+      No exams found.
+    </div>`;
+}
+
+function selectExam(id){
+
+  selectedExam =
+    exams.find(
+      e => String(e.id) === String(id)
+    );
+
+  selectedSubject = null;
+  selectedFolder = null;
+
+  $("subjectPanel").style.display = "block";
+  $("folderPanel").style.display = "none";
+  $("contentPanel").style.display = "none";
+
+  renderExams();
+  renderSubjects();
+}
+
+/* SUBJECTS */
 
 function renderSubjects(){
 
-  $("subjectGrid").innerHTML = subjects
-    .map(subject => {
+  $("subjectGrid").innerHTML =
 
-      const active =
-        selectedSubject &&
-        String(selectedSubject.id) === String(subject.id);
+    subjects.map(s => `
 
-      return `
-        <button
-          class="exam ${active ? "active" : ""}"
-          onclick="selectSubject('${subject.id}')"
-        >
-          ${esc(subject.name || subject.title)}
+      <button
+        class="exam ${
+          selectedSubject &&
+          selectedSubject.id === s.id
+            ? "active"
+            : ""
+        }"
+        onclick="selectSubject('${s.id}')"
+      >
 
-          <small>
-            Manage Practice Drill
-          </small>
-        </button>
-      `;
+        ${esc(s.name)}
 
-    })
-    .join("") ||
+        <small>
+          Manage drill folders
+        </small>
+
+      </button>
+
+    `).join("")
+
+    ||
 
     `<div class="empty">
       No subjects found.
     </div>`;
-
 }
 
+function selectSubject(id){
 
-function selectSubject(subjectId){
-
-  selectedSubject = subjects.find(
-    subject =>
-      String(subject.id) === String(subjectId)
-  );
+  selectedSubject =
+    subjects.find(
+      s => String(s.id) === String(id)
+    );
 
   selectedFolder = null;
 
-  $("folderPanel").classList.remove("hidden");
-  $("contentPanel").classList.add("hidden");
-
-  $("folderHeading").textContent =
-    `${selectedSubject.name} - Practice Folders`;
+  $("folderPanel").style.display = "block";
+  $("contentPanel").style.display = "none";
 
   renderSubjects();
   renderFolders();
-
 }
 
+/* ROOT FOLDERS */
 
 function subjectFolders(){
 
-  if(!selectedExam || !selectedSubject){
-    return [];
-  }
+  return folders.filter(f =>
 
-  return folders
-    .filter(folder =>
-
-      String(folder.exam_id) ===
+    String(f.exam_id) ===
       String(selectedExam.id)
 
-      &&
+    &&
 
-      String(folder.subject_id || "") ===
+    String(f.subject_id || "") ===
       String(selectedSubject.id)
 
-      &&
+    &&
 
-      !folder.parent_id
+    !f.parent_id
 
-      &&
-
-      folder.is_active !== false
-
-    )
-    .sort((a,b) =>
-      Number(a.sort_order || 0) -
-      Number(b.sort_order || 0)
-    );
-
+  );
 }
-
 
 function renderFolders(){
 
-  const list = subjectFolders();
+  const fs = subjectFolders();
 
-  $("folderList").innerHTML = list
-    .map(folder => {
+  $("folderList").innerHTML =
 
-      const active =
-        selectedFolder &&
-        String(selectedFolder.id) === String(folder.id);
+    fs.map(f => `
 
-      return `
-        <div class="folder ${active ? "active" : ""}">
+      <div
+        class="folder ${
+          selectedFolder &&
+          selectedFolder.id === f.id
+            ? "active"
+            : ""
+        }"
+      >
 
-          <div class="row">
+        <div class="row">
 
-            <div
-              onclick="selectFolder('${folder.id}')"
-              style="flex:1;cursor:pointer"
-            >
+          <div
+            onclick="selectFolder('${f.id}')"
+            style="
+              flex:1;
+              display:flex;
+              align-items:center;
+              gap:10px;
+              cursor:pointer
+            "
+          >
+
+            <div class="folder-icon">
+              ${firstLetter(
+                f.display_name || f.name
+              )}
+            </div>
+
+            <div>
+
               <b>
-                ${esc(folder.display_name || folder.name)}
+                ${esc(
+                  f.display_name || f.name
+                )}
               </b>
 
               <small>
-                ${esc(folder.folder_type || "DRILL")}
+                ${esc(
+                  f.folder_type || "DRILL"
+                )}
                 ·
-                ${folder.is_active === false ? "Inactive" : "Active"}
+                ${
+                  f.is_active === false
+                    ? "Inactive"
+                    : "Active"
+                }
               </small>
-            </div>
-
-            <div class="actions">
-
-              <button
-                class="btn secondary"
-                onclick="moveFolder('${folder.id}',-1)"
-              >
-                ↑
-              </button>
-
-              <button
-                class="btn secondary"
-                onclick="moveFolder('${folder.id}',1)"
-              >
-                ↓
-              </button>
-
-              <button
-                class="btn secondary"
-                onclick="editFolder('${folder.id}')"
-              >
-                Edit
-              </button>
-
-              <button
-                class="btn danger"
-                onclick="deleteFolder('${folder.id}')"
-              >
-                Delete
-              </button>
 
             </div>
 
           </div>
 
-        </div>
-      `;
+          <div class="actions">
 
-    })
-    .join("") ||
+            <button
+              class="btn secondary"
+              onclick="moveFolder('${f.id}',-1)"
+            >
+              ↑
+            </button>
+
+            <button
+              class="btn secondary"
+              onclick="moveFolder('${f.id}',1)"
+            >
+              ↓
+            </button>
+
+            <button
+              class="btn secondary"
+              onclick="editFolder('${f.id}')"
+            >
+              Edit
+            </button>
+
+            <button
+              class="btn danger"
+              onclick="deleteFolder('${f.id}')"
+            >
+              Delete
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    `).join("")
+
+    ||
 
     `<div class="empty">
       No folders created for this subject.
     </div>`;
-
 }
 
+/* SELECT ANY FOLDER INCLUDING CHILD FOLDER */
 
-function selectFolder(folderId){
+function selectFolder(id){
 
-  selectedFolder = folders.find(
-    folder =>
-      String(folder.id) === String(folderId)
-  );
+  selectedFolder =
+    folders.find(
+      f => String(f.id) === String(id)
+    );
 
   if(!selectedFolder) return;
 
-  $("contentPanel").classList.remove("hidden");
+  $("contentPanel").style.display = "block";
 
   $("contentTitle").textContent =
     selectedFolder.display_name ||
-    selectedFolder.name ||
-    "Folder";
+    selectedFolder.name;
 
   renderFolders();
   renderContents();
-
-  setTimeout(() => {
-    $("contentPanel").scrollIntoView({
-      behavior:"smooth",
-      block:"start"
-    });
-  },100);
-
 }
 
+/* CURRENT FOLDER CHILDREN */
 
-function childFolders(){
+function children(){
 
   if(!selectedFolder) return [];
 
   return folders
-    .filter(folder =>
-      String(folder.parent_id || "") ===
+    .filter(f =>
+      String(f.parent_id || "") ===
       String(selectedFolder.id)
     )
-    .sort((a,b) =>
-      Number(a.sort_order || 0) -
-      Number(b.sort_order || 0)
+    .sort(
+      (a,b) =>
+        (a.sort_order || 0) -
+        (b.sort_order || 0)
     );
-
 }
 
+/* BREADCRUMB */
 
-function practiceTestsInFolder(){
+function renderBreadcrumb(){
 
-  if(!selectedFolder) return [];
+  if(!selectedFolder){
+    $("folderBreadcrumb").innerHTML = "";
+    return;
+  }
 
-  return tests
-    .filter(test =>
+  const path = [];
 
-      String(test.folder_id || "") ===
-      String(selectedFolder.id)
+  let current = selectedFolder;
 
-      &&
+  while(current){
 
-      normalize(test.test_type) ===
-      "PRACTICE_DRILL"
+    path.unshift(current);
 
-    )
-    .sort((a,b) =>
-      Number(a.sort_order || 0) -
-      Number(b.sort_order || 0)
-    );
+    current =
+      folders.find(
+        f =>
+          String(f.id) ===
+          String(current.parent_id || "")
+      );
+  }
 
+  $("folderBreadcrumb").innerHTML = `
+
+    <div class="breadcrumb">
+
+      <span>Practice Drill</span>
+
+      <b>›</b>
+
+      <span>
+        ${esc(selectedExam?.name || "")}
+      </span>
+
+      <b>›</b>
+
+      <span>
+        ${esc(selectedSubject?.name || "")}
+      </span>
+
+      ${path.map((p,i) => `
+
+        <b>›</b>
+
+        <span
+          style="cursor:pointer"
+          onclick="selectFolder('${p.id}')"
+        >
+          ${esc(
+            p.display_name || p.name
+          )}
+        </span>
+
+      `).join("")}
+
+    </div>
+
+  `;
 }
 
+/* PARENT FOLDER */
+
+function goToParent(){
+
+  if(!selectedFolder) return;
+
+  if(selectedFolder.parent_id){
+
+    selectFolder(
+      selectedFolder.parent_id
+    );
+
+  }else{
+
+    selectedFolder = null;
+
+    $("contentPanel").style.display = "none";
+
+    renderFolders();
+
+  }
+}
+
+/* RENDER CHILD FOLDERS + TESTS */
 
 function renderContents(){
 
   if(!selectedFolder) return;
 
-  const children = childFolders();
+  const cs = children();
 
-  const folderTests = practiceTestsInFolder();
+  const ts = tests.filter(t =>
+    String(t.folder_id || "") ===
+    String(selectedFolder.id)
+  );
 
+  renderBreadcrumb();
 
-  $("childList").innerHTML = children
-    .map(child => {
+  $("contentTitle").textContent =
+    selectedFolder.display_name ||
+    selectedFolder.name;
 
-      return `
-        <div class="item">
+  $("parentBtn").style.display =
+    selectedFolder.parent_id
+      ? "inline-block"
+      : "none";
 
-          <div class="row">
+  $("childList").innerHTML =
+
+    cs.map(c => `
+
+      <div class="item">
+
+        <div class="row">
+
+          <div
+            onclick="selectFolder('${c.id}')"
+            style="
+              flex:1;
+              display:flex;
+              align-items:center;
+              gap:10px;
+              cursor:pointer
+            "
+          >
+
+            <div class="folder-icon">
+              ${firstLetter(
+                c.display_name || c.name
+              )}
+            </div>
 
             <div>
+
               <b>
-                📁 ${esc(child.display_name || child.name)}
+                ${esc(
+                  c.display_name || c.name
+                )}
               </b>
 
               <small>
-                Child folder ·
-                ${child.is_active === false ? "Inactive" : "Active"}
+                Child Folder ·
+                ${
+                  c.is_active === false
+                    ? "Inactive"
+                    : "Active"
+                }
               </small>
-            </div>
-
-            <div class="actions">
-
-              <button
-                class="btn secondary"
-                onclick="editChild('${child.id}')"
-              >
-                Edit
-              </button>
-
-              <button
-                class="btn danger"
-                onclick="deleteFolder('${child.id}')"
-              >
-                Delete
-              </button>
 
             </div>
 
           </div>
 
-        </div>
-      `;
+          <div class="actions">
 
-    })
-    .join("") || "";
+            <button
+              class="btn secondary"
+              onclick="selectFolder('${c.id}')"
+            >
+              Open
+            </button>
 
+            <button
+              class="btn secondary"
+              onclick="editChild('${c.id}')"
+            >
+              Edit
+            </button>
 
-  $("testList").innerHTML = folderTests
-    .map(test => {
-
-      return `
-        <div class="item">
-
-          <div class="row">
-
-            <div>
-              <b>
-                📝 ${esc(test.title)}
-              </b>
-
-              <small>
-                ${test.duration_minutes || 0} min
-                ·
-                ${test.total_questions || 0} questions
-                ·
-                ${test.is_active === false ? "Inactive" : "Active"}
-              </small>
-            </div>
-
-            <div class="actions">
-
-              <button
-                class="btn secondary"
-                onclick="editTest('${test.id}')"
-              >
-                Edit
-              </button>
-
-              <button
-                class="btn secondary"
-                onclick="location.href='admin-mock.html?test_id=${encodeURIComponent(test.id)}'"
-              >
-                Questions
-              </button>
-
-              <button
-                class="btn danger"
-                onclick="deleteTest('${test.id}')"
-              >
-                Delete
-              </button>
-
-            </div>
+            <button
+              class="btn danger"
+              onclick="deleteFolder('${c.id}')"
+            >
+              Delete
+            </button>
 
           </div>
 
         </div>
-      `;
 
-    })
-    .join("") ||
+      </div>
+
+    `).join("")
+
+    ||
 
     `<div class="empty">
-      No Practice Drill mock tests in this folder.
+      No child folders in this folder.
     </div>`;
 
+  $("testList").innerHTML =
+
+    ts.map(t => `
+
+      <div class="item">
+
+        <div class="row">
+
+          <div>
+
+            <b>
+              ${esc(t.title)}
+            </b>
+
+            <small>
+              ${t.duration_minutes || 0} min
+              ·
+              ${t.total_questions || 0} questions
+              ·
+              ${
+                t.is_active === false
+                  ? "Inactive"
+                  : "Active"
+              }
+            </small>
+
+          </div>
+
+          <div class="actions">
+
+            <button
+              class="btn secondary"
+              onclick="editTest('${t.id}')"
+            >
+              Edit
+            </button>
+
+            <button
+              class="btn secondary"
+              onclick="location.href='admin-mock.html?test_id=${t.id}'"
+            >
+              Questions
+            </button>
+
+            <button
+              class="btn danger"
+              onclick="deleteTest('${t.id}')"
+            >
+              Delete
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    `).join("")
+
+    ||
+
+    `<div class="empty">
+      No tests in this folder.
+    </div>`;
 }
 
+/* ADD ROOT FOLDER */
 
 function openFolderModal(){
 
@@ -1016,200 +1211,251 @@ function openFolderModal(){
   mode = "folder";
 
   showModal(
-    "Add Practice Folder",
+    "Add Folder",
 
     `
-      <div class="form">
+    <div class="form">
 
-        <div class="field full">
-          <label>Folder Name *</label>
-          <input
-            id="fName"
-            placeholder="Example: Chapter Wise Practice"
-          >
-        </div>
-
-        <div class="field">
-          <label>Folder Type</label>
-
-          <select id="fType">
-            <option value="CHAPTER_WISE">
-              Chapter Wise Practice
-            </option>
-
-            <option value="REVISION_BOOSTER">
-              Revision Booster
-            </option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>Active</label>
-
-          <select id="fActive">
-            <option value="true">Active</option>
-            <option value="false">Inactive</option>
-          </select>
-        </div>
-
-        <div class="field full">
-          <label>Display Name</label>
-          <input
-            id="fDisplay"
-            placeholder="Name visible to users"
-          >
-        </div>
-
+      <div class="field">
+        <label>Folder Name *</label>
+        <input id="fName">
       </div>
+
+      <div class="field">
+        <label>Folder Type</label>
+
+        <select id="fType">
+          <option value="DRILL">
+            Practice Folder
+          </option>
+
+          <option value="CHAPTER_WISE">
+            Chapter Wise Practice
+          </option>
+
+          <option value="QUIZZES">
+            Quizzes
+          </option>
+
+          <option value="REVISION_BOOSTER">
+            Revision Booster
+          </option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Display Name</label>
+        <input id="fDisplay">
+      </div>
+
+      <div class="field">
+        <label>Active</label>
+
+        <select id="fActive">
+          <option value="true">Active</option>
+          <option value="false">Inactive</option>
+        </select>
+      </div>
+
+    </div>
     `,
 
     saveFolder
   );
-
 }
 
+/* ADD CHILD FOLDER AT ANY LEVEL */
 
 function openChildFolderModal(){
 
   if(!selectedFolder){
-    return toast("Select a parent folder first");
+    return toast("Select a parent folder");
   }
 
   editing = null;
   mode = "child";
 
   showModal(
-    "Add Chapter / Child Folder",
+    "Add Child Folder",
 
     `
-      <div class="form">
+    <div class="form">
 
-        <div class="field full">
-          <label>Folder Name *</label>
-          <input
-            id="fName"
-            placeholder="Example: Percentage"
-          >
-        </div>
+      <div class="field full">
+        <label>
+          Parent Folder
+        </label>
 
-        <div class="field full">
-          <label>Display Name</label>
-          <input
-            id="fDisplay"
-            placeholder="Name visible to users"
-          >
-        </div>
-
-        <div class="field">
-          <label>Active</label>
-
-          <select id="fActive">
-            <option value="true">Active</option>
-            <option value="false">Inactive</option>
-          </select>
-        </div>
-
+        <input
+          value="${esc(
+            selectedFolder.display_name ||
+            selectedFolder.name
+          )}"
+          disabled
+        >
       </div>
+
+      <div class="field">
+        <label>Folder Name *</label>
+        <input id="fName">
+      </div>
+
+      <div class="field">
+        <label>Display Name</label>
+        <input id="fDisplay">
+      </div>
+
+      <div class="field">
+        <label>Active</label>
+
+        <select id="fActive">
+          <option value="true">Active</option>
+          <option value="false">Inactive</option>
+        </select>
+      </div>
+
+    </div>
     `,
 
     saveChild
   );
-
 }
 
+/* EDIT ROOT FOLDER */
 
-function editFolder(folderId){
+function editFolder(id){
 
-  editing = folders.find(
-    folder =>
-      String(folder.id) === String(folderId)
-  );
+  editing =
+    folders.find(
+      f => String(f.id) === String(id)
+    );
 
   if(!editing) return;
 
   mode = "folder";
 
   showModal(
-    "Edit Practice Folder",
+    "Edit Folder",
 
     `
-      <div class="form">
+    <div class="form">
 
-        <div class="field full">
-          <label>Folder Name *</label>
-          <input
-            id="fName"
-            value="${esc(editing.name)}"
-          >
-        </div>
-
-        <div class="field">
-          <label>Folder Type</label>
-
-          <select id="fType">
-
-            <option
-              value="CHAPTER_WISE"
-              ${normalize(editing.folder_type) === "CHAPTER_WISE" ? "selected" : ""}
-            >
-              Chapter Wise Practice
-            </option>
-
-            <option
-              value="REVISION_BOOSTER"
-              ${normalize(editing.folder_type) === "REVISION_BOOSTER" ? "selected" : ""}
-            >
-              Revision Booster
-            </option>
-
-          </select>
-        </div>
-
-        <div class="field">
-          <label>Active</label>
-
-          <select id="fActive">
-
-            <option
-              value="true"
-              ${editing.is_active !== false ? "selected" : ""}
-            >
-              Active
-            </option>
-
-            <option
-              value="false"
-              ${editing.is_active === false ? "selected" : ""}
-            >
-              Inactive
-            </option>
-
-          </select>
-        </div>
-
-        <div class="field full">
-          <label>Display Name</label>
-          <input
-            id="fDisplay"
-            value="${esc(editing.display_name || "")}"
-          >
-        </div>
-
+      <div class="field">
+        <label>Folder Name *</label>
+        <input
+          id="fName"
+          value="${esc(editing.name)}"
+        >
       </div>
+
+      <div class="field">
+        <label>Folder Type</label>
+
+        <select id="fType">
+
+          <option
+            value="DRILL"
+            ${
+              editing.folder_type === "DRILL"
+                ? "selected"
+                : ""
+            }
+          >
+            Practice Folder
+          </option>
+
+          <option
+            value="CHAPTER_WISE"
+            ${
+              editing.folder_type === "CHAPTER_WISE"
+                ? "selected"
+                : ""
+            }
+          >
+            Chapter Wise Practice
+          </option>
+
+          <option
+            value="QUIZZES"
+            ${
+              editing.folder_type === "QUIZZES"
+                ? "selected"
+                : ""
+            }
+          >
+            Quizzes
+          </option>
+
+          <option
+            value="REVISION_BOOSTER"
+            ${
+              editing.folder_type === "REVISION_BOOSTER"
+                ? "selected"
+                : ""
+            }
+          >
+            Revision Booster
+          </option>
+
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Display Name</label>
+
+        <input
+          id="fDisplay"
+          value="${esc(
+            editing.display_name || ""
+          )}"
+        >
+      </div>
+
+      <div class="field">
+        <label>Active</label>
+
+        <select id="fActive">
+
+          <option
+            value="true"
+            ${
+              editing.is_active !== false
+                ? "selected"
+                : ""
+            }
+          >
+            Active
+          </option>
+
+          <option
+            value="false"
+            ${
+              editing.is_active === false
+                ? "selected"
+                : ""
+            }
+          >
+            Inactive
+          </option>
+
+        </select>
+      </div>
+
+    </div>
     `,
 
     saveFolder
   );
-
 }
 
+/* EDIT CHILD AT ANY LEVEL */
 
-function editChild(folderId){
+function editChild(id){
 
-  editing = folders.find(
-    folder =>
-      String(folder.id) === String(folderId)
-  );
+  editing =
+    folders.find(
+      f => String(f.id) === String(id)
+    );
 
   if(!editing) return;
 
@@ -1219,174 +1465,51 @@ function editChild(folderId){
     "Edit Child Folder",
 
     `
-      <div class="form">
-
-        <div class="field full">
-          <label>Folder Name *</label>
-          <input
-            id="fName"
-            value="${esc(editing.name)}"
-          >
-        </div>
-
-        <div class="field full">
-          <label>Display Name</label>
-          <input
-            id="fDisplay"
-            value="${esc(editing.display_name || "")}"
-          >
-        </div>
-
-        <div class="field">
-          <label>Active</label>
-
-          <select id="fActive">
-
-            <option
-              value="true"
-              ${editing.is_active !== false ? "selected" : ""}
-            >
-              Active
-            </option>
-
-            <option
-              value="false"
-              ${editing.is_active === false ? "selected" : ""}
-            >
-              Inactive
-            </option>
-
-          </select>
-        </div>
-
-      </div>
-    `,
-
-    saveChild
-  );
-
-}
-
-
-function openTestModal(){
-
-  if(!selectedFolder){
-    return toast("Select folder first");
-  }
-
-  editing = null;
-
-  showModal(
-    "Add Practice Drill Mock Test",
-    testForm(),
-    saveTest
-  );
-
-}
-
-
-function editTest(testId){
-
-  editing = tests.find(
-    test =>
-      String(test.id) === String(testId)
-  );
-
-  if(!editing) return;
-
-  showModal(
-    "Edit Practice Drill Mock Test",
-    testForm(editing),
-    saveTest
-  );
-
-}
-
-
-function testForm(test = {}){
-
-  return `
-
     <div class="form">
 
       <div class="field full">
-        <label>Mock Test Title *</label>
+        <label>Folder Name *</label>
 
         <input
-          id="tTitle"
-          value="${esc(test.title || "")}"
-          placeholder="Example: Percentage Practice Set 01"
-        >
-      </div>
-
-      <div class="field full">
-        <label>Description</label>
-
-        <textarea
-          id="tDesc"
-          placeholder="Short description"
-        >${esc(test.description || "")}</textarea>
-      </div>
-
-      <div class="field">
-        <label>Duration Minutes</label>
-
-        <input
-          id="tDuration"
-          type="number"
-          min="1"
-          value="${test.duration_minutes ?? 15}"
+          id="fName"
+          value="${esc(editing.name)}"
         >
       </div>
 
       <div class="field">
-        <label>Total Questions</label>
+        <label>Display Name</label>
 
         <input
-          id="tTotal"
-          type="number"
-          min="0"
-          value="${test.total_questions ?? 0}"
-        >
-      </div>
-
-      <div class="field">
-        <label>Marks / Question</label>
-
-        <input
-          id="tMarks"
-          type="number"
-          step="0.01"
-          value="${test.marks_per_question ?? 1}"
-        >
-      </div>
-
-      <div class="field">
-        <label>Negative Marks</label>
-
-        <input
-          id="tNeg"
-          type="number"
-          step="0.01"
-          value="${test.negative_marks ?? 0}"
+          id="fDisplay"
+          value="${esc(
+            editing.display_name || ""
+          )}"
         >
       </div>
 
       <div class="field">
         <label>Active</label>
 
-        <select id="tActive">
+        <select id="fActive">
 
           <option
             value="true"
-            ${test.is_active !== false ? "selected" : ""}
+            ${
+              editing.is_active !== false
+                ? "selected"
+                : ""
+            }
           >
             Active
           </option>
 
           <option
             value="false"
-            ${test.is_active === false ? "selected" : ""}
+            ${
+              editing.is_active === false
+                ? "selected"
+                : ""
+            }
           >
             Inactive
           </option>
@@ -1395,42 +1518,38 @@ function testForm(test = {}){
       </div>
 
     </div>
+    `,
 
-  `;
-
+    saveChild
+  );
 }
 
+/* MODAL */
 
-function showModal(title,body,saveFunction){
+function showModal(title,body,fn){
 
   $("modalTitle").textContent = title;
   $("modalBody").innerHTML = body;
 
   $("modal").classList.add("show");
 
-  $("saveBtn").onclick = saveFunction;
-
+  $("saveBtn").onclick = fn;
 }
-
 
 function closeModal(){
 
   $("modal").classList.remove("show");
 
+  editing = null;
+  mode = "";
 }
 
+/* SAVE ROOT FOLDER */
 
 async function saveFolder(){
 
-  if(!selectedExam){
-    return toast("Default exam not found");
-  }
-
-  if(!selectedSubject){
-    return toast("Select subject first");
-  }
-
-  const name = $("fName").value.trim();
+  const name =
+    $("fName").value.trim();
 
   if(!name){
     return toast("Folder name required");
@@ -1438,11 +1557,11 @@ async function saveFolder(){
 
   const payload = {
 
-    exam_id: selectedExam.id,
+    exam_id:selectedExam.id,
 
-    subject_id: selectedSubject.id,
+    subject_id:selectedSubject.id,
 
-    name: name,
+    name:name,
 
     display_name:
       $("fDisplay").value.trim() || null,
@@ -1460,66 +1579,61 @@ async function saveFolder(){
 
   };
 
-
-  let result;
+  let r;
 
   if(editing){
 
-    result = await db
-      .from("mock_folders")
-      .update(payload)
-      .eq("id",editing.id);
+    r =
+      await db
+        .from("mock_folders")
+        .update(payload)
+        .eq("id",editing.id);
 
   }else{
 
-    result = await db
-      .from("mock_folders")
-      .insert(payload);
-
+    r =
+      await db
+        .from("mock_folders")
+        .insert(payload);
   }
 
-
-  if(result.error){
-    return toast(result.error.message);
+  if(r.error){
+    return toast(r.error.message);
   }
 
   closeModal();
 
   await reload();
 
-  toast("Folder saved successfully");
-
+  toast("Folder saved");
 }
 
+/* SAVE CHILD FOLDER
+   IMPORTANT:
+   parent_id is always selectedFolder.id
+   Therefore child folder can contain another child folder
+*/
 
 async function saveChild(){
 
-  if(!selectedExam){
-    return toast("Default exam not found");
-  }
+  const name =
+    $("fName").value.trim();
 
-  if(!selectedSubject){
-    return toast("Select subject first");
+  if(!name){
+    return toast("Folder name required");
   }
 
   if(!selectedFolder){
     return toast("Parent folder not selected");
   }
 
-  const name = $("fName").value.trim();
-
-  if(!name){
-    return toast("Child folder name required");
-  }
-
-
   const payload = {
 
-    exam_id: selectedExam.id,
+    exam_id:selectedExam.id,
 
-    subject_id: selectedSubject.id,
+    subject_id:selectedSubject.id,
 
-    name: name,
+    name:name,
 
     display_name:
       $("fDisplay").value.trim() || null,
@@ -1532,62 +1646,322 @@ async function saveChild(){
     is_active:
       $("fActive").value === "true",
 
-    parent_id:selectedFolder.id
+    parent_id:
+      editing
+        ? editing.parent_id
+        : selectedFolder.id
 
   };
 
-
-  let result;
+  let r;
 
   if(editing){
 
-    result = await db
-      .from("mock_folders")
-      .update(payload)
-      .eq("id",editing.id);
+    r =
+      await db
+        .from("mock_folders")
+        .update(payload)
+        .eq("id",editing.id);
 
   }else{
 
-    result = await db
-      .from("mock_folders")
-      .insert(payload);
-
+    r =
+      await db
+        .from("mock_folders")
+        .insert(payload);
   }
 
-
-  if(result.error){
-    return toast(result.error.message);
+  if(r.error){
+    return toast(r.error.message);
   }
 
   closeModal();
 
   await reload();
 
-  toast("Child folder saved successfully");
-
+  toast("Child folder saved");
 }
 
+/* RELOAD */
+
+async function reload(){
+
+  const [
+    f,
+    t
+  ] = await Promise.all([
+
+    db
+      .from("mock_folders")
+      .select("*")
+      .order("sort_order")
+      .order("name"),
+
+    db
+      .from("mock_tests")
+      .select("*")
+      .order("sort_order")
+      .order("created_at",{
+        ascending:false
+      })
+
+  ]);
+
+  if(f.error || t.error){
+
+    return toast(
+      (f.error || t.error).message
+    );
+  }
+
+  folders = f.data || [];
+  tests = t.data || [];
+
+  renderFolders();
+
+  if(selectedFolder){
+
+    selectedFolder =
+      folders.find(
+        x =>
+          String(x.id) ===
+          String(selectedFolder.id)
+      );
+
+    if(selectedFolder){
+      renderContents();
+    }
+  }
+}
+
+/* DELETE FOLDER */
+
+async function deleteFolder(id){
+
+  if(!confirm(
+    "Delete this folder? Child folders/tests may become inaccessible."
+  )){
+    return;
+  }
+
+  const r =
+    await db
+      .from("mock_folders")
+      .delete()
+      .eq("id",id);
+
+  if(r.error){
+    return toast(r.error.message);
+  }
+
+  if(
+    selectedFolder &&
+    String(selectedFolder.id) === String(id)
+  ){
+
+    $("contentPanel").style.display = "none";
+    selectedFolder = null;
+  }
+
+  await reload();
+
+  toast("Folder deleted");
+}
+
+/* MOVE ROOT FOLDER */
+
+async function moveFolder(id,dir){
+
+  const fs = subjectFolders();
+
+  const i =
+    fs.findIndex(
+      x => String(x.id) === String(id)
+    );
+
+  const j = i + dir;
+
+  if(
+    i < 0 ||
+    j < 0 ||
+    j >= fs.length
+  ){
+    return;
+  }
+
+  const a = fs[i];
+  const b = fs[j];
+
+  await db
+    .from("mock_folders")
+    .update({
+      sort_order:b.sort_order ?? j
+    })
+    .eq("id",a.id);
+
+  await db
+    .from("mock_folders")
+    .update({
+      sort_order:a.sort_order ?? i
+    })
+    .eq("id",b.id);
+
+  await reload();
+}
+
+/* ADD TEST IN ANY SELECTED FOLDER
+   Parent folder OR child folder OR nested child
+*/
+
+function openTestModal(){
+
+  if(!selectedFolder){
+    return toast("Select folder");
+  }
+
+  editing = null;
+
+  showModal(
+    "Add Practice Test",
+
+    testForm(),
+
+    saveTest
+  );
+}
+
+function editTest(id){
+
+  editing =
+    tests.find(
+      t => String(t.id) === String(id)
+    );
+
+  if(!editing) return;
+
+  showModal(
+    "Edit Practice Test",
+
+    testForm(editing),
+
+    saveTest
+  );
+}
+
+function testForm(t = {}){
+
+  return `
+
+    <div class="form">
+
+      <div class="field full">
+        <label>Title *</label>
+
+        <input
+          id="tTitle"
+          value="${esc(t.title || "")}"
+        >
+      </div>
+
+      <div class="field full">
+        <label>Description</label>
+
+        <textarea id="tDesc">${esc(
+          t.description || ""
+        )}</textarea>
+      </div>
+
+      <div class="field">
+        <label>Duration Minutes</label>
+
+        <input
+          id="tDuration"
+          type="number"
+          value="${t.duration_minutes ?? 15}"
+        >
+      </div>
+
+      <div class="field">
+        <label>Total Questions</label>
+
+        <input
+          id="tTotal"
+          type="number"
+          value="${t.total_questions ?? 0}"
+        >
+      </div>
+
+      <div class="field">
+        <label>Marks / Question</label>
+
+        <input
+          id="tMarks"
+          type="number"
+          step="0.01"
+          value="${t.marks_per_question ?? 1}"
+        >
+      </div>
+
+      <div class="field">
+        <label>Negative Marks</label>
+
+        <input
+          id="tNeg"
+          type="number"
+          step="0.01"
+          value="${t.negative_marks ?? 0}"
+        >
+      </div>
+
+      <div class="field">
+        <label>Active</label>
+
+        <select id="tActive">
+
+          <option
+            value="true"
+            ${
+              t.is_active !== false
+                ? "selected"
+                : ""
+            }
+          >
+            Active
+          </option>
+
+          <option
+            value="false"
+            ${
+              t.is_active === false
+                ? "selected"
+                : ""
+            }
+          >
+            Inactive
+          </option>
+
+        </select>
+      </div>
+
+    </div>
+
+  `;
+}
+
+/* SAVE TEST IN CURRENT SELECTED FOLDER */
 
 async function saveTest(){
 
-  if(!selectedExam){
-    return toast("Default exam not found");
-  }
+  const title =
+    $("tTitle").value.trim();
 
-  if(!selectedSubject){
-    return toast("Select subject first");
+  if(!title){
+    return toast("Title required");
   }
 
   if(!selectedFolder){
     return toast("Select folder first");
   }
-
-  const title = $("tTitle").value.trim();
-
-  if(!title){
-    return toast("Mock test title required");
-  }
-
 
   const payload = {
 
@@ -1602,13 +1976,7 @@ async function saveTest(){
     description:
       $("tDesc").value.trim() || null,
 
-    /*
-      IMPORTANT:
-      This makes it a Practice Drill test.
-      Normal mocks will not appear here.
-    */
-
-    test_type:"PRACTICE_DRILL",
+    test_type:"SUBJECT_WISE",
 
     duration_minutes:
       Number($("tDuration").value) || 15,
@@ -1630,54 +1998,51 @@ async function saveTest(){
 
   };
 
-
-  let result;
+  let r;
 
   if(editing){
 
-    result = await db
-      .from("mock_tests")
-      .update(payload)
-      .eq("id",editing.id)
-      .select()
-      .single();
+    r =
+      await db
+        .from("mock_tests")
+        .update(payload)
+        .eq("id",editing.id)
+        .select()
+        .single();
 
   }else{
 
-    result = await db
-      .from("mock_tests")
-      .insert(payload)
-      .select()
-      .single();
-
+    r =
+      await db
+        .from("mock_tests")
+        .insert(payload)
+        .select()
+        .single();
   }
 
-
-  if(result.error){
-    return toast(result.error.message);
+  if(r.error){
+    return toast(r.error.message);
   }
 
+  const savedTest = r.data;
 
-  const savedTest = result.data;
+  /* Create section only for new test */
 
+  if(savedTest && !editing){
 
-  /*
-    Create section automatically if not already present.
-  */
-
-  if(savedTest){
-
-    const sectionCheck = await db
-      .from("mock_test_sections")
-      .select("id")
-      .eq("mock_test_id",savedTest.id)
-      .limit(1);
-
+    const existingSection =
+      await db
+        .from("mock_test_sections")
+        .select("id")
+        .eq("mock_test_id",savedTest.id)
+        .limit(1);
 
     if(
-      !sectionCheck.error &&
-      (!sectionCheck.data ||
-       sectionCheck.data.length === 0)
+      !existingSection.error &&
+      (
+        !existingSection.data ||
+        !existingSection.data.length
+      )
     ){
 
       await db
@@ -1691,16 +2056,15 @@ async function saveTest(){
           section_name:selectedSubject.name,
 
           duration_minutes:
-            Number($("tDuration").value) || 15,
+            Number(
+              $("tDuration").value
+            ) || 15,
 
           section_order:1
 
         });
-
     }
-
   }
-
 
   closeModal();
 
@@ -1708,182 +2072,59 @@ async function saveTest(){
 
   toast(
     editing
-      ? "Practice Drill mock updated"
-      : "Practice Drill mock added"
+      ? "Test updated"
+      : "Test saved. Use Questions button to assign questions."
   );
-
 }
 
+/* DELETE TEST */
 
-async function deleteFolder(folderId){
+async function deleteTest(id){
 
-  if(!confirm(
-    "Delete this folder? Child folders and tests may become inaccessible."
-  )){
+  if(!confirm("Delete this test?")){
     return;
   }
 
-  const result = await db
-    .from("mock_folders")
-    .delete()
-    .eq("id",folderId);
-
-  if(result.error){
-    return toast(result.error.message);
-  }
-
-  if(
-    selectedFolder &&
-    String(selectedFolder.id) === String(folderId)
-  ){
-
-    selectedFolder = null;
-    $("contentPanel").classList.add("hidden");
-
-  }
-
-  await reload();
-
-  toast("Folder deleted");
-
-}
-
-
-async function deleteTest(testId){
-
-  if(!confirm("Delete this Practice Drill mock test?")){
-    return;
-  }
-
-  const result = await db
-    .from("mock_tests")
-    .delete()
-    .eq("id",testId);
-
-  if(result.error){
-    return toast(result.error.message);
-  }
-
-  await reload();
-
-  toast("Mock test deleted");
-
-}
-
-
-async function moveFolder(folderId,direction){
-
-  const list = subjectFolders();
-
-  const index = list.findIndex(
-    folder =>
-      String(folder.id) === String(folderId)
-  );
-
-  const nextIndex = index + direction;
-
-  if(
-    index < 0 ||
-    nextIndex < 0 ||
-    nextIndex >= list.length
-  ){
-    return;
-  }
-
-  const current = list[index];
-  const next = list[nextIndex];
-
-
-  await db
-    .from("mock_folders")
-    .update({
-      sort_order:next.sort_order ?? nextIndex
-    })
-    .eq("id",current.id);
-
-
-  await db
-    .from("mock_folders")
-    .update({
-      sort_order:current.sort_order ?? index
-    })
-    .eq("id",next.id);
-
-
-  await reload();
-
-}
-
-
-async function reload(){
-
-  const [
-    folderResponse,
-    testResponse
-  ] = await Promise.all([
-
-    db
-      .from("mock_folders")
-      .select("*")
-      .order("sort_order")
-      .order("name"),
-
-    db
+  const r =
+    await db
       .from("mock_tests")
-      .select("*")
-      .order("sort_order")
-      .order("created_at",{ascending:false})
+      .delete()
+      .eq("id",id);
 
-  ]);
-
-
-  if(folderResponse.error){
-    return toast(folderResponse.error.message);
+  if(r.error){
+    return toast(r.error.message);
   }
 
-  if(testResponse.error){
-    return toast(testResponse.error.message);
-  }
+  await reload();
 
-
-  folders = folderResponse.data || [];
-  tests = testResponse.data || [];
-
-
-  renderFolders();
-
-  if(selectedFolder){
-
-    selectedFolder = folders.find(
-      folder =>
-        String(folder.id) ===
-        String(selectedFolder.id)
-    );
-
-    if(selectedFolder){
-      renderContents();
-    }else{
-      $("contentPanel").classList.add("hidden");
-    }
-
-  }
-
+  toast("Test deleted");
 }
 
+/* SUBJECT MODAL */
 
-load().catch(error => {
+function openSubjectModal(){
+
+  toast(
+    "Subjects are managed from existing subject/admin system"
+  );
+}
+
+/* START */
+
+load().catch(e => {
 
   $("authStatus").textContent = "Error";
 
-  $("subjectGrid").innerHTML = `
-    <div class="empty">
-      ${esc(error.message)}
-    </div>
-  `;
+  $("examGrid").innerHTML = `
 
+    <div class="empty">
+      ${esc(e.message)}
+    </div>
+
+  `;
 });
 
 </script>
 
 </body>
-</html>
+  </html>
