@@ -821,16 +821,19 @@ function renderFolderContents(){
               >
 
                 <div class="pd-folder-line">
-
+  
                   <div class="pd-folder-logo ${
-                    isChapter
-                      ? "chapter"
-                      : "default"
-                  }">
-                    ${isChapter ? "📚" : "📂"}
-                  </div>
-
-                  <div>
+  isChapter
+    ? "chapter"
+    : "default"
+}">
+  ${
+    String(c.display_name || c.name || "F")
+      .trim()
+      .charAt(0)
+      .toUpperCase()
+  }
+</div>
 
                     <strong>
                       ${esc(
