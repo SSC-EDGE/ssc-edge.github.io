@@ -12,6 +12,8 @@ body{
   margin:0;
 }
 
+/* ================= ADMIN PAGE ================= */
+
 .admin-page{
   min-height:100vh;
   padding:24px 16px 80px;
@@ -40,6 +42,8 @@ body{
   font-size:14px;
 }
 
+/* ================= SECTION TITLE ================= */
+
 .section-title{
   margin:25px 4px 11px;
   font-size:13px;
@@ -49,17 +53,14 @@ body{
   color:var(--muted);
 }
 
+/* ================= ADMIN CARD ================= */
+
 .admin-card{
   background:var(--card);
   border:1px solid var(--border);
   border-radius:17px;
   padding:17px;
   margin-bottom:12px;
-  transition:.2s;
-}
-
-.admin-card:hover{
-  border-color:var(--purple);
 }
 
 .admin-card-top{
@@ -72,11 +73,7 @@ body{
   width:44px;
   height:44px;
   border-radius:13px;
-  background:color-mix(
-    in srgb,
-    var(--purple) 15%,
-    transparent
-  );
+  background:rgba(155,89,255,.15);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -92,6 +89,7 @@ body{
   margin:0;
   font-size:16px;
   font-weight:700;
+  color:var(--text);
 }
 
 .admin-card p{
@@ -101,37 +99,49 @@ body{
   line-height:1.4;
 }
 
+/* ================= OPEN BUTTON ================= */
+
 .admin-open{
-  margin-top:14px;
-  width:100%;
-  padding:11px 13px;
-  border:0;
-  border-radius:10px;
-  background:var(--purple);
-  color:white;
-  font-size:14px;
-  font-weight:700;
-  cursor:pointer;
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  width:100% !important;
+  margin-top:14px !important;
+  padding:12px 13px !important;
+  border:0 !important;
+  border-radius:10px !important;
+  background:var(--purple) !important;
+  color:#ffffff !important;
+  font-size:14px !important;
+  font-weight:700 !important;
+  cursor:pointer !important;
+  text-align:center !important;
 }
 
-.admin-open:active{
-  transform:scale(.98);
-}
+/* ================= LOGOUT ================= */
 
 .logout-btn{
-  width:100%;
-  margin-top:26px;
-  padding:13px;
-  border-radius:12px;
-  border:1px solid var(--border);
-  background:transparent;
-  color:var(--text);
-  font-size:14px;
-  font-weight:700;
-  cursor:pointer;
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  width:100% !important;
+  margin-top:26px !important;
+  padding:13px !important;
+  border-radius:12px !important;
+  border:1px solid var(--border) !important;
+  background:transparent !important;
+  color:var(--text) !important;
+  font-size:14px !important;
+  font-weight:700 !important;
+  cursor:pointer !important;
+  text-align:center !important;
 }
 
+/* ================= LOGIN BOX ================= */
+
 .login-box{
+  display:block;
+  width:calc(100% - 32px);
   max-width:420px;
   margin:70px auto;
   padding:22px;
@@ -140,6 +150,11 @@ body{
 .login-box h1{
   margin:0 0 7px;
   font-size:25px;
+  color:var(--text);
+}
+
+.login-box h1 span{
+  color:var(--purple);
 }
 
 .login-box p{
@@ -148,47 +163,70 @@ body{
   font-size:14px;
 }
 
+/* ================= LOGIN INPUT ================= */
+
 .login-box input{
-  width:100%;
-  margin-top:13px;
-  padding:14px;
-  border-radius:11px;
-  border:1px solid var(--border);
-  background:var(--card);
-  color:var(--text);
-  font-size:15px;
-  outline:none;
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  width:100% !important;
+  height:auto !important;
+  margin-top:13px !important;
+  padding:14px !important;
+  border-radius:11px !important;
+  border:1px solid var(--border) !important;
+  background:var(--card) !important;
+  color:var(--text) !important;
+  font-size:15px !important;
+  outline:none !important;
+}
+
+.login-box input::placeholder{
+  color:var(--muted);
 }
 
 .login-box input:focus{
-  border-color:var(--purple);
+  border-color:var(--purple) !important;
 }
+
+/* ================= LOGIN BUTTON ================= */
 
 .login-btn{
-  width:100%;
-  margin-top:17px;
-  padding:13px;
-  border:0;
-  border-radius:11px;
-  background:var(--purple);
-  color:white;
-  font-size:15px;
-  font-weight:700;
-  cursor:pointer;
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  width:100% !important;
+  height:auto !important;
+  min-height:46px !important;
+  margin-top:17px !important;
+  padding:13px !important;
+  border:0 !important;
+  border-radius:11px !important;
+  background:var(--purple) !important;
+  color:#ffffff !important;
+  font-size:15px !important;
+  font-weight:700 !important;
+  cursor:pointer !important;
+  text-align:center !important;
 }
 
+/* ================= ERROR ================= */
+
 .error{
+  display:block;
   color:#ff6b6b;
   margin-top:12px;
   font-size:13px;
   line-height:1.4;
 }
 
+/* ================= PANEL ================= */
+
 #adminPanel{
   display:none;
 }
 
-</style></head><body><!-- ================= LOGIN SCREEN ================= --><div id="loginScreen" class="login-box admin-card">  <h1>SSC <span style="color:var(--purple)">EDGE</span></h1>  <p>Admin Login</p><input
+</style></head><body><!-- ================= LOGIN SCREEN ================= --><div id="loginScreen" class="login-box admin-card">  <h1>SSC <span>EDGE</span></h1>  <p>Admin Login</p><input
 type="email"
 id="email"
 placeholder="Email"
@@ -205,6 +243,7 @@ autocomplete="current-password"
 «»
 
 <button
+type="button"
 class="login-btn"
 onclick="login()"
 
@@ -220,7 +259,7 @@ Login
     Dashboard Overview
   </div>  <!-- ================= HOME ================= -->  <div class="section-title">
     🏡 Home
-  </div>  <div class="admin-card"><div class="admin-card-top">
+  </div>  <!-- DAILY SCHEDULE -->  <div class="admin-card"><div class="admin-card-top">
 
   <div class="admin-icon">📅</div>
 
@@ -235,13 +274,14 @@ Login
 </div>
 
 <button
+  type="button"
   class="admin-open"
   onclick="openPage('admin-daily-schedule.html')"
 >
   Manage Daily Schedule
 </button>
 
-  </div>  <div class="admin-card"><div class="admin-card-top">
+  </div>  <!-- DAILY TASKS -->  <div class="admin-card"><div class="admin-card-top">
 
   <div class="admin-icon">🎯</div>
 
@@ -256,13 +296,14 @@ Login
 </div>
 
 <button
+  type="button"
   class="admin-open"
   onclick="openPage('admin-daily-task.html')"
 >
   Manage Daily Tasks
 </button>
 
-  </div>  <div class="admin-card"><div class="admin-card-top">
+  </div>  <!-- UPDATES -->  <div class="admin-card"><div class="admin-card-top">
 
   <div class="admin-icon">🔔</div>
 
@@ -277,6 +318,7 @@ Login
 </div>
 
 <button
+  type="button"
   class="admin-open"
   onclick="openPage('admin-updates.html')"
 >
@@ -300,6 +342,7 @@ Login
 </div>
 
 <button
+  type="button"
   class="admin-open"
   onclick="openPage('admin-study.html')"
 >
@@ -308,7 +351,7 @@ Login
 
   </div>  <!-- ================= PRACTICE & TESTS ================= -->  <div class="section-title">
     📝 Practice & Tests
-  </div>  <div class="admin-card"><div class="admin-card-top">
+  </div>  <!-- PRACTICE -->  <div class="admin-card"><div class="admin-card-top">
 
   <div class="admin-icon">🗂️</div>
 
@@ -323,13 +366,14 @@ Login
 </div>
 
 <button
+  type="button"
   class="admin-open"
   onclick="openPage('admin-practice.html')"
 >
   Manage Practice
 </button>
 
-  </div>  <div class="admin-card"><div class="admin-card-top">
+  </div>  <!-- PRACTICE DRILL -->  <div class="admin-card"><div class="admin-card-top">
 
   <div class="admin-icon">🎯</div>
 
@@ -344,13 +388,14 @@ Login
 </div>
 
 <button
+  type="button"
   class="admin-open"
   onclick="openPage('admin-practice-drill.html')"
 >
   Manage Practice Drill
 </button>
 
-  </div>  <div class="admin-card"><div class="admin-card-top">
+  </div>  <!-- MOCK TESTS -->  <div class="admin-card"><div class="admin-card-top">
 
   <div class="admin-icon">📝</div>
 
@@ -365,6 +410,7 @@ Login
 </div>
 
 <button
+  type="button"
   class="admin-open"
   onclick="openPage('admin-mock.html')"
 >
@@ -373,7 +419,7 @@ Login
 
   </div>  <!-- ================= QUESTION MANAGEMENT ================= -->  <div class="section-title">
     ❔ Question Management
-  </div>  <div class="admin-card"><div class="admin-card-top">
+  </div>  <!-- QUESTION BANK -->  <div class="admin-card"><div class="admin-card-top">
 
   <div class="admin-icon">❓</div>
 
@@ -388,13 +434,14 @@ Login
 </div>
 
 <button
+  type="button"
   class="admin-open"
   onclick="openPage('questions.html')"
 >
   Manage Question Bank
 </button>
 
-  </div>  <div class="admin-card"><div class="admin-card-top">
+  </div>  <!-- CHAPTERS -->  <div class="admin-card"><div class="admin-card-top">
 
   <div class="admin-icon">📖</div>
 
@@ -409,6 +456,7 @@ Login
 </div>
 
 <button
+  type="button"
   class="admin-open"
   onclick="openPage('admin-chapters.html')"
 >
@@ -418,6 +466,7 @@ Login
   </div>  <!-- ================= SYSTEM ================= -->  <div class="section-title">
     ⚙️ System
   </div><button
+type="button"
 class="logout-btn"
 onclick="logout()"
 
@@ -426,6 +475,8 @@ onclick="logout()"
 Logout
 
   </button></main><script>
+
+/* ================= SUPABASE ================= */
 
 const SUPABASE_URL =
 "https://dvvyoygahzzbnpqrfhen.supabase.co";
@@ -506,7 +557,6 @@ async function checkAdmin(){
 
     return;
   }
-
 
   const {
     data,
