@@ -1,516 +1,4859 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script>
-document.documentElement.dataset.theme=localStorage.getItem("ssc-edge-theme")||"dark";
-</script>
-<meta name="theme-color" content="#e9ddff">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1.0"
+>
+
+<meta
+  name="theme-color"
+  content="#160b26"
+>
+
 <title>SSC EDGE - Test</title>
-<link rel="stylesheet" href="css/style.css">
-<style>
-:root{--purple:#7b4dff;--purple-dark:#6840df;--lavender:#c4a7ff;--lavender-light:#e9ddff;--bg:#08080d;--card:#111118;--card2:#17171f;--border:#2b2b35;--text:#f5f5f7;--muted:#9999a6;--green:#27c981;--red:#ff5c68}
-:root[data-theme="light"]{--bg:#f7f5fb;--card:#fff;--card2:#f5f2fa;--border:#ded9e8;--text:#17151d;--muted:#706b78}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
-body{overflow-x:hidden}button{font-family:inherit}.hidden{display:none!important}
 
-/* HEADER — original design preserved; fixed only */
-.test-header{position:fixed;top:0;left:0;right:0;z-index:1000;width:100%;min-height:64px;display:flex;align-items:center;gap:9px;padding:9px 12px;background:var(--card);border-bottom:1px solid var(--border)}
-.brand{flex-shrink:0;font-size:19px;font-weight:900;white-space:nowrap}.brand .edge{color:var(--purple)}
-.test-header-center{min-width:0;flex:1;display:flex;flex-direction:column;justify-content:center}
-.test-title{min-width:0;font-size:14px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.test-number{margin-top:2px;color:var(--muted);font-size:11px;font-weight:600}
-.timer{flex-shrink:0;min-width:64px;height:38px;display:flex;align-items:center;justify-content:center;padding:0 8px;border:1px solid var(--border);border-radius:10px;background:var(--card2);color:var(--text);font-size:14px;font-weight:800;font-variant-numeric:tabular-nums}
-.timer.warning{color:var(--red);border-color:var(--red)}
-.pause-btn{flex-shrink:0;width:40px;height:38px;display:flex;align-items:center;justify-content:center;padding:0;border:1px solid #c4a7ff!important;border-radius:10px;background:#c4a7ff!important;color:#6840df!important;box-shadow:none!important;font-size:18px;font-weight:900;cursor:pointer}
-.pause-btn:active{transform:scale(.96)}
-.lang-btn{flex-shrink:0;width:38px;height:38px;display:flex;align-items:center;justify-content:center;padding:0;border:1px solid var(--border);border-radius:10px;background:var(--card2);color:var(--text);font-size:14px;font-weight:800;cursor:pointer}
-.submit-section-btn{flex-shrink:0;height:38px;padding:0 11px;border:1px solid var(--purple);border-radius:10px;background:var(--purple);color:#fff;font-size:11px;font-weight:800;cursor:pointer}
+<link
+  rel="stylesheet"
+  href="css/style.css"
+>
 
-/* SECTION BAR — original design preserved; fixed below header */
-.section-bar{position:fixed;top:64px;left:0;right:0;z-index:999;width:100%;display:flex;gap:7px;overflow-x:auto;padding:8px 10px;background:var(--bg);border-bottom:1px solid var(--border);scrollbar-width:none}
-.section-bar::-webkit-scrollbar{display:none}
-.section-btn{flex-shrink:0;min-width:88px;height:34px;padding:0 12px;border:1px solid var(--border);border-radius:9px;background:var(--card);color:var(--text);font-size:11px;font-weight:800;cursor:pointer}
-.section-btn.active{background:var(--purple);border-color:var(--purple);color:#fff}.section-btn.completed{border-color:var(--green)}
-
-/* fixed-header offsets */
-.loading-screen{min-height:calc(100vh - 64px);display:flex;align-items:center;justify-content:center;padding:30px;color:var(--muted);font-size:14px;font-weight:700}
-.start-screen{width:100%;max-width:720px;margin:0 auto;padding:20px 14px 40px}
-.start-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px}
-.start-title{margin:0 0 5px;font-size:20px;font-weight:900}.start-subtitle{margin:0 0 18px;color:var(--muted);font-size:12px}
-.summary-table{width:100%;border-collapse:collapse;border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.summary-table th,.summary-table td{padding:10px 9px;border-bottom:1px solid var(--border);font-size:11px;text-align:left}
-.summary-table th{color:var(--muted);font-weight:700}.summary-table td{font-weight:800}
-.summary-table tr:last-child th,.summary-table tr:last-child td{border-bottom:0}
-.start-controls{margin-top:18px}.language-label{display:block;margin-bottom:7px;color:var(--muted);font-size:11px;font-weight:800}
-.language-select{width:100%;height:44px;padding:0 12px;border:1px solid var(--border);border-radius:10px;background:var(--card2);color:var(--text);outline:none}
-.start-btn{width:100%;height:45px;margin-top:13px;border:0;border-radius:11px;background:var(--purple);color:#fff;font-size:13px;font-weight:900;cursor:pointer}
-
-/* question area scrolls beneath fixed bars */
-.test-area{width:100%;max-width:900px;margin:0 auto;padding:10px 12px 100px}
-.question-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
-.question-count{color:var(--muted);font-size:11px;font-weight:800}.question-actions{display:flex;align-items:center;gap:6px}
-.small-icon-btn{width:34px;height:34px;display:flex;align-items:center;justify-content:center;padding:0;border:1px solid var(--border);border-radius:9px;background:var(--card);color:var(--text);font-size:16px;cursor:pointer}
-.small-icon-btn.saved{background:var(--card)!important;border-color:var(--border)!important;color:#c4a7ff!important}
-.question-card{background:var(--card);border:1px solid var(--border);border-radius:15px;padding:14px}
-.question-meta{display:flex;align-items:center;gap:7px;margin-bottom:9px}
-.subject-chip{display:inline-flex;align-items:center;min-height:23px;padding:0 8px;border-radius:7px;background:var(--lavender-light);color:var(--purple-dark);font-size:9px;font-weight:900}
-.question-text{margin:0;font-size:14px;line-height:1.45;font-weight:700;word-break:break-word}
-.question-image{max-width:100%;height:auto;margin-top:11px;border-radius:8px}
-.options{display:flex;flex-direction:column;gap:7px;margin-top:13px}
-.option{width:100%;display:flex;align-items:flex-start;gap:8px;padding:9px 10px;border:1px solid var(--border);border-radius:10px;background:var(--card2);color:var(--text);text-align:left;cursor:pointer}
-.option-letter{flex-shrink:0;width:24px;height:24px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:7px;background:var(--card);color:var(--muted);font-size:10px;font-weight:900}
-.option-text{flex:1;font-size:12px;line-height:1.38;font-weight:600}
-.option.selected{border-color:var(--purple);background:rgba(123,77,255,.10)}.option.selected .option-letter{border-color:var(--purple);background:var(--purple);color:#fff}
-
-/* BOTTOM NAV fixed */
-.bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:1000;display:flex;gap:7px;padding:8px 10px;background:var(--card);border-top:1px solid var(--border);box-shadow:0 -5px 20px rgba(0,0,0,.10)}
-.nav-action{flex:1;height:42px;display:flex;align-items:center;justify-content:center;padding:0 7px;border:1px solid var(--border);border-radius:10px;background:var(--card2);color:var(--text);font-size:11px;font-weight:900;cursor:pointer;white-space:nowrap}
-.nav-action:active{transform:scale(.98)}.nav-action.review{border-color:var(--purple);background:var(--card);color:var(--purple)}.nav-action.next{border-color:var(--purple);background:var(--purple);color:#fff}
-.nav-action:disabled{opacity:.45;cursor:not-allowed}
-
-/* overlays */
-.grid-overlay{position:fixed;inset:0;z-index:2000;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.55)}.grid-overlay.show{display:flex}
-.grid-sheet{width:100%;max-width:700px;max-height:80vh;overflow:auto;padding:16px;border-radius:18px 18px 0 0;background:var(--card);border-top:1px solid var(--border)}
-.grid-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}.grid-title{font-size:15px;font-weight:900}
-.grid-close{width:32px;height:32px;border:1px solid var(--border);border-radius:8px;background:var(--card2);color:var(--text)}
-.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-.grid-question{position:relative;height:39px;display:flex;align-items:center;justify-content:center;border:1px solid #bbb;border-radius:9px;background:#fff;color:#222;font-size:11px;font-weight:900;cursor:pointer}
-.grid-question.attempted{background:var(--green);border-color:var(--green);color:#fff}.grid-question.not-attempted{background:var(--red);border-color:var(--red);color:#fff}.grid-question.current{box-shadow:0 0 0 2px var(--purple)}
-.grid-question.review:after{content:"★";position:absolute;top:-5px;right:-4px;width:15px;height:15px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#c4a7ff;color:#6840df;font-size:8px}
-.grid-legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:15px}.legend-item{display:flex;align-items:center;gap:5px;color:var(--muted);font-size:9px;font-weight:700}
-.legend-dot{width:12px;height:12px;border-radius:4px;background:#fff;border:1px solid #bbb}.legend-dot.green{background:var(--green);border-color:var(--green)}.legend-dot.red{background:var(--red);border-color:var(--red)}.legend-dot.lavender{background:#c4a7ff;border-color:#c4a7ff}
-.pause-overlay{position:fixed;inset:0;z-index:3000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.60)}.pause-overlay.show{display:flex}
-.pause-card{width:100%;max-width:330px;padding:25px 20px;text-align:center;border:1px solid var(--border);border-radius:18px;background:var(--card)}
-.pause-icon{width:60px;height:60px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;border-radius:15px;background:#c4a7ff!important;color:#6840df!important;font-size:27px;font-weight:900}
-.pause-title{margin:0;font-size:20px;font-weight:900}.pause-text{margin:7px 0 17px;color:var(--muted);font-size:12px}
-.resume-btn{width:100%;height:43px;border:0;border-radius:10px;background:var(--purple);color:#fff;font-size:12px;font-weight:900}
-.language-popup{position:fixed;top:70px;right:10px;z-index:2500;display:none;width:150px;padding:7px;border:1px solid var(--border);border-radius:12px;background:var(--card);box-shadow:0 10px 30px rgba(0,0,0,.20)}
-.language-popup.show{display:block}.language-option{width:100%;height:37px;border:0;border-radius:8px;background:transparent;color:var(--text);text-align:left;padding:0 10px;font-size:11px;font-weight:800;cursor:pointer}
-
-/* result */
-.result-screen{width:100%;max-width:680px;margin:0 auto;padding:30px 14px 40px}.result-card{padding:26px 16px;text-align:center;background:var(--card);border:1px solid var(--border);border-radius:18px}
-.result-brand{margin:0;font-size:22px;font-weight:900}.result-brand .edge{color:var(--purple)}.result-test-name{margin-top:8px;font-size:16px;font-weight:800}.result-test-number{margin-top:3px;color:var(--muted);font-size:11px;font-weight:700}
-.result-icon{width:58px;height:58px;margin:18px auto 13px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(39,201,129,.12);color:var(--green);font-size:27px;font-weight:900}
-.result-thankyou{margin:0;font-size:20px;line-height:1.35;font-weight:900}
-.overview-title{margin:23px 0 9px;text-align:left;font-size:15px;font-weight:900}.overview-wrap{width:100%;overflow-x:auto;border:1px solid var(--border);border-radius:12px}
-.overview-table{width:100%;min-width:480px;border-collapse:collapse}.overview-table th,.overview-table td{padding:10px 8px;border-bottom:1px solid var(--border);font-size:10px;text-align:center}
-.overview-table th{background:var(--card2);color:var(--muted);font-size:9px;font-weight:900}.overview-table td{font-weight:800}.overview-table th:first-child,.overview-table td:first-child{text-align:left}.overview-table tr:last-child td{border-bottom:0}
-.result-actions{display:flex;flex-direction:column;gap:9px;margin-top:20px}.result-action{width:100%;height:44px;border:1px solid var(--border);border-radius:10px;background:var(--card2);color:var(--text);font-size:12px;font-weight:900;cursor:pointer}.result-action.primary{border-color:var(--purple);background:var(--purple);color:#fff}
-
-@media(max-width:600px){.test-header{gap:7px;padding:8px}.brand{font-size:17px}.timer{min-width:58px;font-size:12px}.pause-btn,.lang-btn{width:36px;height:36px}.submit-section-btn{padding:0 8px;font-size:10px}.question-text{font-size:14px}.option-text{font-size:12px}}
-@media(max-width:390px){.brand{font-size:16px}.timer{min-width:52px;padding:0 4px;font-size:11px}.pause-btn,.lang-btn{width:34px}.submit-section-btn{display:none}.nav-action{font-size:10px}}
-</style>
-</head>
-<body>
-
-<header class="test-header">
-  <div class="brand">SSC <span class="edge">EDGE</span></div>
-  <div class="test-header-center">
-    <div class="test-title" id="testName">Loading Test...</div>
-    <div class="test-number" id="testNumber">Test</div>
-  </div>
-  <div class="timer" id="mainTimer">--:--</div>
-  <button class="pause-btn" id="pauseBtn" type="button">⏸</button>
-  <button class="lang-btn" id="languageBtn" type="button">अ/A</button>
-  <button class="submit-section-btn" id="submitSectionBtn" type="button">Submit Section</button>
-</header>
-
-<div class="section-bar hidden" id="sectionBar"></div>
-
-<div class="loading-screen" id="loading">Loading test...</div>
-
-<section class="start-screen hidden" id="startScreen">
-  <div class="start-card">
-    <h1 class="start-title">Ready to Start?</h1>
-    <p class="start-subtitle">Check the test details before starting.</p>
-    <table class="summary-table">
-      <thead><tr><th>Section</th><th>Subject</th><th>Questions</th><th>Time</th></tr></thead>
-      <tbody id="summaryBody"></tbody>
-    </table>
-    <div class="start-controls">
-      <label class="language-label">Starting Language</label>
-      <select class="language-select" id="startLanguage">
-        <option value="english">English</option><option value="hindi">हिंदी</option>
-      </select>
-      <button class="start-btn" id="startBtn" type="button">Start Test</button>
-    </div>
-  </div>
-</section>
-
-<section class="test-area hidden" id="testArea">
-  <div class="question-top">
-    <div class="question-count" id="questionCount">Question 1</div>
-    <div class="question-actions">
-      <button class="small-icon-btn" id="gridBtn" type="button">▦</button>
-      <button class="small-icon-btn" id="saveQuestionBtn" type="button">🔖</button>
-    </div>
-  </div>
-  <div class="question-card">
-    <div class="question-meta"><span class="subject-chip" id="subjectName">Subject</span></div>
-    <div class="question-text" id="questionText"></div>
-    <img id="questionImage" class="question-image hidden" alt="Question">
-    <div class="options" id="options"></div>
-  </div>
-</section>
-
-<div class="bottom-nav hidden" id="bottomNav">
-  <button class="nav-action" id="previousBtn" type="button">Previous</button>
-  <button class="nav-action review" id="reviewBtn" type="button">Mark for Review</button>
-  <button class="nav-action next" id="nextBtn" type="button">Save &amp; Next</button>
-</div>
-
-<div class="grid-overlay" id="gridOverlay">
-  <div class="grid-sheet">
-    <div class="grid-head"><div class="grid-title">Questions</div><button class="grid-close" id="gridClose" type="button">✕</button></div>
-    <div class="question-grid" id="questionGrid"></div>
-    <div class="grid-legend">
-      <div class="legend-item"><span class="legend-dot green"></span>Attempted</div>
-      <div class="legend-item"><span class="legend-dot red"></span>Not Attempted</div>
-      <div class="legend-item"><span class="legend-dot"></span>Not Visited</div>
-      <div class="legend-item"><span class="legend-dot lavender"></span>Review</div>
-    </div>
-  </div>
-</div>
-
-<div class="pause-overlay" id="pauseOverlay">
-  <div class="pause-card">
-    <div class="pause-icon">⏸</div>
-    <h2 class="pause-title">Test Paused</h2>
-    <p class="pause-text">Your test timer is paused.</p>
-    <button class="resume-btn" id="resumeBtn" type="button">Resume Test</button>
-  </div>
-</div>
-
-<div class="language-popup" id="languagePopup">
-  <button class="language-option" data-language="english" type="button">English</button>
-  <button class="language-option" data-language="hindi" type="button">हिंदी</button>
-</div>
-
-<section class="result-screen hidden" id="resultScreen">
-  <div class="result-card">
-    <h1 class="result-brand">SSC <span class="edge">EDGE</span></h1>
-    <div class="result-test-name" id="resultTestName">Test</div>
-    <div class="result-test-number" id="resultTestNumber">Test</div>
-    <div class="result-icon">✓</div>
-    <h2 class="result-thankyou">Thank You for attempting the Test.</h2>
-    <div class="overview-title">Test Overview</div>
-    <div class="overview-wrap">
-      <table class="overview-table">
-        <thead><tr><th>Section</th><th>Attempted</th><th>Unattempted</th><th>Time Taken</th></tr></thead>
-        <tbody id="overviewBody"></tbody>
-      </table>
-    </div>
-    <div class="result-actions">
-      <button class="result-action primary" id="analysisBtn" type="button">View Analysis</button>
-      <button class="result-action" id="solutionsBtn" type="button">View Solutions</button>
-      <button class="result-action" id="backPracticeBtn" type="button">Back to Practice</button>
-    </div>
-  </div>
-</section>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL="https://dvvyoygahzzbnpqrfhen.supabase.co";
-const SUPABASE_KEY="sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
-const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+document.documentElement.dataset.theme =
+  localStorage.getItem("ssc-edge-theme") || "dark";
+</script>
 
-let testId=null,testData=null,sections=[],currentSectionIndex=0,questions=[],currentQuestionIndex=0;
-let answers={},reviewQuestions=new Set(),savedQuestions=new Set();
-let selectedStartLanguage=localStorage.getItem("ssc-edge-test-language")||"english";
-let currentQuestionLanguage=selectedStartLanguage;
-let testStarted=false,testFinished=false,isPaused=false,mainTimerInterval=null;
-let testStartTimestamp=null,lastTickTimestamp=null,totalRemainingSeconds=0,questionRemainingSeconds=0;
-let questionStartedTimestamp=null,questionElapsedSeconds=0,resumeStorageKey=null,currentUser=null;
-let sectionTimeData=[],sectionStartedTimestamp=null,currentSectionRemainingSeconds=0,sectionTimeTaken=[],autoSaveTimeout=null;
+<style>
 
-const $=id=>document.getElementById(id);
-document.addEventListener("DOMContentLoaded",setupEventListeners);
+/* ==================================================
+   SSC EDGE TEST UI
+   ================================================== */
 
-function setupEventListeners(){
- $("pauseBtn").onclick=pauseTest;$("resumeBtn").onclick=resumeTest;$("startBtn").onclick=startOrResumeTest;
- $("previousBtn").onclick=goPrevious;$("nextBtn").onclick=goSaveNext;$("reviewBtn").onclick=toggleReview;
- $("gridBtn").onclick=openQuestionGrid;$("gridClose").onclick=closeQuestionGrid;$("languageBtn").onclick=toggleLanguagePopup;
- $("submitSectionBtn").onclick=submitCurrentSection;$("analysisBtn").onclick=openAnalysisPage;$("solutionsBtn").onclick=openSolutionsPage;$("backPracticeBtn").onclick=backToMocks;
- document.querySelectorAll(".language-option").forEach(button=>button.onclick=()=>{currentQuestionLanguage=button.dataset.language;selectedStartLanguage=button.dataset.language;localStorage.setItem("ssc-edge-test-language",selectedStartLanguage);$("languagePopup").classList.remove("show");renderCurrentQuestion()});
- $("startLanguage").value=selectedStartLanguage;
- $("startLanguage").onchange=e=>{selectedStartLanguage=e.target.value;localStorage.setItem("ssc-edge-test-language",selectedStartLanguage)};
- initializeTest();
+*{
+  box-sizing:border-box;
 }
 
+body{
+  margin:0;
+  padding:0 0 30px;
+}
+
+/* ==================================================
+   HEADER
+   ================================================== */
+
+.test-header{
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:var(--header);
+  border-bottom:1px solid var(--border);
+  padding:11px 14px 10px;
+  backdrop-filter:blur(14px);
+}
+
+.test-header-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  min-height:38px;
+}
+
+.brand{
+  font-size:20px;
+  font-weight:900;
+  letter-spacing:-.5px;
+  white-space:nowrap;
+}
+
+.brand-ssc{
+  color:var(--text);
+}
+
+.brand-edge{
+  color:var(--purple);
+}
+
+.header-actions{
+  display:flex;
+  align-items:center;
+  gap:7px;
+}
+
+.timer{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-width:76px;
+  padding:8px 9px;
+  border-radius:10px;
+  background:var(--card2);
+  border:1px solid var(--border);
+  color:var(--text);
+  font-size:13px;
+  font-weight:900;
+}
+
+.timer.warning{
+  color:#ff6868;
+}
+
+.pause-btn{
+  width:40px;
+  height:38px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid var(--border);
+  background:#c4a7ff;
+  border-color:#c4a7ff;
+  color:var(--purple);
+  padding:0;
+  border-radius:10px;
+  font-size:18px;
+  cursor:pointer;
+}
+
+.pause-btn:active{
+  transform:scale(.97);
+}
+
+/* ==================================================
+   TEST INFORMATION
+   ================================================== */
+
+.test-info{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:9px;
+  padding-top:8px;
+  border-top:1px solid var(--border);
+}
+
+.test-info-left{
+  min-width:0;
+}
+
+.test-name{
+  color:var(--text);
+  font-size:15px;
+  font-weight:900;
+  line-height:1.3;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.test-number{
+  display:block;
+  margin-top:3px;
+  color:var(--muted);
+  font-size:11px;
+  font-weight:700;
+}
+
+.test-header-right{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.submit-section{
+  flex-shrink:0;
+  border:0;
+  background:var(--purple);
+  color:white;
+  padding:9px 11px;
+  border-radius:10px;
+  font-size:11px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.language-icon-btn{
+  width:30px;
+  height:30px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid var(--border);
+  background:var(--card2);
+  color:var(--text);
+  border-radius:9px;
+  font-size:13px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.language-icon-btn:active{
+  transform:scale(.96);
+}
+
+/* ==================================================
+   SECTION BAR
+   ================================================== */
+
+.section-bar{
+  display:flex;
+  gap:7px;
+  overflow-x:auto;
+  scrollbar-width:none;
+  margin-top:11px;
+  padding-bottom:1px;
+}
+
+.section-bar::-webkit-scrollbar{
+  display:none;
+}
+
+.section-btn{
+  flex:0 0 auto;
+  border:1px solid var(--border);
+  background:#fff;
+  color:#24152f;
+  padding:8px 12px;
+  border-radius:9px;
+  font-size:11px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.section-btn.current{
+  background:var(--purple);
+  border-color:var(--purple);
+  color:#fff;
+}
+
+.section-btn:active{
+  transform:scale(.97);
+}
+
+/* ==================================================
+   MAIN CONTAINER
+   ================================================== */
+
+.test-container{
+  max-width:850px;
+  margin:auto;
+  padding:15px 14px 30px;
+}
+
+/* ==================================================
+   START SCREEN
+   ================================================== */
+
+.start-screen{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:18px 15px;
+}
+
+.start-title{
+  margin:0;
+  color:var(--text);
+  font-size:19px;
+  font-weight:900;
+}
+
+.start-subtitle{
+  margin:5px 0 15px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.5;
+}
+
+/* ==================================================
+   LANGUAGE SELECTOR ON START SCREEN
+   ================================================== */
+
+.start-language-box{
+  margin:15px 0 0;
+  padding:13px 12px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:var(--card2);
+}
+
+.start-language-title{
+  margin:0 0 9px;
+  color:var(--text);
+  font-size:14px;
+  font-weight:900;
+}
+
+.language-dropdown-wrap{
+  position:relative;
+}
+
+.language-toggle{
+  width:100%;
+  min-height:40px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border:1px solid var(--border);
+  border-radius:9px;
+  background:var(--bg);
+  color:var(--text);
+  padding:0 12px;
+  font-size:12px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.language-toggle-arrow{
+  color:var(--muted);
+  font-size:16px;
+  line-height:1;
+}
+
+.language-menu{
+  position:absolute;
+  z-index:20;
+  left:0;
+  right:0;
+  top:calc(100% + 6px);
+  padding:5px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:var(--card);
+  box-shadow:0 10px 25px rgba(0,0,0,.18);
+}
+
+.language-choice{
+  width:100%;
+  min-height:38px;
+  border:0;
+  border-radius:8px;
+  background:transparent;
+  color:var(--text);
+  text-align:left;
+  padding:0 10px;
+  font-size:12px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.language-choice.active,
+.language-choice:hover{
+  background:var(--purple);
+  color:#fff;
+}
+
+.language-choice:active{
+  transform:scale(.98);
+}
+
+/* ==================================================
+   SECTION SUMMARY
+   ================================================== */
+
+.section-table-wrap{
+  overflow-x:auto;
+  border:1px solid var(--border);
+  border-radius:12px;
+}
+
+.section-table{
+  width:100%;
+  min-width:430px;
+  border-collapse:collapse;
+  color:var(--text);
+  font-size:12px;
+}
+
+.section-table th,
+.section-table td{
+  padding:11px 9px;
+  text-align:left;
+  border-bottom:1px solid var(--border);
+}
+
+.section-table th{
+  background:var(--card2);
+  font-weight:900;
+}
+
+.section-table tr:last-child td{
+  border-bottom:0;
+}
+
+.start-action{
+  width:100%;
+  margin-top:15px;
+  min-height:45px;
+  border:0;
+  border-radius:11px;
+  background:var(--purple);
+  color:#fff;
+  font-size:13px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.start-action:active{
+  transform:scale(.98);
+}
+
+.resume-note{
+  margin-top:9px;
+  text-align:center;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.45;
+}
+
+/* ==================================================
+   QUESTION TOP
+   ================================================== */
+
+.question-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:10px;
+}
+
+.question-count{
+  color:var(--text);
+  font-size:13px;
+  font-weight:900;
+}
+
+.question-top-right{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.question-time{
+  color:var(--muted);
+  font-size:11px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.save-question-btn{
+  width:30px;
+  height:30px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid var(--border);
+  border-radius:9px;
+  background:var(--card2);
+  color:var(--muted);
+  font-size:16px;
+  cursor:pointer;
+}
+
+.save-question-btn.saved{
+  background:var(--purple) !important;
+  border-color:var(--purple) !important;
+  color:#fff !important;
+}
+
+.saved-bookmark{
+  width:17px;
+  height:20px;
+  display:block;
+}
+
+.saved-bookmark path{
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linejoin:round;
+}
+
+.saved-bookmark.filled path{
+  fill:currentColor;
+}
+
+.question-language-label{
+  color:var(--purple2);
+  font-size:11px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+/* ==================================================
+   QUESTION CARD
+   ================================================== */
+
+.question-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:13px;
+}
+
+.question-text{
+  color:var(--text);
+  font-size:15px;
+  line-height:1.45;
+  font-weight:700;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+
+/* ==================================================
+   OPTIONS
+   ================================================== */
+
+.options{
+  margin-top:13px;
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+
+.option{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  padding:10px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:var(--bg);
+  color:var(--text);
+  cursor:pointer;
+  transition:.15s ease;
+}
+
+.option:hover{
+  border-color:var(--purple);
+}
+
+.option.selected{
+  border-color:var(--purple);
+  background:rgba(168,85,247,.12);
+}
+
+.option input{
+  width:17px;
+  height:17px;
+  margin:2px 0 0;
+  flex-shrink:0;
+  accent-color:var(--purple);
+}
+
+.option-label{
+  min-width:22px;
+  color:var(--purple2);
+  font-size:13px;
+  font-weight:900;
+}
+
+.option-text{
+  flex:1;
+  color:var(--text);
+  font-size:14px;
+  line-height:1.5;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+
+/* ==================================================
+   NAVIGATION
+   ================================================== */
+
+.navigation{
+  width:100%;
+  margin-top:32px;
+  padding-bottom:12px;
+}
+
+.navigation-row{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:8px;
+}
+
+.grid-button-row{
+  width:100%;
+  display:flex;
+  justify-content:flex-end;
+  margin-bottom:18px;
+}
+
+.nav-btn{
+  min-height:44px;
+  border-radius:10px;
+  padding:9px;
+  font-size:11px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.previous-btn{
+  background:var(--card2);
+  color:var(--text);
+  border:1px solid var(--border);
+}
+
+.review-btn{
+  width:100%;
+  margin-top:0;
+  background:var(--card2);
+  color:var(--purple2);
+  border:1px solid var(--border);
+}
+
+.review-btn.marked{
+  background:var(--purple);
+  color:white;
+  border-color:var(--purple);
+}
+
+.grid-btn{
+  width:54px;
+  height:48px;
+  margin:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:10px;
+  background:#fff;
+  color:#24152f;
+  border:1px solid var(--border);
+  font-size:20px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.save-next-btn{
+  width:100%;
+  margin-top:0;
+  min-height:44px;
+  border:0;
+  border-radius:10px;
+  background:var(--purple);
+  color:white;
+  font-size:12px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+/* ==================================================
+   QUESTION GRID OVERLAY
+   ================================================== */
+
+.grid-overlay{
+  position:fixed;
+  inset:0;
+  z-index:200;
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  background:rgba(0,0,0,.68);
+}
+
+.grid-overlay.show{
+  display:flex;
+}
+
+.grid-popup{
+  width:100%;
+  max-width:650px;
+  max-height:88vh;
+  overflow-y:auto;
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-bottom:0;
+  border-radius:20px 20px 0 0;
+  padding:17px;
+}
+
+.grid-header{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding-bottom:13px;
+  border-bottom:1px solid var(--border);
+}
+
+.grid-subject-area{
+  flex:1;
+  min-width:0;
+}
+
+.grid-subject{
+  color:var(--text);
+  font-size:17px;
+  font-weight:900;
+  margin:0;
+}
+
+.grid-subtitle{
+  display:block;
+  margin-top:3px;
+  color:var(--muted);
+  font-size:10px;
+  font-weight:700;
+}
+
+.grid-timer{
+  padding:8px 9px;
+  border-radius:9px;
+  background:var(--card2);
+  border:1px solid var(--border);
+  color:var(--purple2);
+  font-size:12px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+.grid-close{
+  width:34px;
+  height:34px;
+  border:0;
+  border-radius:9px;
+  background:var(--card2);
+  color:var(--text);
+  font-size:22px;
+  line-height:1;
+  cursor:pointer;
+}
+
+.question-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:8px;
+  padding:16px 0;
+}
+
+.grid-question{
+  position:relative;
+  min-height:44px;
+  border:1px solid var(--border);
+  border-radius:9px;
+  background:#fff;
+  color:#24152f;
+  font-size:12px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.grid-question.not-visited{
+  background:#fff;
+  color:#24152f;
+}
+
+.grid-question.not-attempted{
+  background:#ef4444;
+  border-color:#ef4444;
+  color:#fff;
+}
+
+.grid-question.attempted{
+  background:#22c55e;
+  border-color:#22c55e;
+  color:#fff;
+}
+
+.grid-question.current{
+  outline:3px solid rgba(168,85,247,.40);
+}
+
+.grid-question.review::after{
+  content:"";
+  position:absolute;
+  top:-7px;
+  right:-5px;
+  width:15px;
+  height:19px;
+  background:var(--purple);
+  clip-path:polygon(
+    0 0,
+    100% 0,
+    100% 100%,
+    50% 72%,
+    0 100%
+  );
+  border-radius:2px 2px 1px 1px;
+}
+
+/* ==================================================
+   GRID LEGEND
+   ================================================== */
+
+.grid-legend{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  padding-top:13px;
+  border-top:1px solid var(--border);
+}
+
+.legend-item{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  color:var(--muted);
+  font-size:10px;
+  font-weight:700;
+}
+
+.legend-box{
+  width:16px;
+  height:16px;
+  border-radius:4px;
+  flex-shrink:0;
+}
+
+.legend-attempted{
+  background:#22c55e;
+}
+
+.legend-not-visited{
+  background:#fff;
+  border:1px solid #bbb;
+}
+
+.legend-not-attempted{
+  background:#ef4444;
+}
+
+.legend-star{
+  color:var(--purple);
+  font-size:15px;
+  width:16px;
+  text-align:center;
+}
+
+/* ==================================================
+   PAUSE OVERLAY
+   ================================================== */
+
+.pause-overlay{
+  position:fixed;
+  inset:0;
+  z-index:300;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.70);
+}
+
+.pause-overlay.show{
+  display:flex;
+}
+
+.pause-popup{
+  width:100%;
+  max-width:350px;
+  padding:25px 20px;
+  border-radius:18px;
+  background:var(--bg);
+  border:1px solid var(--border);
+  text-align:center;
+}
+
+.pause-symbol{
+  color:var(--purple);
+  font-size:30px;
+  font-weight:900;
+}
+
+.pause-popup h2{
+  margin:10px 0 5px;
+  color:var(--text);
+  font-size:20px;
+  font-weight:900;
+}
+
+.pause-popup p{
+  margin:0 0 18px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.5;
+}
+
+.pause-actions{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+
+.resume-btn,
+.pause-back-btn{
+  width:100%;
+  min-height:44px;
+  padding:12px;
+  border-radius:10px;
+  font-size:12px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.resume-btn{
+  border:0;
+  background:var(--purple);
+  color:#fff;
+}
+
+.pause-back-btn{
+  border:1px solid var(--border);
+  background:var(--card2);
+  color:var(--text);
+}
+
+/* ==================================================
+   RESULT
+   ================================================== */
+
+.result-card{
+  width:100%;
+  max-width:520px;
+  box-sizing:border-box;
+  margin:18px auto 0;
+  padding:28px 18px 24px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  text-align:center;
+  overflow:hidden;
+}
+
+.result-brand{
+  margin:0;
+  color:var(--text);
+  font-size:24px;
+  line-height:1.2;
+  font-weight:950;
+}
+
+.result-brand .edge{
+  color:var(--purple);
+}
+
+.result-test-name{
+  margin:15px 0 3px;
+  color:var(--text);
+  font-size:17px;
+  line-height:1.4;
+  font-weight:900;
+  overflow-wrap:anywhere;
+}
+
+.result-test-number{
+  margin:0;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.4;
+  font-weight:700;
+}
+
+.result-thankyou{
+  margin:25px 0 22px;
+  color:var(--text);
+  font-size:21px;
+  line-height:1.5;
+  font-weight:950;
+}
+
+.result-actions{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  width:100%;
+}
+
+.result-action,
+.result-back{
+  width:100%;
+  min-height:44px;
+  box-sizing:border-box;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:10px 12px;
+  font-size:12px;
+  line-height:1.3;
+  font-weight:900;
+  text-decoration:none;
+  overflow-wrap:anywhere;
+}
+
+.result-action{
+  border:1px solid var(--border);
+  background:var(--card2);
+  color:var(--text);
+}
+
+.result-action.primary{
+  background:var(--purple);
+  border-color:var(--purple);
+  color:#fff;
+}
+
+.result-back{
+  margin-top:10px;
+  border:1px solid var(--border);
+  background:var(--card2);
+  color:var(--text);
+}
+
+/* ==================================================
+   STATES
+   ================================================== */
+
+.hidden{
+  display:none!important;
+}
+
+.loading{
+  text-align:center;
+  padding:55px 10px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.error{
+  background:#512020;
+  color:#ffaaaa;
+  padding:15px;
+  border-radius:12px;
+  margin-top:20px;
+  font-size:13px;
+}
+
+/* ==================================================
+   LANGUAGE POPUP
+   ================================================== */
+
+.language-popup-overlay{
+  position:fixed;
+  inset:0;
+  z-index:350;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.70);
+}
+
+.language-popup-overlay.show{
+  display:flex;
+}
+
+.language-popup{
+  width:100%;
+  max-width:320px;
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:20px;
+}
+
+.language-popup h3{
+  margin:0;
+  color:var(--text);
+  font-size:17px;
+  font-weight:900;
+}
+
+.language-popup p{
+  margin:6px 0 15px;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.language-popup-actions{
+  display:flex;
+  gap:8px;
+}
+
+.language-popup-btn{
+  flex:1;
+  min-height:42px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--card2);
+  color:var(--text);
+  font-size:12px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.language-popup-btn.active{
+  background:var(--purple);
+  color:#fff;
+  border-color:var(--purple);
+}
+
+.language-popup-close{
+  width:100%;
+  min-height:40px;
+  margin-top:10px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:transparent;
+  color:var(--muted);
+  font-size:12px;
+  font-weight:800;
+}
+
+/* ==================================================
+   LIGHT THEME
+   ================================================== */
+
+[data-theme="light"] .section-btn{
+  background:#fff;
+  color:#24152f;
+}
+
+[data-theme="light"] .section-btn.current{
+  background:var(--purple);
+  color:#fff;
+}
+
+[data-theme="light"] .question-card,
+[data-theme="light"] .grid-popup,
+[data-theme="light"] .pause-popup,
+[data-theme="light"] .result-card,
+[data-theme="light"] .language-popup{
+  background:var(--card);
+}
+
+[data-theme="light"] .question-text,
+[data-theme="light"] .question-count,
+[data-theme="light"] .question-language-label,
+[data-theme="light"] .test-name,
+[data-theme="light"] .grid-subject,
+[data-theme="light"] .pause-popup h2,
+[data-theme="light"] .result-thankyou{
+  color:var(--text);
+}
+
+/* ==================================================
+   MOBILE
+   ================================================== */
+
+@media(max-width:500px){
+
+  .brand{
+    font-size:19px;
+  }
+
+  .timer{
+    min-width:70px;
+    font-size:12px;
+  }
+
+  .pause-btn{
+    width:37px;
+    height:36px;
+    font-size:17px;
+  }
+
+  .test-name{
+    font-size:14px;
+  }
+
+  .submit-section{
+    padding:8px 9px;
+    font-size:10px;
+  }
+
+  .language-icon-btn{
+    width:30px;
+    height:30px;
+    font-size:12px;
+  }
+
+  .question-text{
+    font-size:14px;
+  }
+
+  .question-grid{
+    grid-template-columns:repeat(5,1fr);
+  }
+
+  .question-top-right{
+    gap:6px;
+  }
+
+  .question-time{
+    font-size:11px;
+  }
+
+  .result-thankyou{
+    font-size:17px;
+  }
+
+}
+
+@media(max-width:380px){
+
+  .test-header{
+    padding-left:10px;
+    padding-right:10px;
+  }
+
+  .header-actions{
+    gap:4px;
+  }
+
+  .timer{
+    min-width:64px;
+    padding:7px 5px;
+  }
+
+  .submit-section{
+    padding:8px 7px;
+  }
+
+  .language-icon-btn{
+    width:32px;
+    height:32px;
+    font-size:13px;
+  }
+
+  .question-time{
+    font-size:10px;
+  }
+
+}
+
+@media(max-width:350px){
+
+  .question-grid{
+    gap:6px;
+  }
+
+  .navigation-row{
+    gap:6px;
+  }
+
+  .nav-btn{
+    font-size:10px;
+  }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- ==================================================
+     TEST HEADER
+     ================================================== -->
+
+<header class="test-header">
+
+  <div class="test-header-top">
+
+    <div class="brand">
+
+      <span class="brand-ssc">SSC</span>
+      <span class="brand-edge">EDGE</span>
+
+    </div>
+
+    <div class="header-actions">
+
+      <div
+        id="timer"
+        class="timer"
+      >
+        --:--
+      </div>
+
+      <button
+        id="pauseBtn"
+        class="pause-btn"
+        type="button"
+        aria-label="Pause Test"
+        title="Pause Test"
+      >
+        ⏸
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="test-info">
+
+    <div class="test-info-left">
+
+      <div
+        id="testName"
+        class="test-name"
+      >
+        Loading Test...
+      </div>
+
+      <span
+        id="testNumber"
+        class="test-number"
+      >
+        Test
+      </span>
+
+    </div>
+
+    <div class="test-header-right">
+
+      <button
+        id="questionLanguageBtn"
+        class="language-icon-btn"
+        type="button"
+        aria-label="Change Question Language"
+        title="Change Question Language"
+      >
+        अ/A
+      </button>
+
+      <button
+        id="submitSectionBtn"
+        class="submit-section"
+        type="button"
+      >
+        Submit Section
+      </button>
+
+    </div>
+
+  </div>
+
+  <div
+    id="sectionBar"
+    class="section-bar hidden"
+  >
+  </div>
+
+</header>
+
+<!-- ==================================================
+     MAIN
+     ================================================== -->
+
+<main class="test-container">
+
+  <div
+    id="loading"
+    class="loading"
+  >
+    Loading test...
+  </div>
+
+  <!-- ==================================================
+       START SCREEN
+       ================================================== -->
+
+  <div
+    id="startScreen"
+    class="start-screen hidden"
+  >
+
+    <h2
+      id="startTitle"
+      class="start-title"
+    >
+      Ready to Start?
+    </h2>
+
+    <p
+      id="startSubtitle"
+      class="start-subtitle"
+    >
+      Check your section details before starting.
+    </p>
+
+    <div class="section-table-wrap">
+
+      <table class="section-table">
+
+        <thead>
+          <tr>
+            <th>Section</th>
+            <th>Subject</th>
+            <th>No. of Questions</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+
+        <tbody id="sectionSummaryBody"></tbody>
+
+      </table>
+
+    </div>
+
+    <div class="start-language-box">
+
+      <h3 class="start-language-title">
+        Select a language
+      </h3>
+
+      <div class="language-dropdown-wrap">
+
+        <button
+          id="startLanguageToggle"
+          class="language-toggle"
+          type="button"
+          aria-expanded="false"
+        >
+          <span id="startLanguageValue">English</span>
+          <span class="language-toggle-arrow">⌄</span>
+        </button>
+
+        <div
+          id="startLanguageMenu"
+          class="language-menu hidden"
+        >
+
+          <button
+            id="startEnglishBtn"
+            class="language-choice"
+            type="button"
+          >
+            English
+          </button>
+
+          <button
+            id="startHindiBtn"
+            class="language-choice"
+            type="button"
+          >
+            Hindi
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <button
+      id="startTestBtn"
+      class="start-action"
+      type="button"
+    >
+      Start Test
+    </button>
+
+    <div
+      id="resumeNote"
+      class="resume-note hidden"
+    >
+      Your previous progress is saved. You can continue from where you stopped.
+    </div>
+
+  </div>
+
+  <!-- ==================================================
+       TEST AREA
+       ================================================== -->
+
+  <div
+    id="testArea"
+    class="hidden"
+  >
+
+    <div class="question-top">
+
+      <span
+        id="questionCount"
+        class="question-count"
+      >
+        Question 1
+      </span>
+
+      <div class="question-top-right">
+
+        <span
+          id="questionTime"
+          class="question-time"
+          title="Time spent on this question"
+        >
+          ⏰ 00:00
+        </span>
+
+        <button
+          id="saveQuestionBtn"
+          class="save-question-btn"
+          type="button"
+          title="Save Question"
+          aria-label="Save Question"
+        >
+        </button>
+
+        <span
+          id="questionSection"
+          class="question-language-label"
+        >
+          English
+        </span>
+
+      </div>
+
+    </div>
+
+    <div
+      id="questionCard"
+      class="question-card"
+    >
+    </div>
+
+    <div class="navigation">
+
+      <div class="grid-button-row">
+
+        <button
+          id="gridBtn"
+          class="grid-btn"
+          type="button"
+          title="Question Palette"
+          aria-label="Question Palette"
+        >
+          ☷
+        </button>
+
+      </div>
+
+      <div class="navigation-row">
+
+        <button
+          id="previousBtn"
+          class="nav-btn previous-btn"
+          type="button"
+        >
+          Previous
+        </button>
+
+        <button
+          id="reviewBtn"
+          class="nav-btn review-btn"
+          type="button"
+        >
+          Mark for Review
+        </button>
+
+        <button
+          id="saveNextBtn"
+          class="nav-btn save-next-btn"
+          type="button"
+        >
+          Save & Next
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ==================================================
+       RESULT
+       ================================================== -->
+
+  <div
+    id="result"
+    class="hidden"
+  >
+  </div>
+
+</main>
+
+<!-- ==================================================
+     QUESTION PALETTE
+     ================================================== -->
+
+<div
+  id="gridOverlay"
+  class="grid-overlay"
+>
+
+  <div class="grid-popup">
+
+    <div class="grid-header">
+
+      <div class="grid-subject-area">
+
+        <h2
+          id="gridSubject"
+          class="grid-subject"
+        >
+          English
+        </h2>
+
+        <span class="grid-subtitle">
+          Question Palette
+        </span>
+
+      </div>
+
+      <div class="grid-timer">
+
+        ⏱
+        <span id="gridTimer">
+          --:--
+        </span>
+
+      </div>
+
+      <button
+        id="gridClose"
+        class="grid-close"
+        type="button"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <div
+      id="questionGrid"
+      class="question-grid"
+    >
+    </div>
+
+    <div class="grid-legend">
+
+      <div class="legend-item">
+
+        <span
+          class="legend-box legend-attempted"
+        ></span>
+
+        Attempted
+
+      </div>
+
+      <div class="legend-item">
+
+        <span
+          class="legend-box legend-not-visited"
+        ></span>
+
+        Not Visited
+
+      </div>
+
+      <div class="legend-item">
+
+        <span
+          class="legend-box legend-not-attempted"
+        ></span>
+
+        Not Attempted
+
+      </div>
+
+      <div class="legend-item">
+
+        <span class="legend-star">
+          ★
+        </span>
+
+        Mark for Review
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ==================================================
+     PAUSE OVERLAY
+     ================================================== -->
+
+<div
+  id="pauseOverlay"
+  class="pause-overlay"
+>
+
+  <div class="pause-popup">
+
+    <div class="pause-symbol">
+      ⏸
+    </div>
+
+    <h2>
+      Test Paused
+    </h2>
+
+    <p>
+      Your test timer is paused.
+    </p>
+
+    <div class="pause-actions">
+
+      <button
+        id="resumeBtn"
+        class="resume-btn"
+        type="button"
+      >
+        Resume Test
+      </button>
+
+      <button
+        id="pauseBackBtn"
+        class="pause-back-btn"
+        type="button"
+      >
+        Back to Mocks
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ==================================================
+     QUESTION LANGUAGE POPUP
+     ================================================== -->
+
+<div
+  id="languagePopupOverlay"
+  class="language-popup-overlay"
+>
+
+  <div class="language-popup">
+
+    <h3>
+      Select Question Language
+    </h3>
+
+    <p>
+      Change the language of the current question.
+    </p>
+
+    <div class="language-popup-actions">
+
+      <button
+        id="popupHindiBtn"
+        class="language-popup-btn"
+        type="button"
+      >
+        Hindi
+      </button>
+
+      <button
+        id="popupEnglishBtn"
+        class="language-popup-btn"
+        type="button"
+      >
+        English
+      </button>
+
+    </div>
+
+    <button
+      id="languagePopupClose"
+      class="language-popup-close"
+      type="button"
+    >
+      Close
+    </button>
+
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- PART 2 WILL CONTINUE FROM HERE -->
+
+<script>
+
+/* ==================================================
+   SUPABASE
+   ================================================== */
+
+const SUPABASE_URL =
+  "https://dvvyoygahzzbnpqrfhen.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+/* ==================================================
+   GLOBAL VARIABLES
+   ================================================== */
+
+let testId = null;
+let testData = null;
+
+let sections = [];
+let currentSectionIndex = 0;
+
+let questions = [];
+let currentQuestionIndex = 0;
+
+let answers = {};
+let reviewQuestions = {};
+
+let savedQuestions = {};
+
+let selectedStartLanguage =
+  localStorage.getItem("ssc-edge-test-language") || "english";
+
+let currentQuestionLanguage = selectedStartLanguage;
+
+let testStarted = false;
+let testFinished = false;
+
+let isPaused = false;
+
+let mainTimerInterval = null;
+let questionTimerInterval = null;
+let renderTimerInterval = null;
+
+let testStartTimestamp = null;
+let lastTickTimestamp = null;
+
+let totalRemainingSeconds = 0;
+let questionRemainingSeconds = 0;
+
+let questionStartedTimestamp = null;
+let questionElapsedSeconds = 0;
+
+let resumeStorageKey = "";
+
+let currentUser = null;
+
+let sectionTimeData = {};
+
+let sectionStartedTimestamp = null;
+
+let currentSectionRemainingSeconds = 0;
+
+let autoSaveTimeout = null;
+
+/* ==================================================
+   DOM HELPERS
+   ================================================== */
+
+const $ = id =>
+  document.getElementById(id);
+
+function show(id){
+  const el = $(id);
+  if(el) el.classList.remove("hidden");
+}
+
+function hide(id){
+  const el = $(id);
+  if(el) el.classList.add("hidden");
+}
+
+function setText(id, text){
+  const el = $(id);
+  if(el) el.textContent = text ?? "";
+}
+
+function escapeHtml(value){
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function formatTime(seconds){
+  seconds = Math.max(0, Math.floor(seconds || 0));
+
+  const hrs = Math.floor(seconds / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+
+  if(hrs > 0){
+    return String(hrs).padStart(2,"0") + ":" +
+           String(mins).padStart(2,"0") + ":" +
+           String(secs).padStart(2,"0");
+  }
+
+  return String(mins).padStart(2,"0") + ":" +
+         String(secs).padStart(2,"0");
+}
+
+function normalizeLanguage(language){
+  return String(language || "english").toLowerCase() === "hindi"
+    ? "hindi"
+    : "english";
+}
+
+function getQuestionText(question, language){
+  language = normalizeLanguage(language);
+
+  if(language === "hindi"){
+    return question.question_text_hi ||
+           question.question_text ||
+           "Question not available";
+  }
+
+  return question.question_text ||
+         question.question_text_hi ||
+         "Question not available";
+}
+
+function getOptionText(option, language){
+  language = normalizeLanguage(language);
+
+  if(language === "hindi"){
+    return option.option_text_hi ||
+           option.option_text ||
+           "";
+  }
+
+  return option.option_text ||
+         option.option_text_hi ||
+         "";
+}
+
+function getLanguageName(language){
+  return normalizeLanguage(language) === "hindi"
+    ? "Hindi"
+    : "English";
+}
+
+/* ==================================================
+   URL / TEST ID
+   ================================================== */
+
+function getTestIdFromUrl(){
+
+  const params = new URLSearchParams(
+    window.location.search
+  );
+
+  return (
+    params.get("test_id") ||
+    params.get("id") ||
+    params.get("mock_test_id")
+  );
+}
+
+/* ==================================================
+   AUTH
+   ================================================== */
+
+async function loadCurrentUser(){
+
+  try{
+
+    const result =
+      await supabaseClient.auth.getUser();
+
+    currentUser =
+      result?.data?.user || null;
+
+  }catch(error){
+
+    console.warn(
+      "User not logged in:",
+      error
+    );
+
+    currentUser = null;
+
+  }
+
+}
+
+/* ==================================================
+   LOCAL STORAGE
+   ================================================== */
+
+function buildResumeKey(){
+
+  const userPart =
+    currentUser?.id || "guest";
+
+  resumeStorageKey =
+    "ssc-edge-test-progress-" +
+    userPart +
+    "-" +
+    testId;
+
+}
+
+function saveLocalProgress(){
+
+  if(!resumeStorageKey) return;
+
+  const progress = {
+
+    testId,
+
+    currentSectionIndex,
+
+    currentQuestionIndex,
+
+    answers,
+
+    reviewQuestions,
+
+    savedQuestions,
+
+    selectedStartLanguage,
+
+    currentQuestionLanguage,
+
+    totalRemainingSeconds,
+
+    questionRemainingSeconds,
+
+    questionElapsedSeconds,
+
+    sectionTimeData,
+
+    testStarted,
+
+    updatedAt:Date.now()
+
+  };
+
+  try{
+
+    localStorage.setItem(
+      resumeStorageKey,
+      JSON.stringify(progress)
+    );
+
+  }catch(error){
+
+    console.warn(
+      "Unable to save progress:",
+      error
+    );
+
+  }
+
+}
+
+function getLocalProgress(){
+
+  if(!resumeStorageKey) return null;
+
+  try{
+
+    const raw =
+      localStorage.getItem(resumeStorageKey);
+
+    if(!raw) return null;
+
+    return JSON.parse(raw);
+
+  }catch(error){
+
+    return null;
+
+  }
+
+}
+
+function clearLocalProgress(){
+
+  if(!resumeStorageKey) return;
+
+  localStorage.removeItem(
+    resumeStorageKey
+  );
+
+}
+
+/* ==================================================
+   INITIAL LOAD
+   ================================================== */
+
 async function initializeTest(){
- try{
-  const params=new URLSearchParams(window.location.search);testId=params.get("test_id")||params.get("id");
-  if(!testId){showError("Test ID is missing. Please open the test from Practice.");return}
-  resumeStorageKey="ssc-edge-test-progress-"+testId;
-  const {data:{user}}=await supabaseClient.auth.getUser();currentUser=user||null;await loadTestData();
- }catch(error){console.error(error);showError("Unable to load the test.")}
+
+  testId = getTestIdFromUrl();
+
+  if(!testId){
+
+    showError(
+      "Test ID is missing. Please open the test from Practice."
+    );
+
+    return;
+
+  }
+
+  await loadCurrentUser();
+
+  buildResumeKey();
+
+  await loadTestData();
+
 }
 
 async function loadTestData(){
- const {data,error}=await supabaseClient.from("mock_tests").select("*").eq("id",testId).maybeSingle();
- if(error){console.error(error);showError("Unable to load test details.");return}
- if(!data){showError("Test not found.");return}
- testData=data;$("testName").textContent=data.name||data.title||"SSC EDGE Test";$("testNumber").textContent=data.test_number||data.mock_number||data.number||"Test";
- await loadSections();
- if(!sections.length){showError("No sections found for this test.");return}
- renderSectionBar();renderStartSummary();$("loading").classList.add("hidden");$("startScreen").classList.remove("hidden");checkResumeAvailability();
+
+  try{
+
+    const {
+      data:test,
+      error:testError
+    } = await supabaseClient
+      .from("mock_tests")
+      .select("*")
+      .eq("id", testId)
+      .maybeSingle();
+
+    if(testError) throw testError;
+
+    if(!test){
+
+      showError(
+        "Test not found or it is no longer available."
+      );
+
+      return;
+
+    }
+
+    testData = test;
+
+    setText(
+      "testName",
+      test.title || test.test_title || "Mock Test"
+    );
+
+    setText(
+      "testNumber",
+      test.test_number
+        ? "Test " + test.test_number
+        : "Mock Test"
+    );
+
+    await loadSections();
+
+    if(!sections.length){
+
+      showError(
+        "No sections or questions found in this test."
+      );
+
+      return;
+
+    }
+
+    renderSectionBar();
+    renderStartSummary();
+
+    hide("loading");
+    show("startScreen");
+
+    checkResumeAvailability();
+
+  }catch(error){
+
+    console.error(
+      "Test loading error:",
+      error
+    );
+
+    showError(
+      "Unable to load test. Please try again."
+    );
+
+  }
+
 }
 
+/* ==================================================
+   LOAD SECTIONS
+   ================================================== */
+
 async function loadSections(){
- let {data,error}=await supabaseClient.from("mock_test_sections").select(`*,subjects(id,name)`).eq("mock_test_id",testId).order("section_order",{ascending:true});
- if(error){const fallback=await supabaseClient.from("mock_test_sections").select("*").eq("mock_test_id",testId).order("section_order",{ascending:true});data=fallback.data||[]}
- sections=data||[];
- if(!sections.length)sections=[{id:null,section_name:"Full Test",section_order:1,duration_minutes:Number(testData.duration_minutes||testData.duration||60)}];
- for(const section of sections){section.questions=await loadQuestionsForSection(section);section.question_count=section.questions.length;section.duration_minutes=Number(section.duration_minutes||section.time_minutes||section.duration||0)}
+
+  const {
+    data:sectionRows,
+    error:sectionError
+  } = await supabaseClient
+    .from("mock_test_sections")
+    .select(`
+      *,
+      subjects(
+        id,
+        name
+      )
+    `)
+    .eq("mock_test_id", testId)
+    .order("section_order", {
+      ascending:true
+    });
+
+  if(sectionError) throw sectionError;
+
+  sections = sectionRows || [];
+
+  /*
+    If no separate sections exist,
+    create one virtual section.
+  */
+
+  if(!sections.length){
+
+    sections = [{
+      id:"virtual-section-" + testId,
+      mock_test_id:testId,
+      section_order:1,
+      subject_id:null,
+      subject_name:"All Questions",
+      name:"All Questions",
+      duration_minutes:
+        testData.duration_minutes ||
+        testData.duration ||
+        60,
+      virtual:true
+    }];
+
+  }
+
+  for(const section of sections){
+
+    await loadQuestionsForSection(section);
+
+  }
+
 }
 
 async function loadQuestionsForSection(section){
- if(!section.id)return [];
- let {data,error}=await supabaseClient.from("mock_test_questions").select(`*,questions(*,question_options(*))`).eq("mock_test_section_id",section.id).order("question_order",{ascending:true});
- if(error){const fallback=await supabaseClient.from("mock_test_questions").select("*").eq("mock_test_section_id",section.id).order("question_order",{ascending:true});data=fallback.data||[]}
- return (data||[]).map(row=>row.questions?{...row.questions,mock_test_question_id:row.id,question_order:row.question_order}:{...row,mock_test_question_id:row.id});
+
+  let query =
+    supabaseClient
+      .from("mock_test_questions")
+      .select(`
+        id,
+        mock_test_id,
+        section_id,
+        question_id,
+        question_order,
+        questions(
+          id,
+          question_text,
+          question_text_hi,
+          explanation,
+          marks,
+          negative_marks,
+          subject_id,
+          chapter_id,
+          correct_options,
+          is_bonus,
+          solution_image_url,
+          solution_video_url,
+          question_options(
+            id,
+            question_id,
+            option_label,
+            option_text,
+            option_text_hi,
+            is_correct
+          )
+        )
+      `)
+      .eq("mock_test_id", testId)
+      .order("question_order", {
+        ascending:true
+      });
+
+  if(!section.virtual){
+
+    query = query.eq(
+      "section_id",
+      section.id
+    );
+
+  }
+
+  const {
+    data:assignmentRows,
+    error:assignmentError
+  } = await query;
+
+  if(assignmentError){
+
+    /*
+      Fallback for installations where
+      nested relation is not available.
+    */
+
+    console.warn(
+      "Nested question query failed:",
+      assignmentError
+    );
+
+    let fallbackQuery =
+      supabaseClient
+        .from("mock_test_questions")
+        .select("*")
+        .eq("mock_test_id", testId)
+        .order("question_order", {
+          ascending:true
+        });
+
+    if(!section.virtual){
+
+      fallbackQuery =
+        fallbackQuery.eq(
+          "section_id",
+          section.id
+        );
+
+    }
+
+    const {
+      data:fallbackRows,
+      error:fallbackError
+    } = await fallbackQuery;
+
+    if(fallbackError) throw fallbackError;
+
+    const questionIds =
+      (fallbackRows || []).map(
+        row => row.question_id
+      );
+
+    if(!questionIds.length){
+
+      section.questions = [];
+
+      return;
+
+    }
+
+    const {
+      data:questionRows,
+      error:questionError
+    } = await supabaseClient
+      .from("questions")
+      .select(`
+        id,
+        question_text,
+        question_text_hi,
+        explanation,
+        marks,
+        negative_marks,
+        subject_id,
+        chapter_id,
+        correct_options,
+        is_bonus,
+        solution_image_url,
+        solution_video_url,
+        question_options(
+          id,
+          question_id,
+          option_label,
+          option_text,
+          option_text_hi,
+          is_correct
+        )
+      `)
+      .in("id", questionIds);
+
+    if(questionError) throw questionError;
+
+    const questionMap = new Map(
+      (questionRows || []).map(
+        q => [q.id, q]
+      )
+    );
+
+    section.questions =
+      (fallbackRows || [])
+        .map(row => {
+
+          const q =
+            questionMap.get(row.question_id);
+
+          if(!q) return null;
+
+          return {
+            ...q,
+            assignment_id:row.id,
+            question_order:row.question_order
+          };
+
+        })
+        .filter(Boolean)
+        .sort(
+          (a,b) =>
+            (a.question_order || 0) -
+            (b.question_order || 0)
+        );
+
+    return;
+
+  }
+
+  section.questions =
+    (assignmentRows || [])
+      .map(row => {
+
+        const q = row.questions;
+
+        if(!q) return null;
+
+        return {
+          ...q,
+          assignment_id:row.id,
+          question_order:row.question_order
+        };
+
+      })
+      .filter(Boolean);
+
 }
+
+/* ==================================================
+   START LANGUAGE
+   ================================================== */
+
+function setupLanguageButtons(){
+
+  const toggle =
+    $("startLanguageToggle");
+
+  const menu =
+    $("startLanguageMenu");
+
+  toggle?.addEventListener(
+    "click",
+    event => {
+
+      event.stopPropagation();
+
+      const isOpen =
+        !menu?.classList.contains("hidden");
+
+      menu?.classList.toggle(
+        "hidden",
+        isOpen
+      );
+
+      toggle.setAttribute(
+        "aria-expanded",
+        String(!isOpen)
+      );
+
+    }
+  );
+
+  $("startHindiBtn")?.addEventListener(
+    "click",
+    () => {
+
+      selectedStartLanguage = "hindi";
+
+      localStorage.setItem(
+        "ssc-edge-test-language",
+        "hindi"
+      );
+
+      updateStartLanguageUI();
+      closeStartLanguageMenu();
+
+    }
+  );
+
+  $("startEnglishBtn")?.addEventListener(
+    "click",
+    () => {
+
+      selectedStartLanguage = "english";
+
+      localStorage.setItem(
+        "ssc-edge-test-language",
+        "english"
+      );
+
+      updateStartLanguageUI();
+      closeStartLanguageMenu();
+
+    }
+  );
+
+  document.addEventListener(
+    "click",
+    event => {
+
+      if(
+        !event.target.closest(
+          ".language-dropdown-wrap"
+        )
+      ){
+
+        closeStartLanguageMenu();
+
+      }
+
+    }
+  );
+
+  updateStartLanguageUI();
+
+}
+
+function closeStartLanguageMenu(){
+
+  $("startLanguageMenu")
+    ?.classList.add("hidden");
+
+  $("startLanguageToggle")
+    ?.setAttribute(
+      "aria-expanded",
+      "false"
+    );
+
+}
+
+function updateStartLanguageUI(){
+
+  const language =
+    normalizeLanguage(
+      selectedStartLanguage
+    );
+
+  setText(
+    "startLanguageValue",
+    getLanguageName(language)
+  );
+
+  $("startHindiBtn")
+    ?.classList.toggle(
+      "active",
+      language === "hindi"
+    );
+
+  $("startEnglishBtn")
+    ?.classList.toggle(
+      "active",
+      language === "english"
+    );
+
+}
+
+/* ==================================================
+   START SUMMARY
+   ================================================== */
 
 function renderStartSummary(){
- const body=$("summaryBody");body.innerHTML="";
- sections.forEach(section=>{const row=document.createElement("tr");const subject=section.subjects?.name||section.subject_name||section.section_name||"General";
- row.innerHTML=`<td>${escapeHtml(section.section_name||subject)}</td><td>${escapeHtml(subject)}</td><td>${section.question_count||0}</td><td>${section.duration_minutes?section.duration_minutes+" min":"—"}</td>`;body.appendChild(row)});
-}
 
-function renderSectionBar(){
- const bar=$("sectionBar");bar.innerHTML="";
- sections.forEach((section,index)=>{const button=document.createElement("button");button.className="section-btn";if(index===currentSectionIndex)button.classList.add("active");
- const subject=section.subjects?.name||section.subject_name||section.section_name||`Section ${index+1}`;button.textContent=subject;button.onclick=()=>switchSection(index);bar.appendChild(button)});
+  const body =
+    $("sectionSummaryBody");
+
+  if(!body) return;
+
+  body.innerHTML = "";
+
+  sections.forEach((section,index) => {
+
+    const subject =
+      section.subjects?.name ||
+      section.subject_name ||
+      section.name ||
+      "Section " + (index + 1);
+
+    const count =
+      section.questions?.length || 0;
+
+    const duration =
+      section.duration_minutes ||
+      section.duration ||
+      testData.duration_minutes ||
+      testData.duration ||
+      0;
+
+    const tr =
+      document.createElement("tr");
+
+    tr.innerHTML = `
+      <td>Section ${index + 1}</td>
+      <td>${escapeHtml(subject)}</td>
+      <td>${count}</td>
+      <td>${formatTime(duration * 60)}</td>
+    `;
+
+    body.appendChild(tr);
+
+  });
+
 }
 
 function checkResumeAvailability(){
- const raw=localStorage.getItem(resumeStorageKey);if(!raw)return;
- try{const saved=JSON.parse(raw);if(saved&&saved.testStarted&&!saved.testFinished){$("startBtn").textContent="Resume Test";const subtitle=document.querySelector(".start-subtitle");if(subtitle)subtitle.textContent="Previous test progress found. You can resume where you left off."}}
- catch(error){localStorage.removeItem(resumeStorageKey)}
+
+  const progress =
+    getLocalProgress();
+
+  if(
+    progress &&
+    progress.testStarted &&
+    !progress.testFinished
+  ){
+
+    setText(
+      "startTitle",
+      "Resume Test"
+    );
+
+    setText(
+      "startSubtitle",
+      "Your previous test progress is available."
+    );
+
+    setText(
+      "startTestBtn",
+      "Resume Test"
+    );
+
+    show("resumeNote");
+
+  }else{
+
+    setText(
+      "startTitle",
+      "Ready to Start?"
+    );
+
+    setText(
+      "startSubtitle",
+      "Check your section details before starting."
+    );
+
+    setText(
+      "startTestBtn",
+      "Start Test"
+    );
+
+    hide("resumeNote");
+
+  }
+
 }
 
+/* ==================================================
+   SECTION BAR
+   ================================================== */
+
+function renderSectionBar(){
+
+  const bar =
+    $("sectionBar");
+
+  if(!bar) return;
+
+  bar.innerHTML = "";
+
+  sections.forEach((section,index) => {
+
+    const subject =
+      section.subjects?.name ||
+      section.subject_name ||
+      section.name ||
+      "Section " + (index + 1);
+
+    const btn =
+      document.createElement("button");
+
+    btn.type = "button";
+    btn.className = "section-btn";
+
+    btn.textContent = subject;
+
+    btn.addEventListener(
+      "click",
+      () => switchSection(index)
+    );
+
+    bar.appendChild(btn);
+
+  });
+
+}
+
+function updateSectionBar(){
+
+  document
+    .querySelectorAll(".section-btn")
+    .forEach((btn,index) => {
+
+      btn.classList.toggle(
+        "current",
+        index === currentSectionIndex
+      );
+
+    });
+
+}
+
+/* ==================================================
+   PREPARE QUESTIONS
+   ================================================== */
+
+function flattenQuestions(){
+
+  questions = [];
+
+  sections.forEach((section,sectionIndex) => {
+
+    (section.questions || []).forEach(
+      (question,questionIndex) => {
+
+        questions.push({
+
+          ...question,
+
+          sectionIndex,
+
+          sectionQuestionIndex:questionIndex
+
+        });
+
+      }
+    );
+
+  });
+
+}
+
+function getCurrentSection(){
+
+  return sections[currentSectionIndex];
+
+}
+
+function getCurrentSectionQuestions(){
+
+  return (
+    getCurrentSection()?.questions || []
+  );
+
+}
+
+function getCurrentQuestion(){
+
+  return getCurrentSectionQuestions()
+    [currentQuestionIndex];
+
+}
+
+/* ==================================================
+   RESUME PROGRESS
+   ================================================== */
+
+function restoreProgress(progress){
+
+  if(!progress) return;
+
+  answers =
+    progress.answers || {};
+
+  reviewQuestions =
+    progress.reviewQuestions || {};
+
+  savedQuestions =
+    progress.savedQuestions || {};
+
+  currentSectionIndex =
+    Number(progress.currentSectionIndex || 0);
+
+  currentQuestionIndex =
+    Number(progress.currentQuestionIndex || 0);
+
+  selectedStartLanguage =
+    normalizeLanguage(
+      progress.selectedStartLanguage ||
+      selectedStartLanguage
+    );
+
+  currentQuestionLanguage =
+    normalizeLanguage(
+      progress.currentQuestionLanguage ||
+      selectedStartLanguage
+    );
+
+  totalRemainingSeconds =
+    Number(
+      progress.totalRemainingSeconds || 0
+    );
+
+  questionRemainingSeconds =
+    Number(
+      progress.questionRemainingSeconds || 0
+    );
+
+  questionElapsedSeconds =
+    Number(
+      progress.questionElapsedSeconds || 0
+    );
+
+  sectionTimeData =
+    progress.sectionTimeData || {};
+
+  testStarted = !!progress.testStarted;
+  testFinished = !!progress.testFinished;
+  isPaused = !!progress.isPaused;
+
+}
+
+/* ==================================================
+   START / RESUME TEST
+   ================================================== */
+
 function startOrResumeTest(){
- const raw=localStorage.getItem(resumeStorageKey);
- if(raw){try{const saved=JSON.parse(raw);if(saved&&saved.testStarted&&!saved.testFinished)restoreProgress(saved);else resetTestState()}catch(error){resetTestState()}}else resetTestState();
- testStarted=true;testFinished=false;isPaused=false;
- $("startScreen").classList.add("hidden");$("testArea").classList.remove("hidden");$("bottomNav").classList.remove("hidden");$("sectionBar").classList.remove("hidden");
- currentQuestionLanguage=selectedStartLanguage;renderSectionBar();renderCurrentQuestion();initializeTimers();saveLocalProgress();
+
+  const progress =
+    getLocalProgress();
+
+  if(
+    progress &&
+    progress.testStarted &&
+    !progress.testFinished
+  ){
+
+    restoreProgress(progress);
+
+  }else{
+
+    resetTestState();
+
+  }
+
+  testStarted = true;
+  testFinished = false;
+  isPaused = false;
+
+  hide("startScreen");
+  show("testArea");
+  show("sectionBar");
+
+  updateSectionBar();
+
+  initializeTimers();
+
+  renderCurrentQuestion();
+
+  saveLocalProgress();
+
 }
 
 function resetTestState(){
- currentSectionIndex=0;currentQuestionIndex=0;answers={};reviewQuestions=new Set();savedQuestions=new Set();
- sectionTimeData=sections.map(section=>Math.max(0,Number(section.duration_minutes||0)*60));
- totalRemainingSeconds=sectionTimeData.reduce((sum,time)=>sum+time,0);
- if(totalRemainingSeconds<=0)totalRemainingSeconds=Number(testData.duration_minutes||testData.duration||60)*60;
- if(sectionTimeData.every(v=>v<=0))sectionTimeData=sections.map(()=>totalRemainingSeconds/sections.length);
- currentSectionRemainingSeconds=sectionTimeData[0]||totalRemainingSeconds;questionRemainingSeconds=currentSectionRemainingSeconds;
- questionElapsedSeconds=0;sectionTimeTaken=sections.map(()=>0);testStartTimestamp=Date.now();lastTickTimestamp=null;sectionStartedTimestamp=Date.now();questionStartedTimestamp=Date.now();
+
+  answers = {};
+  reviewQuestions = {};
+  savedQuestions = {};
+
+  currentSectionIndex = 0;
+  currentQuestionIndex = 0;
+
+  currentQuestionLanguage =
+    selectedStartLanguage;
+
+  sectionTimeData = {};
+
+  sections.forEach((section, index) => {
+    const mins = Number(section.duration_minutes || section.duration || 0);
+    if (mins > 0) sectionTimeData[String(index)] = mins * 60;
+  });
+
+  const totalMinutes =
+    Number(
+      testData.duration_minutes ||
+      testData.duration ||
+      0
+    );
+
+  totalRemainingSeconds =
+    totalMinutes > 0
+      ? totalMinutes * 60
+      : sections.reduce(
+          (sum,section) =>
+            sum +
+            Number(
+              section.duration_minutes ||
+              section.duration ||
+              0
+            ) * 60,
+          0
+        );
+
+  if(!totalRemainingSeconds){
+
+    totalRemainingSeconds = 60 * 60;
+
+  }
+
+  const currentSection =
+    getCurrentSection();
+
+  currentSectionRemainingSeconds =
+    Number(
+      currentSection?.duration_minutes ||
+      currentSection?.duration ||
+      0
+    ) * 60;
+
+  if(!currentSectionRemainingSeconds){
+
+    currentSectionRemainingSeconds =
+      totalRemainingSeconds;
+
+  }
+
+  questionRemainingSeconds = 0;
+  questionElapsedSeconds = 0;
+
+  testStartTimestamp = Date.now();
+
 }
 
-function restoreProgress(saved){
- currentSectionIndex=Number(saved.currentSectionIndex||0);currentQuestionIndex=Number(saved.currentQuestionIndex||0);answers=saved.answers||{};
- reviewQuestions=new Set(saved.reviewQuestions||[]);savedQuestions=new Set(saved.savedQuestions||[]);
- sectionTimeData=Array.isArray(saved.sectionTimeData)&&saved.sectionTimeData.length?saved.sectionTimeData:sections.map(s=>Number(s.duration_minutes||0)*60);
- totalRemainingSeconds=Number(saved.totalRemainingSeconds||0);currentSectionRemainingSeconds=Number(saved.currentSectionRemainingSeconds||sectionTimeData[currentSectionIndex]||0);
- questionRemainingSeconds=Number(saved.questionRemainingSeconds||currentSectionRemainingSeconds);questionElapsedSeconds=Number(saved.questionElapsedSeconds||0);
- sectionTimeTaken=Array.isArray(saved.sectionTimeTaken)?saved.sectionTimeTaken:sections.map(()=>0);
- testStartTimestamp=saved.testStartTimestamp||Date.now();testStarted=true;testFinished=false;isPaused=false;
+/* ==================================================
+   TIMER INITIALIZATION
+   ================================================== */
+
+function initializeTimers(){
+
+  stopAllTimers();
+
+  lastTickTimestamp = Date.now();
+
+  if(!testStartTimestamp){
+
+    testStartTimestamp = Date.now();
+
+  }
+
+  questionStartedTimestamp = Date.now();
+
+  if(
+    !questionRemainingSeconds ||
+    questionRemainingSeconds < 0
+  ){
+
+    questionRemainingSeconds = 0;
+
+  }
+
+  mainTimerInterval =
+    setInterval(
+      synchronizedTimerTick,
+      250
+    );
+
+  questionTimerInterval =
+    mainTimerInterval;
+
+  renderTimerInterval =
+    mainTimerInterval;
+
+  synchronizedTimerTick();
+
 }
 
-function initializeTimers(){stopTimers();lastTickTimestamp=Date.now();questionStartedTimestamp=Date.now();sectionStartedTimestamp=Date.now();renderTimerValues();mainTimerInterval=setInterval(synchronizedTimerTick,250)}
+function stopAllTimers(){
+
+  if(mainTimerInterval){
+
+    clearInterval(mainTimerInterval);
+
+  }
+
+  if(
+    questionTimerInterval &&
+    questionTimerInterval !== mainTimerInterval
+  ){
+
+    clearInterval(
+      questionTimerInterval
+    );
+
+  }
+
+  if(
+    renderTimerInterval &&
+    renderTimerInterval !== mainTimerInterval
+  ){
+
+    clearInterval(
+      renderTimerInterval
+    );
+
+  }
+
+  mainTimerInterval = null;
+  questionTimerInterval = null;
+  renderTimerInterval = null;
+
+}
+
+/* ==================================================
+   SYNCHRONIZED TIMER
+   ================================================== */
 
 function synchronizedTimerTick(){
- if(!testStarted||testFinished||isPaused)return;
- const now=Date.now();if(!lastTickTimestamp){lastTickTimestamp=now;return}
- let elapsed=Math.min(Math.max((now-lastTickTimestamp)/1000,0),2);lastTickTimestamp=now;if(elapsed<=0)return;
- totalRemainingSeconds=Math.max(0,totalRemainingSeconds-elapsed);
- currentSectionRemainingSeconds=Math.max(0,currentSectionRemainingSeconds-elapsed);
- questionElapsedSeconds+=elapsed;questionRemainingSeconds=Math.max(0,questionRemainingSeconds-elapsed);
- sectionTimeTaken[currentSectionIndex]=Math.max(0,(sectionTimeData[currentSectionIndex]||0)-currentSectionRemainingSeconds);
- renderTimerValues();
- if(currentSectionRemainingSeconds<=0){handleSectionTimeEnd();return}
- if(totalRemainingSeconds<=0){finishTestAutomatically();return}
- saveLocalProgressThrottled();
+
+  if(!testStarted || testFinished || isPaused){
+
+    return;
+
+  }
+
+  const now = Date.now();
+
+  if(!lastTickTimestamp){
+
+    lastTickTimestamp = now;
+
+  }
+
+  const elapsedMs =
+    now - lastTickTimestamp;
+
+  if(elapsedMs <= 0) return;
+
+  const elapsedSeconds =
+    elapsedMs / 1000;
+
+  lastTickTimestamp = now;
+
+  totalRemainingSeconds =
+    Math.max(
+      0,
+      totalRemainingSeconds -
+      elapsedSeconds
+    );
+
+  const sectionKey = String(currentSectionIndex);
+  if (Object.prototype.hasOwnProperty.call(sectionTimeData, sectionKey)) {
+    sectionTimeData[sectionKey] = Math.max(
+      0,
+      Number(sectionTimeData[sectionKey]) - elapsedSeconds
+    );
+    currentSectionRemainingSeconds = sectionTimeData[sectionKey];
+  }
+
+  questionElapsedSeconds +=
+    elapsedSeconds;
+
+  updateTimerUI();
+
+  if (Object.prototype.hasOwnProperty.call(sectionTimeData, String(currentSectionIndex)) && sectionTimeData[String(currentSectionIndex)] <= 0) {
+    sectionTimeData[String(currentSectionIndex)] = 0;
+    if (currentSectionIndex < sections.length - 1) {
+      currentSectionIndex++;
+      currentQuestionIndex = 0;
+      resetQuestionClock();
+      updateSectionBar();
+      renderCurrentQuestion();
+      saveLocalProgress();
+      return;
+    }
+    totalRemainingSeconds = 0;
+  }
+
+  if(
+    totalRemainingSeconds <= 0
+  ){
+
+    totalRemainingSeconds = 0;
+
+    updateTimerUI();
+
+    finishTestAutomatically();
+
+    return;
+
+  }
+
+  saveLocalProgressThrottled();
+
 }
 
-function renderTimerValues(){$("mainTimer").textContent=formatTime(totalRemainingSeconds);$("mainTimer").classList.toggle("warning",totalRemainingSeconds<=60)}
+/* ==================================================
+   TIMER UI
+   ================================================== */
 
-function handleSectionTimeEnd(){
- if(testFinished)return;stopTimers();sectionTimeTaken[currentSectionIndex]=sectionTimeData[currentSectionIndex]||0;
- if(currentSectionIndex<sections.length-1){currentSectionIndex++;currentQuestionIndex=0;currentSectionRemainingSeconds=sectionTimeData[currentSectionIndex]||0;questionRemainingSeconds=currentSectionRemainingSeconds;questionElapsedSeconds=0;sectionStartedTimestamp=Date.now();questionStartedTimestamp=Date.now();renderSectionBar();renderCurrentQuestion();lastTickTimestamp=Date.now();mainTimerInterval=setInterval(synchronizedTimerTick,250);saveLocalProgress();return}
- finishTestAutomatically();
+function updateTimerUI(){
+
+  const total =
+    Math.ceil(
+      totalRemainingSeconds
+    );
+
+  setText(
+    "timer",
+    formatTime(total)
+  );
+
+  setText(
+    "gridTimer",
+    formatTime(total)
+  );
+
+  const timerEl =
+    $("timer");
+
+  if(timerEl){
+
+    timerEl.classList.toggle(
+      "warning",
+      total <= 60
+    );
+
+  }
+
+  setText(
+    "questionTime",
+    "⏰ " +
+    formatTime(
+      Math.floor(
+        questionElapsedSeconds
+      )
+    )
+  );
+
 }
+
+/* ==================================================
+   THROTTLED LOCAL SAVE
+   ================================================== */
+
+function saveLocalProgressThrottled(){
+
+  if(autoSaveTimeout) return;
+
+  autoSaveTimeout =
+    setTimeout(
+      () => {
+
+        autoSaveTimeout = null;
+
+        saveLocalProgress();
+
+      },
+      1000
+    );
+
+}
+
+/* ==================================================
+   PAUSE / RESUME
+   ================================================== */
 
 function pauseTest(){
- if(!testStarted||testFinished||isPaused)return;synchronizedTimerTick();isPaused=true;lastTickTimestamp=null;saveLocalProgress();$("pauseOverlay").classList.add("show");
+
+  if(!testStarted || testFinished) return;
+
+  isPaused = true;
+
+  lastTickTimestamp = null;
+
+  saveLocalProgress();
+
+  $("pauseOverlay")
+    ?.classList.add("show");
+
 }
+
 function resumeTest(){
- if(!testStarted||testFinished)return;isPaused=false;lastTickTimestamp=Date.now();$("pauseOverlay").classList.remove("show");saveLocalProgress();
+
+  if(!testStarted || testFinished) return;
+
+  isPaused = false;
+
+  lastTickTimestamp = Date.now();
+
+  $("pauseOverlay")
+    ?.classList.remove("show");
+
+  synchronizedTimerTick();
+
+  saveLocalProgress();
+
 }
-function stopTimers(){if(mainTimerInterval){clearInterval(mainTimerInterval);mainTimerInterval=null}}
+
+function backToMocks(){
+
+  isPaused = true;
+
+  stopAllTimers();
+
+  saveLocalProgress();
+
+  /*
+    Change this URL only if your actual
+    mock listing page has another filename.
+  */
+
+  window.location.href =
+    "practice.html";
+
+}
+
+/* ==================================================
+   SECTION SWITCH
+   ================================================== */
 
 function switchSection(index){
- if(index<0||index>=sections.length)return;synchronizedTimerTick();
- sectionTimeTaken[currentSectionIndex]=Math.max(sectionTimeTaken[currentSectionIndex]||0,(sectionTimeData[currentSectionIndex]||0)-currentSectionRemainingSeconds);
- currentSectionIndex=index;currentQuestionIndex=0;currentSectionRemainingSeconds=sectionTimeData[index]??currentSectionRemainingSeconds;questionRemainingSeconds=currentSectionRemainingSeconds;questionElapsedSeconds=0;sectionStartedTimestamp=Date.now();questionStartedTimestamp=Date.now();
- renderSectionBar();renderCurrentQuestion();saveLocalProgress();
+
+  if(
+    index < 0 ||
+    index >= sections.length
+  ) return;
+
+  currentSectionIndex = index;
+  currentQuestionIndex = 0;
+
+  currentQuestionLanguage =
+    selectedStartLanguage;
+
+  currentSectionRemainingSeconds =
+    Object.prototype.hasOwnProperty.call(sectionTimeData, String(index))
+      ? Number(sectionTimeData[String(index)])
+      : 0;
+
+  questionElapsedSeconds = 0;
+  questionRemainingSeconds = 0;
+
+  updateSectionBar();
+
+  renderCurrentQuestion();
+
+  saveLocalProgress();
+
 }
+
+/* ==================================================
+   QUESTION RENDER
+   ================================================== */
 
 function renderCurrentQuestion(){
- const section=sections[currentSectionIndex];if(!section)return;questions=section.questions||[];
- if(!questions.length){$("questionText").textContent="No questions available in this section.";$("options").innerHTML="";return}
- if(currentQuestionIndex>=questions.length)currentQuestionIndex=questions.length-1;
- const question=questions[currentQuestionIndex];const questionId=String(question.id||question.question_id||question.mock_test_question_id||currentQuestionIndex);
- if(!(questionId in answers))answers[questionId]=null;
- $("questionCount").textContent=`Question ${currentQuestionIndex+1} of ${questions.length}`;
- $("subjectName").textContent=section.subjects?.name||section.subject_name||section.section_name||"General";
- $("questionText").innerHTML=formatQuestionText(getQuestionText(question,currentQuestionLanguage));
- const image=question.image_url||question.question_image||question.image;
- if(image){$("questionImage").src=image;$("questionImage").classList.remove("hidden")}else $("questionImage").classList.add("hidden");
- renderOptions(question);renderSaveButton(questionId);renderReviewButton(questionId);renderQuestionGrid();updateNavigationButtons();
+
+  const section =
+    getCurrentSection();
+
+  const sectionQuestions =
+    getCurrentSectionQuestions();
+
+  if(!sectionQuestions.length){
+
+    $("questionCard").innerHTML = `
+      <div class="error">
+        No questions available in this section.
+      </div>
+    `;
+
+    return;
+
+  }
+
+  if(
+    currentQuestionIndex < 0
+  ){
+
+    currentQuestionIndex = 0;
+
+  }
+
+  if(
+    currentQuestionIndex >= sectionQuestions.length
+  ){
+
+    currentQuestionIndex =
+      sectionQuestions.length - 1;
+
+  }
+
+  const question =
+    sectionQuestions[currentQuestionIndex];
+
+  if(!question) return;
+
+  if(
+    !questionStartedTimestamp
+  ){
+
+    questionStartedTimestamp = Date.now();
+
+  }
+
+  const answerKey =
+    String(question.id);
+
+  if(
+    !Object.prototype.hasOwnProperty.call(
+      answers,
+      answerKey
+    )
+  ){
+
+    answers[answerKey] = null;
+
+  }
+
+  setText(
+    "questionCount",
+    "Question " +
+    (currentQuestionIndex + 1) +
+    " of " +
+    sectionQuestions.length
+  );
+
+  setText(
+    "questionSection",
+    getLanguageName(
+      currentQuestionLanguage
+    )
+  );
+
+  const subject =
+    section.subjects?.name ||
+    section.subject_name ||
+    section.name ||
+    "Section";
+
+  setText(
+    "gridSubject",
+    subject
+  );
+
+  const questionCard =
+    $("questionCard");
+
+  const questionText =
+    getQuestionText(
+      question,
+      currentQuestionLanguage
+    );
+
+  const options =
+    Array.isArray(
+      question.question_options
+    )
+      ? [...question.question_options]
+          .sort(
+            (a,b) =>
+              String(a.option_label || "")
+                .localeCompare(
+                  String(b.option_label || "")
+                )
+          )
+      : [];
+
+  const selectedOptionId =
+    answers[answerKey] || null;
+
+  questionCard.innerHTML = `
+
+    <div class="question-text">
+      ${escapeHtml(questionText)}
+    </div>
+
+    <div class="options">
+
+      ${
+        options.map(option => {
+
+          const selected =
+            String(option.id) ===
+            String(selectedOptionId);
+
+          return `
+
+            <label
+              class="option ${
+                selected ? "selected" : ""
+              }"
+              data-option-id="${escapeHtml(option.id)}"
+            >
+
+              <input
+                type="radio"
+                name="question-${escapeHtml(question.id)}"
+                value="${escapeHtml(option.id)}"
+                ${selected ? "checked" : ""}
+              >
+
+              <span class="option-label">
+                ${escapeHtml(option.option_label || "")}
+              </span>
+
+              <span class="option-text">
+                ${escapeHtml(
+                  getOptionText(
+                    option,
+                    currentQuestionLanguage
+                  )
+                )}
+              </span>
+
+            </label>
+
+          `;
+
+        }).join("")
+
+      }
+
+    </div>
+
+  `;
+
+  questionCard
+    .querySelectorAll(".option")
+    .forEach(optionEl => {
+
+      optionEl.addEventListener(
+        "click",
+        event => {
+
+          const input =
+            optionEl.querySelector("input");
+
+          if(!input) return;
+
+          input.checked = true;
+
+          selectAnswer(
+            question.id,
+            input.value
+          );
+
+        }
+      );
+
+    });
+
+  updateSaveButton();
+  updateReviewButton();
+
+  renderQuestionGrid();
+
+  updateTimerUI();
+
 }
 
-function getQuestionText(question,language){
- if(language==="hindi")return question.question_hindi||question.hindi_question||question.question_hi||question.question||"";
- return question.question_english||question.english_question||question.question_en||question.question||"";
+/* ==================================================
+   ANSWER SELECTION
+   ================================================== */
+
+function selectAnswer(
+  questionId,
+  optionId
+){
+
+  answers[String(questionId)] =
+    optionId;
+
+  const optionRows =
+    document.querySelectorAll(
+      ".option"
+    );
+
+  optionRows.forEach(row => {
+
+    const rowId =
+      row.dataset.optionId;
+
+    row.classList.toggle(
+      "selected",
+      String(rowId) ===
+      String(optionId)
+    );
+
+  });
+
+  saveLocalProgress();
+
 }
 
-function renderOptions(question){
- const container=$("options");container.innerHTML="";let options=question.question_options||question.options||[];
- options=[...options].sort((a,b)=>Number(a.option_order||a.order||0)-Number(b.option_order||b.order||0));
- options.forEach((option,index)=>{
-  const optionId=String(option.id||option.option_id||index),questionId=String(question.id||question.question_id||question.mock_test_question_id);
-  const selected=String(answers[questionId])===optionId;const button=document.createElement("button");button.type="button";button.className="option";if(selected)button.classList.add("selected");
-  const label=String.fromCharCode(65+index);
-  const optionText=currentQuestionLanguage==="hindi"?(option.option_hindi||option.hindi_text||option.option_hi||option.option_text||option.text||""):(option.option_english||option.english_text||option.option_en||option.option_text||option.text||"");
-  button.innerHTML=`<span class="option-letter">${label}</span><span class="option-text">${formatQuestionText(optionText)}</span>`;
-  button.onclick=()=>selectAnswer(question,option);container.appendChild(button);
- });
-}
-
-function selectAnswer(question,option){
- const questionId=String(question.id||question.question_id||question.mock_test_question_id);answers[questionId]=String(option.id||option.option_id);renderOptions(question);renderQuestionGrid();saveLocalProgressThrottled();
-}
+/* ==================================================
+   QUESTION NAVIGATION
+   ================================================== */
 
 function goPrevious(){
- if(currentQuestionIndex>0){currentQuestionIndex--;resetQuestionTimer();renderCurrentQuestion();saveLocalProgress();return}
- if(currentSectionIndex>0){currentSectionIndex--;currentQuestionIndex=Math.max(0,(sections[currentSectionIndex].questions||[]).length-1);currentSectionRemainingSeconds=sectionTimeData[currentSectionIndex]||0;resetQuestionTimer();renderSectionBar();renderCurrentQuestion();saveLocalProgress()}
+
+  if(currentQuestionIndex > 0){
+
+    currentQuestionIndex--;
+
+    resetQuestionClock();
+
+    renderCurrentQuestion();
+
+    saveLocalProgress();
+
+    return;
+
+  }
+
+  if(currentSectionIndex > 0){
+
+    currentSectionIndex--;
+
+    currentQuestionIndex =
+      getCurrentSectionQuestions().length - 1;
+
+    resetQuestionClock();
+
+    updateSectionBar();
+    renderCurrentQuestion();
+
+    saveLocalProgress();
+
+  }
+
 }
 
 function goSaveNext(){
- const section=sections[currentSectionIndex],total=section?.questions?.length||0;
- if(currentQuestionIndex<total-1){currentQuestionIndex++;resetQuestionTimer();renderCurrentQuestion();saveLocalProgress();return}
- if(currentSectionIndex<sections.length-1){sectionTimeTaken[currentSectionIndex]=Math.max(sectionTimeTaken[currentSectionIndex]||0,(sectionTimeData[currentSectionIndex]||0)-currentSectionRemainingSeconds);currentSectionIndex++;currentQuestionIndex=0;currentSectionRemainingSeconds=sectionTimeData[currentSectionIndex]||0;resetQuestionTimer();renderSectionBar();renderCurrentQuestion();saveLocalProgress();return}
- submitCurrentSection();
+
+  const sectionQuestions =
+    getCurrentSectionQuestions();
+
+  if(
+    currentQuestionIndex <
+    sectionQuestions.length - 1
+  ){
+
+    currentQuestionIndex++;
+
+    resetQuestionClock();
+
+    renderCurrentQuestion();
+
+    saveLocalProgress();
+
+    return;
+
+  }
+
+  if(
+    currentSectionIndex <
+    sections.length - 1
+  ){
+
+    currentSectionIndex++;
+    currentQuestionIndex = 0;
+
+    resetQuestionClock();
+
+    updateSectionBar();
+    renderCurrentQuestion();
+
+    saveLocalProgress();
+
+    return;
+
+  }
+
+  submitCurrentSection();
+
 }
 
-function resetQuestionTimer(){questionElapsedSeconds=0;questionStartedTimestamp=Date.now();questionRemainingSeconds=currentSectionRemainingSeconds}
+function resetQuestionClock(){
+
+  questionElapsedSeconds = 0;
+  questionRemainingSeconds = 0;
+  questionStartedTimestamp = Date.now();
+
+}
+
+/* ==================================================
+   REVIEW
+   ================================================== */
 
 function toggleReview(){
- const question=sections[currentSectionIndex]?.questions?.[currentQuestionIndex];if(!question)return;const id=String(question.id||question.question_id||question.mock_test_question_id);
- if(reviewQuestions.has(id))reviewQuestions.delete(id);else reviewQuestions.add(id);renderReviewButton(id);renderQuestionGrid();saveLocalProgressThrottled();
+
+  const question =
+    getCurrentQuestion();
+
+  if(!question) return;
+
+  const key =
+    String(question.id);
+
+  reviewQuestions[key] =
+    !reviewQuestions[key];
+
+  updateReviewButton();
+  renderQuestionGrid();
+
+  saveLocalProgress();
+
 }
-function renderReviewButton(id){$("reviewBtn").textContent=reviewQuestions.has(String(id))?"Unmark Review":"Mark for Review"}
+
+function updateReviewButton(){
+
+  const question =
+    getCurrentQuestion();
+
+  if(!question) return;
+
+  const marked =
+    !!reviewQuestions[
+      String(question.id)
+    ];
+
+  const btn =
+    $("reviewBtn");
+
+  if(!btn) return;
+
+  btn.classList.toggle(
+    "marked",
+    marked
+  );
+
+  btn.textContent =
+    marked
+      ? "Marked for Review"
+      : "Mark for Review";
+
+}
+
+/* ==================================================
+   SAVE QUESTION
+   ================================================== */
 
 function toggleSavedQuestion(){
- const question=sections[currentSectionIndex]?.questions?.[currentQuestionIndex];if(!question)return;const id=String(question.id||question.question_id||question.mock_test_question_id);
- if(savedQuestions.has(id))savedQuestions.delete(id);else savedQuestions.add(id);renderSaveButton(id);saveLocalProgressThrottled();
-}
-function renderSaveButton(id){const button=$("saveQuestionBtn");button.classList.toggle("saved",savedQuestions.has(String(id)));button.textContent="🔖";button.onclick=toggleSavedQuestion}
 
-function openQuestionGrid(){renderQuestionGrid();$("gridOverlay").classList.add("show")}
-function closeQuestionGrid(){$("gridOverlay").classList.remove("show")}
+  const question =
+    getCurrentQuestion();
+
+  if(!question) return;
+
+  const key =
+    String(question.id);
+
+  savedQuestions[key] =
+    !savedQuestions[key];
+
+  updateSaveButton();
+
+  saveLocalProgress();
+
+}
+
+function bookmarkIcon(filled){
+
+  return `<svg
+    class="saved-bookmark"
+    viewBox="0 0 18 22"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M2.5 2.5A1.5 1.5 0 0 1 4 1h10a1.5 1.5 0 0 1 1.5 1.5V20l-6.5-4-6.5 4V2.5Z"></path>
+  </svg>`;
+
+}
+
+function updateSaveButton(){
+
+  const question =
+    getCurrentQuestion();
+
+  if(!question) return;
+
+  const isSaved =
+    !!savedQuestions[
+      String(question.id)
+    ];
+
+  const btn =
+    $("saveQuestionBtn");
+
+  if(!btn) return;
+
+  btn.innerHTML =
+    bookmarkIcon(isSaved);
+
+  btn.classList.toggle("saved", isSaved);
+
+  btn.style.color =
+    isSaved
+      ? "#fff"
+      : "";
+
+}
+
+/* ==================================================
+   QUESTION GRID
+   ================================================== */
 
 function renderQuestionGrid(){
- const grid=$("questionGrid");grid.innerHTML="";const section=sections[currentSectionIndex];if(!section)return;
- (section.questions||[]).forEach((question,index)=>{
-  const id=String(question.id||question.question_id||question.mock_test_question_id),button=document.createElement("button");button.type="button";button.className="grid-question";
-  const answer=answers[id],attempted=answer!==null&&answer!==undefined&&String(answer)!=="";
-  if(attempted)button.classList.add("attempted");else if(index<=currentQuestionIndex)button.classList.add("not-attempted");
-  if(index===currentQuestionIndex)button.classList.add("current");if(reviewQuestions.has(id))button.classList.add("review");button.textContent=index+1;
-  button.onclick=()=>{currentQuestionIndex=index;resetQuestionTimer();renderCurrentQuestion();closeQuestionGrid();saveLocalProgress()};grid.appendChild(button);
- });
+
+  const grid =
+    $("questionGrid");
+
+  if(!grid) return;
+
+  const sectionQuestions =
+    getCurrentSectionQuestions();
+
+  grid.innerHTML = "";
+
+  sectionQuestions.forEach(
+    (question,index) => {
+
+      const btn =
+        document.createElement("button");
+
+      btn.type = "button";
+      btn.className = "grid-question";
+
+      const key =
+        String(question.id);
+
+      const attempted =
+        answers[key] !== null &&
+        answers[key] !== undefined &&
+        answers[key] !== "";
+
+      const visited =
+        index <= currentQuestionIndex;
+
+      if(attempted){
+
+        btn.classList.add(
+          "attempted"
+        );
+
+      }else if(visited){
+
+        btn.classList.add(
+          "not-attempted"
+        );
+
+      }else{
+
+        btn.classList.add(
+          "not-visited"
+        );
+
+      }
+
+      if(
+        index === currentQuestionIndex
+      ){
+
+        btn.classList.add(
+          "current"
+        );
+
+      }
+
+      if(
+        reviewQuestions[key]
+      ){
+
+        btn.classList.add(
+          "review"
+        );
+
+      }
+
+      btn.textContent =
+        index + 1;
+
+      btn.addEventListener(
+        "click",
+        () => {
+
+          currentQuestionIndex =
+            index;
+
+          resetQuestionClock();
+
+          closeGrid();
+
+          renderCurrentQuestion();
+
+          saveLocalProgress();
+
+        }
+      );
+
+      grid.appendChild(btn);
+
+    }
+  );
+
 }
 
-function toggleLanguagePopup(){$("languagePopup").classList.toggle("show")}
+/* ==================================================
+   GRID OPEN / CLOSE
+   ================================================== */
 
-function updateNavigationButtons(){
- const section=sections[currentSectionIndex],total=section?.questions?.length||0;$("previousBtn").disabled=currentSectionIndex===0&&currentQuestionIndex===0;
- $("nextBtn").textContent=currentQuestionIndex===total-1&&currentSectionIndex===sections.length-1?"Submit Test":"Save & Next";
+function openGrid(){
+
+  renderQuestionGrid();
+
+  $("gridOverlay")
+    ?.classList.add("show");
+
 }
+
+function closeGrid(){
+
+  $("gridOverlay")
+    ?.classList.remove("show");
+
+}
+
+/* ==================================================
+   LANGUAGE POPUP
+   ================================================== */
+
+function openLanguagePopup(){
+
+  const current =
+    normalizeLanguage(
+      currentQuestionLanguage
+    );
+
+  $("popupHindiBtn")
+    ?.classList.toggle(
+      "active",
+      current === "hindi"
+    );
+
+  $("popupEnglishBtn")
+    ?.classList.toggle(
+      "active",
+      current === "english"
+    );
+
+  $("languagePopupOverlay")
+    ?.classList.add("show");
+
+}
+
+function closeLanguagePopup(){
+
+  $("languagePopupOverlay")
+    ?.classList.remove("show");
+
+}
+
+function changeQuestionLanguage(language){
+
+  currentQuestionLanguage =
+    normalizeLanguage(language);
+
+  setText(
+    "questionSection",
+    getLanguageName(
+      currentQuestionLanguage
+    )
+  );
+
+  closeLanguagePopup();
+
+  renderCurrentQuestion();
+
+  saveLocalProgress();
+
+}
+
+/* ==================================================
+   SUBMIT SECTION
+   ================================================== */
 
 function submitCurrentSection(){
- if(!confirm("Are you sure you want to submit this section?"))return;
- sectionTimeTaken[currentSectionIndex]=Math.max(sectionTimeTaken[currentSectionIndex]||0,(sectionTimeData[currentSectionIndex]||0)-currentSectionRemainingSeconds);
- if(currentSectionIndex<sections.length-1){currentSectionIndex++;currentQuestionIndex=0;currentSectionRemainingSeconds=sectionTimeData[currentSectionIndex]||0;resetQuestionTimer();renderSectionBar();renderCurrentQuestion();saveLocalProgress();return}
- finishTest();
+
+  const section =
+    getCurrentSection();
+
+  if(!section) return;
+
+  const confirmed =
+    window.confirm(
+      "Are you sure you want to submit this section?"
+    );
+
+  if(!confirmed) return;
+
+  if(
+    currentSectionIndex <
+    sections.length - 1
+  ){
+
+    currentSectionIndex++;
+    currentQuestionIndex = 0;
+
+    resetQuestionClock();
+
+    updateSectionBar();
+    renderCurrentQuestion();
+
+    saveLocalProgress();
+
+  }else{
+
+    finishTest();
+
+  }
+
 }
 
-function finishTestAutomatically(){if(testFinished)return;finishTest()}
+/* ==================================================
+   AUTOMATIC FINISH
+   ================================================== */
+
+function finishTestAutomatically(){
+
+  if(testFinished) return;
+
+  window.alert(
+    "Time is over. Your test will be submitted automatically."
+  );
+
+  finishTest();
+
+}
+
+/* ==================================================
+   EVENT LISTENERS
+   ================================================== */
+
+function setupEventListeners(){
+
+  setupLanguageButtons();
+
+  $("startTestBtn")
+    ?.addEventListener(
+      "click",
+      startOrResumeTest
+    );
+
+  $("submitSectionBtn")
+    ?.addEventListener(
+      "click",
+      submitCurrentSection
+    );
+
+  $("pauseBtn")
+    ?.addEventListener(
+      "click",
+      pauseTest
+    );
+
+  $("resumeBtn")
+    ?.addEventListener(
+      "click",
+      resumeTest
+    );
+
+  $("pauseBackBtn")
+    ?.addEventListener(
+      "click",
+      backToMocks
+    );
+
+  $("previousBtn")
+    ?.addEventListener(
+      "click",
+      goPrevious
+    );
+
+  $("saveNextBtn")
+    ?.addEventListener(
+      "click",
+      goSaveNext
+    );
+
+  $("reviewBtn")
+    ?.addEventListener(
+      "click",
+      toggleReview
+    );
+
+  $("saveQuestionBtn")
+    ?.addEventListener(
+      "click",
+      toggleSavedQuestion
+    );
+
+  $("gridBtn")
+    ?.addEventListener(
+      "click",
+      openGrid
+    );
+
+  $("gridClose")
+    ?.addEventListener(
+      "click",
+      closeGrid
+    );
+
+  $("gridOverlay")
+    ?.addEventListener(
+      "click",
+      event => {
+
+        if(
+          event.target ===
+          $("gridOverlay")
+        ){
+
+          closeGrid();
+
+        }
+
+      }
+    );
+
+  $("questionLanguageBtn")
+    ?.addEventListener(
+      "click",
+      openLanguagePopup
+    );
+
+  $("popupHindiBtn")
+    ?.addEventListener(
+      "click",
+      () =>
+        changeQuestionLanguage("hindi")
+    );
+
+  $("popupEnglishBtn")
+    ?.addEventListener(
+      "click",
+      () =>
+        changeQuestionLanguage("english")
+    );
+
+  $("languagePopupClose")
+    ?.addEventListener(
+      "click",
+      closeLanguagePopup
+    );
+
+  $("languagePopupOverlay")
+    ?.addEventListener(
+      "click",
+      event => {
+
+        if(
+          event.target ===
+          $("languagePopupOverlay")
+        ){
+
+          closeLanguagePopup();
+
+        }
+
+      }
+    );
+
+}
+
+/* ==================================================
+   ERROR UI
+   ================================================== */
+
+function showError(message){
+
+  hide("loading");
+  hide("startScreen");
+  hide("testArea");
+
+  const result =
+    $("result");
+
+  if(result){
+
+    result.classList.remove(
+      "hidden"
+    );
+
+    result.innerHTML = `
+      <div class="error">
+        ${escapeHtml(message)}
+      </div>
+    `;
+
+  }
+
+}
+
+/* ==================================================
+   BOOT
+   ================================================== */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    setupEventListeners();
+    initializeTest();
+
+  }
+);
+
+/* ==================================================
+   FINISH TEST
+   ================================================== */
 
 async function finishTest(){
- if(testFinished)return;if(!isPaused)synchronizedTimerTick();testFinished=true;testStarted=false;isPaused=false;stopTimers();$("pauseOverlay").classList.remove("show");
- const result=calculateResult();await saveTestAttempt(result);localStorage.removeItem(resumeStorageKey);renderResultScreen(result);
-}
 
-function calculateResult(){
- let attempted=0,correct=0,wrong=0,skipped=0,score=0,totalMarks=0;const answerRows=[];
- sections.forEach(section=>(section.questions||[]).forEach(question=>{
-  const questionId=String(question.id||question.question_id||question.mock_test_question_id),selectedId=answers[questionId],options=question.question_options||question.options||[];
-  const selectedOption=options.find(option=>String(option.id||option.option_id)===String(selectedId));
-  const selectedIsCorrect=selectedOption&&(selectedOption.is_correct===true||selectedOption.is_correct===1||selectedOption.is_correct==="true");
-  const marksPerQuestion=Number(question.marks||question.correct_marks||2),negativeMarks=Number(question.negative_marks||question.negative||0);totalMarks+=marksPerQuestion;let status="skipped",marks=0;
-  if(selectedOption){attempted++;if(selectedIsCorrect){correct++;status="correct";marks=marksPerQuestion}else{wrong++;status="wrong";marks=-negativeMarks}}else skipped++;score+=marks;
-  answerRows.push({question_id:question.id||question.question_id,selected_option_id:selectedOption?.id||selectedId||null,selected_option_label:selectedOption?.option_text||selectedOption?.text||null,status,marks_awarded:marks,time_spent_seconds:0});
- }));
- return {score,totalMarks,totalQuestions:sections.reduce((sum,s)=>sum+(s.questions||[]).length,0),attempted,correct,wrong,skipped,percentage:totalMarks>0?Math.max(0,(score/totalMarks)*100):0,answerRows};
-}
+  if(testFinished) return;
 
-async function saveTestAttempt(result){
- if(!currentUser)return;
- try{
-  const {data:attempt,error}=await supabaseClient.from("test_attempts").insert({user_id:currentUser.id,test_id:testId,score:result.score,total_marks:result.totalMarks,total_questions:result.totalQuestions,attempted:result.attempted,correct:result.correct,wrong:result.wrong,skipped:result.skipped,percentage:result.percentage,status:"completed",completed_at:new Date().toISOString()}).select().single();
-  if(error){console.error("Attempt save error:",error);return}
-  if(attempt&&result.answerRows.length){
-   const rows=result.answerRows.map(row=>({attempt_id:attempt.id,question_id:row.question_id,selected_option_id:row.selected_option_id,selected_option_label:row.selected_option_label,status:row.status,marks_awarded:row.marks_awarded,time_spent_seconds:row.time_spent_seconds}));
-   const {error:answerError}=await supabaseClient.from("user_answers").insert(rows);if(answerError)console.error("Answer save error:",answerError);
+  testFinished = true;
+  testStarted = false;
+  isPaused = false;
+
+  stopAllTimers();
+
+  if(autoSaveTimeout){
+
+    clearTimeout(autoSaveTimeout);
+    autoSaveTimeout = null;
+
   }
- }catch(error){console.error("Save attempt failed:",error)}
+
+  saveLocalProgress();
+
+  try{
+
+    const resultData =
+      await calculateTestResult();
+
+    await saveTestAttempt(resultData);
+
+    clearLocalProgress();
+
+    renderResultScreen(resultData);
+
+  }catch(error){
+
+    console.error(
+      "Finish test error:",
+      error
+    );
+
+    renderResultScreen({
+      totalQuestions: getAllQuestions().length,
+      attempted: countAttemptedAnswers(),
+      correct: 0,
+      wrong: 0,
+      skipped: 0,
+      score: 0,
+      maxMarks: calculateMaximumMarks(),
+      error: true
+    });
+
+  }
+
 }
 
-function renderResultScreen(result){
- $("testArea").classList.add("hidden");$("bottomNav").classList.add("hidden");$("sectionBar").classList.add("hidden");$("startScreen").classList.add("hidden");$("loading").classList.add("hidden");$("resultScreen").classList.remove("hidden");
- $("resultTestName").textContent=testData?.name||testData?.title||"SSC EDGE Test";$("resultTestNumber").textContent=testData?.test_number||testData?.mock_number||testData?.number||"Test";renderOverviewTable();
+/* ==================================================
+   GET ALL QUESTIONS
+   ================================================== */
+
+function getAllQuestions(){
+
+  const all = [];
+
+  sections.forEach(section => {
+
+    (section.questions || []).forEach(question => {
+
+      all.push({
+        ...question,
+        section_id: section.id,
+        section_name:
+          section.subjects?.name ||
+          section.subject_name ||
+          section.name ||
+          "Section"
+      });
+
+    });
+
+  });
+
+  return all;
+
 }
 
-function renderOverviewTable(){
- const body=$("overviewBody");body.innerHTML="";
- sections.forEach((section,index)=>{
-  const qs=section.questions||[];let attempted=0;qs.forEach(question=>{const id=String(question.id||question.question_id||question.mock_test_question_id),answer=answers[id];if(answer!==null&&answer!==undefined&&String(answer)!=="")attempted++});
-  const total=qs.length,unattempted=Math.max(0,total-attempted),allocated=Number(sectionTimeData[index]||section.duration_minutes*60||0);
-  let taken=Number(sectionTimeTaken[index]||0);
-  if(index===currentSectionIndex)taken=Math.max(taken,allocated-Number(currentSectionRemainingSeconds||0));
-  const row=document.createElement("tr");row.innerHTML=`<td>${escapeHtml(section.subjects?.name||section.subject_name||section.section_name||`Section ${index+1}`)}</td><td>${attempted}</td><td>${unattempted}</td><td>${formatTime(taken)}</td>`;body.appendChild(row);
- });
+/* ==================================================
+   CORRECT OPTIONS
+   ================================================== */
+
+function getCorrectOptionLabels(question){
+
+  let correct = [];
+
+  if(
+    Array.isArray(question.correct_options)
+  ){
+
+    correct =
+      question.correct_options
+        .map(value => String(value).toUpperCase())
+        .filter(Boolean);
+
+  }else if(
+    typeof question.correct_options === "string"
+  ){
+
+    try{
+
+      const parsed =
+        JSON.parse(question.correct_options);
+
+      if(Array.isArray(parsed)){
+
+        correct =
+          parsed
+            .map(value => String(value).toUpperCase())
+            .filter(Boolean);
+
+      }
+
+    }catch(error){
+
+      correct = [];
+
+    }
+
+  }
+
+  /*
+    Legacy fallback:
+    question_options.is_correct
+  */
+
+  if(!correct.length){
+
+    correct =
+      (question.question_options || [])
+        .filter(option => option.is_correct === true)
+        .map(option =>
+          String(option.option_label || "")
+            .toUpperCase()
+        )
+        .filter(Boolean);
+
+  }
+
+  return correct;
+
 }
 
-function openSolutionsPage(){window.location.href=`solutions.html?test_id=${encodeURIComponent(testId)}`}
-function openAnalysisPage(){window.location.href=`analysis.html?test_id=${encodeURIComponent(testId)}`}
-function backToMocks(){window.location.href="practice.html"}
+/* ==================================================
+   GET SELECTED OPTION LABEL
+   ================================================== */
 
-function saveLocalProgress(){
- if(!resumeStorageKey)return;
- const data={testStarted,testFinished,isPaused,currentSectionIndex,currentQuestionIndex,answers,reviewQuestions:Array.from(reviewQuestions),savedQuestions:Array.from(savedQuestions),sectionTimeData,sectionTimeTaken,totalRemainingSeconds,currentSectionRemainingSeconds,questionRemainingSeconds,questionElapsedSeconds,testStartTimestamp};
- try{localStorage.setItem(resumeStorageKey,JSON.stringify(data))}catch(error){console.warn("Could not save progress:",error)}
+function getSelectedOptionLabel(question, selectedValue){
+
+  if(
+    selectedValue === null ||
+    selectedValue === undefined ||
+    selectedValue === ""
+  ){
+
+    return null;
+
+  }
+
+  const option =
+    (question.question_options || [])
+      .find(option =>
+        String(option.id) ===
+        String(selectedValue)
+      );
+
+  if(!option) return null;
+
+  return String(
+    option.option_label || ""
+  ).toUpperCase();
+
 }
-function saveLocalProgressThrottled(){if(autoSaveTimeout)return;autoSaveTimeout=setTimeout(()=>{autoSaveTimeout=null;saveLocalProgress()},700)}
-function showError(message){$("loading").innerHTML=`<div style="max-width:420px;text-align:center;line-height:1.5">${escapeHtml(message)}</div>`}
-function formatTime(seconds){seconds=Math.max(0,Math.floor(Number(seconds)||0));const hours=Math.floor(seconds/3600),minutes=Math.floor((seconds%3600)/60),secs=seconds%60;if(hours>0)return[String(hours).padStart(2,"0"),String(minutes).padStart(2,"0"),String(secs).padStart(2,"0")].join(":");return[String(minutes).padStart(2,"0"),String(secs).padStart(2,"0")].join(":")}
-function escapeHtml(value){return String(value??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
-function formatQuestionText(value){return escapeHtml(value).replace(/\n/g,"<br>")}
+
+/* ==================================================
+   MARKS HELPERS
+   ================================================== */
+
+function getQuestionMarks(question){
+
+  const marks =
+    Number(question.marks);
+
+  return Number.isFinite(marks)
+    ? marks
+    : 2;
+
+}
+
+function getQuestionNegativeMarks(question){
+
+  const negative =
+    Number(question.negative_marks);
+
+  return Number.isFinite(negative)
+    ? negative
+    : 0;
+
+}
+
+function isQuestionBonus(question){
+
+  return question.is_bonus === true ||
+    question.is_bonus === "true" ||
+    question.is_bonus === 1;
+
+}
+
+/* ==================================================
+   CALCULATE RESULT
+   ================================================== */
+
+async function calculateTestResult(){
+
+  const allQuestions =
+    getAllQuestions();
+
+  let attempted = 0;
+  let correct = 0;
+  let wrong = 0;
+  let skipped = 0;
+  let score = 0;
+  let maxMarks = 0;
+
+  const answerRows = [];
+
+  for(const question of allQuestions){
+
+    const questionKey =
+      String(question.id);
+
+    const selectedValue =
+      answers[questionKey];
+
+    const hasAttempt =
+      selectedValue !== null &&
+      selectedValue !== undefined &&
+      selectedValue !== "";
+
+    const marks =
+      getQuestionMarks(question);
+
+    const negativeMarks =
+      getQuestionNegativeMarks(question);
+
+    maxMarks += marks;
+
+    const selectedLabel =
+      getSelectedOptionLabel(
+        question,
+        selectedValue
+      );
+
+    const correctOptions =
+      getCorrectOptionLabels(question);
+
+    let status = "skipped";
+    let awardedMarks = 0;
+
+    if(!hasAttempt){
+
+      skipped++;
+
+      status = "skipped";
+
+    }else{
+
+      attempted++;
+
+      /*
+        Bonus question:
+        Any attempted option receives marks.
+      */
+
+      if(isQuestionBonus(question)){
+
+        awardedMarks = marks;
+        correct++;
+        status = "bonus";
+
+      }else if(
+        selectedLabel &&
+        correctOptions.includes(selectedLabel)
+      ){
+
+        awardedMarks = marks;
+        correct++;
+        status = "correct";
+
+      }else{
+
+        awardedMarks = -negativeMarks;
+        wrong++;
+        status = "wrong";
+
+      }
+
+    }
+
+    score += awardedMarks;
+
+    answerRows.push({
+
+      question_id: question.id,
+      selected_option_id:
+        hasAttempt ? selectedValue : null,
+      selected_option_label:
+        selectedLabel,
+      status,
+      marks_awarded: awardedMarks,
+      time_spent_seconds:
+        Number(
+          question.time_spent_seconds ||
+          0
+        )
+
+    });
+
+  }
+
+  return {
+
+    testId,
+
+    totalQuestions:
+      allQuestions.length,
+
+    attempted,
+    correct,
+    wrong,
+    skipped,
+
+    score: Number(score.toFixed(2)),
+
+    maxMarks,
+
+    percentage:
+      maxMarks > 0
+        ? Number(
+            ((score / maxMarks) * 100)
+              .toFixed(2)
+          )
+        : 0,
+
+    answerRows
+
+  };
+
+}
+
+/* ==================================================
+   COUNT ATTEMPTED
+   ================================================== */
+
+function countAttemptedAnswers(){
+
+  return getAllQuestions()
+    .filter(question => {
+
+      const value =
+        answers[String(question.id)];
+
+      return value !== null &&
+        value !== undefined &&
+        value !== "";
+
+    }).length;
+
+}
+
+/* ==================================================
+   MAXIMUM MARKS
+   ================================================== */
+
+function calculateMaximumMarks(){
+
+  return getAllQuestions()
+    .reduce(
+      (sum, question) =>
+        sum + getQuestionMarks(question),
+      0
+    );
+
+}
+
+/* ==================================================
+   SAVE TEST ATTEMPT
+   ================================================== */
+
+async function saveTestAttempt(resultData){
+
+  if(!currentUser){
+
+    console.warn(
+      "No logged-in user. Attempt not saved."
+    );
+
+    return null;
+
+  }
+
+  /*
+    Save main attempt.
+    Adjust only if your table has
+    different column names.
+  */
+
+  const attemptPayload = {
+
+    user_id: currentUser.id,
+
+    test_id: testId,
+
+    score: resultData.score,
+
+    total_marks: resultData.maxMarks,
+
+    total_questions:
+      resultData.totalQuestions,
+
+    attempted:
+      resultData.attempted,
+
+    correct:
+      resultData.correct,
+
+    wrong:
+      resultData.wrong,
+
+    skipped:
+      resultData.skipped,
+
+    percentage:
+      resultData.percentage,
+
+    status: "completed",
+
+    completed_at:
+      new Date().toISOString()
+
+  };
+
+  const {
+    data:attempt,
+    error:attemptError
+  } = await supabaseClient
+    .from("test_attempts")
+    .insert(attemptPayload)
+    .select()
+    .single();
+
+  if(attemptError){
+
+    console.error(
+      "Attempt save error:",
+      attemptError
+    );
+
+    /*
+      Do not block result screen if
+      database schema has extra/missing fields.
+    */
+
+    return null;
+
+  }
+
+  if(
+    attempt &&
+    resultData.answerRows?.length
+  ){
+
+    const answerPayload =
+      resultData.answerRows.map(row => ({
+
+        attempt_id: attempt.id,
+
+        question_id:
+          row.question_id,
+
+        selected_option_id:
+          row.selected_option_id,
+
+        selected_option_label:
+          row.selected_option_label,
+
+        status:
+          row.status,
+
+        marks_awarded:
+          row.marks_awarded,
+
+        time_spent_seconds:
+          row.time_spent_seconds
+
+      }));
+
+    const {
+      error:answerError
+    } = await supabaseClient
+      .from("user_answers")
+      .insert(answerPayload);
+
+    if(answerError){
+
+      console.error(
+        "User answers save error:",
+        answerError
+      );
+
+    }
+
+  }
+
+  return attempt;
+
+}
+
+/* ==================================================
+   RESULT SCREEN
+   ================================================== */
+
+function renderResultScreen(resultData){
+
+  stopAllTimers();
+
+  hide("loading");
+  hide("startScreen");
+  hide("testArea");
+  hide("sectionBar");
+
+  const result =
+    $("result");
+
+  if(!result) return;
+
+  result.classList.remove("hidden");
+
+  const percentage =
+    Number(resultData.percentage || 0);
+
+  result.innerHTML = `
+
+    <div class="result-card">
+
+      <div class="result-icon">
+        ✓
+      </div>
+
+      <h2>
+        ${escapeHtml(
+          testData?.title ||
+          testData?.name ||
+          "SSC EDGE Test"
+        )}
+      </h2>
+
+      <p class="result-test-number">
+        Test ${escapeHtml(
+          testData?.test_number ||
+          testData?.test_no ||
+          testData?.number ||
+          ""
+        )}
+      </p>
+
+      <p class="result-thankyou">
+        Thank You for attempting the Test.
+      </p>
+
+      <div class="result-score">
+
+        <strong>
+          ${escapeHtml(resultData.score)}
+        </strong>
+
+        <span>
+          / ${escapeHtml(resultData.maxMarks)}
+        </span>
+
+      </div>
+
+      <div class="result-percentage">
+        ${escapeHtml(percentage)}%
+      </div>
+
+      <div class="result-stats">
+
+        <div class="result-stat">
+          <strong>
+            ${escapeHtml(resultData.totalQuestions)}
+          </strong>
+          <span>Total</span>
+        </div>
+
+        <div class="result-stat">
+          <strong>
+            ${escapeHtml(resultData.attempted)}
+          </strong>
+          <span>Attempted</span>
+        </div>
+
+        <div class="result-stat correct">
+          <strong>
+            ${escapeHtml(resultData.correct)}
+          </strong>
+          <span>Correct</span>
+        </div>
+
+        <div class="result-stat wrong">
+          <strong>
+            ${escapeHtml(resultData.wrong)}
+          </strong>
+          <span>Wrong</span>
+        </div>
+
+        <div class="result-stat skipped">
+          <strong>
+            ${escapeHtml(resultData.skipped)}
+          </strong>
+          <span>Skipped</span>
+        </div>
+
+      </div>
+
+      <div class="result-actions">
+
+        <button
+          type="button"
+          class="result-action primary"
+          onclick="openAnalysisPage()"
+        >
+          View Analysis
+        </button>
+
+        <button
+          type="button"
+          class="result-action"
+          onclick="openSolutionsPage()"
+        >
+          View Solutions
+        </button>
+
+        <button
+          type="button"
+          class="result-back"
+          onclick="backToMocks()"
+        >
+          Back to Practice
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+/* ==================================================
+   OPEN SOLUTIONS
+   ================================================== */
+
+function openSolutionsPage(){
+
+  window.location.href =
+    "solutions.html?test_id=" +
+    encodeURIComponent(testId);
+
+}
+
+/* ==================================================
+   OPEN ANALYSIS
+   ================================================== */
+
+function openAnalysisPage(){
+
+  window.location.href =
+    "analysis.html?test_id=" +
+    encodeURIComponent(testId);
+
+}
+
+/* ==================================================
+   GLOBAL BUTTON FUNCTIONS
+   ================================================== */
+
+window.startOrResumeTest =
+  startOrResumeTest;
+
+window.pauseTest =
+  pauseTest;
+
+window.resumeTest =
+  resumeTest;
+
+window.backToMocks =
+  backToMocks;
+
+window.goPrevious =
+  goPrevious;
+
+window.goSaveNext =
+  goSaveNext;
+
+window.toggleReview =
+  toggleReview;
+
+window.toggleSavedQuestion =
+  toggleSavedQuestion;
+
+window.openGrid =
+  openGrid;
+
+window.closeGrid =
+  closeGrid;
+
+window.openLanguagePopup =
+  openLanguagePopup;
+
+window.closeLanguagePopup =
+  closeLanguagePopup;
+
+window.changeQuestionLanguage =
+  changeQuestionLanguage;
+
+window.submitCurrentSection =
+  submitCurrentSection;
+
+window.finishTest =
+  finishTest;
+
+window.openSolutionsPage =
+  openSolutionsPage;
+
+window.openAnalysisPage =
+  openAnalysisPage;
+
 </script>
-</body>
-</html>
