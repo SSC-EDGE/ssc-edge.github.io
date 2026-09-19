@@ -45,8 +45,6 @@ localStorage.getItem("ssc-edge-theme") || "dark";
     --p-purple2:#7834db;
     --p-header:#eee3ff;
     --p-header2:#f8f4ff;
-
-    /* LIGHT NAV FIX */
     --p-nav:#eee3ff;
     --p-nav-border:#d8c5f5;
     --p-nav-text:#76658f;
@@ -259,7 +257,6 @@ body{
     color:var(--p-purple2);
 }
 
-/* OLD HORIZONTAL STYLE */
 .practice-horizontal{
     width:100%;
     display:flex!important;
@@ -282,8 +279,6 @@ body{
     width:145px!important;
     min-width:145px!important;
 }
-
-/* SWITCHABLE CHIPS */
 
 .mock-chips{
     width:100%;
@@ -443,8 +438,6 @@ body{
     display:none!important;
 }
 
-/* NEW MOCKS / PYQ MOCKS */
-
 #mockCategoryArea{
     width:100%;
     display:flex;
@@ -494,15 +487,11 @@ body{
     font-weight:900;
 }
 
-/* MAIN SUBJECT CARDS */
-
 #mainSubjectGrid{
     display:grid;
     grid-template-columns:repeat(2,minmax(0,1fr));
     gap:14px;
 }
-
-/* BOTTOM NAV */
 
 .bottom-nav{
     position:fixed;
@@ -743,8 +732,6 @@ body{
 
         </div>
 
-        <!-- FULL MOCK CHIPS + TESTS -->
-
         <div id="fullMockArea">
 
             <div
@@ -758,8 +745,6 @@ body{
             ></div>
 
         </div>
-
-        <!-- SECTIONAL SUBJECT CHIPS + TESTS -->
 
         <div
             id="sectionalArea"
@@ -929,9 +914,118 @@ function folderName(f){
 
 }
 
+
+/*
+=========================================
+CANONICAL FOLDER TYPE
+
+NEW / NEW_MOCKS  -> new
+PYQ / PYQ_MOCKS  -> pyq
+FULL / FULL_MOCKS -> full
+SECTIONAL / SECTIONAL_MOCKS -> sectional
+YEAR / YEARS -> year
+SUBJECT / SUBJECTS -> subject
+=========================================
+*/
+
 function folderType(f){
 
-    return normalize(f?.folder_type);
+    const value = String(
+        f?.folder_type || ""
+    )
+    .toLowerCase()
+    .replace(/[\s_-]+/g,"");
+
+    if(
+        value==="new" ||
+        value==="newmocks"
+    ){
+        return "new";
+    }
+
+    if(
+        value==="pyq" ||
+        value==="pyqmocks"
+    ){
+        return "pyq";
+    }
+
+    if(
+        value==="full" ||
+        value==="fullmock" ||
+        value==="fullmocks"
+    ){
+        return "full";
+    }
+
+    if(
+        value==="sectional" ||
+        value==="sectionalmocks"
+    ){
+        return "sectional";
+    }
+
+    if(
+        value==="year" ||
+        value==="years"
+    ){
+        return "year";
+    }
+
+    if(
+        value==="subject" ||
+        value==="subjects"
+    ){
+        return "subject";
+    }
+
+    return value;
+
+}
+
+
+/*
+=========================================
+CANONICAL FOLDER CHECK
+=========================================
+*/
+
+function isCanonicalFolder(f){
+
+    const raw=String(
+        f?.folder_type || ""
+    )
+    .toLowerCase()
+    .replace(/[\s_-]+/g,"");
+
+    return raw===folderType(f);
+
+}
+
+
+/*
+=========================================
+FOLDER PRIORITY
+
+Canonical:
+NEW
+PYQ
+FULL
+SECTIONAL
+
+Aliases:
+NEW_MOCKS
+PYQ_MOCKS
+FULL_MOCKS
+SECTIONAL_MOCKS
+=========================================
+*/
+
+function folderPriority(f){
+
+    return isCanonicalFolder(f)
+        ? 0
+        : 1;
 
 }
 
@@ -1076,12 +1170,15 @@ async function loadData(){
 
         renderMainSubjects();
 
-        console.log("Practice data loaded:",{
-            exams,
-            subjects,
-            tests,
-            folders
-        });
+        console.log(
+            "Practice data loaded:",
+            {
+                exams,
+                subjects,
+                tests,
+                folders
+            }
+        );
 
     }catch(err){
 
@@ -1107,7 +1204,9 @@ async function loadData(){
 
 function renderMainSubjects(){
 
-    const box=document.getElementById("mainSubjectGrid");
+    const box=document.getElementById(
+        "mainSubjectGrid"
+    );
 
     if(!subjects.length){
 
@@ -1128,13 +1227,20 @@ function renderMainSubjects(){
 
     const list=[...subjects].sort((a,b)=>{
 
-        const ai=order.indexOf(normalize(a.name));
-        const bi=order.indexOf(normalize(b.name));
+        const ai=order.indexOf(
+            normalize(a.name)
+        );
+
+        const bi=order.indexOf(
+            normalize(b.name)
+        );
 
         if(ai===-1 && bi===-1){
 
             return normalize(a.name)
-                .localeCompare(normalize(b.name));
+                .localeCompare(
+                    normalize(b.name)
+                );
 
         }
 
@@ -1161,8 +1267,8 @@ function renderMainSubjects(){
             </h3>
 
             <span>
-                  Practice Folders
-           </span>
+                Practice Folders
+            </span>
 
         </div>
 
@@ -1174,7 +1280,9 @@ function getSubjectIcon(name){
 
     const n=normalize(name);
 
-    if(n.includes("quant"))return "🔢";
+    if(n.includes("quant")){
+        return "🔢";
+    }
 
     if(
         n.includes("general") ||
@@ -1184,9 +1292,13 @@ function getSubjectIcon(name){
         return "🌐";
     }
 
-    if(n.includes("english"))return "📖";
+    if(n.includes("english")){
+        return "📖";
+    }
 
-    if(n.includes("reason"))return "🧩";
+    if(n.includes("reason")){
+        return "🧩";
+    }
 
     return "📚";
 
@@ -1227,9 +1339,18 @@ function getExamMainName(exam){
     ).trim();
 
     name=name
-        .replace(/\(\s*tier\s*[- ]?\s*\d+\s*\)/ig,"")
-        .replace(/\bTIER\s*[- ]?\s*\d+\b/ig,"")
-        .replace(/\(\s*(pre|prelims|preliminary|mains|tier)\s*\)/ig,"")
+        .replace(
+            /\s*tier\s*[- ]?\s*\d+\s*/ig,
+            ""
+        )
+        .replace(
+            /\bTIER\s*[- ]?\s*\d+\b/ig,
+            ""
+        )
+        .replace(
+            /\s*(pre|prelims|preliminary|mains|tier)\s*/ig,
+            ""
+        )
         .replace(/\s{2,}/g," ")
         .trim();
 
@@ -1244,7 +1365,7 @@ function getExamTier(exam){
         String(exam?.stage || "");
 
     const match=combined.match(
-        /\(?\s*(TIER\s*[- ]?\s*\d+|PRELIMS?|PRELIMINARY|MAINS)\s*\)?/i
+        /?\s*(TIER\s*[- ]?\s*\d+|PRELIMS?|PRELIMINARY|MAINS)\s*?/i
     );
 
     if(match){
@@ -1252,7 +1373,10 @@ function getExamTier(exam){
         return match[1]
             .replace(/\s+/g," ")
             .toUpperCase()
-            .replace("TIER ","TIER - ");
+            .replace(
+                "TIER ",
+                "TIER - "
+            );
 
     }
 
@@ -1313,8 +1437,11 @@ function renderExams(board){
 
     box.innerHTML=list.map(e=>{
 
-        const mainName=getExamMainName(e);
-        const tier=getExamTier(e);
+        const mainName=
+            getExamMainName(e);
+
+        const tier=
+            getExamTier(e);
 
         return`
 
@@ -1363,33 +1490,41 @@ function openExam(id){
         .classList.remove("hidden");
 
     document.getElementById("examTitle")
-        .textContent=getExamMainName(currentExam);
+        .textContent=
+        getExamMainName(currentExam);
 
     currentBranch="";
     currentMockType="";
     currentFolder=null;
     currentSubject=null;
 
-    document.getElementById("mockCategoryArea")
-        .classList.remove("hidden");
+    document.getElementById(
+        "mockCategoryArea"
+    ).classList.remove("hidden");
 
-    document.getElementById("mockTypeArea")
-        .classList.add("hidden");
+    document.getElementById(
+        "mockTypeArea"
+    ).classList.add("hidden");
 
-    document.getElementById("examTestListArea")
-        .classList.add("hidden");
+    document.getElementById(
+        "examTestListArea"
+    ).classList.add("hidden");
 
-    document.getElementById("fullMockFolders")
-        .innerHTML="";
+    document.getElementById(
+        "fullMockFolders"
+    ).innerHTML="";
 
-    document.getElementById("fullMockTests")
-        .innerHTML="";
+    document.getElementById(
+        "fullMockTests"
+    ).innerHTML="";
 
-    document.getElementById("sectionSubjectList")
-        .innerHTML="";
+    document.getElementById(
+        "sectionSubjectList"
+    ).innerHTML="";
 
-    document.getElementById("sectionalMockTests")
-        .innerHTML="";
+    document.getElementById(
+        "sectionalMockTests"
+    ).innerHTML="";
 
     renderBranches();
 
@@ -1435,17 +1570,38 @@ function backToExamList(){
 
 function examFolders(){
 
-    if(!currentExam)return[];
+    if(!currentExam){
+        return[];
+    }
 
     return folders.filter(f=>
-        String(f.exam_id)===String(currentExam.id)
+        String(f.exam_id)===
+        String(currentExam.id)
     );
 
 }
 
+
+/*
+=========================================
+ROOT FOLDERS
+
+Only logical NEW + PYQ roots are returned.
+
+If database contains both:
+
+NEW
+NEW_MOCKS
+
+only one logical NEW root is used.
+
+Same for PYQ.
+=========================================
+*/
+
 function getRoots(){
 
-    return examFolders()
+    const roots=examFolders()
         .filter(f=>{
 
             const root=
@@ -1455,14 +1611,15 @@ function getRoots(){
 
             if(!root)return false;
 
-            const n=normalize(folderName(f));
             const t=folderType(f);
+
+            const n=normalize(
+                folderName(f)
+            );
 
             return(
                 t==="new" ||
-                t==="new_mocks" ||
                 t==="pyq" ||
-                t==="pyq_mocks" ||
                 n==="new" ||
                 n==="new mocks" ||
                 n==="pyq" ||
@@ -1470,24 +1627,72 @@ function getRoots(){
             );
 
         })
-        .sort((a,b)=>
-            Number(a.sort_order||0)-
-            Number(b.sort_order||0)
-        );
+        .sort((a,b)=>{
+
+            const priorityA=
+                folderPriority(a);
+
+            const priorityB=
+                folderPriority(b);
+
+            if(
+                priorityA!==priorityB
+            ){
+                return priorityA-priorityB;
+            }
+
+            const orderA=
+                Number(a.sort_order||0);
+
+            const orderB=
+                Number(b.sort_order||0);
+
+            if(orderA!==orderB){
+                return orderA-orderB;
+            }
+
+            return folderName(a)
+                .localeCompare(
+                    folderName(b)
+                );
+
+        });
+
+    const seen=new Set();
+
+    return roots.filter(folder=>{
+
+        const type=folderType(folder);
+
+        if(
+            type==="new" ||
+            type==="pyq"
+        ){
+
+            if(seen.has(type)){
+                return false;
+            }
+
+            seen.add(type);
+
+        }
+
+        return true;
+
+    });
 
 }
 
+
+/*
+=========================================
+PYQ CHECK
+=========================================
+*/
+
 function isPyqFolder(f){
 
-    const n=normalize(folderName(f));
-    const t=folderType(f);
-
-    return(
-        t==="pyq" ||
-        t==="pyq_mocks" ||
-        n==="pyq" ||
-        n==="pyq mocks"
-    );
+    return folderType(f)==="pyq";
 
 }
 
@@ -1498,16 +1703,19 @@ function isPyqFolder(f){
 
 function renderBranches(){
 
-    const box=document.getElementById("mockCategoryArea");
+    const box=
+        document.getElementById(
+            "mockCategoryArea"
+        );
 
     const roots=getRoots();
 
     const newRoot=roots.find(r=>
-        !isPyqFolder(r)
+        folderType(r)==="new"
     );
 
     const pyqRoot=roots.find(r=>
-        isPyqFolder(r)
+        folderType(r)==="pyq"
     );
 
     box.innerHTML=`
@@ -1556,6 +1764,15 @@ function renderBranches(){
 
 }
 
+
+/*
+=========================================
+OPEN BRANCH
+
+If a root exists, use that exact root ID.
+=========================================
+*/
+
 function openMockBranch(id,branch){
 
     currentBranch=branch;
@@ -1566,14 +1783,17 @@ function openMockBranch(id,branch){
         ) || null
         :null;
 
-    document.getElementById("mockCategoryArea")
-        .classList.add("hidden");
+    document.getElementById(
+        "mockCategoryArea"
+    ).classList.add("hidden");
 
-    document.getElementById("mockTypeArea")
-        .classList.remove("hidden");
+    document.getElementById(
+        "mockTypeArea"
+    ).classList.remove("hidden");
 
-    document.getElementById("mockBranchTitle")
-        .textContent=
+    document.getElementById(
+        "mockBranchTitle"
+    ).textContent=
         branch==="pyq"
         ? "PYQ MOCKS"
         : "NEW MOCKS";
@@ -1582,51 +1802,84 @@ function openMockBranch(id,branch){
 
 }
 
+
+/* =========================================
+   BRANCH ROOT
+========================================= */
+
 function branchRoot(){
 
-    if(currentFolder)return currentFolder;
+    if(currentFolder){
+
+        return currentFolder;
+
+    }
 
     return getRoots().find(f=>
-        isPyqFolder(f)===(currentBranch==="pyq")
+        folderType(f)===currentBranch
     ) || null;
 
 }
+
+
+/*
+=========================================
+CHILD FOLDER
+
+FULL / FULL_MOCKS -> full
+SECTIONAL / SECTIONAL_MOCKS -> sectional
+=========================================
+*/
 
 function childFolder(parent,type){
 
     if(!parent)return null;
 
-    return examFolders().find(f=>{
+    const matches=examFolders()
+        .filter(f=>{
 
-        if(
-            String(f.parent_id)!==
-            String(parent.id)
-        ){
-            return false;
-        }
+            if(
+                String(f.parent_id)!==
+                String(parent.id)
+            ){
+                return false;
+            }
 
-        const n=normalize(folderName(f));
-        const t=folderType(f);
+            return folderType(f)===type;
 
-        if(type==="full"){
+        })
+        .sort((a,b)=>{
 
-            return(
-                t==="full" ||
-                t==="full_mocks" ||
-                n==="full" ||
-                n==="full mocks"
-            );
+            const priorityA=
+                folderPriority(a);
 
-        }
+            const priorityB=
+                folderPriority(b);
 
-        return(
-            t==="sectional" ||
-            t==="sectional_mocks" ||
-            n==="sectional" ||
-            n==="sectional mocks"
-        );
+            if(
+                priorityA!==priorityB
+            ){
+                return priorityA-priorityB;
+            }
 
-    }) || null;
+            const orderA=
+                Number(a.sort_order||0);
+
+            const orderB=
+                Number(b.sort_order||0);
+
+            if(orderA!==orderB){
+                return orderA-orderB;
+            }
+
+            return folderName(a)
+                .localeCompare(
+                    folderName(b)
+                );
+
+        });
+
+    return matches[0] || null;
 
 }
 
@@ -1663,14 +1916,17 @@ function showMockType(type){
             type!=="sectional"
         );
 
-    document.getElementById("examTestListArea")
-        .classList.add("hidden");
+    document.getElementById(
+        "examTestListArea"
+    ).classList.add("hidden");
 
-    document.getElementById("fullMockTests")
-        .innerHTML="";
+    document.getElementById(
+        "fullMockTests"
+    ).innerHTML="";
 
-    document.getElementById("sectionalMockTests")
-        .innerHTML="";
+    document.getElementById(
+        "sectionalMockTests"
+    ).innerHTML="";
 
     if(type==="full"){
 
@@ -1686,19 +1942,25 @@ function showMockType(type){
 
 
 /* =========================================
-   FULL MOCKS WITH SWITCHABLE YEAR CHIPS
+   FULL MOCKS
 ========================================= */
 
 function renderFull(){
 
     const chipBox=
-        document.getElementById("fullMockFolders");
+        document.getElementById(
+            "fullMockFolders"
+        );
 
     const testBox=
-        document.getElementById("fullMockTests");
+        document.getElementById(
+            "fullMockTests"
+        );
 
     const root=branchRoot();
-    const full=childFolder(root,"full");
+
+    const full=
+        childFolder(root,"full");
 
     chipBox.className="mock-chips";
     testBox.className="chip-test-area";
@@ -1716,13 +1978,28 @@ function renderFull(){
         return;
     }
 
-    /* NEW FULL MOCKS */
+
+    /*
+    =========================================
+    NEW FULL MOCKS
+
+    Direct children of FULL are not years.
+    Mock tests are stored directly in FULL.
+    =========================================
+    */
 
     if(currentBranch==="new"){
 
         const list=tests.filter(t=>
-            String(t.exam_id)===String(currentExam.id) &&
-            String(t.folder_id)===String(full.id)
+
+            String(t.exam_id)===
+            String(currentExam.id)
+
+            &&
+
+            String(t.folder_id)===
+            String(full.id)
+
         );
 
         renderTests(
@@ -1733,20 +2010,28 @@ function renderFull(){
         return;
     }
 
-    /* PYQ FULL MOCK YEARS */
+
+    /*
+    =========================================
+    PYQ FULL MOCK YEARS
+    =========================================
+    */
 
     const years=examFolders()
         .filter(f=>
-            String(f.parent_id)===String(full.id)
+            String(f.parent_id)===
+            String(full.id)
         )
         .filter(f=>{
 
-            const n=normalize(folderName(f));
+            const n=normalize(
+                folderName(f)
+            );
+
             const t=folderType(f);
 
             return(
                 t==="year" ||
-                t==="full_year" ||
                 /^\d{4}$/.test(n)
             );
 
@@ -1755,6 +2040,7 @@ function renderFull(){
             Number(folderName(b))-
             Number(folderName(a))
         );
+
 
     if(!years.length){
 
@@ -1766,33 +2052,48 @@ function renderFull(){
         return;
     }
 
-    chipBox.innerHTML=years.map((year,index)=>`
+
+    chipBox.innerHTML=
+        years.map(
+            (year,index)=>`
 
         <div
-            class="mock-chip ${index===0 ? "active" : ""}"
+            class="mock-chip ${
+                index===0
+                ? "active"
+                : ""
+            }"
             onclick="selectFullYear(
                 '${year.id}',
                 this
             )"
         >
-            ${escapeHtml(folderName(year))}
+            ${escapeHtml(
+                folderName(year)
+            )}
         </div>
 
     `).join("");
 
+
     selectFullYear(
         years[0].id,
-        chipBox.querySelector(".mock-chip")
+        chipBox.querySelector(
+            ".mock-chip"
+        )
     );
 
 }
 
 
 /* =========================================
-   SELECT FULL MOCK YEAR CHIP
+   SELECT FULL MOCK YEAR
 ========================================= */
 
-function selectFullYear(yearId,chip){
+function selectFullYear(
+    yearId,
+    chip
+){
 
     document.querySelectorAll(
         "#fullMockFolders .mock-chip"
@@ -1805,8 +2106,15 @@ function selectFullYear(yearId,chip){
     }
 
     const list=tests.filter(t=>
-        String(t.exam_id)===String(currentExam.id) &&
-        String(t.folder_id)===String(yearId)
+
+        String(t.exam_id)===
+        String(currentExam.id)
+
+        &&
+
+        String(t.folder_id)===
+        String(yearId)
+
     );
 
     renderTests(
@@ -1851,13 +2159,16 @@ function canonicalSubjectName(name){
         return "English";
     }
 
-    return String(name || "Subject").trim();
+    return String(
+        name || "Subject"
+    ).trim();
 
 }
 
 function subjectOrder(name){
 
-    const n=canonicalSubjectName(name);
+    const n=
+        canonicalSubjectName(name);
 
     const order=[
         "Quantitative Aptitude",
@@ -1866,7 +2177,8 @@ function subjectOrder(name){
         "English"
     ];
 
-    const index=order.indexOf(n);
+    const index=
+        order.indexOf(n);
 
     return index===-1
         ?999
@@ -1876,19 +2188,28 @@ function subjectOrder(name){
 
 
 /* =========================================
-   SECTIONAL MOCKS WITH SWITCHABLE SUBJECT CHIPS
+   SECTIONAL MOCKS
 ========================================= */
 
 function renderSectional(){
 
     const chipBox=
-        document.getElementById("sectionSubjectList");
+        document.getElementById(
+            "sectionSubjectList"
+        );
 
     const testBox=
-        document.getElementById("sectionalMockTests");
+        document.getElementById(
+            "sectionalMockTests"
+        );
 
     const root=branchRoot();
-    const sectional=childFolder(root,"sectional");
+
+    const sectional=
+        childFolder(
+            root,
+            "sectional"
+        );
 
     chipBox.className="mock-chips";
     testBox.className="chip-test-area";
@@ -1906,21 +2227,25 @@ function renderSectional(){
         return;
     }
 
+
     const list=examFolders()
         .filter(f=>
-            String(f.parent_id)===String(sectional.id)
+            String(f.parent_id)===
+            String(sectional.id)
         )
         .filter(f=>{
 
             const s=subjects.find(x=>
-                String(x.id)===String(f.subject_id)
+                String(x.id)===
+                String(f.subject_id)
             );
 
-            const name=canonicalSubjectName(
-                folderName(f) ||
-                s?.name ||
-                ""
-            );
+            const name=
+                canonicalSubjectName(
+                    folderName(f) ||
+                    s?.name ||
+                    ""
+                );
 
             return(
                 folderType(f)==="subject" ||
@@ -1937,25 +2262,32 @@ function renderSectional(){
         .sort((a,b)=>{
 
             const sa=subjects.find(x=>
-                String(x.id)===String(a.subject_id)
+                String(x.id)===
+                String(a.subject_id)
             );
 
             const sb=subjects.find(x=>
-                String(x.id)===String(b.subject_id)
+                String(x.id)===
+                String(b.subject_id)
             );
 
-            const na=folderName(a)||
+            const na=
+                folderName(a)||
                 sa?.name||
                 "";
 
-            const nb=folderName(b)||
+            const nb=
+                folderName(b)||
                 sb?.name||
                 "";
 
-            return subjectOrder(na)-
-                subjectOrder(nb);
+            return(
+                subjectOrder(na)-
+                subjectOrder(nb)
+            );
 
         });
+
 
     if(!list.length){
 
@@ -1967,23 +2299,35 @@ function renderSectional(){
         return;
     }
 
-    chipBox.innerHTML=list.map((folder,index)=>{
 
-        const subject=subjects.find(x=>
-            String(x.id)===String(folder.subject_id)
-        );
+    chipBox.innerHTML=
+        list.map(
+            (folder,index)=>{
+
+        const subject=
+            subjects.find(x=>
+                String(x.id)===
+                String(folder.subject_id)
+            );
 
         const rawName=
             folderName(folder)||
             subject?.name||
             "Subject";
 
-        const name=canonicalSubjectName(rawName);
+        const name=
+            canonicalSubjectName(
+                rawName
+            );
 
         return`
 
             <div
-                class="mock-chip ${index===0 ? "active" : ""}"
+                class="mock-chip ${
+                    index===0
+                    ? "active"
+                    : ""
+                }"
                 onclick="selectSectionSubject(
                     '${folder.id}',
                     this
@@ -1997,19 +2341,25 @@ function renderSectional(){
 
     }).join("");
 
+
     selectSectionSubject(
         list[0].id,
-        chipBox.querySelector(".mock-chip")
+        chipBox.querySelector(
+            ".mock-chip"
+        )
     );
 
 }
 
 
 /* =========================================
-   SELECT SECTIONAL SUBJECT CHIP
+   SELECT SECTIONAL SUBJECT
 ========================================= */
 
-function selectSectionSubject(folderId,chip){
+function selectSectionSubject(
+    folderId,
+    chip
+){
 
     document.querySelectorAll(
         "#sectionSubjectList .mock-chip"
@@ -2022,8 +2372,15 @@ function selectSectionSubject(folderId,chip){
     }
 
     const list=tests.filter(t=>
-        String(t.exam_id)===String(currentExam.id) &&
-        String(t.folder_id)===String(folderId)
+
+        String(t.exam_id)===
+        String(currentExam.id)
+
+        &&
+
+        String(t.folder_id)===
+        String(folderId)
+
     );
 
     renderTests(
@@ -2038,29 +2395,44 @@ function selectSectionSubject(folderId,chip){
    OPEN OLD TEST LIST
 ========================================= */
 
-function openFolderTests(id,title){
+function openFolderTests(
+    id,
+    title
+){
 
     currentFolder=folders.find(f=>
-        String(f.id)===String(id)
+        String(f.id)===
+        String(id)
     ) || null;
 
     currentSubject=null;
 
-    document.getElementById("mockTypeArea")
-        .classList.add("hidden");
+    document.getElementById(
+        "mockTypeArea"
+    ).classList.add("hidden");
 
-    document.getElementById("mockCategoryArea")
-        .classList.add("hidden");
+    document.getElementById(
+        "mockCategoryArea"
+    ).classList.add("hidden");
 
-    document.getElementById("examTestListArea")
-        .classList.remove("hidden");
+    document.getElementById(
+        "examTestListArea"
+    ).classList.remove("hidden");
 
-    document.getElementById("examTestListTitle")
-        .textContent=title;
+    document.getElementById(
+        "examTestListTitle"
+    ).textContent=title;
 
     const list=tests.filter(t=>
-        String(t.exam_id)===String(currentExam.id) &&
-        String(t.folder_id)===String(id)
+
+        String(t.exam_id)===
+        String(currentExam.id)
+
+        &&
+
+        String(t.folder_id)===
+        String(id)
+
     );
 
     renderTests(
@@ -2075,7 +2447,9 @@ function openFolderTests(id,title){
    ATTEMPT STATUS
 ========================================= */
 
-async function getAttemptState(testId){
+async function getAttemptState(
+    testId
+){
 
     const result={
         state:"new",
@@ -2083,17 +2457,22 @@ async function getAttemptState(testId){
         completedCount:0
     };
 
+
     try{
 
-        const raw=localStorage.getItem(
-            "ssc-edge-progress-"+testId
-        );
+        const raw=
+            localStorage.getItem(
+                "ssc-edge-progress-"+testId
+            );
 
         if(raw){
 
-            const saved=JSON.parse(raw);
+            const saved=
+                JSON.parse(raw);
 
-            if(saved?.progressStarted){
+            if(
+                saved?.progressStarted
+            ){
 
                 result.state="resume";
 
@@ -2108,13 +2487,19 @@ async function getAttemptState(testId){
 
     try{
 
-        const u=await supabaseClient.auth.getUser();
+        const u=
+            await supabaseClient.auth
+            .getUser();
 
-        const user=u?.data?.user;
+        const user=
+            u?.data?.user;
 
-        if(!user)return result;
+        if(!user){
+            return result;
+        }
 
-        const r=await supabaseClient
+        const r=
+            await supabaseClient
             .from("test_attempts")
             .select(`
                 id,
@@ -2125,10 +2510,26 @@ async function getAttemptState(testId){
                 wrong_answers,
                 unanswered
             `)
-            .eq("user_id",user.id)
-            .eq("mock_test_id",testId)
-            .not("completed_at","is",null)
-            .order("completed_at",{ascending:true});
+            .eq(
+                "user_id",
+                user.id
+            )
+            .eq(
+                "mock_test_id",
+                testId
+            )
+            .not(
+                "completed_at",
+                "is",
+                null
+            )
+            .order(
+                "completed_at",
+                {
+                    ascending:true
+                }
+            );
+
 
         if(r.error){
 
@@ -2141,11 +2542,16 @@ async function getAttemptState(testId){
 
         }
 
-        result.attempts=r.data || [];
+
+        result.attempts=
+            r.data || [];
+
         result.completedCount=
             result.attempts.length;
 
-        if(result.completedCount){
+        if(
+            result.completedCount
+        ){
 
             result.state="completed";
 
@@ -2174,9 +2580,13 @@ async function renderTests(
     targetId="testList"
 ){
 
-    const box=document.getElementById(targetId);
+    const box=
+        document.getElementById(
+            targetId
+        );
 
     if(!box)return;
+
 
     if(!list.length){
 
@@ -2188,21 +2598,31 @@ async function renderTests(
         return;
     }
 
+
     box.innerHTML=`
         <div class="practice-empty">
             Loading test status...
         </div>`;
 
+
     let html="";
 
-    for(const test of list){
+
+    for(
+        const test of list
+    ){
 
         const status=
-            await getAttemptState(test.id);
+            await getAttemptState(
+                test.id
+            );
 
         let actions="";
 
-        if(status.state==="resume"){
+
+        if(
+            status.state==="resume"
+        ){
 
             actions=`
                 <a
@@ -2212,7 +2632,9 @@ async function renderTests(
                     Resume →
                 </a>`;
 
-        }else if(!status.completedCount){
+        }else if(
+            !status.completedCount
+        ){
 
             actions=`
                 <a
@@ -2224,7 +2646,9 @@ async function renderTests(
 
         }else{
 
-            if(status.completedCount<4){
+            if(
+                status.completedCount<4
+            ){
 
                 actions+=`
                     <a
@@ -2236,10 +2660,12 @@ async function renderTests(
 
             }
 
+
             const latest=
                 status.attempts[
                     status.attempts.length-1
                 ];
+
 
             if(latest){
 
@@ -2265,6 +2691,7 @@ async function renderTests(
 
         }
 
+
         html+=`
 
             <div class="test-card">
@@ -2277,15 +2704,19 @@ async function renderTests(
                 </div>
 
                 <div class="test-info">
+
                     ⏱ ${escapeHtml(
-                        test.duration_minutes || "-"
+                        test.duration_minutes ||
+                        "-"
                     )} minutes
 
                     <br>
 
                     📝 ${escapeHtml(
-                        test.total_questions || "-"
+                        test.total_questions ||
+                        "-"
                     )} questions
+
                 </div>
 
                 ${
@@ -2308,7 +2739,9 @@ async function renderTests(
 
     }
 
+
     box.className="test-list";
+
     box.innerHTML=html;
 
 }
@@ -2324,14 +2757,17 @@ function backToMockBranches(){
     currentSubject=null;
     currentMockType="";
 
-    document.getElementById("mockTypeArea")
-        .classList.add("hidden");
+    document.getElementById(
+        "mockTypeArea"
+    ).classList.add("hidden");
 
-    document.getElementById("examTestListArea")
-        .classList.add("hidden");
+    document.getElementById(
+        "examTestListArea"
+    ).classList.add("hidden");
 
-    document.getElementById("mockCategoryArea")
-        .classList.remove("hidden");
+    document.getElementById(
+        "mockCategoryArea"
+    ).classList.remove("hidden");
 
     renderBranches();
 
@@ -2347,14 +2783,17 @@ function backToMockCategories(){
     currentFolder=null;
     currentSubject=null;
 
-    document.getElementById("examTestListArea")
-        .classList.add("hidden");
+    document.getElementById(
+        "examTestListArea"
+    ).classList.add("hidden");
 
-    document.getElementById("mockCategoryArea")
-        .classList.add("hidden");
+    document.getElementById(
+        "mockCategoryArea"
+    ).classList.add("hidden");
 
-    document.getElementById("mockTypeArea")
-        .classList.remove("hidden");
+    document.getElementById(
+        "mockTypeArea"
+    ).classList.remove("hidden");
 
     showMockType(
         currentMockType || "full"
@@ -2368,36 +2807,52 @@ function backToMockCategories(){
 ========================================= */
 
 function openChapterById(subjectId){
-  location.href = "practice-drill.html?subject_id=" + encodeURIComponent(subjectId);
+
+    location.href =
+        "practice-drill.html?subject_id="+
+        encodeURIComponent(subjectId);
+
 }
 
-async function openChapterScreen(subject){
+
+async function openChapterScreen(
+    subject
+){
 
     hideAll();
 
-    document.getElementById("chapterScreen")
-        .classList.remove("hidden");
+    document.getElementById(
+        "chapterScreen"
+    ).classList.remove("hidden");
 
-    document.getElementById("chapterTitle")
-        .textContent=
-        subject.name+" Practice Drill";
+    document.getElementById(
+        "chapterTitle"
+    ).textContent=
+        subject.name+
+        " Practice Drill";
 
-    const list=tests.filter(test=>{
 
-        const type=normalize(
-            test.test_type
-        );
+    const list=tests.filter(
+        test=>{
 
-        return(
-            String(test.subject_id)===
-            String(subject.id) &&
-            (
-                type==="chapter_wise" ||
-                type==="subject_wise"
-            )
-        );
+            const type=
+                normalize(
+                    test.test_type
+                );
 
-    });
+            return(
+                String(test.subject_id)===
+                String(subject.id)
+                &&
+                (
+                    type==="chapter_wise" ||
+                    type==="subject_wise"
+                )
+            );
+
+        }
+    );
+
 
     await renderChapterTests(
         list,
@@ -2406,39 +2861,56 @@ async function openChapterScreen(subject){
 
 }
 
+
 async function renderChapterTests(
     list,
     subjectName
 ){
 
-    const box=document.getElementById("chapterList");
+    const box=
+        document.getElementById(
+            "chapterList"
+        );
+
 
     if(!list.length){
 
         box.innerHTML=`
             <div class="practice-empty">
-                No ${escapeHtml(subjectName)}
+                No ${escapeHtml(
+                    subjectName
+                )}
                 practice available yet.
             </div>`;
 
         return;
     }
 
+
     box.innerHTML=`
         <div class="practice-empty">
             Loading test status...
         </div>`;
 
+
     let html="";
 
-    for(const test of list){
+
+    for(
+        const test of list
+    ){
 
         const status=
-            await getAttemptState(test.id);
+            await getAttemptState(
+                test.id
+            );
 
         let actions="";
 
-        if(status.state==="resume"){
+
+        if(
+            status.state==="resume"
+        ){
 
             actions=`
                 <a
@@ -2448,7 +2920,9 @@ async function renderChapterTests(
                     Resume Practice →
                 </a>`;
 
-        }else if(!status.completedCount){
+        }else if(
+            !status.completedCount
+        ){
 
             actions=`
                 <a
@@ -2460,7 +2934,9 @@ async function renderChapterTests(
 
         }else{
 
-            if(status.completedCount<4){
+            if(
+                status.completedCount<4
+            ){
 
                 actions=`
                     <a
@@ -2472,10 +2948,12 @@ async function renderChapterTests(
 
             }
 
+
             const latest=
                 status.attempts[
                     status.attempts.length-1
                 ];
+
 
             if(latest){
 
@@ -2501,6 +2979,7 @@ async function renderChapterTests(
 
         }
 
+
         html+=`
 
             <div class="test-card">
@@ -2513,50 +2992,5 @@ async function renderChapterTests(
                 </div>
 
                 <div class="test-info">
+
                     ⏱ ${escapeHtml(
-                        test.duration_minutes || "-"
-                    )} minutes
-
-                    <br>
-
-                    📝 ${escapeHtml(
-                        test.total_questions || "-"
-                    )} questions
-                </div>
-
-                ${
-                    status.completedCount
-                    ?`
-                    <div class="attempt-info">
-                        ${status.completedCount}
-                        completed
-                    </div>`
-                    :""
-                }
-
-                <div class="test-actions">
-                    ${actions}
-                </div>
-
-            </div>
-
-        `;
-
-    }
-
-    box.className="test-list";
-    box.innerHTML=html;
-
-}
-
-
-/* =========================================
-   START
-========================================= */
-
-loadData();
-
-</script>
-
-</body>
-</html>
