@@ -493,14 +493,14 @@ body{
 .question-card{
   background:var(--card);
   border:1px solid var(--border);
-  border-radius:14px;
-  padding:13px;
+  border-radius:12px;
+  padding:10px;
 }
 
 .question-text{
   color:var(--text);
-  font-size:15px;
-  line-height:1.45;
+  font-size:13px;
+  line-height:1.38;
   font-weight:700;
   white-space:pre-wrap;
   overflow-wrap:anywhere;
@@ -511,19 +511,19 @@ body{
    ================================================== */
 
 .options{
-  margin-top:13px;
+  margin-top:9px;
   display:flex;
   flex-direction:column;
-  gap:9px;
+  gap:6px;
 }
 
 .option{
   display:flex;
   align-items:flex-start;
   gap:10px;
-  padding:10px;
+  padding:8px;
   border:1px solid var(--border);
-  border-radius:10px;
+  border-radius:9px;
   background:var(--bg);
   color:var(--text);
   cursor:pointer;
@@ -550,15 +550,15 @@ body{
 .option-label{
   min-width:22px;
   color:var(--purple2);
-  font-size:13px;
+  font-size:12px;
   font-weight:900;
 }
 
 .option-text{
   flex:1;
   color:var(--text);
-  font-size:14px;
-  line-height:1.5;
+  font-size:12px;
+  line-height:1.38;
   white-space:pre-wrap;
   overflow-wrap:anywhere;
 }
@@ -569,7 +569,7 @@ body{
 
 .navigation{
   width:100%;
-  margin-top:32px;
+  margin-top:16px;
   padding-bottom:12px;
 }
 
@@ -583,12 +583,12 @@ body{
   width:100%;
   display:flex;
   justify-content:flex-end;
-  margin-bottom:18px;
+  margin-bottom:10px;
 }
 
 .nav-btn{
-  min-height:44px;
-  border-radius:10px;
+  min-height:42px;
+  border-radius:9px;
   padding:9px;
   font-size:11px;
   font-weight:900;
@@ -634,7 +634,7 @@ body{
 .save-next-btn{
   width:100%;
   margin-top:0;
-  min-height:44px;
+  min-height:42px;
   border:0;
   border-radius:10px;
   background:var(--purple);
@@ -915,10 +915,10 @@ body{
 
 .result-card{
   width:100%;
-  max-width:520px;
+  max-width:560px;
   box-sizing:border-box;
   margin:18px auto 0;
-  padding:28px 18px 24px;
+  padding:24px 16px 22px;
   background:var(--card);
   border:1px solid var(--border);
   border-radius:18px;
@@ -939,10 +939,10 @@ body{
 }
 
 .result-test-name{
-  margin:15px 0 3px;
+  margin:10px 0 2px;
   color:var(--text);
-  font-size:17px;
-  line-height:1.4;
+  font-size:16px;
+  line-height:1.35;
   font-weight:900;
   overflow-wrap:anywhere;
 }
@@ -950,24 +950,78 @@ body{
 .result-test-number{
   margin:0;
   color:var(--muted);
-  font-size:12px;
+  font-size:11px;
   line-height:1.4;
   font-weight:700;
 }
 
 .result-thankyou{
-  margin:25px 0 22px;
+  margin:24px 0 20px;
   color:var(--text);
   font-size:21px;
-  line-height:1.5;
+  line-height:1.35;
   font-weight:950;
+}
+
+.result-overview-title{
+  margin:0 0 9px;
+  text-align:left;
+  color:var(--text);
+  font-size:14px;
+  font-weight:950;
+}
+
+.result-overview-wrap{
+  width:100%;
+  overflow-x:auto;
+  border:1px solid var(--border);
+  border-radius:10px;
+}
+
+.result-overview-table{
+  width:100%;
+  min-width:430px;
+  border-collapse:collapse;
+  text-align:center;
+}
+
+.result-overview-table th,
+.result-overview-table td{
+  padding:9px 7px;
+  border-bottom:1px solid var(--border);
+  color:var(--text);
+  font-size:10px;
+  font-weight:700;
+}
+
+.result-overview-table th{
+  background:var(--card2);
+  color:var(--purple2);
+  font-weight:900;
+}
+
+.result-overview-table tbody tr:last-child td{
+  border-bottom:0;
+}
+
+.result-overview-table td:first-child,
+.result-overview-table th:first-child{
+  text-align:left;
+}
+
+.result-completed{
+  margin:12px 0 0;
+  color:var(--purple2);
+  font-size:10px;
+  font-weight:900;
 }
 
 .result-actions{
   display:flex;
   flex-direction:column;
-  gap:10px;
+  gap:9px;
   width:100%;
+  margin-top:20px;
 }
 
 .result-action,
@@ -1000,7 +1054,7 @@ body{
 }
 
 .result-back{
-  margin-top:10px;
+  margin-top:0;
   border:1px solid var(--border);
   background:var(--card2);
   color:var(--text);
@@ -2022,6 +2076,8 @@ function saveLocalProgress(){
 
     questionElapsedSeconds,
 
+    questionTimeData,
+
     sectionTimeData,
 
     testStarted,
@@ -2806,6 +2862,9 @@ function restoreProgress(progress){
       progress.questionElapsedSeconds || 0
     );
 
+  questionTimeData =
+    progress.questionTimeData || {};
+
   sectionTimeData =
     progress.sectionTimeData || {};
 
@@ -2921,6 +2980,7 @@ function resetTestState(){
 
   questionRemainingSeconds = 0;
   questionElapsedSeconds = 0;
+  questionTimeData = {};
 
   testStartTimestamp = Date.now();
 
@@ -2942,6 +3002,11 @@ function initializeTimers(){
 
   }
 
+  const initialQuestion = getCurrentQuestion();
+  if(initialQuestion){
+    questionElapsedSeconds =
+      Number(questionTimeData[String(initialQuestion.id)] || 0);
+  }
   questionStartedTimestamp = Date.now();
 
   if(
@@ -3053,6 +3118,13 @@ function synchronizedTimerTick(){
 
   questionElapsedSeconds +=
     elapsedSeconds;
+
+  const currentQuestion = getCurrentQuestion();
+  if(currentQuestion){
+    const qKey = String(currentQuestion.id);
+    questionTimeData[qKey] =
+      Number(questionTimeData[qKey] || 0) + elapsedSeconds;
+  }
 
   updateTimerUI();
 
@@ -3287,6 +3359,9 @@ function renderCurrentQuestion(){
     sectionQuestions[currentQuestionIndex];
 
   if(!question) return;
+
+  questionElapsedSeconds =
+    Number(questionTimeData[String(question.id)] || 0);
 
   if(
     !questionStartedTimestamp
@@ -3571,9 +3646,20 @@ function goSaveNext(){
 
 function resetQuestionClock(){
 
-  questionElapsedSeconds = 0;
+  const question = getCurrentQuestion();
+
+  if(question){
+    const key = String(question.id);
+    questionElapsedSeconds =
+      Number(questionTimeData[key] || 0);
+  }else{
+    questionElapsedSeconds = 0;
+  }
+
   questionRemainingSeconds = 0;
   questionStartedTimestamp = Date.now();
+
+  updateTimerUI();
 
 }
 
@@ -3656,7 +3742,7 @@ function toggleSavedQuestion(){
 function bookmarkIcon(filled){
 
   return `<svg
-    class="saved-bookmark"
+    class="saved-bookmark ${filled ? "filled" : ""}"
     viewBox="0 0 18 22"
     aria-hidden="true"
     focusable="false"
@@ -4649,132 +4735,132 @@ function renderResultScreen(resultData){
   hide("testArea");
   hide("sectionBar");
 
-  const result =
-    $("result");
-
+  const result = $("result");
   if(!result) return;
 
   result.classList.remove("hidden");
 
-  const percentage =
-    Number(resultData.percentage || 0);
+  const title =
+    testData?.title ||
+    testData?.name ||
+    "SSC EDGE Test";
+
+  const testNumber =
+    testData?.test_number ||
+    testData?.test_no ||
+    testData?.number ||
+    "";
+
+  const rows = sections.map((section,index) => {
+    const questions = Array.isArray(section.questions)
+      ? section.questions
+      : getSectionQuestionsForResult(section, index);
+
+    const attempted = questions.filter(q => {
+      const value = answers[String(q.id)];
+      return value !== null && value !== undefined && value !== "";
+    }).length;
+
+    const total = questions.length;
+    const unattempted = Math.max(0, total - attempted);
+
+    const configured = Number(
+      section.duration_minutes ||
+      section.duration ||
+      0
+    ) * 60;
+
+    const remaining = Number(
+      sectionTimeData[String(index)] || 0
+    );
+
+    const taken = configured > 0
+      ? Math.max(0, configured - remaining)
+      : 0;
+
+    return {
+      name: section.subjects?.name ||
+        section.subject_name ||
+        section.name ||
+        `Section ${index + 1}`,
+      attempted,
+      unattempted,
+      timeTaken: formatTime(Math.floor(taken))
+    };
+  });
 
   result.innerHTML = `
-
     <div class="result-card">
 
-      <div class="result-icon">
-        ✓
+      <div class="result-brand">
+        SSC <span class="edge">EDGE</span>
       </div>
 
-      <h2>
-        ${escapeHtml(
-          testData?.title ||
-          testData?.name ||
-          "SSC EDGE Test"
-        )}
-      </h2>
+      <div class="result-test-name">
+        ${escapeHtml(title)}
+      </div>
 
-      <p class="result-test-number">
-        Test ${escapeHtml(
-          testData?.test_number ||
-          testData?.test_no ||
-          testData?.number ||
-          ""
-        )}
-      </p>
+      <div class="result-test-number">
+        Test ${escapeHtml(testNumber)}
+      </div>
 
-      <p class="result-thankyou">
+      <div class="result-thankyou">
         Thank You for attempting the Test.
-      </p>
-
-      <div class="result-score">
-
-        <strong>
-          ${escapeHtml(resultData.score)}
-        </strong>
-
-        <span>
-          / ${escapeHtml(resultData.maxMarks)}
-        </span>
-
       </div>
 
-      <div class="result-percentage">
-        ${escapeHtml(percentage)}%
+      <div class="result-overview-title">
+        Test overview
       </div>
 
-      <div class="result-stats">
+      <div class="result-overview-wrap">
+        <table class="result-overview-table">
+          <thead>
+            <tr>
+              <th>Section</th>
+              <th>Attempt</th>
+              <th>Unattempt</th>
+              <th>Time Taken</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(row => `
+              <tr>
+                <td>${escapeHtml(row.name)}</td>
+                <td>${row.attempted}</td>
+                <td>${row.unattempted}</td>
+                <td>${escapeHtml(row.timeTaken)}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
 
-        <div class="result-stat">
-          <strong>
-            ${escapeHtml(resultData.totalQuestions)}
-          </strong>
-          <span>Total</span>
-        </div>
-
-        <div class="result-stat">
-          <strong>
-            ${escapeHtml(resultData.attempted)}
-          </strong>
-          <span>Attempted</span>
-        </div>
-
-        <div class="result-stat correct">
-          <strong>
-            ${escapeHtml(resultData.correct)}
-          </strong>
-          <span>Correct</span>
-        </div>
-
-        <div class="result-stat wrong">
-          <strong>
-            ${escapeHtml(resultData.wrong)}
-          </strong>
-          <span>Wrong</span>
-        </div>
-
-        <div class="result-stat skipped">
-          <strong>
-            ${escapeHtml(resultData.skipped)}
-          </strong>
-          <span>Skipped</span>
-        </div>
-
+      <div class="result-completed">
+        Test completed successfully.
       </div>
 
       <div class="result-actions">
-
-        <button
-          type="button"
-          class="result-action primary"
-          onclick="openAnalysisPage()"
-        >
+        <button type="button" class="result-action primary" onclick="openAnalysisPage()">
           View Analysis
         </button>
-
-        <button
-          type="button"
-          class="result-action"
-          onclick="openSolutionsPage()"
-        >
+        <button type="button" class="result-action" onclick="openSolutionsPage()">
           View Solutions
         </button>
-
-        <button
-          type="button"
-          class="result-back"
-          onclick="backToMocks()"
-        >
+        <button type="button" class="result-back" onclick="backToMocks()">
           Back to Practice
         </button>
-
       </div>
 
     </div>
-
   `;
 
+}
+
+function getSectionQuestionsForResult(section,index){
+  if(Array.isArray(section.questions)) return section.questions;
+  if(index === currentSectionIndex) return getCurrentSectionQuestions();
+  if(Array.isArray(section._questions)) return section._questions;
+  return [];
 }
 
 /* ==================================================
