@@ -61,6 +61,7 @@ body{
   align-items:center;
   justify-content:space-between;
   gap:10px;
+  min-height:38px;
 }
 
 .brand{
@@ -109,8 +110,9 @@ body{
   align-items:center;
   justify-content:center;
   border:1px solid var(--border);
-  background:var(--card2);
-  color:var(--text);
+  background:#c4a7ff;
+  border-color:#c4a7ff;
+  color:#24152f;
   padding:0;
   border-radius:10px;
   font-size:18px;
@@ -130,7 +132,9 @@ body{
   align-items:center;
   justify-content:space-between;
   gap:10px;
-  margin-top:10px;
+  margin-top:9px;
+  padding-top:8px;
+  border-top:1px solid var(--border);
 }
 
 .test-info-left{
@@ -174,8 +178,8 @@ body{
 }
 
 .language-icon-btn{
-  width:38px;
-  height:36px;
+  width:32px;
+  height:32px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -183,7 +187,7 @@ body{
   background:var(--card2);
   color:var(--text);
   border-radius:9px;
-  font-size:17px;
+  font-size:13px;
   font-weight:900;
   cursor:pointer;
 }
@@ -271,7 +275,7 @@ body{
    ================================================== */
 
 .start-language-box{
-  margin:0 0 17px;
+  margin:15px 0 0;
   padding:13px 12px;
   border:1px solid var(--border);
   border-radius:12px;
@@ -279,40 +283,68 @@ body{
 }
 
 .start-language-title{
-  margin:0;
+  margin:0 0 9px;
   color:var(--text);
   font-size:14px;
   font-weight:900;
 }
 
-.start-language-description{
-  margin:5px 0 11px;
-  color:var(--muted);
-  font-size:11px;
-  line-height:1.45;
+.language-dropdown-wrap{
+  position:relative;
 }
 
-.language-select-row{
+.language-toggle{
+  width:100%;
+  min-height:40px;
   display:flex;
   align-items:center;
-  gap:8px;
-}
-
-.language-choice{
-  flex:1;
-  min-height:40px;
+  justify-content:space-between;
   border:1px solid var(--border);
   border-radius:9px;
   background:var(--bg);
   color:var(--text);
+  padding:0 12px;
   font-size:12px;
   font-weight:900;
   cursor:pointer;
 }
 
-.language-choice.active{
+.language-toggle-arrow{
+  color:var(--muted);
+  font-size:16px;
+  line-height:1;
+}
+
+.language-menu{
+  position:absolute;
+  z-index:20;
+  left:0;
+  right:0;
+  top:calc(100% + 6px);
+  padding:5px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:var(--card);
+  box-shadow:0 10px 25px rgba(0,0,0,.18);
+}
+
+.language-choice{
+  width:100%;
+  min-height:38px;
+  border:0;
+  border-radius:8px;
+  background:transparent;
+  color:var(--text);
+  text-align:left;
+  padding:0 10px;
+  font-size:12px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.language-choice.active,
+.language-choice:hover{
   background:var(--purple);
-  border-color:var(--purple);
   color:#fff;
 }
 
@@ -405,14 +437,14 @@ body{
 
 .question-time{
   color:var(--muted);
-  font-size:13px;
+  font-size:11px;
   font-weight:800;
   white-space:nowrap;
 }
 
 .save-question-btn{
-  width:34px;
-  height:34px;
+  width:30px;
+  height:30px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -420,8 +452,25 @@ body{
   border-radius:9px;
   background:var(--card2);
   color:var(--muted);
-  font-size:19px;
+  font-size:16px;
   cursor:pointer;
+}
+
+.saved-bookmark{
+  width:17px;
+  height:20px;
+  display:block;
+}
+
+.saved-bookmark path{
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linejoin:round;
+}
+
+.saved-bookmark.filled path{
+  fill:currentColor;
 }
 
 .question-language-label{
@@ -903,8 +952,8 @@ body{
 .result-thankyou{
   margin:25px 0 22px;
   color:var(--text);
-  font-size:18px;
-  line-height:1.6;
+  font-size:21px;
+  line-height:1.5;
   font-weight:950;
 }
 
@@ -1114,8 +1163,9 @@ body{
   }
 
   .language-icon-btn{
-    width:35px;
-    height:35px;
+    width:32px;
+    height:32px;
+    font-size:13px;
   }
 
   .question-text{
@@ -1131,7 +1181,7 @@ body{
   }
 
   .question-time{
-    font-size:12px;
+    font-size:11px;
   }
 
   .result-thankyou{
@@ -1161,12 +1211,13 @@ body{
   }
 
   .language-icon-btn{
-    width:33px;
-    font-size:15px;
+    width:32px;
+    height:32px;
+    font-size:13px;
   }
 
   .question-time{
-    font-size:11px;
+    font-size:10px;
   }
 
 }
@@ -1319,38 +1370,6 @@ body{
       Check your section details before starting.
     </p>
 
-    <div class="start-language-box">
-
-      <h3 class="start-language-title">
-        Select a language
-      </h3>
-
-      <p class="start-language-description">
-        Mock test will appear in selected language.
-      </p>
-
-      <div class="language-select-row">
-
-        <button
-          id="startHindiBtn"
-          class="language-choice"
-          type="button"
-        >
-          Hindi
-        </button>
-
-        <button
-          id="startEnglishBtn"
-          class="language-choice"
-          type="button"
-        >
-          English
-        </button>
-
-      </div>
-
-    </div>
-
     <div class="section-table-wrap">
 
       <table class="section-table">
@@ -1367,6 +1386,51 @@ body{
         <tbody id="sectionSummaryBody"></tbody>
 
       </table>
+
+    </div>
+
+    <div class="start-language-box">
+
+      <h3 class="start-language-title">
+        Select a language
+      </h3>
+
+      <div class="language-dropdown-wrap">
+
+        <button
+          id="startLanguageToggle"
+          class="language-toggle"
+          type="button"
+          aria-expanded="false"
+        >
+          <span id="startLanguageValue">English</span>
+          <span class="language-toggle-arrow">⌄</span>
+        </button>
+
+        <div
+          id="startLanguageMenu"
+          class="language-menu hidden"
+        >
+
+          <button
+            id="startEnglishBtn"
+            class="language-choice"
+            type="button"
+          >
+            English
+          </button>
+
+          <button
+            id="startHindiBtn"
+            class="language-choice"
+            type="button"
+          >
+            Hindi
+          </button>
+
+        </div>
+
+      </div>
 
     </div>
 
@@ -1422,7 +1486,6 @@ body{
           title="Save Question"
           aria-label="Save Question"
         >
-          ♡
         </button>
 
         <span
@@ -2361,22 +2424,47 @@ async function loadQuestionsForSection(section){
 
 function setupLanguageButtons(){
 
+  const toggle =
+    $("startLanguageToggle");
+
+  const menu =
+    $("startLanguageMenu");
+
+  toggle?.addEventListener(
+    "click",
+    event => {
+
+      event.stopPropagation();
+
+      const isOpen =
+        !menu?.classList.contains("hidden");
+
+      menu?.classList.toggle(
+        "hidden",
+        isOpen
+      );
+
+      toggle.setAttribute(
+        "aria-expanded",
+        String(!isOpen)
+      );
+
+    }
+  );
+
   $("startHindiBtn")?.addEventListener(
     "click",
     () => {
 
       selectedStartLanguage = "hindi";
 
-      $("startHindiBtn")
-        .classList.add("active");
-
-      $("startEnglishBtn")
-        .classList.remove("active");
-
       localStorage.setItem(
         "ssc-edge-test-language",
         "hindi"
       );
+
+      updateStartLanguageUI();
+      closeStartLanguageMenu();
 
     }
   );
@@ -2387,16 +2475,30 @@ function setupLanguageButtons(){
 
       selectedStartLanguage = "english";
 
-      $("startEnglishBtn")
-        .classList.add("active");
-
-      $("startHindiBtn")
-        .classList.remove("active");
-
       localStorage.setItem(
         "ssc-edge-test-language",
         "english"
       );
+
+      updateStartLanguageUI();
+      closeStartLanguageMenu();
+
+    }
+  );
+
+  document.addEventListener(
+    "click",
+    event => {
+
+      if(
+        !event.target.closest(
+          ".language-dropdown-wrap"
+        )
+      ){
+
+        closeStartLanguageMenu();
+
+      }
 
     }
   );
@@ -2405,25 +2507,42 @@ function setupLanguageButtons(){
 
 }
 
+function closeStartLanguageMenu(){
+
+  $("startLanguageMenu")
+    ?.classList.add("hidden");
+
+  $("startLanguageToggle")
+    ?.setAttribute(
+      "aria-expanded",
+      "false"
+    );
+
+}
+
 function updateStartLanguageUI(){
 
-  if(selectedStartLanguage === "hindi"){
+  const language =
+    normalizeLanguage(
+      selectedStartLanguage
+    );
 
-    $("startHindiBtn")
-      ?.classList.add("active");
+  setText(
+    "startLanguageValue",
+    getLanguageName(language)
+  );
 
-    $("startEnglishBtn")
-      ?.classList.remove("active");
+  $("startHindiBtn")
+    ?.classList.toggle(
+      "active",
+      language === "hindi"
+    );
 
-  }else{
-
-    $("startEnglishBtn")
-      ?.classList.add("active");
-
-    $("startHindiBtn")
-      ?.classList.remove("active");
-
-  }
+  $("startEnglishBtn")
+    ?.classList.toggle(
+      "active",
+      language === "english"
+    );
 
 }
 
@@ -3528,6 +3647,19 @@ function toggleSavedQuestion(){
 
 }
 
+function bookmarkIcon(filled){
+
+  return `<svg
+    class="saved-bookmark"
+    viewBox="0 0 18 22"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M2.5 2.5A1.5 1.5 0 0 1 4 1h10a1.5 1.5 0 0 1 1.5 1.5V20l-6.5-4-6.5 4V2.5Z"></path>
+  </svg>`;
+
+}
+
 function updateSaveButton(){
 
   const question =
@@ -3545,8 +3677,8 @@ function updateSaveButton(){
 
   if(!btn) return;
 
-  btn.textContent =
-    isSaved ? "♥" : "♡";
+  btn.innerHTML =
+    bookmarkIcon(isSaved);
 
   btn.style.color =
     isSaved
@@ -4527,10 +4659,25 @@ function renderResultScreen(resultData){
         ✓
       </div>
 
-      <h2>Test Submitted</h2>
+      <h2>
+        ${escapeHtml(
+          testData?.title ||
+          testData?.name ||
+          "SSC EDGE Test"
+        )}
+      </h2>
 
-      <p class="result-subtitle">
-        Your test has been submitted successfully.
+      <p class="result-test-number">
+        Test ${escapeHtml(
+          testData?.test_number ||
+          testData?.test_no ||
+          testData?.number ||
+          ""
+        )}
+      </p>
+
+      <p class="result-thankyou">
+        Thank You for attempting the Test.
       </p>
 
       <div class="result-score">
@@ -4592,7 +4739,15 @@ function renderResultScreen(resultData){
 
         <button
           type="button"
-          class="primary-btn"
+          class="result-action primary"
+          onclick="openAnalysisPage()"
+        >
+          View Analysis
+        </button>
+
+        <button
+          type="button"
+          class="result-action"
           onclick="openSolutionsPage()"
         >
           View Solutions
@@ -4600,7 +4755,7 @@ function renderResultScreen(resultData){
 
         <button
           type="button"
-          class="secondary-btn"
+          class="result-back"
           onclick="backToMocks()"
         >
           Back to Practice
@@ -4622,6 +4777,18 @@ function openSolutionsPage(){
 
   window.location.href =
     "solutions.html?test_id=" +
+    encodeURIComponent(testId);
+
+}
+
+/* ==================================================
+   OPEN ANALYSIS
+   ================================================== */
+
+function openAnalysisPage(){
+
+  window.location.href =
+    "analysis.html?test_id=" +
     encodeURIComponent(testId);
 
 }
@@ -4677,5 +4844,8 @@ window.finishTest =
 
 window.openSolutionsPage =
   openSolutionsPage;
+
+window.openAnalysisPage =
+  openAnalysisPage;
 
 </script>
