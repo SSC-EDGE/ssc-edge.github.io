@@ -112,7 +112,7 @@ body{
   border:1px solid var(--border);
   background:#c4a7ff;
   border-color:#c4a7ff;
-  color:#c4a7ff !important;
+  color:#6d3fd1 !important;
   padding:0;
   border-radius:10px;
   font-size:18px;
@@ -120,7 +120,7 @@ body{
 }
 
 .pause-glyph{
-  color:#c4a7ff !important;
+  color:#6d3fd1 !important;
   line-height:1;
   font-size:20px;
   font-family:Arial,sans-serif;
@@ -465,8 +465,8 @@ body{
 }
 
 .save-question-btn.saved{
-  background:var(--card2) !important;
-  border-color:var(--border) !important;
+  background:rgba(196,167,255,.28) !important;
+  border-color:#c4a7ff !important;
   color:#c4a7ff !important;
 }
 
@@ -507,13 +507,13 @@ body{
   background:var(--card);
   border:1px solid var(--border);
   border-radius:12px;
-  padding:7px 8px;
+  padding:10px 11px;
 }
 
 .question-text{
   color:var(--text);
-  font-size:12px;
-  line-height:1.28;
+  font-size:16px;
+  line-height:1.38;
   font-weight:700;
   white-space:pre-wrap;
   overflow-wrap:anywhere;
@@ -524,19 +524,19 @@ body{
    ================================================== */
 
 .options{
-  margin-top:6px;
+  margin-top:8px;
   display:flex;
   flex-direction:column;
-  gap:4px;
+  gap:7px;
 }
 
 .option{
   display:flex;
   align-items:flex-start;
-  gap:7px;
-  padding:6px 7px;
+  gap:10px;
+  padding:10px 12px;
   border:1px solid var(--border);
-  border-radius:9px;
+  border-radius:14px;
   background:var(--bg);
   color:var(--text);
   cursor:pointer;
@@ -553,9 +553,9 @@ body{
 }
 
 .option input{
-  width:15px;
-  height:15px;
-  margin:1px 0 0;
+  width:17px;
+  height:17px;
+  margin:2px 0 0;
   flex-shrink:0;
   accent-color:var(--purple);
 }
@@ -563,15 +563,15 @@ body{
 .option-label{
   min-width:22px;
   color:var(--purple2);
-  font-size:11px;
+  font-size:14px;
   font-weight:900;
 }
 
 .option-text{
   flex:1;
   color:var(--text);
-  font-size:11px;
-  line-height:1.28;
+  font-size:14px;
+  line-height:1.35;
   white-space:pre-wrap;
   overflow-wrap:anywhere;
 }
@@ -587,15 +587,15 @@ body{
   bottom:0;
   z-index:80;
   width:100%;
-  margin:0;
-  padding:8px 10px calc(8px + env(safe-area-inset-bottom));
-  background:var(--bg);
-  border-top:1px solid var(--border);
-  box-shadow:0 -4px 16px rgba(0,0,0,.14);
+  margin:0 0 8px;
+  padding:8px 2px;
+  background:transparent;
+  border:0;
+  box-shadow:none;
 }
 
 #testArea{
-  padding-bottom:82px;
+  padding-bottom:0;
 }
 
 .navigation-row{
@@ -608,7 +608,7 @@ body{
   width:100%;
   display:flex;
   justify-content:flex-end;
-  margin-bottom:10px;
+  margin:10px 0 76px;
 }
 
 .nav-btn{
@@ -1254,8 +1254,18 @@ body{
   }
 
   .question-text{
-    font-size:12px;
-    line-height:1.28;
+    font-size:15px;
+    line-height:1.38;
+  }
+
+  .option{
+    padding:9px 11px;
+    gap:9px;
+  }
+
+  .option-label,
+  .option-text{
+    font-size:13px;
   }
 
   .question-grid{
@@ -1591,21 +1601,21 @@ body{
     >
     </div>
 
+    <div class="grid-button-row">
+
+      <button
+        id="gridBtn"
+        class="grid-btn"
+        type="button"
+        title="Question Palette"
+        aria-label="Question Palette"
+      >
+        ☷
+      </button>
+
+    </div>
+
     <div class="navigation">
-
-      <div class="grid-button-row">
-
-        <button
-          id="gridBtn"
-          class="grid-btn"
-          type="button"
-          title="Question Palette"
-          aria-label="Question Palette"
-        >
-          ☷
-        </button>
-
-      </div>
 
       <div class="navigation-row">
 
