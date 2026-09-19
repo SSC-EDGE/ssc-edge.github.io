@@ -112,7 +112,7 @@ body{
   border:1px solid var(--border);
   background:#c4a7ff;
   border-color:#c4a7ff;
-  color:#24152f;
+  color:var(--purple);
   padding:0;
   border-radius:10px;
   font-size:18px;
@@ -178,8 +178,8 @@ body{
 }
 
 .language-icon-btn{
-  width:32px;
-  height:32px;
+  width:30px;
+  height:30px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -456,6 +456,12 @@ body{
   cursor:pointer;
 }
 
+.save-question-btn.saved{
+  background:var(--purple) !important;
+  border-color:var(--purple) !important;
+  color:#fff !important;
+}
+
 .saved-bookmark{
   width:17px;
   height:20px;
@@ -487,14 +493,14 @@ body{
 .question-card{
   background:var(--card);
   border:1px solid var(--border);
-  border-radius:16px;
-  padding:17px;
+  border-radius:14px;
+  padding:13px;
 }
 
 .question-text{
   color:var(--text);
-  font-size:16px;
-  line-height:1.55;
+  font-size:15px;
+  line-height:1.45;
   font-weight:700;
   white-space:pre-wrap;
   overflow-wrap:anywhere;
@@ -505,7 +511,7 @@ body{
    ================================================== */
 
 .options{
-  margin-top:18px;
+  margin-top:13px;
   display:flex;
   flex-direction:column;
   gap:9px;
@@ -515,9 +521,9 @@ body{
   display:flex;
   align-items:flex-start;
   gap:10px;
-  padding:12px;
+  padding:10px;
   border:1px solid var(--border);
-  border-radius:11px;
+  border-radius:10px;
   background:var(--bg);
   color:var(--text);
   cursor:pointer;
@@ -1163,13 +1169,13 @@ body{
   }
 
   .language-icon-btn{
-    width:32px;
-    height:32px;
-    font-size:13px;
+    width:30px;
+    height:30px;
+    font-size:12px;
   }
 
   .question-text{
-    font-size:15px;
+    font-size:14px;
   }
 
   .question-grid{
@@ -1275,7 +1281,7 @@ body{
         aria-label="Pause Test"
         title="Pause Test"
       >
-        ⏸️
+        ⏸
       </button>
 
     </div>
@@ -1678,7 +1684,7 @@ body{
   <div class="pause-popup">
 
     <div class="pause-symbol">
-      ⏸️
+      ⏸
     </div>
 
     <h2>
@@ -3680,9 +3686,11 @@ function updateSaveButton(){
   btn.innerHTML =
     bookmarkIcon(isSaved);
 
+  btn.classList.toggle("saved", isSaved);
+
   btn.style.color =
     isSaved
-      ? "var(--purple)"
+      ? "#fff"
       : "";
 
 }
