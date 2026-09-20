@@ -2135,7 +2135,7 @@ async function getCompletedAttemptCount(){
       .from("test_attempts")
       .select("id,completed_at")
       .eq("user_id", currentUser.id)
-      .eq("test_id", testId)
+      .eq("mock_test_id", testId)
       .not("completed_at", "is", null)
       .order("completed_at", { ascending:true });
 
@@ -4329,39 +4329,57 @@ async function finishTest(){
     autoSaveTimeout = null;
   }
 
+  /*
+    Keep progress until the MAIN attempt is successfully
+    inserted into test_attempts.
+  */
+  saveLocalProgress();
+
   try{
 
-    const resultData = await calculateTestResult();
-    const savedAttempt = await saveTestAttempt(resultData);
+    const resultData =
+      await calculateTestResult();
 
+    await saveTestAttempt(resultData);
+
+    /*
+      Only clear local progress after the main
+      test_attempt has been saved successfully.
+    */
     clearLocalProgress();
 
-    renderResultScreen({
-      ...resultData,
-      attemptId: savedAttempt?.attempt?.id || null,
-      attemptNumber: savedAttempt?.attemptNumber || null
-    });
+    renderResultScreen(resultData);
 
   }catch(error){
 
-    console.error("Finish test error:", error);
+    console.error(
+      "Finish test error:",
+      error
+    );
 
+    /*
+      Restore the test state so the user can retry.
+      Progress remains saved.
+    */
     testFinished = false;
     testStarted = true;
     isPaused = false;
 
+    lastTickTimestamp = Date.now();
+
     saveLocalProgress();
+
+    try{
+
+      window.alert(
+        "Test couldn't be submitted. " +
+        (error?.message || "Please try again later.") +
+        "\n\nYour progress has been saved."
+      );
+
+    }catch(e){}
+
     initializeTimers();
-
-    const message =
-      error?.message ||
-      error?.details ||
-      "Unknown submission error.";
-
-    window.alert(
-      "Test couldn't be submitted. Your progress has been saved.\n\n" +
-      message
-    );
 
   }
 
@@ -4652,123 +4670,245 @@ async function saveTestAttempt(resultData){
     throw new Error("You must be logged in to submit this test.");
   }
 
-  const completedAttempts = await getCompletedAttemptCount();
-
-  if(completedAttempts >= 4){
-    throw new Error("Maximum 4 attempts are allowed for this test.");
-  }
-
-  const attemptNumber = completedAttempts + 1;
-
   /*
     IMPORTANT:
-    These are the EXISTING columns used by SSC EDGE's
-    test_attempts table.  The mock test itself uses
-    mock_test_id in other tables, but test_attempts uses test_id.
+    This matches the ACTUAL SSC EDGE test_attempts table.
+
+    Existing columns:
+    id
+    user_id
+    mock_test_id
+    started_at
+    completed_at
+    score
+    correct_answers
+    wrong_answers
+    unanswered
+    total_questions
+    rank
+    percentile
+    sectional_data
+
+    Do NOT use test_id / correct / wrong / skipped here.
   */
+
+  const completedAttempts =
+    await getCompletedAttemptCount();
+
+  if(completedAttempts >= 4){
+    throw new Error(
+      "Maximum 4 attempts are allowed for this test."
+    );
+  }
+
+  const attemptNumber =
+    completedAttempts + 1;
+
   const attemptPayload = {
-    user_id: currentUser.id,
-    test_id: testId,
-    score: resultData.score,
-    total_marks: resultData.maxMarks,
-    total_questions: resultData.totalQuestions,
-    attempted: resultData.attempted,
-    correct: resultData.correct,
-    wrong: resultData.wrong,
-    skipped: resultData.skipped,
-    percentage: resultData.percentage,
-    status: "completed",
-    completed_at: new Date().toISOString()
+
+    user_id:
+      currentUser.id,
+
+    mock_test_id:
+      testId,
+
+    started_at:
+      testStartTimestamp
+        ? new Date(testStartTimestamp).toISOString()
+        : new Date().toISOString(),
+
+    completed_at:
+      new Date().toISOString(),
+
+    score:
+      Number(resultData.score || 0),
+
+    correct_answers:
+      Number(resultData.correct || 0),
+
+    wrong_answers:
+      Number(resultData.wrong || 0),
+
+    unanswered:
+      Number(resultData.skipped || 0),
+
+    total_questions:
+      Number(resultData.totalQuestions || 0),
+
+    sectional_data:
+      sections.map((section,index) => ({
+        section_index:index,
+        section_name:
+          section.subjects?.name ||
+          section.subject_name ||
+          section.name ||
+          ("Section " + (index + 1)),
+        attempted:
+          Number(
+            (section.questions || []).filter(q => {
+              const value = answers[String(q.id)];
+              return value !== null &&
+                value !== undefined &&
+                value !== "";
+            }).length
+          ),
+        total_questions:
+          Number((section.questions || []).length),
+        time_spent_seconds:
+          Math.max(
+            0,
+            Math.floor(
+              Number(sectionElapsedData[String(index)] || 0)
+            )
+          )
+      }))
+
   };
 
   /*
-    Do NOT use insert(...).select().single() here.
-    An INSERT can succeed while a SELECT policy blocks the
-    returned row.  First save the attempt, then read it back.
+    Insert the main attempt using ONLY real columns.
   */
-  const { error:insertError } = await supabaseClient
+  const {
+    data:insertedRows,
+    error:insertError
+  } = await supabaseClient
     .from("test_attempts")
-    .insert(attemptPayload);
+    .insert(attemptPayload)
+    .select("id")
+    .maybeSingle();
 
   if(insertError){
-    console.error("TEST ATTEMPT INSERT ERROR:", insertError);
+
+    console.error(
+      "TEST ATTEMPT INSERT ERROR:",
+      insertError
+    );
+
     throw new Error(
       insertError.message ||
-      insertError.details ||
       "Unable to save the test attempt."
     );
+
   }
 
-  /* Get the newly-created attempt ID. */
-  const { data:attemptRows, error:fetchError } =
-    await supabaseClient
+  let attemptId =
+    insertedRows?.id || null;
+
+  /*
+    If RLS prevents the inserted row from being
+    returned, find the just-created completed attempt.
+  */
+  if(!attemptId){
+
+    const {
+      data:latestRows,
+      error:latestError
+    } = await supabaseClient
       .from("test_attempts")
-      .select("*")
+      .select("id,completed_at")
       .eq("user_id", currentUser.id)
-      .eq("test_id", testId)
-      .eq("status", "completed")
+      .eq("mock_test_id", testId)
+      .not("completed_at", "is", null)
       .order("completed_at", { ascending:false })
       .limit(1);
 
-  if(fetchError){
-    console.error("ATTEMPT FETCH ERROR:", fetchError);
-    throw new Error(
-      fetchError.message ||
-      "Test was saved, but the saved attempt could not be read back."
-    );
+    if(!latestError){
+      attemptId =
+        latestRows?.[0]?.id || null;
+    }else{
+      console.warn(
+        "Could not read saved attempt ID:",
+        latestError
+      );
+    }
+
   }
 
-  const attempt = attemptRows?.[0];
+  /*
+    Save answer history separately.
+    If this secondary insert fails, the main
+    test_attempt is already successfully saved.
+  */
+  if(attemptId && resultData.answerRows?.length){
 
-  if(!attempt?.id){
-    throw new Error("Test was saved, but no attempt ID was returned.");
-  }
+    const answerPayload =
+      resultData.answerRows.map(row => ({
+        attempt_id:
+          attemptId,
 
-  if(resultData.answerRows?.length){
+        question_id:
+          row.question_id,
 
-    const answerPayload = resultData.answerRows.map(row => ({
-      attempt_id: attempt.id,
-      question_id: row.question_id,
-      selected_option_id: row.selected_option_id,
-      selected_option_label: row.selected_option_label,
-      status: row.status,
-      marks_awarded: row.marks_awarded,
-      time_spent_seconds: Math.max(
-        0,
-        Math.floor(Number(row.time_spent_seconds || 0))
-      )
-    }));
+        selected_option_id:
+          row.selected_option_id,
 
-    const { error:answerError } = await supabaseClient
+        selected_option_label:
+          row.selected_option_label,
+
+        status:
+          row.status,
+
+        marks_awarded:
+          row.marks_awarded,
+
+        time_spent_seconds:
+          Math.max(
+            0,
+            Math.floor(
+              Number(row.time_spent_seconds || 0)
+            )
+          )
+      }));
+
+    const {
+      error:answerError
+    } = await supabaseClient
       .from("user_answers")
       .insert(answerPayload);
 
-    /*
-      Main attempt is already safely saved.
-      Do not turn a successful submission into a failure
-      just because answer-history rows have an issue.
-    */
     if(answerError){
-      console.error("USER ANSWERS INSERT ERROR:", answerError);
+      console.error(
+        "USER ANSWERS INSERT ERROR:",
+        answerError
+      );
     }
+
   }
 
-  lastAttemptId = attempt.id;
-  lastAttemptNumber = attemptNumber;
+  lastAttemptId =
+    attemptId;
+
+  lastAttemptNumber =
+    attemptNumber;
 
   try{
+
     localStorage.setItem(
-      "ssc-edge-completed-test-" + String(testId),
+      "ssc-edge-completed-test-" +
+      String(testId),
+
       JSON.stringify({
         completed:true,
-        attemptId:attempt.id,
+        attemptId,
         attemptNumber,
         completedAt:Date.now()
       })
     );
+
   }catch(e){}
 
-  return { attempt, attemptNumber };
+  /*
+    The main attempt was inserted successfully.
+    Even if its ID could not be read because of RLS,
+    the test itself is still submitted.
+  */
+  return {
+    attempt:{
+      id:attemptId
+    },
+    attemptNumber
+  };
+
 }
 
 /* ==================================================
