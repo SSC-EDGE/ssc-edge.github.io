@@ -414,6 +414,12 @@ body{
   transform:scale(.98);
 }
 
+.start-action:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+  transform:none;
+}
+
 .resume-note{
   margin-top:9px;
   text-align:center;
@@ -1999,6 +2005,11 @@ let currentSectionRemainingSeconds = 0;
 
 let autoSaveTimeout = null;
 
+let sectionElapsedData = {};
+let lastAttemptId = null;
+let lastAttemptNumber = null;
+let reattemptRequested = false;
+
 /* ==================================================
    DOM HELPERS
    ================================================== */
@@ -2085,6 +2096,56 @@ function getLanguageName(language){
   return normalizeLanguage(language) === "hindi"
     ? "Hindi"
     : "English";
+}
+
+/* ==================================================
+   TEST MODE / ATTEMPT HELPERS
+   ================================================== */
+
+function isSectionalTimingEnabled(){
+
+  if(
+    testData &&
+    Object.prototype.hasOwnProperty.call(
+      testData,
+      "subject_wise_timing"
+    )
+  ){
+    return Boolean(testData.subject_wise_timing);
+  }
+
+  return Boolean(testData?.sectional_timing);
+}
+
+function isReattemptRequested(){
+
+  const params = new URLSearchParams(
+    window.location.search
+  );
+
+  return params.get("reattempt") === "1";
+}
+
+async function getCompletedAttemptCount(){
+
+  if(!currentUser) return 0;
+
+  const { data, error } =
+    await supabaseClient
+      .from("test_attempts")
+      .select("id,completed_at")
+      .eq("user_id", currentUser.id)
+      .eq("test_id", testId)
+      .eq("status", "completed")
+      .not("completed_at", "is", null)
+      .order("completed_at", { ascending:true });
+
+  if(error){
+    console.error("Attempt count error:", error);
+    throw error;
+  }
+
+  return (data || []).length;
 }
 
 /* ==================================================
@@ -2180,7 +2241,15 @@ function saveLocalProgress(){
 
     sectionTimeData,
 
+    sectionElapsedData,
+
+    currentSectionRemainingSeconds,
+
     testStarted,
+
+    testFinished,
+
+    isPaused,
 
     updatedAt:Date.now()
 
@@ -2242,6 +2311,7 @@ function clearLocalProgress(){
 async function initializeTest(){
 
   testId = getTestIdFromUrl();
+  reattemptRequested = isReattemptRequested();
 
   if(!testId){
 
@@ -2318,7 +2388,7 @@ async function loadTestData(){
     hide("loading");
     show("startScreen");
 
-    checkResumeAvailability();
+    await checkResumeAvailability();
 
   }catch(error){
 
@@ -2755,10 +2825,44 @@ function renderStartSummary(){
 
 }
 
-function checkResumeAvailability(){
+async function checkResumeAvailability(){
 
-  const progress =
-    getLocalProgress();
+  reattemptRequested = isReattemptRequested();
+
+  const progress = getLocalProgress();
+
+  if(reattemptRequested){
+
+    try{
+      const completedCount = await getCompletedAttemptCount();
+
+      if(completedCount >= 4){
+        setText("startTitle", "Maximum Attempts Reached");
+        setText("startSubtitle", "You have already completed the maximum 4 attempts for this test.");
+        setText("startTestBtn", "Attempts Completed");
+        hide("resumeNote");
+        $("startTestBtn")?.setAttribute("disabled", "true");
+        return;
+      }
+
+      $("startTestBtn")?.removeAttribute("disabled");
+      setText("startTitle", "Re-attempt Test");
+      setText("startSubtitle", `Attempt ${completedCount + 1} of 4. This will start a fresh attempt.`);
+      setText("startTestBtn", "Re-attempt");
+      hide("resumeNote");
+      return;
+
+    }catch(error){
+      console.error(error);
+      setText("startTitle", "Re-attempt Test");
+      setText("startSubtitle", "A fresh attempt will start when you continue.");
+      setText("startTestBtn", "Re-attempt");
+      hide("resumeNote");
+      return;
+    }
+  }
+
+  $("startTestBtn")?.removeAttribute("disabled");
 
   if(
     progress &&
@@ -2766,40 +2870,16 @@ function checkResumeAvailability(){
     !progress.testFinished
   ){
 
-    setText(
-      "startTitle",
-      "Resume Test"
-    );
-
-    setText(
-      "startSubtitle",
-      "Your previous test progress is available."
-    );
-
-    setText(
-      "startTestBtn",
-      "Resume Test"
-    );
-
+    setText("startTitle", "Resume Test");
+    setText("startSubtitle", "Your previous test progress is available.");
+    setText("startTestBtn", "Resume Test");
     show("resumeNote");
 
   }else{
 
-    setText(
-      "startTitle",
-      "Ready to Start?"
-    );
-
-    setText(
-      "startSubtitle",
-      "Check your section details before starting."
-    );
-
-    setText(
-      "startTestBtn",
-      "Start Test"
-    );
-
+    setText("startTitle", "Ready to Start?");
+    setText("startSubtitle", "Check your section details before starting.");
+    setText("startTestBtn", "Start Test");
     hide("resumeNote");
 
   }
@@ -2812,12 +2892,13 @@ function checkResumeAvailability(){
 
 function renderSectionBar(){
 
-  const bar =
-    $("sectionBar");
+  const bar = $("sectionBar");
 
   if(!bar) return;
 
   bar.innerHTML = "";
+
+  const sectional = isSectionalTimingEnabled();
 
   sections.forEach((section,index) => {
 
@@ -2827,39 +2908,58 @@ function renderSectionBar(){
       section.name ||
       "Section " + (index + 1);
 
-    const btn =
-      document.createElement("button");
+    const btn = document.createElement("button");
 
     btn.type = "button";
     btn.className = "section-btn";
-
     btn.textContent = subject;
 
-    btn.addEventListener(
-      "click",
-      () => switchSection(index)
-    );
+    if(sectional && index !== currentSectionIndex){
+      btn.disabled = true;
+      btn.setAttribute("aria-disabled", "true");
+      btn.style.opacity = ".55";
+      btn.style.cursor = "not-allowed";
+    }else{
+      btn.addEventListener("click", () => switchSection(index));
+    }
 
     bar.appendChild(btn);
 
   });
 
+  updateSectionBar();
+
 }
 
 function updateSectionBar(){
+
+  const sectional = isSectionalTimingEnabled();
 
   document
     .querySelectorAll(".section-btn")
     .forEach((btn,index) => {
 
-      btn.classList.toggle(
-        "current",
-        index === currentSectionIndex
-      );
+      const current = index === currentSectionIndex;
+
+      btn.classList.toggle("current", current);
+
+      if(sectional){
+        btn.disabled = !current;
+        btn.setAttribute("aria-disabled", String(!current));
+        btn.style.opacity = current ? "1" : ".55";
+        btn.style.cursor = current ? "default" : "not-allowed";
+      }else{
+        btn.disabled = false;
+        btn.removeAttribute("aria-disabled");
+        btn.style.opacity = "1";
+        btn.style.cursor = "pointer";
+      }
 
     });
 
 }
+
+
 
 /* ==================================================
    PREPARE QUESTIONS
@@ -2920,53 +3020,29 @@ function restoreProgress(progress){
 
   if(!progress) return;
 
-  answers =
-    progress.answers || {};
+  answers = progress.answers || {};
+  reviewQuestions = progress.reviewQuestions || {};
+  savedQuestions = progress.savedQuestions || {};
 
-  reviewQuestions =
-    progress.reviewQuestions || {};
+  currentSectionIndex = Number(progress.currentSectionIndex || 0);
+  currentQuestionIndex = Number(progress.currentQuestionIndex || 0);
 
-  savedQuestions =
-    progress.savedQuestions || {};
+  selectedStartLanguage = normalizeLanguage(
+    progress.selectedStartLanguage || selectedStartLanguage
+  );
 
-  currentSectionIndex =
-    Number(progress.currentSectionIndex || 0);
+  currentQuestionLanguage = normalizeLanguage(
+    progress.currentQuestionLanguage || selectedStartLanguage
+  );
 
-  currentQuestionIndex =
-    Number(progress.currentQuestionIndex || 0);
+  totalRemainingSeconds = Number(progress.totalRemainingSeconds || 0);
+  questionRemainingSeconds = Number(progress.questionRemainingSeconds || 0);
+  questionElapsedSeconds = Number(progress.questionElapsedSeconds || 0);
 
-  selectedStartLanguage =
-    normalizeLanguage(
-      progress.selectedStartLanguage ||
-      selectedStartLanguage
-    );
-
-  currentQuestionLanguage =
-    normalizeLanguage(
-      progress.currentQuestionLanguage ||
-      selectedStartLanguage
-    );
-
-  totalRemainingSeconds =
-    Number(
-      progress.totalRemainingSeconds || 0
-    );
-
-  questionRemainingSeconds =
-    Number(
-      progress.questionRemainingSeconds || 0
-    );
-
-  questionElapsedSeconds =
-    Number(
-      progress.questionElapsedSeconds || 0
-    );
-
-  questionTimeData =
-    progress.questionTimeData || {};
-
-  sectionTimeData =
-    progress.sectionTimeData || {};
+  questionTimeData = progress.questionTimeData || {};
+  sectionTimeData = progress.sectionTimeData || {};
+  sectionElapsedData = progress.sectionElapsedData || {};
+  currentSectionRemainingSeconds = Number(progress.currentSectionRemainingSeconds || 0);
 
   testStarted = !!progress.testStarted;
   testFinished = !!progress.testFinished;
@@ -2980,21 +3056,42 @@ function restoreProgress(progress){
 
 function startOrResumeTest(){
 
-  const progress =
-    getLocalProgress();
+  const progress = getLocalProgress();
 
-  if(
-    progress &&
-    progress.testStarted &&
-    !progress.testFinished
-  ){
+  if(reattemptRequested){
 
+    getCompletedAttemptCount()
+      .then(completedCount => {
+        if(completedCount >= 4){
+          window.alert("Maximum 4 attempts are allowed for this test.");
+          return;
+        }
+
+        clearLocalProgress();
+        resetTestState();
+        testStarted = true;
+        testFinished = false;
+        isPaused = false;
+        hide("startScreen");
+        show("testArea");
+        show("sectionBar");
+        updateSectionBar();
+        initializeTimers();
+        renderCurrentQuestion();
+        saveLocalProgress();
+      })
+      .catch(error => {
+        console.error(error);
+        window.alert("Unable to verify attempt limit. Please try again.");
+      });
+
+    return;
+  }
+
+  if(progress && progress.testStarted && !progress.testFinished){
     restoreProgress(progress);
-
   }else{
-
     resetTestState();
-
   }
 
   testStarted = true;
@@ -3006,11 +3103,8 @@ function startOrResumeTest(){
   show("sectionBar");
 
   updateSectionBar();
-
   initializeTimers();
-
   renderCurrentQuestion();
-
   saveLocalProgress();
 
 }
@@ -3024,58 +3118,35 @@ function resetTestState(){
   currentSectionIndex = 0;
   currentQuestionIndex = 0;
 
-  currentQuestionLanguage =
-    selectedStartLanguage;
+  currentQuestionLanguage = selectedStartLanguage;
 
   sectionTimeData = {};
+  sectionElapsedData = {};
 
-  sections.forEach((section, index) => {
+  sections.forEach((section,index) => {
     const mins = Number(section.duration_minutes || section.duration || 0);
-    if (mins > 0) sectionTimeData[String(index)] = mins * 60;
+    sectionTimeData[String(index)] = mins > 0 ? mins * 60 : 0;
+    sectionElapsedData[String(index)] = 0;
   });
 
-  const totalMinutes =
-    Number(
-      testData.duration_minutes ||
-      testData.duration ||
-      0
-    );
+  const totalMinutes = Number(
+    testData.duration_minutes || testData.duration || 0
+  );
 
-  totalRemainingSeconds =
-    totalMinutes > 0
-      ? totalMinutes * 60
-      : sections.reduce(
-          (sum,section) =>
-            sum +
-            Number(
-              section.duration_minutes ||
-              section.duration ||
-              0
-            ) * 60,
-          0
-        );
+  totalRemainingSeconds = totalMinutes > 0
+    ? totalMinutes * 60
+    : sections.reduce((sum,section) =>
+        sum + Number(section.duration_minutes || section.duration || 0) * 60, 0);
 
-  if(!totalRemainingSeconds){
+  if(!totalRemainingSeconds) totalRemainingSeconds = 60 * 60;
 
-    totalRemainingSeconds = 60 * 60;
-
-  }
-
-  const currentSection =
-    getCurrentSection();
-
-  currentSectionRemainingSeconds =
-    Number(
-      currentSection?.duration_minutes ||
-      currentSection?.duration ||
-      0
-    ) * 60;
+  const currentSection = getCurrentSection();
+  currentSectionRemainingSeconds = Number(
+    currentSection?.duration_minutes || currentSection?.duration || 0
+  ) * 60;
 
   if(!currentSectionRemainingSeconds){
-
-    currentSectionRemainingSeconds =
-      totalRemainingSeconds;
-
+    currentSectionRemainingSeconds = totalRemainingSeconds;
   }
 
   questionRemainingSeconds = 0;
@@ -3083,6 +3154,8 @@ function resetTestState(){
   questionTimeData = {};
 
   testStartTimestamp = Date.now();
+  lastAttemptId = null;
+  lastAttemptNumber = null;
 
 }
 
@@ -3176,84 +3249,80 @@ function stopAllTimers(){
 
 function synchronizedTimerTick(){
 
-  if(!testStarted || testFinished || isPaused){
-
-    return;
-
-  }
+  if(!testStarted || testFinished || isPaused) return;
 
   const now = Date.now();
 
-  if(!lastTickTimestamp){
+  if(!lastTickTimestamp) lastTickTimestamp = now;
 
-    lastTickTimestamp = now;
-
-  }
-
-  const elapsedMs =
-    now - lastTickTimestamp;
-
+  const elapsedMs = now - lastTickTimestamp;
   if(elapsedMs <= 0) return;
 
-  const elapsedSeconds =
-    elapsedMs / 1000;
-
+  const elapsedSeconds = elapsedMs / 1000;
   lastTickTimestamp = now;
 
-  totalRemainingSeconds =
-    Math.max(
-      0,
-      totalRemainingSeconds -
-      elapsedSeconds
-    );
-
+  const sectional = isSectionalTimingEnabled();
   const sectionKey = String(currentSectionIndex);
-  if (Object.prototype.hasOwnProperty.call(sectionTimeData, sectionKey)) {
-    sectionTimeData[sectionKey] = Math.max(
-      0,
-      Number(sectionTimeData[sectionKey]) - elapsedSeconds
-    );
-    currentSectionRemainingSeconds = sectionTimeData[sectionKey];
+
+  if(sectional){
+
+    if(Object.prototype.hasOwnProperty.call(sectionTimeData, sectionKey)){
+      sectionTimeData[sectionKey] = Math.max(0, Number(sectionTimeData[sectionKey]) - elapsedSeconds);
+      currentSectionRemainingSeconds = sectionTimeData[sectionKey];
+    }
+
+    totalRemainingSeconds = Object.values(sectionTimeData)
+      .reduce((sum,value) => sum + Math.max(0, Number(value) || 0), 0);
+
+    if(Object.prototype.hasOwnProperty.call(sectionElapsedData, sectionKey)){
+      sectionElapsedData[sectionKey] = Number(sectionElapsedData[sectionKey] || 0) + elapsedSeconds;
+    }
+
+  }else{
+
+    totalRemainingSeconds = Math.max(0, totalRemainingSeconds - elapsedSeconds);
+
+    if(Object.prototype.hasOwnProperty.call(sectionElapsedData, sectionKey)){
+      sectionElapsedData[sectionKey] = Number(sectionElapsedData[sectionKey] || 0) + elapsedSeconds;
+    }
+
   }
 
-  questionElapsedSeconds +=
-    elapsedSeconds;
+  questionElapsedSeconds += elapsedSeconds;
 
   const currentQuestion = getCurrentQuestion();
   if(currentQuestion){
     const qKey = String(currentQuestion.id);
-    questionTimeData[qKey] =
-      Number(questionTimeData[qKey] || 0) + elapsedSeconds;
+    questionTimeData[qKey] = Number(questionTimeData[qKey] || 0) + elapsedSeconds;
   }
 
   updateTimerUI();
 
-  if (Object.prototype.hasOwnProperty.call(sectionTimeData, String(currentSectionIndex)) && sectionTimeData[String(currentSectionIndex)] <= 0) {
-    sectionTimeData[String(currentSectionIndex)] = 0;
-    if (currentSectionIndex < sections.length - 1) {
+  if(sectional && Number(sectionTimeData[sectionKey] || 0) <= 0){
+
+    sectionTimeData[sectionKey] = 0;
+
+    if(currentSectionIndex < sections.length - 1){
+
       currentSectionIndex++;
       currentQuestionIndex = 0;
+      currentSectionRemainingSeconds = Number(sectionTimeData[String(currentSectionIndex)] || 0);
       resetQuestionClock();
       updateSectionBar();
       renderCurrentQuestion();
       saveLocalProgress();
       return;
+
     }
+
     totalRemainingSeconds = 0;
   }
 
-  if(
-    totalRemainingSeconds <= 0
-  ){
-
+  if(totalRemainingSeconds <= 0){
     totalRemainingSeconds = 0;
-
     updateTimerUI();
-
     finishTestAutomatically();
-
     return;
-
   }
 
   saveLocalProgressThrottled();
@@ -3266,41 +3335,22 @@ function synchronizedTimerTick(){
 
 function updateTimerUI(){
 
-  const total =
-    Math.ceil(
-      totalRemainingSeconds
-    );
+  const sectional = isSectionalTimingEnabled();
+  const displaySeconds = sectional
+    ? Math.ceil(currentSectionRemainingSeconds)
+    : Math.ceil(totalRemainingSeconds);
 
-  setText(
-    "timer",
-    formatTime(total)
-  );
+  setText("timer", formatTime(displaySeconds));
+  setText("gridTimer", formatTime(displaySeconds));
 
-  setText(
-    "gridTimer",
-    formatTime(total)
-  );
-
-  const timerEl =
-    $("timer");
-
+  const timerEl = $("timer");
   if(timerEl){
-
-    timerEl.classList.toggle(
-      "warning",
-      total <= 60
-    );
-
+    timerEl.classList.toggle("warning", displaySeconds <= 60);
   }
 
   setText(
     "questionTime",
-    "⏰ " +
-    formatTime(
-      Math.floor(
-        questionElapsedSeconds
-      )
-    )
+    "⏰ " + formatTime(Math.floor(questionElapsedSeconds))
   );
 
 }
@@ -3387,29 +3437,27 @@ function backToMocks(){
 
 function switchSection(index){
 
-  if(
-    index < 0 ||
-    index >= sections.length
-  ) return;
+  if(index < 0 || index >= sections.length) return;
+
+  if(isSectionalTimingEnabled() && testStarted && index !== currentSectionIndex){
+    return;
+  }
 
   currentSectionIndex = index;
   currentQuestionIndex = 0;
+  currentQuestionLanguage = selectedStartLanguage;
 
-  currentQuestionLanguage =
-    selectedStartLanguage;
+  currentSectionRemainingSeconds = Number(
+    sectionTimeData[String(index)] || 0
+  );
 
-  currentSectionRemainingSeconds =
-    Object.prototype.hasOwnProperty.call(sectionTimeData, String(index))
-      ? Number(sectionTimeData[String(index)])
-      : 0;
-
-  questionElapsedSeconds = 0;
+  questionElapsedSeconds = Number(
+    questionTimeData[String(getCurrentQuestion()?.id)] || 0
+  );
   questionRemainingSeconds = 0;
 
   updateSectionBar();
-
   renderCurrentQuestion();
-
   saveLocalProgress();
 
 }
@@ -3668,76 +3716,53 @@ function selectAnswer(
 function goPrevious(){
 
   if(currentQuestionIndex > 0){
-
     currentQuestionIndex--;
-
     resetQuestionClock();
-
     renderCurrentQuestion();
-
     saveLocalProgress();
-
     return;
-
   }
 
+  if(isSectionalTimingEnabled()) return;
+
   if(currentSectionIndex > 0){
-
     currentSectionIndex--;
-
-    currentQuestionIndex =
-      getCurrentSectionQuestions().length - 1;
-
+    currentQuestionIndex = getCurrentSectionQuestions().length - 1;
+    currentSectionRemainingSeconds = Number(sectionTimeData[String(currentSectionIndex)] || 0);
     resetQuestionClock();
-
     updateSectionBar();
     renderCurrentQuestion();
-
     saveLocalProgress();
-
   }
 
 }
 
 function goSaveNext(){
 
-  const sectionQuestions =
-    getCurrentSectionQuestions();
+  const sectionQuestions = getCurrentSectionQuestions();
 
-  if(
-    currentQuestionIndex <
-    sectionQuestions.length - 1
-  ){
-
+  if(currentQuestionIndex < sectionQuestions.length - 1){
     currentQuestionIndex++;
-
     resetQuestionClock();
-
     renderCurrentQuestion();
-
     saveLocalProgress();
-
     return;
-
   }
 
-  if(
-    currentSectionIndex <
-    sections.length - 1
-  ){
+  if(isSectionalTimingEnabled()){
+    submitCurrentSection();
+    return;
+  }
 
+  if(currentSectionIndex < sections.length - 1){
     currentSectionIndex++;
     currentQuestionIndex = 0;
-
+    currentSectionRemainingSeconds = Number(sectionTimeData[String(currentSectionIndex)] || 0);
     resetQuestionClock();
-
     updateSectionBar();
     renderCurrentQuestion();
-
     saveLocalProgress();
-
     return;
-
   }
 
   submitCurrentSection();
@@ -4066,37 +4091,27 @@ function changeQuestionLanguage(language){
 
 function submitCurrentSection(){
 
-  const section =
-    getCurrentSection();
-
+  const section = getCurrentSection();
   if(!section) return;
 
-  const confirmed =
-    window.confirm(
-      "Are you sure you want to submit this section?"
-    );
+  const confirmed = window.confirm(
+    "Are you sure you want to submit this section?"
+  );
 
   if(!confirmed) return;
 
-  if(
-    currentSectionIndex <
-    sections.length - 1
-  ){
+  if(currentSectionIndex < sections.length - 1){
 
     currentSectionIndex++;
     currentQuestionIndex = 0;
-
+    currentSectionRemainingSeconds = Number(sectionTimeData[String(currentSectionIndex)] || 0);
     resetQuestionClock();
-
     updateSectionBar();
     renderCurrentQuestion();
-
     saveLocalProgress();
 
   }else{
-
     finishTest();
-
   }
 
 }
@@ -4311,43 +4326,38 @@ async function finishTest(){
   stopAllTimers();
 
   if(autoSaveTimeout){
-
     clearTimeout(autoSaveTimeout);
     autoSaveTimeout = null;
-
   }
-
-  saveLocalProgress();
 
   try{
 
-    const resultData =
-      await calculateTestResult();
-
-    await saveTestAttempt(resultData);
+    const resultData = await calculateTestResult();
+    const savedAttempt = await saveTestAttempt(resultData);
 
     clearLocalProgress();
 
-    renderResultScreen(resultData);
+    renderResultScreen({
+      ...resultData,
+      attemptId: savedAttempt?.attempt?.id || null,
+      attemptNumber: savedAttempt?.attemptNumber || null
+    });
 
   }catch(error){
 
-    console.error(
-      "Finish test error:",
-      error
+    console.error("Finish test error:", error);
+
+    testFinished = false;
+    testStarted = true;
+    isPaused = false;
+
+    saveLocalProgress();
+
+    window.alert(
+      "The test could not be submitted. Your progress has been saved. Please try again."
     );
 
-    renderResultScreen({
-      totalQuestions: getAllQuestions().length,
-      attempted: countAttemptedAnswers(),
-      correct: 0,
-      wrong: 0,
-      skipped: 0,
-      score: 0,
-      maxMarks: calculateMaximumMarks(),
-      error: true
-    });
-
+    initializeTimers();
   }
 
 }
@@ -4518,8 +4528,7 @@ function isQuestionBonus(question){
 
 async function calculateTestResult(){
 
-  const allQuestions =
-    getAllQuestions();
+  const allQuestions = getAllQuestions();
 
   let attempted = 0;
   let correct = 0;
@@ -4532,124 +4541,63 @@ async function calculateTestResult(){
 
   for(const question of allQuestions){
 
-    const questionKey =
-      String(question.id);
+    const questionKey = String(question.id);
+    const selectedValue = answers[questionKey];
+    const hasAttempt = selectedValue !== null && selectedValue !== undefined && selectedValue !== "";
 
-    const selectedValue =
-      answers[questionKey];
-
-    const hasAttempt =
-      selectedValue !== null &&
-      selectedValue !== undefined &&
-      selectedValue !== "";
-
-    const marks =
-      getQuestionMarks(question);
-
-    const negativeMarks =
-      getQuestionNegativeMarks(question);
-
+    const marks = getQuestionMarks(question);
+    const negativeMarks = getQuestionNegativeMarks(question);
     maxMarks += marks;
 
-    const selectedLabel =
-      getSelectedOptionLabel(
-        question,
-        selectedValue
-      );
-
-    const correctOptions =
-      getCorrectOptionLabels(question);
+    const selectedLabel = getSelectedOptionLabel(question, selectedValue);
+    const correctOptions = getCorrectOptionLabels(question);
 
     let status = "skipped";
     let awardedMarks = 0;
 
     if(!hasAttempt){
-
       skipped++;
-
-      status = "skipped";
-
     }else{
-
       attempted++;
-
-      /*
-        Bonus question:
-        Any attempted option receives marks.
-      */
-
       if(isQuestionBonus(question)){
-
         awardedMarks = marks;
         correct++;
         status = "bonus";
-
-      }else if(
-        selectedLabel &&
-        correctOptions.includes(selectedLabel)
-      ){
-
+      }else if(selectedLabel && correctOptions.includes(selectedLabel)){
         awardedMarks = marks;
         correct++;
         status = "correct";
-
       }else{
-
         awardedMarks = -negativeMarks;
         wrong++;
         status = "wrong";
-
       }
-
     }
 
     score += awardedMarks;
 
     answerRows.push({
-
       question_id: question.id,
-      selected_option_id:
-        hasAttempt ? selectedValue : null,
-      selected_option_label:
-        selectedLabel,
+      selected_option_id: hasAttempt ? selectedValue : null,
+      selected_option_label: selectedLabel,
       status,
       marks_awarded: awardedMarks,
-      time_spent_seconds:
-        Number(
-          question.time_spent_seconds ||
-          0
-        )
-
+      time_spent_seconds: Number(questionTimeData[questionKey] || 0)
     });
 
   }
 
   return {
-
     testId,
-
-    totalQuestions:
-      allQuestions.length,
-
+    totalQuestions: allQuestions.length,
     attempted,
     correct,
     wrong,
     skipped,
-
     score: Number(score.toFixed(2)),
-
     maxMarks,
-
-    percentage:
-      maxMarks > 0
-        ? Number(
-            ((score / maxMarks) * 100)
-              .toFixed(2)
-          )
-        : 0,
-
+    percentage: maxMarks > 0 ? Number(((score / maxMarks) * 100).toFixed(2)) : 0,
     answerRows
-
   };
 
 }
@@ -4696,129 +4644,75 @@ function calculateMaximumMarks(){
 async function saveTestAttempt(resultData){
 
   if(!currentUser){
-
-    console.warn(
-      "No logged-in user. Attempt not saved."
-    );
-
-    return null;
-
+    throw new Error("Please login before submitting a test so your attempt can be saved.");
   }
 
-  /*
-    Save main attempt.
-    Adjust only if your table has
-    different column names.
-  */
+  const completedAttempts = await getCompletedAttemptCount();
+
+  if(completedAttempts >= 4){
+    throw new Error("Maximum 4 attempts are allowed for this test.");
+  }
+
+  const attemptNumber = completedAttempts + 1;
 
   const attemptPayload = {
-
     user_id: currentUser.id,
-
     test_id: testId,
-
     score: resultData.score,
-
     total_marks: resultData.maxMarks,
-
-    total_questions:
-      resultData.totalQuestions,
-
-    attempted:
-      resultData.attempted,
-
-    correct:
-      resultData.correct,
-
-    wrong:
-      resultData.wrong,
-
-    skipped:
-      resultData.skipped,
-
-    percentage:
-      resultData.percentage,
-
+    total_questions: resultData.totalQuestions,
+    attempted: resultData.attempted,
+    correct: resultData.correct,
+    wrong: resultData.wrong,
+    skipped: resultData.skipped,
+    percentage: resultData.percentage,
     status: "completed",
-
-    completed_at:
-      new Date().toISOString()
-
+    completed_at: new Date().toISOString()
   };
 
-  const {
-    data:attempt,
-    error:attemptError
-  } = await supabaseClient
+  const { data:attempt, error:attemptError } = await supabaseClient
     .from("test_attempts")
     .insert(attemptPayload)
     .select()
     .single();
 
-  if(attemptError){
+  if(attemptError) throw attemptError;
 
-    console.error(
-      "Attempt save error:",
-      attemptError
-    );
+  if(attempt && resultData.answerRows?.length){
 
-    /*
-      Do not block result screen if
-      database schema has extra/missing fields.
-    */
+    const answerPayload = resultData.answerRows.map(row => ({
+      attempt_id: attempt.id,
+      question_id: row.question_id,
+      selected_option_id: row.selected_option_id,
+      selected_option_label: row.selected_option_label,
+      status: row.status,
+      marks_awarded: row.marks_awarded,
+      time_spent_seconds: row.time_spent_seconds
+    }));
 
-    return null;
-
-  }
-
-  if(
-    attempt &&
-    resultData.answerRows?.length
-  ){
-
-    const answerPayload =
-      resultData.answerRows.map(row => ({
-
-        attempt_id: attempt.id,
-
-        question_id:
-          row.question_id,
-
-        selected_option_id:
-          row.selected_option_id,
-
-        selected_option_label:
-          row.selected_option_label,
-
-        status:
-          row.status,
-
-        marks_awarded:
-          row.marks_awarded,
-
-        time_spent_seconds:
-          row.time_spent_seconds
-
-      }));
-
-    const {
-      error:answerError
-    } = await supabaseClient
+    const { error:answerError } = await supabaseClient
       .from("user_answers")
       .insert(answerPayload);
 
-    if(answerError){
-
-      console.error(
-        "User answers save error:",
-        answerError
-      );
-
-    }
-
+    if(answerError) throw answerError;
   }
 
-  return attempt;
+  lastAttemptId = attempt.id;
+  lastAttemptNumber = attemptNumber;
+
+  try{
+    localStorage.setItem(
+      "ssc-edge-completed-test-" + String(testId),
+      JSON.stringify({
+        completed:true,
+        attemptId:attempt.id,
+        attemptNumber,
+        completedAt:Date.now()
+      })
+    );
+  }catch(e){}
+
+  return { attempt, attemptNumber };
 
 }
 
@@ -4969,9 +4863,14 @@ function getSectionQuestionsForResult(section,index){
 
 function openSolutionsPage(){
 
-  window.location.href =
+  const url =
     "solutions.html?test_id=" +
-    encodeURIComponent(testId);
+    encodeURIComponent(testId) +
+    (lastAttemptId
+      ? "&attempt_id=" + encodeURIComponent(lastAttemptId)
+      : "");
+
+  window.location.href = url;
 
 }
 
@@ -4980,6 +4879,13 @@ function openSolutionsPage(){
    ================================================== */
 
 function openAnalysisPage(){
+
+  if(lastAttemptId){
+    window.location.href =
+      "analysis.html?attempt_id=" +
+      encodeURIComponent(lastAttemptId);
+    return;
+  }
 
   window.location.href =
     "analysis.html?test_id=" +
