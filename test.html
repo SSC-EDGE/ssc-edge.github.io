@@ -2135,7 +2135,7 @@ async function getCompletedAttemptCount(){
       .from("test_attempts")
       .select("id,completed_at")
       .eq("user_id", currentUser.id)
-      .eq("mock_test_id", testId)
+      .eq("test_id", testId)
       .not("completed_at", "is", null)
       .order("completed_at", { ascending:true });
 
@@ -4351,12 +4351,18 @@ async function finishTest(){
     isPaused = false;
 
     saveLocalProgress();
+    initializeTimers();
+
+    const message =
+      error?.message ||
+      error?.details ||
+      "Unknown submission error.";
 
     window.alert(
-      "The test could not be submitted. Your progress has been saved. Please try again."
+      "Test couldn't be submitted. Your progress has been saved.\n\n" +
+      message
     );
 
-    initializeTimers();
   }
 
 }
@@ -4643,7 +4649,7 @@ function calculateMaximumMarks(){
 async function saveTestAttempt(resultData){
 
   if(!currentUser){
-    throw new Error("Please login before submitting a test so your attempt can be saved.");
+    throw new Error("You must be logged in to submit this test.");
   }
 
   const completedAttempts = await getCompletedAttemptCount();
@@ -4656,39 +4662,77 @@ async function saveTestAttempt(resultData){
 
   /*
     IMPORTANT:
-    These are the real columns used by SSC EDGE's
-    existing test_attempts table.
-    Do not change these names to test_id/correct/wrong/skipped.
+    These are the EXISTING columns used by SSC EDGE's
+    test_attempts table.  The mock test itself uses
+    mock_test_id in other tables, but test_attempts uses test_id.
   */
   const attemptPayload = {
     user_id: currentUser.id,
-    mock_test_id: testId,
+    test_id: testId,
     score: resultData.score,
-    correct_answers: resultData.correct,
-    wrong_answers: resultData.wrong,
-    unanswered: resultData.skipped,
+    total_marks: resultData.maxMarks,
     total_questions: resultData.totalQuestions,
+    attempted: resultData.attempted,
+    correct: resultData.correct,
+    wrong: resultData.wrong,
+    skipped: resultData.skipped,
+    percentage: resultData.percentage,
+    status: "completed",
     completed_at: new Date().toISOString()
   };
 
-  const { data:attempt, error:attemptError } = await supabaseClient
+  /*
+    Do NOT use insert(...).select().single() here.
+    An INSERT can succeed while a SELECT policy blocks the
+    returned row.  First save the attempt, then read it back.
+  */
+  const { error:insertError } = await supabaseClient
     .from("test_attempts")
-    .insert(attemptPayload)
-    .select()
-    .single();
+    .insert(attemptPayload);
 
-  if(attemptError) throw attemptError;
+  if(insertError){
+    console.error("TEST ATTEMPT INSERT ERROR:", insertError);
+    throw new Error(
+      insertError.message ||
+      insertError.details ||
+      "Unable to save the test attempt."
+    );
+  }
 
-  if(attempt && resultData.answerRows?.length){
+  /* Get the newly-created attempt ID. */
+  const { data:attemptRows, error:fetchError } =
+    await supabaseClient
+      .from("test_attempts")
+      .select("*")
+      .eq("user_id", currentUser.id)
+      .eq("test_id", testId)
+      .eq("status", "completed")
+      .order("completed_at", { ascending:false })
+      .limit(1);
 
-    /*
-      Keep user_answers compatible with the existing table.
-      The confirmed working schema uses these fields.
-    */
+  if(fetchError){
+    console.error("ATTEMPT FETCH ERROR:", fetchError);
+    throw new Error(
+      fetchError.message ||
+      "Test was saved, but the saved attempt could not be read back."
+    );
+  }
+
+  const attempt = attemptRows?.[0];
+
+  if(!attempt?.id){
+    throw new Error("Test was saved, but no attempt ID was returned.");
+  }
+
+  if(resultData.answerRows?.length){
+
     const answerPayload = resultData.answerRows.map(row => ({
       attempt_id: attempt.id,
       question_id: row.question_id,
       selected_option_id: row.selected_option_id,
+      selected_option_label: row.selected_option_label,
+      status: row.status,
+      marks_awarded: row.marks_awarded,
       time_spent_seconds: Math.max(
         0,
         Math.floor(Number(row.time_spent_seconds || 0))
@@ -4700,12 +4744,12 @@ async function saveTestAttempt(resultData){
       .insert(answerPayload);
 
     /*
-      The main attempt is already safely saved.
-      Do not make the whole submission fail just because
-      optional answer-history rows could not be inserted.
+      Main attempt is already safely saved.
+      Do not turn a successful submission into a failure
+      just because answer-history rows have an issue.
     */
     if(answerError){
-      console.error("User answers save error:", answerError);
+      console.error("USER ANSWERS INSERT ERROR:", answerError);
     }
   }
 
@@ -4725,7 +4769,6 @@ async function saveTestAttempt(resultData){
   }catch(e){}
 
   return { attempt, attemptNumber };
-
 }
 
 /* ==================================================
