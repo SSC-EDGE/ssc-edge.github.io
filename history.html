@@ -42,6 +42,15 @@ body{
   font-size:20px;
 }
 
+/* EDGE = LAVENDER */
+.simple-header h2{
+  color:var(--text);
+}
+
+.simple-header h2::first-letter{
+  color:var(--text);
+}
+
 .page-container{
   max-width:600px;
   margin:auto;
@@ -198,7 +207,9 @@ body{
 <body>
 
 <header class="simple-header">
-  <h2>SSC EDGE</h2>
+  <h2>
+    SSC <span style="color:#c4a7ff;">EDGE</span>
+  </h2>
 </header>
 
 
@@ -384,7 +395,7 @@ async function loadHistory(){
 
 
   /* =========================
-     GET ATTEMPTS
+     GET COMPLETED ATTEMPTS
   ========================= */
 
   const {
@@ -404,6 +415,7 @@ async function loadHistory(){
       unanswered
     `)
     .eq("user_id",user.id)
+    .not("completed_at","is",null)
     .order("completed_at",{ascending:false});
 
 
@@ -514,6 +526,13 @@ async function loadHistory(){
         || "Mock Test";
 
 
+      const testId =
+        String(attempt.mock_test_id || "");
+
+      const attemptId =
+        String(attempt.id || "");
+
+
       return `
 
         <div class="history-card">
@@ -567,13 +586,13 @@ async function loadHistory(){
 
             <a
               class="btn analysis-btn"
-              href="analysis.html?attempt_id=${encodeURIComponent(attempt.id)}">
+              href="analysis.html?test_id=${encodeURIComponent(testId)}&attempt_id=${encodeURIComponent(attemptId)}">
               View Analysis
             </a>
 
             <a
               class="btn solution-btn"
-              href="solutions.html?test_id=${encodeURIComponent(attempt.mock_test_id)}">
+              href="solutions.html?test_id=${encodeURIComponent(testId)}&attempt_id=${encodeURIComponent(attemptId)}">
               View Solutions
             </a>
 
