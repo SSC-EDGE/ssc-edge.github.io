@@ -2413,26 +2413,56 @@ async function getCurrentUser(){
    LOCAL RESUME DETECTION
 ========================================= */
 
-function getPossibleProgressKeys(testId){
+async function getPossibleProgressKeys(testId){
 
-    return [
+    const keys=[];
 
+    /*
+       Current test.html uses a user-specific key.
+       This prevents one user's unfinished test from
+       appearing as another user's RESUME TEST.
+    */
+
+    try{
+
+        const sessionResult =
+            await supabaseClient.auth.getSession();
+
+        const userId =
+            sessionResult?.data?.session?.user?.id;
+
+        if(userId){
+
+            keys.push(
+                "ssc-edge-test-progress-" +
+                userId +
+                "-" +
+                testId
+            );
+
+        }
+
+    }catch(e){}
+
+    /*
+       Keep older keys as compatibility fallbacks.
+    */
+
+    keys.push(
         "ssc-edge-test-progress-"+testId,
-
         "ssc-edge-progress-"+testId,
-
         "ssc-edge-test-"+testId,
-
         "ssc-edge-progress_"+testId
+    );
 
-    ];
+    return keys;
 
 }
 
-function getSavedProgress(testId){
+async function getSavedProgress(testId){
 
-    const keys=
-        getPossibleProgressKeys(testId);
+    const keys =
+        await getPossibleProgressKeys(testId);
 
     for(
         const key of keys
@@ -2440,14 +2470,14 @@ function getSavedProgress(testId){
 
         try{
 
-            const raw=
+            const raw =
                 localStorage.getItem(key);
 
             if(!raw){
                 continue;
             }
 
-            const data=
+            const data =
                 JSON.parse(raw);
 
             if(
@@ -2455,24 +2485,39 @@ function getSavedProgress(testId){
                 String(
                     data.testId ??
                     testId
-                )!==
+                ) !==
                 String(testId)
             ){
                 continue;
             }
 
-            return {
-                key,
-                data
-            };
+            if(
+                data.testFinished === true
+            ){
+                continue;
+            }
+
+            if(
+                data.testStarted ||
+                data.progressStarted
+            ){
+
+                return {
+                    key,
+                    data
+                };
+
+            }
 
         }catch(e){}
 
     }
 
     /*
-       Fallback:
-       scan localStorage for the test id.
+       Final compatibility fallback:
+       scan localStorage for an unfinished
+       SSC EDGE progress object belonging to
+       this test.
     */
 
     try{
@@ -2483,7 +2528,7 @@ function getSavedProgress(testId){
             i++
         ){
 
-            const key=
+            const key =
                 localStorage.key(i);
 
             if(!key){
@@ -2492,25 +2537,21 @@ function getSavedProgress(testId){
 
             if(
                 !(
-                    key.includes(
-                        "ssc-edge"
-                    ) &&
-                    key.includes(
-                        String(testId)
-                    )
+                    key.includes("ssc-edge") &&
+                    key.includes(String(testId))
                 )
             ){
                 continue;
             }
 
-            const raw=
+            const raw =
                 localStorage.getItem(key);
 
             if(!raw){
                 continue;
             }
 
-            const data=
+            const data =
                 JSON.parse(raw);
 
             if(
@@ -2518,7 +2559,7 @@ function getSavedProgress(testId){
                 String(
                     data.testId ??
                     testId
-                )===
+                ) ===
                 String(testId) &&
                 (
                     data.testStarted ||
@@ -2541,14 +2582,13 @@ function getSavedProgress(testId){
     return null;
 
 }
-
 /* =========================================
    ATTEMPT DATA
 ========================================= */
 
 async function getCompletedAttempts(testId){
 
-    const user=
+    const user =
         await getCurrentUser();
 
     if(!user){
@@ -2561,39 +2601,63 @@ async function getCompletedAttempts(testId){
     }
 
     /*
-       Current test system uses test_id.
+       VERIFIED LIVE SUPABASE SCHEMA:
+
+       test_attempts:
+       id
+       user_id
+       mock_test_id
+       started_at
+       completed_at
+       score
+       correct_answers
+       wrong_answers
+       unanswered
+       rank
+       percentile
+       sectional_data
+
+       There is NO:
+       test_id
+       total_questions
+       attempted
+       correct
+       wrong
+       skipped
+       percentage
+       status
+       created_at
     */
 
-    let result=
+    const result =
         await supabaseClient
             .from("test_attempts")
             .select(`
                 id,
-                test_id,
                 user_id,
-                score,
-                total_marks,
-                total_questions,
-                attempted,
-                correct,
-                wrong,
-                skipped,
-                percentage,
-                status,
+                mock_test_id,
+                started_at,
                 completed_at,
-                created_at
+                score,
+                correct_answers,
+                wrong_answers,
+                unanswered,
+                rank,
+                percentile,
+                sectional_data
             `)
             .eq(
                 "user_id",
                 user.id
             )
             .eq(
-                "test_id",
+                "mock_test_id",
                 testId
             )
-            .eq(
-                "status",
-                "completed"
+            .not(
+                "completed_at",
+                "is",
+                null
             )
             .order(
                 "completed_at",
@@ -2601,63 +2665,6 @@ async function getCompletedAttempts(testId){
                     ascending:true
                 }
             );
-
-    /*
-       Compatibility fallback for an older
-       database column, if it exists.
-    */
-
-    if(
-        result.error &&
-        (
-            String(
-                result.error.message || ""
-            ).toLowerCase().includes("test_id") ||
-            String(
-                result.error.message || ""
-            ).toLowerCase().includes("column")
-        )
-    ){
-
-        result=
-            await supabaseClient
-                .from("test_attempts")
-                .select(`
-                    id,
-                    mock_test_id,
-                    user_id,
-                    score,
-                    total_marks,
-                    total_questions,
-                    attempted,
-                    correct,
-                    wrong,
-                    skipped,
-                    percentage,
-                    status,
-                    completed_at,
-                    created_at
-                `)
-                .eq(
-                    "user_id",
-                    user.id
-                )
-                .eq(
-                    "mock_test_id",
-                    testId
-                )
-                .eq(
-                    "status",
-                    "completed"
-                )
-                .order(
-                    "completed_at",
-                    {
-                        ascending:true
-                    }
-                );
-
-    }
 
     if(result.error){
 
@@ -2679,7 +2686,6 @@ async function getCompletedAttempts(testId){
     };
 
 }
-
 /* =========================================
    ATTEMPT STATE
 ========================================= */
@@ -2700,7 +2706,7 @@ async function getAttemptState(testId){
     */
 
     const saved=
-        getSavedProgress(testId);
+        await getSavedProgress(testId);
 
     if(saved){
 
@@ -2792,7 +2798,6 @@ function analysisUrl(attempt){
         )+
         "&test_id="+
         encodeURIComponent(
-            attempt.test_id ||
             attempt.mock_test_id ||
             ""
         )
