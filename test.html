@@ -2135,8 +2135,7 @@ async function getCompletedAttemptCount(){
       .from("test_attempts")
       .select("id,completed_at")
       .eq("user_id", currentUser.id)
-      .eq("test_id", testId)
-      .eq("status", "completed")
+      .eq("mock_test_id", testId)
       .not("completed_at", "is", null)
       .order("completed_at", { ascending:true });
 
@@ -4655,18 +4654,20 @@ async function saveTestAttempt(resultData){
 
   const attemptNumber = completedAttempts + 1;
 
+  /*
+    IMPORTANT:
+    These are the real columns used by SSC EDGE's
+    existing test_attempts table.
+    Do not change these names to test_id/correct/wrong/skipped.
+  */
   const attemptPayload = {
     user_id: currentUser.id,
-    test_id: testId,
+    mock_test_id: testId,
     score: resultData.score,
-    total_marks: resultData.maxMarks,
+    correct_answers: resultData.correct,
+    wrong_answers: resultData.wrong,
+    unanswered: resultData.skipped,
     total_questions: resultData.totalQuestions,
-    attempted: resultData.attempted,
-    correct: resultData.correct,
-    wrong: resultData.wrong,
-    skipped: resultData.skipped,
-    percentage: resultData.percentage,
-    status: "completed",
     completed_at: new Date().toISOString()
   };
 
@@ -4680,21 +4681,32 @@ async function saveTestAttempt(resultData){
 
   if(attempt && resultData.answerRows?.length){
 
+    /*
+      Keep user_answers compatible with the existing table.
+      The confirmed working schema uses these fields.
+    */
     const answerPayload = resultData.answerRows.map(row => ({
       attempt_id: attempt.id,
       question_id: row.question_id,
       selected_option_id: row.selected_option_id,
-      selected_option_label: row.selected_option_label,
-      status: row.status,
-      marks_awarded: row.marks_awarded,
-      time_spent_seconds: row.time_spent_seconds
+      time_spent_seconds: Math.max(
+        0,
+        Math.floor(Number(row.time_spent_seconds || 0))
+      )
     }));
 
     const { error:answerError } = await supabaseClient
       .from("user_answers")
       .insert(answerPayload);
 
-    if(answerError) throw answerError;
+    /*
+      The main attempt is already safely saved.
+      Do not make the whole submission fail just because
+      optional answer-history rows could not be inserted.
+    */
+    if(answerError){
+      console.error("User answers save error:", answerError);
+    }
   }
 
   lastAttemptId = attempt.id;
