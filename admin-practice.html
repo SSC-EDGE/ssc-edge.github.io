@@ -963,5 +963,4879 @@ Manage exams, branches, custom folders, categories, years, subjects and mock tes
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script>
+const SUPABASE_URL="https://dvvyoygahzzbnpqrfhen.supabase.co";
+const SUPABASE_KEY="sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
+const db=window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
+/* =========================================================
+   GLOBAL STATE
+========================================================= */
+
+let exams=[];
+let subjects=[];
+let folders=[];
+let tests=[];
+
+let activeBoard="SSC";
+
+let selectedExam=null;
+let selectedBranch=null;
+let selectedCategory=null;
+let selectedFolder=null;
+let selectedYear=null;
+let selectedRootFolder=null;
+
+let editingExamId=null;
+let editingMockId=null;
+
+let structureMode=null;
+let structureEditId=null;
+
+let editorFolderId=null;
+let editorType=null;
+
+/* =========================================================
+   BASIC HELPERS
+========================================================= */
+
+const $=id=>document.getElementById(id);
+
+function bindClick(id,handler){
+const el=$(id);
+if(el)el.onclick=handler;
+}
+
+function toast(message){
+
+const el=$("toast");
+
+if(!el)return;
+
+el.textContent=message;
+
+el.classList.add("show");
+
+clearTimeout(window.toastTimer);
+
+window.toastTimer=setTimeout(()=>{
+el.classList.remove("show");
+},2800);
+
+}
+
+function openModal(id){
+
+const el=$(id);
+
+if(el)el.classList.add("open");
+
+}
+
+function closeModal(id){
+
+const el=$(id);
+
+if(el)el.classList.remove("open");
+
+}
+
+function escapeHTML(value){
+
+return String(value??"")
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+
+}
+
+function nameOfSubject(subject){
+
+return subject?.name||
+subject?.subject_name||
+subject?.title||
+"Subject";
+
+}
+
+function examName(exam){
+
+return exam?.name||
+exam?.exam_name||
+exam?.title||
+"Unnamed Exam";
+
+}
+
+/* =========================================================
+   EXAM / BOARD HELPERS
+========================================================= */
+
+function boardOfExam(exam){
+
+if(exam?.board)
+return String(exam.board).toUpperCase();
+
+if(exam?.exam_board)
+return String(exam.exam_board).toUpperCase();
+
+const name=examName(exam).toLowerCase();
+
+if(
+name.includes("rrb")||
+name.includes("ntpc")||
+name.includes("group d")||
+name.includes("group-d")||
+name.includes("alp")||
+name.includes("technician")
+){
+return "RRB";
+}
+
+return "SSC";
+
+}
+
+/* =========================================================
+   FOLDER HELPERS
+========================================================= */
+
+function folderName(folder){
+
+return folder?.display_name||
+folder?.name||
+"Unnamed Folder";
+
+}
+
+/*
+=========================================================
+IMPORTANT FIX
+
+Old database may contain:
+
+NEW
+NEW_MOCKS
+NEW MOCKS
+
+PYQ
+PYQ_MOCKS
+PYQ MOCKS
+
+FULL
+FULL_MOCK
+FULL_MOCKS
+FULL MOCKS
+
+SECTIONAL
+SECTIONAL_MOCKS
+SECTIONAL MOCKS
+
+All of them are now treated as one logical type.
+=========================================================
+*/
+
+function folderType(folder){
+
+const value=String(folder?.folder_type||"")
+.trim()
+.toUpperCase()
+.replace(/[\s_-]+/g,"");
+
+if(
+value==="NEW"||
+value==="NEWMOCKS"||
+value==="NEWMOCK"
+){
+return "NEW";
+}
+
+if(
+value==="PYQ"||
+value==="PYQMOCKS"||
+value==="PYQMOCK"
+){
+return "PYQ";
+}
+
+if(
+value==="FULL"||
+value==="FULLMOCK"||
+value==="FULLMOCKS"
+){
+return "FULL";
+}
+
+if(
+value==="SECTIONAL"||
+value==="SECTIONALMOCKS"||
+value==="SECTIONALMOCK"
+){
+return "SECTIONAL";
+}
+
+if(
+value==="YEAR"||
+value==="YEARS"||
+value==="FULLYEAR"
+){
+return "YEAR";
+}
+
+if(
+value==="SUBJECT"||
+value==="SUBJECTS"
+){
+return "SUBJECT";
+}
+
+if(value==="CUSTOM"){
+return "CUSTOM";
+}
+
+return value;
+
+}
+
+/* =========================================================
+   TEST TYPE
+========================================================= */
+
+function testType(test){
+
+const value=String(test?.test_type||"")
+.trim()
+.toUpperCase()
+.replace(/[\s_-]+/g,"");
+
+if(
+value==="FULL"||
+value==="FULLMOCK"||
+value==="FULLMOCKS"
+){
+return "FULL";
+}
+
+if(
+value==="SECTIONAL"||
+value==="SECTIONALMOCK"||
+value==="SECTIONALMOCKS"||
+value==="SUBJECTWISE"||
+value==="CHAPTERWISE"
+){
+return "SECTIONAL";
+}
+
+return value;
+
+}
+
+function isFull(test){
+
+return testType(test)==="FULL";
+
+}
+
+function isSectional(test){
+
+return testType(test)==="SECTIONAL";
+
+}
+
+/* =========================================================
+   FOLDER LOOKUP
+========================================================= */
+
+function getFolder(id){
+
+return folders.find(folder=>
+String(folder.id)===String(id)
+);
+
+}
+
+/*
+Return all active folders matching the parent and
+logical type.
+*/
+
+function childrenOf(parentId,type=null){
+
+return folders
+.filter(folder=>{
+
+const sameParent=
+String(folder.parent_id||"")===
+String(parentId||"");
+
+const active=
+folder.is_active!==false;
+
+const sameType=
+type
+?folderType(folder)===type
+:true;
+
+return sameParent&&active&&sameType;
+
+})
+.sort((a,b)=>{
+
+const oa=Number(a.sort_order||0);
+const ob=Number(b.sort_order||0);
+
+return oa!==ob
+?oa-ob
+:folderName(a).localeCompare(folderName(b));
+
+});
+
+}
+
+/*
+First child only.
+*/
+
+function directChild(parentId,type){
+
+return childrenOf(parentId,type)[0]||null;
+
+}
+
+/*
+Check whether folder belongs somewhere under a branch.
+
+Important:
+Old aliases are normalized by folderType().
+*/
+
+function isFolderUnderBranch(folder,branch){
+
+if(!folder)return false;
+
+let current=folder;
+let guard=0;
+
+while(current&&guard<30){
+
+if(folderType(current)===branch)
+return true;
+
+current=getFolder(current.parent_id);
+
+guard++;
+
+}
+
+return false;
+
+}
+
+/* =========================================================
+   ROOT FOLDER LOGIC
+========================================================= */
+
+/*
+All physical roots belonging to one logical branch.
+
+Example:
+
+NEW
+NEW_MOCKS
+
+Both returned for branch NEW.
+*/
+
+function getAllRootFoldersForType(type){
+
+if(!selectedExam)return [];
+
+return folders
+.filter(folder=>
+String(folder.exam_id)===String(selectedExam.id)&&
+!folder.parent_id&&
+folder.is_active!==false&&
+folderType(folder)===type
+)
+.sort((a,b)=>
+Number(a.sort_order||0)-
+Number(b.sort_order||0)
+);
+
+}
+
+/*
+Choose the preferred root.
+
+Canonical NEW/PYQ folder is preferred.
+If both exist, earliest sort_order is used.
+*/
+
+function getPreferredRoot(type){
+
+const list=getAllRootFoldersForType(type);
+
+if(!list.length)return null;
+
+const canonical=list.find(folder=>{
+
+const raw=String(folder?.folder_type||"")
+.trim()
+.toUpperCase();
+
+return raw===type;
+
+});
+
+return canonical||list[0]||null;
+
+}
+
+/*
+Visible roots.
+
+System branches are deduplicated:
+one NEW
+one PYQ
+
+Custom folders remain separate.
+*/
+
+function getRootFoldersForExam(){
+
+if(!selectedExam)return [];
+
+const roots=folders.filter(folder=>
+String(folder.exam_id)===String(selectedExam.id)&&
+!folder.parent_id&&
+folder.is_active!==false
+);
+
+const system={};
+const custom=[];
+
+roots.forEach(folder=>{
+
+const type=folderType(folder);
+
+if(type==="NEW"||type==="PYQ"){
+
+if(
+!system[type]||
+Number(folder.sort_order||0)<
+Number(system[type].sort_order||0)
+){
+
+system[type]=folder;
+
+}
+
+}else{
+
+custom.push(folder);
+
+}
+
+});
+
+const result=[
+system.NEW,
+system.PYQ,
+...custom
+].filter(Boolean);
+
+return result.sort((a,b)=>{
+
+function rank(folder){
+
+const type=folderType(folder);
+
+if(type==="NEW")return 0;
+if(type==="PYQ")return 1;
+
+return 2;
+
+}
+
+return rank(a)-rank(b)||
+Number(a.sort_order||0)-
+Number(b.sort_order||0);
+
+});
+
+}
+
+/*
+All branch roots including duplicate/legacy aliases.
+
+Used internally so old mocks are not lost.
+*/
+
+function getBranchRoots(branch){
+
+if(branch==="CUSTOM"){
+
+return selectedRootFolder
+?[selectedRootFolder]
+:[];
+
+}
+
+return getAllRootFoldersForType(branch);
+
+}
+
+/* =========================================================
+   LOGICAL CHILD FOLDER HELPERS
+========================================================= */
+
+/*
+Get all child folders of equivalent branch roots.
+
+This is the key part that lets old and new structures work
+together.
+*/
+
+function getBranchChildren(branch,type){
+
+const roots=getBranchRoots(branch);
+
+const result=[];
+
+roots.forEach(root=>{
+
+childrenOf(root.id,type).forEach(child=>{
+
+if(
+!result.some(existing=>
+String(existing.id)===String(child.id)
+)
+){
+
+result.push(child);
+
+}
+
+});
+
+});
+
+return result.sort((a,b)=>
+Number(a.sort_order||0)-
+Number(b.sort_order||0)
+);
+
+}
+
+/*
+Find preferred FULL folder across all equivalent roots.
+*/
+
+function getPreferredFullFolder(branch){
+
+const list=getBranchChildren(branch,"FULL");
+
+if(!list.length)return null;
+
+const canonical=list.find(folder=>{
+
+const raw=String(folder?.folder_type||"")
+.trim()
+.toUpperCase();
+
+return raw==="FULL";
+
+});
+
+return canonical||list[0];
+
+}
+
+/*
+Find preferred SECTIONAL folder.
+*/
+
+function getPreferredSectionalFolder(branch){
+
+const list=getBranchChildren(branch,"SECTIONAL");
+
+if(!list.length)return null;
+
+const canonical=list.find(folder=>{
+
+const raw=String(folder?.folder_type||"")
+.trim()
+.toUpperCase();
+
+return raw==="SECTIONAL";
+
+});
+
+return canonical||list[0];
+
+}
+
+/*
+Get all YEAR folders from every equivalent FULL folder.
+*/
+
+function getBranchYearFolders(branch){
+
+const fullFolders=getBranchChildren(branch,"FULL");
+
+const result=[];
+
+fullFolders.forEach(full=>{
+
+childrenOf(full.id,"YEAR").forEach(year=>{
+
+if(
+!result.some(existing=>
+String(existing.id)===String(year.id)
+)
+){
+
+result.push(year);
+
+}
+
+});
+
+});
+
+return result.sort((a,b)=>{
+
+const order=
+Number(a.sort_order||0)-
+Number(b.sort_order||0);
+
+return order||
+folderName(a).localeCompare(folderName(b));
+
+});
+
+}
+
+/*
+Get all SUBJECT folders from every equivalent SECTIONAL folder.
+*/
+
+function getBranchSubjectFolders(branch){
+
+const sectionalFolders=
+getBranchChildren(branch,"SECTIONAL");
+
+const result=[];
+
+sectionalFolders.forEach(sectional=>{
+
+childrenOf(sectional.id,"SUBJECT").forEach(subject=>{
+
+if(
+!result.some(existing=>
+String(existing.id)===String(subject.id)
+)
+){
+
+result.push(subject);
+
+}
+
+});
+
+});
+
+return result.sort((a,b)=>{
+
+const order=
+Number(a.sort_order||0)-
+Number(b.sort_order||0);
+
+return order||
+folderName(a).localeCompare(folderName(b));
+
+});
+
+}
+
+/* =========================================================
+   SUBJECTS
+========================================================= */
+
+function getExamSubjects(){
+
+if(!selectedExam)return [];
+
+return subjects.filter(subject=>
+subject.exam_id==null||
+String(subject.exam_id)===String(selectedExam.id)
+);
+
+}
+
+/* =========================================================
+   VIEW RESET
+========================================================= */
+
+function resetViews(){
+
+$("branchView").style.display="block";
+
+$("categoryView").classList.remove("visible");
+
+$("mockManagementView").classList.remove("visible");
+
+selectedBranch=null;
+selectedCategory=null;
+selectedFolder=null;
+selectedYear=null;
+selectedRootFolder=null;
+
+renderRootBranches();
+
+}
+
+/* =========================================================
+   LOAD ALL DATA
+========================================================= */
+
+async function loadAllData(){
+
+const grid=$("examGrid");
+
+if(grid){
+
+grid.innerHTML=
+'<div class="ap-loading">Loading exams...</div>';
+
+}
+
+try{
+
+const [
+examsResponse,
+subjectsResponse,
+foldersResponse,
+testsResponse
+]=await Promise.all([
+
+db.from("exams").select("*"),
+
+db.from("subjects").select("*"),
+
+db.from("mock_folders").select("*"),
+
+db.from("mock_tests").select("*")
+
+]);
+
+if(examsResponse.error)
+throw examsResponse.error;
+
+if(subjectsResponse.error)
+throw subjectsResponse.error;
+
+if(foldersResponse.error)
+throw foldersResponse.error;
+
+if(testsResponse.error)
+throw testsResponse.error;
+
+exams=(examsResponse.data||[])
+.sort((a,b)=>
+Number(a.sort_order||0)-
+Number(b.sort_order||0)
+);
+
+subjects=(subjectsResponse.data||[])
+.sort((a,b)=>
+nameOfSubject(a).localeCompare(
+nameOfSubject(b)
+)
+);
+
+folders=(foldersResponse.data||[])
+.sort((a,b)=>
+Number(a.sort_order||0)-
+Number(b.sort_order||0)
+);
+
+tests=(testsResponse.data||[])
+.sort((a,b)=>
+Number(b.id||0)-
+Number(a.id||0)
+);
+
+renderExams();
+
+if(selectedExam){
+
+const updated=exams.find(exam=>
+String(exam.id)===
+String(selectedExam.id)
+);
+
+if(updated){
+
+selectedExam=updated;
+
+$("selectedExamName").textContent=
+examName(updated);
+
+}
+
+}
+
+renderRootBranches();
+
+}catch(error){
+
+console.error(error);
+
+if(grid){
+
+grid.innerHTML=`
+<div class="ap-error">
+Unable to load data.<br>
+${escapeHTML(error.message)}
+</div>
+`;
+
+}
+
+}
+
+}
+
+/* =========================================================
+   EXAM LIST
+========================================================= */
+
+function renderExams(){
+
+const grid=$("examGrid");
+
+if(!grid)return;
+
+const list=exams.filter(exam=>
+boardOfExam(exam)===activeBoard&&
+exam.is_active!==false
+);
+
+if(!list.length){
+
+grid.innerHTML=
+`<div class="ap-empty">
+No exams found for ${escapeHTML(activeBoard)}.
+</div>`;
+
+return;
+
+}
+
+grid.innerHTML=list.map((exam,index)=>{
+
+const count=tests.filter(test=>
+String(test.exam_id)===
+String(exam.id)
+).length;
+
+return `
+<div class="ap-exam-card ${
+selectedExam&&
+String(selectedExam.id)===
+String(exam.id)
+?"selected":""
+}">
+
+<div class="ap-exam-main">
+
+<div
+data-select-exam="${escapeHTML(exam.id)}"
+style="flex:1;cursor:pointer"
+>
+
+<div class="ap-exam-name">
+${escapeHTML(examName(exam))}
+</div>
+
+<div class="ap-exam-meta">
+${escapeHTML(exam.stage||"Exam")} •
+${count} mock${count===1?"":"s"}
+</div>
+
+</div>
+
+<div
+class="ap-exam-arrow"
+data-select-exam="${escapeHTML(exam.id)}"
+>›</div>
+
+</div>
+
+<div class="ap-exam-actions">
+
+<button
+class="ap-small-btn edit"
+data-edit-exam="${escapeHTML(exam.id)}"
+type="button"
+>Edit</button>
+
+<button
+class="ap-small-btn"
+data-up-exam="${escapeHTML(exam.id)}"
+type="button"
+${index<=0?"disabled":""}
+>↑</button>
+
+<button
+class="ap-small-btn"
+data-down-exam="${escapeHTML(exam.id)}"
+type="button"
+${index>=list.length-1?"disabled":""}
+>↓</button>
+
+<button
+class="ap-small-btn delete"
+data-delete-exam="${escapeHTML(exam.id)}"
+type="button"
+>Delete</button>
+
+</div>
+
+</div>
+`;
+
+}).join("");
+
+document.querySelectorAll("[data-select-exam]")
+.forEach(el=>{
+
+el.onclick=()=>{
+
+const exam=exams.find(item=>
+String(item.id)===
+String(el.dataset.selectExam)
+);
+
+if(exam)selectExam(exam);
+
+};
+
+});
+
+document.querySelectorAll("[data-edit-exam]")
+.forEach(btn=>{
+
+btn.onclick=e=>{
+
+e.stopPropagation();
+
+const exam=exams.find(item=>
+String(item.id)===
+String(btn.dataset.editExam)
+);
+
+if(exam)openExamModal(exam);
+
+};
+
+});
+
+document.querySelectorAll("[data-delete-exam]")
+.forEach(btn=>{
+
+btn.onclick=e=>{
+
+e.stopPropagation();
+
+const exam=exams.find(item=>
+String(item.id)===
+String(btn.dataset.deleteExam)
+);
+
+if(exam)deleteExam(exam);
+
+};
+
+});
+
+document.querySelectorAll("[data-up-exam]")
+.forEach(btn=>{
+
+btn.onclick=()=>
+reorderExam(btn.dataset.upExam,-1);
+
+});
+
+document.querySelectorAll("[data-down-exam]")
+.forEach(btn=>{
+
+btn.onclick=()=>
+reorderExam(btn.dataset.downExam,1);
+
+});
+
+}
+
+/* =========================================================
+   SELECT EXAM
+========================================================= */
+
+function selectExam(exam){
+
+selectedExam=exam;
+
+$("selectedExamName").textContent=
+examName(exam);
+
+$("workspace").classList.add("visible");
+
+resetViews();
+
+renderRootBranches();
+
+renderExams();
+
+window.scrollTo({
+top:$("workspace").offsetTop-75,
+behavior:"smooth"
+});
+
+}
+
+/* =========================================================
+   ROOT BRANCH RENDER
+========================================================= */
+
+function renderRootBranches(){
+
+const container=$("branchCards");
+
+if(!container)return;
+
+if(!selectedExam){
+
+container.innerHTML=
+'<div class="ap-empty">Select an exam first.</div>';
+
+return;
+
+}
+
+const roots=getRootFoldersForExam();
+
+if(!roots.length){
+
+container.innerHTML=
+'<div class="ap-empty">No folders found. Click + Add Folder.</div>';
+
+return;
+
+}
+
+container.innerHTML=roots.map(folder=>{
+
+const type=folderType(folder);
+
+const system=
+type==="NEW"||
+type==="PYQ";
+
+const childCount=
+childrenOf(folder.id).length;
+
+return `
+<div class="ap-folder-card">
+
+<div
+class="ap-folder-main"
+data-root-folder="${escapeHTML(folder.id)}"
+>
+
+<div class="ap-folder-title">
+${escapeHTML(folderName(folder))}
+</div>
+
+<div class="ap-folder-sub">
+
+${
+system
+?"System mock branch"
+:
+`${childCount} sub-folder${
+childCount===1?"":"s"
+}`
+}
+
+</div>
+
+</div>
+
+<div class="ap-folder-actions">
+
+${
+system
+?""
+:
+`
+<button
+class="ap-small-btn edit"
+data-edit-root-folder="${escapeHTML(folder.id)}"
+type="button"
+>Edit</button>
+
+<button
+class="ap-small-btn delete"
+data-delete-root-folder="${escapeHTML(folder.id)}"
+type="button"
+>×</button>
+`
+}
+
+<div
+class="ap-folder-arrow"
+data-root-folder="${escapeHTML(folder.id)}"
+>›</div>
+
+</div>
+
+</div>
+`;
+
+}).join("");
+
+document.querySelectorAll("[data-root-folder]")
+.forEach(el=>{
+
+el.onclick=()=>{
+
+const folder=
+getFolder(el.dataset.rootFolder);
+
+if(folder)openRootFolder(folder);
+
+};
+
+});
+
+document.querySelectorAll("[data-edit-root-folder]")
+.forEach(btn=>{
+
+btn.onclick=e=>{
+
+e.stopPropagation();
+
+const folder=
+getFolder(btn.dataset.editRootFolder);
+
+if(folder)openCustomFolderEdit(folder);
+
+};
+
+});
+
+document.querySelectorAll("[data-delete-root-folder]")
+.forEach(btn=>{
+
+btn.onclick=e=>{
+
+e.stopPropagation();
+
+const folder=
+getFolder(btn.dataset.deleteRootFolder);
+
+if(folder)deleteCustomRootFolder(folder);
+
+};
+
+});
+
+}
+
+/* =========================================================
+   OPEN ROOT
+========================================================= */
+
+function openRootFolder(folder){
+
+selectedRootFolder=folder;
+
+const type=folderType(folder);
+
+if(type==="NEW"||type==="PYQ"){
+
+openBranch(type);
+
+return;
+
+}
+
+selectedBranch="CUSTOM";
+
+selectedCategory=null;
+selectedFolder=null;
+selectedYear=null;
+
+$("branchView").style.display="none";
+
+$("categoryView").classList.add("visible");
+
+$("mockManagementView").classList.remove("visible");
+
+$("branchHeading").textContent=
+folderName(folder);
+
+}
+
+/* =========================================================
+   OPEN SYSTEM BRANCH
+========================================================= */
+
+function openBranch(branch){
+
+if(!selectedExam){
+
+toast("Select an exam first");
+
+return;
+
+}
+
+selectedBranch=branch;
+
+selectedRootFolder=
+getPreferredRoot(branch);
+
+$("branchView").style.display="none";
+
+$("categoryView").classList.add("visible");
+
+$("mockManagementView").classList.remove("visible");
+
+$("branchHeading").textContent=
+branch==="PYQ"
+?"PYQ Mocks"
+:"New Mocks";
+
+}
+
+/* =========================================================
+   OPEN CATEGORY
+========================================================= */
+
+function openCategory(category){
+
+if(!selectedExam||!selectedBranch){
+
+toast("Select branch first");
+
+return;
+
+}
+
+if(
+selectedBranch==="CUSTOM"&&
+!selectedRootFolder
+){
+
+toast("Custom folder missing");
+
+return;
+
+}
+
+selectedCategory=category;
+
+selectedFolder=null;
+selectedYear=null;
+
+$("categoryView").classList.remove("visible");
+
+$("mockManagementView").classList.add("visible");
+
+if(selectedBranch==="CUSTOM"){
+
+$("managementTitle").textContent=
+`${folderName(selectedRootFolder)} - ${
+category==="FULL"
+?"Full Mocks"
+:"Sectional Mocks"
+}`;
+
+}else{
+
+$("managementTitle").textContent=
+`${selectedBranch==="PYQ"?"PYQ":"New"} ${
+category==="FULL"
+?"Full Mocks"
+:"Sectional Mocks"
+}`;
+
+}
+
+$("managementSubtitle").textContent=
+category==="FULL"
+?"Manage full mock folders and tests"
+:"Manage subject clips and sectional mocks";
+
+if(category==="FULL")
+renderFullManagement();
+else
+renderSectionalManagement();
+
+}
+
+/* =========================================================
+   ENSURE FOLDER
+========================================================= */
+
+async function ensureFolder({
+examId,
+parentId=null,
+name,
+displayName=name,
+type,
+subjectId=null,
+sortOrder=0
+}){
+
+/*
+First search by logical folder type.
+This prevents NEW_MOCKS and NEW from
+creating another logical folder.
+*/
+
+const found=folders.find(folder=>
+
+String(folder.exam_id)===
+String(examId)&&
+
+String(folder.parent_id||"")===
+String(parentId||"")&&
+
+folderType(folder)===type&&
+
+String(folder.name||"")
+.trim()
+.toLowerCase()===
+String(name)
+.trim()
+.toLowerCase()&&
+
+folder.is_active!==false
+
+);
+
+if(found){
+
+return found;
+
+}
+
+const payload={
+
+exam_id:examId,
+
+parent_id:parentId,
+
+name,
+
+display_name:displayName,
+
+folder_type:type,
+
+sort_order:sortOrder,
+
+is_active:true
+
+};
+
+if(
+subjectId!==null&&
+subjectId!==undefined
+){
+
+payload.subject_id=subjectId;
+
+}
+
+let response=await db
+.from("mock_folders")
+.insert(payload)
+.select()
+.single();
+
+if(
+response.error&&
+payload.subject_id!==undefined&&
+/subject_id|column|schema cache/i
+.test(response.error.message)
+){
+
+delete payload.subject_id;
+
+response=await db
+.from("mock_folders")
+.insert(payload)
+.select()
+.single();
+
+}
+
+if(response.error)
+throw response.error;
+
+folders.push(response.data);
+
+return response.data;
+
+}
+
+/* =========================================================
+   ENSURE EXAM STRUCTURE
+========================================================= */
+
+async function ensureExamStructure(examId){
+
+/*
+Prefer existing logical root.
+Only create if none exists.
+*/
+
+let newRoot=getPreferredRoot("NEW");
+
+if(
+!newRoot||
+String(newRoot.exam_id)!==
+String(examId)
+){
+
+newRoot=await ensureFolder({
+
+examId,
+
+name:"NEW",
+
+displayName:"New Mocks",
+
+type:"NEW",
+
+sortOrder:1
+
+});
+
+}else if(
+String(newRoot.exam_id)!==
+String(examId)
+){
+
+newRoot=await ensureFolder({
+
+examId,
+
+name:"NEW",
+
+displayName:"New Mocks",
+
+type:"NEW",
+
+sortOrder:1
+
+});
+
+}
+
+let pyqRoot=
+getAllRootFoldersForType("PYQ")
+.find(folder=>
+String(folder.exam_id)===
+String(examId)
+);
+
+if(!pyqRoot){
+
+pyqRoot=await ensureFolder({
+
+examId,
+
+name:"PYQ",
+
+displayName:"PYQ Mocks",
+
+type:"PYQ",
+
+sortOrder:2
+
+});
+
+}
+
+/*
+Find existing FULL child from all equivalent roots.
+*/
+
+let newFull=
+getBranchChildrenForExam(examId,"NEW","FULL")[0]||
+null;
+
+if(!newFull){
+
+newFull=await ensureFolder({
+
+examId,
+
+parentId:newRoot.id,
+
+name:"FULL",
+
+displayName:"FULL MOCKS",
+
+type:"FULL",
+
+sortOrder:1
+
+});
+
+}
+
+/*
+Find existing SECTIONAL child.
+*/
+
+let newSectional=
+getBranchChildrenForExam(
+examId,
+"NEW",
+"SECTIONAL"
+)[0]||null;
+
+if(!newSectional){
+
+newSectional=await ensureFolder({
+
+examId,
+
+parentId:newRoot.id,
+
+name:"SECTIONAL",
+
+displayName:"SECTIONAL MOCKS",
+
+type:"SECTIONAL",
+
+sortOrder:2
+
+});
+
+}
+
+let pyqFull=
+getBranchChildrenForExam(
+examId,
+"PYQ",
+"FULL"
+)[0]||null;
+
+if(!pyqFull){
+
+pyqFull=await ensureFolder({
+
+examId,
+
+parentId:pyqRoot.id,
+
+name:"FULL",
+
+displayName:"FULL MOCKS",
+
+type:"FULL",
+
+sortOrder:1
+
+});
+
+}
+
+let pyqSectional=
+getBranchChildrenForExam(
+examId,
+"PYQ",
+"SECTIONAL"
+)[0]||null;
+
+if(!pyqSectional){
+
+pyqSectional=await ensureFolder({
+
+examId,
+
+parentId:pyqRoot.id,
+
+name:"SECTIONAL",
+
+displayName:"SECTIONAL MOCKS",
+
+type:"SECTIONAL",
+
+sortOrder:2
+
+});
+
+}
+
+const examSubjects=getExamSubjects();
+
+for(let i=0;i<examSubjects.length;i++){
+
+const subject=examSubjects[i];
+
+const existingNew=
+childrenOf(
+newSectional.id,
+"SUBJECT"
+).find(folder=>
+String(folder.subject_id||"")===
+String(subject.id)
+||
+String(folder.name||"")
+.trim()
+.toLowerCase()===
+nameOfSubject(subject)
+.trim()
+.toLowerCase()
+);
+
+if(!existingNew){
+
+await ensureFolder({
+
+examId,
+
+parentId:newSectional.id,
+
+name:nameOfSubject(subject),
+
+displayName:nameOfSubject(subject),
+
+type:"SUBJECT",
+
+subjectId:subject.id,
+
+sortOrder:i+1
+
+});
+
+}
+
+const existingPyq=
+childrenOf(
+pyqSectional.id,
+"SUBJECT"
+).find(folder=>
+String(folder.subject_id||"")===
+String(subject.id)
+||
+String(folder.name||"")
+.trim()
+.toLowerCase()===
+nameOfSubject(subject)
+.trim()
+.toLowerCase()
+);
+
+if(!existingPyq){
+
+await ensureFolder({
+
+examId,
+
+parentId:pyqSectional.id,
+
+name:nameOfSubject(subject),
+
+displayName:nameOfSubject(subject),
+
+type:"SUBJECT",
+
+subjectId:subject.id,
+
+sortOrder:i+1
+
+});
+
+}
+
+}
+
+return{
+
+newRoot,
+pyqRoot,
+newFull,
+newSectional,
+pyqFull,
+pyqSectional
+
+};
+
+}
+
+/*
+Same as getBranchChildren(), but works before
+selectedExam is updated.
+*/
+
+function getBranchChildrenForExam(
+examId,
+branch,
+type
+){
+
+const roots=folders
+.filter(folder=>
+String(folder.exam_id)===
+String(examId)&&
+!folder.parent_id&&
+folder.is_active!==false&&
+folderType(folder)===branch
+);
+
+const result=[];
+
+roots.forEach(root=>{
+
+childrenOf(root.id,type)
+.forEach(child=>{
+
+if(
+!result.some(item=>
+String(item.id)===
+String(child.id)
+)
+){
+
+result.push(child);
+
+}
+
+});
+
+});
+
+return result.sort((a,b)=>
+Number(a.sort_order||0)-
+Number(b.sort_order||0)
+);
+
+}
+
+/* =========================================================
+   SYNC STRUCTURE
+========================================================= */
+
+async function syncStructure(){
+
+if(!selectedExam){
+
+toast("Select an exam first");
+
+return;
+
+}
+
+try{
+
+await ensureExamStructure(
+selectedExam.id
+);
+
+await loadAllData();
+
+toast("Structure synced successfully");
+
+}catch(error){
+
+console.error(error);
+
+toast(error.message);
+
+}
+
+}
+
+/* =========================================================
+   GET FULL FOLDER
+========================================================= */
+
+async function getFullFolder(){
+
+if(selectedBranch==="CUSTOM"){
+
+if(!selectedRootFolder)
+throw new Error("Custom folder missing");
+
+let full=
+directChild(
+selectedRootFolder.id,
+"FULL"
+);
+
+if(!full){
+
+full=await ensureFolder({
+
+examId:selectedExam.id,
+
+parentId:selectedRootFolder.id,
+
+name:"FULL",
+
+displayName:"FULL MOCKS",
+
+type:"FULL",
+
+sortOrder:1
+
+});
+
+}
+
+return full;
+
+}
+
+let full=
+getPreferredFullFolder(
+selectedBranch
+);
+
+if(full)return full;
+
+const structure=
+await ensureExamStructure(
+selectedExam.id
+);
+
+return selectedBranch==="NEW"
+?structure.newFull
+:structure.pyqFull;
+
+}
+
+/* =========================================================
+   GET SECTIONAL FOLDER
+========================================================= */
+
+async function getSectionalFolder(){
+
+if(selectedBranch==="CUSTOM"){
+
+if(!selectedRootFolder)
+throw new Error("Custom folder missing");
+
+let sectional=
+directChild(
+selectedRootFolder.id,
+"SECTIONAL"
+);
+
+if(!sectional){
+
+sectional=await ensureFolder({
+
+examId:selectedExam.id,
+
+parentId:selectedRootFolder.id,
+
+name:"SECTIONAL",
+
+displayName:"SECTIONAL MOCKS",
+
+type:"SECTIONAL",
+
+sortOrder:2
+
+});
+
+}
+
+return sectional;
+
+}
+
+let sectional=
+getPreferredSectionalFolder(
+selectedBranch
+);
+
+if(sectional)return sectional;
+
+const structure=
+await ensureExamStructure(
+selectedExam.id
+);
+
+return selectedBranch==="NEW"
+?structure.newSectional
+:structure.pyqSectional;
+
+}
+
+/* =========================================================
+   FULL MOCK MANAGEMENT
+========================================================= */
+
+function renderFullManagement(){
+
+const chipsArea=
+$("managementChipsArea");
+
+const extra=
+$("managementExtraActions");
+
+const chips=
+$("managementChips");
+
+chipsArea.style.display=
+selectedBranch==="PYQ"
+?"block"
+:"none";
+
+extra.innerHTML="";
+
+let fullFolders=[];
+
+/* =====================================================
+   PYQ
+===================================================== */
+
+if(selectedBranch==="PYQ"){
+
+$("chipsTitle").textContent=
+"PYQ Years";
+
+fullFolders=
+getBranchChildren(
+"PYQ",
+"FULL"
+);
+
+/*
+Collect years from every equivalent FULL folder.
+*/
+
+const years=getBranchYearFolders("PYQ");
+
+/*
+If selected year belongs to an old folder,
+it is still valid.
+*/
+
+const selectedYearStillExists=
+selectedYear&&
+years.some(year=>
+String(year.id)===
+String(selectedYear.id)
+);
+
+if(
+selectedYear&&
+!selectedYearStillExists
+){
+
+selectedYear=null;
+
+}
+
+chips.innerHTML=`
+
+<div class="ap-chip-wrap">
+
+<button
+class="ap-chip ${
+!selectedYear?"active":""
+}"
+data-year-id="all"
+type="button"
+>
+All Years
+</button>
+
+</div>
+
+${years.map((year,index)=>`
+
+<div class="ap-chip-wrap">
+
+<button
+class="ap-chip ${
+selectedYear&&
+String(selectedYear.id)===
+String(year.id)
+?"active":""
+}"
+data-year-id="${escapeHTML(year.id)}"
+type="button"
+>
+${escapeHTML(folderName(year))}
+</button>
+
+<button
+class="ap-chip-mini edit"
+data-edit-year="${escapeHTML(year.id)}"
+type="button"
+>
+✎
+</button>
+
+<button
+class="ap-chip-mini move"
+data-year-up="${escapeHTML(year.id)}"
+type="button"
+${index===0?"disabled":""}
+>
+↑
+</button>
+
+<button
+class="ap-chip-mini move"
+data-year-down="${escapeHTML(year.id)}"
+type="button"
+${index===years.length-1?"disabled":""}
+>
+↓
+</button>
+
+<button
+class="ap-chip-mini delete"
+data-delete-year="${escapeHTML(year.id)}"
+type="button"
+>
+×
+</button>
+
+</div>
+
+`).join("")}
+`;
+
+extra.innerHTML=`
+
+<button
+class="ap-primary-btn"
+id="addYearBtn"
+type="button"
+>
++ Add Year
+</button>
+
+<button
+class="ap-secondary-btn"
+id="addFullMockBtn"
+type="button"
+>
++ Add Full Mock
+</button>
+
+`;
+
+bindClick(
+"addYearBtn",
+addYear
+);
+
+bindClick(
+"addFullMockBtn",
+()=>openMockEditor("FULL")
+);
+
+/*
+Year selection.
+*/
+
+document
+.querySelectorAll("[data-year-id]")
+.forEach(btn=>{
+
+btn.onclick=()=>{
+
+selectedYear=
+btn.dataset.yearId==="all"
+?null
+:years.find(year=>
+String(year.id)===
+String(btn.dataset.yearId)
+)||null;
+
+renderFullManagement();
+
+};
+
+});
+
+/*
+Edit year.
+*/
+
+document
+.querySelectorAll("[data-edit-year]")
+.forEach(btn=>{
+
+btn.onclick=()=>{
+
+const folder=
+getFolder(
+btn.dataset.editYear
+);
+
+if(folder)
+openStructureEdit(
+"YEAR",
+folder
+);
+
+};
+
+});
+
+/*
+Delete year.
+*/
+
+document
+.querySelectorAll("[data-delete-year]")
+.forEach(btn=>{
+
+btn.onclick=()=>{
+
+const folder=
+getFolder(
+btn.dataset.deleteYear
+);
+
+if(folder)
+deleteStructureFolder(folder);
+
+};
+
+});
+
+/*
+Reordering old/new year folders.
+*/
+
+document
+.querySelectorAll("[data-year-up]")
+.forEach(btn=>{
+
+btn.onclick=()=>{
+
+const folder=
+getFolder(
+btn.dataset.yearUp
+);
+
+if(!folder)return;
+
+reorderFolder(
+folder.id,
+folder.parent_id,
+-1,
+"Year"
+);
+
+};
+
+});
+
+document
+.querySelectorAll("[data-year-down]")
+.forEach(btn=>{
+
+btn.onclick=()=>{
+
+const folder=
+getFolder(
+btn.dataset.yearDown
+);
+
+if(!folder)return;
+
+reorderFolder(
+folder.id,
+folder.parent_id,
+1,
+"Year"
+);
+
+};
+
+});
+
+}else{
+
+/* =====================================================
+   NEW
+===================================================== */
+
+extra.innerHTML=`
+
+<button
+class="ap-primary-btn"
+id="addNewFullMockBtn"
+type="button"
+>
++ Add Full Mock
+</button>
+
+`;
+
+bindClick(
+"addNewFullMockBtn",
+()=>openMockEditor("FULL")
+);
+
+}
+
+/* =====================================================
+   GET ALLOWED FOLDER IDS
+===================================================== */
+
+let allowedIds=[];
+
+if(selectedBranch==="PYQ"){
+
+if(selectedYear){
+
+allowedIds=[
+String(selectedYear.id)
+];
+
+}else{
+
+const years=
+getBranchYearFolders("PYQ");
+
+allowedIds=
+years.map(year=>
+String(year.id)
+);
+
+/*
+Also allow direct mocks accidentally saved
+inside a FULL folder.
+*/
+
+if(!allowedIds.length){
+
+allowedIds=
+fullFolders.map(folder=>
+String(folder.id)
+);
+
+}
+
+}
+
+}else{
+
+fullFolders=
+getBranchChildren(
+selectedBranch,
+"FULL"
+);
+
+allowedIds=
+fullFolders.map(folder=>
+String(folder.id)
+);
+
+}
+
+/* =====================================================
+   CUSTOM BRANCH
+===================================================== */
+
+if(selectedBranch==="CUSTOM"){
+
+const full=
+directChild(
+selectedRootFolder?.id,
+"FULL"
+);
+
+allowedIds=
+full
+?[String(full.id)]
+:[];
+
+}
+
+/* =====================================================
+   FIND TESTS
+===================================================== */
+
+const list=tests.filter(test=>
+
+String(test.exam_id)===
+String(selectedExam.id)&&
+
+isFull(test)&&
+
+allowedIds.includes(
+String(test.folder_id||"")
+)
+
+);
+
+renderTestList(list);
+
+}
+
+/* =========================================================
+   SECTIONAL MANAGEMENT
+========================================================= */
+
+function renderSectionalManagement(){
+
+$("managementChipsArea")
+.style.display="block";
+
+$("chipsTitle").textContent=
+"Subject Clips";
+
+const chips=
+$("managementChips");
+
+const extra=
+$("managementExtraActions");
+
+let clips=[];
+
+/* =====================================================
+   CUSTOM
+===================================================== */
+
+if(selectedBranch==="CUSTOM"){
+
+const parent=
+directChild(
+selectedRootFolder?.id,
+"SECTIONAL"
+);
+
+clips=parent
+?childrenOf(
+parent.id,
+"SUBJECT"
+)
+:[];
+
+}else{
+
+clips=
+getBranchSubjectFolders(
+selectedBranch
+);
+
+}
+
+/*
+Deduplicate same subject name.
+
+Old duplicate subject folders can exist.
+Keep first physical folder but don't show duplicates.
+*/
+
+const unique=[];
+
+clips.forEach(clip=>{
+
+const key=
+String(
+clip.subject_id||
+folderName(clip)
+).trim().toLowerCase();
+
+if(
+!unique.some(item=>
+String(
+item.subject_id||
+folderName(item)
+).trim().toLowerCase()===key
+)
+){
+
+unique.push(clip);
+
+}
+
+});
+
+clips=unique;
+
+const selectedStillExists=
+selectedFolder&&
+clips.some(clip=>
+String(clip.id)===
+String(selectedFolder.id)
+);
+
+if(
+selectedFolder&&
+!selectedStillExists
+){
+
+selectedFolder=null;
+
+}
+
+chips.innerHTML=
+clips.map((clip,index)=>`
+
+<div class="ap-chip-wrap">
+
+<button
+class="ap-chip ${
+selectedFolder&&
+String(selectedFolder.id)===
+String(clip.id)
+?"active":""
+}"
+data-folder-id="${escapeHTML(clip.id)}"
+type="button"
+>
+${escapeHTML(folderName(clip))}
+</button>
+
+<button
+class="ap-chip-mini edit"
+data-edit-subject="${escapeHTML(clip.id)}"
+type="button"
+>
+✎
+</button>
+
+<button
+class="ap-chip-mini move"
+data-subject-up="${escapeHTML(clip.id)}"
+type="button"
+${index===0?"disabled":""}
+>
+↑
+</button>
+
+<button
+class="ap-chip-mini move"
+data-subject-down="${escapeHTML(clip.id)}"
+type="button"
+${index===clips.length-1?"disabled":""}
+>
+↓
+</button>
+
+<button
+class="ap-chip-mini delete"
+data-delete-subject="${escapeHTML(clip.id)}"
+type="button"
+>
+×
+</button>
+
+</div>
+
+`).join("");
+
+extra.innerHTML=`
+
+<button
+class="ap-secondary-btn"
+id="addSubjectClipBtn"
+type="button"
+>
++ Add Subject Clip
+</button>
+
+`;
+
+bindClick(
+"addSubjectClipBtn",
+()=>{
+
+structureMode="SUBJECT";
+
+structureEditId=null;
+
+$("structureModalTitle").textContent=
+"Add Sectional Subject";
+
+$("structureInputLabel").textContent=
+"Subject Name";
+
+$("structureNameInput").value="";
+
+openModal("structureModal");
+
+});
+
+document
+.querySelectorAll("[data-folder-id]")
+.forEach(btn=>{
+
+btn.onclick=()=>{
+
+selectedFolder=
+getFolder(
+btn.dataset.folderId
+);
+
+renderSectionalManagement();
+
+};
+
+});
+
+document
+.querySelectorAll("[data-edit-subject]")
+.forEach(btn=>{
+
+btn.onclick=()=>{
+
+const folder=
+getFolder(
+btn.dataset.editSubject
+);
+
+if(folder)
+openStructureEdit(
+"SUBJECT",
+folder
+);
+
+};
+
+});
+
+document
+.querySelectorAll("[data-delete-subject]")
+.forEach(btn=>{
+
+btn.onclick=()=>{
+
+const folder=
+getFolder(
+btn.dataset.deleteSubject
+);
+
+if(folder)
+deleteStructureFolder(folder);
+
+};
+
+});
+
+document
+.querySelectorAll("[data-subject-up]")
+.forEach(btn=>{
+
+btn.onclick=()=>{
+
+const folder=
+getFolder(
+btn.dataset.subjectUp
+);
+
+if(!folder)return;
+
+reorderFolder(
+folder.id,
+folder.parent_id,
+-1,
+"Subject"
+);
+
+};
+
+});
+
+document
+.querySelectorAll("[data-subject-down]")
+.forEach(btn=>{
+
+btn.onclick=()=>{
+
+const folder=
+getFolder(
+btn.dataset.subjectDown
+);
+
+if(!folder)return;
+
+reorderFolder(
+folder.id,
+folder.parent_id,
+1,
+"Subject"
+);
+
+};
+
+});
+
+if(!selectedFolder){
+
+$("managementTestList").innerHTML=
+'<div class="ap-empty">Select a subject clip to view its mocks.</div>';
+
+return;
+
+}
+
+renderSubjectMockList();
+
+}
+
+/* =========================================================
+   SUBJECT MOCK LIST
+========================================================= */
+
+function renderSubjectMockList(){
+
+$("managementExtraActions").innerHTML+=`
+
+<button
+class="ap-primary-btn"
+id="addSectionalMockBtn"
+type="button"
+>
++ Add Sectional Mock
+</button>
+
+`;
+
+bindClick(
+"addSectionalMockBtn",
+()=>openMockEditor("SECTIONAL")
+);
+
+/*
+Current selected subject folder.
+*/
+
+let folderIds=[
+String(selectedFolder.id)
+];
+
+/*
+Also include duplicate equivalent subject folders
+with same subject_id/name under other equivalent
+SECTIONAL branches.
+*/
+
+if(selectedBranch!=="CUSTOM"){
+
+const allSubjects=
+getBranchSubjectFolders(
+selectedBranch
+);
+
+const targetKey=
+String(
+selectedFolder.subject_id||
+folderName(selectedFolder)
+).trim().toLowerCase();
+
+allSubjects.forEach(folder=>{
+
+const key=
+String(
+folder.subject_id||
+folderName(folder)
+).trim().toLowerCase();
+
+if(key===targetKey){
+
+folderIds.push(
+String(folder.id)
+);
+
+}
+
+});
+
+}
+
+const list=tests.filter(test=>
+
+String(test.exam_id)===
+String(selectedExam.id)&&
+
+isSectional(test)&&
+
+folderIds.includes(
+String(test.folder_id||"")
+)
+
+);
+
+renderTestList(list);
+
+}
+
+/* =========================================================
+   TEST LIST
+========================================================= */
+
+function renderTestList(list){
+
+const el=$("managementTestList");
+
+if(!el)return;
+
+if(!list.length){
+
+el.innerHTML=
+'<div class="ap-empty">No mock tests found here.</div>';
+
+return;
+
+}
+
+el.innerHTML=list.map(test=>{
+
+const timing=Boolean(
+test.subject_wise_timing||
+test.sectional_timing
+);
+
+const active=
+test.is_active!==false;
+
+return `
+
+<div class="ap-test-card">
+
+<div class="ap-test-top">
+
+<div>
+
+<div class="ap-test-title">
+${escapeHTML(
+test.title||"Untitled Mock"
+)}
+</div>
+
+${
+test.description
+?
+`
+<div class="ap-test-description">
+${escapeHTML(test.description)}
+</div>
+`
+:""
+}
+
+</div>
+
+</div>
+
+<div class="ap-test-badges">
+
+<span class="ap-test-badge">
+${test.duration_minutes||0} min
+</span>
+
+<span class="ap-test-badge">
+${test.total_questions||0} Questions
+</span>
+
+<span class="ap-test-badge">
+${timing
+?"Section Timing ON"
+:"Overall Timing"}
+</span>
+
+<span class="ap-test-badge ${
+active?"active":"inactive"
+}">
+${active?"Active":"Inactive"}
+</span>
+
+</div>
+
+<div class="ap-test-actions">
+
+<button
+class="ap-small-btn edit"
+data-edit-test="${escapeHTML(test.id)}"
+type="button"
+>
+Edit
+</button>
+
+<button
+class="ap-small-btn"
+data-question-test="${escapeHTML(test.id)}"
+type="button"
+>
+Questions
+</button>
+
+<button
+class="ap-small-btn delete"
+data-delete-test="${escapeHTML(test.id)}"
+type="button"
+>
+Delete
+</button>
+
+</div>
+
+</div>
+
+`;
+
+}).join("");
+
+document
+.querySelectorAll("[data-edit-test]")
+.forEach(btn=>{
+
+btn.onclick=()=>{
+
+const test=
+tests.find(item=>
+String(item.id)===
+String(btn.dataset.editTest)
+);
+
+if(test)
+openMockEditor(
+test.test_type,
+test
+);
+
+};
+
+});
+
+document
+.querySelectorAll("[data-question-test]")
+.forEach(btn=>{
+
+btn.onclick=()=>{
+
+location.href=
+`admin-mock.html?test_id=${
+encodeURIComponent(
+btn.dataset.questionTest
+)
+}`;
+
+};
+
+});
+
+document
+.querySelectorAll("[data-delete-test]")
+.forEach(btn=>{
+
+btn.onclick=()=>{
+
+const test=
+tests.find(item=>
+String(item.id)===
+String(btn.dataset.deleteTest)
+);
+
+if(test)
+deleteMock(test);
+
+};
+
+});
+
+}
+
+/* =========================================================
+   LOAD EXISTING SECTIONS
+========================================================= */
+
+async function loadExistingSections(testId){
+
+const response=await db
+.from("mock_test_sections")
+.select("*")
+.eq("mock_test_id",testId)
+.order(
+"section_order",
+{ascending:true}
+);
+
+if(response.error){
+
+console.warn(
+"Sections load warning:",
+response.error.message
+);
+
+return[];
+
+}
+
+return(response.data||[])
+.map((section,index)=>{
+
+const subject=
+subjects.find(item=>
+String(item.id)===
+String(section.subject_id)
+);
+
+const savedName=
+section.section_name||
+section.name||
+(
+subject
+?nameOfSubject(subject)
+:""
+)||
+`Section ${index+1}`;
+
+return{
+
+name:savedName,
+
+subject_id:
+section.subject_id||null,
+
+duration:
+Number(section.duration_minutes||0),
+
+questions:
+Number(section.question_count||0)
+
+};
+
+});
+
+}
+
+/* =========================================================
+   OPEN MOCK EDITOR
+========================================================= */
+
+async function openMockEditor(type,test=null){
+
+editorType=
+test
+?testType(test)
+:type;
+
+editingMockId=
+test
+?test.id
+:null;
+
+try{
+
+if(test){
+
+editorFolderId=
+test.folder_id||null;
+
+}else if(type==="SECTIONAL"){
+
+editorFolderId=
+selectedFolder?.id||null;
+
+}else{
+
+const full=
+await getFullFolder();
+
+if(
+selectedBranch==="PYQ"&&
+selectedYear
+){
+
+editorFolderId=
+selectedYear.id;
+
+}else{
+
+editorFolderId=
+full.id;
+
+}
+
+}
+
+}catch(error){
+
+toast(error.message);
+
+return;
+
+}
+
+if(!editorFolderId){
+
+toast(
+"Mock folder missing. Sync structure first."
+);
+
+return;
+
+}
+
+$("mockModalTitle").textContent=
+test
+?"Edit Mock"
+:"Add Mock";
+
+$("mockTitleInput").value=
+test?.title||"";
+
+$("mockDescriptionInput").value=
+test?.description||"";
+
+$("mockDurationInput").value=
+test?.duration_minutes||60;
+
+$("mockQuestionsInput").value=
+test?.total_questions||25;
+
+$("mockActiveInput").value=
+test&&test.is_active===false
+?"false"
+:"true";
+
+$("sectionalTimingInput").checked=
+test
+?Boolean(
+test.subject_wise_timing||
+test.sectional_timing
+)
+:false;
+
+let sections=test
+?await loadExistingSections(test.id)
+:[];
+
+if(!sections.length){
+
+sections=[
+
+{
+name:"English",
+duration:15,
+questions:25
+},
+
+{
+name:"Reasoning",
+duration:15,
+questions:25
+},
+
+{
+name:"Quant",
+duration:15,
+questions:25
+},
+
+{
+name:"GK",
+duration:15,
+questions:25
+}
+
+];
+
+}
+
+$("sectionRows").innerHTML="";
+
+sections.forEach(addSectionRow);
+
+openModal("mockModal");
+
+}
+
+/* =========================================================
+   ADD SECTION ROW
+========================================================= */
+
+function addSectionRow(data={}){
+
+const rows=$("sectionRows");
+
+if(!rows)return;
+
+const row=
+document.createElement("div");
+
+row.className="ap-section-row";
+
+row.innerHTML=`
+
+<input
+class="section-name"
+placeholder="Section"
+value="${escapeHTML(data.name||"")}"
+>
+
+<input
+class="section-time"
+type="number"
+min="0"
+placeholder="Min"
+value="${escapeHTML(data.duration??"")}"
+>
+
+<input
+class="section-questions"
+type="number"
+min="0"
+placeholder="Ques"
+value="${escapeHTML(data.questions??"")}"
+>
+
+<button
+class="ap-remove-section"
+type="button"
+>
+×
+</button>
+
+`;
+
+row
+.querySelector(".ap-remove-section")
+.onclick=()=>{
+row.remove();
+};
+
+rows.appendChild(row);
+
+}
+
+/* =========================================================
+   SAVE MOCK
+========================================================= */
+
+async function saveMock(){
+
+if(!selectedExam){
+
+toast("Select exam first");
+
+return;
+
+}
+
+const title=
+$("mockTitleInput")
+.value
+.trim();
+
+if(!title){
+
+toast("Enter mock title");
+
+return;
+
+}
+
+if(!editorFolderId){
+
+toast("Mock folder missing");
+
+return;
+
+}
+
+const sections=[
+...document.querySelectorAll(
+".ap-section-row"
+)
+]
+.map(row=>{
+
+const name=
+row.querySelector(
+".section-name"
+).value.trim();
+
+const duration=
+Number(
+row.querySelector(
+".section-time"
+).value
+)||0;
+
+const questions=
+Number(
+row.querySelector(
+".section-questions"
+).value
+)||0;
+
+const normalized=
+name.toLowerCase();
+
+const subject=
+subjects.find(item=>
+nameOfSubject(item)
+.trim()
+.toLowerCase()===
+normalized
+);
+
+return{
+
+name,
+
+subject_id:
+subject
+?subject.id
+:null,
+
+duration,
+
+questions
+
+};
+
+})
+.filter(section=>section.name);
+
+if(!sections.length){
+
+toast("Add at least one section");
+
+return;
+
+}
+
+const payload={
+
+exam_id:selectedExam.id,
+
+folder_id:editorFolderId,
+
+title,
+
+description:
+$("mockDescriptionInput")
+.value
+.trim(),
+
+duration_minutes:
+Number(
+$("mockDurationInput").value
+)||0,
+
+total_questions:
+Number(
+$("mockQuestionsInput").value
+)||0,
+
+is_active:
+$("mockActiveInput").value==="true",
+
+test_type:
+editorType==="SECTIONAL"
+?"SECTIONAL"
+:"FULL",
+
+subject_wise_timing:
+$("sectionalTimingInput").checked
+
+};
+
+if(
+editorType==="SECTIONAL"&&
+selectedFolder
+){
+
+payload.subject_id=
+selectedFolder.subject_id||null;
+
+}
+
+try{
+
+let saved;
+
+if(editingMockId){
+
+const response=
+await db
+.from("mock_tests")
+.update(payload)
+.eq("id",editingMockId)
+.select()
+.single();
+
+if(response.error)
+throw response.error;
+
+saved=response.data;
+
+}else{
+
+const response=
+await db
+.from("mock_tests")
+.insert(payload)
+.select()
+.single();
+
+if(response.error)
+throw response.error;
+
+saved=response.data;
+
+}
+
+await saveMockSections(
+saved.id,
+sections
+);
+
+closeModal("mockModal");
+
+toast(
+editingMockId
+?"Mock updated successfully"
+:"Mock created successfully"
+);
+
+editingMockId=null;
+
+await loadAllData();
+
+if(selectedCategory==="FULL")
+renderFullManagement();
+else
+renderSectionalManagement();
+
+}catch(error){
+
+console.error(
+"Mock save error:",
+error
+);
+
+toast(
+"Mock save failed: "+
+error.message
+);
+
+}
+
+}
+
+/* =========================================================
+   SAVE MOCK SECTIONS
+========================================================= */
+
+async function saveMockSections(
+testId,
+sections
+){
+
+try{
+
+const deleteResponse=
+await db
+.from("mock_test_sections")
+.delete()
+.eq("mock_test_id",testId);
+
+if(deleteResponse.error){
+
+throw new Error(
+deleteResponse.error.message
+);
+
+}
+
+if(
+!sections||
+!sections.length
+){
+
+return true;
+
+}
+
+const rows=
+sections
+.filter(section=>
+section.subject_id
+)
+.map((section,index)=>({
+
+mock_test_id:testId,
+
+subject_id:
+section.subject_id,
+
+section_name:
+section.name||"",
+
+duration_minutes:
+Number(
+section.duration||0
+),
+
+question_count:
+Number(
+section.questions||0
+),
+
+section_order:
+index+1
+
+}));
+
+if(!rows.length){
+
+throw new Error(
+"No valid subject found. Section names must match subjects table."
+);
+
+}
+
+const insertResponse=
+await db
+.from("mock_test_sections")
+.insert(rows);
+
+if(insertResponse.error){
+
+throw new Error(
+insertResponse.error.message
+);
+
+}
+
+return true;
+
+}catch(error){
+
+console.error(
+"Sections save failed:",
+error
+);
+
+throw error;
+
+}
+
+}
+
+/* =========================================================
+   DELETE MOCK
+========================================================= */
+
+async function deleteMock(test){
+
+if(
+!confirm(
+`Delete mock "${test.title}"?`
+)
+)return;
+
+try{
+
+const sectionResponse=
+await db
+.from("mock_test_sections")
+.delete()
+.eq("mock_test_id",test.id);
+
+if(sectionResponse.error)
+throw sectionResponse.error;
+
+const response=
+await db
+.from("mock_tests")
+.delete()
+.eq("id",test.id);
+
+if(response.error)
+throw response.error;
+
+toast("Mock deleted");
+
+await loadAllData();
+
+if(selectedCategory==="FULL")
+renderFullManagement();
+else
+renderSectionalManagement();
+
+}catch(error){
+
+console.error(error);
+
+toast(error.message);
+
+}
+
+}
+
+/* =========================================================
+   CUSTOM ROOT FOLDER
+========================================================= */
+
+function openCustomFolderCreate(){
+
+structureMode="CUSTOM_ROOT";
+
+structureEditId=null;
+
+$("structureModalTitle").textContent=
+"Add Custom Folder";
+
+$("structureInputLabel").textContent=
+"Folder Name";
+
+$("structureNameInput").value="";
+
+openModal("structureModal");
+
+}
+
+function openCustomFolderEdit(folder){
+
+structureMode="CUSTOM_ROOT";
+
+structureEditId=folder.id;
+
+$("structureModalTitle").textContent=
+"Edit Folder";
+
+$("structureInputLabel").textContent=
+"Folder Name";
+
+$("structureNameInput").value=
+folderName(folder);
+
+openModal("structureModal");
+
+}
+
+/* =========================================================
+   ADD YEAR
+========================================================= */
+
+async function addYear(){
+
+try{
+
+const full=
+await getFullFolder();
+
+if(!full){
+
+toast(
+"PYQ Full folder missing"
+);
+
+return;
+
+}
+
+structureMode="YEAR";
+
+structureEditId=null;
+
+$("structureModalTitle").textContent=
+"Add PYQ Year";
+
+$("structureInputLabel").textContent=
+"Year";
+
+$("structureNameInput").value="";
+
+openModal("structureModal");
+
+}catch(error){
+
+toast(error.message);
+
+}
+
+}
+
+/* =========================================================
+   EDIT STRUCTURE
+========================================================= */
+
+function openStructureEdit(
+mode,
+folder
+){
+
+structureMode=mode;
+
+structureEditId=folder.id;
+
+$("structureModalTitle").textContent=
+mode==="YEAR"
+?"Edit PYQ Year"
+:"Edit Subject Clip";
+
+$("structureInputLabel").textContent=
+mode==="YEAR"
+?"Year"
+:"Subject Name";
+
+$("structureNameInput").value=
+folderName(folder);
+
+openModal("structureModal");
+
+}
+
+/* =========================================================
+   SAVE STRUCTURE
+========================================================= */
+
+async function saveStructure(){
+
+const name=
+$("structureNameInput")
+.value
+.trim();
+
+if(!name){
+
+toast("Enter name");
+
+return;
+
+}
+
+try{
+
+/* =====================================================
+   CUSTOM ROOT
+===================================================== */
+
+if(structureMode==="CUSTOM_ROOT"){
+
+const roots=
+getRootFoldersForExam();
+
+if(!structureEditId){
+
+const duplicate=
+roots.find(folder=>
+folderName(folder)
+.toLowerCase()===
+name.toLowerCase()
+);
+
+if(duplicate){
+
+toast(
+"This folder already exists"
+);
+
+return;
+
+}
+
+const max=
+roots.reduce(
+(m,f)=>
+Math.max(
+m,
+Number(
+f.sort_order||0
+)
+),
+0
+);
+
+const response=
+await db
+.from("mock_folders")
+.insert({
+
+exam_id:
+selectedExam.id,
+
+parent_id:null,
+
+name,
+
+display_name:name,
+
+folder_type:"CUSTOM",
+
+sort_order:max+1,
+
+is_active:true
+
+})
+.select()
+.single();
+
+if(response.error)
+throw response.error;
+
+await ensureFolder({
+
+examId:selectedExam.id,
+
+parentId:
+response.data.id,
+
+name:"FULL",
+
+displayName:"FULL MOCKS",
+
+type:"FULL",
+
+sortOrder:1
+
+});
+
+await ensureFolder({
+
+examId:selectedExam.id,
+
+parentId:
+response.data.id,
+
+name:"SECTIONAL",
+
+displayName:"SECTIONAL MOCKS",
+
+type:"SECTIONAL",
+
+sortOrder:2
+
+});
+
+toast(
+"Custom folder added successfully"
+);
+
+}else{
+
+const response=
+await db
+.from("mock_folders")
+.update({
+
+name,
+
+display_name:name
+
+})
+.eq("id",structureEditId);
+
+if(response.error)
+throw response.error;
+
+toast(
+"Folder updated successfully"
+);
+
+}
+
+closeModal("structureModal");
+
+structureMode=null;
+structureEditId=null;
+
+await loadAllData();
+
+renderRootBranches();
+
+return;
+
+}
+
+/* =====================================================
+   YEAR
+===================================================== */
+
+if(structureMode==="YEAR"){
+
+const parent=
+getFolder(
+structureEditId
+)?.parent_id
+?
+getFolder(
+getFolder(
+structureEditId
+).parent_id
+)
+:null;
+
+/*
+For editing use original parent.
+For adding use selected branch FULL.
+*/
+
+let full;
+
+if(structureEditId){
+
+full=parent;
+
+}else{
+
+full=await getFullFolder();
+
+}
+
+if(!full){
+
+throw new Error(
+"PYQ Full folder missing"
+);
+
+}
+
+const years=
+childrenOf(
+full.id,
+"YEAR"
+);
+
+if(!structureEditId){
+
+const max=
+years.reduce(
+(m,f)=>
+Math.max(
+m,
+Number(f.sort_order||0)
+),
+0
+);
+
+const response=
+await db
+.from("mock_folders")
+.insert({
+
+exam_id:selectedExam.id,
+
+parent_id:full.id,
+
+name,
+
+display_name:name,
+
+folder_type:"YEAR",
+
+sort_order:max+1,
+
+is_active:true
+
+});
+
+if(response.error)
+throw response.error;
+
+toast(
+"Year added successfully"
+);
+
+}else{
+
+const response=
+await db
+.from("mock_folders")
+.update({
+
+name,
+
+display_name:name
+
+})
+.eq("id",structureEditId);
+
+if(response.error)
+throw response.error;
+
+toast(
+"Year updated successfully"
+);
+
+}
+
+}
+
+/* =====================================================
+   SUBJECT
+===================================================== */
+
+else if(structureMode==="SUBJECT"){
+
+let parent;
+
+if(structureEditId){
+
+const oldFolder=
+getFolder(structureEditId);
+
+parent=
+oldFolder
+?getFolder(oldFolder.parent_id)
+:null;
+
+}else{
+
+parent=
+await getSectionalFolder();
+
+}
+
+if(!parent){
+
+throw new Error(
+"Sectional folder missing"
+);
+
+}
+
+const clips=
+childrenOf(
+parent.id,
+"SUBJECT"
+);
+
+if(!structureEditId){
+
+const max=
+clips.reduce(
+(m,f)=>
+Math.max(
+m,
+Number(f.sort_order||0)
+),
+0
+);
+
+const subject=
+getExamSubjects().find(item=>
+nameOfSubject(item)
+.trim()
+.toLowerCase()===
+name
+.trim()
+.toLowerCase()
+);
+
+const payload={
+
+exam_id:selectedExam.id,
+
+parent_id:parent.id,
+
+name,
+
+display_name:name,
+
+folder_type:"SUBJECT",
+
+sort_order:max+1,
+
+is_active:true
+
+};
+
+if(subject)
+payload.subject_id=subject.id;
+
+let response=
+await db
+.from("mock_folders")
+.insert(payload);
+
+if(
+response.error&&
+payload.subject_id!==undefined&&
+/subject_id|column|schema cache/i
+.test(response.error.message)
+){
+
+delete payload.subject_id;
+
+response=
+await db
+.from("mock_folders")
+.insert(payload);
+
+}
+
+if(response.error)
+throw response.error;
+
+toast(
+"Subject clip added successfully"
+);
+
+}else{
+
+const response=
+await db
+.from("mock_folders")
+.update({
+
+name,
+
+display_name:name
+
+})
+.eq("id",structureEditId);
+
+if(response.error)
+throw response.error;
+
+toast(
+"Subject clip updated successfully"
+);
+
+}
+
+}
+
+closeModal("structureModal");
+
+structureMode=null;
+structureEditId=null;
+
+await loadAllData();
+
+if(selectedCategory==="FULL")
+renderFullManagement();
+else if(selectedCategory==="SECTIONAL")
+renderSectionalManagement();
+else
+renderRootBranches();
+
+}catch(error){
+
+console.error(error);
+
+toast(error.message);
+
+}
+
+}
+
+/* =========================================================
+   DELETE CUSTOM ROOT
+========================================================= */
+
+async function deleteCustomRootFolder(folder){
+
+const children=
+folders.filter(child=>
+String(child.parent_id)===
+String(folder.id)&&
+child.is_active!==false
+);
+
+const childIds=
+children.map(child=>
+String(child.id)
+);
+
+const hasMocks=
+tests.some(test=>
+childIds.includes(
+String(test.folder_id||"")
+)||
+String(test.folder_id||"")===
+String(folder.id)
+);
+
+if(hasMocks){
+
+toast(
+"First delete mocks inside this folder"
+);
+
+return;
+
+}
+
+if(
+!confirm(
+`Delete "${folderName(folder)}" folder?`
+)
+)return;
+
+try{
+
+const response=
+await db
+.from("mock_folders")
+.delete()
+.eq("id",folder.id);
+
+if(response.error)
+throw response.error;
+
+toast(
+"Folder deleted successfully"
+);
+
+await loadAllData();
+
+renderRootBranches();
+
+}catch(error){
+
+console.error(error);
+
+toast(error.message);
+
+}
+
+}
+
+/* =========================================================
+   DELETE STRUCTURE FOLDER
+========================================================= */
+
+async function deleteStructureFolder(folder){
+
+const hasMocks=
+tests.some(test=>
+String(test.folder_id)===
+String(folder.id)
+);
+
+const hasChildren=
+folders.some(child=>
+String(child.parent_id)===
+String(folder.id)&&
+child.is_active!==false
+);
+
+if(hasMocks||hasChildren){
+
+toast(
+"Cannot delete: first remove its mocks or children"
+);
+
+return;
+
+}
+
+if(
+!confirm(
+`Delete "${folderName(folder)}"?`
+)
+)return;
+
+try{
+
+const response=
+await db
+.from("mock_folders")
+.delete()
+.eq("id",folder.id);
+
+if(response.error)
+throw response.error;
+
+toast("Deleted successfully");
+
+if(
+selectedFolder&&
+String(selectedFolder.id)===
+String(folder.id)
+){
+
+selectedFolder=null;
+
+}
+
+if(
+selectedYear&&
+String(selectedYear.id)===
+String(folder.id)
+){
+
+selectedYear=null;
+
+}
+
+await loadAllData();
+
+if(selectedCategory==="FULL")
+renderFullManagement();
+else
+renderSectionalManagement();
+
+}catch(error){
+
+console.error(error);
+
+toast(error.message);
+
+}
+
+}
+
+/* =========================================================
+   REORDER FOLDER
+========================================================= */
+
+async function reorderFolder(
+folderId,
+parentId,
+direction,
+label
+){
+
+const type=
+label==="Year"
+?"YEAR"
+:"SUBJECT";
+
+const list=
+childrenOf(
+parentId,
+type
+);
+
+const index=
+list.findIndex(folder=>
+String(folder.id)===
+String(folderId)
+);
+
+const target=
+index+direction;
+
+if(
+index<0||
+target<0||
+target>=list.length
+){
+
+return;
+
+}
+
+[list[index],list[target]]=
+[list[target],list[index]];
+
+try{
+
+for(
+let i=0;
+i<list.length;
+i++
+){
+
+const response=
+await db
+.from("mock_folders")
+.update({
+sort_order:i+1
+})
+.eq("id",list[i].id);
+
+if(response.error)
+throw response.error;
+
+}
+
+toast(
+`${label} order updated`
+);
+
+await loadAllData();
+
+if(selectedCategory==="FULL")
+renderFullManagement();
+else
+renderSectionalManagement();
+
+}catch(error){
+
+console.error(error);
+
+toast(error.message);
+
+}
+
+}
+
+/* =========================================================
+   DELETE EXAM
+========================================================= */
+
+async function deleteExam(exam){
+
+const examTests=
+tests.filter(test=>
+String(test.exam_id)===
+String(exam.id)
+);
+
+if(examTests.length){
+
+const deactivate=
+confirm(
+`This exam has ${examTests.length} mocks. Deactivate exam instead?`
+);
+
+if(!deactivate)return;
+
+const response=
+await db
+.from("exams")
+.update({
+is_active:false
+})
+.eq("id",exam.id);
+
+if(response.error){
+
+toast(
+response.error.message
+);
+
+return;
+
+}
+
+toast(
+"Exam deactivated"
+);
+
+}else{
+
+if(
+!confirm(
+`Delete exam "${examName(exam)}"?`
+)
+)return;
+
+const response=
+await db
+.from("exams")
+.delete()
+.eq("id",exam.id);
+
+if(response.error){
+
+toast(
+response.error.message
+);
+
+return;
+
+}
+
+toast(
+"Exam deleted"
+);
+
+}
+
+if(
+selectedExam&&
+String(selectedExam.id)===
+String(exam.id)
+){
+
+selectedExam=null;
+
+$("workspace")
+.classList.remove("visible");
+
+resetViews();
+
+}
+
+await loadAllData();
+
+}
+
+/* =========================================================
+   REORDER EXAM
+========================================================= */
+
+async function reorderExam(
+id,
+direction
+){
+
+const list=
+exams
+.filter(exam=>
+boardOfExam(exam)===
+activeBoard&&
+exam.is_active!==false
+)
+.sort((a,b)=>
+Number(a.sort_order||0)-
+Number(b.sort_order||0)
+);
+
+const index=
+list.findIndex(exam=>
+String(exam.id)===
+String(id)
+);
+
+const target=
+index+direction;
+
+if(
+index<0||
+target<0||
+target>=list.length
+){
+
+return;
+
+}
+
+[list[index],list[target]]=
+[list[target],list[index]];
+
+try{
+
+for(
+let i=0;
+i<list.length;
+i++
+){
+
+const response=
+await db
+.from("exams")
+.update({
+sort_order:i+1
+})
+.eq("id",list[i].id);
+
+if(response.error)
+throw response.error;
+
+}
+
+toast(
+"Exam order updated"
+);
+
+await loadAllData();
+
+}catch(error){
+
+console.error(error);
+
+toast(error.message);
+
+}
+
+}
+
+/* =========================================================
+   EXAM MODAL
+========================================================= */
+
+function openExamModal(exam=null){
+
+editingExamId=
+exam
+?exam.id
+:null;
+
+$("examBoardInput").value=
+exam
+?boardOfExam(exam)
+:activeBoard;
+
+$("examNameInput").value=
+exam
+?examName(exam)
+:"";
+
+$("examStageInput").value=
+exam
+?exam.stage||""
+:"";
+
+openModal("examModal");
+
+}
+
+/* =========================================================
+   SAVE EXAM
+========================================================= */
+
+async function saveExam(){
+
+const board=
+$("examBoardInput").value;
+
+const name=
+$("examNameInput")
+.value
+.trim();
+
+const stage=
+$("examStageInput")
+.value
+.trim();
+
+if(!name){
+
+toast("Enter exam name");
+
+return;
+
+}
+
+try{
+
+if(editingExamId){
+
+const response=
+await db
+.from("exams")
+.update({
+
+name,
+
+stage,
+
+is_active:true
+
+})
+.eq("id",editingExamId);
+
+if(response.error)
+throw response.error;
+
+toast(
+"Exam updated successfully"
+);
+
+}else{
+
+const max=
+exams
+.filter(exam=>
+boardOfExam(exam)===board
+)
+.reduce(
+(m,e)=>
+Math.max(
+m,
+Number(e.sort_order||0)
+),
+0
+);
+
+let response=
+await db
+.from("exams")
+.insert({
+
+name,
+
+stage,
+
+board,
+
+sort_order:max+1,
+
+is_active:true
+
+})
+.select()
+.single();
+
+if(
+response.error&&
+/board|column|schema cache/i
+.test(response.error.message)
+){
+
+response=
+await db
+.from("exams")
+.insert({
+
+name,
+
+stage,
+
+sort_order:max+1,
+
+is_active:true
+
+})
+.select()
+.single();
+
+}
+
+if(response.error)
+throw response.error;
+
+await loadAllData();
+
+/*
+Select newly created exam temporarily
+so ensure structure uses its own exam ID.
+*/
+
+const created=
+exams.find(item=>
+String(item.id)===
+String(response.data.id)
+);
+
+if(created)
+selectedExam=created;
+
+await ensureExamStructure(
+response.data.id
+);
+
+toast(
+"Exam added successfully"
+);
+
+}
+
+closeModal("examModal");
+
+editingExamId=null;
+
+await loadAllData();
+
+}catch(error){
+
+console.error(error);
+
+toast(error.message);
+
+}
+
+}
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+document
+.querySelectorAll(".ap-board-tab")
+.forEach(tab=>{
+
+tab.onclick=()=>{
+
+activeBoard=
+tab.dataset.board;
+
+document
+.querySelectorAll(".ap-board-tab")
+.forEach(item=>
+item.classList.toggle(
+"active",
+item===tab
+)
+);
+
+renderExams();
+
+};
+
+});
+
+document
+.querySelectorAll("[data-category]")
+.forEach(btn=>{
+
+btn.onclick=()=>
+openCategory(
+btn.dataset.category
+);
+
+});
+
+bindClick(
+"backToBranchesBtn",
+resetViews
+);
+
+bindClick(
+"backToCategoriesBtn",
+()=>{
+
+$("mockManagementView")
+.classList.remove("visible");
+
+$("categoryView")
+.classList.add("visible");
+
+}
+);
+
+bindClick(
+"changeExamBtn",
+()=>{
+
+selectedExam=null;
+
+$("workspace")
+.classList.remove("visible");
+
+resetViews();
+
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
+
+}
+);
+
+bindClick(
+"syncStructureBtn",
+syncStructure
+);
+
+bindClick(
+"addRootFolderBtn",
+()=>{
+
+if(!selectedExam){
+
+toast(
+"Select an exam first"
+);
+
+return;
+
+}
+
+openCustomFolderCreate();
+
+}
+);
+
+bindClick(
+"addExamBtn",
+()=>openExamModal()
+);
+
+bindClick(
+"refreshBtn",
+async()=>{
+
+await loadAllData();
+
+toast(
+"Data refreshed"
+);
+
+}
+);
+
+bindClick(
+"adminBackBtn",
+()=>{
+
+location.href=
+"practice.html";
+
+}
+);
+
+bindClick(
+"saveExamBtn",
+saveExam
+);
+
+bindClick(
+"saveMockBtn",
+saveMock
+);
+
+bindClick(
+"addSectionBtn",
+()=>addSectionRow()
+);
+
+bindClick(
+"saveStructureBtn",
+saveStructure
+);
+
+document
+.querySelectorAll("[data-close-modal]")
+.forEach(btn=>{
+
+btn.onclick=()=>
+closeModal(
+btn.dataset.closeModal
+);
+
+});
+
+document
+.querySelectorAll(".ap-modal-overlay")
+.forEach(overlay=>{
+
+overlay.addEventListener(
+"click",
+event=>{
+
+if(
+event.target===overlay
+){
+
+overlay.classList.remove(
+"open"
+);
+
+}
+
+});
+
+});
+
+/* =========================================================
+   START
+========================================================= */
+
+loadAllData();
+
+</script>
+
 </body>
 </html>
