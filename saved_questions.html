@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>SSC EDGE - Saved Questions</title>
 
@@ -51,6 +53,13 @@ body{
     margin-bottom:15px;
 }
 
+.head-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+}
+
 .head h1{
     margin:0;
     color:var(--text);
@@ -58,8 +67,71 @@ body{
     line-height:1.3;
 }
 
+/* SUBJECT BUTTON */
+
+.subject-wrap{
+    position:relative;
+    flex-shrink:0;
+}
+
+.subject-btn{
+    border:1px solid var(--border);
+    background:var(--card2);
+    color:var(--text);
+    border-radius:10px;
+    padding:9px 11px;
+    font-size:11px;
+    font-weight:900;
+    cursor:pointer;
+    white-space:nowrap;
+}
+
+.subject-btn:active{
+    transform:scale(.97);
+}
+
+.subject-menu{
+    position:absolute;
+    top:calc(100% + 7px);
+    right:0;
+    width:190px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:6px;
+    z-index:50;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+    display:none;
+}
+
+.subject-menu.show{
+    display:block;
+}
+
+.subject-option{
+    width:100%;
+    border:0;
+    background:transparent;
+    color:var(--text);
+    padding:10px;
+    border-radius:8px;
+    text-align:left;
+    font-size:12px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.subject-option:hover{
+    background:var(--card2);
+}
+
+.subject-option.active{
+    background:var(--purple);
+    color:#fff;
+}
+
 .sub{
-    margin:5px 0 0;
+    margin:7px 0 0;
     color:var(--muted);
     font-size:12px;
     line-height:1.5;
@@ -83,28 +155,70 @@ body{
     margin-bottom:8px;
 }
 
-/* TEST GROUP */
+/* SUBJECT GROUP */
 
-.test-group{
-    margin-top:18px;
+.subject-group{
+    margin-top:20px;
 }
 
-.test-title{
+.subject-heading{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
     margin:0 0 10px;
+    padding:0 2px;
+}
+
+.subject-heading h2{
+    margin:0;
     color:var(--text);
     font-size:16px;
     font-weight:900;
 }
 
+.subject-count{
+    color:var(--muted);
+    font-size:11px;
+    font-weight:700;
+}
+
+/* HORIZONTAL SLIDES */
+
+.question-slider{
+    display:flex;
+    gap:12px;
+
+    overflow-x:auto;
+    overflow-y:hidden;
+
+    scroll-snap-type:x mandatory;
+    scroll-behavior:smooth;
+
+    padding:2px 2px 14px;
+
+    scrollbar-width:none;
+
+    -webkit-overflow-scrolling:touch;
+}
+
+.question-slider::-webkit-scrollbar{
+    display:none;
+}
+
 /* QUESTION CARD */
 
 .question-card{
+    flex:0 0 100%;
+    width:100%;
+
     background:var(--card);
     border:1px solid var(--border);
     border-radius:18px;
     padding:16px;
-    margin-bottom:13px;
+
     overflow:hidden;
+
+    scroll-snap-align:start;
 }
 
 /* TOP */
@@ -131,23 +245,10 @@ body{
     line-height:1;
 }
 
-/* SUBJECT */
-
-.subject{
-    display:inline-block;
-
-    margin-top:10px;
-
-    color:var(--purple2);
-
-    font-size:11px;
-    font-weight:900;
-}
-
 /* QUESTION */
 
 .question{
-    margin-top:10px;
+    margin-top:12px;
 
     color:var(--text);
 
@@ -183,11 +284,8 @@ body{
     overflow-wrap:anywhere;
 }
 
-/* CORRECT OPTION */
-
 .option.correct{
     border-color:#2fbf71;
-
     background:rgba(47,191,113,.10);
 }
 
@@ -255,6 +353,15 @@ body{
     margin-bottom:5px;
 }
 
+/* SLIDE INDICATOR */
+
+.slide-hint{
+    text-align:center;
+    color:var(--muted);
+    font-size:10px;
+    margin:-3px 0 8px;
+}
+
 /* BUTTONS */
 
 .actions{
@@ -307,8 +414,24 @@ body{
 
 @media(max-width:500px){
 
+    .head-top{
+        align-items:flex-start;
+    }
+
+    .head h1{
+        font-size:19px;
+    }
+
+    .subject-btn{
+        padding:8px 9px;
+    }
+
     .actions{
         grid-template-columns:1fr;
+    }
+
+    .question-card{
+        padding:14px;
     }
 
 }
@@ -326,7 +449,70 @@ body{
 
 <div class="head">
 
-    <h1>🔖 Saved Questions</h1>
+    <div class="head-top">
+
+        <h1>🔖 Saved Questions</h1>
+
+        <div class="subject-wrap">
+
+            <button
+                id="subjectButton"
+                class="subject-btn"
+                type="button"
+            >
+                Subject ▾
+            </button>
+
+            <div
+                id="subjectMenu"
+                class="subject-menu"
+            >
+
+                <button
+                    class="subject-option active"
+                    data-subject="all"
+                    type="button"
+                >
+                    All Subjects
+                </button>
+
+                <button
+                    class="subject-option"
+                    data-subject="Quantitative Aptitude"
+                    type="button"
+                >
+                    Quantitative Aptitude
+                </button>
+
+                <button
+                    class="subject-option"
+                    data-subject="General Awareness"
+                    type="button"
+                >
+                    General Awareness
+                </button>
+
+                <button
+                    class="subject-option"
+                    data-subject="Reasoning"
+                    type="button"
+                >
+                    Reasoning
+                </button>
+
+                <button
+                    class="subject-option"
+                    data-subject="English"
+                    type="button"
+                >
+                    English
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
 
     <p id="count" class="sub">
         Loading saved questions...
@@ -346,7 +532,6 @@ body{
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 
 <script>
 
@@ -377,6 +562,21 @@ document.getElementById("app");
 const count =
 document.getElementById("count");
 
+const subjectButton =
+document.getElementById("subjectButton");
+
+const subjectMenu =
+document.getElementById("subjectMenu");
+
+
+/* ==========================================
+   CURRENT FILTER
+========================================== */
+
+let selectedSubject = "all";
+
+let allQuestionData = [];
+
 
 /* ==========================================
    ESCAPE HTML
@@ -385,16 +585,12 @@ document.getElementById("count");
 function esc(value){
 
     return String(value ?? "")
-
         .replace(/&/g,"&amp;")
-
         .replace(/</g,"&lt;")
-
         .replace(/>/g,"&gt;")
-
         .replace(/"/g,"&quot;")
-
         .replace(/'/g,"&#039;");
+
 }
 
 
@@ -420,12 +616,59 @@ function isCorrectOption(option){
 
 
 /* ==========================================
+   SUBJECT NAME
+========================================== */
+
+function normalizeSubjectName(name){
+
+    const value =
+        String(name || "")
+        .trim()
+        .toLowerCase();
+
+
+    if(
+        value.includes("quant")
+    ){
+        return "Quantitative Aptitude";
+    }
+
+
+    if(
+        value.includes("general") &&
+        value.includes("aware")
+    ){
+        return "General Awareness";
+    }
+
+
+    if(
+        value.includes("reason")
+    ){
+        return "Reasoning";
+    }
+
+
+    if(
+        value.includes("english")
+    ){
+        return "English";
+    }
+
+
+    return name || "Other";
+
+}
+
+
+/* ==========================================
    GET SAVED QUESTIONS
 ========================================== */
 
 function getSavedEntries(){
 
     const entries = [];
+
 
     for(
         let i = 0;
@@ -434,7 +677,8 @@ function getSavedEntries(){
     ){
 
         const key =
-        localStorage.key(i);
+            localStorage.key(i);
+
 
         if(
             !key ||
@@ -442,24 +686,22 @@ function getSavedEntries(){
                 "ssc-edge-saved-questions-"
             )
         ){
-
             continue;
-
         }
 
 
         const testId =
-        key.substring(
-            "ssc-edge-saved-questions-".length
-        );
+            key.substring(
+                "ssc-edge-saved-questions-".length
+            );
 
 
         try{
 
             const ids =
-            JSON.parse(
-                localStorage.getItem(key)
-            );
+                JSON.parse(
+                    localStorage.getItem(key)
+                );
 
 
             if(Array.isArray(ids)){
@@ -468,9 +710,11 @@ function getSavedEntries(){
 
                     entries.push({
 
-                        testId:String(testId),
+                        testId:
+                            String(testId),
 
-                        questionId:String(id)
+                        questionId:
+                            String(id)
 
                     });
 
@@ -505,29 +749,29 @@ function removeSaved(
 ){
 
     const key =
-    "ssc-edge-saved-questions-" +
-    String(testId);
+        "ssc-edge-saved-questions-" +
+        String(testId);
 
 
     try{
 
         const saved =
-        JSON.parse(
-            localStorage.getItem(key) || "[]"
-        );
+            JSON.parse(
+                localStorage.getItem(key) || "[]"
+            );
 
 
         const ids =
-        Array.isArray(saved)
-        ? saved.map(x=>String(x))
-        : [];
+            Array.isArray(saved)
+            ? saved.map(x=>String(x))
+            : [];
 
 
         const next =
-        ids.filter(
-            id =>
-            id !== String(questionId)
-        );
+            ids.filter(
+                id =>
+                    id !== String(questionId)
+            );
 
 
         if(next.length){
@@ -570,11 +814,11 @@ async function loadTestData(
     /* TEST */
 
     const testResult =
-    await db
-        .from("mock_tests")
-        .select("id,title")
-        .eq("id",testId)
-        .maybeSingle();
+        await db
+            .from("mock_tests")
+            .select("id,title")
+            .eq("id",testId)
+            .maybeSingle();
 
 
     if(testResult.error){
@@ -587,19 +831,19 @@ async function loadTestData(
     /* TEST QUESTIONS */
 
     const assignmentResult =
-    await db
-        .from("mock_test_questions")
-        .select(
-            "question_id,question_order,section_id"
-        )
-        .eq(
-            "mock_test_id",
-            testId
-        )
-        .order(
-            "question_order",
-            {ascending:true}
-        );
+        await db
+            .from("mock_test_questions")
+            .select(
+                "question_id,question_order,section_id"
+            )
+            .eq(
+                "mock_test_id",
+                testId
+            )
+            .order(
+                "question_order",
+                {ascending:true}
+            );
 
 
     if(assignmentResult.error){
@@ -610,13 +854,13 @@ async function loadTestData(
 
 
     const assignments =
-    (assignmentResult.data || [])
-        .filter(
-            a =>
-            questionIds.includes(
-                String(a.question_id)
-            )
-        );
+        (assignmentResult.data || [])
+            .filter(
+                a =>
+                    questionIds.includes(
+                        String(a.question_id)
+                    )
+            );
 
 
     if(!assignments.length){
@@ -624,8 +868,8 @@ async function loadTestData(
         return {
 
             title:
-            testResult.data?.title ||
-            "SSC EDGE Test",
+                testResult.data?.title ||
+                "SSC EDGE Test",
 
             questions:[]
 
@@ -635,20 +879,20 @@ async function loadTestData(
 
 
     const ids =
-    assignments.map(
-        a => a.question_id
-    );
+        assignments.map(
+            a => a.question_id
+        );
 
 
     /* QUESTIONS */
 
     const questionResult =
-    await db
-        .from("questions")
-        .select(
-            "id,question_text,explanation,subject_id,chapter_id"
-        )
-        .in("id",ids);
+        await db
+            .from("questions")
+            .select(
+                "*"
+            )
+            .in("id",ids);
 
 
     if(questionResult.error){
@@ -658,25 +902,19 @@ async function loadTestData(
     }
 
 
-    /* ==========================================
-       OPTIONS
-       
-       IMPORTANT:
-       is_correct is required to show
-       the correct answer.
-    ========================================== */
+    /* OPTIONS */
 
     const optionResult =
-    await db
-        .from("question_options")
-        .select(
-            "id,question_id,option_label,option_text,is_correct"
-        )
-        .in("question_id",ids)
-        .order(
-            "id",
-            {ascending:true}
-        );
+        await db
+            .from("question_options")
+            .select(
+                "id,question_id,option_label,option_text,is_correct"
+            )
+            .in("question_id",ids)
+            .order(
+                "id",
+                {ascending:true}
+            );
 
 
     if(optionResult.error){
@@ -693,15 +931,13 @@ async function loadTestData(
         ...new Set(
 
             assignments
-
                 .map(
                     a => a.section_id
                 )
-
                 .filter(
                     x =>
-                    x !== null &&
-                    x !== undefined
+                        x !== null &&
+                        x !== undefined
                 )
 
         )
@@ -714,19 +950,19 @@ async function loadTestData(
     if(sectionIds.length){
 
         const sectionResult =
-        await db
-            .from("mock_test_sections")
-            .select(
-                "id,subject_id,section_order"
-            )
-            .in(
-                "id",
-                sectionIds
-            )
-            .order(
-                "section_order",
-                {ascending:true}
-            );
+            await db
+                .from("mock_test_sections")
+                .select(
+                    "id,subject_id,section_order"
+                )
+                .in(
+                    "id",
+                    sectionIds
+                )
+                .order(
+                    "section_order",
+                    {ascending:true}
+                );
 
 
         if(sectionResult.error){
@@ -737,7 +973,7 @@ async function loadTestData(
 
 
         sections =
-        sectionResult.data || [];
+            sectionResult.data || [];
 
     }
 
@@ -753,21 +989,20 @@ async function loadTestData(
                 ...(questionResult.data || [])
                     .map(
                         q =>
-                        q.subject_id
+                            q.subject_id
                     ),
 
                 ...sections
                     .map(
                         s =>
-                        s.subject_id
+                            s.subject_id
                     )
 
             ]
-
             .filter(
                 x =>
-                x !== null &&
-                x !== undefined
+                    x !== null &&
+                    x !== undefined
             )
 
         )
@@ -780,53 +1015,51 @@ async function loadTestData(
     if(subjectIds.length){
 
         const subjectResult =
-        await db
-            .from("subjects")
-            .select("id,name")
-            .in(
-                "id",
-                subjectIds
-            );
+            await db
+                .from("subjects")
+                .select("id,name")
+                .in(
+                    "id",
+                    subjectIds
+                );
 
 
         if(!subjectResult.error){
 
             subjects =
-            subjectResult.data || [];
+                subjectResult.data || [];
 
         }
 
     }
 
 
-    /* ==========================================
-       MAP DATA
-    ========================================== */
+    /* MAP DATA */
 
     const questionMap =
-    new Map(
+        new Map(
 
-        (questionResult.data || [])
-            .map(
-                q =>
-                [
-                    String(q.id),
-                    q
-                ]
-            )
+            (questionResult.data || [])
+                .map(
+                    q =>
+                    [
+                        String(q.id),
+                        q
+                    ]
+                )
 
-    );
+        );
 
 
     const optionsMap =
-    new Map();
+        new Map();
 
 
     (optionResult.data || [])
         .forEach(option=>{
 
             const key =
-            String(option.question_id);
+                String(option.question_id);
 
 
             if(
@@ -849,114 +1082,490 @@ async function loadTestData(
 
 
     const sectionMap =
-    new Map(
+        new Map(
 
-        sections.map(
-            s =>
-            [
-                String(s.id),
-                s
-            ]
-        )
+            sections.map(
+                s =>
+                [
+                    String(s.id),
+                    s
+                ]
+            )
 
-    );
+        );
 
 
     const subjectMap =
-    new Map(
+        new Map(
 
-        subjects.map(
-            s =>
-            [
-                String(s.id),
-                s.name
-            ]
-        )
+            subjects.map(
+                s =>
+                [
+                    String(s.id),
+                    s.name
+                ]
+            )
 
-    );
+        );
 
 
-    /* ==========================================
-       BUILD QUESTIONS
-    ========================================== */
+    /* BUILD QUESTIONS */
 
     const questions =
-    assignments
+        assignments
 
-        .map(a=>{
+            .map(a=>{
 
-            const q =
-            questionMap.get(
-                String(a.question_id)
-            );
-
-
-            if(!q){
-
-                return null;
-
-            }
+                const q =
+                    questionMap.get(
+                        String(a.question_id)
+                    );
 
 
-            const section =
-            sectionMap.get(
-                String(a.section_id)
-            );
+                if(!q){
+
+                    return null;
+
+                }
 
 
-            const subjectName =
-
-                subjectMap.get(
-                    String(q.subject_id)
-                )
-
-                ||
-
-                subjectMap.get(
-                    String(section?.subject_id)
-                )
-
-                ||
-
-                "";
+                const section =
+                    sectionMap.get(
+                        String(a.section_id)
+                    );
 
 
-            return {
+                const rawSubject =
 
-                ...q,
+                    subjectMap.get(
+                        String(q.subject_id)
+                    )
 
-                question_order:
-                a.question_order,
+                    ||
 
-                subjectName:
+                    subjectMap.get(
+                        String(section?.subject_id)
+                    )
 
-                subjectName,
+                    ||
 
-                options:
+                    "";
 
-                optionsMap.get(
-                    String(q.id)
-                ) || []
 
-            };
+                const subjectName =
+                    normalizeSubjectName(
+                        rawSubject
+                    );
 
-        })
 
-        .filter(Boolean);
+                return {
+
+                    ...q,
+
+                    question_order:
+                        a.question_order,
+
+                    subjectName:
+                        subjectName,
+
+                    options:
+                        optionsMap.get(
+                            String(q.id)
+                        ) || []
+
+                };
+
+            })
+
+            .filter(Boolean);
 
 
     return {
 
         title:
-
-        testResult.data?.title ||
-        "SSC EDGE Test",
+            testResult.data?.title ||
+            "SSC EDGE Test",
 
         questions:
-
-        questions
+            questions
 
     };
+
+}
+
+
+/* ==========================================
+   RENDER QUESTIONS
+========================================== */
+
+function renderQuestions(){
+
+    const filtered =
+
+        selectedSubject === "all"
+
+        ?
+
+        allQuestionData
+
+        :
+
+        allQuestionData.filter(
+            item =>
+                item.subjectName ===
+                selectedSubject
+        );
+
+
+    if(!filtered.length){
+
+        app.innerHTML = `
+
+            <div class="status">
+
+                <div class="empty-icon">
+                    🔖
+                </div>
+
+                <div>
+                    No saved questions in
+                    ${esc(selectedSubject)}
+                </div>
+
+            </div>
+
+        `;
+
+        count.textContent =
+            "🔖 0 Saved Questions";
+
+        return;
+
+    }
+
+
+    /* GROUP BY SUBJECT */
+
+    const groups =
+        new Map();
+
+
+    filtered.forEach(item=>{
+
+        const subject =
+            item.subjectName ||
+            "Other";
+
+
+        if(!groups.has(subject)){
+
+            groups.set(
+                subject,
+                []
+            );
+
+        }
+
+
+        groups
+            .get(subject)
+            .push(item);
+
+    });
+
+
+    let html = "";
+
+    let total = 0;
+
+
+    groups.forEach(
+        (items,subject)=>{
+
+            total += items.length;
+
+
+            html += `
+
+                <section class="subject-group">
+
+                    <div class="subject-heading">
+
+                        <h2>
+                            ${esc(subject)}
+                        </h2>
+
+                        <span class="subject-count">
+                            ${items.length}
+                            ${
+                                items.length === 1
+                                ? "Question"
+                                : "Questions"
+                            }
+                        </span>
+
+                    </div>
+
+
+                    <div class="slide-hint">
+                        Swipe left/right to view questions
+                    </div>
+
+
+                    <div class="question-slider">
+
+            `;
+
+
+            items.forEach(
+                (item,index)=>{
+
+                    const q =
+                        item.question;
+
+                    const correct =
+                        q.options.find(
+                            isCorrectOption
+                        );
+
+
+                    /* OPTIONS */
+
+                    const opts =
+                        q.options.length
+
+                        ?
+
+                        `
+
+                        <div class="options">
+
+                            ${
+                                q.options
+                                    .map(
+                                        (o,i)=>`
+
+                                            <div
+                                                class="option ${
+                                                    isCorrectOption(o)
+                                                    ? "correct"
+                                                    : ""
+                                                }"
+                                            >
+
+                                                <b>
+                                                    ${
+                                                        esc(
+                                                            o.option_label ||
+                                                            String.fromCharCode(
+                                                                65+i
+                                                            )
+                                                        )
+                                                    }
+                                                </b>
+
+                                                ${
+                                                    o.option_text
+                                                    ?
+                                                    " " +
+                                                    esc(
+                                                        o.option_text
+                                                    )
+                                                    :
+                                                    ""
+                                                }
+
+                                                ${
+                                                    isCorrectOption(o)
+                                                    ?
+                                                    " ✓"
+                                                    :
+                                                    ""
+                                                }
+
+                                            </div>
+
+                                        `
+                                    )
+                                    .join("")
+                            }
+
+                        </div>
+
+                        `
+
+                        :
+
+                        "";
+
+
+                    /* ANSWER */
+
+                    const answerText =
+
+                        correct
+
+                        ?
+
+                        (
+                            (correct.option_label || "") +
+
+                            (
+                                correct.option_text
+                                ?
+                                " " +
+                                correct.option_text
+                                :
+                                ""
+                            )
+                        )
+
+                        :
+
+                        "Correct answer is not available.";
+
+
+                    /* EXPLANATION */
+
+                    const explanation =
+
+                        q.explanation
+
+                        ?
+
+                        esc(q.explanation)
+
+                        :
+
+                        "No explanation has been added for this question yet.";
+
+
+                    html += `
+
+                        <article
+                            class="question-card"
+                        >
+
+                            <div class="q-top">
+
+                                <span class="q-number">
+
+                                    Question
+                                    ${esc(q.question_order)}
+
+                                </span>
+
+
+                                <span
+                                    class="bookmark"
+                                    title="Saved Question"
+                                >
+                                    🔖
+                                </span>
+
+                            </div>
+
+
+                            <div class="question">
+
+                                ${esc(q.question_text)}
+
+                            </div>
+
+
+                            ${opts}
+
+
+                            <div class="answer-box">
+
+                                <strong>
+                                    Correct Answer:
+                                </strong>
+
+                                ${esc(answerText)}
+
+                            </div>
+
+
+                            <div class="explanation-box">
+
+                                <span class="explanation-title">
+
+                                    📖 Explanation
+
+                                </span>
+
+                                ${explanation}
+
+                            </div>
+
+
+                            <div class="actions">
+
+                                <button
+                                    class="btn"
+                                    type="button"
+                                    onclick="
+                                        removeSaved(
+                                            '${esc(item.testId)}',
+                                            '${esc(q.id)}'
+                                        )
+                                    "
+                                >
+
+                                    Remove
+
+                                </button>
+
+
+                                <a
+                                    class="btn primary"
+                                    href="solutions.html?test_id=${encodeURIComponent(item.testId)}"
+                                >
+
+                                    Open Test
+
+                                </a>
+
+                            </div>
+
+                        </article>
+
+                    `;
+
+                }
+
+            );
+
+
+            html += `
+
+                    </div>
+
+                </section>
+
+            `;
+
+        }
+
+    );
+
+
+    app.innerHTML =
+        html;
+
+
+    count.textContent =
+
+        "🔖 " +
+
+        total +
+
+        (
+            total === 1
+            ? " Saved Question"
+            : " Saved Questions"
+        );
 
 }
 
@@ -975,7 +1584,7 @@ async function loadSavedQuestions(){
 
 
     const entries =
-    getSavedEntries();
+        getSavedEntries();
 
 
     /* NO SAVED QUESTIONS */
@@ -983,7 +1592,7 @@ async function loadSavedQuestions(){
     if(!entries.length){
 
         count.textContent =
-        "🔖 0 Saved Questions";
+            "🔖 0 Saved Questions";
 
 
         app.innerHTML = `
@@ -1015,7 +1624,7 @@ async function loadSavedQuestions(){
     /* GROUP BY TEST */
 
     const grouped =
-    new Map();
+        new Map();
 
 
     entries.forEach(entry=>{
@@ -1043,14 +1652,10 @@ async function loadSavedQuestions(){
     });
 
 
-    let html = "";
-
-    let displayed = 0;
+    allQuestionData = [];
 
 
-    /* ==========================================
-       EACH TEST
-    ========================================== */
+    /* LOAD EACH TEST */
 
     for(
         const [
@@ -1063,289 +1668,24 @@ async function loadSavedQuestions(){
         try{
 
             const data =
-            await loadTestData(
-                testId,
-                questionIds
-            );
+                await loadTestData(
+                    testId,
+                    questionIds
+                );
 
 
-            if(
-                !data.questions.length
-            ){
+            data.questions.forEach(q=>{
 
-                continue;
+                allQuestionData.push({
 
-            }
+                    testId:
+                        String(testId),
 
-
-            html += `
-
-                <section class="test-group">
-
-                    <h2 class="test-title">
-                        ${esc(data.title)}
-                    </h2>
-
-            `;
-
-
-            /* ==================================
-               EACH QUESTION
-            ================================== */
-
-            data.questions
-                .forEach(q=>{
-
-                    displayed++;
-
-
-                    /* FIND CORRECT ANSWER */
-
-                    const correct =
-                    q.options.find(
-                        isCorrectOption
-                    );
-
-
-                    /* OPTIONS */
-
-                    const opts =
-                    q.options.length
-
-                    ?
-
-                    `
-
-                    <div class="options">
-
-                        ${
-                            q.options
-                            .map(
-                                (o,i)=>`
-
-                                <div
-                                    class="option ${
-                                        isCorrectOption(o)
-                                        ? "correct"
-                                        : ""
-                                    }"
-                                >
-
-                                    <b>
-                                        ${
-                                            esc(
-                                                o.option_label ||
-                                                String.fromCharCode(
-                                                    65+i
-                                                )
-                                            )
-                                        }
-                                    </b>
-
-                                    ${
-                                        o.option_text
-                                        ?
-                                        " — " +
-                                        esc(
-                                            o.option_text
-                                        )
-                                        :
-                                        ""
-                                    }
-
-                                    ${
-                                        isCorrectOption(o)
-                                        ?
-                                        " ✓"
-                                        :
-                                        ""
-                                    }
-
-                                </div>
-
-                            `
-                            )
-                            .join("")
-                        }
-
-                    </div>
-
-                    `
-
-                    :
-
-                    "";
-
-
-                    /* CORRECT ANSWER TEXT */
-
-                    const answerText =
-
-                    correct
-
-                    ?
-
-                    (
-                        (correct.option_label || "") +
-
-                        (
-                            correct.option_text
-                            ?
-                            " — " +
-                            correct.option_text
-                            :
-                            ""
-                        )
-                    )
-
-                    :
-
-                    "Correct answer is not available.";
-
-
-                    /* EXPLANATION */
-
-                    const explanation =
-
-                    q.explanation
-
-                    ?
-
-                    esc(q.explanation)
-
-                    :
-
-                    "No explanation has been added for this question yet.";
-
-
-                    /* ==================================
-                       QUESTION CARD
-                    ================================== */
-
-                    html += `
-
-                    <article class="question-card">
-
-                        <div class="q-top">
-
-                            <span class="q-number">
-
-                                Question
-                                ${esc(q.question_order)}
-
-                            </span>
-
-
-                            <span
-                                class="bookmark"
-                                title="Saved Question"
-                            >
-                                🔖
-                            </span>
-
-                        </div>
-
-
-                        ${
-                            q.subjectName
-
-                            ?
-
-                            `
-                            <span class="subject">
-
-                                ${esc(q.subjectName)}
-
-                            </span>
-                            `
-
-                            :
-
-                            ""
-                        }
-
-
-                        <div class="question">
-
-                            ${esc(q.question_text)}
-
-                        </div>
-
-
-                        ${opts}
-
-
-                        <!-- CORRECT ANSWER -->
-
-                        <div class="answer-box">
-
-                            <strong>
-                                Correct Answer:
-                            </strong>
-
-                            ${esc(answerText)}
-
-                        </div>
-
-
-                        <!-- EXPLANATION -->
-
-                        <div class="explanation-box">
-
-                            <span class="explanation-title">
-
-                                📖 Explanation
-
-                            </span>
-
-                            ${explanation}
-
-                        </div>
-
-
-                        <!-- ACTIONS -->
-
-                        <div class="actions">
-
-                            <button
-                                class="btn"
-                                type="button"
-                                onclick="
-                                    removeSaved(
-                                        '${esc(testId)}',
-                                        '${esc(q.id)}'
-                                    )
-                                "
-                            >
-
-                                Remove
-
-                            </button>
-
-
-                            <a
-                                class="btn primary"
-                                href="test.html?id=${encodeURIComponent(testId)}"
-                            >
-
-                                Open Test
-
-                            </a>
-
-                        </div>
-
-
-                    </article>
-
-                    `;
+                    question:q
 
                 });
 
-
-            html += `
-                </section>
-            `;
-
+            });
 
         }catch(error){
 
@@ -1359,14 +1699,10 @@ async function loadSavedQuestions(){
     }
 
 
-    /* ==========================================
-       FINAL OUTPUT
-    ========================================== */
-
-    if(!html){
+    if(!allQuestionData.length){
 
         count.textContent =
-        "🔖 0 Saved Questions";
+            "🔖 0 Saved Questions";
 
 
         app.innerHTML = `
@@ -1391,29 +1727,122 @@ async function loadSavedQuestions(){
     }
 
 
-    app.innerHTML =
-    html;
+    /* RESET FILTER */
+
+    selectedSubject = "all";
+
+    document
+        .querySelectorAll(".subject-option")
+        .forEach(btn=>{
+
+            btn.classList.toggle(
+                "active",
+                btn.dataset.subject === "all"
+            );
+
+        });
 
 
-    count.textContent =
+    subjectButton.textContent =
+        "Subject ▾";
 
-        "🔖 " +
 
-        displayed +
-
-        (
-            displayed === 1
-
-            ?
-
-            " Saved Question"
-
-            :
-
-            " Saved Questions"
-        );
+    renderQuestions();
 
 }
+
+
+/* ==========================================
+   SUBJECT DROPDOWN
+========================================== */
+
+subjectButton.addEventListener(
+    "click",
+    event=>{
+
+        event.stopPropagation();
+
+        subjectMenu.classList.toggle(
+            "show"
+        );
+
+    }
+);
+
+
+document
+    .querySelectorAll(".subject-option")
+    .forEach(button=>{
+
+        button.addEventListener(
+            "click",
+            event=>{
+
+                event.stopPropagation();
+
+
+                selectedSubject =
+                    button.dataset.subject;
+
+
+                document
+                    .querySelectorAll(
+                        ".subject-option"
+                    )
+                    .forEach(btn=>{
+
+                        btn.classList.toggle(
+                            "active",
+                            btn === button
+                        );
+
+                    });
+
+
+                subjectButton.textContent =
+
+                    selectedSubject === "all"
+
+                    ?
+
+                    "Subject ▾"
+
+                    :
+
+                    selectedSubject + " ▾";
+
+
+                subjectMenu.classList.remove(
+                    "show"
+                );
+
+
+                renderQuestions();
+
+            }
+        );
+
+    });
+
+
+document.addEventListener(
+    "click",
+    event=>{
+
+        if(
+            !event.target.closest(
+                ".subject-wrap"
+            )
+        ){
+
+            subjectMenu.classList.remove(
+                "show"
+            );
+
+        }
+
+    }
+);
 
 
 /* ==========================================
@@ -1425,4 +1854,4 @@ loadSavedQuestions();
 </script>
 
 </body>
-</html>
+    </html>
