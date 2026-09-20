@@ -4672,9 +4672,9 @@ async function saveTestAttempt(resultData){
 
   /*
     IMPORTANT:
-    This matches the ACTUAL SSC EDGE test_attempts table.
+    This matches the VERIFIED live SSC EDGE schema.
 
-    Existing columns:
+    test_attempts columns:
     id
     user_id
     mock_test_id
@@ -4684,12 +4684,12 @@ async function saveTestAttempt(resultData){
     correct_answers
     wrong_answers
     unanswered
-    total_questions
     rank
     percentile
     sectional_data
 
-    Do NOT use test_id / correct / wrong / skipped here.
+    total_questions is NOT a column in test_attempts.
+    It belongs to mock_tests and is therefore not inserted here.
   */
 
   const completedAttempts =
@@ -4732,9 +4732,6 @@ async function saveTestAttempt(resultData){
     unanswered:
       Number(resultData.skipped || 0),
 
-    total_questions:
-      Number(resultData.totalQuestions || 0),
-
     sectional_data:
       sections.map((section,index) => ({
         section_index:index,
@@ -4768,14 +4765,18 @@ async function saveTestAttempt(resultData){
   /*
     Insert the main attempt using ONLY real columns.
   */
+  /*
+    Insert WITHOUT .select().
+    The insert itself is the important operation.
+    Asking Supabase to return the inserted row can fail under
+    a restrictive SELECT/RLS policy even when the INSERT succeeds.
+    We fetch the attempt ID separately below for user_answers.
+  */
   const {
-    data:insertedRows,
     error:insertError
   } = await supabaseClient
     .from("test_attempts")
-    .insert(attemptPayload)
-    .select("id")
-    .maybeSingle();
+    .insert(attemptPayload);
 
   if(insertError){
 
@@ -4791,12 +4792,11 @@ async function saveTestAttempt(resultData){
 
   }
 
-  let attemptId =
-    insertedRows?.id || null;
+  let attemptId = null;
 
   /*
-    If RLS prevents the inserted row from being
-    returned, find the just-created completed attempt.
+    Find the just-created completed attempt.
+    This is also used when SELECT-on-INSERT is unavailable.
   */
   if(!attemptId){
 
@@ -4817,7 +4817,7 @@ async function saveTestAttempt(resultData){
         latestRows?.[0]?.id || null;
     }else{
       console.warn(
-        "Could not read saved attempt ID:",
+        "Could not read saved attempt ID. The main attempt was already inserted:",
         latestError
       );
     }
@@ -4842,14 +4842,9 @@ async function saveTestAttempt(resultData){
         selected_option_id:
           row.selected_option_id,
 
-        selected_option_label:
-          row.selected_option_label,
-
-        status:
-          row.status,
-
-        marks_awarded:
-          row.marks_awarded,
+        is_correct:
+          row.status === "correct" ||
+          row.status === "bonus",
 
         time_spent_seconds:
           Math.max(
