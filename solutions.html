@@ -7,87 +7,1480 @@
 <title>SSC EDGE - Solutions</title>
 <link rel="stylesheet" href="css/style.css">
 <script>document.documentElement.dataset.theme=localStorage.getItem("ssc-edge-theme")||"dark";</script>
+
 <style>
-*{box-sizing:border-box}body{margin:0;padding:0 0 30px}
-.test-header{position:sticky;top:0;z-index:50;background:var(--header);border-bottom:1px solid var(--border);padding:11px 14px 10px;backdrop-filter:blur(14px)}
-.test-header-top{display:flex;align-items:center;justify-content:space-between;gap:10px}.brand{font-size:20px;font-weight:900;letter-spacing:-.5px;white-space:nowrap}.brand-ssc{color:var(--text)}.brand-edge{color:var(--purple)}
-.header-actions{display:flex;align-items:center;gap:7px}.pause-btn,.attempt-select{border:1px solid var(--border);background:var(--card2);color:var(--text);padding:8px 11px;border-radius:10px;font-size:12px;font-weight:900;cursor:pointer}.attempt-select{border-color:var(--purple);color:var(--purple2);max-width:120px}
-.test-info{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px}.test-info-left{min-width:0}.test-name{color:var(--text);font-size:15px;font-weight:900;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.test-number{display:block;margin-top:3px;color:var(--muted);font-size:11px;font-weight:700}.submit-section{flex-shrink:0;border:0;background:var(--purple);color:white;padding:9px 11px;border-radius:10px;font-size:11px;font-weight:900}
-.section-bar{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;margin-top:11px;padding-bottom:1px}.section-bar::-webkit-scrollbar{display:none}.section-btn{flex:0 0 auto;border:1px solid var(--border);background:#fff;color:#24152f;padding:8px 12px;border-radius:9px;font-size:11px;font-weight:900;cursor:pointer}.section-btn.current{background:var(--purple);border-color:var(--purple);color:#fff}
-.test-container{max-width:850px;margin:auto;padding:15px 14px 30px}.question-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.question-count{color:var(--text);font-size:13px;font-weight:900}.question-tools{display:flex;align-items:center;gap:7px}.question-section{color:var(--purple2);font-size:11px;font-weight:900}
-.language-btn,.saved-top-btn{border:1px solid var(--border);background:var(--card2);color:var(--purple2);padding:7px 9px;border-radius:9px;font-size:11px;font-weight:900;cursor:pointer}.language-btn.active{background:var(--purple);color:#fff;border-color:var(--purple)}.saved-top-btn{font-size:15px;padding:5px 8px;line-height:1}.question-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:17px}.question-text{color:var(--text);font-size:16px;line-height:1.55;font-weight:700;white-space:pre-wrap}.options{margin-top:18px;display:flex;flex-direction:column;gap:9px}.option{display:flex;align-items:flex-start;gap:10px;padding:12px;border:1px solid var(--border);border-radius:11px;background:var(--bg);color:var(--text)}.option-label{min-width:22px;color:var(--purple2);font-size:13px;font-weight:900}.option-text{color:var(--text);font-size:14px;line-height:1.45}.navigation{margin-top:13px}.navigation-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px}.grid-button-row{display:flex;justify-content:flex-end}.nav-btn{min-height:44px;border-radius:10px;padding:9px;font-size:11px;font-weight:900;cursor:pointer}.previous-btn{background:var(--card2);color:var(--text);border:1px solid var(--border)}.save-question-btn{background:var(--card2);color:var(--purple2);border:1px solid var(--border)}.save-question-btn.saved{background:rgba(124,58,237,.16);border-color:var(--purple)}.save-next-btn{background:var(--purple);color:#fff;border:0}.grid-btn{width:46px;height:38px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:#fff;color:#24152f;border:1px solid var(--border);font-size:20px;font-weight:900;cursor:pointer}
-.grid-overlay{position:fixed;inset:0;z-index:200;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.68)}.grid-overlay.show{display:flex}.grid-popup{width:100%;max-width:650px;max-height:88vh;overflow-y:auto;background:var(--bg);border:1px solid var(--border);border-bottom:0;border-radius:20px 20px 0 0;padding:17px}.grid-header{display:flex;align-items:center;gap:10px;padding-bottom:13px;border-bottom:1px solid var(--border)}.grid-subject-area{flex:1;min-width:0}.grid-subject{color:var(--text);font-size:17px;font-weight:900;margin:0}.grid-subtitle{display:block;margin-top:3px;color:var(--muted);font-size:10px;font-weight:700}.grid-close{width:34px;height:34px;border:0;border-radius:9px;background:var(--card2);color:var(--text);font-size:22px;line-height:1;cursor:pointer}.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;padding:16px 0}.grid-question{position:relative;min-height:44px;border:1px solid var(--border);border-radius:9px;background:#fff;color:#24152f;font-size:12px;font-weight:900;cursor:pointer}.grid-question.current{outline:3px solid rgba(168,85,247,.4)}.grid-question.saved::after{content:"🔖";position:absolute;top:-7px;right:-5px;font-size:12px}.grid-legend{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding-top:13px;border-top:1px solid var(--border)}
-.solution-page .solution-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 13px}.solution-page .solution-meta-box{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:9px 7px;text-align:center}.solution-page .solution-meta-label{color:var(--muted);font-size:9px;font-weight:800;margin-bottom:4px}.solution-page .solution-meta-value{color:var(--text);font-size:12px;font-weight:900}.solution-page .solution-meta-value.good{color:#25c27a}.solution-page .solution-option{cursor:default!important;display:flex;align-items:flex-start;gap:8px}.solution-page .solution-option.correct-option{border-color:#25c27a;background:rgba(37,194,122,.1)}.solution-page .solution-option.wrong-option{border-color:#ef4444;background:rgba(239,68,68,.1)}.solution-page .solution-option.your-option{outline:2px solid rgba(124,58,237,.35)}.solution-page .your-attempt{margin-left:6px;font-size:10px;font-weight:900;color:var(--purple2)}.solution-page .solution-answer{margin-top:11px;padding:10px 11px;border:1px solid var(--border);border-radius:10px;background:var(--card2);color:var(--text);font-size:12px;font-weight:800;line-height:1.5}.solution-page .solution-explanation{margin-top:10px;padding:11px;border-left:3px solid var(--purple);border-radius:0 10px 10px 0;background:var(--card2);color:var(--text);font-size:12px;line-height:1.65}.solution-page .solution-explanation-title{color:var(--purple2);font-weight:900;margin-bottom:4px}.solution-page .saved-icon{font-size:15px;line-height:1;vertical-align:-1px}.hidden{display:none!important}.loading{text-align:center;padding:55px 10px;color:var(--muted);font-size:13px}.error{background:#512020;color:#ffaaaa;padding:15px;border-radius:12px;margin-top:20px;font-size:13px}
-@media(max-width:500px){.brand{font-size:19px}.test-name{font-size:14px}.submit-section{padding:8px 9px;font-size:10px}.question-text{font-size:15px}.attempt-select{max-width:105px;padding:8px 7px;font-size:11px}.question-tools{gap:4px}.language-btn,.saved-top-btn{padding:7px 7px;font-size:10px}.question-grid{grid-template-columns:repeat(5,1fr)}}
-@media(max-width:350px){.attempt-select{max-width:90px}.question-tools{gap:3px}.language-btn{padding:7px 5px}.saved-top-btn{padding:5px 6px}}
+*{box-sizing:border-box}
+body{margin:0;padding:0 0 30px}
+
+.test-header{
+position:sticky;top:0;z-index:50;background:var(--header);
+border-bottom:1px solid var(--border);padding:11px 14px 10px;
+backdrop-filter:blur(14px)
+}
+
+.test-header-top{
+display:flex;align-items:center;justify-content:space-between;gap:10px
+}
+
+.brand{
+font-size:20px;font-weight:900;letter-spacing:-.5px;white-space:nowrap
+}
+
+.brand-ssc{color:var(--text)}
+.brand-edge{color:#b98cff}
+
+.header-actions{
+display:flex;align-items:center;gap:7px
+}
+
+.pause-btn,.attempt-select{
+border:1px solid var(--border);background:var(--card2);color:var(--text);
+padding:8px 11px;border-radius:10px;font-size:12px;font-weight:900;cursor:pointer
+}
+
+.attempt-select{
+border-color:var(--purple);color:var(--purple2);max-width:120px
+}
+
+.test-info{
+display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px
+}
+
+.test-info-left{min-width:0}
+
+.test-name{
+color:var(--text);font-size:15px;font-weight:900;line-height:1.3;
+white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+}
+
+.test-number{
+display:block;margin-top:3px;color:var(--muted);font-size:11px;font-weight:700
+}
+
+.submit-section{
+flex-shrink:0;border:0;background:var(--purple);color:white;
+padding:9px 11px;border-radius:10px;font-size:11px;font-weight:900
+}
+
+.section-bar{
+display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;
+margin-top:11px;padding-bottom:1px
+}
+
+.section-bar::-webkit-scrollbar{display:none}
+
+.section-btn{
+flex:0 0 auto;border:1px solid var(--border);background:#fff;color:#24152f;
+padding:8px 12px;border-radius:9px;font-size:11px;font-weight:900;cursor:pointer
+}
+
+.section-btn.current{
+background:var(--purple);border-color:var(--purple);color:#fff
+}
+
+.test-container{
+max-width:850px;margin:auto;padding:15px 14px 30px
+}
+
+.question-top{
+display:flex;align-items:center;justify-content:space-between;margin-bottom:10px
+}
+
+.question-count{
+color:var(--text);font-size:13px;font-weight:900
+}
+
+.question-tools{
+display:flex;align-items:center;gap:7px
+}
+
+.question-section{
+color:var(--purple2);font-size:11px;font-weight:900
+}
+
+.language-btn,.saved-top-btn{
+border:1px solid var(--border);background:var(--card2);color:var(--purple2);
+padding:7px 9px;border-radius:9px;font-size:11px;font-weight:900;cursor:pointer
+}
+
+.language-btn.active{
+background:var(--purple);color:#fff;border-color:var(--purple)
+}
+
+.saved-top-btn{
+font-size:15px;padding:5px 8px;line-height:1
+}
+
+.question-card{
+background:var(--card);border:1px solid var(--border);
+border-radius:16px;padding:17px
+}
+
+.question-text{
+color:var(--text);font-size:16px;line-height:1.55;font-weight:700;
+white-space:pre-wrap
+}
+
+.options{
+margin-top:18px;display:flex;flex-direction:column;gap:9px
+}
+
+.option{
+display:flex;align-items:flex-start;gap:10px;padding:12px;
+border:1px solid var(--border);border-radius:11px;background:var(--bg);color:var(--text)
+}
+
+.option-label{
+min-width:22px;color:var(--purple2);font-size:13px;font-weight:900
+}
+
+.option-text{
+color:var(--text);font-size:14px;line-height:1.45
+}
+
+.navigation{margin-top:13px}
+
+.navigation-row{
+display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px
+}
+
+.grid-button-row{
+display:flex;justify-content:flex-end
+}
+
+.nav-btn{
+min-height:44px;border-radius:10px;padding:9px;font-size:11px;
+font-weight:900;cursor:pointer
+}
+
+.previous-btn{
+background:var(--card2);color:var(--text);border:1px solid var(--border)
+}
+
+.save-question-btn{
+background:var(--card2);color:var(--purple2);border:1px solid var(--border)
+}
+
+.save-question-btn.saved{
+background:rgba(124,58,237,.16);border-color:var(--purple)
+}
+
+.save-next-btn{
+background:var(--purple);color:#fff;border:0
+}
+
+.grid-btn{
+width:46px;height:38px;display:flex;align-items:center;justify-content:center;
+border-radius:10px;background:#fff;color:#24152f;border:1px solid var(--border);
+font-size:20px;font-weight:900;cursor:pointer
+}
+
+.grid-overlay{
+position:fixed;inset:0;z-index:200;display:none;align-items:flex-end;
+justify-content:center;background:rgba(0,0,0,.68)
+}
+
+.grid-overlay.show{display:flex}
+
+.grid-popup{
+width:100%;max-width:650px;max-height:88vh;overflow-y:auto;
+background:var(--bg);border:1px solid var(--border);border-bottom:0;
+border-radius:20px 20px 0 0;padding:17px
+}
+
+.grid-header{
+display:flex;align-items:center;gap:10px;padding-bottom:13px;
+border-bottom:1px solid var(--border)
+}
+
+.grid-subject-area{flex:1;min-width:0}
+
+.grid-subject{
+color:var(--text);font-size:17px;font-weight:900;margin:0
+}
+
+.grid-subtitle{
+display:block;margin-top:3px;color:var(--muted);font-size:10px;font-weight:700
+}
+
+.grid-close{
+width:34px;height:34px;border:0;border-radius:9px;background:var(--card2);
+color:var(--text);font-size:22px;line-height:1;cursor:pointer
+}
+
+.question-grid{
+display:grid;grid-template-columns:repeat(5,1fr);gap:8px;padding:16px 0
+}
+
+.grid-question{
+position:relative;min-height:44px;border:1px solid var(--border);
+border-radius:9px;background:#fff;color:#24152f;font-size:12px;
+font-weight:900;cursor:pointer
+}
+
+.grid-question.current{
+outline:3px solid rgba(168,85,247,.4)
+}
+
+.grid-question.saved::after{
+content:"🔖";position:absolute;top:-7px;right:-5px;font-size:12px
+}
+
+.grid-legend{
+display:grid;grid-template-columns:1fr 1fr;gap:9px;
+padding-top:13px;border-top:1px solid var(--border)
+}
+
+.solution-page .solution-meta{
+display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 13px
+}
+
+.solution-page .solution-meta-box{
+background:var(--card2);border:1px solid var(--border);
+border-radius:10px;padding:9px 7px;text-align:center
+}
+
+.solution-page .solution-meta-label{
+color:var(--muted);font-size:9px;font-weight:800;margin-bottom:4px
+}
+
+.solution-page .solution-meta-value{
+color:var(--text);font-size:12px;font-weight:900
+}
+
+.solution-page .solution-meta-value.good{
+color:#25c27a
+}
+
+.solution-page .solution-option{
+cursor:default!important;display:flex;align-items:flex-start;gap:8px
+}
+
+.solution-page .solution-option.correct-option{
+border-color:#25c27a;background:rgba(37,194,122,.1)
+}
+
+.solution-page .solution-option.wrong-option{
+border-color:#ef4444;background:rgba(239,68,68,.1)
+}
+
+.solution-page .solution-option.your-option{
+outline:2px solid rgba(124,58,237,.35)
+}
+
+.solution-page .your-attempt{
+margin-left:6px;font-size:10px;font-weight:900;color:var(--purple2)
+}
+
+.solution-page .solution-answer{
+margin-top:11px;padding:10px 11px;border:1px solid var(--border);
+border-radius:10px;background:var(--card2);color:var(--text);
+font-size:12px;font-weight:800;line-height:1.5
+}
+
+.solution-page .solution-explanation{
+margin-top:10px;padding:11px;border-left:3px solid var(--purple);
+border-radius:0 10px 10px 0;background:var(--card2);
+color:var(--text);font-size:12px;line-height:1.65
+}
+
+/* FIX: Preserve line breaks in explanations */
+.solution-page .solution-text{
+white-space:pre-line
+}
+
+.solution-page .solution-explanation-title{
+color:var(--purple2);font-weight:900;margin-bottom:4px
+}
+
+.solution-page .saved-icon{
+font-size:15px;line-height:1;vertical-align:-1px
+}
+
+.hidden{display:none!important}
+
+.loading{
+text-align:center;padding:55px 10px;color:var(--muted);font-size:13px
+}
+
+.error{
+background:#512020;color:#ffaaaa;padding:15px;border-radius:12px;
+margin-top:20px;font-size:13px
+}
+
+@media(max-width:500px){
+.brand{font-size:19px}
+.test-name{font-size:14px}
+.submit-section{padding:8px 9px;font-size:10px}
+.question-text{font-size:15px}
+.attempt-select{max-width:105px;padding:8px 7px;font-size:11px}
+.question-tools{gap:4px}
+.language-btn,.saved-top-btn{padding:7px 7px;font-size:10px}
+.question-grid{grid-template-columns:repeat(5,1fr)}
+}
+
+@media(max-width:350px){
+.attempt-select{max-width:90px}
+.question-tools{gap:3px}
+.language-btn{padding:7px 5px}
+.saved-top-btn{padding:5px 6px}
+}
 </style>
 </head>
+
 <body class="solution-page">
+
 <header class="test-header">
+
 <div class="test-header-top">
-<div class="brand"><span class="brand-ssc">SSC</span> <span class="brand-edge">EDGE</span></div>
-<div class="header-actions"><select id="attemptSelect" class="attempt-select" aria-label="Select attempt"></select><a class="pause-btn" href="practice.html" style="text-decoration:none;">Back</a></div>
+
+<div class="brand">
+<span class="brand-ssc">SSC</span>
+<span class="brand-edge">EDGE</span>
 </div>
-<div class="test-info"><div class="test-info-left"><div id="testName" class="test-name">Loading Test...</div><span id="testNumber" class="test-number">Test</span></div><div class="submit-section" style="cursor:default;">Solutions</div></div>
+
+<div class="header-actions">
+<select id="attemptSelect" class="attempt-select" aria-label="Select attempt"></select>
+<a class="pause-btn" href="practice.html" style="text-decoration:none;">Back</a>
+</div>
+
+</div>
+
+<div class="test-info">
+<div class="test-info-left">
+<div id="testName" class="test-name">Loading Test...</div>
+<span id="testNumber" class="test-number">Test</span>
+</div>
+
+<div class="submit-section" style="cursor:default;">Solutions</div>
+</div>
+
 <div id="sectionBar" class="section-bar hidden"></div>
+
 </header>
-<main class="test-container"><div id="loading" class="loading">Loading solutions...</div><div id="solutionArea" class="hidden"><div class="question-top"><span id="questionCount" class="question-count">Question 1</span><div class="question-tools"><button id="languageBtn" class="language-btn" type="button" style="display:none;">A / अ</button><button id="savedTopBtn" class="saved-top-btn" type="button" title="Saved Question">🔖</button><span id="questionSection" class="question-section"></span></div></div><div id="questionCard" class="question-card"></div><div id="navigation" class="navigation"></div></div></main>
-<div id="gridOverlay" class="grid-overlay"><div class="grid-popup"><div class="grid-header"><div class="grid-subject-area"><h2 id="gridSubject" class="grid-subject">Solutions</h2><span class="grid-subtitle">Question Palette</span></div><button id="gridClose" class="grid-close" type="button">×</button></div><div id="questionGrid" class="question-grid"></div></div></div>
+
+<main class="test-container">
+
+<div id="loading" class="loading">
+Loading solutions...
+</div>
+
+<div id="solutionArea" class="hidden">
+
+<div class="question-top">
+
+<span id="questionCount" class="question-count">
+Question 1
+</span>
+
+<div class="question-tools">
+
+<button id="languageBtn" class="language-btn" type="button" style="display:none;">
+A / अ
+</button>
+
+<button id="savedTopBtn" class="saved-top-btn" type="button" title="Saved Question">
+🔖
+</button>
+
+<span id="questionSection" class="question-section"></span>
+
+</div>
+
+</div>
+
+<div id="questionCard" class="question-card"></div>
+
+<div id="navigation" class="navigation"></div>
+
+</div>
+
+</main>
+
+<div id="gridOverlay" class="grid-overlay">
+
+<div class="grid-popup">
+
+<div class="grid-header">
+
+<div class="grid-subject-area">
+
+<h2 id="gridSubject" class="grid-subject">
+Solutions
+</h2>
+
+<span class="grid-subtitle">
+Question Palette
+</span>
+
+</div>
+
+<button id="gridClose" class="grid-close" type="button">
+×
+</button>
+
+</div>
+
+<div id="questionGrid" class="question-grid"></div>
+
+</div>
+
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-const db=supabase.createClient("https://dvvyoygahzzbnpqrfhen.supabase.co","sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s");
-const params=new URLSearchParams(location.search),testId=params.get("test_id")||params.get("id"),requestedAttemptId=params.get("attempt_id");
-let test=null,sections=[],questions=[],attempt=null,userAttempts=[],answers={},questionTimes={},avgTimes={},correctRates={},subjectNames={},currentSectionIndex=0,currentIndex=0,language="default";
+
+const db=supabase.createClient(
+"https://dvvyoygahzzbnpqrfhen.supabase.co",
+"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s"
+);
+
+const params=new URLSearchParams(location.search),
+testId=params.get("test_id")||params.get("id"),
+requestedAttemptId=params.get("attempt_id");
+
+let test=null,
+sections=[],
+questions=[],
+attempt=null,
+userAttempts=[],
+answers={},
+questionTimes={},
+avgTimes={},
+correctRates={},
+subjectNames={},
+currentSectionIndex=0,
+currentIndex=0,
+language="default";
+
 const $=id=>document.getElementById(id);
-function esc(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
-function fmtTime(v){v=Math.max(0,Math.floor(Number(v)||0));return String(Math.floor(v/60)).padStart(2,"0")+":"+String(v%60).padStart(2,"0")}
-function showError(t){$("loading").className="loading error";$("loading").textContent=t}
-function sectionName(s,i){const direct=[s?.subject_name,s?.subjectName,s?.subject,s?.name,s?.title,s?.section_name];for(const x of direct)if(String(x||"").trim()&&!/^section\s*\d+$/i.test(String(x).trim()))return String(x).trim();if(s?.subject_id!=null&&subjectNames[String(s.subject_id)])return subjectNames[String(s.subject_id)];return"Section "+(i+1)}
-function activeList(){return sections.length?questions.map((q,i)=>({q,i})).filter(x=>String(x.q.section_id)===String(sections[currentSectionIndex]?.id)):questions.map((q,i)=>({q,i}))}
-function renderSections(){const bar=$("sectionBar");if(!sections.length){bar.classList.add("hidden");return}bar.classList.remove("hidden");bar.innerHTML="";sections.forEach((s,i)=>{const b=document.createElement("button");b.type="button";b.className="section-btn"+(i===currentSectionIndex?" current":"");b.textContent=sectionName(s,i);b.onclick=()=>{currentSectionIndex=i;const l=activeList();currentIndex=l.length?l[0].i:currentIndex;render()};bar.appendChild(b)})}
-function savedKey(){return"ssc-edge-saved-questions-"+String(test?.id||testId)}
-function isQuestionSaved(id){try{const a=JSON.parse(localStorage.getItem(savedKey())||"[]");return Array.isArray(a)&&a.map(String).includes(String(id))}catch(e){return false}}
-function toggleSavedQuestion(id){try{const key=savedKey();let a=JSON.parse(localStorage.getItem(key)||"[]");if(!Array.isArray(a))a=[];const s=String(id);a=a.map(String).includes(s)?a.filter(x=>x!==s):a.concat(s);localStorage.setItem(key,JSON.stringify(a));render()}catch(e){console.error(e)}}
-function getLangText(q,lang){if(lang==="hi")return q.question_text_hindi??q.question_text_hi??q.hindi_question_text??q.question_hi??q.question_text_hin??q.question_text??"";return q.question_text_en??q.question_en??q.english_question_text??q.question_text??""}
-function getOptionText(o,lang){if(lang==="hi")return o.option_text_hindi??o.option_text_hi??o.hindi_option_text??o.option_hi??o.option_text??"";return o.option_text_en??o.option_en??o.english_option_text??o.option_text??""}
-function hasHindi(q){return["question_text_hindi","question_text_hi","hindi_question_text","question_hi","question_text_hin"].some(k=>q[k]!=null&&String(q[k]).trim()!=="")||((q.options||[]).some(o=>["option_text_hindi","option_text_hi","hindi_option_text","option_hi"].some(k=>o[k]!=null&&String(o[k]).trim()!=="")))}
-function toggleLanguage(){const q=questions[currentIndex];if(!q||!hasHindi(q))return;language=language==="hi"?"default":"hi";render()}
-function renderGrid(){const g=$("questionGrid");g.innerHTML="";activeList().forEach((item,pos)=>{const b=document.createElement("button");b.type="button";b.className="grid-question";b.textContent=pos+1;if(item.i===currentIndex)b.classList.add("current");if(isQuestionSaved(item.q.id))b.classList.add("saved");b.onclick=()=>{currentIndex=item.i;closeGrid();render()};g.appendChild(b)})}
-function openGrid(){$("gridOverlay").classList.add("show");renderGrid()}function closeGrid(){$("gridOverlay").classList.remove("show")}
-function render(){
-const q=questions[currentIndex];if(!q)return;const list=activeList(),pos=Math.max(0,list.findIndex(x=>x.i===currentIndex));$("questionCount").textContent="Question "+(pos+1)+" of "+list.length;$("questionSection").textContent=sections.length?sectionName(sections[currentSectionIndex],currentSectionIndex):"";$("gridSubject").textContent=sections.length?sectionName(sections[currentSectionIndex],currentSectionIndex):"Solutions";
-const lb=$("languageBtn");lb.style.display=hasHindi(q)?"inline-block":"none";lb.textContent=language==="hi"?"अ / A":"A / अ";lb.classList.toggle("active",language==="hi");$("savedTopBtn").textContent=isQuestionSaved(q.id)?"🔖":"🔖";$("savedTopBtn").classList.toggle("active",isQuestionSaved(q.id));renderSections();
-const card=$("questionCard");card.innerHTML="";const text=document.createElement("div");text.className="question-text";text.textContent=getLangText(q,language);card.appendChild(text);
-const meta=document.createElement("div");meta.className="solution-meta";const your=questionTimes[String(q.id)]??0,avg=avgTimes[String(q.id)];meta.innerHTML='<div class="solution-meta-box"><div class="solution-meta-label">Your Time</div><div class="solution-meta-value">'+fmtTime(your)+'</div></div><div class="solution-meta-box"><div class="solution-meta-label">Avg Time</div><div class="solution-meta-value">'+(avg==null?"—":fmtTime(avg))+'</div></div><div class="solution-meta-box"><div class="solution-meta-label">Correct %</div><div class="solution-meta-value good">'+(correctRates[String(q.id)]==null?"—":Number(correctRates[String(q.id)]).toFixed(0)+"%")+'</div></div>';card.appendChild(meta);
-const options=document.createElement("div");options.className="options";const selectedId=answers[String(q.id)]==null?null:String(answers[String(q.id)]);(q.options||[]).forEach((o,i)=>{const row=document.createElement("div");row.className="option solution-option";const isCorrect=!!o.is_correct,isYour=selectedId!==null&&selectedId===String(o.id);if(isCorrect)row.classList.add("correct-option");if(isYour&&!isCorrect)row.classList.add("wrong-option");if(isYour)row.classList.add("your-option");const lab=o.option_label||String.fromCharCode(65+i),tag=isYour?' <span class="your-attempt">[Your Attempt]</span>':'';row.innerHTML='<span class="option-label">'+esc(lab)+'</span><span class="option-text">'+esc(getOptionText(o,language))+tag+'</span>';options.appendChild(row)});card.appendChild(options);
-const correct=(q.options||[]).find(o=>o.is_correct),ans=document.createElement("div");ans.className="solution-answer";ans.innerHTML='<b>Correct Answer:</b> '+(correct?esc((correct.option_label||"")+" "+getOptionText(correct,language)):"Not available");card.appendChild(ans);
-const ex=document.createElement("div");ex.className="solution-explanation";ex.innerHTML='<div class="solution-explanation-title">Explanation</div><div>'+esc(q.explanation||"No explanation has been added for this question yet.")+'</div>';card.appendChild(ex);
-const nav=$("navigation");nav.innerHTML="";const gr=document.createElement("div");gr.className="grid-button-row";const gb=document.createElement("button");gb.type="button";gb.className="grid-btn";gb.textContent="▦";gb.onclick=openGrid;gr.appendChild(gb);nav.appendChild(gr);
-const row=document.createElement("div");row.className="navigation-row";const prev=document.createElement("button");prev.type="button";prev.className="nav-btn previous-btn";prev.textContent="← Previous";prev.disabled=pos<=0;prev.onclick=()=>{if(pos>0){currentIndex=list[pos-1].i;language="default";render()}};const middle=document.createElement("button");middle.type="button";middle.className="nav-btn save-question-btn"+(isQuestionSaved(q.id)?" saved":"");middle.innerHTML="🔖 "+(isQuestionSaved(q.id)?"Saved":"Save Question");middle.onclick=()=>toggleSavedQuestion(q.id);const next=document.createElement("button");next.type="button";next.className="nav-btn save-next-btn";next.textContent=pos<list.length-1?"Next →":(currentSectionIndex<sections.length-1?"Next Section →":"End");next.onclick=()=>{if(pos<list.length-1){currentIndex=list[pos+1].i;language="default";render()}else if(currentSectionIndex<sections.length-1){currentSectionIndex++;const l=activeList();currentIndex=l.length?l[0].i:currentIndex;language="default";render()}};row.append(prev,middle,next);nav.appendChild(row);renderGrid()
+
+function esc(v){
+return String(v??"")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 }
-async function loadCurrentAttempt(id){
-const r=await db.from("test_attempts").select("id,user_id,mock_test_id,completed_at").eq("id",id).eq("user_id",(await db.auth.getUser()).data.user.id).eq("mock_test_id",testId).not("completed_at","is",null).maybeSingle();if(r.error)throw r.error;return r.data}
-async function loadAnswerData(){
-answers={};questionTimes={};if(!attempt)return;const r=await db.from("user_answers").select("attempt_id,question_id,selected_option_id,time_spent_seconds").eq("attempt_id",attempt.id);if(r.error)throw r.error;(r.data||[]).forEach(x=>{answers[String(x.question_id)]=x.selected_option_id;questionTimes[String(x.question_id)]=Number(x.time_spent_seconds||0)})
+
+function fmtTime(v){
+v=Math.max(0,Math.floor(Number(v)||0));
+return String(Math.floor(v/60)).padStart(2,"0")+":"+String(v%60).padStart(2,"0");
 }
-async function switchAttempt(id){try{const a=await loadCurrentAttempt(id);if(!a)return;attempt=a;await loadAnswerData();language="default";currentSectionIndex=0;const first=sections.findIndex(s=>questions.some(q=>String(q.section_id)===String(s.id)));currentSectionIndex=first>=0?first:0;const l=activeList();currentIndex=l.length?l[0].i:0;render()}catch(e){console.error(e);showError("Could not switch attempt. Please try again.")}}
-async function run(){
+
+function showError(t){
+$("loading").className="loading error";
+$("loading").textContent=t;
+}
+
+function sectionName(s,i){
+const direct=[
+s?.subject_name,
+s?.subjectName,
+s?.subject,
+s?.name,
+s?.title,
+s?.section_name
+];
+
+for(const x of direct)
+if(String(x||"").trim()&&!/^section\s*\d+$/i.test(String(x).trim()))
+return String(x).trim();
+
+if(s?.subject_id!=null&&subjectNames[String(s.subject_id)])
+return subjectNames[String(s.subject_id)];
+
+return"Section "+(i+1);
+}
+
+function activeList(){
+return sections.length
+?questions.map((q,i)=>({q,i}))
+.filter(x=>String(x.q.section_id)===String(sections[currentSectionIndex]?.id))
+:questions.map((q,i)=>({q,i}));
+}
+
+function renderSections(){
+
+const bar=$("sectionBar");
+
+if(!sections.length){
+bar.classList.add("hidden");
+return;
+}
+
+bar.classList.remove("hidden");
+bar.innerHTML="";
+
+sections.forEach((s,i)=>{
+
+const b=document.createElement("button");
+
+b.type="button";
+b.className="section-btn"+(i===currentSectionIndex?" current":"");
+b.textContent=sectionName(s,i);
+
+b.onclick=()=>{
+currentSectionIndex=i;
+const l=activeList();
+currentIndex=l.length?l[0].i:currentIndex;
+render();
+};
+
+bar.appendChild(b);
+
+});
+
+}
+
+function savedKey(){
+return"ssc-edge-saved-questions-"+String(test?.id||testId);
+}
+
+function isQuestionSaved(id){
+
 try{
-if(!testId){showError("Test ID is missing.");return}
-const tr=await db.from("mock_tests").select("*").eq("id",testId).maybeSingle();if(tr.error)throw tr.error;if(!tr.data){showError("Test not found.");return}test=tr.data;
-const sr=await db.from("mock_test_sections").select("*").eq("mock_test_id",testId).order("section_order");if(sr.error)throw sr.error;sections=sr.data||[];const subjectIds=[...new Set(sections.map(x=>x.subject_id).filter(x=>x!=null))];if(subjectIds.length){const sub=await db.from("subjects").select("id,name").in("id",subjectIds);if(sub.error)throw sub.error;(sub.data||[]).forEach(x=>subjectNames[String(x.id)]=x.name)}
-const ar=await db.from("mock_test_questions").select("question_id,question_order,section_id").eq("mock_test_id",testId).order("question_order");if(ar.error)throw ar.error;const assignments=ar.data||[];const ids=assignments.map(a=>a.question_id);if(!ids.length){showError("No questions found for this test.");return}
-const [qr,or]=await Promise.all([db.from("questions").select("*").in("id",ids),db.from("question_options").select("*").in("question_id",ids).order("id")]);if(qr.error)throw qr.error;if(or.error)throw or.error;
-const qm=new Map((qr.data||[]).map(q=>[String(q.id),{...q,options:[]}]));(or.data||[]).forEach(o=>{const q=qm.get(String(o.question_id));if(q)q.options.push(o)});questions=assignments.map(a=>{const q=qm.get(String(a.question_id));return q?{...q,section_id:a.section_id,question_order:a.question_order}:null}).filter(Boolean);
-const ur=await db.auth.getUser(),user=ur.data?.user;if(!user){showError("Please login to view solutions.");return}
-const ta=await db.from("test_attempts").select("id,user_id,completed_at").eq("mock_test_id",testId).eq("user_id",user.id).not("completed_at","is",null).order("completed_at",{ascending:false});if(ta.error)throw ta.error;userAttempts=ta.data||[];if(!userAttempts.length){showError("No completed attempt found for this test.");return}
-attempt=(requestedAttemptId&&userAttempts.find(a=>String(a.id)===String(requestedAttemptId)))||userAttempts[0];
-const latestAll=await db.from("test_attempts").select("id,user_id,completed_at").eq("mock_test_id",testId).not("completed_at","is",null).order("completed_at",{ascending:false});if(latestAll.error)throw latestAll.error;const latestByUser=new Map();(latestAll.data||[]).forEach(a=>{const u=String(a.user_id);if(!latestByUser.has(u))latestByUser.set(u,a)});const avgIds=[...latestByUser.values()].map(a=>a.id);
-if(avgIds.length){const ua=await db.from("user_answers").select("attempt_id,question_id,selected_option_id,time_spent_seconds").in("attempt_id",avgIds);if(!ua.error){const rows=ua.data||[],correctMap=new Map(questions.map(q=>[String(q.id),String((q.options||[]).find(o=>o.is_correct)?.id||"")])),times=new Map(),right=new Map(),answered=new Map();rows.forEach(r=>{const k=String(r.question_id),t=Number(r.time_spent_seconds||0);if(t>0){if(!times.has(k))times.set(k,[]);times.get(k).push(t)}if(r.selected_option_id!=null){answered.set(k,(answered.get(k)||0)+1);if(String(r.selected_option_id)===correctMap.get(k))right.set(k,(right.get(k)||0)+1)}});times.forEach((v,k)=>avgTimes[k]=v.reduce((a,b)=>a+b,0)/v.length);answered.forEach((v,k)=>correctRates[k]=v?((right.get(k)||0)/v)*100:null)}}
-await loadAnswerData();$("testName").textContent=test.title||"SSC EDGE Test";$("testNumber").textContent="Test "+(test.test_number||test.test_no||"01");const sel=$("attemptSelect");sel.innerHTML="";userAttempts.forEach((a,i)=>{const o=document.createElement("option");o.value=a.id;o.textContent="Attempt "+(userAttempts.length-i);sel.appendChild(o)});sel.value=attempt.id;sel.onchange=e=>switchAttempt(e.target.value);$("loading").classList.add("hidden");$("solutionArea").classList.remove("hidden");const first=sections.findIndex(s=>questions.some(q=>String(q.section_id)===String(s.id)));currentSectionIndex=first>=0?first:0;const l=activeList();currentIndex=l.length?l[0].i:0;render()
-}catch(e){console.error(e);showError("Could not load solutions. Please try again.")}
+
+const a=JSON.parse(
+localStorage.getItem(savedKey())||"[]"
+);
+
+return Array.isArray(a)&&a.map(String).includes(String(id));
+
+}catch(e){
+
+return false;
+
 }
-$("languageBtn").onclick=toggleLanguage;$("savedTopBtn").onclick=()=>{const q=questions[currentIndex];if(q)toggleSavedQuestion(q.id)};$("gridClose").onclick=closeGrid;$("gridOverlay").onclick=e=>{if(e.target===$("gridOverlay"))closeGrid()};run();
+
+}
+
+function toggleSavedQuestion(id){
+
+try{
+
+const key=savedKey();
+
+let a=JSON.parse(
+localStorage.getItem(key)||"[]"
+);
+
+if(!Array.isArray(a))a=[];
+
+const s=String(id);
+
+a=a.map(String).includes(s)
+?a.filter(x=>x!==s)
+:a.concat(s);
+
+localStorage.setItem(key,JSON.stringify(a));
+
+render();
+
+}catch(e){
+
+console.error(e);
+
+}
+
+}
+
+function getLangText(q,lang){
+
+if(lang==="hi")
+return q.question_text_hindi??
+q.question_text_hi??
+q.hindi_question_text??
+q.question_hi??
+q.question_text_hin??
+q.question_text??"";
+
+return q.question_text_en??
+q.question_en??
+q.english_question_text??
+q.question_text??"";
+
+}
+
+function getOptionText(o,lang){
+
+if(lang==="hi")
+return o.option_text_hindi??
+o.option_text_hi??
+o.hindi_option_text??
+o.option_hi??
+o.option_text??"";
+
+return o.option_text_en??
+o.option_en??
+o.english_option_text??
+o.option_text??"";
+
+}
+
+function hasHindi(q){
+
+return[
+"question_text_hindi",
+"question_text_hi",
+"hindi_question_text",
+"question_hi",
+"question_text_hin"
+].some(
+k=>q[k]!=null&&String(q[k]).trim()!==""
+)
+||
+((q.options||[]).some(
+o=>[
+"option_text_hindi",
+"option_text_hi",
+"hindi_option_text",
+"option_hi"
+].some(
+k=>o[k]!=null&&String(o[k]).trim()!==""
+)
+));
+
+}
+
+function toggleLanguage(){
+
+const q=questions[currentIndex];
+
+if(!q||!hasHindi(q))return;
+
+language=language==="hi"?"default":"hi";
+
+render();
+
+}
+
+function renderGrid(){
+
+const g=$("questionGrid");
+
+g.innerHTML="";
+
+activeList().forEach((item,pos)=>{
+
+const b=document.createElement("button");
+
+b.type="button";
+b.className="grid-question";
+b.textContent=pos+1;
+
+if(item.i===currentIndex)
+b.classList.add("current");
+
+if(isQuestionSaved(item.q.id))
+b.classList.add("saved");
+
+b.onclick=()=>{
+currentIndex=item.i;
+closeGrid();
+render();
+};
+
+g.appendChild(b);
+
+});
+
+}
+
+function openGrid(){
+$("gridOverlay").classList.add("show");
+renderGrid();
+}
+
+function closeGrid(){
+$("gridOverlay").classList.remove("show");
+}
+
+function render(){
+
+const q=questions[currentIndex];
+
+if(!q)return;
+
+const list=activeList();
+
+const pos=Math.max(
+0,
+list.findIndex(x=>x.i===currentIndex)
+);
+
+$("questionCount").textContent=
+"Question "+(pos+1)+" of "+list.length;
+
+$("questionSection").textContent=
+sections.length
+?sectionName(sections[currentSectionIndex],currentSectionIndex)
+:"";
+
+$("gridSubject").textContent=
+sections.length
+?sectionName(sections[currentSectionIndex],currentSectionIndex)
+:"Solutions";
+
+const lb=$("languageBtn");
+
+lb.style.display=
+hasHindi(q)?"inline-block":"none";
+
+lb.textContent=
+language==="hi"?"अ / A":"A / अ";
+
+lb.classList.toggle(
+"active",
+language==="hi"
+);
+
+$("savedTopBtn").textContent="🔖";
+
+$("savedTopBtn").classList.toggle(
+"active",
+isQuestionSaved(q.id)
+);
+
+renderSections();
+
+const card=$("questionCard");
+
+card.innerHTML="";
+
+const text=document.createElement("div");
+
+text.className="question-text";
+
+text.textContent=
+getLangText(q,language);
+
+card.appendChild(text);
+
+const meta=document.createElement("div");
+
+meta.className="solution-meta";
+
+const your=questionTimes[String(q.id)]??0,
+avg=avgTimes[String(q.id)];
+
+meta.innerHTML=
+'<div class="solution-meta-box">'+
+'<div class="solution-meta-label">Your Time</div>'+
+'<div class="solution-meta-value">'+
+fmtTime(your)+
+'</div></div>'+
+'<div class="solution-meta-box">'+
+'<div class="solution-meta-label">Avg Time</div>'+
+'<div class="solution-meta-value">'+
+(avg==null?"—":fmtTime(avg))+
+'</div></div>'+
+'<div class="solution-meta-box">'+
+'<div class="solution-meta-label">Correct %</div>'+
+'<div class="solution-meta-value good">'+
+(correctRates[String(q.id)]==null
+?"—"
+:Number(correctRates[String(q.id)]).toFixed(0)+"%")+
+'</div></div>';
+
+card.appendChild(meta);
+
+const options=document.createElement("div");
+
+options.className="options";
+
+const selectedId=
+answers[String(q.id)]==null
+?null
+:String(answers[String(q.id)]);
+
+(q.options||[]).forEach((o,i)=>{
+
+const row=document.createElement("div");
+
+row.className="option solution-option";
+
+const isCorrect=!!o.is_correct;
+
+const isYour=
+selectedId!==null&&
+selectedId===String(o.id);
+
+if(isCorrect)
+row.classList.add("correct-option");
+
+if(isYour&&!isCorrect)
+row.classList.add("wrong-option");
+
+if(isYour)
+row.classList.add("your-option");
+
+const lab=
+o.option_label||
+String.fromCharCode(65+i);
+
+const tag=
+isYour
+?' <span class="your-attempt">[Your Attempt]</span>'
+:"";
+
+row.innerHTML=
+'<span class="option-label">'+
+esc(lab)+
+'</span>'+
+'<span class="option-text">'+
+esc(getOptionText(o,language))+
+tag+
+'</span>';
+
+options.appendChild(row);
+
+});
+
+card.appendChild(options);
+
+const correct=
+(q.options||[]).find(o=>o.is_correct);
+
+const ans=document.createElement("div");
+
+ans.className="solution-answer";
+
+ans.innerHTML=
+'<b>Correct Answer:</b> '+
+(
+correct
+?esc(
+(correct.option_label||"")+" "+
+getOptionText(correct,language)
+)
+:"Not available"
+);
+
+card.appendChild(ans);
+
+const ex=document.createElement("div");
+
+ex.className="solution-explanation";
+
+/*
+FIX:
+solution-text uses white-space:pre-line,
+so line breaks stored in q.explanation
+are preserved on the Solutions page.
+*/
+
+ex.innerHTML=
+'<div class="solution-explanation-title">Explanation</div>'+
+'<div class="solution-text">'+
+esc(
+q.explanation||
+"No explanation has been added for this question yet."
+)+
+'</div>';
+
+card.appendChild(ex);
+
+const nav=$("navigation");
+
+nav.innerHTML="";
+
+const gr=document.createElement("div");
+
+gr.className="grid-button-row";
+
+const gb=document.createElement("button");
+
+gb.type="button";
+gb.className="grid-btn";
+gb.textContent="▦";
+gb.onclick=openGrid;
+
+gr.appendChild(gb);
+
+nav.appendChild(gr);
+
+const row=document.createElement("div");
+
+row.className="navigation-row";
+
+const prev=document.createElement("button");
+
+prev.type="button";
+prev.className="nav-btn previous-btn";
+prev.textContent="← Previous";
+prev.disabled=pos<=0;
+
+prev.onclick=()=>{
+if(pos>0){
+currentIndex=list[pos-1].i;
+language="default";
+render();
+}
+};
+
+const middle=document.createElement("button");
+
+middle.type="button";
+
+middle.className=
+"nav-btn save-question-btn"+
+(isQuestionSaved(q.id)?" saved":"");
+
+middle.innerHTML=
+"🔖 "+
+(isQuestionSaved(q.id)?"Saved":"Save Question");
+
+middle.onclick=()=>{
+toggleSavedQuestion(q.id);
+};
+
+const next=document.createElement("button");
+
+next.type="button";
+next.className="nav-btn save-next-btn";
+
+next.textContent=
+pos<list.length-1
+?"Next →"
+:(currentSectionIndex<sections.length-1
+?"Next Section →"
+:"End");
+
+next.onclick=()=>{
+
+if(pos<list.length-1){
+
+currentIndex=list[pos+1].i;
+language="default";
+render();
+
+}else if(currentSectionIndex<sections.length-1){
+
+currentSectionIndex++;
+
+const l=activeList();
+
+currentIndex=
+l.length?l[0].i:currentIndex;
+
+language="default";
+
+render();
+
+}
+
+};
+
+row.append(
+prev,
+middle,
+next
+);
+
+nav.appendChild(row);
+
+renderGrid();
+
+}
+
+async function loadCurrentAttempt(id){
+
+const r=
+await db
+.from("test_attempts")
+.select("id,user_id,mock_test_id,completed_at")
+.eq("id",id)
+.eq(
+"user_id",
+(await db.auth.getUser()).data.user.id
+)
+.eq("mock_test_id",testId)
+.not("completed_at","is",null)
+.maybeSingle();
+
+if(r.error)throw r.error;
+
+return r.data;
+
+}
+
+async function loadAnswerData(){
+
+answers={};
+questionTimes={};
+
+if(!attempt)return;
+
+const r=
+await db
+.from("user_answers")
+.select(
+"attempt_id,question_id,selected_option_id,time_spent_seconds"
+)
+.eq("attempt_id",attempt.id);
+
+if(r.error)throw r.error;
+
+(r.data||[]).forEach(x=>{
+
+answers[String(x.question_id)] =
+x.selected_option_id;
+
+questionTimes[String(x.question_id)] =
+Number(x.time_spent_seconds||0);
+
+});
+
+}
+
+async function switchAttempt(id){
+
+try{
+
+const a=
+await loadCurrentAttempt(id);
+
+if(!a)return;
+
+attempt=a;
+
+await loadAnswerData();
+
+language="default";
+
+currentSectionIndex=0;
+
+const first=
+sections.findIndex(
+s=>questions.some(
+q=>String(q.section_id)===String(s.id)
+)
+);
+
+currentSectionIndex=
+first>=0?first:0;
+
+const l=activeList();
+
+currentIndex=
+l.length?l[0].i:0;
+
+render();
+
+}catch(e){
+
+console.error(e);
+
+showError(
+"Could not switch attempt. Please try again."
+);
+
+}
+
+}
+
+async function run(){
+
+try{
+
+if(!testId){
+
+showError("Test ID is missing.");
+
+return;
+
+}
+
+const tr=
+await db
+.from("mock_tests")
+.select("*")
+.eq("id",testId)
+.maybeSingle();
+
+if(tr.error)throw tr.error;
+
+if(!tr.data){
+
+showError("Test not found.");
+
+return;
+
+}
+
+test=tr.data;
+
+const sr=
+await db
+.from("mock_test_sections")
+.select("*")
+.eq("mock_test_id",testId)
+.order("section_order");
+
+if(sr.error)throw sr.error;
+
+sections=sr.data||[];
+
+const subjectIds=[
+...new Set(
+sections
+.map(x=>x.subject_id)
+.filter(x=>x!=null)
+)
+];
+
+if(subjectIds.length){
+
+const sub=
+await db
+.from("subjects")
+.select("id,name")
+.in("id",subjectIds);
+
+if(sub.error)throw sub.error;
+
+(sub.data||[]).forEach(
+x=>subjectNames[String(x.id)]=x.name
+);
+
+}
+
+const ar=
+await db
+.from("mock_test_questions")
+.select(
+"question_id,question_order,section_id"
+)
+.eq("mock_test_id",testId)
+.order("question_order");
+
+if(ar.error)throw ar.error;
+
+const assignments=ar.data||[];
+
+const ids=
+assignments.map(a=>a.question_id);
+
+if(!ids.length){
+
+showError("No questions found for this test.");
+
+return;
+
+}
+
+const [qr,or]=
+await Promise.all([
+
+db
+.from("questions")
+.select("*")
+.in("id",ids),
+
+db
+.from("question_options")
+.select("*")
+.in("question_id",ids)
+.order("id")
+
+]);
+
+if(qr.error)throw qr.error;
+
+if(or.error)throw or.error;
+
+const qm=
+new Map(
+(qr.data||[]).map(
+q=>[
+String(q.id),
+{...q,options:[]}
+]
+)
+);
+
+(or.data||[]).forEach(o=>{
+
+const q=
+qm.get(String(o.question_id));
+
+if(q)
+q.options.push(o);
+
+});
+
+questions=
+assignments
+.map(a=>{
+
+const q=
+qm.get(String(a.question_id));
+
+return q
+?{
+...q,
+section_id:a.section_id,
+question_order:a.question_order
+}
+:null;
+
+})
+.filter(Boolean);
+
+const ur=
+await db.auth.getUser();
+
+const user=
+ur.data?.user;
+
+if(!user){
+
+showError(
+"Please login to view solutions."
+);
+
+return;
+
+}
+
+const ta=
+await db
+.from("test_attempts")
+.select(
+"id,user_id,completed_at"
+)
+.eq("mock_test_id",testId)
+.eq("user_id",user.id)
+.not("completed_at","is",null)
+.order("completed_at",{ascending:false});
+
+if(ta.error)throw ta.error;
+
+userAttempts=ta.data||[];
+
+if(!userAttempts.length){
+
+showError(
+"No completed attempt found for this test."
+);
+
+return;
+
+}
+
+attempt=
+(
+requestedAttemptId&&
+userAttempts.find(
+a=>String(a.id)===String(requestedAttemptId)
+)
+)||userAttempts[0];
+
+const latestAll=
+await db
+.from("test_attempts")
+.select(
+"id,user_id,completed_at"
+)
+.eq("mock_test_id",testId)
+.not("completed_at","is",null)
+.order("completed_at",{ascending:false});
+
+if(latestAll.error)
+throw latestAll.error;
+
+const latestByUser=new Map();
+
+(latestAll.data||[]).forEach(a=>{
+
+const u=String(a.user_id);
+
+if(!latestByUser.has(u))
+latestByUser.set(u,a);
+
+});
+
+const avgIds=
+[...latestByUser.values()]
+.map(a=>a.id);
+
+if(avgIds.length){
+
+const ua=
+await db
+.from("user_answers")
+.select(
+"attempt_id,question_id,selected_option_id,time_spent_seconds"
+)
+.in("attempt_id",avgIds);
+
+if(!ua.error){
+
+const rows=ua.data||[];
+
+const correctMap=
+new Map(
+questions.map(
+q=>[
+String(q.id),
+String(
+(q.options||[])
+.find(o=>o.is_correct)?.id||""
+)
+]
+)
+);
+
+const times=new Map(),
+right=new Map(),
+answered=new Map();
+
+rows.forEach(r=>{
+
+const k=String(r.question_id);
+
+const t=
+Number(r.time_spent_seconds||0);
+
+if(t>0){
+
+if(!times.has(k))
+times.set(k,[]);
+
+times.get(k).push(t);
+
+}
+
+if(r.selected_option_id!=null){
+
+answered.set(
+k,
+(answered.get(k)||0)+1
+);
+
+if(
+String(r.selected_option_id)===
+correctMap.get(k)
+){
+
+right.set(
+k,
+(right.get(k)||0)+1
+);
+
+}
+
+}
+
+});
+
+times.forEach((v,k)=>
+avgTimes[k]=
+v.reduce((a,b)=>a+b,0)/v.length
+);
+
+answered.forEach((v,k)=>
+correctRates[k]=
+v
+?((right.get(k)||0)/v)*100
+:null
+);
+
+}
+
+}
+
+await loadAnswerData();
+
+$("testName").textContent=
+test.title||"SSC EDGE Test";
+
+$("testNumber").textContent=
+"Test "+
+(test.test_number||test.test_no||"01");
+
+const sel=$("attemptSelect");
+
+sel.innerHTML="";
+
+userAttempts.forEach((a,i)=>{
+
+const o=
+document.createElement("option");
+
+o.value=a.id;
+
+o.textContent=
+"Attempt "+(userAttempts.length-i);
+
+sel.appendChild(o);
+
+});
+
+sel.value=attempt.id;
+
+sel.onchange=
+e=>switchAttempt(e.target.value);
+
+$("loading").classList.add("hidden");
+
+$("solutionArea").classList.remove("hidden");
+
+const first=
+sections.findIndex(
+s=>questions.some(
+q=>String(q.section_id)===String(s.id)
+)
+);
+
+currentSectionIndex=
+first>=0?first:0;
+
+const l=activeList();
+
+currentIndex=
+l.length?l[0].i:0;
+
+render();
+
+}catch(e){
+
+console.error(e);
+
+showError(
+"Could not load solutions. Please try again."
+);
+
+}
+
+}
+
+$("languageBtn").onclick=toggleLanguage;
+
+$("savedTopBtn").onclick=()=>{
+
+const q=questions[currentIndex];
+
+if(q)
+toggleSavedQuestion(q.id);
+
+};
+
+$("gridClose").onclick=closeGrid;
+
+$("gridOverlay").onclick=e=>{
+
+if(e.target===$("gridOverlay"))
+closeGrid();
+
+};
+
+run();
+
 </script>
+
 </body>
 </html>
