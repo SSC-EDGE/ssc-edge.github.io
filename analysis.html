@@ -13,7 +13,7 @@ document.documentElement.dataset.theme=localStorage.getItem("ssc-edge-theme")||"
 :root[data-theme="light"]{--bg:#f6f3fb;--header:#eee7fa;--card:#fff;--card2:#eee6fa;--purple:#6d35d4;--purple2:#8149e8;--text:#17121e;--muted:#706879;--border:#ddd4e9}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
 .header{height:58px;background:var(--header);display:flex;align-items:center;padding:0 18px;border-bottom:1px solid var(--border)}
-.logo{font-size:21px;font-weight:800;letter-spacing:.4px}.container{max-width:850px;margin:auto;padding:18px 14px 35px}
+.logo{font-size:21px;font-weight:800;letter-spacing:.4px}.logo span{color:#b98cff}.container{max-width:850px;margin:auto;padding:18px 14px 35px}
 .test-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}.test-title{min-width:0}.test-name{font-size:20px;font-weight:800;margin-bottom:5px;word-break:break-word}.test-no{color:var(--muted);font-size:13px}
 .header-actions{display:flex;align-items:center;gap:7px;flex-shrink:0}.solution-btn,.attempt-select{border:1px solid var(--purple);background:transparent;color:var(--purple2);padding:9px 12px;border-radius:10px;font-weight:700;cursor:pointer}.attempt-select{appearance:auto;max-width:125px}
 .card{background:var(--card);border:1px solid var(--border);border-radius:15px;padding:18px}.card-title{font-size:17px;font-weight:800;margin-bottom:18px}
@@ -26,7 +26,7 @@ document.documentElement.dataset.theme=localStorage.getItem("ssc-edge-theme")||"
 </style>
 </head>
 <body>
-<header class="header"><div class="logo">SSC EDGE</div></header>
+<header class="header"><div class="logo">SSC <span>EDGE</span></div></header>
 <main class="container">
 <div id="loading" class="loading">Loading analysis...</div>
 <div id="content" style="display:none">
@@ -43,7 +43,7 @@ document.documentElement.dataset.theme=localStorage.getItem("ssc-edge-theme")||"
 <div class="stat"><div class="stat-label">Rank</div><div id="rank" class="stat-value">—</div></div>
 <div class="stat"><div class="stat-label">Marks</div><div id="marks" class="stat-value">—</div></div>
 <div class="stat"><div class="stat-label">Attempted</div><div id="attempted" class="stat-value">—</div></div>
-<div class="stat"><div class="stat-label">Correct / Wrong</div><div id="correctWrong" class="stat-value small-value">—</div></div>
+<div class="stat"><div class="stat-label">Correct / Incorrect </div><div id="correctWrong" class="stat-value small-value">—</div></div>
 </div>
 <div class="subheading">Performance</div>
 <div class="stat-grid">
