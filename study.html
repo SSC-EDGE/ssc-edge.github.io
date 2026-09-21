@@ -66,20 +66,31 @@ margin-bottom:10px;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:42px;
+color:#a970ff;
+filter:drop-shadow(0 4px 8px rgba(155,92,255,.20));
 }
 
-.study-option-text h3{
-margin:0;
-font-size:17px;
-font-weight:700;
-}
-
-.study-option-text span{
+.study-option-icon svg{
+width:100%;
+height:100%;
 display:block;
-margin-top:4px;
-font-size:12px;
-color:var(--muted);
+}
+
+
+/* =========================================
+   VIDEO / E-BOOK ICON GLOW
+   ========================================= */
+
+.icon-main{
+stroke:#c8a6ff;
+}
+
+.icon-accent{
+fill:#9b5cff;
+}
+
+.icon-light{
+stroke:#ffffff;
 }
 
 
@@ -103,16 +114,51 @@ text-align:center;
 box-sizing:border-box;
 }
 
+
+/* Smaller subject icons */
+
 .subject-icon{
-width:54px;
-height:54px;
+width:46px;
+height:46px;
 margin-bottom:10px;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:40px;
-line-height:1;
+color:#a970ff;
+filter:drop-shadow(0 4px 8px rgba(155,92,255,.18));
 }
+
+.subject-icon svg{
+width:100%;
+height:100%;
+display:block;
+}
+
+
+/* =========================================
+   SUBJECT ICON STYLE
+   ========================================= */
+
+.subject-main{
+stroke:#c8a6ff;
+}
+
+.subject-fill{
+fill:#9b5cff;
+}
+
+.subject-white{
+stroke:#ffffff;
+}
+
+.subject-soft{
+fill:#c8a6ff;
+}
+
+
+/* =========================================
+   SUBJECT TEXT
+   ========================================= */
 
 .subject-card h3{
 margin:0;
@@ -192,7 +238,18 @@ min-height:165px;
 font-size:23px;
 }
 
+.subject-icon{
+width:42px;
+height:42px;
 }
+
+.study-option-icon{
+width:52px;
+height:52px;
+}
+
+}
+
 </style>
 
 </head>
@@ -240,7 +297,55 @@ font-size:23px;
     <a href="video.html" class="study-option-card">
 
       <div class="study-option-icon">
-        ▶️
+
+        <!-- PREMIUM VIDEO ICON -->
+
+        <svg viewBox="0 0 64 64"
+             fill="none"
+             xmlns="http://www.w3.org/2000/svg">
+
+          <!-- Graduation cap -->
+
+          <path d="M13 17L32 9L51 17L32 25L13 17Z"
+                class="icon-accent"/>
+
+          <path d="M19 21V27C19 33 25 37 32 37C39 37 45 33 45 27V21"
+                class="icon-main"
+                stroke-width="3"/>
+
+          <path d="M51 17V29"
+                class="icon-light"
+                stroke-width="3"
+                stroke-linecap="round"/>
+
+          <!-- Screen -->
+
+          <rect x="9" y="32"
+                width="46"
+                height="25"
+                rx="6"
+                class="icon-main"
+                stroke-width="3.5"/>
+
+          <!-- Play -->
+
+          <path d="M28 39L40 44.5L28 50V39Z"
+                class="icon-accent"/>
+
+          <!-- Stand -->
+
+          <path d="M32 57V61"
+                class="icon-main"
+                stroke-width="3"
+                stroke-linecap="round"/>
+
+          <path d="M24 61H40"
+                class="icon-main"
+                stroke-width="3"
+                stroke-linecap="round"/>
+
+        </svg>
+
       </div>
 
       <div class="study-option-text">
@@ -260,7 +365,56 @@ font-size:23px;
     <a href="ebooks.html" class="study-option-card">
 
       <div class="study-option-icon">
-        📖
+
+        <!-- PREMIUM E-BOOK / PDF ICON -->
+
+        <svg viewBox="0 0 64 64"
+             fill="none"
+             xmlns="http://www.w3.org/2000/svg">
+
+          <!-- Book -->
+
+          <path d="M8 14C16 11 24 12 32 18V55C24 50 16 49 8 52V14Z"
+                class="icon-main"
+                stroke-width="3.5"
+                stroke-linejoin="round"/>
+
+          <path d="M56 14C48 11 40 12 32 18V55C40 50 48 49 56 52V14Z"
+                class="icon-main"
+                stroke-width="3.5"
+                stroke-linejoin="round"/>
+
+          <!-- Page lines -->
+
+          <path d="M15 24H25M15 30H26M15 36H25"
+                class="icon-main"
+                stroke-width="2.5"
+                stroke-linecap="round"/>
+
+          <path d="M39 24H49M38 30H48M39 36H49"
+                class="icon-main"
+                stroke-width="2.5"
+                stroke-linecap="round"/>
+
+          <!-- PDF badge -->
+
+          <rect x="39" y="39"
+                width="19"
+                height="15"
+                rx="4"
+                class="icon-accent"/>
+
+          <text x="42"
+                y="50"
+                fill="white"
+                font-size="8"
+                font-weight="800"
+                font-family="Arial,sans-serif">
+            PDF
+          </text>
+
+        </svg>
+
       </div>
 
       <div class="study-option-text">
@@ -295,12 +449,52 @@ font-size:23px;
   <section class="subject-grid">
 
 
-    <!-- QUANTITATIVE APTITUDE -->
+    <!-- =========================================
+         QUANTITATIVE APTITUDE
+         ========================================= -->
 
     <a href="quant.html" class="subject-card">
 
       <div class="subject-icon">
-        🧮
+
+        <svg viewBox="0 0 64 64"
+             fill="none"
+             xmlns="http://www.w3.org/2000/svg">
+
+          <!-- Calculator -->
+
+          <rect x="10"
+                y="7"
+                width="35"
+                height="50"
+                rx="7"
+                class="subject-main"
+                stroke-width="3.5"/>
+
+          <rect x="17"
+                y="14"
+                width="21"
+                height="9"
+                rx="2"
+                class="subject-fill"/>
+
+          <path d="M17 32H22M29 32H34M17 41H22M29 41H34M17 50H22M29 50H34"
+                class="subject-white"
+                stroke-width="3"
+                stroke-linecap="round"/>
+
+          <!-- Small graph -->
+
+          <path d="M49 16V46"
+                class="subject-main"
+                stroke-width="3"
+                stroke-linecap="round"/>
+
+          <path d="M44 41L49 46L55 39"
+                class="subject-fill"/>
+
+        </svg>
+
       </div>
 
       <h3>
@@ -315,12 +509,57 @@ font-size:23px;
 
 
 
-    <!-- GENERAL AWARENESS -->
+    <!-- =========================================
+         GENERAL AWARENESS
+         ========================================= -->
 
     <a href="gk.html" class="subject-card">
 
       <div class="subject-icon">
-        🌍
+
+        <svg viewBox="0 0 64 64"
+             fill="none"
+             xmlns="http://www.w3.org/2000/svg">
+
+          <!-- Globe -->
+
+          <circle cx="32"
+                  cy="27"
+                  r="20"
+                  class="subject-main"
+                  stroke-width="3.2"/>
+
+          <path d="M12 27H52"
+                class="subject-main"
+                stroke-width="2.5"/>
+
+          <path d="M32 7C25 14 23 21 23 27C23 34 25 41 32 47C39 41 41 34 41 27C41 21 39 14 32 7Z"
+                class="subject-main"
+                stroke-width="2.3"/>
+
+          <!-- India / chakra inspired center -->
+
+          <circle cx="32"
+                  cy="27"
+                  r="5"
+                  class="subject-fill"/>
+
+          <circle cx="32"
+                  cy="27"
+                  r="2"
+                  fill="white"/>
+
+          <!-- Book -->
+
+          <path d="M13 49C20 46 26 47 32 51C38 47 44 46 51 49L46 57H18L13 49Z"
+                class="subject-fill"/>
+
+          <path d="M18 49L22 54M46 49L42 54"
+                class="subject-white"
+                stroke-width="2"/>
+
+        </svg>
+
       </div>
 
       <h3>
@@ -335,12 +574,59 @@ font-size:23px;
 
 
 
-    <!-- ENGLISH -->
+    <!-- =========================================
+         ENGLISH
+         ========================================= -->
 
     <a href="english.html" class="subject-card">
 
       <div class="subject-icon">
-        📕
+
+        <svg viewBox="0 0 64 64"
+             fill="none"
+             xmlns="http://www.w3.org/2000/svg">
+
+          <!-- Open book -->
+
+          <path d="M7 14C15 11 24 12 32 18V54C24 49 15 48 7 51V14Z"
+                class="subject-main"
+                stroke-width="3.2"
+                stroke-linejoin="round"/>
+
+          <path d="M57 14C49 11 40 12 32 18V54C40 49 49 48 57 51V14Z"
+                class="subject-main"
+                stroke-width="3.2"
+                stroke-linejoin="round"/>
+
+          <!-- Aa -->
+
+          <text x="36"
+                y="38"
+                fill="#c8a6ff"
+                font-size="18"
+                font-weight="800"
+                font-family="Arial,sans-serif">
+            Aa
+          </text>
+
+          <!-- Text lines -->
+
+          <path d="M13 25H25M13 31H26"
+                class="subject-main"
+                stroke-width="2.3"
+                stroke-linecap="round"/>
+
+          <!-- Pen -->
+
+          <path d="M43 42L53 32L57 36L47 46L41 48L43 42Z"
+                class="subject-fill"/>
+
+          <path d="M41 48L47 46"
+                class="subject-white"
+                stroke-width="2"/>
+
+        </svg>
+
       </div>
 
       <h3>
@@ -355,12 +641,70 @@ font-size:23px;
 
 
 
-    <!-- REASONING -->
+    <!-- =========================================
+         REASONING
+         ========================================= -->
 
     <a href="reasoning.html" class="subject-card">
 
       <div class="subject-icon">
-        🧩
+
+        <svg viewBox="0 0 64 64"
+             fill="none"
+             xmlns="http://www.w3.org/2000/svg">
+
+          <!-- Head -->
+
+          <path d="M27 10C18 10 12 17 12 26C12 34 16 38 20 42V52H31V42C36 40 40 34 40 26C40 17 35 10 27 10Z"
+                class="subject-main"
+                stroke-width="3.2"
+                stroke-linejoin="round"/>
+
+          <!-- Brain gear -->
+
+          <circle cx="26"
+                  cy="26"
+                  r="7"
+                  class="subject-fill"/>
+
+          <circle cx="26"
+                  cy="26"
+                  r="3"
+                  fill="#0b0820"/>
+
+          <path d="M26 16V12M26 40V36M16 26H12M40 26H36"
+                class="subject-main"
+                stroke-width="2.5"
+                stroke-linecap="round"/>
+
+          <!-- Logic nodes -->
+
+          <rect x="46"
+                y="11"
+                width="9"
+                height="9"
+                rx="2"
+                class="subject-fill"/>
+
+          <circle cx="49"
+                  cy="43"
+                  r="6"
+                  class="subject-fill"/>
+
+          <rect x="39"
+                y="27"
+                width="10"
+                height="10"
+                rx="2"
+                class="subject-fill"/>
+
+          <path d="M50 20V27M44 37L48 39"
+                class="subject-main"
+                stroke-width="2.5"
+                stroke-linecap="round"/>
+
+        </svg>
+
       </div>
 
       <h3>
@@ -382,6 +726,7 @@ font-size:23px;
 
 <!-- =========================================
      BOTTOM NAVIGATION
+     UNCHANGED
      ========================================= -->
 
 <nav class="bottom-nav">
