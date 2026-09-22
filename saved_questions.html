@@ -367,11 +367,11 @@ body{
 .actions{
     display:grid;
 
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:1fr 1fr 1fr;
 
     gap:8px;
 
-    margin-top:14px;
+    margin-top:8px;
 }
 
 .btn{
@@ -412,6 +412,15 @@ body{
     color:#fff;
 }
 
+.btn:disabled{
+    opacity:.45;
+    cursor:default;
+}
+
+.open-test{
+    margin-top:14px;
+}
+
 @media(max-width:500px){
 
     .head-top{
@@ -426,12 +435,12 @@ body{
         padding:8px 9px;
     }
 
-    .actions{
-        grid-template-columns:1fr;
-    }
-
     .question-card{
         padding:14px;
+    }
+
+    .actions{
+        grid-template-columns:1fr 1fr 1fr;
     }
 
 }
@@ -628,15 +637,20 @@ function normalizeSubjectName(name){
 
 
     if(
-        value.includes("quant")
+        value.includes("quant") ||
+        value.includes("math")
     ){
         return "Quantitative Aptitude";
     }
 
 
     if(
-        value.includes("general") &&
-        value.includes("aware")
+        (
+            value.includes("general") &&
+            value.includes("aware")
+        ) ||
+        value === "gk" ||
+        value.includes("general awareness")
     ){
         return "General Awareness";
     }
@@ -803,6 +817,56 @@ function removeSaved(
 
 
 /* ==========================================
+   PREVIOUS / NEXT
+========================================== */
+
+function moveQuestion(
+    button,
+    direction
+){
+
+    const slider =
+        button.closest(
+            ".question-slider"
+        );
+
+
+    if(!slider){
+        return;
+    }
+
+
+    const card =
+        slider.querySelector(
+            ".question-card"
+        );
+
+
+    if(!card){
+        return;
+    }
+
+
+    const amount =
+        card.getBoundingClientRect().width +
+        12;
+
+
+    slider.scrollBy({
+
+        left:
+            direction === "next"
+            ? amount
+            : -amount,
+
+        behavior:"smooth"
+
+    });
+
+}
+
+
+/* ==========================================
    LOAD TEST DATA
 ========================================== */
 
@@ -811,27 +875,20 @@ async function loadTestData(
     questionIds
 ){
 
-    /* TEST */
+    /* TEST + ASSIGNMENTS TOGETHER */
 
-    const testResult =
-        await db
+    const [
+        testResult,
+        assignmentResult
+    ] = await Promise.all([
+
+        db
             .from("mock_tests")
             .select("id,title")
             .eq("id",testId)
-            .maybeSingle();
+            .maybeSingle(),
 
-
-    if(testResult.error){
-
-        throw testResult.error;
-
-    }
-
-
-    /* TEST QUESTIONS */
-
-    const assignmentResult =
-        await db
+        db
             .from("mock_test_questions")
             .select(
                 "question_id,question_order,section_id"
@@ -843,7 +900,16 @@ async function loadTestData(
             .order(
                 "question_order",
                 {ascending:true}
-            );
+            )
+
+    ]);
+
+
+    if(testResult.error){
+
+        throw testResult.error;
+
+    }
 
 
     if(assignmentResult.error){
@@ -884,48 +950,6 @@ async function loadTestData(
         );
 
 
-    /* QUESTIONS */
-
-    const questionResult =
-        await db
-            .from("questions")
-            .select(
-                "*"
-            )
-            .in("id",ids);
-
-
-    if(questionResult.error){
-
-        throw questionResult.error;
-
-    }
-
-
-    /* OPTIONS */
-
-    const optionResult =
-        await db
-            .from("question_options")
-            .select(
-                "id,question_id,option_label,option_text,is_correct"
-            )
-            .in("question_id",ids)
-            .order(
-                "id",
-                {ascending:true}
-            );
-
-
-    if(optionResult.error){
-
-        throw optionResult.error;
-
-    }
-
-
-    /* SECTIONS */
-
     const sectionIds =
     [
         ...new Set(
@@ -944,38 +968,81 @@ async function loadTestData(
     ];
 
 
-    let sections = [];
+    /* QUESTIONS + OPTIONS + SECTIONS TOGETHER */
+
+    const [
+        questionResult,
+        optionResult,
+        sectionResult
+    ] = await Promise.all([
+
+        db
+            .from("questions")
+            .select("*")
+            .in("id",ids),
+
+        db
+            .from("question_options")
+            .select(
+                "id,question_id,option_label,option_text,is_correct"
+            )
+            .in("question_id",ids)
+            .order(
+                "id",
+                {ascending:true}
+            ),
+
+        sectionIds.length
+
+        ?
+
+        db
+            .from("mock_test_sections")
+            .select(
+                "id,subject_id,section_order"
+            )
+            .in(
+                "id",
+                sectionIds
+            )
+            .order(
+                "section_order",
+                {ascending:true}
+            )
+
+        :
+
+        Promise.resolve({
+            data:[],
+            error:null
+        })
+
+    ]);
 
 
-    if(sectionIds.length){
+    if(questionResult.error){
 
-        const sectionResult =
-            await db
-                .from("mock_test_sections")
-                .select(
-                    "id,subject_id,section_order"
-                )
-                .in(
-                    "id",
-                    sectionIds
-                )
-                .order(
-                    "section_order",
-                    {ascending:true}
-                );
-
-
-        if(sectionResult.error){
-
-            throw sectionResult.error;
-
-        }
-
-
-        sections =
-            sectionResult.data || [];
+        throw questionResult.error;
 
     }
+
+
+    if(optionResult.error){
+
+        throw optionResult.error;
+
+    }
+
+
+    if(sectionResult.error){
+
+        throw sectionResult.error;
+
+    }
+
+
+    const sections =
+        sectionResult.data || [];
 
 
     /* SUBJECT IDS */
@@ -1149,6 +1216,22 @@ async function loadTestData(
 
                     ||
 
+                    q.subject_name
+
+                    ||
+
+                    q.subject
+
+                    ||
+
+                    section?.subject_name
+
+                    ||
+
+                    section?.subject
+
+                    ||
+
                     "";
 
 
@@ -1212,7 +1295,7 @@ function renderQuestions(){
 
         allQuestionData.filter(
             item =>
-                item.subjectName ===
+                item.question.subjectName ===
                 selectedSubject
         );
 
@@ -1253,7 +1336,7 @@ function renderQuestions(){
     filtered.forEach(item=>{
 
         const subject =
-            item.subjectName ||
+            item.question.subjectName ||
             "Other";
 
 
@@ -1500,7 +1583,37 @@ function renderQuestions(){
                             </div>
 
 
+                            <!-- OPEN TEST -->
+
+                            <a
+                                class="btn primary open-test"
+                                href="solutions.html?test_id=${encodeURIComponent(item.testId)}"
+                            >
+
+                                Open Test
+
+                            </a>
+
+
+                            <!-- PREVIOUS / REMOVE / NEXT -->
+
                             <div class="actions">
+
+                                <button
+                                    class="btn"
+                                    type="button"
+                                    onclick="
+                                        moveQuestion(
+                                            this,
+                                            'prev'
+                                        )
+                                    "
+                                >
+
+                                    Previous
+
+                                </button>
+
 
                                 <button
                                     class="btn"
@@ -1518,14 +1631,20 @@ function renderQuestions(){
                                 </button>
 
 
-                                <a
+                                <button
                                     class="btn primary"
-                                    href="solutions.html?test_id=${encodeURIComponent(item.testId)}"
+                                    type="button"
+                                    onclick="
+                                        moveQuestion(
+                                            this,
+                                            'next'
+                                        )
+                                    "
                                 >
 
-                                    Open Test
+                                    Next
 
-                                </a>
+                                </button>
 
                             </div>
 
@@ -1655,48 +1774,80 @@ async function loadSavedQuestions(){
     allQuestionData = [];
 
 
-    /* LOAD EACH TEST */
+    /*
+       LOAD EVERY SAVED TEST
+       IN PARALLEL
+    */
 
-    for(
-        const [
-            testId,
-            questionIds
-        ]
-        of grouped
-    ){
-
-        try{
-
-            const data =
-                await loadTestData(
-                    testId,
-                    questionIds
-                );
+    const groupedEntries =
+        [...grouped.entries()];
 
 
-            data.questions.forEach(q=>{
+    const results =
+        await Promise.all(
 
-                allQuestionData.push({
+            groupedEntries.map(
+                async ([testId,questionIds])=>{
 
-                    testId:
-                        String(testId),
+                    try{
 
-                    question:q
+                        const data =
+                            await loadTestData(
+                                testId,
+                                questionIds
+                            );
 
-                });
+
+                        return {
+
+                            testId:
+                                String(testId),
+
+                            questions:
+                                data.questions || []
+
+                        };
+
+                    }catch(error){
+
+                        console.error(
+                            "Saved question load error:",
+                            error
+                        );
+
+                        return {
+
+                            testId:
+                                String(testId),
+
+                            questions:[]
+
+                        };
+
+                    }
+
+                }
+            )
+
+        );
+
+
+    results.forEach(result=>{
+
+        result.questions.forEach(q=>{
+
+            allQuestionData.push({
+
+                testId:
+                    result.testId,
+
+                question:q
 
             });
 
-        }catch(error){
+        });
 
-            console.error(
-                "Saved question load error:",
-                error
-            );
-
-        }
-
-    }
+    });
 
 
     if(!allQuestionData.length){
