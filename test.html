@@ -120,14 +120,22 @@ body{
 }
 
 .pause-glyph{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  width:12px;
+  height:15px;
+}
+
+.pause-glyph::before,
+.pause-glyph::after{
+  content:"";
   display:block;
-  color:#6d3fd1 !important;
-  line-height:1;
-  font-size:18px;
-  font-family:Arial Black,Arial,sans-serif;
-  font-weight:900;
-  letter-spacing:-3px;
-  transform:scaleX(.58);
+  width:3px;
+  height:14px;
+  background:#6d3fd1 !important;
+  border-radius:2px;
 }
 
 .pause-btn:active{
@@ -157,9 +165,27 @@ body{
   font-size:15px;
   font-weight:900;
   line-height:1.3;
-  white-space:pre-line;
   overflow:hidden;
   text-overflow:ellipsis;
+}
+
+.test-name-main{
+  display:block;
+  color:var(--text);
+  font-size:15px;
+  font-weight:900;
+  line-height:1.3;
+  overflow-wrap:anywhere;
+}
+
+.test-name-type{
+  display:block;
+  margin-top:2px;
+  color:var(--text);
+  font-size:11px;
+  font-weight:800;
+  line-height:1.3;
+  overflow-wrap:anywhere;
 }
 
 .test-number{
@@ -547,7 +573,7 @@ body{
   gap:10px;
   min-height:52px;
   padding:10px 12px;
-  border:1px solid var(--border);
+  border:1px solid rgba(196,167,255,.32);
   border-radius:14px;
   background:rgba(196,167,255,.08);
   color:var(--text);
@@ -556,17 +582,7 @@ body{
 }
 
 .option:hover{
-  border-color:var(--border);
-}
-
-.option:focus,
-.option:focus-within{
-  outline:none;
-}
-
-.option input:focus{
-  outline:none;
-  box-shadow:none;
+  border-color:var(--purple);
 }
 
 .option.selected{
@@ -1266,6 +1282,14 @@ body{
     font-size:14px;
   }
 
+  .test-name-main{
+    font-size:14px;
+  }
+
+  .test-name-type{
+    font-size:10px;
+  }
+
   .submit-section{
     padding:8px 9px;
     font-size:10px;
@@ -1453,7 +1477,7 @@ body{
         aria-label="Pause Test"
         title="Pause Test"
       >
-        <span class="pause-glyph" aria-hidden="true">Ⅱ</span>
+        <span class="pause-glyph" aria-hidden="true"></span>
       </button>
 
     </div>
@@ -2317,10 +2341,12 @@ function clearLocalProgress(){
    TEST HEADER NAME FORMAT
    ================================================== */
 
-function formatTestHeaderName(title, testNumber){
+function formatTestHeaderName(title, testNumber, mockType){
 
   const rawTitle =
     String(title || "")
+      .replace(/\\n/g, " ")
+      .replace(/\r?\n/g, " ")
       .replace(/\s+/g, " ")
       .trim();
 
@@ -2329,66 +2355,80 @@ function formatTestHeaderName(title, testNumber){
       .replace(/^test\s*/i, "")
       .trim();
 
-  /*
-    Required header format:
+  const rawType =
+    String(mockType || "")
+      .trim()
+      .toLowerCase();
 
-    SSC CGL TIER-1
-    full mock test 01
-
-    or
-
-    SSC CGL TIER-1
-    sectional mock test 01
-  */
-
-  const fullMockMatch =
-    rawTitle.match(
-      /^(.*?)\s+FULL\s+MOCK(?:\s+TEST)?\s*(\d+)\s*$/i
-    );
-
-  if(fullMockMatch){
-
-    return (
-      fullMockMatch[1].trim() +
-      "\\n" +
-      "full mock test " +
-      fullMockMatch[2]
-    );
-
-  }
-
-  const sectionalMockMatch =
-    rawTitle.match(
-      /^(.*?)\s+SECTIONAL\s+MOCK(?:\s+TEST)?\s*(\d+)\s*$/i
-    );
-
-  if(sectionalMockMatch){
-
-    return (
-      sectionalMockMatch[1].trim() +
-      "\\n" +
-      "sectional mock test " +
-      sectionalMockMatch[2]
-    );
-
-  }
+  let main = rawTitle || "Mock Test";
+  let typeText = "";
+  let mockNumber = "";
 
   /*
-    If the database keeps the mock number separately,
-    keep the existing title and use FULL MOCK by default.
+    FULL MOCK / SECTIONAL MOCK written inside the test title.
   */
-  if(numberText){
-
-    return (
-      rawTitle +
-      "\\n" +
-      "full mock test " +
-      numberText
+  const mockMatch =
+    rawTitle.match(
+      /^(.*?)\s+(FULL|SECTIONAL)\s+MOCK(?:\s+TEST)?\s*(\d+)\s*$/i
     );
+
+  if(mockMatch){
+
+    main = mockMatch[1].trim();
+    typeText =
+      mockMatch[2].toLowerCase() === "sectional"
+        ? "sectional mock test"
+        : "full mock test";
+    mockNumber = mockMatch[3];
+
+  }else{
+
+    /*
+      If the title already contains the type but the number
+      is stored separately in the database.
+    */
+    const sectionalMatch =
+      rawTitle.match(
+        /^(.*?)\s+SECTIONAL\s+MOCK(?:\s+TEST)?\s*$/i
+      );
+
+    const fullMatch =
+      rawTitle.match(
+        /^(.*?)\s+FULL\s+MOCK(?:\s+TEST)?\s*$/i
+      );
+
+    if(sectionalMatch){
+
+      main = sectionalMatch[1].trim();
+      typeText = "sectional mock test";
+
+    }else if(fullMatch){
+
+      main = fullMatch[1].trim();
+      typeText = "full mock test";
+
+    }else if(
+      rawType.includes("sectional")
+    ){
+
+      typeText = "sectional mock test";
+
+    }else{
+
+      typeText = "full mock test";
+
+    }
+
+    mockNumber = numberText;
 
   }
 
-  return rawTitle;
+  return {
+    main,
+    type:
+      typeText || "full mock test",
+    number:mockNumber
+  };
 
 }
 
@@ -2454,13 +2494,34 @@ async function loadTestData(){
         test.test_number ||
         test.test_no ||
         test.number ||
+        "",
+        test.mock_type ||
+        test.test_type ||
+        test.type ||
         ""
       );
 
-    setText(
-      "testName",
-      headerTitle
-    );
+    const testNameEl =
+      $("testName");
+
+    if(testNameEl){
+
+      testNameEl.innerHTML = `
+        <span class="test-name-main">
+          ${escapeHtml(headerTitle.main)}
+        </span>
+
+        <span class="test-name-type">
+          ${escapeHtml(headerTitle.type)}
+          ${
+            headerTitle.number
+              ? " " + escapeHtml(headerTitle.number)
+              : ""
+          }
+        </span>
+      `;
+
+    }
 
     /*
       The new two-line header already contains the
