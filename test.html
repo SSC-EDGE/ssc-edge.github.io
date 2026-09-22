@@ -2321,12 +2321,12 @@ function formatTestHeaderName(title, testNumber){
 
   const rawTitle =
     String(title || "")
-      .replace(/\\s+/g, " ")
+      .replace(/\s+/g, " ")
       .trim();
 
   const numberText =
     String(testNumber || "")
-      .replace(/^test\\s*/i, "")
+      .replace(/^test\s*/i, "")
       .trim();
 
   /*
@@ -2343,7 +2343,7 @@ function formatTestHeaderName(title, testNumber){
 
   const fullMockMatch =
     rawTitle.match(
-      /^(.*?)\\s+FULL\\s+MOCK(?:\\s+TEST)?\\s*(\\d+)\\s*$/i
+      /^(.*?)\s+FULL\s+MOCK(?:\s+TEST)?\s*(\d+)\s*$/i
     );
 
   if(fullMockMatch){
@@ -2359,7 +2359,7 @@ function formatTestHeaderName(title, testNumber){
 
   const sectionalMockMatch =
     rawTitle.match(
-      /^(.*?)\\s+SECTIONAL\\s+MOCK(?:\\s+TEST)?\\s*(\\d+)\\s*$/i
+      /^(.*?)\s+SECTIONAL\s+MOCK(?:\s+TEST)?\s*(\d+)\s*$/i
     );
 
   if(sectionalMockMatch){
