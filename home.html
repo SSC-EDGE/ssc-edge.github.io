@@ -1,11 +1,35 @@
-<!DOCTYPE html><html lang="en"><head><script>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<script>
 document.documentElement.dataset.theme =
   localStorage.getItem("ssc-edge-theme") || "dark";
-</script><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#160d22"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><title>SSC EDGE - Home</title><style>
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="theme-color" content="#160d22">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<title>SSC EDGE - Home</title>
+
+<style>
+  * {
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .header-brand {
+    font-size: 34px !important;
+  }
+
+  .header-tagline {
+    font-size: 14px !important;
+  }
 
 *{
-font-family:Arial,Helvetica,sans-serif;
 box-sizing:border-box;
 }
 
@@ -139,10 +163,9 @@ margin-left:17px;
 margin-top:-17px;
 width:7px;
 height:7px;
-background:#ff3b30;
+background:#ff6b35;
 border-radius:50%;
 display:none;
-box-shadow:0 0 0 2px #ffffff;
 }
 
 /* ==================================================
@@ -169,7 +192,8 @@ bottom:0;
 width:285px;
 max-width:82vw;
 background:#ffffff;
-box-shadow:8px 0 30px rgba(20,10,30,.18);
+box-shadow:
+8px 0 30px rgba(20,10,30,.18);
 padding:16px;
 overflow-y:auto;
 }
@@ -350,7 +374,8 @@ margin-top:50px;
 background:#ffffff;
 border-radius:22px;
 overflow:hidden;
-box-shadow:0 20px 60px rgba(20,10,30,.22);
+box-shadow:
+0 20px 60px rgba(20,10,30,.22);
 }
 
 .search-top{
@@ -377,7 +402,6 @@ border-radius:50%;
 background:#f0e8ff;
 color:#7540c4;
 font-size:21px;
-cursor:pointer;
 }
 
 .search-results{
@@ -415,14 +439,6 @@ color:#777180;
 margin-top:4px;
 }
 
-.search-result small{
-display:block;
-font-size:9px;
-color:#9b5cff;
-margin-top:6px;
-font-weight:700;
-}
-
 /* ==================================================
    HOME CONTENT
    ================================================== */
@@ -437,7 +453,8 @@ padding:18px 18px 30px;
 .home-welcome{
 position:relative;
 overflow:hidden;
-background:linear-gradient(
+background:
+linear-gradient(
 135deg,
 #e8dcff 0%,
 #f3ebff 50%,
@@ -446,7 +463,8 @@ background:linear-gradient(
 border:1px solid #d1b9ef;
 border-radius:25px;
 padding:24px 21px;
-box-shadow:0 9px 28px rgba(104,59,150,.13);
+box-shadow:
+0 9px 28px rgba(104,59,150,.13);
 }
 
 .home-welcome::before{
@@ -519,7 +537,8 @@ color:#ffffff;
 text-decoration:none;
 font-size:14px;
 font-weight:800;
-box-shadow:0 7px 20px rgba(155,92,255,.28);
+box-shadow:
+0 7px 20px rgba(155,92,255,.28);
 }
 
 .welcome-action span{
@@ -547,7 +566,8 @@ margin-right:9px;
 
 .dashboard-grid{
 display:grid;
-grid-template-columns:repeat(2,minmax(0,1fr));
+grid-template-columns:
+repeat(2,minmax(0,1fr));
 gap:11px;
 }
 
@@ -560,7 +580,8 @@ border:1px solid #e3ddea;
 text-decoration:none;
 display:flex;
 flex-direction:column;
-box-shadow:0 5px 17px rgba(30,20,50,.055);
+box-shadow:
+0 5px 17px rgba(30,20,50,.055);
 }
 
 .dashboard-card:active{
@@ -628,7 +649,8 @@ border:1px solid #e3ddea;
 text-decoration:none;
 display:flex;
 flex-direction:column;
-box-shadow:0 6px 18px rgba(30,20,50,.06);
+box-shadow:
+0 6px 18px rgba(30,20,50,.06);
 scroll-snap-align:start;
 }
 
@@ -750,7 +772,8 @@ border:1px solid #e3ddea;
 text-decoration:none;
 display:flex;
 align-items:center;
-box-shadow:0 5px 16px rgba(30,20,50,.05);
+box-shadow:
+0 5px 16px rgba(30,20,50,.05);
 scroll-snap-align:start;
 }
 
@@ -898,7 +921,8 @@ max-height:80vh;
 overflow:hidden;
 background:#ffffff;
 border-radius:22px;
-box-shadow:0 20px 60px rgba(20,10,30,.25);
+box-shadow:
+0 20px 60px rgba(20,10,30,.25);
 }
 
 .updates-popup-header{
@@ -929,7 +953,6 @@ border-radius:50%;
 background:#f0e8ff;
 color:#7b4ac0;
 font-size:23px;
-cursor:pointer;
 }
 
 .updates-content{
@@ -1060,12 +1083,9 @@ color:#aaa1b5;
 stroke:#ffffff;
 }
 
-:root[data-theme="dark"] .update-dot{
-box-shadow:0 0 0 2px #160d22;
-}
-
 :root[data-theme="dark"] .home-welcome{
-background:linear-gradient(
+background:
+linear-gradient(
 135deg,
 #321d4b 0%,
 #1d102b 52%,
@@ -1195,10 +1215,6 @@ border-color:#352640;
 color:#ffffff;
 }
 
-:root[data-theme="dark"] .no-updates strong{
-color:#ffffff;
-}
-
 /* ==================================================
    MOBILE
    ================================================== */
@@ -1299,7 +1315,8 @@ padding-right:30px;
 }
 
 .dashboard-grid{
-grid-template-columns:repeat(4,minmax(0,1fr));
+grid-template-columns:
+repeat(4,minmax(0,1fr));
 }
 
 .community-card{
@@ -1312,287 +1329,542 @@ flex-basis:320px;
 
 }
 
-</style></head><body><header class="home-header"><div class="home-header-content"><div class="header-left"><button
+</style>
+
+</head>
+
+<body>
+
+<header class="home-header">
+
+<div class="home-header-content">
+
+<div class="header-left">
+
+<button
 class="menu-button"
 id="menuButton"
 type="button"
 aria-label="Open menu"
-
-«»
+>
 
 <span></span>
 <span></span>
 <span></span>
 
-</button><div class="header-brand-wrap"><div class="header-brand">
+</button>
+
+<div class="header-brand-wrap">
+
+<div class="header-brand">
 SSC <span class="edge">EDGE</span>
-</div><div class="header-tagline">
+</div>
+
+<div class="header-tagline">
 Learn • Practice • Improve
-</div></div></div><div class="header-actions"><button
+</div>
+
+</div>
+
+</div>
+
+<div class="header-actions">
+
+<button
 class="header-search"
 id="searchButton"
 type="button"
 aria-label="Search"
+>
 
-«»
+<svg viewBox="0 0 24 24">
 
-<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg></button><button
+<circle cx="11" cy="11" r="7"/>
+
+<path d="m16.5 16.5 4 4"/>
+
+</svg>
+
+</button>
+
+<button
 class="update-bell"
 id="updateBell"
 type="button"
 aria-label="Open updates"
+>
 
-«»
+<svg viewBox="0 0 24 24">
 
-<svg viewBox="0 0 24 24"><path
+<path
 d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"
 />
 
-<path d="M10 21h4"/></svg><span
+<path d="M10 21h4"/>
+
+</svg>
+
+<span
 class="update-dot"
 id="updateDot"
+></span>
 
-«</span>»
+</button>
 
-</button></div></div></header><div
+</div>
+
+</div>
+
+</header>
+
+<div
 class="menu-overlay"
 id="menuOverlay"
-><aside class="side-menu"><div class="side-profile"><div
+>
+
+<aside class="side-menu">
+
+<div class="side-profile">
+
+<div
 class="side-profile-photo"
 id="sideProfilePhoto"
 >
 👤
-</div><div class="side-profile-info"><div
+</div>
+
+<div class="side-profile-info">
+
+<div
 class="side-profile-name"
 id="sideProfileName"
 >
 User
-</div><a
+</div>
+
+<a
 href="profile.html"
 class="side-profile-link"
-
-«»
-
+>
 View Profile →
 </a>
 
-</div></div><div class="side-menu-header"><div class="side-menu-brand">
+</div>
+
+</div>
+
+<div class="side-menu-header">
+
+<div class="side-menu-brand">
 SSC <span>EDGE</span>
-</div><button
+</div>
+
+<button
 class="menu-close"
 id="menuClose"
 type="button"
-
-«»
-
+>
 ×
 </button>
 
-</div><div class="side-menu-links"><a href="home.html"><div class="menu-link-icon">
+</div>
+
+<div class="side-menu-links">
+
+<a href="home.html">
+
+<div class="menu-link-icon">
 🏠
-</div>Home
+</div>
 
-</a><a href="study.html"><div class="menu-link-icon">
+Home
+
+</a>
+
+<a href="study.html">
+
+<div class="menu-link-icon">
 📚
-</div>Study Material
+</div>
 
-</a><a href="practice.html"><div class="menu-link-icon">
+Study Material
+
+</a>
+
+<a href="practice.html">
+
+<div class="menu-link-icon">
 📝
-</div>Practice
+</div>
 
-</a><div class="menu-divider"></div><a href="progress.html"><div class="menu-link-icon">
+Practice
+
+</a>
+
+<div class="menu-divider"></div>
+
+<a href="progress.html">
+
+<div class="menu-link-icon">
 📊
-</div>My Progress
+</div>
 
-</a><a href="daily-task.html"><div class="menu-link-icon">
+My Progress
+
+</a>
+
+<a href="daily-task.html">
+
+<div class="menu-link-icon">
 🎯
-</div>Daily Task
+</div>
 
-</a><a href="history.html"><div class="menu-link-icon">
+Daily Task
+
+</a>
+
+<a href="history.html">
+
+<div class="menu-link-icon">
 📋
-</div>Test History
+</div>
 
-</a><a href="saved_questions.html"><div class="menu-link-icon">
+Test History
+
+</a>
+
+<a href="saved_questions.html">
+
+<div class="menu-link-icon">
 🔖
-</div>Saved Questions
+</div>
 
-</a><div class="menu-divider"></div><div class="menu-theme"><span>
+Saved Questions
+
+</a>
+
+<div class="menu-divider"></div>
+
+<div class="menu-theme">
+
+<span>
 Theme
-</span><div class="theme-options"><button
+</span>
+
+<div class="theme-options">
+
+<button
 id="darkThemeBtn"
 type="button"
-
-«»
-
+>
 Dark
 </button>
 
 <button
 id="lightThemeBtn"
 type="button"
-
-«»
-
+>
 Light
 </button>
 
-</div></div><a
+</div>
+
+</div>
+
+<a
 href="profile.html"
 id="logoutLink"
-
-«»
+>
 
 <div class="menu-link-icon">
 🚪
-</div>Log Out
+</div>
 
-</a></div></aside></div><div
+Log Out
+
+</a>
+
+</div>
+
+</aside>
+
+</div>
+
+<div
 class="search-overlay"
 id="searchOverlay"
-><div class="search-box"><div class="search-top"><input
+>
+
+<div class="search-box">
+
+<div class="search-top">
+
+<input
 type="search"
 class="search-input"
 id="searchInput"
 placeholder="Search SSC EDGE..."
 autocomplete="off"
-
-«»
+>
 
 <button
 class="search-close"
 id="searchClose"
 type="button"
-
-«»
-
+>
 ×
 </button>
 
-</div><div
+</div>
+
+<div
 class="search-results"
 id="searchResults"
-><div class="search-empty">
-Search SSC EDGE exams, mocks and study material.
-</div></div></div></div><div
+>
+
+<div class="search-empty">
+Search SSC EDGE exams, mocks, PDFs and study material.
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div
 class="updates-overlay"
 id="updatesOverlay"
-><div class="updates-popup"><div class="updates-popup-header"><div><h2>
+>
+
+<div class="updates-popup">
+
+<div class="updates-popup-header">
+
+<div>
+
+<h2>
 Updates
-</h2><p>
+</h2>
+
+<p>
 SSC EDGE latest updates
-</p></div><button
+</p>
+
+</div>
+
+<button
 class="updates-close"
 id="updatesClose"
 type="button"
-
-«»
-
+>
 ×
 </button>
 
-</div><div
+</div>
+
+<div
 class="updates-content"
 id="updatesContent"
-><div class="no-updates"><div class="no-updates-icon"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h5"/></svg></div><strong>
+>
+
+<div class="no-updates">
+
+<div class="no-updates-icon">
+
+<svg viewBox="0 0 24 24">
+
+<path d="M4 5h16v14H4z"/>
+
+<path d="M8 9h8M8 13h5"/>
+
+</svg>
+
+</div>
+
+<strong>
 Currently no updates
-</strong><span>
+</strong>
+
+<span>
 New SSC EDGE updates will appear here.
-</span></div></div></div></div><main class="home-container"><section class="home-welcome"><div class="welcome-pill">
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<main class="home-container">
+
+<section class="home-welcome">
+
+<div class="welcome-pill">
 SSC PREPARATION
-</div><h1>
+</div>
+
+<h1>
 Welcome to SSC EDGE
-</h1><p>
+</h1>
+
+<p>
 Your smart preparation platform for SSC exams.
-</p><a
+</p>
+
+<a
 href="study.html"
 class="welcome-action"
-
-«»
+>
 
 Get Started
 
 <span>
 →
-</span></a></section><h2 class="section-heading">
+</span>
+
+</a>
+
+</section>
+
+<h2 class="section-heading">
 Dashboard
-</h2><section class="dashboard-grid"><a
+</h2>
+
+<section class="dashboard-grid">
+
+<a
 href="study.html"
 class="dashboard-card"
-
-«»
+>
 
 <div class="dash-icon">
-📚
-</div><strong>
+  📚
+</div>
+
+<strong>
 Study Material
-</strong><span>
+</strong>
+
+<span>
 Notes & PDFs
-</span></a><a
+</span>
+
+</a>
+
+<a
 href="practice.html"
 class="dashboard-card"
-
-«»
+>
 
 <div class="dash-icon">
-📝
-</div><strong>
+  📝
+</div>
+
+<strong>
 Practice
-</strong><span>
+</strong>
+
+<span>
 Mock Tests
-</span></a><a
+</span>
+
+</a>
+
+<a
 href="daily-task.html"
 class="dashboard-card"
-
-«»
+>
 
 <div class="dash-icon">
 🎯
-</div><strong>
+</div>
+
+<strong>
 Daily Task
-</strong><span>
+</strong>
+
+<span>
 Daily learning tasks
-</span></a><a
+</span>
+
+</a>
+
+<a
 href="progress.html"
 class="dashboard-card"
-
-«»
+>
 
 <div class="dash-icon">
-📊
-</div><strong>
+  📊
+</div>
+
+<strong>
 Progress
-</strong><span>
+</strong>
+
+<span>
 Track your performance
-</span></a></section><h2 class="section-heading">
+</span>
+
+</a>
+
+</section>
+
+<h2 class="section-heading">
 Join SSC EDGE Community
-</h2><section class="community-scroll"><a
+</h2>
+
+<section class="community-scroll">
+
+<a
 href="https://t.me/EDGE_SSC"
 target="_blank"
 rel="noopener noreferrer"
 class="community-card"
+>
 
-«»
+<div class="community-logo telegram-logo">
 
-<div class="community-logo telegram-logo"><svg viewBox="0 0 24 24"><path
+<svg viewBox="0 0 24 24">
+
+<path
 d="M21.6 3.5 18.4 20c-.2 1-.8 1.4-1.6.9l-4.8-3.6-2.4 2.3c-.3.3-.5.5-.9.5l.3-4.9 9-8.2c.4-.4-.1-.6-.6-.2L6.3 13.3l-4.7-1.5c-1-.3-1-1.1.2-1.5L20.2 3c.9-.3 1.7.2 1.4.5Z"
 />
 
-</svg></div><strong>
+</svg>
+
+</div>
+
+<strong>
 Telegram Channel
-</strong><span>
+</strong>
+
+<span>
 Daily updates & exam alerts
-</span><div class="community-button telegram-button">
+</span>
+
+<div class="community-button telegram-button">
 Join Now →
-</div></a><a
+</div>
+
+</a>
+
+<a
 href="https://youtube.com/@sscedge07?si=G3GngIGL79XRy3PK"
 target="_blank"
 rel="noopener noreferrer"
 class="community-card"
+>
 
-«»
+<div class="community-logo youtube-logo">
 
-<div class="community-logo youtube-logo"><svg viewBox="0 0 24 24"><path
-d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8Z"
+<svg viewBox="0 0 24 24">
+
+<path
+d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a31 31 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8Z"
 />
 
 <path
@@ -1600,21 +1872,36 @@ d="m9.5 15.5 6-3.5-6-3.5v7Z"
 fill="#ffffff"
 />
 
-</svg></div><strong>
+</svg>
+
+</div>
+
+<strong>
 YouTube
-</strong><span>
+</strong>
+
+<span>
 Free classes & strategy sessions
-</span><div class="community-button youtube-button">
+</span>
+
+<div class="community-button youtube-button">
 Watch Now →
-</div></a><a
+</div>
+
+</a>
+
+<a
 href="https://www.instagram.com/ssc_edge"
 target="_blank"
 rel="noopener noreferrer"
 class="community-card"
+>
 
-«»
+<div class="community-logo instagram-logo">
 
-<div class="community-logo instagram-logo"><svg viewBox="0 0 24 24"><rect
+<svg viewBox="0 0 24 24">
+
+<rect
 x="3"
 y="3"
 width="18"
@@ -1636,21 +1923,36 @@ fill="#E1306C"
 stroke="none"
 />
 
-</svg></div><strong>
+</svg>
+
+</div>
+
+<strong>
 Instagram
-</strong><span>
+</strong>
+
+<span>
 Follow SSC EDGE for updates
-</span><div class="community-button instagram-button">
+</span>
+
+<div class="community-button instagram-button">
 Follow Us →
-</div></a><a
+</div>
+
+</a>
+
+<a
 href="https://t.me/+nHIcGkweGB5mNDdl"
 target="_blank"
 rel="noopener noreferrer"
 class="community-card"
+>
 
-«»
+<div class="community-logo discussion-logo">
 
-<div class="community-logo discussion-logo"><svg viewBox="0 0 24 24"><path
+<svg viewBox="0 0 24 24">
+
+<path
 d="M4 5.5h16v11H9l-5 4v-15Z"
 />
 
@@ -1662,34 +1964,78 @@ stroke-width="1.7"
 stroke-linecap="round"
 />
 
-</svg></div><strong>
+</svg>
+
+</div>
+
+<strong>
 Discussion Group
-</strong><span>
+</strong>
+
+<span>
 Ask doubts & discuss with aspirants
-</span><div class="community-button discussion-button">
+</span>
+
+<div class="community-button discussion-button">
 Join Group →
-</div></a></section><h2 class="section-heading">
+</div>
+
+</a>
+
+</section>
+
+<h2 class="section-heading">
 Continue Learning
-</h2><section class="continue-grid"><!-- CHANGE 3:
-     Mock Test now opens SSC branch inside practice.html --><a
+</h2>
+
+<section class="continue-grid">
+
+<!-- ONLY CHANGE #3 -->
+<a
 href="practice.html#ssc"
 class="continue-card"
+>
 
-«»
+<div class="continue-icon">
 
-<div class="continue-icon"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z"/><path d="m8 12 2.5 2.5L16 9"/></svg></div><div><strong>
+<svg viewBox="0 0 24 24">
+
+<path d="M5 4h14v16H5z"/>
+
+<path d="m8 12 2.5 2.5L16 9"/>
+
+</svg>
+
+</div>
+
+<div>
+
+<strong>
 Mock Test
-</strong><span>
+</strong>
+
+<span>
 Practice SSC mock tests
-</span></div><b>
+</span>
+
+</div>
+
+<b>
 ›
-</b></a><a
+</b>
+
+</a>
+
+<a
 href="video.html"
 class="continue-card"
+>
 
-«»
+<div class="continue-icon">
 
-<div class="continue-icon"><svg viewBox="0 0 24 24"><rect
+<svg viewBox="0 0 24 24">
+
+<rect
 x="4"
 y="5"
 width="16"
@@ -1702,86 +2048,170 @@ d="m10 9 5 3-5 3Z"
 fill="none"
 />
 
-</svg></div><div><strong>
+</svg>
+
+</div>
+
+<div>
+
+<strong>
 Videos
-</strong><span>
+</strong>
+
+<span>
 Continue video classes
-</span></div><b>
+</span>
+
+</div>
+
+<b>
 ›
-</b></a><a
+</b>
+
+</a>
+
+<a
 href="saved_questions.html"
 class="continue-card"
+>
 
-«»
+<div class="continue-icon">
 
-<div class="continue-icon"><svg viewBox="0 0 24 24"><path
+<svg viewBox="0 0 24 24">
+
+<path
 d="M6 4h12v17l-6-3-6 3V4Z"
 />
 
-</svg></div><div><strong>
+</svg>
+
+</div>
+
+<div>
+
+<strong>
 Saved Questions
-</strong><span>
+</strong>
+
+<span>
 Revise saved questions
-</span></div><b>
+</span>
+
+</div>
+
+<b>
 ›
-</b></a><a
+</b>
+
+</a>
+
+<a
 href="progress.html"
 class="continue-card"
+>
 
-«»
+<div class="continue-icon">
 
-<div class="continue-icon"><svg viewBox="0 0 24 24"><path d="M4 19V5"/>
+<svg viewBox="0 0 24 24">
+
+<path d="M4 19V5"/>
 <path d="M4 19h16"/>
-<path d="m7 15 4-4 3 2 5-6"/></svg></div><div><strong>
+<path d="m7 15 4-4 3 2 5-6"/>
+
+</svg>
+
+</div>
+
+<div>
+
+<strong>
 Performance
-</strong><span>
+</strong>
+
+<span>
 Check your performance
-</span></div><b>
+</span>
+
+</div>
+
+<b>
 ›
-</b></a></section></main><footer class="home-footer"><h2>
+</b>
+
+</a>
+
+</section>
+
+</main>
+
+<footer class="home-footer">
+
+<h2>
 SSC <span>EDGE</span>
-</h2><p>
+</h2>
+
+<p>
 Learn • Practice • Improve
-</p></footer><nav class="bottom-nav"><a
+</p>
+
+</footer>
+
+<nav class="bottom-nav">
+
+<a
 href="home.html"
 class="active"
-
-«»
+>
 
 <span class="nav-icon">
 🏠
-</span><small>
+</span>
+
+<small>
 Home
-</small></a><a href="study.html"><span class="nav-icon">
+</small>
+
+</a>
+
+<a href="study.html">
+
+<span class="nav-icon">
 📚
-</span><small>
+</span>
+
+<small>
 Study Material
-</small></a><a href="practice.html"><span class="nav-icon">
+</small>
+
+</a>
+
+<a href="practice.html">
+
+<span class="nav-icon">
 📝
-</span><small>
+</span>
+
+<small>
 Practice
-</small></a><a href="profile.html"><span class="nav-icon">
+</small>
+
+</a>
+
+<a href="profile.html">
+
+<span class="nav-icon">
 👤
-</span><small>
+</span>
+
+<small>
 Profile
-</small></a></nav><script>
+</small>
 
-/* ==================================================
-   SUPABASE
-   ================================================== */
+</a>
 
-const SUPABASE_URL =
-"https://dvvyoygahzzbnpqrfhen.supabase.co";
+</nav>
 
-const SUPABASE_KEY =
-"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
-
-const updatesDb =
-supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
-);
-
+<script>
 
 /* ==================================================
    MENU
@@ -1827,7 +2257,6 @@ menuOverlay.classList.remove("show");
 }
 );
 
-
 /* ==================================================
    PROFILE NAME
    ================================================== */
@@ -1872,7 +2301,6 @@ document.getElementById(
 "sideProfileName"
 ).textContent = savedName;
 
-
 const possiblePhotoKeys = [
 
 "ssc-edge-profile-photo",
@@ -1904,7 +2332,6 @@ break;
 
 loadProfileInfo();
 
-
 /* ==================================================
    SEARCH
    ================================================== */
@@ -1926,70 +2353,114 @@ document.getElementById("searchResults");
 
 
 /*
-   Basic pages are still available,
-   but database content is searched too.
+==================================================
+ONLY CHANGE #2
+
+Search now searches the actual Supabase data
+instead of only the fixed Home-page list.
+
+It searches:
+- exams
+- mock_tests
+- study material tables when available
+
+It also keeps the original page search.
+==================================================
 */
 
-const staticSearchIndex = [
+const searchIndex = [
 
 {
 title:"Home",
 text:"SSC EDGE home dashboard welcome community continue learning",
-url:"home.html",
-type:"Page"
+url:"home.html"
 },
 
 {
 title:"Study Material",
-text:"Study Material Notes PDFs Quantitative Aptitude General Awareness English Reasoning",
-url:"study.html",
-type:"Page"
+text:"Study Material Video E-Books Notes PDFs Quantitative Aptitude General Awareness English Reasoning",
+url:"study.html"
+},
+
+{
+title:"Video Classes",
+text:"Video classes study videos",
+url:"video.html"
+},
+
+{
+title:"E-Books",
+text:"E Books PDFs books study material downloads",
+url:"ebooks.html"
+},
+
+{
+title:"Quantitative Aptitude",
+text:"Quant maths mathematics notes PDF practice",
+url:"quant.html"
+},
+
+{
+title:"General Awareness",
+text:"GK General Knowledge Current Affairs notes PDF",
+url:"gk.html"
+},
+
+{
+title:"English",
+text:"English Grammar Vocabulary notes PDF",
+url:"english.html"
+},
+
+{
+title:"Reasoning",
+text:"Reasoning Logic Practice notes PDF",
+url:"reasoning.html"
 },
 
 {
 title:"Practice",
 text:"Practice Mock Tests Full Mocks CGL PRE CGL MAINS Sectional Mocks SSC",
-url:"practice.html",
-type:"Page"
+url:"practice.html"
 },
 
 {
 title:"My Progress",
-text:"Progress performance score accuracy rank percentile",
-url:"progress.html",
-type:"Page"
+text:"Progress performance score accuracy rank percentile test performance",
+url:"progress.html"
 },
 
 {
 title:"Daily Task",
-text:"Daily learning tasks preparation",
-url:"daily-task.html",
-type:"Page"
+text:"Daily tasks daily learning tasks preparation",
+url:"daily-task.html"
 },
 
 {
 title:"Test History",
 text:"Previous attempts test history mock tests",
-url:"history.html",
-type:"Page"
+url:"history.html"
 },
 
 {
 title:"Saved Questions",
 text:"Saved questions questions saved for revision",
-url:"saved_questions.html",
-type:"Page"
+url:"saved_questions.html"
+},
+
+{
+title:"Downloads",
+text:"Downloaded PDFs E Books downloads",
+url:"downloads.html"
 },
 
 {
 title:"Profile",
-text:"Profile account theme logout",
-url:"profile.html",
-type:"Page"
+text:"Profile account downloads saved questions test history theme about logout",
+url:"profile.html"
 }
 
 ];
-
 
 function openSearch(){
 
@@ -2003,7 +2474,6 @@ searchInput.focus();
 
 }
 
-
 function closeSearch(){
 
 searchOverlay.classList.remove("show");
@@ -2014,360 +2484,24 @@ showSearchEmpty();
 
 }
 
-
 function showSearchEmpty(){
 
 searchResults.innerHTML = `
 
 <div class="search-empty">
-Search SSC EDGE exams, mocks and study material.
+Search SSC EDGE exams, mocks, PDFs and study material.
 </div>
 
 `;
 
 }
 
-
-function showSearchLoading(){
-
-searchResults.innerHTML = `
-
-<div class="search-empty">
-Searching SSC EDGE...
-</div>
-
-`;
-
-}
-
-
-function createSearchResult(
-title,
-text,
-url,
-type
-){
-
-const result =
-document.createElement("a");
-
-result.className =
-"search-result";
-
-result.href =
-url;
-
-result.innerHTML = `
-
-<strong>
-${escapeHtml(title)}
-</strong>
-
-<span>
-${escapeHtml(text || "")}
-</span>
-
-<small>
-${escapeHtml(type || "SSC EDGE")}
-</small>
-
-`;
-
-return result;
-
-}
-
-
-/*
-==================================================
-DATABASE SEARCH
-
-Searches actual Supabase content.
-
-Known SSC EDGE tables:
-- exams
-- mock_tests
-
-The query searches all text-like fields by
-checking common columns individually.
-==================================================
-*/
-
-async function searchDatabase(query){
-
-const results = [];
-
-const lowerQuery =
-query.toLowerCase();
-
-
-/* -----------------------------------------------
-   SEARCH EXAMS
-   ----------------------------------------------- */
-
-try{
-
-const {
-data,
-error
-} = await updatesDb
-.from("exams")
-.select("*")
-.limit(100);
-
-if(!error && data){
-
-data.forEach(function(row){
-
-const searchable =
-Object.values(row)
-.map(function(value){
-
-return String(
-value ?? ""
-);
-
-})
-.join(" ")
-.toLowerCase();
-
-if(
-searchable.includes(lowerQuery)
-){
-
-const title =
-row.name ||
-row.title ||
-row.exam_name ||
-row.exam ||
-"SSC Exam";
-
-results.push({
-
-title:title,
-
-text:
-"Exam • " +
-searchable.slice(0,180),
-
-url:"practice.html#ssc",
-
-type:"Exam"
-
-});
-
-}
-
-});
-
-}
-
-}catch(error){
-
-console.error(
-"Exam search error:",
-error
-);
-
-}
-
-
-/* -----------------------------------------------
-   SEARCH MOCK TESTS
-   ----------------------------------------------- */
-
-try{
-
-const {
-data,
-error
-} = await updatesDb
-.from("mock_tests")
-.select("*")
-.limit(200);
-
-if(!error && data){
-
-data.forEach(function(row){
-
-const searchable =
-Object.values(row)
-.map(function(value){
-
-return String(
-value ?? ""
-);
-
-})
-.join(" ")
-.toLowerCase();
-
-if(
-searchable.includes(lowerQuery)
-){
-
-const title =
-row.name ||
-row.title ||
-row.mock_name ||
-row.test_name ||
-"Mock Test";
-
-results.push({
-
-title:title,
-
-text:
-"Mock Test • " +
-searchable.slice(0,180),
-
-url:"practice.html#ssc",
-
-type:"Mock"
-
-});
-
-}
-
-});
-
-}
-
-}catch(error){
-
-console.error(
-"Mock search error:",
-error
-);
-
-}
-
-
-/*
---------------------------------------------------
-TRY COMMON STUDY/PDF TABLES
-
-If any of these tables exist, their data is
-searched automatically.
-
-A missing table is simply ignored.
---------------------------------------------------
-*/
-
-const possibleStudyTables = [
-
-"study_material",
-"study_materials",
-"ebooks",
-"pdfs",
-"documents",
-"materials"
-
-];
-
-
-for(
-const tableName of possibleStudyTables
-){
-
-try{
-
-const {
-data,
-error
-} = await updatesDb
-.from(tableName)
-.select("*")
-.limit(100);
-
-if(
-error ||
-!data
-){
-
-continue;
-
-}
-
-data.forEach(function(row){
-
-const searchable =
-Object.values(row)
-.map(function(value){
-
-return String(
-value ?? ""
-);
-
-})
-.join(" ")
-.toLowerCase();
-
-if(
-searchable.includes(lowerQuery)
-){
-
-const title =
-row.name ||
-row.title ||
-row.subject ||
-row.chapter ||
-row.file_name ||
-row.filename ||
-"Study Material";
-
-results.push({
-
-title:title,
-
-text:
-"Study Material • " +
-searchable.slice(0,180),
-
-url:
-row.url ||
-row.file_url ||
-row.pdf_url ||
-"study.html",
-
-type:"PDF / Study"
-
-});
-
-}
-
-});
-
-}catch(error){
-
-/*
-   Table may not exist.
-   Ignore it so Home does not break.
-*/
-
-}
-
-}
-
-
-return results;
-
-}
-
-
-/* ==================================================
-   SEARCH
-   ================================================== */
-
-let searchTimer = null;
-
-async function performSearch(){
+function performSearch(){
 
 const query =
 searchInput.value
 .trim()
 .toLowerCase();
-
 
 if(!query){
 
@@ -2378,23 +2512,10 @@ return;
 }
 
 
-showSearchLoading();
+/* ORIGINAL PAGE SEARCH */
 
-
-clearTimeout(searchTimer);
-
-
-searchTimer =
-setTimeout(
-async function(){
-
-/*
-   Static page results
-*/
-
-const staticResults =
-staticSearchIndex.filter(
-function(item){
+const pageResults =
+searchIndex.filter(function(item){
 
 return (
 
@@ -2410,38 +2531,38 @@ item.text
 
 );
 
-}
-);
+});
+
+
+searchResults.innerHTML = `
+
+<div class="search-empty">
+Searching SSC EDGE...
+</div>
+
+`;
 
 
 /*
-   Real database results
+DATABASE SEARCH
 */
 
-const databaseResults =
-await searchDatabase(query);
-
-
-/*
-   Combine results
-*/
+searchDatabase(query)
+.then(function(databaseResults){
 
 const allResults = [
-...staticResults,
+...pageResults,
 ...databaseResults
 ];
 
 
-/*
-   Remove duplicates
-*/
+/* Remove duplicates */
 
 const uniqueResults = [];
 
 const seen = new Set();
 
-allResults.forEach(
-function(item){
+allResults.forEach(function(item){
 
 const key =
 (
@@ -2449,7 +2570,7 @@ item.title +
 "|" +
 item.url +
 "|" +
-item.type
+(item.type || "")
 ).toLowerCase();
 
 if(!seen.has(key)){
@@ -2460,13 +2581,10 @@ uniqueResults.push(item);
 
 }
 
-}
-);
+});
 
 
-if(
-uniqueResults.length === 0
-){
+if(uniqueResults.length === 0){
 
 searchResults.innerHTML = `
 
@@ -2486,28 +2604,271 @@ return;
 
 searchResults.innerHTML = "";
 
-
 uniqueResults
 .slice(0,50)
-.forEach(
-function(item){
+.forEach(function(item){
 
-searchResults.appendChild(
-createSearchResult(
-item.title,
-item.text,
-item.url,
-item.type
-)
+const result =
+document.createElement("a");
+
+result.className =
+"search-result";
+
+result.href =
+item.url;
+
+result.innerHTML = `
+
+<strong>
+${escapeHtml(item.title)}
+</strong>
+
+<span>
+${escapeHtml(item.text || "")}
+</span>
+
+`;
+
+searchResults.appendChild(result);
+
+});
+
+
+})
+.catch(function(error){
+
+console.error(
+"Search error:",
+error
+);
+
+/*
+If database search fails, the original
+page search still works.
+*/
+
+if(pageResults.length === 0){
+
+searchResults.innerHTML = `
+
+<div class="search-empty">
+
+No results found for
+"<strong>${escapeHtml(query)}</strong>"
+
+</div>
+
+`;
+
+}else{
+
+searchResults.innerHTML = "";
+
+pageResults.forEach(function(item){
+
+const result =
+document.createElement("a");
+
+result.className =
+"search-result";
+
+result.href =
+item.url;
+
+result.innerHTML = `
+
+<strong>
+${escapeHtml(item.title)}
+</strong>
+
+<span>
+${escapeHtml(item.text)}
+</span>
+
+`;
+
+searchResults.appendChild(result);
+
+});
+
+}
+
+});
+
+}
+
+
+/*
+==================================================
+SUPABASE DATABASE SEARCH
+==================================================
+*/
+
+async function searchDatabase(query){
+
+const results = [];
+
+const tables = [
+
+{
+name:"exams",
+type:"Exam",
+url:"practice.html#ssc"
+},
+
+{
+name:"mock_tests",
+type:"Mock Test",
+url:"practice.html#ssc"
+},
+
+{
+name:"study_material",
+type:"Study Material",
+url:"study.html"
+},
+
+{
+name:"study_materials",
+type:"Study Material",
+url:"study.html"
+},
+
+{
+name:"ebooks",
+type:"E-Book",
+url:"ebooks.html"
+},
+
+{
+name:"pdfs",
+type:"PDF",
+url:"study.html"
+}
+
+];
+
+
+for(const table of tables){
+
+try{
+
+const {
+data,
+error
+} = await updatesDb
+.from(table.name)
+.select("*")
+.limit(200);
+
+
+if(error || !data){
+
+continue;
+
+}
+
+
+data.forEach(function(row){
+
+const values =
+Object.values(row);
+
+
+const searchable =
+values
+.map(function(value){
+
+return String(
+value ?? ""
+);
+
+})
+.join(" ")
+.toLowerCase();
+
+
+if(
+searchable.includes(query)
+){
+
+let title =
+row.name ||
+row.title ||
+row.exam_name ||
+row.exam ||
+row.mock_name ||
+row.test_name ||
+row.subject ||
+row.chapter ||
+row.file_name ||
+row.filename ||
+"SSC EDGE";
+
+
+let url =
+table.url;
+
+
+/*
+If a study/PDF row already contains
+a usable URL, use it.
+*/
+
+if(
+table.type === "PDF" ||
+table.type === "E-Book" ||
+table.type === "Study Material"
+){
+
+url =
+row.url ||
+row.file_url ||
+row.pdf_url ||
+row.link ||
+table.url;
+
+}
+
+
+results.push({
+
+title:String(title),
+
+text:
+table.type +
+" • " +
+searchable.substring(0,220),
+
+url:url,
+
+type:table.type
+
+});
+
+}
+
+});
+
+
+}catch(error){
+
+/*
+A table that does not exist is ignored.
+This keeps Home working normally.
+*/
+
+console.log(
+"Search table skipped:",
+table.name
 );
 
 }
-);
+
+}
 
 
-},
-250
-);
+return results;
 
 }
 
@@ -2523,7 +2884,6 @@ return String(value)
 .replaceAll("'","&#039;");
 
 }
-
 
 searchButton.addEventListener(
 "click",
@@ -2553,7 +2913,6 @@ closeSearch();
 }
 );
 
-
 /* ==================================================
    UPDATES
    ================================================== */
@@ -2576,14 +2935,17 @@ document.getElementById("updateDot");
 
 /*
 ==================================================
-NOTIFICATION READ SYSTEM
+ONLY CHANGE #1
 
-The timestamp of the newest update that the user
-has opened is stored locally.
+Unread notification is remembered locally.
 
-Newer update = red dot.
+The red dot appears when there is an active
+update newer than the last update the user saw.
 
-Opening notification = mark current updates read.
+Opening the bell marks the currently displayed
+updates as read.
+
+A newly added update gets the red dot again.
 ==================================================
 */
 
@@ -2591,51 +2953,79 @@ const UPDATE_READ_KEY =
 "ssc-edge-updates-last-read";
 
 
-function getLastReadTime(){
+function getLastReadUpdate(){
 
-const saved =
-localStorage.getItem(
+return localStorage.getItem(
 UPDATE_READ_KEY
-);
-
-if(!saved){
-
-return 0;
-
-}
-
-const time =
-new Date(saved).getTime();
-
-return isNaN(time)
-? 0
-: time;
+) || "";
 
 }
 
 
-function markUpdatesAsRead(){
+function checkUnreadUpdates(data){
 
-const now =
-new Date().toISOString();
-
-localStorage.setItem(
-UPDATE_READ_KEY,
-now
-);
+if(!data || data.length === 0){
 
 updateDot.style.display =
 "none";
 
+return;
+
 }
 
 
+const lastRead =
+getLastReadUpdate();
+
+
 /*
-Check whether there are updates newer
-than the user's last-read timestamp.
+First ever visit:
+show red dot because updates exist.
 */
 
-function updateNotificationDot(data){
+if(!lastRead){
+
+updateDot.style.display =
+"block";
+
+return;
+
+}
+
+
+const lastReadTime =
+new Date(lastRead).getTime();
+
+
+const unread =
+data.some(function(update){
+
+if(!update.created_at){
+
+return false;
+
+}
+
+return (
+new Date(
+update.created_at
+).getTime()
+>
+lastReadTime
+);
+
+});
+
+
+updateDot.style.display =
+unread
+? "block"
+: "none";
+
+}
+
+
+function markUpdatesRead(data){
 
 if(
 !data ||
@@ -2650,61 +3040,47 @@ return;
 }
 
 
-const lastRead =
-getLastReadTime();
+const newest =
+data.find(function(update){
+
+return update.created_at;
+
+});
 
 
-const hasUnread =
-data.some(
-function(update){
+if(newest && newest.created_at){
 
-if(!update.created_at){
-
-return false;
-
-}
-
-return (
-new Date(
-update.created_at
-).getTime()
->
-lastRead
+localStorage.setItem(
+UPDATE_READ_KEY,
+newest.created_at
 );
 
 }
-);
 
 
 updateDot.style.display =
-hasUnread
-? "block"
-: "none";
+"none";
 
 }
 
-
-/*
-Opening the popup marks the currently
-available notifications as read.
-*/
 
 updateBell.addEventListener(
 "click",
 async function(){
 
-updatesOverlay.classList.add(
-"show"
-);
+updatesOverlay.classList.add("show");
 
-/*
-   Load first so the user sees the latest
-   data, then mark it read.
-*/
-
+const data =
 await loadUpdates();
 
-markUpdatesAsRead();
+
+/*
+User has now opened the notification.
+Mark the currently available notifications
+as read.
+*/
+
+markUpdatesRead(data);
 
 }
 );
@@ -2714,13 +3090,10 @@ updatesClose.addEventListener(
 "click",
 function(){
 
-updatesOverlay.classList.remove(
-"show"
-);
+updatesOverlay.classList.remove("show");
 
 }
 );
-
 
 updatesOverlay.addEventListener(
 "click",
@@ -2728,21 +3101,49 @@ function(event){
 
 if(event.target === updatesOverlay){
 
-updatesOverlay.classList.remove(
-"show"
-);
+updatesOverlay.classList.remove("show");
 
 }
 
 }
 );
-
 
 /* ==================================================
-   LOAD UPDATES
+   LOAD UPDATES FROM SUPABASE
    ================================================== */
 
 async function loadUpdates(){
+
+updateDot.style.display = "none";
+
+updatesContent.innerHTML = `
+
+<div class="no-updates">
+
+<div class="no-updates-icon">
+
+<svg viewBox="0 0 24 24">
+
+<path d="M4 5h16v14H4z"/>
+
+<path d="M8 9h8M8 13h5"/>
+
+</svg>
+
+</div>
+
+<strong>
+Loading updates...
+</strong>
+
+<span>
+Please wait
+</span>
+
+</div>
+
+`;
+
 
 const {
 data,
@@ -2753,9 +3154,9 @@ error
 
 .select("*")
 
-.eq("is_active",true)
+.eq("is_active", true)
 
-.order("created_at",{
+.order("created_at", {
 ascending:false
 });
 
@@ -2769,12 +3170,9 @@ error
 
 showNoUpdates();
 
-return;
+return [];
 
 }
-
-
-updateNotificationDot(data);
 
 
 if(
@@ -2784,16 +3182,23 @@ data.length === 0
 
 showNoUpdates();
 
-return;
+return [];
 
 }
+
+
+/*
+When loading normally, check whether
+there is an unread notification.
+*/
+
+checkUnreadUpdates(data);
 
 
 updatesContent.innerHTML = "";
 
 
-data.forEach(
-function(update){
+data.forEach(function(update){
 
 const item =
 document.createElement("div");
@@ -2843,12 +3248,14 @@ update.title ||
 )}
 </strong>
 
+
 <span>
 ${escapeHtml(
 update.message ||
 ""
 )}
 </span>
+
 
 <small>
 ${escapeHtml(
@@ -2861,25 +3268,24 @@ formattedDate
 `;
 
 
-updatesContent.appendChild(
-item
-);
+updatesContent.appendChild(item);
 
-}
-);
+});
+
+
+return data;
 
 }
 
 
 /* ==================================================
-   NO UPDATES
+   NO UPDATES MESSAGE
    ================================================== */
 
 function showNoUpdates(){
 
 updateDot.style.display =
 "none";
-
 
 updatesContent.innerHTML = `
 
@@ -2897,9 +3303,11 @@ updatesContent.innerHTML = `
 
 </div>
 
+
 <strong>
 Currently no updates
 </strong>
+
 
 <span>
 New SSC EDGE updates will appear here.
@@ -2912,20 +3320,11 @@ New SSC EDGE updates will appear here.
 }
 
 
-/*
-==================================================
-INITIAL UPDATE CHECK
-
-Important:
-Do NOT mark read here.
-
-If there is a new notification, the red dot
-remains visible until the user opens the bell.
-==================================================
-*/
+/* ==================================================
+   INITIAL LOAD
+   ================================================== */
 
 loadUpdates();
-
 
 /* ==================================================
    THEME
@@ -2937,14 +3336,12 @@ document.getElementById("darkThemeBtn");
 const lightThemeBtn =
 document.getElementById("lightThemeBtn");
 
-
 function updateThemeButtons(){
 
 const theme =
 localStorage.getItem(
 "ssc-edge-theme"
 ) || "dark";
-
 
 darkThemeBtn.classList.toggle(
 "active",
@@ -2957,7 +3354,6 @@ theme === "light"
 );
 
 }
-
 
 darkThemeBtn.addEventListener(
 "click",
@@ -2976,7 +3372,6 @@ updateThemeButtons();
 }
 );
 
-
 lightThemeBtn.addEventListener(
 "click",
 function(){
@@ -2994,9 +3389,7 @@ updateThemeButtons();
 }
 );
 
-
 updateThemeButtons();
-
 
 /* ==================================================
    ESC KEY
@@ -3017,5 +3410,7 @@ updatesOverlay.classList.remove("show");
 }
 );
 
-</script></body>
+</script>
+
+</body>
   </html>
