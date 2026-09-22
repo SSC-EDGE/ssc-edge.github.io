@@ -1,82 +1,133 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>SSC EDGE - Login</title> <!-- THEME --> <script> document.documentElement.dataset.theme = localStorage.getItem("ssc-edge-theme") || "dark"; </script> <style> :root{ --bg:#08050e; --card:#171025; --card2:#251344; --purple:#7c3aed; --purple2:#a66bff; --text:#fff; --muted:#aaa2b9; --border:#302044; } :root[data-theme="light"]{ --bg:#f6f3fb; --card:#fff; --card2:#eee6fa; --purple:#6d35d4; --purple2:#8149e8; --text:#17121e; --muted:#706879; --border:#ddd4e9; } *{ box-sizing:border-box; } body{ margin:0; min-height:100vh; background:var(--bg); color:var(--text); font-family:Arial,Helvetica,sans-serif; display:flex; justify-content:center; align-items:center; padding:20px; } .container{ width:100%; max-width:420px; } .logo{ text-align:center; font-size:30px; font-weight:800; margin-bottom:8px; } .subtitle{ text-align:center; color:var(--muted); margin-bottom:28px; } .card{ background:var(--card); border:1px solid var(--border); border-radius:18px; padding:22px; box-shadow: 0 10px 30px rgba(0,0,0,.25); } h2{ margin:0 0 18px; font-size:21px; } label{ display:block; margin: 13px 0 7px; color:var(--muted); font-size:14px; } input{ width:100%; padding:13px 14px; border-radius:11px; border:1px solid var(--border); background:var(--bg); color:var(--text); outline:none; font-size:15px; } input:focus{ border-color:var(--purple); } button{ width:100%; border:0; border-radius:11px; padding:13px; margin-top:14px; font-size:15px; font-weight:700; cursor:pointer; } .primary{ background:var(--purple); color:#fff; } .google{ background:#fff; color:#222; } .guest{ background:var(--card2); color:var(--text); } .divider{ display:flex; align-items:center; gap:10px; margin:20px 0; color:var(--muted); font-size:13px; } .divider:before, .divider:after{ content:""; flex:1; height:1px; background:var(--border); } .message{ margin-top:15px; text-align:center; font-size:14px; color:var(--muted); min-height:20px; } .small{ font-size:12px; color:var(--muted); margin-top:10px; line-height:1.5; text-align:center; } </style> </head> <body> <div class="container"> <!-- ========================= LOGIN ========================== --> <div class="logo"> SSC EDGE </div> <div class="subtitle"> Smart Preparation for SSC Exams </div> <div class="card" id="loginBox"> <h2> Login </h2> <label> Mobile Number </label> <input type="tel" id="loginPhone" placeholder="Enter your mobile number" autocomplete="tel" inputmode="tel" > <label> Password </label> <input type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password" > <button class="primary" onclick="loginPhonePassword()"> Login </button> <div class="divider"> OR </div> <button class="google" onclick="loginWithGoogle()"> Continue with Google </button> <button class="guest" onclick="continueAsGuest()"> Continue as Guest </button> <div class="message" id="loginMessage"> </div> <div class="small"> New users can create their SSC EDGE account using Google. </div> </div> </div> <!-- ========================= SUPABASE ========================== --> <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> <script> /* ========================================= SUPABASE CONFIG ========================================= */ const SUPABASE_URL = "https://dvvyoygahzzbnpqrfhen.supabase.co"; const SUPABASE_KEY = "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s"; const supabaseClient = window.supabase.createClient( SUPABASE_URL, SUPABASE_KEY, { auth:{ autoRefreshToken:true, persistSession:true, detectSessionInUrl:true } } ); /* ========================================= SAVE USER ========================================= */ async function saveUser(user){ if(!user){ return; } localStorage.setItem( "ssc-edge-user-id", user.id ); localStorage.setItem( "ssc-edge-user-email", user.email || "" ); const name = user.user_metadata?.name || user.user_metadata?.full_name || user.email?.split("@")[0] || "Candidate"; localStorage.setItem( "ssc-edge-user-name", name ); localStorage.removeItem( "ssc-edge-guest" ); } /* ========================================= GO HOME ========================================= */ function goHome(){ window.location.replace( "home.html" ); } /* ========================================= NORMALIZE PHONE ========================================= */ function normalizePhone(phone){ phone = phone.trim().replace(/\s+/g,""); /* SSC EDGE users are expected to use Indian mobile numbers. 10 digit number: 9876543210 becomes: +919876543210 */ if( /^\d{10}$/.test(phone) ){ return "+91" + phone; } /* Already entered with country code. */ if( /^\+91\d{10}$/.test(phone) ){ return phone; } return null; } /* ========================================= MOBILE + PASSWORD LOGIN ========================================= */ async function loginPhonePassword(){
- const phoneInput = document.getElementById("loginPhone");
- const passwordInput = document.getElementById("loginPassword");
- const msg = document.getElementById("loginMessage");
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>SSC EDGE - Login</title> <!-- THEME --> <script> document.documentElement.dataset.theme = localStorage.getItem("ssc-edge-theme") || "dark"; </script> <style> :root{ --bg:#08050e; --card:#171025; --card2:#251344; --purple:#7c3aed; --purple2:#a66bff; --lavender:#c8a8ff; --text:#fff; --muted:#aaa2b9; --border:#302044; } :root[data-theme="light"]{ --bg:#f6f3fb; --card:#fff; --card2:#eee6fa; --purple:#6d35d4; --purple2:#8149e8; --lavender:#9b72d9; --text:#17121e; --muted:#706879; --border:#ddd4e9; } *{ box-sizing:border-box; } body{ margin:0; min-height:100vh; background:var(--bg); color:var(--text); font-family:Arial,Helvetica,sans-serif; display:flex; justify-content:center; align-items:center; padding:20px; } .container{ width:100%; max-width:420px; } .logo{ text-align:center; font-size:30px; font-weight:800; margin-bottom:8px; } .logo .edge{ color:var(--lavender); } .subtitle{ text-align:center; color:var(--muted); margin-bottom:28px; } .card{ background:var(--card); border:1px solid var(--border); border-radius:18px; padding:22px; box-shadow: 0 10px 30px rgba(0,0,0,.25); } h2{ margin:0 0 18px; font-size:21px; } label{ display:block; margin: 13px 0 7px; color:var(--muted); font-size:14px; } input{ width:100%; padding:13px 14px; border-radius:11px; border:1px solid var(--border); background:var(--bg); color:var(--text); outline:none; font-size:15px; } input:focus{ border-color:var(--purple); } button{ width:100%; border:0; border-radius:11px; padding:13px; margin-top:14px; font-size:15px; font-weight:700; cursor:pointer; } .primary{ background:var(--purple); color:#fff; } .google{
+  background:#fff;
+  color:#222;
+}
+.google-content{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+}
+.google-icon{
+  width:20px;
+  height:20px;
+  flex:0 0 20px;
+} .guest{ background:var(--card2); color:var(--text); } .divider{ display:flex; align-items:center; gap:10px; margin:20px 0; color:var(--muted); font-size:13px; } .divider:before, .divider:after{ content:""; flex:1; height:1px; background:var(--border); } .message{ margin-top:15px; text-align:center; font-size:14px; color:var(--muted); min-height:20px; } .small{ font-size:12px; color:var(--muted); margin-top:10px; line-height:1.5; text-align:center; } </style> </head> <body> <div class="container"> <!-- ========================= LOGIN ========================== --> <div class="logo">SSC <span class="edge">EDGE</span></div> <div class="subtitle"> Smart Preparation for SSC Exams </div> <div class="card" id="loginBox"> <h2> Login </h2> <label> Mobile Number </label> <input type="tel" id="loginPhone" placeholder="Enter your mobile number" autocomplete="tel" inputmode="tel" > <label> Password </label> <input type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password" > <button class="primary" onclick="loginPhonePassword()"> Login </button> <div class="divider"> OR </div> <button class="google" onclick="loginWithGoogle()">
+  <span class="google-content">
+    <svg class="google-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path fill="#4285F4" d="M21.35 12.27c0-.79-.07-1.55-.22-2.27H12v4.3h5.24a4.48 4.48 0 0 1-1.94 2.94v2.45h3.14c1.84-1.69 2.91-4.18 2.91-7.42z"/>
+      <path fill="#34A853" d="M12 21.7c2.63 0 4.84-.87 6.45-2.35l-3.14-2.45c-.87.58-1.98.92-3.31.92-2.54 0-4.69-1.72-5.46-4.03H3.3v2.53A9.74 9.74 0 0 0 12 21.7z"/>
+      <path fill="#FBBC05" d="M6.54 13.79A5.86 5.86 0 0 1 6.23 12c0-.62.11-1.22.31-1.79V7.68H3.3A9.74 9.74 0 0 0 2.25 12c0 1.57.38 3.05 1.05 4.32l3.24-2.53z"/>
+      <path fill="#EA4335" d="M12 6.18c1.43 0 2.71.49 3.72 1.46l2.79-2.79C16.84 3.2 14.63 2.3 12 2.3a9.74 9.74 0 0 0-8.7 5.38l3.24 2.53C6.31 7.9 8.46 6.18 12 6.18z"/>
+    </svg>
+    <span>Continue with Google</span>
+  </span>
+</button> <button class="guest" onclick="continueAsGuest()"> Continue as Guest </button> <div class="message" id="loginMessage"> </div> <div class="small"> New users can create their SSC EDGE account using Google. </div> </div> </div> <!-- ========================= SUPABASE ========================== --> <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> <script> /* ========================================= SUPABASE CONFIG ========================================= */ const SUPABASE_URL = "https://dvvyoygahzzbnpqrfhen.supabase.co"; const SUPABASE_KEY = "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s"; const supabaseClient = window.supabase.createClient( SUPABASE_URL, SUPABASE_KEY, { auth:{ autoRefreshToken:true, persistSession:true, detectSessionInUrl:true } } ); /* ========================================= SAVE USER ========================================= */ async function saveUser(user){ if(!user){ return; } localStorage.setItem( "ssc-edge-user-id", user.id ); localStorage.setItem( "ssc-edge-user-email", user.email || "" ); const name = user.user_metadata?.name || user.user_metadata?.full_name || user.email?.split("@")[0] || "Candidate"; localStorage.setItem( "ssc-edge-user-name", name ); localStorage.removeItem( "ssc-edge-guest" ); } /* ========================================= GO HOME ========================================= */ function goHome(){ window.location.replace( "home.html" ); } /* ========================================= NORMALIZE PHONE ========================================= */ function normalizePhone(phone){ phone = phone.trim().replace(/\s+/g,""); /* SSC EDGE users are expected to use Indian mobile numbers. 10 digit number: 9876543210 becomes: +919876543210 */ if( /^\d{10}$/.test(phone) ){ return "+91" + phone; } /* Already entered with country code. */ if( /^\+91\d{10}$/.test(phone) ){ return phone; } return null; } /* ========================================= MOBILE + PASSWORD LOGIN ========================================= */ async function loginPhonePassword(){
 
- const phone = normalizePhone(phoneInput.value);
- const password = passwordInput.value;
+  const phoneInput =
+    document.getElementById("loginPhone");
 
- if(!phone){
-   msg.textContent =
-     "Please enter a valid 10-digit mobile number.";
-   return;
- }
+  const passwordInput =
+    document.getElementById("loginPassword");
 
- if(!password){
-   msg.textContent =
-     "Please enter your password.";
-   return;
- }
+  const msg =
+    document.getElementById("loginMessage");
 
- msg.textContent = "Logging in...";
+  const phone =
+    normalizePhone(phoneInput.value);
 
- const { data, error } =
-   await supabaseClient.functions.invoke(
-     "mobile-login",
-     {
-       body:{
-         mobile:phone,
-         password:password
-       }
-     }
-   );
+  const password =
+    passwordInput.value;
 
- if(error){
-   console.error("Mobile login error:", error);
+  if(!phone){
+    msg.textContent =
+      "Please enter a valid 10-digit mobile number.";
+    return;
+  }
 
-   let message =
-     error?.message ||
-     "Mobile login failed.";
+  if(!password){
+    msg.textContent =
+      "Please enter your password.";
+    return;
+  }
 
-   try{
-     if(error?.context){
-       const body =
-         await error.context.json();
+  msg.textContent =
+    "Logging in...";
 
-       if(body?.error){
-         message = body.error;
-       }
-     }
-   }catch(e){}
+  const { data, error } =
+    await supabaseClient.functions.invoke(
+      "quick-api",
+      {
+        body:{
+          mobile:phone,
+          password:password
+        }
+      }
+    );
 
-   msg.textContent = message;
-   return;
- }
+  if(error){
 
- if(!data?.access_token || !data?.refresh_token){
-   msg.textContent =
-     data?.error ||
-     "Mobile login failed.";
-   return;
- }
+    console.error(
+      "Mobile login error:",
+      error
+    );
 
- const sessionResult =
-   await supabaseClient.auth.setSession({
-     access_token:data.access_token,
-     refresh_token:data.refresh_token
-   });
+    let message =
+      error?.message ||
+      "Mobile login failed.";
 
- if(sessionResult.error){
-   msg.textContent =
-     sessionResult.error.message;
-   return;
- }
+    try{
 
- await saveUser(
-   sessionResult.data.session.user
- );
+      if(error?.context){
 
- goHome();
+        const body =
+          await error.context.json();
+
+        if(body?.error){
+          message = body.error;
+        }
+
+      }
+
+    }catch(e){}
+
+    msg.textContent =
+      message;
+
+    return;
+  }
+
+  if(
+    !data?.access_token ||
+    !data?.refresh_token
+  ){
+
+    msg.textContent =
+      data?.error ||
+      "Mobile login failed.";
+
+    return;
+  }
+
+  const sessionResult =
+    await supabaseClient.auth.setSession({
+      access_token:data.access_token,
+      refresh_token:data.refresh_token
+    });
+
+  if(sessionResult.error){
+
+    msg.textContent =
+      sessionResult.error.message;
+
+    return;
+  }
+
+  await saveUser(
+    sessionResult.data.session.user
+  );
+
+  goHome();
 }
 
 /* ========================================= GOOGLE LOGIN ========================================= */ async function loginWithGoogle(){ const msg = document.getElementById( "loginMessage" ); if(msg){ msg.textContent = "Opening Google..."; } const { error } = await supabaseClient.auth.signInWithOAuth({ provider:"google", options:{ redirectTo: "https://ssc-edge.github.io/", queryParams:{ prompt: "select_account" } } }); if(error && msg){ msg.textContent = error.message; } } /* ========================================= GUEST MODE ========================================= */ function continueAsGuest(){ localStorage.setItem( "ssc-edge-guest", "true" ); localStorage.removeItem( "ssc-edge-user-id" ); localStorage.setItem( "ssc-edge-user-name", "Guest" ); localStorage.removeItem( "ssc-edge-user-email" ); goHome(); } /* ========================================= GOOGLE RETURN HANDLING ========================================= */ async function handleGoogleReturn(){ const hash = window.location.hash; const search = window.location.search; const oauthReturn = hash.includes("access_token") || hash.includes("refresh_token") || search.includes("code="); if(!oauthReturn){ const { data:{ session } } = await supabaseClient.auth.getSession(); if(session){ await saveUser( session.user ); goHome(); } return; } /* OAuth returned. Wait for Supabase to restore the Google session. */ for(let i=0; i<40; i++){ const { data:{ session } } = await supabaseClient.auth.getSession(); if(session){ await saveUser( session.user ); window.history.replaceState( {}, document.title, window.location.pathname ); goHome(); return; } await new Promise( resolve => setTimeout(resolve,250) ); } const msg = document.getElementById( "loginMessage" ); if(msg){ msg.textContent = "Google login could not be completed. Please try again."; } } /* ========================================= AUTH STATE LISTENER ========================================= */ supabaseClient.auth.onAuthStateChange( async (event, session) => { if( event === "SIGNED_IN" && session ){ await saveUser( session.user ); goHome(); } } ); /* ========================================= START ========================================= */ handleGoogleReturn(); </script> </body> </html>
