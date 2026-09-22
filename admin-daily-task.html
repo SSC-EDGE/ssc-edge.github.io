@@ -254,10 +254,109 @@ select:focus{
   color:#55d98a;
 }
 
+
+/* ================= MULTIPLE MOCKS ================= */
+
+.mock-add-row{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:8px;
+  align-items:center;
+}
+
+.add-mock-btn{
+  border:0;
+  border-radius:11px;
+  padding:13px 16px;
+  background:var(--purple);
+  color:#fff;
+  font-weight:800;
+  cursor:pointer;
+  white-space:nowrap;
+}
+
+.selected-mocks{
+  margin-top:12px;
+}
+
+.selected-mock{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  border:1px solid var(--border);
+  border-radius:11px;
+  padding:11px 12px;
+  margin-top:8px;
+  background:var(--card);
+}
+
+.selected-mock-info{
+  min-width:0;
+}
+
+.selected-mock-title{
+  font-size:13px;
+  font-weight:800;
+  line-height:1.4;
+}
+
+.selected-mock-id{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:2px;
+}
+
+.remove-mock{
+  flex-shrink:0;
+  border:1px solid #ff6b6b;
+  background:transparent;
+  color:#ff6b6b;
+  border-radius:8px;
+  padding:7px 10px;
+  font-size:11px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.mock-count{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:9px;
+}
+
+.task-mocks{
+  margin-top:10px;
+}
+
+.task-mock{
+  border:1px solid var(--border);
+  border-radius:9px;
+  padding:8px 10px;
+  margin-top:6px;
+  font-size:12px;
+  font-weight:700;
+}
+
+.no-mocks{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:8px;
+}
+
+
 @media(max-width:480px){
 
   .type-grid{
     grid-template-columns:1fr;
+  }
+
+  .mock-add-row{
+    grid-template-columns:1fr;
+  }
+
+  .add-mock-btn{
+    width:100%;
   }
 
 }
@@ -381,7 +480,7 @@ select:focus{
         </div>
 
         <div class="type-sub">
-          Open selected test directly
+          Add multiple tests
         </div>
 
       </div>
@@ -389,7 +488,7 @@ select:focus{
     </div>
 
 
-    <!-- CONTENT -->
+    <!-- ================= CONTENT ================= -->
 
     <div id="contentBox">
 
@@ -421,7 +520,7 @@ select:focus{
     </div>
 
 
-    <!-- MOCK -->
+    <!-- ================= MULTIPLE MOCKS ================= -->
 
     <div
       id="mockBox"
@@ -430,13 +529,39 @@ select:focus{
 
       <label>Select Mock / Test</label>
 
-      <select id="mockSelect">
+      <div class="mock-add-row">
 
-        <option value="">
-          Loading tests...
-        </option>
+        <select id="mockSelect">
 
-      </select>
+          <option value="">
+            Loading tests...
+          </option>
+
+        </select>
+
+        <button
+          type="button"
+          class="add-mock-btn"
+          onclick="addSelectedMock()"
+        >
+          + Add Mock
+        </button>
+
+      </div>
+
+
+      <div
+        id="selectedMocks"
+        class="selected-mocks"
+      ></div>
+
+
+      <div
+        id="mockCount"
+        class="mock-count"
+      >
+        0 mocks selected
+      </div>
 
     </div>
 
@@ -484,9 +609,11 @@ select:focus{
     <h2>📋 Existing Daily Tasks</h2>
 
     <div id="taskList">
+
       <div class="empty">
         Loading tasks...
       </div>
+
     </div>
 
   </section>
@@ -510,7 +637,12 @@ supabase.createClient(
 
 
 let selectedType = "content";
+
 let allTasks = [];
+
+let allMocks = [];
+
+let selectedMockIds = [];
 
 
 /* ================= DATE ================= */
@@ -584,17 +716,22 @@ async function loadMocks(){
     document.getElementById("mockSelect");
 
   select.innerHTML =
-    `<option value="">Select Mock / Test</option>`;
+    `<option value="">
+      Loading tests...
+    </option>`;
 
 
   const {
     data,
     error
   } =
-    await supabaseClient
-      .from("mock_tests")
-      .select("*")
-      .order("created_at",{ascending:false});
+  await supabaseClient
+    .from("mock_tests")
+    .select("*")
+    .order(
+      "created_at",
+      {ascending:false}
+    );
 
 
   if(error){
@@ -610,7 +747,11 @@ async function loadMocks(){
   }
 
 
-  if(!data || !data.length){
+  allMocks =
+    data || [];
+
+
+  if(!allMocks.length){
 
     select.innerHTML =
       `<option value="">
@@ -621,13 +762,19 @@ async function loadMocks(){
   }
 
 
-  data.forEach(test => {
+  select.innerHTML =
+    `<option value="">
+      Select Mock / Test
+    </option>`;
+
+
+  allMocks.forEach(test => {
 
     const option =
       document.createElement("option");
 
     option.value =
-      test.id;
+      String(test.id);
 
     option.textContent =
       test.title ||
@@ -637,6 +784,149 @@ async function loadMocks(){
     select.appendChild(option);
 
   });
+
+}
+
+
+/* ================= ADD MOCK ================= */
+
+function addSelectedMock(){
+
+  const select =
+    document.getElementById("mockSelect");
+
+  const id =
+    String(select.value || "");
+
+  if(!id){
+
+    alert("Please select a Mock / Test.");
+
+    return;
+  }
+
+
+  if(
+    selectedMockIds.includes(id)
+  ){
+
+    alert("This Mock / Test is already added.");
+
+    return;
+  }
+
+
+  selectedMockIds.push(id);
+
+  renderSelectedMocks();
+
+  select.value = "";
+
+}
+
+
+/* ================= REMOVE MOCK ================= */
+
+function removeSelectedMock(id){
+
+  selectedMockIds =
+    selectedMockIds.filter(
+      mockId =>
+        String(mockId) !== String(id)
+    );
+
+  renderSelectedMocks();
+
+}
+
+
+/* ================= RENDER SELECTED MOCKS ================= */
+
+function renderSelectedMocks(){
+
+  const box =
+    document.getElementById("selectedMocks");
+
+  const count =
+    document.getElementById("mockCount");
+
+
+  box.innerHTML = "";
+
+
+  if(!selectedMockIds.length){
+
+    count.textContent =
+      "0 mocks selected";
+
+    return;
+  }
+
+
+  selectedMockIds.forEach(
+    (id,index) => {
+
+      const mock =
+        allMocks.find(
+          item =>
+            String(item.id) === String(id)
+        );
+
+
+      const title =
+        mock
+          ? (
+              mock.title ||
+              mock.name ||
+              `Test #${id}`
+            )
+          : `Test #${id}`;
+
+
+      const div =
+        document.createElement("div");
+
+      div.className =
+        "selected-mock";
+
+
+      div.innerHTML = `
+
+        <div class="selected-mock-info">
+
+          <div class="selected-mock-title">
+            ${index + 1}. ${escapeHtml(title)}
+          </div>
+
+          <div class="selected-mock-id">
+            Test ID: ${escapeHtml(id)}
+          </div>
+
+        </div>
+
+        <button
+          type="button"
+          class="remove-mock"
+          onclick="removeSelectedMock('${escapeHtml(id)}')"
+        >
+          Remove
+        </button>
+
+      `;
+
+
+      box.appendChild(div);
+
+    }
+  );
+
+
+  count.textContent =
+    `${selectedMockIds.length} mock${
+      selectedMockIds.length === 1
+        ? ""
+        : "s"
+    } selected`;
 
 }
 
@@ -695,10 +985,13 @@ async function saveTask(){
         .value
     ) || 1;
 
-  const mockId =
-    document.getElementById("mockSelect")
+
+  const editId =
+    document.getElementById("editId")
       .value;
 
+
+  /* ================= VALIDATION ================= */
 
   if(!taskDate || !title){
 
@@ -734,27 +1027,31 @@ async function saveTask(){
 
   if(
     selectedType === "mock" &&
-    !mockId
+    !selectedMockIds.length
   ){
 
     status.className =
       "status error";
 
     status.textContent =
-      "Please select a Mock / Test.";
+      "Please add at least one Mock / Test.";
 
     return;
   }
 
 
+  /* ================= DAILY TASK PAYLOAD ================= */
+
   const payload = {
 
-    task_date:taskDate,
+    task_date:
+      taskDate,
 
     subject:
       subject || null,
 
-    title:title,
+    title:
+      title,
 
     description:
       description || null,
@@ -764,9 +1061,17 @@ async function saveTask(){
         ? "Practice"
         : "Daily Task",
 
+    /*
+      Keep old column populated for
+      backward compatibility.
+      For multiple mocks, first mock
+      is stored here.
+    */
+
     task_url:
-      selectedType === "mock"
-        ? `test.html?id=${mockId}`
+      selectedType === "mock" &&
+      selectedMockIds.length
+        ? `test.html?id=${selectedMockIds[0]}`
         : null,
 
     content:
@@ -785,27 +1090,34 @@ async function saveTask(){
         : null,
 
     target_type:
-      selectedType,
+      selectedType === "mock"
+        ? "mock"
+        : "content",
+
+    /*
+      Keep first mock in old target_id
+      so old frontend/data remains safe.
+    */
 
     target_id:
-      selectedType === "mock"
-        ? Number(mockId)
+      selectedType === "mock" &&
+      selectedMockIds.length
+        ? Number(selectedMockIds[0])
         : null,
 
-    task_order:taskOrder,
+    task_order:
+      taskOrder,
 
-    is_active:true
+    is_active:
+      true
 
   };
 
 
-  const editId =
-    document.getElementById("editId")
-      .value;
-
-
   let result;
 
+
+  /* ================= UPDATE ================= */
 
   if(editId){
 
@@ -818,12 +1130,18 @@ async function saveTask(){
           editId
         );
 
-  }else{
+  }
+
+  /* ================= INSERT ================= */
+
+  else{
 
     result =
       await supabaseClient
         .from("daily_tasks")
-        .insert(payload);
+        .insert(payload)
+        .select("id")
+        .single();
 
   }
 
@@ -839,6 +1157,116 @@ async function saveTask(){
       result.error.message;
 
     return;
+  }
+
+
+  /*
+    Get Daily Task ID.
+  */
+
+  const dailyTaskId =
+    editId
+      ? Number(editId)
+      : Number(result.data.id);
+
+
+  /* ================= SAVE MULTIPLE MOCKS ================= */
+
+  if(selectedType === "mock"){
+
+    /*
+      First delete old child records.
+      Then insert the currently selected mocks.
+    */
+
+    const deleteResult =
+      await supabaseClient
+        .from("daily_task_mocks")
+        .delete()
+        .eq(
+          "daily_task_id",
+          dailyTaskId
+        );
+
+
+    if(deleteResult.error){
+
+      console.log(deleteResult.error);
+
+      status.className =
+        "status error";
+
+      status.textContent =
+        "Task saved, but old mock links could not be updated: " +
+        deleteResult.error.message;
+
+      return;
+    }
+
+
+    const rows =
+      selectedMockIds.map(
+        (mockId,index) => ({
+
+          daily_task_id:
+            dailyTaskId,
+
+          mock_id:
+            Number(mockId),
+
+          task_order:
+            index + 1
+
+        })
+      );
+
+
+    const insertResult =
+      await supabaseClient
+        .from("daily_task_mocks")
+        .insert(rows);
+
+
+    if(insertResult.error){
+
+      console.log(insertResult.error);
+
+      status.className =
+        "status error";
+
+      status.textContent =
+        "Task saved, but mocks could not be linked: " +
+        insertResult.error.message;
+
+      return;
+    }
+
+  }
+
+  else{
+
+    /*
+      If editing and switching from
+      Mock to Content, remove old
+      child mock links.
+    */
+
+    const deleteResult =
+      await supabaseClient
+        .from("daily_task_mocks")
+        .delete()
+        .eq(
+          "daily_task_id",
+          dailyTaskId
+        );
+
+
+    if(deleteResult.error){
+
+      console.log(deleteResult.error);
+
+    }
+
   }
 
 
@@ -858,6 +1286,64 @@ async function saveTask(){
 }
 
 
+/* ================= LOAD TASK MOCKS ================= */
+
+async function getTaskMocks(taskIds){
+
+  if(!taskIds.length){
+
+    return {};
+
+  }
+
+
+  const {
+    data,
+    error
+  } =
+  await supabaseClient
+    .from("daily_task_mocks")
+    .select("*")
+    .in(
+      "daily_task_id",
+      taskIds
+    )
+    .order(
+      "task_order",
+      {ascending:true}
+    );
+
+
+  if(error){
+
+    console.log(error);
+
+    return {};
+
+  }
+
+
+  const map = {};
+
+
+  (data || []).forEach(row => {
+
+    if(!map[row.daily_task_id]){
+
+      map[row.daily_task_id] = [];
+
+    }
+
+    map[row.daily_task_id].push(row);
+
+  });
+
+
+  return map;
+
+}
+
+
 /* ================= LOAD TASKS ================= */
 
 async function loadTasks(){
@@ -873,11 +1359,17 @@ async function loadTasks(){
     data,
     error
   } =
-    await supabaseClient
-      .from("daily_tasks")
-      .select("*")
-      .order("task_date",{ascending:false})
-      .order("task_order",{ascending:true});
+  await supabaseClient
+    .from("daily_tasks")
+    .select("*")
+    .order(
+      "task_date",
+      {ascending:false}
+    )
+    .order(
+      "task_order",
+      {ascending:true}
+    );
 
 
   if(error){
@@ -909,6 +1401,16 @@ async function loadTasks(){
   }
 
 
+  const taskIds =
+    allTasks.map(
+      task => Number(task.id)
+    );
+
+
+  const taskMocks =
+    await getTaskMocks(taskIds);
+
+
   list.innerHTML = "";
 
 
@@ -921,10 +1423,112 @@ async function loadTasks(){
       "task-item";
 
 
+    const isMock =
+      task.target_type === "mock";
+
+
     const typeLabel =
-      task.target_type === "mock"
+      isMock
         ? "📝 Mock / Test"
         : "📄 Content";
+
+
+    const mocks =
+      taskMocks[task.id] || [];
+
+
+    let mockHtml = "";
+
+
+    if(isMock){
+
+      if(mocks.length){
+
+        mockHtml =
+          `<div class="task-mocks">` +
+
+          mocks.map(
+            (item,index) => {
+
+              const mock =
+                allMocks.find(
+                  m =>
+                    String(m.id) ===
+                    String(item.mock_id)
+                );
+
+
+              const mockTitle =
+                mock
+                  ? (
+                      mock.title ||
+                      mock.name ||
+                      `Test #${item.mock_id}`
+                    )
+                  : `Test #${item.mock_id}`;
+
+
+              return `
+                <div class="task-mock">
+                  ${index + 1}. ${escapeHtml(mockTitle)}
+                  <span style="color:var(--muted);font-size:10px;">
+                    (ID: ${escapeHtml(item.mock_id)})
+                  </span>
+                </div>
+              `;
+
+            }
+          ).join("") +
+
+          `</div>`;
+
+      }
+
+      else{
+
+        /*
+          Backward compatibility:
+          old tasks may only have target_id.
+        */
+
+        if(task.target_id){
+
+          const oldMock =
+            allMocks.find(
+              m =>
+                String(m.id) ===
+                String(task.target_id)
+            );
+
+
+          const oldTitle =
+            oldMock
+              ? (
+                  oldMock.title ||
+                  oldMock.name ||
+                  `Test #${task.target_id}`
+                )
+              : `Test #${task.target_id}`;
+
+
+          mockHtml = `
+            <div class="task-mocks">
+
+              <div class="task-mock">
+                1. ${escapeHtml(oldTitle)}
+                <span style="color:var(--muted);font-size:10px;">
+                  (ID: ${escapeHtml(task.target_id)})
+                </span>
+              </div>
+
+            </div>
+          `;
+
+        }
+
+      }
+
+    }
 
 
     div.innerHTML = `
@@ -941,25 +1545,43 @@ async function loadTasks(){
 
       </div>
 
+
       <div class="task-meta">
 
         📅 ${escapeHtml(task.task_date || "")}
 
-        ${task.subject
-          ? ` • ${escapeHtml(task.subject)}`
-          : ""}
+        ${
+          task.subject
+            ? ` • ${escapeHtml(task.subject)}`
+            : ""
+        }
 
         <br>
 
-        Order: ${task.task_order || 1}
+        Order:
+        ${task.task_order || 1}
 
         ${
-          task.target_id
-          ? ` • Test ID: ${task.target_id}`
-          : ""
+          isMock
+            ? ` • ${
+                mocks.length ||
+                (task.target_id ? 1 : 0)
+              } Mock${
+                (
+                  mocks.length ||
+                  (task.target_id ? 1 : 0)
+                ) === 1
+                  ? ""
+                  : "s"
+              }`
+            : ""
         }
 
       </div>
+
+
+      ${mockHtml}
+
 
       <div class="actions">
 
@@ -991,11 +1613,13 @@ async function loadTasks(){
 
 /* ================= EDIT ================= */
 
-function editTask(id){
+async function editTask(id){
 
   const task =
     allTasks.find(
-      item => Number(item.id) === Number(id)
+      item =>
+        Number(item.id) ===
+        Number(id)
     );
 
 
@@ -1003,31 +1627,106 @@ function editTask(id){
 
 
   document.getElementById("editId")
-    .value = task.id;
+    .value =
+      task.id;
+
 
   document.getElementById("taskDate")
-    .value = task.task_date || "";
+    .value =
+      task.task_date || "";
+
 
   document.getElementById("subject")
-    .value = task.subject || "";
+    .value =
+      task.subject || "";
+
 
   document.getElementById("title")
-    .value = task.title || "";
+    .value =
+      task.title || "";
+
 
   document.getElementById("description")
-    .value = task.description || "";
+    .value =
+      task.description || "";
+
 
   document.getElementById("content")
-    .value = task.content || "";
+    .value =
+      task.content || "";
+
 
   document.getElementById("pdfUrl")
-    .value = task.pdf_url || "";
+    .value =
+      task.pdf_url || "";
+
 
   document.getElementById("taskLink")
-    .value = task.task_link || "";
+    .value =
+      task.task_link || "";
+
 
   document.getElementById("taskOrder")
-    .value = task.task_order || 1;
+    .value =
+      task.task_order || 1;
+
+
+  selectedMockIds = [];
+
+
+  /*
+    Load child mocks for this task.
+  */
+
+  const {
+    data,
+    error
+  } =
+  await supabaseClient
+    .from("daily_task_mocks")
+    .select("*")
+    .eq(
+      "daily_task_id",
+      id
+    )
+    .order(
+      "task_order",
+      {ascending:true}
+    );
+
+
+  if(error){
+
+    console.log(error);
+
+  }
+
+
+  if(data && data.length){
+
+    selectedMockIds =
+      data.map(
+        row =>
+          String(row.mock_id)
+      );
+
+  }
+
+  /*
+    Backward compatibility for old
+    single-mock Daily Tasks.
+  */
+
+  else if(
+    task.target_type === "mock" &&
+    task.target_id
+  ){
+
+    selectedMockIds = [
+      String(task.target_id)
+    ];
+
+  }
 
 
   selectType(
@@ -1037,20 +1736,18 @@ function editTask(id){
   );
 
 
-  document.getElementById("mockSelect")
-    .value =
-      task.target_id
-        ? String(task.target_id)
-        : "";
+  renderSelectedMocks();
 
 
   document.getElementById("formTitle")
     .textContent =
       "✏️ Edit Daily Task";
 
+
   document.getElementById("saveButton")
     .textContent =
       "Update Task";
+
 
   document.getElementById("cancelButton")
     .classList
@@ -1076,19 +1773,25 @@ async function deleteTask(id){
   ){
 
     return;
+
   }
 
+
+  /*
+    Child records automatically delete
+    because of ON DELETE CASCADE.
+  */
 
   const {
     error
   } =
-    await supabaseClient
-      .from("daily_tasks")
-      .delete()
-      .eq(
-        "id",
-        id
-      );
+  await supabaseClient
+    .from("daily_tasks")
+    .delete()
+    .eq(
+      "id",
+      id
+    );
 
 
   if(error){
@@ -1099,6 +1802,7 @@ async function deleteTask(id){
     );
 
     return;
+
   }
 
 
@@ -1114,42 +1818,62 @@ function resetForm(){
   document.getElementById("editId")
     .value = "";
 
+
   document.getElementById("taskDate")
-    .value = getToday();
+    .value =
+      getToday();
+
 
   document.getElementById("subject")
     .value = "";
 
+
   document.getElementById("title")
     .value = "";
+
 
   document.getElementById("description")
     .value = "";
 
+
   document.getElementById("content")
     .value = "";
+
 
   document.getElementById("pdfUrl")
     .value = "";
 
+
   document.getElementById("taskLink")
     .value = "";
+
 
   document.getElementById("taskOrder")
     .value = "1";
 
+
   document.getElementById("mockSelect")
     .value = "";
 
+
+  selectedMockIds = [];
+
+
+  renderSelectedMocks();
+
+
   selectType("content");
+
 
   document.getElementById("formTitle")
     .textContent =
       "➕ Add Daily Task";
 
+
   document.getElementById("saveButton")
     .textContent =
       "Save Task";
+
 
   document.getElementById("cancelButton")
     .classList
@@ -1187,9 +1911,11 @@ function escapeHtml(value){
 /* ================= START ================= */
 
 document.getElementById("taskDate")
-  .value = getToday();
+  .value =
+    getToday();
 
 loadMocks();
+
 loadTasks();
 
 </script>
