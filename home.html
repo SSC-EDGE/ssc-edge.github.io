@@ -1,35 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-<script>
+<!DOCTYPE html><html lang="en"><head><script>
 document.documentElement.dataset.theme =
   localStorage.getItem("ssc-edge-theme") || "dark";
-</script>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<meta name="theme-color" content="#160d22">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<title>SSC EDGE - Home</title>
-
-<style>
-  * {
-    font-family: Arial, Helvetica, sans-serif;
-  }
-
-  .header-brand {
-    font-size: 34px !important;
-  }
-
-  .header-tagline {
-    font-size: 14px !important;
-  }
+</script><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#160d22"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><title>SSC EDGE - Home</title><style>
 
 *{
+font-family:Arial,Helvetica,sans-serif;
 box-sizing:border-box;
 }
 
@@ -62,21 +38,15 @@ gap:7px;
 height:100%;
 }
 
-/* ==================================================
-   THREE LINE MENU
-   ================================================== */
-
 .menu-button{
 width:38px;
 height:38px;
 border:0;
 background:transparent;
-
 display:flex;
 flex-direction:column;
 align-items:center;
 justify-content:center;
-
 gap:5px;
 padding:5px;
 cursor:pointer;
@@ -90,13 +60,8 @@ border-radius:3px;
 background:#191525;
 }
 
-/* ==================================================
-   BRAND
-   ================================================== */
-
 .header-brand-wrap{
 height:38px;
-
 display:flex;
 flex-direction:column;
 justify-content:center;
@@ -106,9 +71,7 @@ justify-content:center;
 font-size:22px;
 font-weight:850;
 letter-spacing:-.4px;
-
 color:#191525;
-
 line-height:1;
 white-space:nowrap;
 }
@@ -120,27 +83,17 @@ color:#9b5cff;
 .header-tagline{
 font-size:7px;
 font-weight:600;
-
 color:#817987;
-
 margin-top:2px;
-
 letter-spacing:.1px;
 line-height:1;
-
 white-space:nowrap;
 }
 
-/* ==================================================
-   RIGHT HEADER
-   ================================================== */
-
 .header-actions{
 margin-left:auto;
-
 display:flex;
 align-items:center;
-
 gap:3px;
 }
 
@@ -148,14 +101,11 @@ gap:3px;
 .update-bell{
 width:36px;
 height:36px;
-
 border:0;
 background:transparent;
-
 display:flex;
 align-items:center;
 justify-content:center;
-
 padding:0;
 cursor:pointer;
 }
@@ -163,10 +113,8 @@ cursor:pointer;
 .header-search svg{
 width:22px;
 height:22px;
-
 fill:none;
 stroke:#191525;
-
 stroke-width:2;
 stroke-linecap:round;
 }
@@ -178,10 +126,8 @@ position:relative;
 .update-bell svg{
 width:20px;
 height:20px;
-
 fill:none;
 stroke:#191525;
-
 stroke-width:2;
 stroke-linecap:round;
 stroke-linejoin:round;
@@ -189,18 +135,14 @@ stroke-linejoin:round;
 
 .update-dot{
 position:absolute;
-
 margin-left:17px;
 margin-top:-17px;
-
 width:7px;
 height:7px;
-
-background:#ff6b35;
-
+background:#ff3b30;
 border-radius:50%;
-
 display:none;
+box-shadow:0 0 0 2px #ffffff;
 }
 
 /* ==================================================
@@ -210,11 +152,8 @@ display:none;
 .menu-overlay{
 position:fixed;
 inset:0;
-
 background:rgba(20,12,30,.45);
-
 z-index:300;
-
 display:none;
 }
 
@@ -224,53 +163,34 @@ display:block;
 
 .side-menu{
 position:absolute;
-
 left:0;
 top:0;
 bottom:0;
-
 width:285px;
 max-width:82vw;
-
 background:#ffffff;
-
-box-shadow:
-8px 0 30px rgba(20,10,30,.18);
-
+box-shadow:8px 0 30px rgba(20,10,30,.18);
 padding:16px;
-
 overflow-y:auto;
 }
-
-/* ==================================================
-   PROFILE TOP
-   ================================================== */
 
 .side-profile{
 display:flex;
 align-items:center;
-
 gap:12px;
-
 padding:8px 5px 16px;
-
 border-bottom:1px solid #eee8f2;
 }
 
 .side-profile-photo{
 width:48px;
 height:48px;
-
 border-radius:50%;
-
 background:#eadcff;
-
 display:flex;
 align-items:center;
 justify-content:center;
-
 font-size:23px;
-
 overflow:hidden;
 flex-shrink:0;
 }
@@ -278,7 +198,6 @@ flex-shrink:0;
 .side-profile-photo img{
 width:100%;
 height:100%;
-
 object-fit:cover;
 }
 
@@ -289,9 +208,7 @@ min-width:0;
 .side-profile-name{
 font-size:16px;
 font-weight:800;
-
 color:#191525;
-
 white-space:nowrap;
 overflow:hidden;
 text-overflow:ellipsis;
@@ -299,33 +216,23 @@ text-overflow:ellipsis;
 
 .side-profile-link{
 display:inline-block;
-
 margin-top:3px;
-
 font-size:11px;
 font-weight:600;
-
 color:#8d4fdc;
-
 text-decoration:none;
 }
-
-/* ==================================================
-   MENU BRAND
-   ================================================== */
 
 .side-menu-header{
 display:flex;
 align-items:center;
 justify-content:space-between;
-
 padding:15px 5px 12px;
 }
 
 .side-menu-brand{
 font-size:22px;
 font-weight:850;
-
 color:#191525;
 }
 
@@ -336,21 +243,13 @@ color:#9b5cff;
 .menu-close{
 width:34px;
 height:34px;
-
 border:0;
 border-radius:50%;
-
 background:#f0e8ff;
 color:#7540c4;
-
 font-size:22px;
-
 cursor:pointer;
 }
-
-/* ==================================================
-   MENU LINKS
-   ================================================== */
 
 .side-menu-links{
 padding-top:4px;
@@ -359,20 +258,13 @@ padding-top:4px;
 .side-menu-links a{
 display:flex;
 align-items:center;
-
 gap:12px;
-
 padding:11px 10px;
-
 border-radius:13px;
-
 text-decoration:none;
-
 color:#292332;
-
 font-size:14px;
 font-weight:700;
-
 margin-bottom:3px;
 }
 
@@ -385,46 +277,28 @@ color:#8d4fdc;
 .menu-link-icon{
 width:34px;
 height:34px;
-
 border-radius:10px;
-
 background:#f0e5ff;
-
 display:flex;
 align-items:center;
 justify-content:center;
-
 font-size:18px;
-
 flex-shrink:0;
 }
 
-/* ==================================================
-   MENU DIVIDER
-   ================================================== */
-
 .menu-divider{
 height:1px;
-
 background:#eee8f2;
-
 margin:9px 4px;
 }
-
-/* ==================================================
-   MENU THEME
-   ================================================== */
 
 .menu-theme{
 display:flex;
 align-items:center;
 justify-content:space-between;
-
 padding:11px 10px;
-
 font-size:14px;
 font-weight:700;
-
 color:#292332;
 }
 
@@ -435,26 +309,18 @@ gap:5px;
 
 .theme-options button{
 border:1px solid #ded3eb;
-
 background:#f7f2fc;
-
 padding:5px 9px;
-
 border-radius:8px;
-
 font-size:10px;
 font-weight:700;
-
 color:#655b70;
-
 cursor:pointer;
 }
 
 .theme-options button.active{
 background:#9b5cff;
-
 color:#ffffff;
-
 border-color:#9b5cff;
 }
 
@@ -465,19 +331,14 @@ border-color:#9b5cff;
 .search-overlay{
 position:fixed;
 inset:0;
-
 z-index:250;
-
 display:none;
-
 background:rgba(20,12,30,.48);
-
 padding:18px;
 }
 
 .search-overlay.show{
 display:flex;
-
 align-items:flex-start;
 justify-content:center;
 }
@@ -485,104 +346,81 @@ justify-content:center;
 .search-box{
 width:100%;
 max-width:520px;
-
 margin-top:50px;
-
 background:#ffffff;
-
 border-radius:22px;
-
 overflow:hidden;
-
-box-shadow:
-0 20px 60px rgba(20,10,30,.22);
+box-shadow:0 20px 60px rgba(20,10,30,.22);
 }
 
 .search-top{
 display:flex;
 align-items:center;
-
 padding:12px 14px;
-
 border-bottom:1px solid #eee8f2;
 }
 
 .search-input{
 flex:1;
-
 border:0;
 outline:none;
-
 font-size:15px;
-
 color:#191525;
-
 background:transparent;
 }
 
 .search-close{
 width:34px;
 height:34px;
-
 border:0;
-
 border-radius:50%;
-
 background:#f0e8ff;
-
 color:#7540c4;
-
 font-size:21px;
+cursor:pointer;
 }
 
 .search-results{
 max-height:65vh;
-
 overflow-y:auto;
-
 padding:10px;
 }
 
 .search-empty{
 padding:30px 15px;
-
 text-align:center;
-
 font-size:13px;
-
 color:#777180;
 }
 
 .search-result{
 display:block;
-
 padding:13px;
-
 border-radius:14px;
-
 text-decoration:none;
-
 margin-bottom:6px;
-
 background:#faf8fd;
 }
 
 .search-result strong{
 display:block;
-
 font-size:14px;
-
 color:#191525;
 }
 
 .search-result span{
 display:block;
-
 font-size:11px;
-
 color:#777180;
-
 margin-top:4px;
+}
+
+.search-result small{
+display:block;
+font-size:9px;
+color:#9b5cff;
+margin-top:6px;
+font-weight:700;
 }
 
 /* ==================================================
@@ -592,218 +430,137 @@ margin-top:4px;
 .home-container{
 width:100%;
 max-width:1100px;
-
 margin:0 auto;
-
 padding:18px 18px 30px;
 }
 
-/* ==================================================
-   WELCOME
-   ================================================== */
-
 .home-welcome{
 position:relative;
-
 overflow:hidden;
-
-background:
-linear-gradient(
+background:linear-gradient(
 135deg,
 #e8dcff 0%,
 #f3ebff 50%,
 #e1d1ff 100%
 );
-
 border:1px solid #d1b9ef;
-
 border-radius:25px;
-
 padding:24px 21px;
-
-box-shadow:
-0 9px 28px rgba(104,59,150,.13);
+box-shadow:0 9px 28px rgba(104,59,150,.13);
 }
 
 .home-welcome::before{
 content:"";
-
 position:absolute;
-
 width:150px;
 height:150px;
-
 right:-45px;
 top:-55px;
-
 border-radius:50%;
-
 background:rgba(155,92,255,.16);
 }
 
 .home-welcome::after{
 content:"";
-
 position:absolute;
-
 width:80px;
 height:80px;
-
 right:55px;
 bottom:-40px;
-
 border-radius:50%;
-
 background:rgba(255,255,255,.28);
 }
 
 .welcome-pill{
 position:relative;
 z-index:2;
-
 display:inline-flex;
-
 padding:7px 13px;
-
 border-radius:20px;
-
 background:#d8c4fa;
-
 color:#7040b4;
-
 font-size:11px;
 font-weight:850;
-
 letter-spacing:.5px;
-
 margin-bottom:12px;
 }
 
 .home-welcome h1{
 position:relative;
 z-index:2;
-
 margin:0;
-
 font-size:29px;
-
 line-height:1.15;
-
 font-weight:850;
-
 color:#21152d;
 }
 
 .home-welcome p{
 position:relative;
 z-index:2;
-
 margin:11px 0 0;
-
 max-width:500px;
-
 font-size:13px;
-
 line-height:1.5;
-
 color:#675d72;
 }
 
 .welcome-action{
 position:relative;
 z-index:3;
-
 display:inline-flex;
-
 align-items:center;
 justify-content:center;
-
 margin-top:18px;
-
 padding:11px 19px;
-
 border-radius:13px;
-
 background:#9b5cff;
-
 color:#ffffff;
-
 text-decoration:none;
-
 font-size:14px;
-
 font-weight:800;
-
-box-shadow:
-0 7px 20px rgba(155,92,255,.28);
+box-shadow:0 7px 20px rgba(155,92,255,.28);
 }
 
 .welcome-action span{
 margin-left:7px;
-
 font-size:18px;
 }
 
-/* ==================================================
-   SECTION HEADING
-   ================================================== */
-
 .section-heading{
 margin:24px 0 12px;
-
 font-size:20px;
 font-weight:850;
-
 color:#191525;
-
 display:flex;
 align-items:center;
 }
 
 .section-heading::before{
 content:"";
-
 width:4px;
 height:21px;
-
 background:#9b5cff;
-
 border-radius:5px;
-
 margin-right:9px;
 }
 
-/* ==================================================
-   DASHBOARD
-   ================================================== */
-
 .dashboard-grid{
 display:grid;
-
-grid-template-columns:
-repeat(2,minmax(0,1fr));
-
+grid-template-columns:repeat(2,minmax(0,1fr));
 gap:11px;
 }
 
 .dashboard-card{
 min-height:130px;
-
 padding:16px;
-
 border-radius:18px;
-
 background:#ffffff;
-
 border:1px solid #e3ddea;
-
 text-decoration:none;
-
 display:flex;
 flex-direction:column;
-
-box-shadow:
-0 5px 17px rgba(30,20,50,.055);
+box-shadow:0 5px 17px rgba(30,20,50,.055);
 }
 
 .dashboard-card:active{
@@ -813,66 +570,47 @@ transform:scale(.98);
 .dash-icon{
 width:45px;
 height:45px;
-
 border-radius:13px;
-
 background:#f0e5ff;
-
 display:flex;
 align-items:center;
 justify-content:center;
-
 margin-bottom:10px;
 }
 
 .dash-icon svg{
 width:24px;
 height:24px;
-
 fill:none;
-
 stroke:#9b5cff;
-
 stroke-width:2;
-
 stroke-linecap:round;
 stroke-linejoin:round;
 }
 
 .dashboard-card strong{
 font-size:14px;
-
 font-weight:800;
-
 color:#191525;
 }
 
 .dashboard-card span{
 margin-top:4px;
-
 font-size:11px;
-
 color:#777180;
 }
 
 /* ==================================================
    COMMUNITY
-   HORIZONTAL SWIPE
    ================================================== */
 
 .community-scroll{
 display:flex;
-
 gap:11px;
-
 overflow-x:auto;
-
 padding:2px 1px 12px;
-
 scroll-snap-type:x mandatory;
-
 -webkit-overflow-scrolling:touch;
-
 scrollbar-width:none;
 }
 
@@ -882,38 +620,25 @@ display:none;
 
 .community-card{
 flex:0 0 245px;
-
 min-height:215px;
-
 padding:16px;
-
 border-radius:22px;
-
 background:#ffffff;
-
 border:1px solid #e3ddea;
-
 text-decoration:none;
-
 display:flex;
 flex-direction:column;
-
-box-shadow:
-0 6px 18px rgba(30,20,50,.06);
-
+box-shadow:0 6px 18px rgba(30,20,50,.06);
 scroll-snap-align:start;
 }
 
 .community-logo{
 width:55px;
 height:55px;
-
 border-radius:16px;
-
 display:flex;
 align-items:center;
 justify-content:center;
-
 margin-bottom:12px;
 }
 
@@ -921,8 +646,6 @@ margin-bottom:12px;
 width:33px;
 height:33px;
 }
-
-/* TELEGRAM */
 
 .telegram-logo{
 background:#dff3ff;
@@ -932,21 +655,15 @@ background:#dff3ff;
 fill:#229ED9;
 }
 
-/* INSTAGRAM */
-
 .instagram-logo{
 background:#ffe5ef;
 }
 
 .instagram-logo svg{
 fill:none;
-
 stroke:#E1306C;
-
 stroke-width:2;
 }
-
-/* YOUTUBE */
 
 .youtube-logo{
 background:#ffe4e4;
@@ -955,8 +672,6 @@ background:#ffe4e4;
 .youtube-logo svg{
 fill:#FF0000;
 }
-
-/* DISCUSSION */
 
 .discussion-logo{
 background:#e9f7ff;
@@ -968,39 +683,26 @@ fill:#229ED9;
 
 .community-card strong{
 font-size:16px;
-
 font-weight:800;
-
 color:#191525;
 }
 
 .community-card span{
 font-size:12px;
-
 line-height:1.45;
-
 color:#777180;
-
 margin-top:5px;
 }
 
 .community-button{
 margin-top:auto;
-
 width:calc(100% - 20px);
-
 margin-left:10px;
-
 padding:8px 10px;
-
 border-radius:10px;
-
 font-size:12px;
-
 font-weight:800;
-
 text-align:center;
-
 color:#ffffff;
 }
 
@@ -1026,17 +728,11 @@ background:#9b5cff;
 
 .continue-grid{
 display:flex;
-
 gap:13px;
-
 overflow-x:auto;
-
 padding:2px 1px 12px;
-
 scroll-snap-type:x mandatory;
-
 -webkit-overflow-scrolling:touch;
-
 scrollbar-width:none;
 }
 
@@ -1046,55 +742,36 @@ display:none;
 
 .continue-card{
 flex:0 0 275px;
-
 min-height:100px;
-
 padding:15px;
-
 border-radius:18px;
-
 background:#ffffff;
-
 border:1px solid #e3ddea;
-
 text-decoration:none;
-
 display:flex;
 align-items:center;
-
-box-shadow:
-0 5px 16px rgba(30,20,50,.05);
-
+box-shadow:0 5px 16px rgba(30,20,50,.05);
 scroll-snap-align:start;
 }
 
 .continue-icon{
 width:46px;
 height:46px;
-
 flex-shrink:0;
-
 border-radius:13px;
-
 background:#f0e5ff;
-
 display:flex;
 align-items:center;
 justify-content:center;
-
 margin-right:12px;
 }
 
 .continue-icon svg{
 width:24px;
 height:24px;
-
 fill:none;
-
 stroke:#9b5cff;
-
 stroke-width:2;
-
 stroke-linecap:round;
 stroke-linejoin:round;
 }
@@ -1105,31 +782,22 @@ flex:1;
 
 .continue-card strong{
 display:block;
-
 font-size:14px;
-
 font-weight:800;
-
 color:#191525;
 }
 
 .continue-card span{
 display:block;
-
 font-size:11px;
-
 margin-top:4px;
-
 color:#777180;
 }
 
 .continue-card b{
 font-size:25px;
-
 font-weight:400;
-
 color:#8a8390;
-
 margin-left:8px;
 }
 
@@ -1139,21 +807,15 @@ margin-left:8px;
 
 .home-footer{
 text-align:center;
-
 padding:25px 20px 105px;
-
 border-top:1px solid #e6dfeb;
-
 background:#faf8fc;
 }
 
 .home-footer h2{
 margin:0;
-
 font-size:19px;
-
 font-weight:800;
-
 color:#191525;
 }
 
@@ -1163,9 +825,7 @@ color:#9b5cff;
 
 .home-footer p{
 margin:6px 0 0;
-
 font-size:11px;
-
 color:#817987;
 }
 
@@ -1175,34 +835,24 @@ color:#817987;
 
 .bottom-nav{
 position:fixed;
-
 left:0;
 right:0;
 bottom:0;
-
 z-index:100;
-
 height:67px;
-
 display:grid;
 grid-template-columns:repeat(4,1fr);
-
 background:#f0e8ff;
-
 border-top:1px solid #d9c9ef;
 }
 
 .bottom-nav a{
 display:flex;
 flex-direction:column;
-
 align-items:center;
 justify-content:center;
-
 gap:3px;
-
 text-decoration:none;
-
 font-size:9px;
 font-weight:800;
 }
@@ -1214,9 +864,7 @@ line-height:1;
 
 .bottom-nav small{
 font-size:9px;
-
 font-weight:800;
-
 color:#71697d;
 }
 
@@ -1230,18 +878,12 @@ color:#9b5cff;
 
 .updates-overlay{
 position:fixed;
-
 inset:0;
-
 z-index:200;
-
 display:none;
-
 align-items:center;
 justify-content:center;
-
 padding:20px;
-
 background:rgba(20,12,30,.48);
 }
 
@@ -1252,150 +894,106 @@ display:flex;
 .updates-popup{
 width:100%;
 max-width:430px;
-
 max-height:80vh;
-
 overflow:hidden;
-
 background:#ffffff;
-
 border-radius:22px;
-
-box-shadow:
-0 20px 60px rgba(20,10,30,.25);
+box-shadow:0 20px 60px rgba(20,10,30,.25);
 }
 
 .updates-popup-header{
 display:flex;
-
 align-items:center;
 justify-content:space-between;
-
 padding:18px;
-
 border-bottom:1px solid #eee8f2;
 }
 
 .updates-popup-header h2{
 margin:0;
-
 font-size:20px;
-
 color:#191525;
 }
 
 .updates-popup-header p{
 margin:4px 0 0;
-
 font-size:11px;
-
 color:#777180;
 }
 
 .updates-close{
 width:34px;
 height:34px;
-
 border:0;
-
 border-radius:50%;
-
 background:#f0e8ff;
-
 color:#7b4ac0;
-
 font-size:23px;
+cursor:pointer;
 }
 
 .updates-content{
 padding:18px;
-
 overflow-y:auto;
-
 max-height:60vh;
 }
 
 .no-updates{
 display:flex;
-
 flex-direction:column;
-
 align-items:center;
-
 text-align:center;
-
 padding:28px 15px;
 }
 
 .no-updates-icon{
 width:58px;
 height:58px;
-
 border-radius:17px;
-
 background:#f0e5ff;
-
 display:flex;
 align-items:center;
 justify-content:center;
-
 margin-bottom:13px;
 }
 
 .no-updates-icon svg{
 width:29px;
 height:29px;
-
 fill:none;
-
 stroke:#9b5cff;
-
 stroke-width:2;
-
 stroke-linecap:round;
 stroke-linejoin:round;
 }
 
 .no-updates strong{
 font-size:15px;
-
 color:#191525;
 }
 
 .no-updates span{
 font-size:11px;
-
 color:#777180;
-
 margin-top:5px;
 }
 
 .update-item{
 display:flex;
-
 gap:12px;
-
 padding:13px;
-
 border-radius:14px;
-
 background:#faf7ff;
-
 border:1px solid #ece2f7;
-
 margin-bottom:10px;
 }
 
 .update-item-icon{
 width:42px;
 height:42px;
-
 flex-shrink:0;
-
 border-radius:12px;
-
 background:#eee2ff;
-
 display:flex;
 align-items:center;
 justify-content:center;
@@ -1404,44 +1002,31 @@ justify-content:center;
 .update-item-icon svg{
 width:22px;
 height:22px;
-
 fill:none;
-
 stroke:#9b5cff;
-
 stroke-width:2;
-
 stroke-linecap:round;
 stroke-linejoin:round;
 }
 
 .update-item-text strong{
 display:block;
-
 font-size:13px;
-
 color:#191525;
 }
 
 .update-item-text span{
 display:block;
-
 font-size:11px;
-
 line-height:1.4;
-
 color:#777180;
-
 margin-top:3px;
 }
 
 .update-item-text small{
 display:block;
-
 font-size:9px;
-
 color:#9b5cff;
-
 margin-top:5px;
 }
 
@@ -1455,7 +1040,6 @@ background:#10091a;
 
 :root[data-theme="dark"] .home-header{
 background:#160d22;
-
 border-color:#2c2038;
 }
 
@@ -1476,21 +1060,22 @@ color:#aaa1b5;
 stroke:#ffffff;
 }
 
+:root[data-theme="dark"] .update-dot{
+box-shadow:0 0 0 2px #160d22;
+}
+
 :root[data-theme="dark"] .home-welcome{
-background:
-linear-gradient(
+background:linear-gradient(
 135deg,
 #321d4b 0%,
 #1d102b 52%,
 #2c183f 100%
 );
-
 border-color:#4b3262;
 }
 
 :root[data-theme="dark"] .welcome-pill{
 background:#392255;
-
 color:#c6a4ff;
 }
 
@@ -1514,7 +1099,6 @@ color:#aaa1b5;
 :root[data-theme="dark"] .community-card,
 :root[data-theme="dark"] .continue-card{
 background:#1a1024;
-
 border-color:#352640;
 }
 
@@ -1525,13 +1109,11 @@ background:#2a1939;
 
 :root[data-theme="dark"] .home-footer{
 background:#140c1c;
-
 border-color:#2d2036;
 }
 
 :root[data-theme="dark"] .bottom-nav{
 background:#21142f;
-
 border-color:#3a2850;
 }
 
@@ -1581,9 +1163,7 @@ background:#352640;
 
 :root[data-theme="dark"] .theme-options button{
 background:#241630;
-
 border-color:#49355b;
-
 color:#aaa1b5;
 }
 
@@ -1615,6 +1195,10 @@ border-color:#352640;
 color:#ffffff;
 }
 
+:root[data-theme="dark"] .no-updates strong{
+color:#ffffff;
+}
+
 /* ==================================================
    MOBILE
    ================================================== */
@@ -1623,7 +1207,6 @@ color:#ffffff;
 
 .home-header-content{
 height:68px;
-
 padding:0 14px;
 }
 
@@ -1633,7 +1216,6 @@ font-size:21px;
 
 .header-tagline{
 font-size:7px;
-
 margin-top:2px;
 }
 
@@ -1664,7 +1246,6 @@ padding:16px 16px 25px;
 
 .home-welcome{
 padding:22px 18px 21px;
-
 border-radius:23px;
 }
 
@@ -1682,21 +1263,17 @@ gap:10px;
 
 .dashboard-card{
 min-height:125px;
-
 padding:15px 14px;
 }
 
 .community-card{
 flex-basis:225px;
-
 min-height:210px;
 }
 
 .community-button{
 width:calc(100% - 18px);
-
 margin-left:9px;
-
 padding:8px;
 }
 
@@ -1722,8 +1299,7 @@ padding-right:30px;
 }
 
 .dashboard-grid{
-grid-template-columns:
-repeat(4,minmax(0,1fr));
+grid-template-columns:repeat(4,minmax(0,1fr));
 }
 
 .community-card{
@@ -1736,541 +1312,286 @@ flex-basis:320px;
 
 }
 
-</style>
-
-</head>
-
-<body>
-
-<header class="home-header">
-
-<div class="home-header-content">
-
-<div class="header-left">
-
-<button
+</style></head><body><header class="home-header"><div class="home-header-content"><div class="header-left"><button
 class="menu-button"
 id="menuButton"
 type="button"
 aria-label="Open menu"
->
+
+«»
 
 <span></span>
 <span></span>
 <span></span>
 
-</button>
-
-<div class="header-brand-wrap">
-
-<div class="header-brand">
+</button><div class="header-brand-wrap"><div class="header-brand">
 SSC <span class="edge">EDGE</span>
-</div>
-
-<div class="header-tagline">
+</div><div class="header-tagline">
 Learn • Practice • Improve
-</div>
-
-</div>
-
-</div>
-
-<div class="header-actions">
-
-<button
+</div></div></div><div class="header-actions"><button
 class="header-search"
 id="searchButton"
 type="button"
 aria-label="Search"
->
 
-<svg viewBox="0 0 24 24">
+«»
 
-<circle cx="11" cy="11" r="7"/>
-
-<path d="m16.5 16.5 4 4"/>
-
-</svg>
-
-</button>
-
-<button
+<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg></button><button
 class="update-bell"
 id="updateBell"
 type="button"
 aria-label="Open updates"
->
 
-<svg viewBox="0 0 24 24">
+«»
 
-<path
+<svg viewBox="0 0 24 24"><path
 d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"
 />
 
-<path d="M10 21h4"/>
-
-</svg>
-
-<span
+<path d="M10 21h4"/></svg><span
 class="update-dot"
 id="updateDot"
-></span>
 
-</button>
+«</span>»
 
-</div>
-
-</div>
-
-</header>
-
-<div
+</button></div></div></header><div
 class="menu-overlay"
 id="menuOverlay"
->
-
-<aside class="side-menu">
-
-<div class="side-profile">
-
-<div
+><aside class="side-menu"><div class="side-profile"><div
 class="side-profile-photo"
 id="sideProfilePhoto"
 >
 👤
-</div>
-
-<div class="side-profile-info">
-
-<div
+</div><div class="side-profile-info"><div
 class="side-profile-name"
 id="sideProfileName"
 >
 User
-</div>
-
-<a
+</div><a
 href="profile.html"
 class="side-profile-link"
->
+
+«»
+
 View Profile →
 </a>
 
-</div>
-
-</div>
-
-<div class="side-menu-header">
-
-<div class="side-menu-brand">
+</div></div><div class="side-menu-header"><div class="side-menu-brand">
 SSC <span>EDGE</span>
-</div>
-
-<button
+</div><button
 class="menu-close"
 id="menuClose"
 type="button"
->
+
+«»
+
 ×
 </button>
 
-</div>
-
-<div class="side-menu-links">
-
-<a href="home.html">
-
-<div class="menu-link-icon">
+</div><div class="side-menu-links"><a href="home.html"><div class="menu-link-icon">
 🏠
-</div>
+</div>Home
 
-Home
-
-</a>
-
-<a href="study.html">
-
-<div class="menu-link-icon">
+</a><a href="study.html"><div class="menu-link-icon">
 📚
-</div>
+</div>Study Material
 
-Study Material
-
-</a>
-
-<a href="practice.html">
-
-<div class="menu-link-icon">
+</a><a href="practice.html"><div class="menu-link-icon">
 📝
-</div>
+</div>Practice
 
-Practice
-
-</a>
-
-<div class="menu-divider"></div>
-
-<a href="progress.html">
-
-<div class="menu-link-icon">
+</a><div class="menu-divider"></div><a href="progress.html"><div class="menu-link-icon">
 📊
-</div>
+</div>My Progress
 
-My Progress
-
-</a>
-
-<a href="daily-task.html">
-
-<div class="menu-link-icon">
+</a><a href="daily-task.html"><div class="menu-link-icon">
 🎯
-</div>
+</div>Daily Task
 
-Daily Task
-
-</a>
-
-<a href="history.html">
-
-<div class="menu-link-icon">
+</a><a href="history.html"><div class="menu-link-icon">
 📋
-</div>
+</div>Test History
 
-Test History
-
-</a>
-
-<a href="saved_questions.html">
-
-<div class="menu-link-icon">
+</a><a href="saved_questions.html"><div class="menu-link-icon">
 🔖
-</div>
+</div>Saved Questions
 
-Saved Questions
-
-</a>
-
-<div class="menu-divider"></div>
-
-<div class="menu-theme">
-
-<span>
+</a><div class="menu-divider"></div><div class="menu-theme"><span>
 Theme
-</span>
-
-<div class="theme-options">
-
-<button
+</span><div class="theme-options"><button
 id="darkThemeBtn"
 type="button"
->
+
+«»
+
 Dark
 </button>
 
 <button
 id="lightThemeBtn"
 type="button"
->
+
+«»
+
 Light
 </button>
 
-</div>
-
-</div>
-
-<a
+</div></div><a
 href="profile.html"
 id="logoutLink"
->
+
+«»
 
 <div class="menu-link-icon">
 🚪
-</div>
+</div>Log Out
 
-Log Out
-
-</a>
-
-</div>
-
-</aside>
-
-</div>
-
-<div
+</a></div></aside></div><div
 class="search-overlay"
 id="searchOverlay"
->
-
-<div class="search-box">
-
-<div class="search-top">
-
-<input
+><div class="search-box"><div class="search-top"><input
 type="search"
 class="search-input"
 id="searchInput"
 placeholder="Search SSC EDGE..."
 autocomplete="off"
->
+
+«»
 
 <button
 class="search-close"
 id="searchClose"
 type="button"
->
+
+«»
+
 ×
 </button>
 
-</div>
-
-<div
+</div><div
 class="search-results"
 id="searchResults"
->
-
-<div class="search-empty">
-Search Study Material, Practice, Progress, Profile and more.
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div
+><div class="search-empty">
+Search SSC EDGE exams, mocks and study material.
+</div></div></div></div><div
 class="updates-overlay"
 id="updatesOverlay"
->
-
-<div class="updates-popup">
-
-<div class="updates-popup-header">
-
-<div>
-
-<h2>
+><div class="updates-popup"><div class="updates-popup-header"><div><h2>
 Updates
-</h2>
-
-<p>
+</h2><p>
 SSC EDGE latest updates
-</p>
-
-</div>
-
-<button
+</p></div><button
 class="updates-close"
 id="updatesClose"
 type="button"
->
+
+«»
+
 ×
 </button>
 
-</div>
-
-<div
+</div><div
 class="updates-content"
 id="updatesContent"
->
-
-<div class="no-updates">
-
-<div class="no-updates-icon">
-
-<svg viewBox="0 0 24 24">
-
-<path d="M4 5h16v14H4z"/>
-
-<path d="M8 9h8M8 13h5"/>
-
-</svg>
-
-</div>
-
-<strong>
+><div class="no-updates"><div class="no-updates-icon"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h5"/></svg></div><strong>
 Currently no updates
-</strong>
-
-<span>
+</strong><span>
 New SSC EDGE updates will appear here.
-</span>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<main class="home-container">
-
-<section class="home-welcome">
-
-<div class="welcome-pill">
+</span></div></div></div></div><main class="home-container"><section class="home-welcome"><div class="welcome-pill">
 SSC PREPARATION
-</div>
-
-<h1>
+</div><h1>
 Welcome to SSC EDGE
-</h1>
-
-<p>
+</h1><p>
 Your smart preparation platform for SSC exams.
-</p>
-
-<a
+</p><a
 href="study.html"
 class="welcome-action"
->
+
+«»
 
 Get Started
 
 <span>
 →
-</span>
-
-</a>
-
-</section>
-
-<h2 class="section-heading">
+</span></a></section><h2 class="section-heading">
 Dashboard
-</h2>
-
-<section class="dashboard-grid">
-
-<a
+</h2><section class="dashboard-grid"><a
 href="study.html"
 class="dashboard-card"
->
+
+«»
 
 <div class="dash-icon">
-  📚
-</div>
-
-<strong>
+📚
+</div><strong>
 Study Material
-</strong>
-
-<span>
+</strong><span>
 Notes & PDFs
-</span>
-
-</a>
-
-<a
+</span></a><a
 href="practice.html"
 class="dashboard-card"
->
+
+«»
 
 <div class="dash-icon">
-  📝
-</div>
-
-<strong>
+📝
+</div><strong>
 Practice
-</strong>
-
-<span>
+</strong><span>
 Mock Tests
-</span>
-
-</a>
-
-<a
+</span></a><a
 href="daily-task.html"
 class="dashboard-card"
->
+
+«»
 
 <div class="dash-icon">
 🎯
-</div>
-
-<strong>
+</div><strong>
 Daily Task
-</strong>
-
-<span>
+</strong><span>
 Daily learning tasks
-</span>
-
-</a>
-
-<a
+</span></a><a
 href="progress.html"
 class="dashboard-card"
->
+
+«»
 
 <div class="dash-icon">
-  📊
-</div>
-
-<strong>
+📊
+</div><strong>
 Progress
-</strong>
-
-<span>
+</strong><span>
 Track your performance
-</span>
-
-</a>
-
-</section>
-
-<h2 class="section-heading">
+</span></a></section><h2 class="section-heading">
 Join SSC EDGE Community
-</h2>
-
-<section class="community-scroll">
-
-<a
-href="https://t.me/+QCNa39ZJZnBhMzll"
+</h2><section class="community-scroll"><a
+href="https://t.me/EDGE_SSC"
 target="_blank"
 rel="noopener noreferrer"
 class="community-card"
->
 
-<div class="community-logo telegram-logo">
+«»
 
-<svg viewBox="0 0 24 24">
-
-<path
+<div class="community-logo telegram-logo"><svg viewBox="0 0 24 24"><path
 d="M21.6 3.5 18.4 20c-.2 1-.8 1.4-1.6.9l-4.8-3.6-2.4 2.3c-.3.3-.5.5-.9.5l.3-4.9 9-8.2c.4-.4-.1-.6-.6-.2L6.3 13.3l-4.7-1.5c-1-.3-1-1.1.2-1.5L20.2 3c.9-.3 1.7.2 1.4.5Z"
 />
 
-</svg>
-
-</div>
-
-<strong>
+</svg></div><strong>
 Telegram Channel
-</strong>
-
-<span>
+</strong><span>
 Daily updates & exam alerts
-</span>
-
-<div class="community-button telegram-button">
+</span><div class="community-button telegram-button">
 Join Now →
-</div>
-
-</a>
-
-<a
+</div></a><a
 href="https://youtube.com/@sscedge07?si=G3GngIGL79XRy3PK"
 target="_blank"
 rel="noopener noreferrer"
 class="community-card"
->
 
-<div class="community-logo youtube-logo">
+«»
 
-<svg viewBox="0 0 24 24">
-
-<path
+<div class="community-logo youtube-logo"><svg viewBox="0 0 24 24"><path
 d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8Z"
 />
 
@@ -2279,36 +1600,21 @@ d="m9.5 15.5 6-3.5-6-3.5v7Z"
 fill="#ffffff"
 />
 
-</svg>
-
-</div>
-
-<strong>
+</svg></div><strong>
 YouTube
-</strong>
-
-<span>
+</strong><span>
 Free classes & strategy sessions
-</span>
-
-<div class="community-button youtube-button">
+</span><div class="community-button youtube-button">
 Watch Now →
-</div>
-
-</a>
-
-<a
+</div></a><a
 href="https://www.instagram.com/ssc_edge"
 target="_blank"
 rel="noopener noreferrer"
 class="community-card"
->
 
-<div class="community-logo instagram-logo">
+«»
 
-<svg viewBox="0 0 24 24">
-
-<rect
+<div class="community-logo instagram-logo"><svg viewBox="0 0 24 24"><rect
 x="3"
 y="3"
 width="18"
@@ -2330,36 +1636,21 @@ fill="#E1306C"
 stroke="none"
 />
 
-</svg>
-
-</div>
-
-<strong>
+</svg></div><strong>
 Instagram
-</strong>
-
-<span>
+</strong><span>
 Follow SSC EDGE for updates
-</span>
-
-<div class="community-button instagram-button">
+</span><div class="community-button instagram-button">
 Follow Us →
-</div>
-
-</a>
-
-<a
+</div></a><a
 href="https://t.me/+nHIcGkweGB5mNDdl"
 target="_blank"
 rel="noopener noreferrer"
 class="community-card"
->
 
-<div class="community-logo discussion-logo">
+«»
 
-<svg viewBox="0 0 24 24">
-
-<path
+<div class="community-logo discussion-logo"><svg viewBox="0 0 24 24"><path
 d="M4 5.5h16v11H9l-5 4v-15Z"
 />
 
@@ -2371,77 +1662,34 @@ stroke-width="1.7"
 stroke-linecap="round"
 />
 
-</svg>
-
-</div>
-
-<strong>
+</svg></div><strong>
 Discussion Group
-</strong>
-
-<span>
+</strong><span>
 Ask doubts & discuss with aspirants
-</span>
-
-<div class="community-button discussion-button">
+</span><div class="community-button discussion-button">
 Join Group →
-</div>
-
-</a>
-
-</section>
-
-<h2 class="section-heading">
+</div></a></section><h2 class="section-heading">
 Continue Learning
-</h2>
-
-<section class="continue-grid">
-
-<a
-href="practice.html"
+</h2><section class="continue-grid"><!-- CHANGE 3:
+     Mock Test now opens SSC branch inside practice.html --><a
+href="practice.html#ssc"
 class="continue-card"
->
 
-<div class="continue-icon">
+«»
 
-<svg viewBox="0 0 24 24">
-
-<path d="M5 4h14v16H5z"/>
-
-<path d="m8 12 2.5 2.5L16 9"/>
-
-</svg>
-
-</div>
-
-<div>
-
-<strong>
+<div class="continue-icon"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z"/><path d="m8 12 2.5 2.5L16 9"/></svg></div><div><strong>
 Mock Test
-</strong>
-
-<span>
+</strong><span>
 Practice SSC mock tests
-</span>
-
-</div>
-
-<b>
+</span></div><b>
 ›
-</b>
-
-</a>
-
-<a
+</b></a><a
 href="video.html"
 class="continue-card"
->
 
-<div class="continue-icon">
+«»
 
-<svg viewBox="0 0 24 24">
-
-<rect
+<div class="continue-icon"><svg viewBox="0 0 24 24"><rect
 x="4"
 y="5"
 width="16"
@@ -2454,170 +1702,86 @@ d="m10 9 5 3-5 3Z"
 fill="none"
 />
 
-</svg>
-
-</div>
-
-<div>
-
-<strong>
+</svg></div><div><strong>
 Videos
-</strong>
-
-<span>
+</strong><span>
 Continue video classes
-</span>
-
-</div>
-
-<b>
+</span></div><b>
 ›
-</b>
-
-</a>
-
-<a
+</b></a><a
 href="saved_questions.html"
 class="continue-card"
->
 
-<div class="continue-icon">
+«»
 
-<svg viewBox="0 0 24 24">
-
-<path
+<div class="continue-icon"><svg viewBox="0 0 24 24"><path
 d="M6 4h12v17l-6-3-6 3V4Z"
 />
 
-</svg>
-
-</div>
-
-<div>
-
-<strong>
+</svg></div><div><strong>
 Saved Questions
-</strong>
-
-<span>
+</strong><span>
 Revise saved questions
-</span>
-
-</div>
-
-<b>
+</span></div><b>
 ›
-</b>
-
-</a>
-
-<a
+</b></a><a
 href="progress.html"
 class="continue-card"
->
 
-<div class="continue-icon">
+«»
 
-<svg viewBox="0 0 24 24">
-
-<path d="M4 19V5"/>
+<div class="continue-icon"><svg viewBox="0 0 24 24"><path d="M4 19V5"/>
 <path d="M4 19h16"/>
-<path d="m7 15 4-4 3 2 5-6"/>
-
-</svg>
-
-</div>
-
-<div>
-
-<strong>
+<path d="m7 15 4-4 3 2 5-6"/></svg></div><div><strong>
 Performance
-</strong>
-
-<span>
+</strong><span>
 Check your performance
-</span>
-
-</div>
-
-<b>
+</span></div><b>
 ›
-</b>
-
-</a>
-
-</section>
-
-</main>
-
-<footer class="home-footer">
-
-<h2>
+</b></a></section></main><footer class="home-footer"><h2>
 SSC <span>EDGE</span>
-</h2>
-
-<p>
+</h2><p>
 Learn • Practice • Improve
-</p>
-
-</footer>
-
-<nav class="bottom-nav">
-
-<a
+</p></footer><nav class="bottom-nav"><a
 href="home.html"
 class="active"
->
+
+«»
 
 <span class="nav-icon">
 🏠
-</span>
-
-<small>
+</span><small>
 Home
-</small>
-
-</a>
-
-<a href="study.html">
-
-<span class="nav-icon">
+</small></a><a href="study.html"><span class="nav-icon">
 📚
-</span>
-
-<small>
+</span><small>
 Study Material
-</small>
-
-</a>
-
-<a href="practice.html">
-
-<span class="nav-icon">
+</small></a><a href="practice.html"><span class="nav-icon">
 📝
-</span>
-
-<small>
+</span><small>
 Practice
-</small>
-
-</a>
-
-<a href="profile.html">
-
-<span class="nav-icon">
+</small></a><a href="profile.html"><span class="nav-icon">
 👤
-</span>
-
-<small>
+</span><small>
 Profile
-</small>
+</small></a></nav><script>
 
-</a>
+/* ==================================================
+   SUPABASE
+   ================================================== */
 
-</nav>
+const SUPABASE_URL =
+"https://dvvyoygahzzbnpqrfhen.supabase.co";
 
-<script>
+const SUPABASE_KEY =
+"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
+const updatesDb =
+supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
 
 /* ==================================================
    MENU
@@ -2663,6 +1827,7 @@ menuOverlay.classList.remove("show");
 }
 );
 
+
 /* ==================================================
    PROFILE NAME
    ================================================== */
@@ -2707,6 +1872,7 @@ document.getElementById(
 "sideProfileName"
 ).textContent = savedName;
 
+
 const possiblePhotoKeys = [
 
 "ssc-edge-profile-photo",
@@ -2738,6 +1904,7 @@ break;
 
 loadProfileInfo();
 
+
 /* ==================================================
    SEARCH
    ================================================== */
@@ -2757,99 +1924,72 @@ document.getElementById("searchInput");
 const searchResults =
 document.getElementById("searchResults");
 
-const searchIndex = [
+
+/*
+   Basic pages are still available,
+   but database content is searched too.
+*/
+
+const staticSearchIndex = [
 
 {
 title:"Home",
 text:"SSC EDGE home dashboard welcome community continue learning",
-url:"home.html"
+url:"home.html",
+type:"Page"
 },
 
 {
 title:"Study Material",
-text:"Study Material Video E-Books Notes PDFs Quantitative Aptitude General Awareness English Reasoning",
-url:"study.html"
-},
-
-{
-title:"Video Classes",
-text:"Video classes study videos",
-url:"video.html"
-},
-
-{
-title:"E-Books",
-text:"E Books PDFs books study material downloads",
-url:"ebooks.html"
-},
-
-{
-title:"Quantitative Aptitude",
-text:"Quant maths mathematics notes PDF practice",
-url:"quant.html"
-},
-
-{
-title:"General Awareness",
-text:"GK General Knowledge Current Affairs notes PDF",
-url:"gk.html"
-},
-
-{
-title:"English",
-text:"English Grammar Vocabulary notes PDF",
-url:"english.html"
-},
-
-{
-title:"Reasoning",
-text:"Reasoning Logic Practice notes PDF",
-url:"reasoning.html"
+text:"Study Material Notes PDFs Quantitative Aptitude General Awareness English Reasoning",
+url:"study.html",
+type:"Page"
 },
 
 {
 title:"Practice",
 text:"Practice Mock Tests Full Mocks CGL PRE CGL MAINS Sectional Mocks SSC",
-url:"practice.html"
+url:"practice.html",
+type:"Page"
 },
 
 {
 title:"My Progress",
-text:"Progress performance score accuracy rank percentile test performance",
-url:"progress.html"
+text:"Progress performance score accuracy rank percentile",
+url:"progress.html",
+type:"Page"
 },
 
 {
 title:"Daily Task",
-text:"Daily tasks daily learning tasks preparation",
-url:"daily-task.html"
+text:"Daily learning tasks preparation",
+url:"daily-task.html",
+type:"Page"
 },
 
 {
 title:"Test History",
 text:"Previous attempts test history mock tests",
-url:"history.html"
+url:"history.html",
+type:"Page"
 },
 
 {
 title:"Saved Questions",
 text:"Saved questions questions saved for revision",
-url:"saved_questions.html"
-},
-
-{
-title:"Downloads",
-text:"Downloaded PDFs E Books downloads",
-url:"downloads.html"
+url:"saved_questions.html",
+type:"Page"
 },
 
 {
 title:"Profile",
-text:"Profile account downloads saved questions test history theme about logout",
-url:"profile.html"
+text:"Profile account theme logout",
+url:"profile.html",
+type:"Page"
 }
 
 ];
+
 
 function openSearch(){
 
@@ -2863,6 +2003,7 @@ searchInput.focus();
 
 }
 
+
 function closeSearch(){
 
 searchOverlay.classList.remove("show");
@@ -2873,24 +2014,360 @@ showSearchEmpty();
 
 }
 
+
 function showSearchEmpty(){
 
 searchResults.innerHTML = `
 
 <div class="search-empty">
-Search SSC EDGE pages, subjects and study material.
+Search SSC EDGE exams, mocks and study material.
 </div>
 
 `;
 
 }
 
-function performSearch(){
+
+function showSearchLoading(){
+
+searchResults.innerHTML = `
+
+<div class="search-empty">
+Searching SSC EDGE...
+</div>
+
+`;
+
+}
+
+
+function createSearchResult(
+title,
+text,
+url,
+type
+){
+
+const result =
+document.createElement("a");
+
+result.className =
+"search-result";
+
+result.href =
+url;
+
+result.innerHTML = `
+
+<strong>
+${escapeHtml(title)}
+</strong>
+
+<span>
+${escapeHtml(text || "")}
+</span>
+
+<small>
+${escapeHtml(type || "SSC EDGE")}
+</small>
+
+`;
+
+return result;
+
+}
+
+
+/*
+==================================================
+DATABASE SEARCH
+
+Searches actual Supabase content.
+
+Known SSC EDGE tables:
+- exams
+- mock_tests
+
+The query searches all text-like fields by
+checking common columns individually.
+==================================================
+*/
+
+async function searchDatabase(query){
+
+const results = [];
+
+const lowerQuery =
+query.toLowerCase();
+
+
+/* -----------------------------------------------
+   SEARCH EXAMS
+   ----------------------------------------------- */
+
+try{
+
+const {
+data,
+error
+} = await updatesDb
+.from("exams")
+.select("*")
+.limit(100);
+
+if(!error && data){
+
+data.forEach(function(row){
+
+const searchable =
+Object.values(row)
+.map(function(value){
+
+return String(
+value ?? ""
+);
+
+})
+.join(" ")
+.toLowerCase();
+
+if(
+searchable.includes(lowerQuery)
+){
+
+const title =
+row.name ||
+row.title ||
+row.exam_name ||
+row.exam ||
+"SSC Exam";
+
+results.push({
+
+title:title,
+
+text:
+"Exam • " +
+searchable.slice(0,180),
+
+url:"practice.html#ssc",
+
+type:"Exam"
+
+});
+
+}
+
+});
+
+}
+
+}catch(error){
+
+console.error(
+"Exam search error:",
+error
+);
+
+}
+
+
+/* -----------------------------------------------
+   SEARCH MOCK TESTS
+   ----------------------------------------------- */
+
+try{
+
+const {
+data,
+error
+} = await updatesDb
+.from("mock_tests")
+.select("*")
+.limit(200);
+
+if(!error && data){
+
+data.forEach(function(row){
+
+const searchable =
+Object.values(row)
+.map(function(value){
+
+return String(
+value ?? ""
+);
+
+})
+.join(" ")
+.toLowerCase();
+
+if(
+searchable.includes(lowerQuery)
+){
+
+const title =
+row.name ||
+row.title ||
+row.mock_name ||
+row.test_name ||
+"Mock Test";
+
+results.push({
+
+title:title,
+
+text:
+"Mock Test • " +
+searchable.slice(0,180),
+
+url:"practice.html#ssc",
+
+type:"Mock"
+
+});
+
+}
+
+});
+
+}
+
+}catch(error){
+
+console.error(
+"Mock search error:",
+error
+);
+
+}
+
+
+/*
+--------------------------------------------------
+TRY COMMON STUDY/PDF TABLES
+
+If any of these tables exist, their data is
+searched automatically.
+
+A missing table is simply ignored.
+--------------------------------------------------
+*/
+
+const possibleStudyTables = [
+
+"study_material",
+"study_materials",
+"ebooks",
+"pdfs",
+"documents",
+"materials"
+
+];
+
+
+for(
+const tableName of possibleStudyTables
+){
+
+try{
+
+const {
+data,
+error
+} = await updatesDb
+.from(tableName)
+.select("*")
+.limit(100);
+
+if(
+error ||
+!data
+){
+
+continue;
+
+}
+
+data.forEach(function(row){
+
+const searchable =
+Object.values(row)
+.map(function(value){
+
+return String(
+value ?? ""
+);
+
+})
+.join(" ")
+.toLowerCase();
+
+if(
+searchable.includes(lowerQuery)
+){
+
+const title =
+row.name ||
+row.title ||
+row.subject ||
+row.chapter ||
+row.file_name ||
+row.filename ||
+"Study Material";
+
+results.push({
+
+title:title,
+
+text:
+"Study Material • " +
+searchable.slice(0,180),
+
+url:
+row.url ||
+row.file_url ||
+row.pdf_url ||
+"study.html",
+
+type:"PDF / Study"
+
+});
+
+}
+
+});
+
+}catch(error){
+
+/*
+   Table may not exist.
+   Ignore it so Home does not break.
+*/
+
+}
+
+}
+
+
+return results;
+
+}
+
+
+/* ==================================================
+   SEARCH
+   ================================================== */
+
+let searchTimer = null;
+
+async function performSearch(){
 
 const query =
 searchInput.value
 .trim()
 .toLowerCase();
+
 
 if(!query){
 
@@ -2900,8 +2377,24 @@ return;
 
 }
 
-const results =
-searchIndex.filter(function(item){
+
+showSearchLoading();
+
+
+clearTimeout(searchTimer);
+
+
+searchTimer =
+setTimeout(
+async function(){
+
+/*
+   Static page results
+*/
+
+const staticResults =
+staticSearchIndex.filter(
+function(item){
 
 return (
 
@@ -2917,9 +2410,63 @@ item.text
 
 );
 
-});
+}
+);
 
-if(results.length === 0){
+
+/*
+   Real database results
+*/
+
+const databaseResults =
+await searchDatabase(query);
+
+
+/*
+   Combine results
+*/
+
+const allResults = [
+...staticResults,
+...databaseResults
+];
+
+
+/*
+   Remove duplicates
+*/
+
+const uniqueResults = [];
+
+const seen = new Set();
+
+allResults.forEach(
+function(item){
+
+const key =
+(
+item.title +
+"|" +
+item.url +
+"|" +
+item.type
+).toLowerCase();
+
+if(!seen.has(key)){
+
+seen.add(key);
+
+uniqueResults.push(item);
+
+}
+
+}
+);
+
+
+if(
+uniqueResults.length === 0
+){
 
 searchResults.innerHTML = `
 
@@ -2936,36 +2483,34 @@ return;
 
 }
 
+
 searchResults.innerHTML = "";
 
-results.forEach(function(item){
 
-const result =
-document.createElement("a");
+uniqueResults
+.slice(0,50)
+.forEach(
+function(item){
 
-result.className =
-"search-result";
-
-result.href =
-item.url;
-
-result.innerHTML = `
-
-<strong>
-${escapeHtml(item.title)}
-</strong>
-
-<span>
-${escapeHtml(item.text)}
-</span>
-
-`;
-
-searchResults.appendChild(result);
-
-});
+searchResults.appendChild(
+createSearchResult(
+item.title,
+item.text,
+item.url,
+item.type
+)
+);
 
 }
+);
+
+
+},
+250
+);
+
+}
+
 
 function escapeHtml(value){
 
@@ -2978,6 +2523,7 @@ return String(value)
 .replaceAll("'","&#039;");
 
 }
+
 
 searchButton.addEventListener(
 "click",
@@ -3007,6 +2553,7 @@ closeSearch();
 }
 );
 
+
 /* ==================================================
    UPDATES
    ================================================== */
@@ -3026,23 +2573,154 @@ document.getElementById("updatesContent");
 const updateDot =
 document.getElementById("updateDot");
 
-updateBell.addEventListener(
-"click",
-function(){
 
-updatesOverlay.classList.add("show");
+/*
+==================================================
+NOTIFICATION READ SYSTEM
+
+The timestamp of the newest update that the user
+has opened is stored locally.
+
+Newer update = red dot.
+
+Opening notification = mark current updates read.
+==================================================
+*/
+
+const UPDATE_READ_KEY =
+"ssc-edge-updates-last-read";
+
+
+function getLastReadTime(){
+
+const saved =
+localStorage.getItem(
+UPDATE_READ_KEY
+);
+
+if(!saved){
+
+return 0;
+
+}
+
+const time =
+new Date(saved).getTime();
+
+return isNaN(time)
+? 0
+: time;
+
+}
+
+
+function markUpdatesAsRead(){
+
+const now =
+new Date().toISOString();
+
+localStorage.setItem(
+UPDATE_READ_KEY,
+now
+);
+
+updateDot.style.display =
+"none";
+
+}
+
+
+/*
+Check whether there are updates newer
+than the user's last-read timestamp.
+*/
+
+function updateNotificationDot(data){
+
+if(
+!data ||
+data.length === 0
+){
+
+updateDot.style.display =
+"none";
+
+return;
+
+}
+
+
+const lastRead =
+getLastReadTime();
+
+
+const hasUnread =
+data.some(
+function(update){
+
+if(!update.created_at){
+
+return false;
+
+}
+
+return (
+new Date(
+update.created_at
+).getTime()
+>
+lastRead
+);
 
 }
 );
+
+
+updateDot.style.display =
+hasUnread
+? "block"
+: "none";
+
+}
+
+
+/*
+Opening the popup marks the currently
+available notifications as read.
+*/
+
+updateBell.addEventListener(
+"click",
+async function(){
+
+updatesOverlay.classList.add(
+"show"
+);
+
+/*
+   Load first so the user sees the latest
+   data, then mark it read.
+*/
+
+await loadUpdates();
+
+markUpdatesAsRead();
+
+}
+);
+
 
 updatesClose.addEventListener(
 "click",
 function(){
 
-updatesOverlay.classList.remove("show");
+updatesOverlay.classList.remove(
+"show"
+);
 
 }
 );
+
 
 updatesOverlay.addEventListener(
 "click",
@@ -3050,243 +2728,204 @@ function(event){
 
 if(event.target === updatesOverlay){
 
-updatesOverlay.classList.remove("show");
+updatesOverlay.classList.remove(
+"show"
+);
 
 }
 
 }
 );
+
 
 /* ==================================================
    LOAD UPDATES
    ================================================== */
 
-  /* ==================================================
-   SUPABASE UPDATES CONNECTION
-   ================================================== */
-
-const SUPABASE_URL =
-"https://dvvyoygahzzbnpqrfhen.supabase.co";
-
-const SUPABASE_KEY =
-"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
-
-const updatesDb =
-supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
-
-
-/* ==================================================
-   LOAD UPDATES FROM SUPABASE
-   ================================================== */
-
 async function loadUpdates(){
 
-  updateDot.style.display = "none";
+const {
+data,
+error
+} = await updatesDb
 
-  updatesContent.innerHTML = `
+.from("updates")
 
-    <div class="no-updates">
+.select("*")
 
-      <div class="no-updates-icon">
+.eq("is_active",true)
 
-        <svg viewBox="0 0 24 24">
-
-          <path d="M4 5h16v14H4z"/>
-
-          <path d="M8 9h8M8 13h5"/>
-
-        </svg>
-
-      </div>
-
-      <strong>
-        Loading updates...
-      </strong>
-
-      <span>
-        Please wait
-      </span>
-
-    </div>
-
-  `;
+.order("created_at",{
+ascending:false
+});
 
 
-  const {
-    data,
-    error
-  } = await updatesDb
+if(error){
 
-    .from("updates")
+console.error(
+"Supabase Updates Error:",
+error
+);
 
-    .select("*")
+showNoUpdates();
 
-    .eq("is_active", true)
+return;
 
-    .order("created_at", {
-      ascending: false
-    });
+}
 
 
-  if(error){
-
-    console.error(
-      "Supabase Updates Error:",
-      error
-    );
-
-    showNoUpdates();
-
-    return;
-
-  }
+updateNotificationDot(data);
 
 
-  if(
-    !data ||
-    data.length === 0
-  ){
+if(
+!data ||
+data.length === 0
+){
 
-    showNoUpdates();
+showNoUpdates();
 
-    return;
+return;
 
-  }
-
-
-  updateDot.style.display = "block";
-
-  updatesContent.innerHTML = "";
+}
 
 
-  data.forEach(function(update){
-
-    const item =
-    document.createElement("div");
-
-    item.className =
-    "update-item";
+updatesContent.innerHTML = "";
 
 
-    const formattedDate =
-    update.created_at
+data.forEach(
+function(update){
 
-      ? new Date(
-          update.created_at
-        ).toLocaleDateString(
-          "en-IN",
-          {
-            day: "2-digit",
-            month: "short",
-            year: "numeric"
-          }
-        )
+const item =
+document.createElement("div");
 
-      : "";
+item.className =
+"update-item";
 
 
-    item.innerHTML = `
+const formattedDate =
+update.created_at
 
-      <div class="update-item-icon">
+? new Date(
+update.created_at
+).toLocaleDateString(
+"en-IN",
+{
+day:"2-digit",
+month:"short",
+year:"numeric"
+}
+)
 
-        <svg viewBox="0 0 24 24">
-
-          <path d="M5 4h14v16H5z"/>
-
-          <path d="M8 9h8M8 13h6M8 17h4"/>
-
-        </svg>
-
-      </div>
-
-
-      <div class="update-item-text">
-
-        <strong>
-          ${escapeHtml(
-            update.title ||
-            "SSC EDGE Update"
-          )}
-        </strong>
+: "";
 
 
-        <span>
-          ${escapeHtml(
-            update.message ||
-            ""
-          )}
-        </span>
+item.innerHTML = `
+
+<div class="update-item-icon">
+
+<svg viewBox="0 0 24 24">
+
+<path d="M5 4h14v16H5z"/>
+
+<path d="M8 9h8M8 13h6M8 17h4"/>
+
+</svg>
+
+</div>
 
 
-        <small>
-          ${escapeHtml(
-            formattedDate
-          )}
-        </small>
+<div class="update-item-text">
 
-      </div>
+<strong>
+${escapeHtml(
+update.title ||
+"SSC EDGE Update"
+)}
+</strong>
 
-    `;
+<span>
+${escapeHtml(
+update.message ||
+""
+)}
+</span>
+
+<small>
+${escapeHtml(
+formattedDate
+)}
+</small>
+
+</div>
+
+`;
 
 
-    updatesContent.appendChild(item);
+updatesContent.appendChild(
+item
+);
 
-  });
+}
+);
 
 }
 
 
 /* ==================================================
-   NO UPDATES MESSAGE
+   NO UPDATES
    ================================================== */
 
 function showNoUpdates(){
 
-  updateDot.style.display =
-  "none";
+updateDot.style.display =
+"none";
 
 
-  updatesContent.innerHTML = `
+updatesContent.innerHTML = `
 
-    <div class="no-updates">
+<div class="no-updates">
 
-      <div class="no-updates-icon">
+<div class="no-updates-icon">
 
-        <svg viewBox="0 0 24 24">
+<svg viewBox="0 0 24 24">
 
-          <path d="M4 5h16v14H4z"/>
+<path d="M4 5h16v14H4z"/>
 
-          <path d="M8 9h8M8 13h5"/>
+<path d="M8 9h8M8 13h5"/>
 
-        </svg>
+</svg>
 
-      </div>
+</div>
 
+<strong>
+Currently no updates
+</strong>
 
-      <strong>
-        Currently no updates
-      </strong>
+<span>
+New SSC EDGE updates will appear here.
+</span>
 
+</div>
 
-      <span>
-        New SSC EDGE updates will appear here.
-      </span>
-
-    </div>
-
-  `;
+`;
 
 }
 
 
-/* ==================================================
-   INITIAL LOAD
-   ================================================== */
+/*
+==================================================
+INITIAL UPDATE CHECK
+
+Important:
+Do NOT mark read here.
+
+If there is a new notification, the red dot
+remains visible until the user opens the bell.
+==================================================
+*/
 
 loadUpdates();
+
 
 /* ==================================================
    THEME
@@ -3298,12 +2937,14 @@ document.getElementById("darkThemeBtn");
 const lightThemeBtn =
 document.getElementById("lightThemeBtn");
 
+
 function updateThemeButtons(){
 
 const theme =
 localStorage.getItem(
 "ssc-edge-theme"
 ) || "dark";
+
 
 darkThemeBtn.classList.toggle(
 "active",
@@ -3316,6 +2957,7 @@ theme === "light"
 );
 
 }
+
 
 darkThemeBtn.addEventListener(
 "click",
@@ -3334,6 +2976,7 @@ updateThemeButtons();
 }
 );
 
+
 lightThemeBtn.addEventListener(
 "click",
 function(){
@@ -3351,7 +2994,9 @@ updateThemeButtons();
 }
 );
 
+
 updateThemeButtons();
+
 
 /* ==================================================
    ESC KEY
@@ -3372,7 +3017,5 @@ updatesOverlay.classList.remove("show");
 }
 );
 
-</script>
-
-</body>
+</script></body>
   </html>
