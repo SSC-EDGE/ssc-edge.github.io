@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta name="theme-color" content="#160b26">
@@ -15,6 +16,7 @@ document.documentElement.dataset.theme =
 </script>
 
 <style>
+
 *{
   box-sizing:border-box;
 }
@@ -69,11 +71,21 @@ body{
   padding:8px 0 20px;
 }
 
-.avatar{
+/* PROFILE PICTURE */
+
+.avatar-wrap{
+  position:relative;
   width:76px;
   height:76px;
   margin:0 auto 10px;
+}
+
+.avatar{
+  width:76px;
+  height:76px;
+
   border-radius:50%;
+
   display:flex;
   align-items:center;
   justify-content:center;
@@ -82,6 +94,38 @@ body{
   border:1px solid var(--border);
 
   font-size:36px;
+}
+
+/* PENCIL BUTTON */
+
+.avatar-edit{
+  position:absolute;
+
+  right:-3px;
+  bottom:-3px;
+
+  width:27px;
+  height:27px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border:2px solid var(--bg);
+  border-radius:50%;
+
+  background:#9b5cff;
+  color:#fff;
+
+  font-size:13px;
+
+  cursor:pointer;
+
+  box-shadow:0 3px 10px rgba(0,0,0,.25);
+}
+
+.avatar-edit:active{
+  transform:scale(.94);
 }
 
 .profile-name{
@@ -548,12 +592,7 @@ body{
 }
 
 .footer-rights{
-  margin-top:4px;
-
-  color:var(--muted);
-
-  font-size:9px;
-  font-weight:700;
+  display:none;
 }
 
 .footer-motto{
@@ -658,35 +697,36 @@ body{
     padding:4px 6px;
   }
 }
+
 </style>
 </head>
 
 <body>
 
-<!-- =========================
-     HEADER
-========================= -->
-
 <header class="profile-header">
-
   <div class="profile-brand">
     SSC <span class="edge">EDGE</span>
   </div>
-
 </header>
-
-
-<!-- =========================
-     MAIN PROFILE
-========================= -->
 
 <main class="profile-container">
 
-  <!-- PROFILE -->
   <section class="profile-top">
 
-    <div class="avatar">
-      👤
+    <div class="avatar-wrap">
+
+      <div class="avatar">
+        👤
+      </div>
+
+      <button
+        class="avatar-edit"
+        type="button"
+        onclick="openProfileEdit()"
+        aria-label="Edit Profile">
+        ✎
+      </button>
+
     </div>
 
     <h1 id="profileName" class="profile-name">
@@ -699,27 +739,16 @@ body{
 
   </section>
 
-
-  <!-- =========================
-       ACCOUNT
-  ========================= -->
-
-  <div class="section-title">
-    Account
-  </div>
+  <div class="section-title">Account</div>
 
   <section class="menu-card">
-
-    <!-- Performance -->
 
     <button
       class="menu-item"
       type="button"
       onclick="openPerformance()">
 
-      <span class="menu-icon">
-        📊
-      </span>
+      <span class="menu-icon">📊</span>
 
       <span class="menu-content">
 
@@ -733,23 +762,16 @@ body{
 
       </span>
 
-      <span class="menu-arrow">
-        ›
-      </span>
+      <span class="menu-arrow">›</span>
 
     </button>
-
-
-    <!-- Saved Questions -->
 
     <a
       class="menu-item"
       href="saved_questions.html"
       style="text-decoration:none;">
 
-      <span class="menu-icon">
-        🔖
-      </span>
+      <span class="menu-icon">🔖</span>
 
       <span class="menu-content">
 
@@ -763,23 +785,16 @@ body{
 
       </span>
 
-      <span class="menu-arrow">
-        ›
-      </span>
+      <span class="menu-arrow">›</span>
 
     </a>
-
-
-    <!-- Downloads -->
 
     <a
       class="menu-item"
       href="downloads.html"
       style="text-decoration:none;">
 
-      <span class="menu-icon">
-        ⬇️
-      </span>
+      <span class="menu-icon">⬇️</span>
 
       <span class="menu-content">
 
@@ -793,23 +808,16 @@ body{
 
       </span>
 
-      <span class="menu-arrow">
-        ›
-      </span>
+      <span class="menu-arrow">›</span>
 
     </a>
-
-
-    <!-- Test History -->
 
     <a
       class="menu-item"
       href="history.html"
       style="text-decoration:none;">
 
-      <span class="menu-icon">
-        🕘
-      </span>
+      <span class="menu-icon">🕘</span>
 
       <span class="menu-content">
 
@@ -823,26 +831,17 @@ body{
 
       </span>
 
-      <span class="menu-arrow">
-        ›
-      </span>
+      <span class="menu-arrow">›</span>
 
     </a>
 
   </section>
-
-
-  <!-- =========================
-       MORE
-  ========================= -->
 
   <div class="section-title">
     More
   </div>
 
   <section class="menu-card">
-
-    <!-- Theme -->
 
     <button
       class="menu-item"
@@ -867,11 +866,15 @@ body{
 
       <span class="theme-row">
 
-        <span id="darkChip" class="theme-chip">
+        <span
+          id="darkChip"
+          class="theme-chip">
           Dark
         </span>
 
-        <span id="lightChip" class="theme-chip">
+        <span
+          id="lightChip"
+          class="theme-chip">
           Light
         </span>
 
@@ -882,9 +885,6 @@ body{
       </span>
 
     </button>
-
-
-    <!-- Follow Us -->
 
     <button
       class="menu-item"
@@ -913,9 +913,6 @@ body{
 
     </button>
 
-
-    <!-- About -->
-
     <button
       class="menu-item"
       type="button"
@@ -942,9 +939,6 @@ body{
       </span>
 
     </button>
-
-
-    <!-- Logout -->
 
     <button
       class="menu-item logout-item"
@@ -977,11 +971,6 @@ body{
 
 </main>
 
-
-<!-- =========================
-     FOOTER
-========================= -->
-
 <footer class="footer-brand">
 
   <div class="footer-main">
@@ -989,7 +978,6 @@ body{
   </div>
 
   <div class="footer-rights">
-    © All Rights Reserved ®️
   </div>
 
   <div class="footer-motto">
@@ -998,75 +986,36 @@ body{
 
 </footer>
 
-
-<!-- =========================
-     BOTTOM NAV
-========================= -->
-
 <nav class="bottom-nav">
 
   <a href="home.html">
-
-    <span class="nav-icon">
-      🏠
-    </span>
-
-    <span>
-      Home
-    </span>
-
+    <span class="nav-icon">🏠</span>
+    <span>Home</span>
   </a>
-
 
   <a href="study.html">
-
-    <span class="nav-icon">
-      📚
-    </span>
-
-    <span>
-      Study Material
-    </span>
-
+    <span class="nav-icon">📚</span>
+    <span>Study Material</span>
   </a>
-
 
   <a href="practice.html">
-
-    <span class="nav-icon">
-      📝
-    </span>
-
-    <span>
-      Practice
-    </span>
-
+    <span class="nav-icon">📝</span>
+    <span>Practice</span>
   </a>
 
-
-  <a
-    href="profile.html"
-    class="active">
-
-    <span class="nav-icon">
-      👤
-    </span>
-
-    <span>
-      Profile
-    </span>
-
+  <a href="profile.html" class="active">
+    <span class="nav-icon">👤</span>
+    <span>Profile</span>
   </a>
 
 </nav>
 
-
 <!-- =========================
-     CANDIDATE DETAILS POPUP
+     PROFILE EDIT POPUP
 ========================= -->
 
 <div
-  id="candidatePopup"
+  id="profileEditPopup"
   class="popup-overlay">
 
   <div class="popup">
@@ -1074,13 +1023,13 @@ body{
     <div class="popup-head">
 
       <h2 class="popup-title">
-        Candidate Details
+        Edit Profile
       </h2>
 
       <button
         class="close-x"
         type="button"
-        onclick="closePopup('candidatePopup')">
+        onclick="closePopup('profileEditPopup')">
         ×
       </button>
 
@@ -1095,76 +1044,28 @@ body{
         </label>
 
         <input
-          id="candidateNameInput"
+          id="editName"
           class="form-input"
           type="text"
           placeholder="Enter your name">
 
       </div>
 
-
       <div class="form-group">
 
         <label class="form-label">
-          Email
+          Mobile Number
         </label>
 
         <input
-          id="candidateEmailInput"
+          id="editMobile"
           class="form-input"
-          type="email"
-          placeholder="Email">
+          type="tel"
+          inputmode="numeric"
+          maxlength="10"
+          placeholder="Enter mobile number">
 
       </div>
-
-
-      <button
-        class="popup-button"
-        type="button"
-        onclick="saveCandidateDetails()">
-
-        Save Details
-
-      </button>
-
-      <div
-        id="candidateMessage"
-        class="details-message">
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- =========================
-     PASSWORD POPUP
-========================= -->
-
-<div
-  id="passwordPopup"
-  class="popup-overlay">
-
-  <div class="popup">
-
-    <div class="popup-head">
-
-      <h2 class="popup-title">
-        Change Password
-      </h2>
-
-      <button
-        class="close-x"
-        type="button"
-        onclick="closePopup('passwordPopup')">
-        ×
-      </button>
-
-    </div>
-
-    <div class="popup-body">
 
       <div class="form-group">
 
@@ -1173,24 +1074,24 @@ body{
         </label>
 
         <input
-          id="newPassword"
+          id="editPassword"
           class="form-input"
           type="password"
-          placeholder="New password">
+          placeholder="Leave blank to keep current password">
 
       </div>
 
       <button
         class="popup-button"
         type="button"
-        onclick="changePassword()">
+        onclick="saveProfileEdit()">
 
-        Change Password
+        Save Changes
 
       </button>
 
       <div
-        id="passwordMessage"
+        id="profileEditMessage"
         class="details-message">
       </div>
 
@@ -1200,48 +1101,7 @@ body{
 
 </div>
 
-
-<!-- =========================
-     GUEST POPUP
-========================= -->
-
-<div
-  id="guestPopup"
-  class="popup-overlay">
-
-  <div class="popup">
-
-    <div class="popup-head">
-
-      <h2 class="popup-title">
-        Guest Mode
-      </h2>
-
-      <button
-        class="close-x"
-        type="button"
-        onclick="closePopup('guestPopup')">
-        ×
-      </button>
-
-    </div>
-
-    <div class="popup-body">
-
-      <div class="popup-text">
-        You are currently using SSC EDGE in Guest Mode.
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- =========================
-     PERFORMANCE POPUP
-========================= -->
+<!-- PERFORMANCE POPUP -->
 
 <div
   id="performancePopup"
@@ -1282,10 +1142,7 @@ body{
 
 </div>
 
-
-<!-- =========================
-     THEME POPUP
-========================= -->
+<!-- THEME POPUP -->
 
 <div
   id="themePopup"
@@ -1319,7 +1176,6 @@ body{
 
       </button>
 
-
       <button
         class="popup-button"
         type="button"
@@ -1336,10 +1192,7 @@ body{
 
 </div>
 
-
-<!-- =========================
-     FOLLOW US POPUP
-========================= -->
+<!-- FOLLOW POPUP -->
 
 <div
   id="followPopup"
@@ -1372,7 +1225,6 @@ body{
 
       </div>
 
-
       <button
         class="popup-button"
         type="button"
@@ -1388,10 +1240,7 @@ body{
 
 </div>
 
-
-<!-- =========================
-     ABOUT POPUP
-========================= -->
+<!-- ABOUT POPUP -->
 
 <div
   id="aboutPopup"
@@ -1446,9 +1295,6 @@ body{
 
       </div>
 
-
-      <!-- CLOSE BUTTON AT END -->
-
       <button
         class="about-close"
         type="button"
@@ -1463,11 +1309,6 @@ body{
   </div>
 
 </div>
-
-
-<!-- =========================
-     SUPABASE
-========================= -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -1485,23 +1326,14 @@ const db =
     SUPABASE_KEY
   );
 
-
-/* =========================
-   YOUTUBE
-========================= */
-
 const YOUTUBE_URL =
   "https://youtube.com/@sscedge07?si=G3GngIGL79XRy3PK";
 
-
-/* =========================
-   SHORT SELECTOR
-========================= */
-
 function $(id){
-  return document.getElementById(id);
-}
 
+  return document.getElementById(id);
+
+}
 
 /* =========================
    LOAD PROFILE
@@ -1526,12 +1358,11 @@ async function loadProfile(){
         "Guest Mode";
 
       return;
-    }
 
+    }
 
     const metadata =
       user.user_metadata || {};
-
 
     const name =
       metadata.name ||
@@ -1539,16 +1370,15 @@ async function loadProfile(){
       metadata.username ||
       "Candidate";
 
-
     $("profileName").textContent =
       name;
-
 
     $("profileEmail").textContent =
       user.email ||
       "Account";
 
   }
+
   catch(error){
 
     console.warn(
@@ -1560,165 +1390,201 @@ async function loadProfile(){
 
 }
 
-
 /* =========================
-   CANDIDATE DETAILS
+   EDIT PROFILE
 ========================= */
 
-function openCandidateDetails(){
+async function openProfileEdit(){
 
-  $("candidateNameInput").value =
+  $("editName").value =
     $("profileName").textContent === "Candidate"
       ? ""
       : $("profileName").textContent;
 
-
-  $("candidateEmailInput").value =
-    $("profileEmail").textContent === "Guest Mode"
-      ? ""
-      : $("profileEmail").textContent;
-
-
-  $("candidateMessage").textContent =
+  $("editMobile").value =
     "";
 
+  $("editPassword").value =
+    "";
 
-  $("candidatePopup")
+  $("profileEditMessage").textContent =
+    "";
+
+  try{
+
+    const result =
+      await db.auth.getUser();
+
+    const user =
+      result.data?.user;
+
+    if(user){
+
+      const metadata =
+        user.user_metadata || {};
+
+      $("editName").value =
+        metadata.name ||
+        metadata.full_name ||
+        metadata.username ||
+        $("editName").value;
+
+      $("editMobile").value =
+        metadata.mobile ||
+        metadata.phone ||
+        "";
+
+    }
+
+  }
+
+  catch(error){
+
+    console.warn(
+      "Could not load edit profile data:",
+      error
+    );
+
+  }
+
+  $("profileEditPopup")
     .classList
     .add("show");
 
 }
 
+/* =========================
+   SAVE PROFILE
+========================= */
 
-async function saveCandidateDetails(){
+async function saveProfileEdit(){
 
   const name =
-    $("candidateNameInput")
+    $("editName")
       .value
       .trim();
 
-
-  const email =
-    $("candidateEmailInput")
+  const mobile =
+    $("editMobile")
       .value
       .trim();
 
+  const password =
+    $("editPassword")
+      .value;
 
   if(!name){
 
-    $("candidateMessage").textContent =
+    $("profileEditMessage").textContent =
       "Please enter your name.";
 
     return;
 
   }
 
+  if(
+    mobile &&
+    !/^\d{10}$/.test(mobile)
+  ){
 
-  try{
-
-    const result =
-      await db.auth.updateUser({
-
-        data:{
-          name:name,
-          full_name:name
-        }
-
-      });
-
-
-    if(result.error)
-      throw result.error;
-
-
-    $("profileName").textContent =
-      name;
-
-
-    if(email){
-
-      $("profileEmail").textContent =
-        email;
-
-    }
-
-
-    $("candidateMessage").textContent =
-      "Details saved.";
-
-  }
-  catch(error){
-
-    $("candidateMessage").textContent =
-      error.message ||
-      "Could not save details.";
-
-  }
-
-}
-
-
-/* =========================
-   PASSWORD
-========================= */
-
-function openPasswordPopup(){
-
-  $("newPassword").value =
-    "";
-
-  $("passwordMessage").textContent =
-    "";
-
-  $("passwordPopup")
-    .classList
-    .add("show");
-
-}
-
-
-async function changePassword(){
-
-  const password =
-    $("newPassword").value;
-
-
-  if(password.length < 6){
-
-    $("passwordMessage").textContent =
-      "Password must be at least 6 characters.";
+    $("profileEditMessage").textContent =
+      "Please enter a valid 10-digit mobile number.";
 
     return;
 
   }
 
+  $("profileEditMessage").textContent =
+    "Saving...";
 
   try{
 
     const result =
+      await db.auth.getUser();
+
+    const user =
+      result.data?.user;
+
+    if(!user){
+
+      $("profileEditMessage").textContent =
+        "Please sign in to edit your profile.";
+
+      return;
+
+    }
+
+    /* SAVE NAME + MOBILE */
+
+    const updateResult =
       await db.auth.updateUser({
-        password
+
+        data:{
+          name:name,
+          full_name:name,
+          mobile:mobile,
+          phone:mobile
+        }
+
       });
 
+    if(updateResult.error)
+      throw updateResult.error;
 
-    if(result.error)
-      throw result.error;
+    /* CHANGE PASSWORD ONLY IF ENTERED */
 
+    if(password){
 
-    $("passwordMessage").textContent =
-      "Password changed successfully.";
+      if(password.length < 6){
+
+        $("profileEditMessage").textContent =
+          "Password must be at least 6 characters.";
+
+        return;
+
+      }
+
+      const passwordResult =
+        await db.auth.updateUser({
+
+          password:password
+
+        });
+
+      if(passwordResult.error)
+        throw passwordResult.error;
+
+    }
+
+    $("profileName").textContent =
+      name;
+
+    $("profileEditMessage").textContent =
+      password
+        ? "Profile and password updated successfully."
+        : "Profile updated successfully.";
+
+    setTimeout(()=>{
+
+      closePopup(
+        "profileEditPopup"
+      );
+
+    },1200);
 
   }
+
   catch(error){
 
-    $("passwordMessage").textContent =
+    console.error(error);
+
+    $("profileEditMessage").textContent =
       error.message ||
-      "Could not change password.";
+      "Could not update profile.";
 
   }
 
 }
-
 
 /* =========================
    PERFORMANCE
@@ -1730,17 +1596,14 @@ async function openPerformance(){
     .classList
     .add("show");
 
-
   const box =
     $("performanceContent");
-
 
   box.innerHTML = `
     <div class="performance-empty">
       Loading performance...
     </div>
   `;
-
 
   try{
 
@@ -1749,7 +1612,6 @@ async function openPerformance(){
 
     const user =
       result.data?.user;
-
 
     if(!user){
 
@@ -1761,8 +1623,8 @@ async function openPerformance(){
       `;
 
       return;
-    }
 
+    }
 
     const attemptsResult =
       await db
@@ -1775,19 +1637,17 @@ async function openPerformance(){
           user.id
         );
 
-
     if(attemptsResult.error)
       throw attemptsResult.error;
 
-
     const attempts =
       attemptsResult.data || [];
-
 
     if(!attempts.length){
 
       box.innerHTML = `
         <div class="performance-empty">
+
           <div style="font-size:28px;margin-bottom:7px;">
             📊
           </div>
@@ -1798,18 +1658,18 @@ async function openPerformance(){
 
           Attempt a mock test to see
           your performance here.
+
         </div>
       `;
 
       return;
-    }
 
+    }
 
     let totalScore = 0;
     let correct = 0;
     let wrong = 0;
     let unanswered = 0;
-
 
     attempts.forEach(a=>{
 
@@ -1827,10 +1687,8 @@ async function openPerformance(){
 
     });
 
-
     const attempted =
       correct + wrong;
-
 
     const accuracy =
       attempted > 0
@@ -1839,12 +1697,10 @@ async function openPerformance(){
           )
         : 0;
 
-
     const averageScore =
       Math.round(
         (totalScore / attempts.length) * 100
       ) / 100;
-
 
     box.innerHTML = `
 
@@ -1868,7 +1724,6 @@ async function openPerformance(){
 
       </div>
 
-
       <div class="performance-card">
 
         <div class="performance-icon">
@@ -1888,7 +1743,6 @@ async function openPerformance(){
         </div>
 
       </div>
-
 
       <div class="performance-card">
 
@@ -1910,7 +1764,6 @@ async function openPerformance(){
 
       </div>
 
-
       <div class="performance-card">
 
         <div class="performance-icon">
@@ -1931,7 +1784,6 @@ async function openPerformance(){
 
       </div>
 
-
       <div class="performance-card">
 
         <div class="performance-icon">
@@ -1951,7 +1803,6 @@ async function openPerformance(){
         </div>
 
       </div>
-
 
       <div class="performance-card">
 
@@ -1976,28 +1827,23 @@ async function openPerformance(){
     `;
 
   }
+
   catch(error){
 
     console.error(error);
 
-
     box.innerHTML = `
       <div class="performance-empty">
-
         Unable to load performance
         right now.
-
         <br>
-
         Please try again later.
-
       </div>
     `;
 
   }
 
 }
-
 
 /* =========================
    THEME
@@ -2013,7 +1859,6 @@ function openTheme(){
 
 }
 
-
 function setTheme(theme){
 
   localStorage.setItem(
@@ -2021,18 +1866,16 @@ function setTheme(theme){
     theme
   );
 
-
   document.documentElement.dataset.theme =
     theme;
 
-
   updateThemeText();
 
-
-  closePopup("themePopup");
+  closePopup(
+    "themePopup"
+  );
 
 }
-
 
 function updateThemeText(){
 
@@ -2041,14 +1884,12 @@ function updateThemeText(){
       "ssc-edge-theme"
     ) || "dark";
 
-
   $("darkChip")
     .classList
     .toggle(
       "active",
       theme === "dark"
     );
-
 
   $("lightChip")
     .classList
@@ -2058,7 +1899,6 @@ function updateThemeText(){
     );
 
 }
-
 
 /* =========================
    FOLLOW US
@@ -2072,7 +1912,6 @@ function openFollowUs(){
 
 }
 
-
 function openYouTube(){
 
   window.open(
@@ -2082,7 +1921,6 @@ function openYouTube(){
   );
 
 }
-
 
 /* =========================
    ABOUT
@@ -2095,7 +1933,6 @@ function openAbout(){
     .add("show");
 
 }
-
 
 /* =========================
    CLOSE POPUP
@@ -2115,7 +1952,6 @@ function closePopup(id){
 
 }
 
-
 /* =========================
    LOGOUT
 ========================= */
@@ -2127,6 +1963,7 @@ async function logout(){
     await db.auth.signOut();
 
   }
+
   catch(error){
 
     console.warn(
@@ -2136,12 +1973,10 @@ async function logout(){
 
   }
 
-
   window.location.href =
     "home.html";
 
 }
-
 
 /* =========================
    OUTSIDE CLICK
@@ -2169,9 +2004,8 @@ document
 
   });
 
-
 /* =========================
-   START
+   INIT
 ========================= */
 
 loadProfile();
