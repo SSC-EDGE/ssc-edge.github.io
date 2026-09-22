@@ -371,6 +371,87 @@ body{
 
 
 /* =========================
+   MULTIPLE MOCKS
+========================= */
+
+.mock-list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-top:15px;
+}
+
+.mock-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  padding:10px;
+
+  border:1px solid var(--border);
+  border-radius:11px;
+
+  background:var(--card2);
+}
+
+.mock-number{
+  width:28px;
+  height:28px;
+  flex-shrink:0;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:8px;
+
+  background:var(--purple);
+  color:white;
+
+  font-size:11px;
+  font-weight:900;
+}
+
+.mock-info{
+  flex:1;
+  min-width:0;
+}
+
+.mock-title{
+  font-size:13px;
+  font-weight:800;
+  line-height:1.35;
+}
+
+.mock-id{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:2px;
+}
+
+.mock-start-btn{
+  flex-shrink:0;
+
+  border:0;
+  border-radius:9px;
+
+  background:var(--purple);
+  color:white;
+
+  padding:9px 11px;
+
+  font-size:11px;
+  font-weight:900;
+
+  cursor:pointer;
+}
+
+.mock-start-btn:active{
+  transform:scale(.97);
+}
+
+
+/* =========================
    STATUS
 ========================= */
 
@@ -723,6 +804,14 @@ body{
 
   .task-title{
     font-size:16px;
+  }
+
+  .mock-item{
+    align-items:flex-start;
+  }
+
+  .mock-start-btn{
+    margin-top:2px;
   }
 
 }
@@ -1196,6 +1285,163 @@ function getTaskIcon(type){
 
 let currentTasks = [];
 
+let currentTaskMocks = {};
+
+
+/* =========================================================
+   LOAD MULTIPLE MOCKS
+========================================================= */
+
+async function loadTaskMocks(taskIds){
+
+  currentTaskMocks = {};
+
+
+  if(!taskIds || !taskIds.length){
+
+    return;
+
+  }
+
+
+  const {
+    data,
+    error
+  } =
+  await supabaseClient
+    .from("daily_task_mocks")
+    .select("*")
+    .in(
+      "daily_task_id",
+      taskIds
+    )
+    .order(
+      "task_order",
+      {
+        ascending:true
+      }
+    );
+
+
+  if(error){
+
+    console.error(
+      "Daily Task Mocks Error:",
+      error
+    );
+
+    return;
+
+  }
+
+
+  const rows =
+    data || [];
+
+
+  if(!rows.length){
+
+    return;
+
+  }
+
+
+  /*
+    Collect all mock IDs.
+  */
+
+  const mockIds =
+    [
+      ...new Set(
+        rows.map(
+          row =>
+            Number(row.mock_id)
+        )
+      )
+    ];
+
+
+  let mockMap = {};
+
+
+  if(mockIds.length){
+
+    const {
+      data:mockData,
+      error:mockError
+    } =
+    await supabaseClient
+      .from("mock_tests")
+      .select("*")
+      .in(
+        "id",
+        mockIds
+      );
+
+
+    if(mockError){
+
+      console.error(
+        "Mock Loading Error:",
+        mockError
+      );
+
+    }
+    else{
+
+      (mockData || []).forEach(
+        mock => {
+
+          mockMap[
+            String(mock.id)
+          ] = mock;
+
+        }
+      );
+
+    }
+
+  }
+
+
+  /*
+    Group mocks by Daily Task.
+  */
+
+  rows.forEach(row => {
+
+    const taskId =
+      String(
+        row.daily_task_id
+      );
+
+
+    if(!currentTaskMocks[taskId]){
+
+      currentTaskMocks[taskId] = [];
+
+    }
+
+
+    currentTaskMocks[taskId].push({
+
+      ...row,
+
+      mock:
+        mockMap[
+          String(row.mock_id)
+        ] || null
+
+    });
+
+  });
+
+}
+
+
+/* =========================================================
+   LOAD DAILY TASKS
+========================================================= */
 
 async function loadTasks(){
 
@@ -1204,15 +1450,27 @@ async function loadTasks(){
     const today =
       getToday();
 
-    const { data, error } =
-      await supabaseClient
-        .from("daily_tasks")
-        .select("*")
-        .eq("task_date", today)
-        .eq("is_active", true)
-        .order("task_order", {
+    const {
+      data,
+      error
+    } =
+    await supabaseClient
+      .from("daily_tasks")
+      .select("*")
+      .eq(
+        "task_date",
+        today
+      )
+      .eq(
+        "is_active",
+        true
+      )
+      .order(
+        "task_order",
+        {
           ascending:true
-        });
+        }
+      );
 
 
     if(error){
@@ -1232,9 +1490,32 @@ async function loadTasks(){
     currentTasks =
       data || [];
 
-    renderTasks(currentTasks);
 
-    updateProgress(currentTasks);
+    /*
+      Load all child mocks.
+    */
+
+    const taskIds =
+      currentTasks.map(
+        task =>
+          Number(task.id)
+      );
+
+
+    await loadTaskMocks(
+      taskIds
+    );
+
+
+    renderTasks(
+      currentTasks
+    );
+
+
+    updateProgress(
+      currentTasks
+    );
+
 
   }catch(error){
 
@@ -1247,6 +1528,10 @@ async function loadTasks(){
 }
 
 
+/* =========================================================
+   RENDER TASKS
+========================================================= */
+
 function renderTasks(tasks){
 
   const completed =
@@ -1255,7 +1540,10 @@ function renderTasks(tasks){
   taskList.innerHTML = "";
 
 
-  if(!tasks || tasks.length === 0){
+  if(
+    !tasks ||
+    tasks.length === 0
+  ){
 
     taskList.innerHTML = `
 
@@ -1292,12 +1580,165 @@ function renderTasks(tasks){
       completed.includes(id);
 
 
+    const mocks =
+      currentTaskMocks[id] || [];
+
+
     const card =
       document.createElement("div");
 
+
     card.className =
       "task-card" +
-      (isCompleted ? " completed" : "");
+      (
+        isCompleted
+        ? " completed"
+        : ""
+      );
+
+
+    /*
+      Multiple mock HTML.
+    */
+
+    let mockHtml = "";
+
+
+    if(
+      String(
+        task.target_type || ""
+      ).toLowerCase() === "mock"
+    ){
+
+      /*
+        New multiple-mock system.
+      */
+
+      if(mocks.length){
+
+        mockHtml = `
+
+          <div class="mock-list">
+
+            ${
+              mocks.map(
+                (item,index) => {
+
+                  const mock =
+                    item.mock || {};
+
+
+                  const mockTitle =
+                    mock.title ||
+                    mock.name ||
+                    `Mock / Test #${item.mock_id}`;
+
+
+                  return `
+
+                    <div class="mock-item">
+
+                      <div class="mock-number">
+                        ${index + 1}
+                      </div>
+
+
+                      <div class="mock-info">
+
+                        <div class="mock-title">
+
+                          ${escapeHtml(
+                            mockTitle
+                          )}
+
+                        </div>
+
+                        <div class="mock-id">
+
+                          Test ID:
+                          ${escapeHtml(
+                            item.mock_id
+                          )}
+
+                        </div>
+
+                      </div>
+
+
+                      <button
+                        class="mock-start-btn"
+                        onclick="startMock(event, '${escapeAttribute(item.mock_id)}')">
+
+                        Start
+
+                      </button>
+
+                    </div>
+
+                  `;
+
+                }
+              ).join("")
+            }
+
+          </div>
+
+        `;
+
+      }
+
+      /*
+        Old Daily Task compatibility.
+        If old task has target_id but
+        no child records.
+      */
+
+      else if(task.target_id){
+
+        mockHtml = `
+
+          <div class="mock-list">
+
+            <div class="mock-item">
+
+              <div class="mock-number">
+                1
+              </div>
+
+              <div class="mock-info">
+
+                <div class="mock-title">
+                  Mock / Test
+                </div>
+
+                <div class="mock-id">
+
+                  Test ID:
+                  ${escapeHtml(
+                    task.target_id
+                  )}
+
+                </div>
+
+              </div>
+
+              <button
+                class="mock-start-btn"
+                onclick="startMock(event, '${escapeAttribute(task.target_id)}')">
+
+                Start
+
+              </button>
+
+            </div>
+
+          </div>
+
+        `;
+
+      }
+
+    }
 
 
     card.innerHTML = `
@@ -1305,25 +1746,35 @@ function renderTasks(tasks){
       <div class="task-top">
 
         <div class="task-icon">
+
           ${getTaskIcon(
             task.target_type ||
             task.task_type
           )}
+
         </div>
+
 
         <div class="task-info">
 
           <div class="task-subject">
+
             ${escapeHtml(
               task.subject || "SSC"
             )}
+
           </div>
 
+
           <div class="task-title">
+
             ${escapeHtml(
-              task.title || "Daily Task"
+              task.title ||
+              "Daily Task"
             )}
+
           </div>
+
 
           ${
             task.description
@@ -1342,38 +1793,84 @@ function renderTasks(tasks){
       </div>
 
 
-      <div class="task-bottom">
-
-        <span class="task-type">
-
-          ${
-            isCompleted
-            ?
-            `<span class="completed-text">
-              ✓ Completed
-            </span>`
-            :
-            escapeHtml(
-              getDisplayTaskType(task)
-            )
-          }
-
-        </span>
+      ${mockHtml}
 
 
-        <button
-          class="task-btn"
-          onclick="handleTask('${id}')">
+      ${
+        String(
+          task.target_type || ""
+        ).toLowerCase() !== "mock"
+        ?
+        `
 
-          ${
-            isCompleted
-            ? "✓ Completed"
-            : "Start Task"
-          }
+          <div class="task-bottom">
 
-        </button>
+            <span class="task-type">
 
-      </div>
+              ${
+                isCompleted
+                ?
+                `<span class="completed-text">
+                  ✓ Completed
+                </span>`
+                :
+                escapeHtml(
+                  getDisplayTaskType(
+                    task
+                  )
+                )
+              }
+
+            </span>
+
+
+            <button
+              class="task-btn"
+              onclick="handleTask('${escapeAttribute(id)}')">
+
+              ${
+                isCompleted
+                ? "✓ Completed"
+                : "Start Task"
+              }
+
+            </button>
+
+          </div>
+
+        `
+        :
+        `
+          <div class="task-bottom">
+
+            <span class="task-type">
+
+              ${
+                mocks.length
+                ? `${mocks.length} Mock${
+                    mocks.length === 1
+                      ? ""
+                      : "s"
+                  }`
+                : "Mock / Test"
+              }
+
+            </span>
+
+
+            ${
+              isCompleted
+              ?
+              `<span class="completed-text">
+                ✓ Completed
+              </span>`
+              :
+              ""
+            }
+
+          </div>
+        `
+      }
 
     `;
 
@@ -1385,9 +1882,109 @@ function renderTasks(tasks){
 }
 
 
-/* =========================
+/* =========================================================
+   START MOCK
+========================================================= */
+
+function startMock(event,mockId){
+
+  if(event){
+
+    event.stopPropagation();
+
+  }
+
+
+  if(!mockId){
+
+    return;
+
+  }
+
+
+  /*
+    Mark parent Daily Task completed.
+  */
+
+  const mockElement =
+    event
+      ? event.currentTarget
+      : null;
+
+
+  let taskId = "";
+
+
+  if(mockElement){
+
+    const card =
+      mockElement.closest(
+        ".task-card"
+      );
+
+
+    if(card){
+
+      const index =
+        [
+          ...document.querySelectorAll(
+            ".task-card"
+          )
+        ].indexOf(card);
+
+
+      if(
+        index >= 0 &&
+        currentTasks[index]
+      ){
+
+        taskId =
+          String(
+            currentTasks[index].id
+          );
+
+      }
+
+    }
+
+  }
+
+
+  if(taskId){
+
+    const completed =
+      getCompletedTasks();
+
+
+    if(!completed.includes(taskId)){
+
+      completed.push(taskId);
+
+      saveCompletedTasks(
+        completed
+      );
+
+    }
+
+  }
+
+
+  /*
+    Open selected mock.
+  */
+
+  window.location.href =
+    "test.html?id=" +
+    encodeURIComponent(
+      mockId
+    );
+
+}
+
+
+/* =========================================================
    DISPLAY TASK TYPE
-========================= */
+========================================================= */
 
 function getDisplayTaskType(task){
 
@@ -1396,25 +1993,31 @@ function getDisplayTaskType(task){
       task.target_type || ""
     ).toLowerCase();
 
+
   if(target === "mock")
     return "Mock / Test";
+
 
   if(target === "content")
     return "Content";
 
+
   if(target === "pdf")
     return "PDF";
+
 
   if(target === "link")
     return "Link";
 
-  return task.task_type || "Daily Task";
+
+  return task.task_type ||
+    "Daily Task";
 
 }
 
 
 /* =========================================================
-   HANDLE TASK
+   HANDLE NON-MOCK TASK
 ========================================================= */
 
 function handleTask(id){
@@ -1422,10 +2025,12 @@ function handleTask(id){
   const completed =
     getCompletedTasks();
 
+
   const task =
     currentTasks.find(
       item =>
-        String(item.id) === String(id)
+        String(item.id) ===
+        String(id)
     );
 
 
@@ -1433,27 +2038,32 @@ function handleTask(id){
     return;
 
 
-  /* =========================
-     MARK COMPLETE
-  ========================= */
+  if(
+    !completed.includes(
+      String(id)
+    )
+  ){
 
-  if(!completed.includes(String(id))){
+    completed.push(
+      String(id)
+    );
 
-    completed.push(String(id));
-
-    saveCompletedTasks(completed);
+    saveCompletedTasks(
+      completed
+    );
 
   }
 
 
-  updateProgress(currentTasks);
+  updateProgress(
+    currentTasks
+  );
 
-  renderTasks(currentTasks);
 
+  renderTasks(
+    currentTasks
+  );
 
-  /* =========================
-     TARGET TYPE
-  ========================= */
 
   const targetType =
     String(
@@ -1469,6 +2079,29 @@ function handleTask(id){
     targetType === "mock" ||
     targetType === "test"
   ){
+
+    /*
+      New system:
+      If multiple mocks exist,
+      the buttons are already shown.
+    */
+
+    const mocks =
+      currentTaskMocks[
+        String(task.id)
+      ] || [];
+
+
+    if(mocks.length){
+
+      return;
+
+    }
+
+
+    /*
+      Old single mock support.
+    */
 
     if(task.target_id){
 
@@ -1493,7 +2126,9 @@ function handleTask(id){
     }
 
 
-    showTaskDetail(task);
+    showTaskDetail(
+      task
+    );
 
     return;
 
@@ -1530,7 +2165,9 @@ function handleTask(id){
     }
 
 
-    showTaskDetail(task);
+    showTaskDetail(
+      task
+    );
 
     return;
 
@@ -1567,7 +2204,9 @@ function handleTask(id){
     }
 
 
-    showTaskDetail(task);
+    showTaskDetail(
+      task
+    );
 
     return;
 
@@ -1580,7 +2219,9 @@ function handleTask(id){
 
   if(targetType === "content"){
 
-    showTaskDetail(task);
+    showTaskDetail(
+      task
+    );
 
     return;
 
@@ -1601,7 +2242,9 @@ function handleTask(id){
   }
 
 
-  showTaskDetail(task);
+  showTaskDetail(
+    task
+  );
 
 }
 
@@ -1612,13 +2255,21 @@ function handleTask(id){
 
 function showTaskDetail(task){
 
-  taskPage.classList.add("hide");
+  taskPage.classList.add(
+    "hide"
+  );
 
-  schedulePage.classList.remove("show");
+  schedulePage.classList.remove(
+    "show"
+  );
 
-  scheduleMessagePage.classList.remove("show");
+  scheduleMessagePage.classList.remove(
+    "show"
+  );
 
-  taskDetailPage.classList.add("show");
+  taskDetailPage.classList.add(
+    "show"
+  );
 
 
   const targetType =
@@ -1752,7 +2403,8 @@ function showTaskDetail(task){
     <div class="task-detail-title">
 
       ${escapeHtml(
-        task.title || "Daily Task"
+        task.title ||
+        "Daily Task"
       )}
 
     </div>
@@ -1761,7 +2413,9 @@ function showTaskDetail(task){
     <div class="task-detail-type">
 
       ${escapeHtml(
-        getDisplayTaskType(task)
+        getDisplayTaskType(
+          task
+        )
       )}
 
     </div>
@@ -1771,13 +2425,17 @@ function showTaskDetail(task){
       task.content
       ?
       `<div class="task-detail-content">
-        ${escapeHtml(task.content)}
+        ${escapeHtml(
+          task.content
+        )}
       </div>`
       :
       task.description
       ?
       `<div class="task-detail-content">
-        ${escapeHtml(task.description)}
+        ${escapeHtml(
+          task.description
+        )}
       </div>`
       :
       ""
@@ -1789,7 +2447,10 @@ function showTaskDetail(task){
   `;
 
 
-  window.scrollTo(0,0);
+  window.scrollTo(
+    0,
+    0
+  );
 
 }
 
@@ -1800,15 +2461,26 @@ function showTaskDetail(task){
 
 function closeTaskDetail(){
 
-  taskDetailPage.classList.remove("show");
+  taskDetailPage.classList.remove(
+    "show"
+  );
 
-  schedulePage.classList.remove("show");
+  schedulePage.classList.remove(
+    "show"
+  );
 
-  scheduleMessagePage.classList.remove("show");
+  scheduleMessagePage.classList.remove(
+    "show"
+  );
 
-  taskPage.classList.remove("hide");
+  taskPage.classList.remove(
+    "hide"
+  );
 
-  window.scrollTo(0,0);
+  window.scrollTo(
+    0,
+    0
+  );
 
 }
 
@@ -1822,8 +2494,10 @@ function updateProgress(tasks){
   const total =
     tasks.length;
 
+
   const completed =
     getCompletedTasks();
+
 
   const completedCount =
     tasks.filter(
@@ -1840,8 +2514,11 @@ function updateProgress(tasks){
 
   const percentage =
     total === 0
-    ? 0
-    : (completedCount / total) * 100;
+      ? 0
+      : (
+          completedCount /
+          total
+        ) * 100;
 
 
   progressFill.style.width =
@@ -1890,14 +2567,23 @@ async function loadSchedule(){
 
   try{
 
-    const { data, error } =
-      await supabaseClient
-        .from("daily_schedules")
-        .select("*")
-        .eq("is_active", true)
-        .order("day_number", {
+    const {
+      data,
+      error
+    } =
+    await supabaseClient
+      .from("daily_schedules")
+      .select("*")
+      .eq(
+        "is_active",
+        true
+      )
+      .order(
+        "day_number",
+        {
           ascending:true
-        });
+        }
+      );
 
 
     if(error){
@@ -1917,7 +2603,10 @@ async function loadSchedule(){
     schedules =
       data || [];
 
-    renderSchedule(schedules);
+
+    renderSchedule(
+      schedules
+    );
 
   }catch(error){
 
@@ -1935,7 +2624,10 @@ function renderSchedule(data){
   dayList.innerHTML = "";
 
 
-  if(!data || data.length === 0){
+  if(
+    !data ||
+    data.length === 0
+  ){
 
     dayList.innerHTML = `
 
@@ -1966,75 +2658,84 @@ function renderSchedule(data){
     getToday();
 
 
-  data.forEach(schedule => {
+  data.forEach(
+    schedule => {
 
-    const isToday =
-      schedule.schedule_date === today;
-
-
-    const button =
-      document.createElement("button");
-
-    button.className =
-      "day-card";
+      const isToday =
+        schedule.schedule_date ===
+        today;
 
 
-    button.onclick = function(){
-
-      openScheduleMessage(
-        schedule
-      );
-
-    };
+      const button =
+        document.createElement(
+          "button"
+        );
 
 
-    button.innerHTML = `
+      button.className =
+        "day-card";
 
-      <div class="day-left">
 
-        <div class="day-number">
+      button.onclick =
+        function(){
 
-          DAY ${escapeHtml(
-            schedule.day_number
-          )}
+          openScheduleMessage(
+            schedule
+          );
 
-        </div>
+        };
 
-        <div>
 
-          <div class="day-name">
+      button.innerHTML = `
+
+        <div class="day-left">
+
+          <div class="day-number">
 
             DAY ${escapeHtml(
               schedule.day_number
             )}
 
-            ${
-              isToday
-              ?
-              `<span class="today-label">
-                (Today)
-              </span>`
-              :
-              ""
-            }
+          </div>
+
+          <div>
+
+            <div class="day-name">
+
+              DAY ${escapeHtml(
+                schedule.day_number
+              )}
+
+              ${
+                isToday
+                ?
+                `<span class="today-label">
+                  (Today)
+                </span>`
+                :
+                ""
+              }
+
+            </div>
 
           </div>
 
         </div>
 
-      </div>
+
+        <div class="day-arrow">
+          ›
+        </div>
+
+      `;
 
 
-      <div class="day-arrow">
-        ›
-      </div>
+      dayList.appendChild(
+        button
+      );
 
-    `;
-
-
-    dayList.appendChild(button);
-
-  });
+    }
+  );
 
 }
 
@@ -2070,17 +2771,28 @@ function showScheduleError(){
 
 function openSchedule(){
 
-  taskPage.classList.add("hide");
+  taskPage.classList.add(
+    "hide"
+  );
 
-  schedulePage.classList.add("show");
+  schedulePage.classList.add(
+    "show"
+  );
 
-  scheduleMessagePage.classList.remove("show");
+  scheduleMessagePage.classList.remove(
+    "show"
+  );
 
-  taskDetailPage.classList.remove("show");
+  taskDetailPage.classList.remove(
+    "show"
+  );
 
   loadSchedule();
 
-  window.scrollTo(0,0);
+  window.scrollTo(
+    0,
+    0
+  );
 
 }
 
@@ -2091,15 +2803,26 @@ function openSchedule(){
 
 function closeSchedule(){
 
-  schedulePage.classList.remove("show");
+  schedulePage.classList.remove(
+    "show"
+  );
 
-  scheduleMessagePage.classList.remove("show");
+  scheduleMessagePage.classList.remove(
+    "show"
+  );
 
-  taskDetailPage.classList.remove("show");
+  taskDetailPage.classList.remove(
+    "show"
+  );
 
-  taskPage.classList.remove("hide");
+  taskPage.classList.remove(
+    "hide"
+  );
 
-  window.scrollTo(0,0);
+  window.scrollTo(
+    0,
+    0
+  );
 
 }
 
@@ -2108,20 +2831,30 @@ function closeSchedule(){
    OPEN DAY MESSAGE
 ========================================================= */
 
-function openScheduleMessage(schedule){
+function openScheduleMessage(
+  schedule
+){
 
-  schedulePage.classList.remove("show");
+  schedulePage.classList.remove(
+    "show"
+  );
 
-  scheduleMessagePage.classList.add("show");
+  scheduleMessagePage.classList.add(
+    "show"
+  );
 
-  taskDetailPage.classList.remove("show");
+  taskDetailPage.classList.remove(
+    "show"
+  );
 
 
   const today =
     getToday();
 
+
   const isToday =
-    schedule.schedule_date === today;
+    schedule.schedule_date ===
+    today;
 
 
   messageCard.innerHTML = `
@@ -2166,7 +2899,10 @@ function openScheduleMessage(schedule){
   `;
 
 
-  window.scrollTo(0,0);
+  window.scrollTo(
+    0,
+    0
+  );
 
 }
 
@@ -2177,11 +2913,18 @@ function openScheduleMessage(schedule){
 
 function closeScheduleMessage(){
 
-  scheduleMessagePage.classList.remove("show");
+  scheduleMessagePage.classList.remove(
+    "show"
+  );
 
-  schedulePage.classList.add("show");
+  schedulePage.classList.add(
+    "show"
+  );
 
-  window.scrollTo(0,0);
+  window.scrollTo(
+    0,
+    0
+  );
 
 }
 
@@ -2192,12 +2935,29 @@ function closeScheduleMessage(){
 
 function escapeHtml(value){
 
-  return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+  return String(
+    value ?? ""
+  )
+  .replace(
+    /&/g,
+    "&amp;"
+  )
+  .replace(
+    /</g,
+    "&lt;"
+  )
+  .replace(
+    />/g,
+    "&gt;"
+  )
+  .replace(
+    /"/g,
+    "&quot;"
+  )
+  .replace(
+    /'/g,
+    "&#039;"
+  );
 
 }
 
@@ -2208,11 +2968,25 @@ function escapeHtml(value){
 
 function escapeAttribute(value){
 
-  return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/"/g,"&quot;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;");
+  return String(
+    value ?? ""
+  )
+  .replace(
+    /&/g,
+    "&amp;"
+  )
+  .replace(
+    /"/g,
+    "&quot;"
+  )
+  .replace(
+    /</g,
+    "&lt;"
+  )
+  .replace(
+    />/g,
+    "&gt;"
+  );
 
 }
 
