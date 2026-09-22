@@ -123,11 +123,11 @@ body{
   display:block;
   color:#6d3fd1 !important;
   line-height:1;
-  font-size:22px;
-  font-family:Arial,sans-serif;
+  font-size:18px;
+  font-family:Arial Black,Arial,sans-serif;
   font-weight:900;
-  letter-spacing:-2px;
-  transform:scaleX(.72);
+  letter-spacing:-3px;
+  transform:scaleX(.58);
 }
 
 .pause-btn:active{
@@ -547,7 +547,7 @@ body{
   gap:10px;
   min-height:52px;
   padding:10px 12px;
-  border:1px solid rgba(196,167,255,.32);
+  border:1px solid var(--border);
   border-radius:14px;
   background:rgba(196,167,255,.08);
   color:var(--text);
@@ -556,7 +556,17 @@ body{
 }
 
 .option:hover{
-  border-color:var(--purple);
+  border-color:var(--border);
+}
+
+.option:focus,
+.option:focus-within{
+  outline:none;
+}
+
+.option input:focus{
+  outline:none;
+  box-shadow:none;
 }
 
 .option.selected{
@@ -2320,12 +2330,17 @@ function formatTestHeaderName(title, testNumber){
       .trim();
 
   /*
-    Example:
-    SSC CGL ( TIER 1 ) FULL MOCK TEST 01
-    ->
-    SSC CGL ( TIER 1 )
-    FULL MOCK 01
+    Required header format:
+
+    SSC CGL TIER-1
+    full mock test 01
+
+    or
+
+    SSC CGL TIER-1
+    sectional mock test 01
   */
+
   const fullMockMatch =
     rawTitle.match(
       /^(.*?)\\s+FULL\\s+MOCK(?:\\s+TEST)?\\s*(\\d+)\\s*$/i
@@ -2336,40 +2351,38 @@ function formatTestHeaderName(title, testNumber){
     return (
       fullMockMatch[1].trim() +
       "\\n" +
-      "FULL MOCK " +
+      "full mock test " +
       fullMockMatch[2]
     );
 
   }
 
-  /*
-    If title already has FULL MOCK 01.
-  */
-  const mockMatch =
+  const sectionalMockMatch =
     rawTitle.match(
-      /^(.*?)\\s+FULL\\s+MOCK\\s*(\\d+)\\s*$/i
+      /^(.*?)\\s+SECTIONAL\\s+MOCK(?:\\s+TEST)?\\s*(\\d+)\\s*$/i
     );
 
-  if(mockMatch){
+  if(sectionalMockMatch){
 
     return (
-      mockMatch[1].trim() +
+      sectionalMockMatch[1].trim() +
       "\\n" +
-      "FULL MOCK " +
-      mockMatch[2]
+      "sectional mock test " +
+      sectionalMockMatch[2]
     );
 
   }
 
   /*
-    If the database keeps the mock number separately.
+    If the database keeps the mock number separately,
+    keep the existing title and use FULL MOCK by default.
   */
   if(numberText){
 
     return (
       rawTitle +
       "\\n" +
-      "FULL MOCK " +
+      "full mock test " +
       numberText
     );
 
