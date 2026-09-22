@@ -319,40 +319,6 @@ body{
     color:#2fbf71;
 }
 
-/* EXPLANATION */
-
-.explanation-box{
-    margin-top:11px;
-
-    padding:12px;
-
-    border-radius:11px;
-
-    background:var(--card2);
-
-    border:1px solid var(--border);
-
-    border-left:3px solid var(--purple);
-
-    color:var(--text);
-
-    font-size:13px;
-
-    line-height:1.65;
-
-    overflow-wrap:anywhere;
-}
-
-.explanation-title{
-    display:block;
-
-    color:var(--purple2);
-
-    font-weight:900;
-
-    margin-bottom:5px;
-}
-
 /* SLIDE INDICATOR */
 
 .slide-hint{
@@ -1508,21 +1474,6 @@ function renderQuestions(){
                         "Correct answer is not available.";
 
 
-                    /* EXPLANATION */
-
-                    const explanation =
-
-                        q.explanation
-
-                        ?
-
-                        esc(q.explanation)
-
-                        :
-
-                        "No explanation has been added for this question yet.";
-
-
                     html += `
 
                         <article
@@ -1566,21 +1517,6 @@ function renderQuestions(){
                                 </strong>
 
                                 ${esc(answerText)}
-
-                            </div>
-
-
-                            <div class="explanation-box">
-
-                                <span class="explanation-title">
-
-                                    📖 Explanation
-
-                                </span>
-
-                                ${explanation}
-
-                            </div>
 
 
                             <!-- OPEN TEST -->
