@@ -1330,9 +1330,68 @@ const YOUTUBE_URL =
   "https://youtube.com/@sscedge07?si=G3GngIGL79XRy3PK";
 
 function $(id){
-
   return document.getElementById(id);
+}
 
+/* =========================
+   MOBILE NUMBER NORMALIZER
+========================= */
+
+function normalizeMobile(value){
+
+  let mobile =
+    String(value || "")
+      .replace(/\D/g,"");
+
+  /*
+     Accept:
+     9876543210
+     919876543210
+     +919876543210
+  */
+
+  if(mobile.startsWith("91") && mobile.length === 12){
+
+    mobile =
+      mobile.substring(2);
+
+  }
+
+  if(!/^\d{10}$/.test(mobile)){
+    return null;
+  }
+
+  return "+91" + mobile;
+}
+
+/* =========================
+   DISPLAY MOBILE
+========================= */
+
+function displayMobile(phone){
+
+  if(!phone){
+    return "";
+  }
+
+  let value =
+    String(phone)
+      .replace(/\D/g,"");
+
+  if(
+    value.startsWith("91") &&
+    value.length === 12
+  ){
+
+    return value.substring(2);
+
+  }
+
+  if(value.length === 10){
+    return value;
+  }
+
+  return "";
 }
 
 /* =========================
@@ -1372,6 +1431,11 @@ async function loadProfile(){
 
     $("profileName").textContent =
       name;
+
+    /*
+      Google email remains the account email.
+      Mobile is NOT displayed here.
+    */
 
     $("profileEmail").textContent =
       user.email ||
@@ -1429,9 +1493,16 @@ async function openProfileEdit(){
         metadata.username ||
         $("editName").value;
 
+      /*
+        IMPORTANT:
+        First use the real Supabase Auth phone.
+        If not available, use the old metadata value.
+      */
+
       $("editMobile").value =
-        metadata.mobile ||
-        metadata.phone ||
+        displayMobile(user.phone) ||
+        displayMobile(metadata.mobile) ||
+        displayMobile(metadata.phone) ||
         "";
 
     }
@@ -1464,7 +1535,7 @@ async function saveProfileEdit(){
       .value
       .trim();
 
-  const mobile =
+  const mobileInput =
     $("editMobile")
       .value
       .trim();
@@ -1482,13 +1553,47 @@ async function saveProfileEdit(){
 
   }
 
-  if(
-    mobile &&
-    !/^\d{10}$/.test(mobile)
-  ){
+  /*
+     Mobile is required for the new
+     Mobile + Password login system.
+  */
+
+  if(!mobileInput){
+
+    $("profileEditMessage").textContent =
+      "Please enter your 10-digit mobile number.";
+
+    return;
+
+  }
+
+  const mobile =
+    normalizeMobile(mobileInput);
+
+  if(!mobile){
 
     $("profileEditMessage").textContent =
       "Please enter a valid 10-digit mobile number.";
+
+    return;
+
+  }
+
+  /*
+     Password is required when the account
+     does not already have a password.
+
+     If the user enters a password,
+     it will be updated.
+  */
+
+  if(
+    password &&
+    password.length < 6
+  ){
+
+    $("profileEditMessage").textContent =
+      "Password must be at least 6 characters.";
 
     return;
 
@@ -1514,55 +1619,90 @@ async function saveProfileEdit(){
 
     }
 
-    /* SAVE NAME + MOBILE */
+    /* =========================
+       PREPARE AUTH UPDATE
+    ========================= */
+
+    const authUpdate = {
+
+      /*
+         THIS is the important change.
+
+         Earlier code only stored:
+         data.phone
+
+         Now the actual Supabase Auth
+         phone field is updated.
+      */
+
+      phone: mobile,
+
+      data:{
+        name:name,
+        full_name:name,
+        mobile:mobile,
+        phone:mobile
+      }
+
+    };
+
+    /*
+       Add password only when the user
+       entered one.
+    */
+
+    if(password){
+
+      authUpdate.password =
+        password;
+
+    }
+
+    /* =========================
+       UPDATE SUPABASE AUTH
+    ========================= */
 
     const updateResult =
-      await db.auth.updateUser({
-
-        data:{
-          name:name,
-          full_name:name,
-          mobile:mobile,
-          phone:mobile
-        }
-
-      });
+      await db.auth.updateUser(
+        authUpdate
+      );
 
     if(updateResult.error)
       throw updateResult.error;
 
-    /* CHANGE PASSWORD ONLY IF ENTERED */
-
-    if(password){
-
-      if(password.length < 6){
-
-        $("profileEditMessage").textContent =
-          "Password must be at least 6 characters.";
-
-        return;
-
-      }
-
-      const passwordResult =
-        await db.auth.updateUser({
-
-          password:password
-
-        });
-
-      if(passwordResult.error)
-        throw passwordResult.error;
-
-    }
+    /* =========================
+       UPDATE LOCAL DISPLAY
+    ========================= */
 
     $("profileName").textContent =
       name;
 
+    /*
+       Keep the Google email/account
+       exactly as it is.
+    */
+
+    const refreshedUser =
+      updateResult.data?.user;
+
+    if(
+      refreshedUser &&
+      refreshedUser.email
+    ){
+
+      $("profileEmail").textContent =
+        refreshedUser.email;
+
+    }
+
+    /* =========================
+       SUCCESS MESSAGE
+    ========================= */
+
     $("profileEditMessage").textContent =
       password
-        ? "Profile and password updated successfully."
-        : "Profile updated successfully.";
+        ? "Profile, mobile number and password updated successfully."
+        : "Profile and mobile number updated successfully.";
 
     setTimeout(()=>{
 
@@ -1576,11 +1716,55 @@ async function saveProfileEdit(){
 
   catch(error){
 
-    console.error(error);
+    console.error(
+      "Profile update error:",
+      error
+    );
+
+    let message =
+      error?.message ||
+      "Could not update profile.";
+
+    /*
+       Make common Supabase phone
+       errors easier to understand.
+    */
+
+    if(
+      message.toLowerCase().includes(
+        "phone"
+      )
+    ){
+
+      if(
+        message.toLowerCase().includes(
+          "already"
+        )
+      ){
+
+        message =
+          "This mobile number is already linked to another account.";
+
+      }
+
+      else if(
+        message.toLowerCase().includes(
+          "confirm"
+        ) ||
+        message.toLowerCase().includes(
+          "verification"
+        )
+      ){
+
+        message =
+          "Supabase is requiring phone verification for this number. Please check your Supabase phone-auth settings.";
+
+      }
+
+    }
 
     $("profileEditMessage").textContent =
-      error.message ||
-      "Could not update profile.";
+      message;
 
   }
 
