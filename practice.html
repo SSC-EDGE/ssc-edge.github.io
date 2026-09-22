@@ -3350,8 +3350,35 @@ window.openChapterById=openChapterById;
    START
 ========================================= */
 
-loadData();
+async function startPracticePage(){
 
+    await loadData();
+
+    /*
+       Home se:
+       practice.html#ssc
+
+       open hone par directly
+       SSC exam folder kholna hai.
+    */
+
+    const hash =
+        String(location.hash || "")
+        .toLowerCase()
+        .replace("#","")
+        .trim();
+
+    if(hash === "ssc"){
+
+        openSSC();
+
+    }
+
+}
+
+/* Start */
+startPracticePage();
+    
 </script>
 
 </body>
