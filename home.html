@@ -1990,7 +1990,6 @@ Continue Learning
 
 <section class="continue-grid">
 
-<!-- ONLY CHANGE #3 -->
 <a
 href="practice.html#ssc"
 class="continue-card"
@@ -2214,6 +2213,31 @@ Profile
 <script>
 
 /* ==================================================
+   SUPABASE
+   ================================================== */
+
+/*
+FIX #1 + FIX #2
+
+Create the Supabase client before anything
+uses updatesDb.
+
+This was missing from the Home file.
+*/
+
+const SUPABASE_URL =
+"https://dvvyoygahzzbnpqrfhen.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+
+const updatesDb =
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+/* ==================================================
    MENU
    ================================================== */
 
@@ -2351,23 +2375,6 @@ document.getElementById("searchInput");
 const searchResults =
 document.getElementById("searchResults");
 
-
-/*
-==================================================
-ONLY CHANGE #2
-
-Search now searches the actual Supabase data
-instead of only the fixed Home-page list.
-
-It searches:
-- exams
-- mock_tests
-- study material tables when available
-
-It also keeps the original page search.
-==================================================
-*/
-
 const searchIndex = [
 
 {
@@ -2496,6 +2503,94 @@ Search SSC EDGE exams, mocks, PDFs and study material.
 
 }
 
+/*
+==================================================
+PRACTICE DRILL CHECK
+
+Same logic used by practice.html.
+
+Practice Drill exams should not appear
+as public SSC/RRB exam search results.
+==================================================
+*/
+
+function normalizeSearchValue(value){
+
+return String(value || "")
+.toLowerCase()
+.trim();
+
+}
+
+function compactSearchValue(value){
+
+return normalizeSearchValue(value)
+.replace(/[\s_-]+/g,"");
+
+}
+
+function isPracticeDrillExam(exam){
+
+const name =
+normalizeSearchValue(exam?.name);
+
+const type =
+compactSearchValue(exam?.mock_type);
+
+const stage =
+normalizeSearchValue(exam?.stage);
+
+return(
+
+name.includes("practice drill") ||
+
+type === "practicedrill" ||
+
+stage.includes("practice drill")
+
+);
+
+}
+
+/*
+==================================================
+RENDER SEARCH RESULT
+==================================================
+*/
+
+function addSearchResult(item){
+
+const result =
+document.createElement("a");
+
+result.className =
+"search-result";
+
+result.href =
+item.url;
+
+result.innerHTML = `
+
+<strong>
+${escapeHtml(item.title)}
+</strong>
+
+<span>
+${escapeHtml(item.text || "")}
+</span>
+
+`;
+
+searchResults.appendChild(result);
+
+}
+
+/*
+==================================================
+PERFORM SEARCH
+==================================================
+*/
+
 function performSearch(){
 
 const query =
@@ -2510,7 +2605,6 @@ showSearchEmpty();
 return;
 
 }
-
 
 /* ORIGINAL PAGE SEARCH */
 
@@ -2533,7 +2627,6 @@ item.text
 
 });
 
-
 searchResults.innerHTML = `
 
 <div class="search-empty">
@@ -2542,10 +2635,7 @@ Searching SSC EDGE...
 
 `;
 
-
-/*
-DATABASE SEARCH
-*/
+/* DATABASE SEARCH */
 
 searchDatabase(query)
 .then(function(databaseResults){
@@ -2554,7 +2644,6 @@ const allResults = [
 ...pageResults,
 ...databaseResults
 ];
-
 
 /* Remove duplicates */
 
@@ -2583,7 +2672,6 @@ uniqueResults.push(item);
 
 });
 
-
 if(uniqueResults.length === 0){
 
 searchResults.innerHTML = `
@@ -2601,38 +2689,15 @@ return;
 
 }
 
-
 searchResults.innerHTML = "";
 
 uniqueResults
 .slice(0,50)
 .forEach(function(item){
 
-const result =
-document.createElement("a");
-
-result.className =
-"search-result";
-
-result.href =
-item.url;
-
-result.innerHTML = `
-
-<strong>
-${escapeHtml(item.title)}
-</strong>
-
-<span>
-${escapeHtml(item.text || "")}
-</span>
-
-`;
-
-searchResults.appendChild(result);
+addSearchResult(item);
 
 });
-
 
 })
 .catch(function(error){
@@ -2666,28 +2731,7 @@ searchResults.innerHTML = "";
 
 pageResults.forEach(function(item){
 
-const result =
-document.createElement("a");
-
-result.className =
-"search-result";
-
-result.href =
-item.url;
-
-result.innerHTML = `
-
-<strong>
-${escapeHtml(item.title)}
-</strong>
-
-<span>
-${escapeHtml(item.text)}
-</span>
-
-`;
-
-searchResults.appendChild(result);
+addSearchResult(item);
 
 });
 
@@ -2697,30 +2741,237 @@ searchResults.appendChild(result);
 
 }
 
-
-/*
-==================================================
-SUPABASE DATABASE SEARCH
-==================================================
-*/
+/* ==================================================
+   SUPABASE DATABASE SEARCH
+   ================================================== */
 
 async function searchDatabase(query){
 
 const results = [];
 
+/*
+==================================================
+FIX #2 — EXAMS
+
+Use the SAME exam fields and filters as
+practice.html.
+
+This makes CGL / CHSL / SSC exams searchable.
+==================================================
+*/
+
+try{
+
+const {
+data: exams,
+error: examsError
+} = await updatesDb
+
+.from("exams")
+
+.select(`
+id,
+name,
+mock_type,
+is_active,
+sort_order,
+stage,
+created_at
+`)
+
+.eq("is_active", true)
+
+.order("sort_order", {
+ascending:true
+})
+
+.order("name", {
+ascending:true
+});
+
+if(!examsError && exams){
+
+exams.forEach(function(exam){
+
+/*
+Do not show Practice Drill as a public exam.
+*/
+
+if(isPracticeDrillExam(exam)){
+
+return;
+
+}
+
+const searchable = [
+
+exam.name,
+exam.mock_type,
+exam.stage
+
+]
+
+.map(function(value){
+
+return String(
+value ?? ""
+);
+
+})
+
+.join(" ")
+.toLowerCase();
+
+if(searchable.includes(query)){
+
+results.push({
+
+title:String(
+exam.name || "SSC Exam"
+),
+
+text:
+"Exam • " +
+[
+exam.mock_type,
+exam.stage
+]
+.filter(Boolean)
+.join(" • "),
+
+url:"practice.html#ssc",
+
+type:"Exam"
+
+});
+
+}
+
+});
+
+}
+
+}catch(error){
+
+console.log(
+"Exam search skipped:",
+error
+);
+
+}
+
+/*
+==================================================
+FIX #2 — MOCK TESTS
+
+Use the same mock_tests fields as practice.html.
+==================================================
+*/
+
+try{
+
+const {
+data: mocks,
+error: mocksError
+} = await updatesDb
+
+.from("mock_tests")
+
+.select(`
+id,
+exam_id,
+title,
+description,
+test_type,
+subject_id,
+folder_id,
+duration_minutes,
+total_questions,
+is_active,
+created_at
+`)
+
+.eq("is_active", true)
+
+.order("created_at", {
+ascending:false
+})
+
+.limit(200);
+
+if(!mocksError && mocks){
+
+mocks.forEach(function(mock){
+
+const searchable = [
+
+mock.title,
+mock.description,
+mock.test_type,
+mock.duration_minutes,
+mock.total_questions
+
+]
+
+.map(function(value){
+
+return String(
+value ?? ""
+);
+
+})
+
+.join(" ")
+.toLowerCase();
+
+if(searchable.includes(query)){
+
+results.push({
+
+title:String(
+mock.title || "Mock Test"
+),
+
+text:
+"Mock Test • " +
+[
+mock.test_type,
+mock.description
+]
+.filter(Boolean)
+.join(" • ")
+.substring(0,220),
+
+url:"practice.html#ssc",
+
+type:"Mock Test"
+
+});
+
+}
+
+});
+
+}
+
+}catch(error){
+
+console.log(
+"Mock test search skipped:",
+error
+);
+
+}
+
+/*
+==================================================
+OTHER DATABASE TABLES
+
+Keep the existing study/PDF search.
+==================================================
+*/
+
 const tables = [
-
-{
-name:"exams",
-type:"Exam",
-url:"practice.html#ssc"
-},
-
-{
-name:"mock_tests",
-type:"Mock Test",
-url:"practice.html#ssc"
-},
 
 {
 name:"study_material",
@@ -2748,7 +2999,6 @@ url:"study.html"
 
 ];
 
-
 for(const table of tables){
 
 try{
@@ -2757,10 +3007,10 @@ const {
 data,
 error
 } = await updatesDb
+
 .from(table.name)
 .select("*")
 .limit(200);
-
 
 if(error || !data){
 
@@ -2768,12 +3018,10 @@ continue;
 
 }
 
-
 data.forEach(function(row){
 
 const values =
 Object.values(row);
-
 
 const searchable =
 values
@@ -2786,7 +3034,6 @@ value ?? ""
 })
 .join(" ")
 .toLowerCase();
-
 
 if(
 searchable.includes(query)
@@ -2805,10 +3052,8 @@ row.file_name ||
 row.filename ||
 "SSC EDGE";
 
-
 let url =
 table.url;
-
 
 /*
 If a study/PDF row already contains
@@ -2830,7 +3075,6 @@ table.url;
 
 }
 
-
 results.push({
 
 title:String(title),
@@ -2850,12 +3094,10 @@ type:table.type
 
 });
 
-
 }catch(error){
 
 /*
 A table that does not exist is ignored.
-This keeps Home working normally.
 */
 
 console.log(
@@ -2867,11 +3109,9 @@ table.name
 
 }
 
-
 return results;
 
 }
-
 
 function escapeHtml(value){
 
@@ -2932,10 +3172,9 @@ document.getElementById("updatesContent");
 const updateDot =
 document.getElementById("updateDot");
 
-
 /*
 ==================================================
-ONLY CHANGE #1
+FIX #1
 
 Unread notification is remembered locally.
 
@@ -2952,7 +3191,6 @@ A newly added update gets the red dot again.
 const UPDATE_READ_KEY =
 "ssc-edge-updates-last-read";
 
-
 function getLastReadUpdate(){
 
 return localStorage.getItem(
@@ -2960,7 +3198,6 @@ UPDATE_READ_KEY
 ) || "";
 
 }
-
 
 function checkUnreadUpdates(data){
 
@@ -2973,10 +3210,8 @@ return;
 
 }
 
-
 const lastRead =
 getLastReadUpdate();
-
 
 /*
 First ever visit:
@@ -2992,10 +3227,8 @@ return;
 
 }
 
-
 const lastReadTime =
 new Date(lastRead).getTime();
-
 
 const unread =
 data.some(function(update){
@@ -3016,14 +3249,12 @@ lastReadTime
 
 });
 
-
 updateDot.style.display =
 unread
 ? "block"
 : "none";
 
 }
-
 
 function markUpdatesRead(data){
 
@@ -3039,6 +3270,10 @@ return;
 
 }
 
+/*
+loadUpdates() already requests newest first,
+so find() gets the newest dated update.
+*/
 
 const newest =
 data.find(function(update){
@@ -3046,7 +3281,6 @@ data.find(function(update){
 return update.created_at;
 
 });
-
 
 if(newest && newest.created_at){
 
@@ -3057,12 +3291,10 @@ newest.created_at
 
 }
 
-
 updateDot.style.display =
 "none";
 
 }
-
 
 updateBell.addEventListener(
 "click",
@@ -3073,18 +3305,19 @@ updatesOverlay.classList.add("show");
 const data =
 await loadUpdates();
 
-
 /*
-User has now opened the notification.
-Mark the currently available notifications
-as read.
+Only mark as read when updates were actually
+loaded successfully.
 */
+
+if(data && data.length){
 
 markUpdatesRead(data);
 
 }
-);
 
+}
+);
 
 updatesClose.addEventListener(
 "click",
@@ -3144,6 +3377,7 @@ Please wait
 
 `;
 
+try{
 
 const {
 data,
@@ -3160,7 +3394,6 @@ error
 ascending:false
 });
 
-
 if(error){
 
 console.error(
@@ -3174,7 +3407,6 @@ return [];
 
 }
 
-
 if(
 !data ||
 data.length === 0
@@ -3186,7 +3418,6 @@ return [];
 
 }
 
-
 /*
 When loading normally, check whether
 there is an unread notification.
@@ -3194,9 +3425,7 @@ there is an unread notification.
 
 checkUnreadUpdates(data);
 
-
 updatesContent.innerHTML = "";
-
 
 data.forEach(function(update){
 
@@ -3205,7 +3434,6 @@ document.createElement("div");
 
 item.className =
 "update-item";
-
 
 const formattedDate =
 update.created_at
@@ -3223,7 +3451,6 @@ year:"numeric"
 
 : "";
 
-
 item.innerHTML = `
 
 <div class="update-item-icon">
@@ -3238,7 +3465,6 @@ item.innerHTML = `
 
 </div>
 
-
 <div class="update-item-text">
 
 <strong>
@@ -3248,14 +3474,12 @@ update.title ||
 )}
 </strong>
 
-
 <span>
 ${escapeHtml(
 update.message ||
 ""
 )}
 </span>
-
 
 <small>
 ${escapeHtml(
@@ -3267,16 +3491,34 @@ formattedDate
 
 `;
 
-
 updatesContent.appendChild(item);
 
 });
 
-
 return data;
+
+}catch(error){
+
+/*
+IMPORTANT FIX:
+
+If Supabase/network/client throws an exception,
+the popup must NOT remain stuck on
+"Loading updates...".
+*/
+
+console.error(
+"Updates loading exception:",
+error
+);
+
+showNoUpdates();
+
+return [];
 
 }
 
+}
 
 /* ==================================================
    NO UPDATES MESSAGE
@@ -3303,11 +3545,9 @@ updatesContent.innerHTML = `
 
 </div>
 
-
 <strong>
 Currently no updates
 </strong>
-
 
 <span>
 New SSC EDGE updates will appear here.
@@ -3318,7 +3558,6 @@ New SSC EDGE updates will appear here.
 `;
 
 }
-
 
 /* ==================================================
    INITIAL LOAD
@@ -3413,4 +3652,4 @@ updatesOverlay.classList.remove("show");
 </script>
 
 </body>
-  </html>
+</html>
