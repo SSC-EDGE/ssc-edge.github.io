@@ -1770,13 +1770,17 @@ tests=(testsResponse.data||[])
 .sort((a,b)=>{
 const ao=Number(a.sort_order);
 const bo=Number(b.sort_order);
+
 if(Number.isFinite(ao)&&Number.isFinite(bo)&&ao!==bo)
 return ao-bo;
-if(Number.isFinite(ao)&&!Number.isFinite(bo))return -1;
-if(!Number.isFinite(ao)&&Number.isFinite(bo))return 1;
-return String(b.created_at||b.id||"").localeCompare(
-String(a.created_at||a.id||"")
-);
+
+if(Number.isFinite(ao)&&!Number.isFinite(bo))
+return -1;
+
+if(!Number.isFinite(ao)&&Number.isFinite(bo))
+return 1;
+
+return Number(b.id||0)-Number(a.id||0);
 });
 
 renderExams();
@@ -3784,15 +3788,17 @@ ${active?"Active":"Inactive"}
 class="ap-small-btn"
 data-up-test="${escapeHTML(test.id)}"
 type="button"
-${list.indexOf(test)===0?"disabled":""}
->↑</button>
+>
+↑
+</button>
 
 <button
 class="ap-small-btn"
 data-down-test="${escapeHTML(test.id)}"
 type="button"
-${list.indexOf(test)===list.length-1?"disabled":""}
->↓</button>
+>
+↓
+</button>
 
 <button
 class="ap-small-btn edit"
@@ -3825,28 +3831,6 @@ Delete
 `;
 
 }).join("");
-
-document
-.querySelectorAll("[data-up-test]")
-.forEach(btn=>{
-
-btn.onclick=e=>{
-e.stopPropagation();
-reorderMock(btn.dataset.upTest,-1);
-};
-
-});
-
-document
-.querySelectorAll("[data-down-test]")
-.forEach(btn=>{
-
-btn.onclick=e=>{
-e.stopPropagation();
-reorderMock(btn.dataset.downTest,1);
-};
-
-});
 
 document
 .querySelectorAll("[data-edit-test]")
@@ -3906,90 +3890,39 @@ deleteMock(test);
 
 });
 
-}
+document
+.querySelectorAll("[data-up-test]")
+.forEach(btn=>{
 
-/* =========================================================
-   REORDER MOCK
-========================================================= */
+btn.onclick=e=>{
 
-async function reorderMock(id,direction){
+e.stopPropagation();
 
-const current=tests.find(test=>
-String(test.id)===String(id)
+reorderMock(
+btn.dataset.upTest,
+-1
 );
 
-if(!current)return;
+};
 
-/*
-Mocks are reordered only inside their own folder.
-This keeps different PYQ years / subjects independent.
-*/
-
-const list=tests
-.filter(test=>
-String(test.exam_id)===String(current.exam_id)&&
-String(test.folder_id||"")===String(current.folder_id||"")&&
-test.is_active!==false
-)
-.sort((a,b)=>{
-const ao=Number(a.sort_order);
-const bo=Number(b.sort_order);
-if(Number.isFinite(ao)&&Number.isFinite(bo)&&ao!==bo)return ao-bo;
-if(Number.isFinite(ao)&&!Number.isFinite(bo))return -1;
-if(!Number.isFinite(ao)&&Number.isFinite(bo))return 1;
-return String(a.created_at||a.id||"").localeCompare(String(b.created_at||b.id||""));
 });
 
-const index=list.findIndex(test=>
-String(test.id)===String(id)
+document
+.querySelectorAll("[data-down-test]")
+.forEach(btn=>{
+
+btn.onclick=e=>{
+
+e.stopPropagation();
+
+reorderMock(
+btn.dataset.downTest,
+1
 );
 
-const target=index+direction;
+};
 
-if(index<0||target<0||target>=list.length)return;
-
-const first=list[index];
-const second=list[target];
-
-const firstOrder=Number.isFinite(Number(first.sort_order))
-?Number(first.sort_order)
-:index+1;
-
-const secondOrder=Number.isFinite(Number(second.sort_order))
-?Number(second.sort_order)
-target+1;
-
-try{
-
-let response=await db
-.from("mock_tests")
-.update({sort_order:secondOrder})
-.eq("id",first.id);
-
-if(response.error)throw response.error;
-
-response=await db
-.from("mock_tests")
-.update({sort_order:firstOrder})
-.eq("id",second.id);
-
-if(response.error)throw response.error;
-
-toast("Mock order updated");
-
-await loadAllData();
-
-if(selectedCategory==="FULL")
-renderFullManagement();
-else
-renderSectionalManagement();
-
-}catch(error){
-
-console.error("Mock reorder error:",error);
-toast("Mock reorder failed: "+error.message);
-
-}
+});
 
 }
 
@@ -5506,6 +5439,105 @@ resetViews();
 }
 
 await loadAllData();
+
+}
+
+/* =========================================================
+   REORDER MOCK
+========================================================= */
+
+async function reorderMock(id,direction){
+
+const current=
+tests.find(test=>
+String(test.id)===String(id)
+);
+
+if(!current)return;
+
+/*
+Use the exact mock list currently visible in the admin screen.
+This keeps reorder working independently for:
+New Mocks,
+PYQ Year Mocks,
+Full Mocks,
+and Sectional Subject Mocks.
+*/
+
+const visibleButtons=
+Array.from(
+document.querySelectorAll("[data-edit-test]")
+);
+
+const visibleIds=
+visibleButtons.map(btn=>
+String(btn.dataset.editTest)
+);
+
+const list=
+visibleIds
+.map(testId=>
+tests.find(test=>
+String(test.id)===testId
+)
+)
+.filter(Boolean);
+
+const index=
+list.findIndex(test=>
+String(test.id)===String(id)
+);
+
+const target=index+direction;
+
+if(
+index<0||
+target<0||
+target>=list.length
+)return;
+
+[list[index],list[target]]=
+[list[target],list[index]];
+
+try{
+
+for(let i=0;i<list.length;i++){
+
+const response=
+await db
+.from("mock_tests")
+.update({
+sort_order:i+1
+})
+.eq("id",list[i].id);
+
+if(response.error)
+throw response.error;
+
+}
+
+toast("Mock order updated");
+
+await loadAllData();
+
+if(selectedCategory==="FULL")
+renderFullManagement();
+else
+renderSectionalManagement();
+
+}catch(error){
+
+console.error(
+"Mock reorder error:",
+error
+);
+
+toast(
+"Mock reorder failed: "+
+error.message
+);
+
+}
 
 }
 
