@@ -25,23 +25,19 @@ localStorage.getItem("ssc-edge-theme") || "dark";
   --pd-muted:#9b9bb5;
   --pd-purple:#8b5cf6;
   --pd-purple2:#a78bfa;
-
-  /* Same header colors as practice.html */
   --pd-header:#21152f;
   --pd-header2:#17111f;
 }
 
-:root[data-theme=light]{
+:root[data-theme="light"]{
   --pd-bg:#f5f6fb;
-  --pd-card:#fff;
+  --pd-card:#ffffff;
   --pd-card2:#f0f0f8;
   --pd-border:#dcdceb;
   --pd-text:#171725;
   --pd-muted:#68687d;
   --pd-purple:#6d3ee8;
   --pd-purple2:#7c4dff;
-
-  /* Same light header colors as practice.html */
   --pd-header:#eee3ff;
   --pd-header2:#f8f4ff;
 }
@@ -57,6 +53,10 @@ body{
   font-family:Arial,Helvetica,sans-serif;
 }
 
+/* =========================
+   HEADER
+   ========================= */
+
 .pd-head{
   height:58px;
   display:flex;
@@ -64,27 +64,18 @@ body{
   gap:12px;
   padding:0 15px;
 
-  background:linear-gradient(
-    100deg,
-    var(--pd-header),
-    var(--pd-header2)
-  ) !important;
+  background:
+    linear-gradient(
+      100deg,
+      var(--pd-header),
+      var(--pd-header2)
+    ) !important;
 
   border-bottom:1px solid var(--pd-border);
+
   position:sticky;
   top:0;
   z-index:10;
-}
-
-.pd-back{
-  width:36px;
-  height:36px;
-  border:1px solid var(--pd-border);
-  border-radius:10px;
-  background:var(--pd-card2);
-  color:var(--pd-text);
-  font-size:21px;
-  cursor:pointer;
 }
 
 .pd-brand{
@@ -101,6 +92,43 @@ body{
   color:var(--pd-muted);
   font-size:11px;
 }
+
+/* =========================
+   TOP BACK BUTTON
+   ========================= */
+
+.pd-top-back{
+  max-width:900px;
+  margin:10px auto 0;
+  padding:0 15px;
+}
+
+.pd-top-back button{
+  min-height:40px;
+  padding:0 15px;
+
+  border:1px solid var(--pd-border);
+  border-radius:10px;
+
+  background:var(--pd-card2);
+  color:var(--pd-text);
+
+  font-size:12px;
+  font-weight:800;
+
+  cursor:pointer;
+
+  transition:.15s ease;
+}
+
+.pd-top-back button:hover{
+  border-color:var(--pd-purple);
+  color:var(--pd-purple2);
+}
+
+/* =========================
+   MAIN
+   ========================= */
 
 .pd-wrap{
   max-width:900px;
@@ -119,9 +147,15 @@ body{
   color:var(--pd-muted);
 }
 
+/* =========================
+   SUBJECT GRID
+   ========================= */
+
 .pd-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
+  grid-template-columns:
+    repeat(auto-fit,minmax(145px,1fr));
+
   gap:11px;
   margin-top:15px;
 }
@@ -155,6 +189,10 @@ body{
   margin:0;
 }
 
+/* =========================
+   PANEL
+   ========================= */
+
 .pd-panel{
   background:var(--pd-card);
   border:1px solid var(--pd-border);
@@ -175,6 +213,10 @@ body{
   margin:0;
 }
 
+/* =========================
+   LIST
+   ========================= */
+
 .pd-list{
   display:grid;
   gap:9px;
@@ -185,12 +227,17 @@ body{
   display:flex;
   align-items:center;
   justify-content:space-between;
+
   gap:10px;
+
   border:1px solid var(--pd-border);
   background:var(--pd-card2);
+
   border-radius:11px;
   padding:12px;
+
   cursor:pointer;
+
   transition:.15s;
 }
 
@@ -211,81 +258,63 @@ body{
   margin-top:5px;
 }
 
+/* =========================
+   FULL LAVENDER ARROW
+   ========================= */
+
 .pd-arrow{
   color:var(--pd-purple2);
-  font-size:18px;
+
+  font-size:25px;
+  font-weight:900;
+
+  line-height:1;
+
   flex-shrink:0;
+
+  margin-left:auto;
 }
 
-.pd-empty{
-  text-align:center;
-  color:var(--pd-muted);
-  padding:25px 8px;
-  font-size:13px;
-}
-
-.pd-btn{
-  border:0;
-  border-radius:9px;
-  padding:9px 12px;
-  background:var(--pd-purple);
-  color:#fff;
-  font-weight:800;
-  font-size:12px;
-}
-
-.pd-btn.alt{
-  background:var(--pd-card2);
-  border:1px solid var(--pd-border);
-  color:var(--pd-text);
-}
-
-.pd-breadcrumb{
-  font-size:12px;
-  color:var(--pd-muted);
-  margin:4px 0 12px;
-}
-
-.pd-test{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-}
-
-.pd-test-meta{
-  font-size:11px;
-  color:var(--pd-muted);
-  margin-top:5px;
-}
-
-.pd-tag{
-  font-size:10px;
-  color:var(--pd-purple2);
-  border:1px solid var(--pd-purple);
-  border-radius:6px;
-  padding:4px 6px;
-  white-space:nowrap;
-}
-
-/* Folder logo style like NEW MOCKS / PYQ MOCKS */
+/* =========================
+   FOLDER / CHAPTER LINE
+   ========================= */
 
 .pd-folder-line{
   display:flex;
   align-items:center;
+
   gap:11px;
+
+  min-width:0;
+  flex:1;
 }
+
+.pd-folder-line strong{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+/* =========================
+   FOLDER LOGO
+   ========================= */
 
 .pd-folder-logo{
   width:39px;
   height:39px;
+
   border-radius:11px;
+
   display:flex;
   align-items:center;
   justify-content:center;
+
   font-size:22px;
+
   background:rgba(139,92,246,.15);
   border:1px solid rgba(139,92,246,.35);
+
   flex-shrink:0;
 }
 
@@ -309,37 +338,273 @@ body{
   border-color:rgba(139,92,246,.35);
 }
 
+/* =========================
+   EMPTY
+   ========================= */
+
+.pd-empty{
+  text-align:center;
+  color:var(--pd-muted);
+  padding:25px 8px;
+  font-size:13px;
+}
+
+/* =========================
+   BREADCRUMB
+   ========================= */
+
+.pd-breadcrumb{
+  font-size:12px;
+  color:var(--pd-muted);
+  margin:4px 0 12px;
+}
+
+/* =========================
+   TEST
+   ========================= */
+
+.pd-test{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:0;
+  flex:1;
+}
+
+.pd-test-info{
+  min-width:0;
+}
+
+.pd-test-meta{
+  font-size:11px;
+  color:var(--pd-muted);
+  margin-top:5px;
+}
+
+/* =========================
+   TEST ACTION AREA
+   ========================= */
+
+.pd-test-card{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  width:100%;
+}
+
+.pd-test-title{
+  font-size:15px;
+  font-weight:800;
+}
+
+.pd-test-details{
+  font-size:11px;
+  color:var(--pd-muted);
+  line-height:1.6;
+}
+
+.pd-attempt-info{
+  color:var(--pd-purple2);
+  font-size:11px;
+  font-weight:800;
+}
+
+/* =========================
+   ACTION BUTTONS
+   ========================= */
+
+.pd-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:4px;
+}
+
+.pd-action{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  min-height:36px;
+
+  padding:0 12px;
+
+  border-radius:9px;
+
+  text-decoration:none;
+
+  font-size:11px;
+  font-weight:800;
+
+  cursor:pointer;
+
+  transition:.15s ease;
+}
+
+.pd-action.primary{
+  background:var(--pd-purple);
+  color:#fff;
+
+  border:1px solid var(--pd-purple);
+}
+
+.pd-action.primary:hover{
+  opacity:.9;
+}
+
+.pd-action.secondary{
+  background:var(--pd-card);
+  color:var(--pd-purple2);
+
+  border:1px solid var(--pd-purple);
+}
+
+.pd-action.secondary:hover{
+  background:rgba(139,92,246,.10);
+}
+
+/* =========================
+   OLD START TAG
+   ========================= */
+
+.pd-tag{
+  font-size:10px;
+  color:var(--pd-purple2);
+
+  border:1px solid var(--pd-purple);
+
+  border-radius:6px;
+
+  padding:4px 6px;
+
+  white-space:nowrap;
+}
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media(max-width:520px){
+
+  .pd-wrap{
+    padding:13px;
+  }
+
+  .pd-top-back{
+    padding:0 13px;
+  }
+
+  .pd-row{
+    padding:11px;
+  }
+
+  .pd-row strong{
+    font-size:14px;
+  }
+
+  .pd-folder-logo{
+    width:37px;
+    height:37px;
+    font-size:20px;
+  }
+
+  .pd-arrow{
+    font-size:24px;
+  }
+
+  .pd-actions{
+    width:100%;
+  }
+
+  .pd-action{
+    flex:1;
+    min-width:85px;
+  }
+
+}
+
 </style>
+
 </head>
 
 <body>
 
+<!-- =========================
+     HEADER
+     ========================= -->
+
 <header class="pd-head">
-  <button class="pd-back" onclick="goBack()">‹</button>
-  <div class="pd-brand">SSC <span>EDGE</span></div>
-  <div class="pd-sub">Practice Drill</div>
+
+  <div class="pd-brand">
+    SSC <span>EDGE</span>
+  </div>
+
+  <div class="pd-sub">
+    Practice Drill
+  </div>
+
 </header>
 
+
+<!-- =========================
+     BACK BUTTON
+     HEADER KE NICHE
+     ========================= -->
+
+<div class="pd-top-back">
+
+  <button onclick="goBack()">
+    ‹ &nbsp; Back
+  </button>
+
+</div>
+
+
+<!-- =========================
+     MAIN
+     ========================= -->
+
 <main class="pd-wrap">
+
   <div id="app">
-    <div class="pd-empty">Loading...</div>
+
+    <div class="pd-empty">
+      Loading...
+    </div>
+
   </div>
+
 </main>
+
+
+<!-- =========================
+     SUPABASE
+     ========================= -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
+/* ==================================================
+   SUPABASE
+   ================================================== */
+
 const SUPABASE_URL =
-"https://dvvyoygahzzbnpqrfhen.supabase.co";
+  "https://dvvyoygahzzbnpqrfhen.supabase.co";
 
 const SUPABASE_KEY =
-"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+  "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
 
-const db = supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+const db =
+  supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+/* ==================================================
+   DATA
+   ================================================== */
 
 let subjects = [];
 let chapters = [];
@@ -350,60 +615,95 @@ let currentSubject = null;
 let currentFolder = null;
 let currentChapter = null;
 
-const icons = [
-  "🔢",
-  "🌍",
-  "🧠",
-  "📘",
-  "📝",
-  "🎯"
-];
+
+/* ==================================================
+   ATTEMPT CACHE
+   ================================================== */
+
+const attemptCache = new Map();
+
+let currentUser = null;
+
+
+/* ==================================================
+   ESCAPE HTML
+   ================================================== */
 
 function esc(v){
+
   return String(v ?? "")
     .replaceAll("&","&amp;")
     .replaceAll("<","&lt;")
     .replaceAll(">","&gt;")
     .replaceAll('"',"&quot;")
     .replaceAll("'","&#039;");
+
 }
+
+
+/* ==================================================
+   SUBJECT ICON
+   ================================================== */
 
 function iconFor(n){
 
   n = String(n).toLowerCase();
 
-  if(n.includes("quant")) return "🔢";
+  if(n.includes("quant"))
+    return "🔢";
+
   if(
     n.includes("general") ||
     n.includes("aware") ||
     n.includes("gk")
-  ) return "🌍";
+  )
+    return "🌍";
 
-  if(n.includes("reason")) return "🧠";
-  if(n.includes("english")) return "📘";
+  if(n.includes("reason"))
+    return "🧠";
+
+  if(n.includes("english"))
+    return "📘";
 
   return "📚";
+
 }
+
+
+/* ==================================================
+   FOLDER LOGO
+   ================================================== */
 
 function folderLogo(f){
 
-  const type = String(
-    f.folder_type || f.type || f.name || ""
-  ).toUpperCase();
+  const type =
+    String(
+      f.folder_type ||
+      f.type ||
+      f.name ||
+      ""
+    ).toUpperCase();
 
-  const name = String(
-    f.display_name || f.name || ""
-  ).toUpperCase();
+  const name =
+    String(
+      f.display_name ||
+      f.name ||
+      ""
+    ).toUpperCase();
+
 
   if(
     type.includes("CHAPTER") ||
     name.includes("CHAPTER")
   ){
+
     return {
       icon:"📚",
       cls:"chapter"
     };
+
   }
+
 
   if(
     type.includes("REVISION") ||
@@ -411,71 +711,446 @@ function folderLogo(f){
     name.includes("REVISION") ||
     name.includes("BOOSTER")
   ){
+
     return {
       icon:"🚀",
       cls:"revision"
     };
+
   }
+
 
   if(
     type.includes("QUIZ") ||
     name.includes("QUIZ")
   ){
+
     return {
       icon:"🧩",
       cls:"quiz"
     };
+
   }
+
 
   if(
     type.includes("PYQ") ||
     name.includes("PYQ")
   ){
+
     return {
       icon:"📝",
       cls:"default"
     };
+
   }
+
 
   if(
     type.includes("NEW") ||
     name.includes("NEW MOCK")
   ){
+
     return {
       icon:"🔥",
       cls:"default"
     };
+
   }
+
 
   return {
     icon:"📁",
     cls:"default"
   };
+
 }
+
+
+/* ==================================================
+   BACK
+   ================================================== */
 
 function goBack(){
 
   if(currentChapter){
+
     currentChapter = null;
+
     renderFolderContents();
+
     return;
+
   }
+
 
   if(currentFolder){
+
     currentFolder = null;
+
     renderFolders();
+
     return;
+
   }
+
 
   if(currentSubject){
+
     location.href = "practice.html";
+
     return;
+
   }
 
+
   location.href = "practice.html";
+
 }
 
+
+/* ==================================================
+   CURRENT USER
+   ================================================== */
+
+async function loadCurrentUser(){
+
+  try{
+
+    const result =
+      await db.auth.getUser();
+
+    currentUser =
+      result?.data?.user || null;
+
+  }catch(error){
+
+    console.warn(
+      "Unable to load current user:",
+      error
+    );
+
+    currentUser = null;
+
+  }
+
+}
+
+
+/* ==================================================
+   LOAD ATTEMPT DATA
+   ================================================== */
+
+async function loadAttemptData(testIds){
+
+  const uniqueIds = [
+    ...new Set(
+      testIds.map(id => String(id))
+    )
+  ];
+
+
+  if(!uniqueIds.length)
+    return;
+
+
+  const missingIds =
+    uniqueIds.filter(
+      id => !attemptCache.has(id)
+    );
+
+
+  if(!missingIds.length)
+    return;
+
+
+  /*
+    User not logged in:
+    no database attempts available.
+  */
+
+  if(!currentUser){
+
+    missingIds.forEach(id => {
+
+      attemptCache.set(
+        id,
+        {
+          attempts:[],
+          completedCount:0,
+          state:"new"
+        }
+      );
+
+    });
+
+    return;
+
+  }
+
+
+  try{
+
+    const result =
+      await db
+        .from("test_attempts")
+        .select(`
+          id,
+          user_id,
+          mock_test_id,
+          started_at,
+          completed_at,
+          score,
+          correct_answers,
+          wrong_answers,
+          unanswered,
+          rank,
+          percentile,
+          sectional_data
+        `)
+        .eq(
+          "user_id",
+          currentUser.id
+        )
+        .in(
+          "mock_test_id",
+          missingIds
+        )
+        .not(
+          "completed_at",
+          "is",
+          null
+        )
+        .order(
+          "completed_at",
+          {
+            ascending:true
+          }
+        );
+
+
+    if(result.error)
+      throw result.error;
+
+
+    const grouped =
+      new Map();
+
+
+    (result.data || [])
+      .forEach(attempt => {
+
+        const id =
+          String(
+            attempt.mock_test_id
+          );
+
+
+        if(!grouped.has(id)){
+
+          grouped.set(
+            id,
+            []
+          );
+
+        }
+
+
+        grouped
+          .get(id)
+          .push(attempt);
+
+      });
+
+
+    missingIds.forEach(id => {
+
+      const attempts =
+        grouped.get(id) || [];
+
+
+      let state =
+        attempts.length
+          ? "completed"
+          : "new";
+
+
+      /*
+        Existing test.html allows
+        maximum 4 completed attempts.
+      */
+
+      if(attempts.length >= 4){
+
+        state = "completed";
+
+      }
+
+
+      attemptCache.set(
+        id,
+        {
+          attempts,
+          completedCount:
+            attempts.length,
+          state
+        }
+      );
+
+    });
+
+
+  }catch(error){
+
+    console.error(
+      "Attempt data error:",
+      error
+    );
+
+
+    /*
+      Do not break Practice Drill
+      if attempt query fails.
+    */
+
+    missingIds.forEach(id => {
+
+      attemptCache.set(
+        id,
+        {
+          attempts:[],
+          completedCount:0,
+          state:"new"
+        }
+      );
+
+    });
+
+  }
+
+}
+
+
+/* ==================================================
+   GET ATTEMPT STATE
+   ================================================== */
+
+function getAttemptState(testId){
+
+  return (
+    attemptCache.get(
+      String(testId)
+    ) ||
+    {
+      attempts:[],
+      completedCount:0,
+      state:"new"
+    }
+  );
+
+}
+
+
+/* ==================================================
+   TEST URL
+   ================================================== */
+
+function testUrl(
+  testId,
+  reattempt = false
+){
+
+  let url =
+    "test.html?id=" +
+    encodeURIComponent(testId);
+
+
+  if(reattempt){
+
+    url += "&reattempt=1";
+
+  }
+
+
+  return url;
+
+}
+
+
+/* ==================================================
+   ANALYSIS URL
+   SAME FORMAT AS PRACTICE PAGE
+   ================================================== */
+
+function analysisUrl(attempt){
+
+  if(!attempt){
+
+    return "analysis.html";
+
+  }
+
+
+  return (
+    "analysis.html" +
+    "?attempt_id=" +
+    encodeURIComponent(
+      attempt.id
+    ) +
+    "&test_id=" +
+    encodeURIComponent(
+      attempt.mock_test_id || ""
+    )
+  );
+
+}
+
+
+/* ==================================================
+   SOLUTIONS URL
+   ================================================== */
+
+function solutionsUrl(
+  test,
+  attempt
+){
+
+  let url =
+    "solutions.html?test_id=" +
+    encodeURIComponent(
+      test.id
+    );
+
+
+  if(attempt?.id){
+
+    url +=
+      "&attempt_id=" +
+      encodeURIComponent(
+        attempt.id
+      );
+
+  }
+
+
+  return url;
+
+}
+
+
+/* ==================================================
+   LOAD EVERYTHING
+   ================================================== */
+
 async function load(){
+
+  /*
+    Load user first so attempt data
+    is associated with correct account.
+  */
+
+  await loadCurrentUser();
+
 
   const [
     s,
@@ -492,27 +1167,40 @@ async function load(){
     db
       .from("chapters")
       .select("*")
-      .eq("is_active",true)
+      .eq(
+        "is_active",
+        true
+      )
       .order("display_order")
       .order("name"),
 
     db
       .from("mock_folders")
       .select("*")
-      .eq("is_active",true)
+      .eq(
+        "is_active",
+        true
+      )
       .order("sort_order")
       .order("name"),
 
     db
       .from("mock_tests")
       .select("*")
-      .eq("is_active",true)
+      .eq(
+        "is_active",
+        true
+      )
       .order("sort_order")
-      .order("created_at",{
-        ascending:false
-      })
+      .order(
+        "created_at",
+        {
+          ascending:false
+        }
+      )
 
   ]);
+
 
   if(
     s.error ||
@@ -520,30 +1208,52 @@ async function load(){
     f.error ||
     t.error
   ){
+
     throw(
       s.error ||
       c.error ||
       f.error ||
       t.error
     );
+
   }
 
-  subjects = s.data || [];
-  chapters = c.data || [];
-  folders = f.data || [];
-  tests = t.data || [];
+
+  subjects =
+    s.data || [];
+
+  chapters =
+    c.data || [];
+
+  folders =
+    f.data || [];
+
+  tests =
+    t.data || [];
+
 
   const sid =
-    new URLSearchParams(location.search)
-      .get("subject_id");
+    new URLSearchParams(
+      location.search
+    ).get("subject_id");
+
 
   if(sid){
+
     openSubject(sid);
+
   }else{
+
     renderSubjects();
+
   }
 
 }
+
+
+/* ==================================================
+   SUBJECT SCREEN
+   ================================================== */
 
 function renderSubjects(){
 
@@ -551,9 +1261,14 @@ function renderSubjects(){
   currentFolder = null;
   currentChapter = null;
 
-  document.getElementById("app").innerHTML = `
 
-    <div class="pd-title">Practice Drill</div>
+  document.getElementById(
+    "app"
+  ).innerHTML = `
+
+    <div class="pd-title">
+      Practice Drill
+    </div>
 
     <div class="pd-muted">
       Choose a subject to continue practice.
@@ -573,37 +1288,53 @@ function renderSubjects(){
               ${iconFor(s.name)}
             </div>
 
-            <h3>${esc(s.name)}</h3>
+            <h3>
+              ${esc(s.name)}
+            </h3>
 
-            <p>Practice folders</p>
+            <p>
+              Practice folders
+            </p>
 
           </div>
 
         `).join("")
-
         ||
-
-        `<div class="pd-empty">
-          No subjects found.
-        </div>`
+        `
+          <div class="pd-empty">
+            No subjects found.
+          </div>
+        `
       }
 
     </div>
-
   `;
 
 }
 
+
+/* ==================================================
+   OPEN SUBJECT
+   ================================================== */
+
 function openSubject(id){
 
-  currentSubject = subjects.find(
-    s => String(s.id) === String(id)
-  );
+  currentSubject =
+    subjects.find(
+      s =>
+        String(s.id) ===
+        String(id)
+    );
+
 
   if(!currentSubject){
+
     renderSubjects();
+
     return;
+
   }
+
 
   currentFolder = null;
   currentChapter = null;
@@ -612,27 +1343,45 @@ function openSubject(id){
 
 }
 
+
+/* ==================================================
+   SUBJECT FOLDERS
+   ================================================== */
+
 function subjectFolders(){
 
-  return folders.filter(f =>
-    String(f.subject_id || "") ===
-    String(currentSubject.id)
-
-    &&
-
-    !f.parent_id
+  return folders.filter(
+    f =>
+      String(
+        f.subject_id || ""
+      ) ===
+      String(
+        currentSubject.id
+      )
+      &&
+      !f.parent_id
   );
 
 }
 
+
+/* ==================================================
+   RENDER FOLDERS
+   ================================================== */
+
 function renderFolders(){
 
-  const fs = subjectFolders();
+  const fs =
+    subjectFolders();
 
-  document.getElementById("app").innerHTML = `
+
+  document.getElementById(
+    "app"
+  ).innerHTML = `
 
     <div class="pd-breadcrumb">
-      Practice Drill › ${esc(currentSubject.name)}
+      Practice Drill ›
+      ${esc(currentSubject.name)}
     </div>
 
     <div class="pd-title">
@@ -648,7 +1397,8 @@ function renderFolders(){
       ${
         fs.map(f => {
 
-          const logo = folderLogo(f);
+          const logo =
+            folderLogo(f);
 
           return `
 
@@ -659,75 +1409,102 @@ function renderFolders(){
 
               <div class="pd-folder-line">
 
-                <div class="pd-folder-logo ${logo.cls}">
+                <div
+                  class="pd-folder-logo ${logo.cls}"
+                >
                   ${logo.icon}
                 </div>
 
                 <div>
+
                   <strong>
-                    ${esc(f.display_name || f.name)}
+                    ${esc(
+                      f.display_name ||
+                      f.name
+                    )}
                   </strong>
 
                   <small>
                     ${folderHint(f)}
                   </small>
+
                 </div>
 
               </div>
 
-              <div class="pd-arrow">➡️</div>
+              <div class="pd-arrow">
+                →
+              </div>
 
             </div>
 
           `;
 
         }).join("")
-
         ||
-
-        `<div class="pd-empty">
-          No folders available for this subject.
-        </div>`
+        `
+          <div class="pd-empty">
+            No folders available
+            for this subject.
+          </div>
+        `
       }
 
     </div>
-
   `;
 
 }
 
+
+/* ==================================================
+   FOLDER HINT
+   ================================================== */
+
 function folderHint(f){
 
-  const x = String(
-    f.folder_type || ""
-  ).toUpperCase();
+  const x =
+    String(
+      f.folder_type || ""
+    ).toUpperCase();
 
-  if(x.includes("CHAPTER")){
+
+  if(x.includes("CHAPTER"))
     return "Chapter-wise practice";
-  }
 
-  if(x.includes("QUIZ")){
+
+  if(x.includes("QUIZ"))
     return "Topic quizzes";
-  }
+
 
   if(
     x.includes("REVISION") ||
     x.includes("BOOST")
-  ){
+  )
     return "Revision booster";
-  }
+
 
   return "Practice tests";
 
 }
 
+
+/* ==================================================
+   OPEN FOLDER
+   ================================================== */
+
 function openFolder(id){
 
-  currentFolder = folders.find(
-    f => String(f.id) === String(id)
-  );
+  currentFolder =
+    folders.find(
+      f =>
+        String(f.id) ===
+        String(id)
+    );
 
-  if(!currentFolder) return;
+
+  if(!currentFolder)
+    return;
+
 
   currentChapter = null;
 
@@ -735,17 +1512,27 @@ function openFolder(id){
 
 }
 
+
+/* ==================================================
+   CHILD FOLDERS
+   ================================================== */
+
 function childFolders(){
 
   return folders
-    .filter(f =>
-      String(f.parent_id || "") ===
-      String(currentFolder.id)
 
-      &&
-
-      f.is_active !== false
+    .filter(
+      f =>
+        String(
+          f.parent_id || ""
+        ) ===
+        String(
+          currentFolder.id
+        )
+        &&
+        f.is_active !== false
     )
+
     .sort(
       (a,b) =>
         (a.sort_order || 0) -
@@ -754,22 +1541,38 @@ function childFolders(){
 
 }
 
+
+/* ==================================================
+   FOLDER TESTS
+   ================================================== */
+
 function folderTests(fid){
 
-  return tests.filter(t =>
-    String(t.folder_id || "") ===
-    String(fid)
+  return tests.filter(
+    t =>
+      String(
+        t.folder_id || ""
+      ) ===
+      String(fid)
   );
 
 }
 
-function renderFolderContents(){
 
-  const children = childFolders();
+/* ==================================================
+   RENDER FOLDER CONTENTS
+   ================================================== */
 
-  const direct = folderTests(
-    currentFolder.id
-  );
+async function renderFolderContents(){
+
+  const children =
+    childFolders();
+
+  const direct =
+    folderTests(
+      currentFolder.id
+    );
+
 
   const isChapter =
     String(
@@ -778,25 +1581,63 @@ function renderFolderContents(){
     .toUpperCase()
     .includes("CHAPTER");
 
+
+  /*
+    Load attempt data for direct tests
+    and child folder tests.
+  */
+
+  const childTestIds = [];
+
+  children.forEach(c => {
+
+    folderTests(c.id)
+      .forEach(t =>
+        childTestIds.push(t.id)
+      );
+
+  });
+
+
+  direct.forEach(t =>
+    childTestIds.push(t.id)
+  );
+
+
+  await loadAttemptData(
+    childTestIds
+  );
+
+
   let html = `
 
     <div class="pd-breadcrumb">
+
       Practice Drill ›
-      ${esc(currentSubject.name)} ›
+      ${esc(currentSubject.name)}
+      ›
       ${esc(
         currentFolder.display_name ||
         currentFolder.name
       )}
+
     </div>
 
     <div class="pd-title">
+
       ${esc(
         currentFolder.display_name ||
         currentFolder.name
       )}
+
     </div>
 
   `;
+
+
+  /* =========================
+     CHILD CHAPTERS / TOPICS
+     ========================= */
 
   if(children.length){
 
@@ -805,9 +1646,15 @@ function renderFolderContents(){
       <div class="pd-panel">
 
         <div class="pd-panel-head">
+
           <h2>
-            ${isChapter ? "Chapters" : "Topics"}
+            ${
+              isChapter
+                ? "Chapters"
+                : "Topics"
+            }
           </h2>
+
         </div>
 
         <div class="pd-list">
@@ -821,37 +1668,42 @@ function renderFolderContents(){
               >
 
                 <div class="pd-folder-line">
-  
-                  <div class="pd-folder-logo ${
-  isChapter
-    ? "chapter"
-    : "default"
-}">
-  ${
-    String(c.display_name || c.name || "F")
-      .trim()
-      .charAt(0)
-      .toUpperCase()
-  }
-</div>
 
-                    <strong>
-                      ${esc(
+                  <div
+                    class="
+                      pd-folder-logo
+                      ${
+                        isChapter
+                          ? "chapter"
+                          : "default"
+                      }
+                    "
+                  >
+
+                    ${
+                      String(
                         c.display_name ||
-                        c.name
-                      )}
-                    </strong>
-
-                    <small>
-                      Open practice
-                    </small>
+                        c.name ||
+                        "F"
+                      )
+                      .trim()
+                      .charAt(0)
+                      .toUpperCase()
+                    }
 
                   </div>
+
+                  <strong>
+                    ${esc(
+                      c.display_name ||
+                      c.name
+                    )}
+                  </strong>
 
                 </div>
 
                 <div class="pd-arrow">
-                  ➡️
+                  →
                 </div>
 
               </div>
@@ -867,9 +1719,20 @@ function renderFolderContents(){
 
   }
 
+
+  /* =========================
+     DIRECT TESTS
+     ========================= */
+
   if(direct.length){
-    html += testList(direct);
+
+    html +=
+      renderTestList(
+        direct
+      );
+
   }
+
 
   if(
     !children.length &&
@@ -881,7 +1744,8 @@ function renderFolderContents(){
       <div class="pd-panel">
 
         <div class="pd-empty">
-          No practice tests available yet.
+          No practice tests
+          available yet.
         </div>
 
       </div>
@@ -890,33 +1754,57 @@ function renderFolderContents(){
 
   }
 
-  document.getElementById("app").innerHTML = html;
+
+  document.getElementById(
+    "app"
+  ).innerHTML = html;
 
 }
 
-function openChapter(id){
 
-  currentChapter = folders.find(
-    f => String(f.id) === String(id)
+/* ==================================================
+   OPEN CHAPTER
+   ================================================== */
+
+async function openChapter(id){
+
+  currentChapter =
+    folders.find(
+      f =>
+        String(f.id) ===
+        String(id)
+    );
+
+
+  if(!currentChapter)
+    return;
+
+
+  const ts =
+    folderTests(
+      currentChapter.id
+    );
+
+
+  await loadAttemptData(
+    ts.map(t => t.id)
   );
 
-  if(!currentChapter) return;
 
-  const ts = folderTests(
-    currentChapter.id
-  );
-
-  document.getElementById("app").innerHTML = `
+  document.getElementById(
+    "app"
+  ).innerHTML = `
 
     <div class="pd-breadcrumb">
 
       Practice Drill ›
-      ${esc(currentSubject.name)} ›
+      ${esc(currentSubject.name)}
+      ›
       ${esc(
         currentFolder.display_name ||
         currentFolder.name
-      )} ›
-
+      )}
+      ›
       ${esc(
         currentChapter.display_name ||
         currentChapter.name
@@ -934,81 +1822,256 @@ function openChapter(id){
     </div>
 
     ${
-      testList(ts)
-
+      renderTestList(ts)
       ||
+      `
+        <div class="pd-panel">
 
-      `<div class="pd-panel">
-        <div class="pd-empty">
-          No tests in this chapter yet.
+          <div class="pd-empty">
+            No tests in this
+            chapter yet.
+          </div>
+
         </div>
-      </div>`
+      `
     }
 
   `;
 
 }
 
-function testList(ts){
 
-  if(!ts.length) return "";
+/* ==================================================
+   TEST LIST
+   ================================================== */
+
+function renderTestList(ts){
+
+  if(!ts.length)
+    return "";
+
 
   return `
 
     <div class="pd-panel">
 
       <div class="pd-panel-head">
-        <h2>Available Tests</h2>
+
+        <h2>
+          Available Tests
+        </h2>
+
       </div>
 
       <div class="pd-list">
 
         ${
-          ts.map(t => `
+          ts.map(t => {
 
-            <div
-              class="pd-row"
-              onclick="openTest('${t.id}')"
-            >
+            const status =
+              getAttemptState(
+                t.id
+              );
 
-              <div class="pd-test">
 
-                <div>
+            const completedCount =
+              status.completedCount;
 
-                  <strong>
-                    ${esc(t.title)}
-                  </strong>
 
-                  <div class="pd-test-meta">
+            /*
+              Latest attempt.
+              Data is ordered oldest → newest,
+              so last item is latest.
+            */
+
+            const latest =
+              status.attempts.length
+                ? status.attempts[
+                    status.attempts.length - 1
+                  ]
+                : null;
+
+
+            let actions = "";
+
+
+            /* =========================
+               NO ATTEMPT
+               ========================= */
+
+            if(
+              completedCount === 0
+            ){
+
+              actions = `
+
+                <a
+                  class="pd-action primary"
+                  href="${testUrl(
+                    t.id,
+                    false
+                  )}"
+                >
+                  START
+                </a>
+
+              `;
+
+            }
+
+
+            /* =========================
+               ATTEMPTS EXIST
+               ========================= */
+
+            else{
+
+              /*
+                Maximum 4 attempts.
+              */
+
+              if(
+                completedCount < 4
+              ){
+
+                actions += `
+
+                  <a
+                    class="
+                      pd-action
+                      primary
+                    "
+                    href="${testUrl(
+                      t.id,
+                      true
+                    )}"
+                  >
+                    RE-ATTEMPT
+                  </a>
+
+                `;
+
+              }
+
+
+              /*
+                Solutions + Analysis
+                always use latest completed
+                attempt.
+              */
+
+              if(latest){
+
+                actions += `
+
+                  <a
+                    class="
+                      pd-action
+                      secondary
+                    "
+                    href="${solutionsUrl(
+                      t,
+                      latest
+                    )}"
+                  >
+                    SOLUTIONS
+                  </a>
+
+                  <a
+                    class="
+                      pd-action
+                      secondary
+                    "
+                    href="${analysisUrl(
+                      latest
+                    )}"
+                  >
+                    ANALYSIS
+                  </a>
+
+                `;
+
+              }
+
+            }
+
+
+            return `
+
+              <div
+                class="pd-row"
+                style="cursor:default"
+              >
+
+                <div
+                  class="pd-test-card"
+                >
+
+                  <div
+                    class="pd-test-title"
+                  >
+                    ${esc(
+                      t.title ||
+                      "Practice Test"
+                    )}
+                  </div>
+
+
+                  <div
+                    class="pd-test-details"
+                  >
 
                     ${esc(
                       t.description ||
                       "Practice Test"
                     )}
 
-                    ·
+                    <br>
 
+                    ⏱
                     ${t.duration_minutes || 0}
                     min
 
-                    ·
+                    &nbsp; · &nbsp;
 
+                    📝
                     ${t.total_questions || 0}
                     questions
 
+                  </div>
+
+
+                  ${
+                    completedCount
+                      ? `
+
+                        <div
+                          class="
+                            pd-attempt-info
+                          "
+                        >
+                          ${completedCount}
+                          / 4 attempts completed
+                        </div>
+
+                      `
+                      : ""
+                  }
+
+
+                  <div
+                    class="pd-actions"
+                  >
+                    ${actions}
                   </div>
 
                 </div>
 
               </div>
 
-              <span class="pd-tag">
-                START
-              </span>
+            `;
 
-            </div>
-
-          `).join("")
+          }).join("")
         }
 
       </div>
@@ -1019,6 +2082,11 @@ function testList(ts){
 
 }
 
+
+/* ==================================================
+   OPEN TEST
+   ================================================== */
+
 function openTest(id){
 
   location.href =
@@ -1027,24 +2095,46 @@ function openTest(id){
 
 }
 
-load().catch(e => {
 
-  document.getElementById("app").innerHTML = `
+/* ==================================================
+   START
+   ================================================== */
 
-    <div class="pd-panel">
+load()
 
-      <div class="pd-empty">
+  .catch(error => {
 
-        Error loading practice drill:
-        ${esc(e.message)}
+    console.error(
+      "Practice Drill load error:",
+      error
+    );
+
+
+    document.getElementById(
+      "app"
+    ).innerHTML = `
+
+      <div class="pd-panel">
+
+        <div class="pd-empty">
+
+          Error loading
+          practice drill:
+
+          <br><br>
+
+          ${esc(
+            error?.message ||
+            "Unknown error"
+          )}
+
+        </div>
 
       </div>
 
-    </div>
+    `;
 
-  `;
-
-});
+  });
 
 </script>
 
