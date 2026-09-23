@@ -1767,10 +1767,17 @@ Number(b.sort_order||0)
 );
 
 tests=(testsResponse.data||[])
-.sort((a,b)=>
-Number(b.id||0)-
-Number(a.id||0)
+.sort((a,b)=>{
+const ao=Number(a.sort_order);
+const bo=Number(b.sort_order);
+if(Number.isFinite(ao)&&Number.isFinite(bo)&&ao!==bo)
+return ao-bo;
+if(Number.isFinite(ao)&&!Number.isFinite(bo))return -1;
+if(!Number.isFinite(ao)&&Number.isFinite(bo))return 1;
+return String(b.created_at||b.id||"").localeCompare(
+String(a.created_at||a.id||"")
 );
+});
 
 renderExams();
 
@@ -3774,6 +3781,20 @@ ${active?"Active":"Inactive"}
 <div class="ap-test-actions">
 
 <button
+class="ap-small-btn"
+data-up-test="${escapeHTML(test.id)}"
+type="button"
+${list.indexOf(test)===0?"disabled":""}
+>↑</button>
+
+<button
+class="ap-small-btn"
+data-down-test="${escapeHTML(test.id)}"
+type="button"
+${list.indexOf(test)===list.length-1?"disabled":""}
+>↓</button>
+
+<button
 class="ap-small-btn edit"
 data-edit-test="${escapeHTML(test.id)}"
 type="button"
@@ -3804,6 +3825,28 @@ Delete
 `;
 
 }).join("");
+
+document
+.querySelectorAll("[data-up-test]")
+.forEach(btn=>{
+
+btn.onclick=e=>{
+e.stopPropagation();
+reorderMock(btn.dataset.upTest,-1);
+};
+
+});
+
+document
+.querySelectorAll("[data-down-test]")
+.forEach(btn=>{
+
+btn.onclick=e=>{
+e.stopPropagation();
+reorderMock(btn.dataset.downTest,1);
+};
+
+});
 
 document
 .querySelectorAll("[data-edit-test]")
@@ -3862,6 +3905,91 @@ deleteMock(test);
 };
 
 });
+
+}
+
+/* =========================================================
+   REORDER MOCK
+========================================================= */
+
+async function reorderMock(id,direction){
+
+const current=tests.find(test=>
+String(test.id)===String(id)
+);
+
+if(!current)return;
+
+/*
+Mocks are reordered only inside their own folder.
+This keeps different PYQ years / subjects independent.
+*/
+
+const list=tests
+.filter(test=>
+String(test.exam_id)===String(current.exam_id)&&
+String(test.folder_id||"")===String(current.folder_id||"")&&
+test.is_active!==false
+)
+.sort((a,b)=>{
+const ao=Number(a.sort_order);
+const bo=Number(b.sort_order);
+if(Number.isFinite(ao)&&Number.isFinite(bo)&&ao!==bo)return ao-bo;
+if(Number.isFinite(ao)&&!Number.isFinite(bo))return -1;
+if(!Number.isFinite(ao)&&Number.isFinite(bo))return 1;
+return String(a.created_at||a.id||"").localeCompare(String(b.created_at||b.id||""));
+});
+
+const index=list.findIndex(test=>
+String(test.id)===String(id)
+);
+
+const target=index+direction;
+
+if(index<0||target<0||target>=list.length)return;
+
+const first=list[index];
+const second=list[target];
+
+const firstOrder=Number.isFinite(Number(first.sort_order))
+?Number(first.sort_order)
+:index+1;
+
+const secondOrder=Number.isFinite(Number(second.sort_order))
+?Number(second.sort_order)
+target+1;
+
+try{
+
+let response=await db
+.from("mock_tests")
+.update({sort_order:secondOrder})
+.eq("id",first.id);
+
+if(response.error)throw response.error;
+
+response=await db
+.from("mock_tests")
+.update({sort_order:firstOrder})
+.eq("id",second.id);
+
+if(response.error)throw response.error;
+
+toast("Mock order updated");
+
+await loadAllData();
+
+if(selectedCategory==="FULL")
+renderFullManagement();
+else
+renderSectionalManagement();
+
+}catch(error){
+
+console.error("Mock reorder error:",error);
+toast("Mock reorder failed: "+error.message);
+
+}
 
 }
 
