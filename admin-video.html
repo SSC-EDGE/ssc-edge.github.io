@@ -1,3807 +1,2586 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<script>
+document.documentElement.dataset.theme =
+  localStorage.getItem("ssc-edge-theme") || "dark";
+</script>
 
 <title>SSC EDGE - Manage Videos</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
 *{
-box-sizing:border-box;
+  box-sizing:border-box;
 }
 
 body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#08050e;
-color:#fff;
-padding:20px;
+  margin:0;
+  background:#08050e;
+  color:#fff;
+  font-family:Arial,Helvetica,sans-serif;
+  min-height:100vh;
 }
 
 .container{
-max-width:700px;
-margin:auto;
+  width:100%;
+  max-width:700px;
+  margin:auto;
+  padding:18px 14px 50px;
 }
 
 .back{
-display:inline-block;
-margin-bottom:20px;
-color:#a66bff;
-text-decoration:none;
+  display:inline-block;
+  color:#c9a7ff;
+  text-decoration:none;
+  margin-bottom:18px;
+  font-size:14px;
 }
 
 h1{
-margin-bottom:5px;
+  margin:0;
+  font-size:25px;
 }
 
 .subtitle{
-color:#aaa2b9;
-margin-bottom:25px;
+  color:#a9a2b5;
+  font-size:14px;
+  margin:7px 0 20px;
 }
 
 .card{
-background:#171025;
-border:1px solid #302044;
-border-radius:18px;
-padding:20px;
-margin-bottom:20px;
+  background:#120d1b;
+  border:1px solid #28202f;
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:18px;
+}
+
+.card h2{
+  font-size:17px;
+  margin:0 0 14px;
 }
 
 label{
-display:block;
-margin:16px 0 7px;
-font-weight:bold;
+  display:block;
+  font-size:13px;
+  color:#c8c1d0;
+  margin:14px 0 7px;
 }
 
 input,
 textarea,
 select{
-width:100%;
-padding:13px;
-border-radius:10px;
-border:1px solid #302044;
-background:#08050e;
-color:#fff;
-font-size:15px;
+  width:100%;
+  border:1px solid #33293e;
+  background:#0c0912;
+  color:#fff;
+  border-radius:10px;
+  padding:12px;
+  outline:none;
+  font-size:14px;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+  border-color:#a970ff;
 }
 
 textarea{
-min-height:100px;
-resize:vertical;
+  min-height:90px;
+  resize:vertical;
 }
 
-.help-text{
-color:#aaa2b9;
-font-size:12px;
-line-height:1.5;
-margin-top:7px;
-}
-
-.thumbnail-preview{
-width:100%;
-aspect-ratio:16/9;
-margin-top:12px;
-border:1px solid #302044;
-border-radius:12px;
-overflow:hidden;
-background:#08050e;
-display:none;
-}
-
-.thumbnail-preview img{
-width:100%;
-height:100%;
-object-fit:cover;
-display:block;
-}
-
-.source-box{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-margin-top:10px;
-}
-
-.source-option{
-border:1px solid #302044;
-border-radius:12px;
-padding:13px;
-text-align:center;
-cursor:pointer;
-color:#aaa2b9;
-}
-
-.source-option.active{
-border-color:#7c3aed;
-background:#251344;
-color:#fff;
-}
-
-.source-option input{
-display:none;
-}
-
-.hidden{
-display:none !important;
+input[type="file"]{
+  padding:9px;
 }
 
 button{
-width:100%;
-margin-top:20px;
-padding:13px;
-border:0;
-border-radius:10px;
-background:#7c3aed;
-color:#fff;
-font-size:15px;
-font-weight:bold;
-cursor:pointer;
+  border:0;
+  border-radius:10px;
+  padding:11px 14px;
+  background:#8e52df;
+  color:#fff;
+  font-weight:700;
+  cursor:pointer;
+  font-size:13px;
 }
 
 button:disabled{
-opacity:.6;
-cursor:not-allowed;
+  opacity:.55;
+  cursor:not-allowed;
 }
 
-.cancel-btn{
-background:#302044;
+.secondary{
+  background:#21182b;
+  border:1px solid #3a2c47;
 }
 
-
-/* =========================
-   FOLDER MANAGER
-========================= */
-
-.folder-create-box{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-align-items:end;
+.danger{
+  background:#5b202b;
+  border:1px solid #82313e;
 }
 
-.folder-create-box button{
-margin-top:0;
+.small{
+  padding:8px 11px;
+  font-size:12px;
+}
+
+.row{
+  display:flex;
+  gap:9px;
+  align-items:center;
+}
+
+.row > *{
+  flex:1;
+}
+
+.source-row{
+  display:flex;
+  gap:10px;
+  margin-top:8px;
+}
+
+.source-option{
+  flex:1;
+  border:1px solid #33293e;
+  background:#0c0912;
+  padding:11px;
+  border-radius:10px;
+  font-size:13px;
+  cursor:pointer;
+}
+
+.source-option input{
+  width:auto;
+  margin-right:6px;
+}
+
+.preview{
+  display:none;
+  width:100%;
+  max-height:210px;
+  object-fit:cover;
+  border-radius:12px;
+  margin-top:10px;
+  border:1px solid #30263a;
+}
+
+.help{
+  color:#8f879b;
+  font-size:12px;
+  line-height:1.5;
+  margin-top:6px;
+}
+
+.status{
+  margin-top:12px;
+  padding:10px;
+  border-radius:9px;
+  display:none;
+  font-size:13px;
+}
+
+.status.ok{
+  display:block;
+  background:#12301d;
+  color:#8ff0a7;
+}
+
+.status.error{
+  display:block;
+  background:#35131a;
+  color:#ff9aaa;
+}
+
+.folder-tools{
+  margin-top:10px;
+  display:flex;
+  gap:8px;
+}
+
+.folder-tools button{
+  flex:1;
 }
 
 .folder-list{
-margin-top:15px;
-display:flex;
-flex-direction:column;
-gap:10px;
+  margin-top:14px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
 }
 
 .folder-item{
-background:#08050e;
-border:1px solid #302044;
-border-radius:12px;
-padding:12px;
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:10px;
-}
-
-.folder-info{
-min-width:0;
+  background:#0c0912;
+  border:1px solid #2c2335;
+  border-radius:11px;
+  padding:10px;
 }
 
 .folder-name{
-font-size:15px;
-font-weight:bold;
+  font-size:14px;
+  font-weight:700;
 }
 
 .folder-subject{
-font-size:12px;
-color:#aaa2b9;
-margin-top:4px;
+  color:#8f879b;
+  font-size:11px;
+  margin-top:3px;
 }
 
 .folder-actions{
-display:flex;
-gap:7px;
-flex-shrink:0;
+  display:flex;
+  gap:6px;
+  margin-top:9px;
 }
 
 .folder-actions button{
-width:auto;
-margin:0;
-padding:8px 11px;
-font-size:12px;
+  flex:1;
 }
-
-.folder-delete{
-background:#8b2435;
-}
-
-
-/* =========================
-   VIDEO ITEM
-========================= */
 
 .video-item{
-background:#171025;
-border:1px solid #302044;
-border-radius:16px;
-padding:16px;
-margin-top:12px;
+  border:1px solid #2b2234;
+  background:#0c0912;
+  border-radius:14px;
+  overflow:hidden;
+  margin-top:12px;
+}
+
+.video-thumb{
+  width:100%;
+  height:190px;
+  object-fit:cover;
+  display:block;
+  background:#17111e;
+}
+
+.video-info{
+  padding:13px;
 }
 
 .video-title{
-font-size:17px;
-font-weight:bold;
-margin-bottom:7px;
+  font-size:15px;
+  font-weight:700;
+  line-height:1.4;
 }
 
-.video-subject{
-display:inline-block;
-color:#a66bff;
-background:#251344;
-padding:5px 9px;
-border-radius:20px;
-font-size:12px;
-margin-bottom:10px;
+.badges{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:8px;
 }
 
-.video-folder{
-display:inline-block;
-color:#c8a6ff;
-background:#251344;
-border:1px solid #302044;
-padding:5px 9px;
-border-radius:20px;
-font-size:12px;
-margin:0 5px 10px 0;
+.badge{
+  display:inline-block;
+  padding:5px 8px;
+  border-radius:20px;
+  background:#241732;
+  color:#cba8ff;
+  font-size:11px;
 }
 
-.video-description{
-color:#aaa2b9;
-font-size:14px;
-line-height:1.5;
+.folder-badge{
+  background:#182b2b;
+  color:#8ce5df;
 }
 
-.video-thumbnail-small{
-width:100%;
-aspect-ratio:16/9;
-border-radius:10px;
-overflow:hidden;
-background:#08050e;
-margin-bottom:12px;
-}
-
-.video-thumbnail-small img{
-width:100%;
-height:100%;
-object-fit:cover;
-display:block;
-}
-
-.thumbnail-fallback-small{
-width:100%;
-height:100%;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-background:linear-gradient(135deg,#171225,#30204f);
-color:#fff;
-text-align:center;
-}
-
-.thumbnail-fallback-small strong{
-font-size:24px;
-}
-
-.thumbnail-fallback-small span{
-margin-top:5px;
-font-size:11px;
-opacity:.8;
+.video-desc{
+  color:#9d95a8;
+  font-size:12px;
+  line-height:1.5;
+  margin-top:8px;
 }
 
 .video-actions{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-margin-top:15px;
+  display:flex;
+  gap:8px;
+  margin-top:12px;
 }
 
-.edit-btn{
-background:#302044;
-}
-
-.delete-btn{
-background:#8b2435;
+.video-actions button{
+  flex:1;
 }
 
 .empty{
-text-align:center;
-padding:35px 10px;
-color:#aaa2b9;
+  color:#8f879b;
+  text-align:center;
+  padding:25px 10px;
+  font-size:13px;
 }
 
-#status{
-margin-top:15px;
-padding:12px;
-border-radius:10px;
-display:none;
-line-height:1.5;
+.hidden{
+  display:none !important;
 }
 
-.section-title{
-margin-top:30px;
-margin-bottom:12px;
+@media(max-width:500px){
+  .row{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .folder-tools,
+  .folder-actions,
+  .video-actions{
+    flex-direction:column;
+  }
+
+  .video-thumb{
+    height:175px;
+  }
 }
-
-@media(max-width:430px){
-
-body{
-padding:14px;
-}
-
-.card{
-padding:16px;
-}
-
-.folder-create-box{
-grid-template-columns:1fr;
-}
-
-.folder-actions button{
-padding:8px 9px;
-}
-
-}
-
 </style>
-
 </head>
-
 
 <body>
 
 <div class="container">
 
-
-<a href="admin-study.html" class="back">
-← Back
-</a>
-
-
-<h1>
-Manage Videos
-</h1>
-
-
-<div class="subtitle">
-Add, edit and delete SSC EDGE video classes
-</div>
-
-
-
-<!-- =================================================
-     VIDEO FORM
-================================================= -->
-
-<div class="card">
-
-<h2 id="formTitle">
-Add Video
-</h2>
-
-
-<label>
-Video Title
-</label>
-
-<input
-type="text"
-id="title"
-placeholder="Enter video title"
->
-
-
-
-<label>
-Subject
-</label>
-
-<select id="subject">
-
-<option value="">
-Loading subjects...
-</option>
-
-</select>
-
-
-
-<!-- =================================================
-     OPTIONAL SUBJECT FOLDER
-================================================= -->
-
-<label>
-Subject Folder (Optional)
-</label>
-
-<select id="folder">
-
-<option value="">
-No Folder
-</option>
-
-</select>
-
-<div class="help-text">
-Folder select karne par video us Subject Folder ke andar dikhega.
-Folder select na karne par video normal Videos list mein rahega.
-</div>
-
-
-
-<label>
-Description
-</label>
-
-<textarea
-id="description"
-placeholder="Enter video description"
-></textarea>
-
-
-
-<!-- THUMBNAIL URL -->
-
-<label>
-Thumbnail URL (Optional)
-</label>
-
-<input
-type="url"
-id="thumbnailUrl"
-placeholder="https://example.com/thumbnail.jpg"
-oninput="updateThumbnailPreview()"
->
-
-<div class="help-text">
-Agar URL nahi dena hai to neeche image upload kar sakte ho.
-</div>
-
-
-
-<!-- THUMBNAIL UPLOAD -->
-
-<label>
-Upload Thumbnail Image (Optional)
-</label>
-
-<input
-type="file"
-id="thumbnailFile"
-accept="image/*"
-onchange="previewUploadedThumbnail()"
->
-
-<div class="help-text">
-Recommended ratio: 16:9. JPG, PNG ya WEBP image upload kar sakte ho.
-</div>
-
-
-
-<div
-id="thumbnailPreview"
-class="thumbnail-preview"
->
-
-<img
-id="thumbnailPreviewImage"
-src=""
-alt="Thumbnail Preview"
->
-
-</div>
-
-
-
-<label>
-Video Source
-</label>
-
-
-<div class="source-box">
-
-
-<label
-class="source-option active"
-id="uploadOption"
->
-
-<input
-type="radio"
-name="source"
-value="upload"
-checked
-onchange="changeSource('upload')"
->
-
-📁 Upload Video
-
-</label>
-
-
-
-<label
-class="source-option"
-id="urlOption"
->
-
-<input
-type="radio"
-name="source"
-value="url"
-onchange="changeSource('url')"
->
-
-🔗 Video URL
-
-</label>
-
-
-</div>
-
-
-
-<div id="uploadBox">
-
-<label>
-Choose Video File
-</label>
-
-<input
-type="file"
-id="videoFile"
-accept="video/*"
->
+  <a class="back" href="admin-study.html">← Back to Admin Study</a>
+
+  <h1>Manage Videos</h1>
+  <div class="subtitle">
+    Add, edit, delete and organize SSC EDGE video classes.
+  </div>
+
+  <!-- =========================
+       FOLDER MANAGER
+  ========================== -->
+  <div class="card">
+
+    <h2>📁 Subject Folders</h2>
+
+    <label>Subject</label>
+    <select id="folderSubject">
+      <option value="">Select Subject</option>
+    </select>
+
+    <label>Folder Name</label>
+    <input
+      id="folderName"
+      type="text"
+      placeholder="Example: Quantitative Aptitude"
+      maxlength="100"
+    >
+
+    <div class="folder-tools">
+      <button type="button" id="addFolderBtn">
+        ＋ Add Folder
+      </button>
+
+      <button
+        type="button"
+        class="secondary"
+        id="refreshFoldersBtn"
+      >
+        ↻ Refresh
+      </button>
+    </div>
+
+    <div class="help">
+      Create subject folders here. Videos can be placed inside a folder
+      or saved without a folder.
+    </div>
+
+    <div id="folderStatus" class="status"></div>
+
+    <div id="folderList" class="folder-list"></div>
+
+  </div>
+
+  <!-- =========================
+       VIDEO FORM
+  ========================== -->
+  <div class="card">
+
+    <h2 id="formHeading">Add Video</h2>
+
+    <label>Video Title</label>
+    <input
+      id="title"
+      type="text"
+      placeholder="Enter video title"
+    >
+
+    <label>Subject</label>
+    <select id="subject">
+      <option value="">Select Subject</option>
+    </select>
+
+    <label>Video Folder (Optional)</label>
+    <select id="folder">
+      <option value="">No Folder — Show Directly</option>
+    </select>
+
+    <div class="help">
+      Select a subject folder if you want this video inside a folder.
+    </div>
+
+    <label>Description</label>
+    <textarea
+      id="description"
+      placeholder="Enter video description"
+    ></textarea>
+
+    <label>Thumbnail URL (Optional)</label>
+    <input
+      id="thumbnailUrl"
+      type="url"
+      placeholder="https://..."
+    >
+
+    <label>Thumbnail Upload (Optional)</label>
+    <input
+      id="thumbnailFile"
+      type="file"
+      accept="image/*"
+    >
+
+    <img
+      id="thumbnailPreview"
+      class="preview"
+      alt="Thumbnail Preview"
+    >
+
+    <label>Video Source</label>
+
+    <div class="source-row">
+
+      <label class="source-option">
+        <input
+          type="radio"
+          name="videoSource"
+          value="upload"
+          checked
+          onchange="changeSource()"
+        >
+        Upload Video
+      </label>
+
+      <label class="source-option">
+        <input
+          type="radio"
+          name="videoSource"
+          value="url"
+          onchange="changeSource()"
+        >
+        Video URL
+      </label>
+
+    </div>
+
+    <div id="uploadBox">
+      <label>Video File</label>
+      <input
+        id="videoFile"
+        type="file"
+        accept="video/*"
+      >
+      <div class="help">
+        Upload the video to the SSC EDGE video storage.
+      </div>
+    </div>
+
+    <div id="urlBox" class="hidden">
+      <label>Video URL</label>
+      <input
+        id="videoUrl"
+        type="url"
+        placeholder="YouTube / video URL"
+      >
+    </div>
+
+    <div class="row" style="margin-top:16px;">
+
+      <button
+        type="button"
+        id="saveBtn"
+        onclick="saveVideo()"
+      >
+        Save Video
+      </button>
+
+      <button
+        type="button"
+        id="cancelBtn"
+        class="secondary hidden"
+        onclick="resetForm()"
+      >
+        Cancel Edit
+      </button>
+
+    </div>
+
+    <div id="status" class="status"></div>
+
+  </div>
+
+  <!-- =========================
+       EXISTING VIDEOS
+  ========================== -->
+  <div class="card">
+
+    <h2>Existing Videos</h2>
+
+    <div id="videos">
+      <div class="empty">Loading videos...</div>
+    </div>
+
+  </div>
 
 </div>
-
-
-
-<div
-id="urlBox"
-class="hidden"
->
-
-<label>
-Video URL
-</label>
-
-<input
-type="url"
-id="videoUrl"
-placeholder="https://youtube.com/watch?v=..."
-oninput="updateThumbnailPreview()"
->
-
-<div class="help-text">
-YouTube URL hone par custom thumbnail blank hone par automatic thumbnail use hoga.
-</div>
-
-</div>
-
-
-
-<button
-id="saveBtn"
-onclick="saveVideo()"
->
-Save Video
-</button>
-
-
-
-<button
-id="cancelBtn"
-class="cancel-btn hidden"
-onclick="cancelEdit()"
->
-Cancel Edit
-</button>
-
-
-
-<div id="status"></div>
-
-</div>
-
-
-
-<!-- =================================================
-     SUBJECT FOLDER MANAGER
-================================================= -->
-
-<h2 class="section-title">
-Subject Folders
-</h2>
-
-
-<div class="card">
-
-<h2>
-Manage Subject Folders
-</h2>
-
-<div class="help-text">
-Subject select karke folder create karein. Har subject ka folder optional hai.
-</div>
-
-
-<label>
-Folder Subject
-</label>
-
-<select id="folderSubject">
-
-<option value="">
-Loading subjects...
-</option>
-
-</select>
-
-
-<div class="folder-create-box">
-
-<input
-type="text"
-id="folderName"
-placeholder="Folder name"
->
-
-<button
-id="createFolderBtn"
-onclick="createFolder()"
->
-+ Create Folder
-</button>
-
-</div>
-
-
-<div
-id="folderList"
-class="folder-list"
->
-
-<div class="empty">
-Loading folders...
-</div>
-
-</div>
-
-</div>
-
-
-
-<!-- =================================================
-     EXISTING VIDEOS
-================================================= -->
-
-<h2 class="section-title">
-Existing Videos
-</h2>
-
-
-<div id="videoList">
-
-<div class="empty">
-Loading videos...
-</div>
-
-</div>
-
-
-</div>
-
-
 
 <script>
 
-/* =================================================
-   SUPABASE
-================================================= */
-
 const SUPABASE_URL =
-"https://dvvyoygahzzbnpqrfhen.supabase.co";
+  "https://dvvyoygahzzbnpqrfhen.supabase.co";
 
 const SUPABASE_KEY =
-"sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
+  "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
 
 const supabaseClient =
-supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
-);
-
-
-
-/* =================================================
-   STATE
-================================================= */
+  supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
 
 let editingId = null;
-
 let editingOldFilePath = null;
-
 let editingOldThumbnailPath = null;
 
-let folders = [];
+let subjectsCache = [];
+let foldersCache = [];
 
-
-
-/* =================================================
-   STATUS
-================================================= */
+// ==========================================
+// STATUS
+// ==========================================
 
 function showStatus(
-message,
-success
+  elementId,
+  message,
+  type = "ok"
 ){
 
-const status =
-document.getElementById(
-"status"
-);
+  const el =
+    document.getElementById(elementId);
 
-status.style.display =
-"block";
+  if(!el) return;
 
-status.textContent =
-message;
-
-status.style.background =
-success
-? "#17351f"
-: "#3a1820";
-
+  el.textContent = message;
+  el.className =
+    "status " + type;
 }
 
-
-
-/* =================================================
-   ADMIN CHECK
-================================================= */
+// ==========================================
+// ADMIN CHECK
+// ==========================================
 
 async function checkAdmin(){
 
-const {
-data:{
-user
-}
-} =
-await supabaseClient.auth.getUser();
+  const {
+    data: { user },
+    error: userError
+  } = await supabaseClient.auth.getUser();
 
+  if(userError || !user){
 
-if(!user){
+    location.href = "index.html";
+    return false;
+  }
 
-alert(
-"Please login first."
-);
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from("admin_users")
+    .select("user_id")
+    .eq("user_id", user.id)
+    .maybeSingle();
 
-location.href =
-"admin.html";
+  if(error || !data){
 
-return false;
+    alert("Admin access required.");
+    location.href = "index.html";
+    return false;
+  }
 
-}
-
-
-const {
-data,
-error
-} =
-await supabaseClient
-
-.from("admin_users")
-
-.select("user_id")
-
-.eq(
-"user_id",
-user.id
-)
-
-.maybeSingle();
-
-
-if(error || !data){
-
-alert(
-"Access denied."
-);
-
-location.href =
-"admin.html";
-
-return false;
-
+  return true;
 }
 
-
-return true;
-
-}
-
-
-
-/* =================================================
-   LOAD SUBJECTS
-================================================= */
+// ==========================================
+// LOAD SUBJECTS
+// ==========================================
 
 async function loadSubjects(){
 
-const selects = [
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from("subjects")
+    .select("id,name")
+    .eq("is_active", true)
+    .order("name");
 
-document.getElementById(
-"subject"
-),
+  if(error){
 
-document.getElementById(
-"folderSubject"
-)
+    console.error(error);
 
-];
+    showStatus(
+      "status",
+      "Unable to load subjects.",
+      "error"
+    );
 
+    return;
+  }
 
-const {
-data,
-error
-} =
-await supabaseClient
+  subjectsCache = data || [];
 
-.from("subjects")
+  const subject =
+    document.getElementById("subject");
 
-.select(
-"id,name"
-)
+  const folderSubject =
+    document.getElementById("folderSubject");
 
-.eq(
-"is_active",
-true
-)
+  subject.innerHTML =
+    '<option value="">Select Subject</option>';
 
-.order(
-"name"
-);
+  folderSubject.innerHTML =
+    '<option value="">Select Subject</option>';
 
+  subjectsCache.forEach(item => {
 
-if(error){
+    subject.innerHTML += `
+      <option value="${item.id}">
+        ${escapeHtml(item.name)}
+      </option>
+    `;
 
-selects.forEach(
-function(select){
-
-select.innerHTML =
-'<option value="">Unable to load subjects</option>';
-
-}
-);
-
-return;
-
-}
-
-
-selects.forEach(
-function(select){
-
-select.innerHTML =
-'<option value="">Select Subject</option>';
-
-(data || []).forEach(
-function(subject){
-
-const option =
-document.createElement(
-"option"
-);
-
-option.value =
-subject.id;
-
-option.textContent =
-subject.name;
-
-select.appendChild(
-option
-);
-
-});
-
-}
-);
-
+    folderSubject.innerHTML += `
+      <option value="${item.id}">
+        ${escapeHtml(item.name)}
+      </option>
+    `;
+  });
 }
 
+// ==========================================
+// FOLDER LOAD
+// ==========================================
 
-
-/* =================================================
-   LOAD FOLDERS
-================================================= */
-
-async function loadFolders(){
-
-const {
-data,
-error
-} =
-await supabaseClient
-
-.from("video_folders")
-
-.select(`
-id,
-name,
-subject_id,
-sort_order,
-is_active,
-created_at,
-subjects(
-    name
-)
-`)
-
-.eq(
-"is_active",
-true
-)
-
-.order(
-"sort_order",
-{
-ascending:true
-}
-)
-
-.order(
-"name",
-{
-ascending:true
-}
-);
-
-
-if(error){
-
-console.error(
-"Folder loading error:",
-error
-);
-
-folders = [];
-
-renderFolderList();
-
-updateFolderSelect();
-
-return;
-
-}
-
-
-folders =
-data || [];
-
-
-renderFolderList();
-
-updateFolderSelect();
-
-}
-
-
-
-/* =================================================
-   UPDATE VIDEO FOLDER SELECT
-================================================= */
-
-function updateFolderSelect(){
-
-const select =
-document.getElementById(
-"folder"
-);
-
-const currentValue =
-select.value;
-
-
-select.innerHTML =
-'<option value="">No Folder</option>';
-
-
-folders.forEach(
-function(folder){
-
-const option =
-document.createElement(
-"option"
-);
-
-option.value =
-folder.id;
-
-option.textContent =
-folder.subjects?.name
-? folder.subjects.name
-: folder.name;
-
-select.appendChild(
-option
-);
-
-}
-);
-
-
-if(
-currentValue &&
-folders.some(
-function(folder){
-
-return String(folder.id) ===
-String(currentValue);
-
-}
-)
+async function loadFoldersForSubject(
+  subjectId,
+  selectedFolderId = ""
 ){
 
-select.value =
-currentValue;
+  const folderSelect =
+    document.getElementById("folder");
 
+  folderSelect.innerHTML =
+    '<option value="">No Folder — Show Directly</option>';
+
+  if(!subjectId){
+
+    return;
+  }
+
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from("video_folders")
+    .select(`
+      id,
+      subject_id,
+      name,
+      is_active,
+      sort_order
+    `)
+    .eq("subject_id", subjectId)
+    .eq("is_active", true)
+    .order("sort_order", {
+      ascending:true
+    })
+    .order("name", {
+      ascending:true
+    });
+
+  if(error){
+
+    console.error(error);
+
+    showStatus(
+      "status",
+      "Unable to load folders.",
+      "error"
+    );
+
+    return;
+  }
+
+  foldersCache = data || [];
+
+  foldersCache.forEach(folder => {
+
+    const option =
+      document.createElement("option");
+
+    option.value = folder.id;
+    option.textContent = folder.name;
+
+    folderSelect.appendChild(option);
+  });
+
+  if(selectedFolderId){
+
+    folderSelect.value =
+      String(selectedFolderId);
+  }
 }
 
+// ==========================================
+// FOLDER MANAGER LOAD
+// ==========================================
+
+async function loadFolderManager(){
+
+  const subjectId =
+    document.getElementById(
+      "folderSubject"
+    ).value;
+
+  const list =
+    document.getElementById(
+      "folderList"
+    );
+
+  list.innerHTML = "";
+
+  if(!subjectId){
+
+    list.innerHTML =
+      '<div class="empty">Select a subject to manage its folders.</div>';
+
+    return;
+  }
+
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from("video_folders")
+    .select(`
+      id,
+      subject_id,
+      name,
+      is_active,
+      sort_order,
+      subjects(name)
+    `)
+    .eq("subject_id", subjectId)
+    .eq("is_active", true)
+    .order("sort_order", {
+      ascending:true
+    })
+    .order("name", {
+      ascending:true
+    });
+
+  if(error){
+
+    console.error(error);
+
+    list.innerHTML =
+      '<div class="empty">Unable to load folders.</div>';
+
+    return;
+  }
+
+  if(!data || !data.length){
+
+    list.innerHTML =
+      '<div class="empty">No folder created for this subject.</div>';
+
+    return;
+  }
+
+  data.forEach((folder,index) => {
+
+    const item =
+      document.createElement("div");
+
+    item.className =
+      "folder-item";
+
+    item.innerHTML = `
+
+      <div class="folder-name">
+        📁 ${escapeHtml(folder.name)}
+      </div>
+
+      <div class="folder-subject">
+        ${escapeHtml(
+          folder.subjects?.name || ""
+        )}
+      </div>
+
+      <div class="folder-actions">
+
+        <button
+          type="button"
+          class="secondary small"
+          onclick="moveFolder('${folder.id}','up')"
+          ${index === 0 ? "disabled" : ""}
+        >
+          ↑ Up
+        </button>
+
+        <button
+          type="button"
+          class="secondary small"
+          onclick="moveFolder('${folder.id}','down')"
+          ${index === data.length-1 ? "disabled" : ""}
+        >
+          ↓ Down
+        </button>
+
+        <button
+          type="button"
+          class="secondary small"
+          onclick="renameFolder('${folder.id}')"
+        >
+          ✏️ Rename
+        </button>
+
+        <button
+          type="button"
+          class="danger small"
+          onclick="deleteFolder('${folder.id}','${escapeJs(folder.name)}')"
+        >
+          🗑️ Delete
+        </button>
+
+      </div>
+    `;
+
+    list.appendChild(item);
+  });
 }
 
+// ==========================================
+// ADD FOLDER
+// ==========================================
 
+async function addFolder(){
 
-/* =================================================
-   RENDER FOLDER LIST
-================================================= */
+  const subjectId =
+    document.getElementById(
+      "folderSubject"
+    ).value;
 
-function renderFolderList(){
+  const nameInput =
+    document.getElementById(
+      "folderName"
+    );
 
-const container =
-document.getElementById(
-"folderList"
-);
+  const name =
+    nameInput.value.trim();
 
+  if(!subjectId){
 
-if(
-!folders.length
-){
+    showStatus(
+      "folderStatus",
+      "Please select a subject first.",
+      "error"
+    );
 
-container.innerHTML = `
+    return;
+  }
 
-<div class="empty">
-No subject folders created yet.
-</div>
+  if(!name){
 
-`;
+    showStatus(
+      "folderStatus",
+      "Please enter folder name.",
+      "error"
+    );
 
-return;
+    return;
+  }
 
+  const {
+    data: existing,
+    error: existingError
+  } = await supabaseClient
+    .from("video_folders")
+    .select("id")
+    .eq("subject_id", subjectId)
+    .ilike("name", name)
+    .maybeSingle();
+
+  if(existingError){
+
+    console.error(existingError);
+  }
+
+  if(existing){
+
+    showStatus(
+      "folderStatus",
+      "A folder with this name already exists.",
+      "error"
+    );
+
+    return;
+  }
+
+  const {
+    data: lastFolder,
+    error: lastError
+  } = await supabaseClient
+    .from("video_folders")
+    .select("sort_order")
+    .eq("subject_id", subjectId)
+    .order("sort_order", {
+      ascending:false
+    })
+    .limit(1)
+    .maybeSingle();
+
+  if(lastError){
+
+    console.error(lastError);
+  }
+
+  const nextOrder =
+    lastFolder
+      ? Number(lastFolder.sort_order || 0) + 1
+      : 0;
+
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from("video_folders")
+    .insert({
+      subject_id:Number(subjectId),
+      name:name,
+      is_active:true,
+      sort_order:nextOrder
+    })
+    .select()
+    .single();
+
+  if(error){
+
+    console.error(error);
+
+    showStatus(
+      "folderStatus",
+      "Folder could not be created: " +
+      error.message,
+      "error"
+    );
+
+    return;
+  }
+
+  nameInput.value = "";
+
+  showStatus(
+    "folderStatus",
+    "Folder created successfully.",
+    "ok"
+  );
+
+  await loadFolderManager();
+
+  await loadFoldersForSubject(
+    document.getElementById("subject").value
+  );
 }
 
+// ==========================================
+// RENAME FOLDER
+// ==========================================
 
-container.innerHTML =
-folders.map(
-function(folder){
+async function renameFolder(folderId){
 
-const subject =
-folder.subjects?.name ||
-folder.name ||
-"Subject";
+  const {
+    data: folder,
+    error: fetchError
+  } = await supabaseClient
+    .from("video_folders")
+    .select("id,name,subject_id")
+    .eq("id", folderId)
+    .single();
 
+  if(fetchError || !folder){
 
-const videoCount =
-window.currentVideoData
-?
-window.currentVideoData.filter(
-function(video){
+    showStatus(
+      "folderStatus",
+      "Folder not found.",
+      "error"
+    );
 
-return String(
-video.folder_id
-) ===
-String(
-folder.id
-);
+    return;
+  }
 
-}
-).length
-: 0;
+  const newName =
+    prompt(
+      "Enter new folder name:",
+      folder.name
+    );
 
+  if(newName === null) return;
 
-return `
+  const name =
+    newName.trim();
 
-<div class="folder-item">
+  if(!name){
 
-<div class="folder-info">
+    showStatus(
+      "folderStatus",
+      "Folder name cannot be empty.",
+      "error"
+    );
 
-<div class="folder-name">
-📁 ${escapeHTML(subject)}
-</div>
+    return;
+  }
 
-<div class="folder-subject">
-${videoCount}
-${videoCount === 1 ? "Video" : "Videos"}
-</div>
+  const {
+    error
+  } = await supabaseClient
+    .from("video_folders")
+    .update({
+      name:name
+    })
+    .eq("id", folderId);
 
-</div>
+  if(error){
 
+    console.error(error);
 
-<div class="folder-actions">
+    showStatus(
+      "folderStatus",
+      "Folder rename failed: " +
+      error.message,
+      "error"
+    );
 
-<button
-type="button"
-class="folder-delete"
-data-folder-delete="${escapeHTML(folder.id)}"
->
-Delete
-</button>
+    return;
+  }
 
-</div>
+  showStatus(
+    "folderStatus",
+    "Folder renamed successfully.",
+    "ok"
+  );
 
-</div>
+  await loadFolderManager();
 
-`;
-
-}
-).join("");
-
-
-container
-.querySelectorAll(
-"[data-folder-delete]"
-)
-.forEach(
-function(button){
-
-button.onclick =
-function(){
-
-deleteFolder(
-this.dataset.folderDelete
-);
-
-};
-
-}
-);
-
+  await loadFoldersForSubject(
+    document.getElementById("subject").value
+  );
 }
 
-
-
-/* =================================================
-   CREATE FOLDER
-================================================= */
-
-async function createFolder(){
-
-const subjectId =
-document.getElementById(
-"folderSubject"
-).value;
-
-
-const nameInput =
-document.getElementById(
-"folderName"
-);
-
-
-const name =
-nameInput.value.trim();
-
-
-if(!subjectId){
-
-showStatus(
-"Please select a subject for the folder.",
-false
-);
-
-return;
-
-}
-
-
-if(!name){
-
-showStatus(
-"Please enter folder name.",
-false
-);
-
-return;
-
-}
-
-
-/*
-   Check whether the same subject
-   already has an active folder.
-*/
-
-const existing =
-folders.find(
-function(folder){
-
-return String(
-folder.subject_id
-) ===
-String(
-subjectId
-);
-
-}
-);
-
-
-if(existing){
-
-showStatus(
-"This subject already has a folder.",
-false
-);
-
-return;
-
-}
-
-
-const button =
-document.getElementById(
-"createFolderBtn"
-);
-
-button.disabled =
-true;
-
-button.textContent =
-"Creating...";
-
-
-try{
-
-const subjectSelect =
-document.getElementById(
-"folderSubject"
-);
-
-const subjectName =
-subjectSelect.options[
-subjectSelect.selectedIndex
-]?.textContent ||
-name;
-
-
-const {
-data,
-error
-} =
-await supabaseClient
-
-.from("video_folders")
-
-.insert({
-
-name:name,
-
-subject_id:
-Number(subjectId),
-
-sort_order:
-folders.length,
-
-is_active:true
-
-})
-
-.select(`
-id,
-name,
-subject_id,
-sort_order,
-is_active,
-created_at,
-subjects(
-    name
-)
-`)
-
-.single();
-
-
-if(error){
-
-throw error;
-
-}
-
-
-folders.push(
-data
-);
-
-
-nameInput.value =
-"";
-
-document.getElementById(
-"folderSubject"
-).value =
-"";
-
-
-renderFolderList();
-
-updateFolderSelect();
-
-
-showStatus(
-"✅ " +
-subjectName +
-" folder created successfully!",
-true
-);
-
-
-}catch(error){
-
-console.error(error);
-
-showStatus(
-"Folder creation failed: " +
-error.message,
-false
-);
-
-}
-
-
-button.disabled =
-false;
-
-button.textContent =
-"+ Create Folder";
-
-}
-
-
-
-/* =================================================
-   DELETE FOLDER
-================================================= */
+// ==========================================
+// DELETE FOLDER
+// ==========================================
 
 async function deleteFolder(
-folderId
+  folderId,
+  folderName
 ){
 
-const folder =
-folders.find(
-function(item){
+  const confirmed =
+    confirm(
+      `Delete folder "${folderName}"?\n\nVideos inside this folder will NOT be deleted. They will become "No Folder".`
+    );
 
-return String(
-item.id
-) ===
-String(
-folderId
-);
+  if(!confirmed) return;
 
-}
-);
+  const {
+    error
+  } = await supabaseClient
+    .from("video_folders")
+    .delete()
+    .eq("id", folderId);
 
+  if(error){
 
-if(!folder){
+    console.error(error);
 
-return;
+    showStatus(
+      "folderStatus",
+      "Folder could not be deleted: " +
+      error.message,
+      "error"
+    );
 
-}
+    return;
+  }
 
+  showStatus(
+    "folderStatus",
+    "Folder deleted. Its videos are now in No Folder.",
+    "ok"
+  );
 
-const subject =
-folder.subjects?.name ||
-folder.name ||
-"this folder";
+  await loadFolderManager();
 
-
-const videoCount =
-window.currentVideoData
-?
-window.currentVideoData.filter(
-function(video){
-
-return String(
-video.folder_id
-) ===
-String(
-folderId
-);
-
-}
-).length
-: 0;
-
-
-let message =
-"Delete folder \"" +
-subject +
-"\"?";
-
-
-if(videoCount){
-
-message +=
-"\n\n" +
-videoCount +
-" video(s) are currently inside this folder." +
-"\n\nThey will NOT be deleted. They will simply become unassigned videos.";
-
+  await loadFoldersForSubject(
+    document.getElementById("subject").value
+  );
 }
 
+// ==========================================
+// MOVE FOLDER
+// ==========================================
 
-if(!confirm(message)){
-
-return;
-
-}
-
-
-const {
-error
-} =
-await supabaseClient
-
-.from("video_folders")
-
-.delete()
-
-.eq(
-"id",
-folderId
-);
-
-
-if(error){
-
-alert(
-"Folder delete failed: " +
-error.message
-);
-
-return;
-
-}
-
-
-/*
-   Because study_material.folder_id
-   uses ON DELETE SET NULL,
-   videos automatically become
-   unassigned.
-*/
-
-folders =
-folders.filter(
-function(item){
-
-return String(
-item.id
-) !==
-String(
-folderId
-);
-
-}
-);
-
-
-renderFolderList();
-
-updateFolderSelect();
-
-
-await loadVideos();
-
-
-showStatus(
-"✅ Folder deleted successfully!",
-true
-);
-
-}
-
-
-
-/* =================================================
-   SOURCE SWITCH
-================================================= */
-
-function changeSource(
-source
+async function moveFolder(
+  folderId,
+  direction
 ){
 
-const uploadBox =
-document.getElementById(
-"uploadBox"
-);
+  const subjectId =
+    document.getElementById(
+      "folderSubject"
+    ).value;
 
-const urlBox =
-document.getElementById(
-"urlBox"
-);
+  if(!subjectId) return;
 
-const uploadOption =
-document.getElementById(
-"uploadOption"
-);
+  const {
+    data: folders,
+    error
+  } = await supabaseClient
+    .from("video_folders")
+    .select("id,sort_order")
+    .eq("subject_id", subjectId)
+    .eq("is_active", true)
+    .order("sort_order", {
+      ascending:true
+    })
+    .order("name", {
+      ascending:true
+    });
 
-const urlOption =
-document.getElementById(
-"urlOption"
-);
+  if(error){
 
+    console.error(error);
 
-if(source==="upload"){
+    showStatus(
+      "folderStatus",
+      "Unable to reorder folders.",
+      "error"
+    );
 
-uploadBox.classList.remove(
-"hidden"
-);
+    return;
+  }
 
-urlBox.classList.add(
-"hidden"
-);
+  const index =
+    folders.findIndex(
+      x => String(x.id) === String(folderId)
+    );
 
-uploadOption.classList.add(
-"active"
-);
+  if(index === -1) return;
 
-urlOption.classList.remove(
-"active"
-);
+  const newIndex =
+    direction === "up"
+      ? index - 1
+      : index + 1;
 
-}else{
+  if(
+    newIndex < 0 ||
+    newIndex >= folders.length
+  ){
+    return;
+  }
 
-uploadBox.classList.add(
-"hidden"
-);
+  const current =
+    folders[index];
 
-urlBox.classList.remove(
-"hidden"
-);
+  const target =
+    folders[newIndex];
 
-uploadOption.classList.remove(
-"active"
-);
+  const oldOrder =
+    Number(current.sort_order);
 
-urlOption.classList.add(
-"active"
-);
+  const newOrder =
+    Number(target.sort_order);
 
-updateThumbnailPreview();
+  const {
+    error: firstError
+  } = await supabaseClient
+    .from("video_folders")
+    .update({
+      sort_order:newOrder
+    })
+    .eq("id", current.id);
 
+  if(firstError){
+
+    console.error(firstError);
+
+    showStatus(
+      "folderStatus",
+      "Folder reorder failed.",
+      "error"
+    );
+
+    return;
+  }
+
+  const {
+    error: secondError
+  } = await supabaseClient
+    .from("video_folders")
+    .update({
+      sort_order:oldOrder
+    })
+    .eq("id", target.id);
+
+  if(secondError){
+
+    console.error(secondError);
+
+    showStatus(
+      "folderStatus",
+      "Folder reorder failed.",
+      "error"
+    );
+
+    return;
+  }
+
+  await loadFolderManager();
+
+  await loadFoldersForSubject(
+    document.getElementById("subject").value
+  );
+
+  showStatus(
+    "folderStatus",
+    "Folder order updated.",
+    "ok"
+  );
 }
 
+// ==========================================
+// SOURCE
+// ==========================================
+
+function changeSource(){
+
+  const source =
+    getSource();
+
+  document
+    .getElementById("uploadBox")
+    .classList.toggle(
+      "hidden",
+      source !== "upload"
+    );
+
+  document
+    .getElementById("urlBox")
+    .classList.toggle(
+      "hidden",
+      source !== "url"
+    );
 }
-
-
 
 function getSource(){
 
-const selected =
-document.querySelector(
-'input[name="source"]:checked'
-);
+  const checked =
+    document.querySelector(
+      'input[name="videoSource"]:checked'
+    );
 
-return selected
-?
-selected.value
-:
-"upload";
-
+  return checked
+    ? checked.value
+    : "upload";
 }
 
+// ==========================================
+// YOUTUBE
+// ==========================================
 
+function getYouTubeVideoId(url){
 
-/* =================================================
-   YOUTUBE ID
-================================================= */
+  if(!url) return null;
 
-function getYouTubeVideoId(
-url
-){
+  try{
 
-if(!url) return null;
+    const u =
+      new URL(url);
 
+    if(
+      u.hostname.includes("youtube.com")
+    ){
 
-try{
+      if(u.pathname === "/watch")
+        return u.searchParams.get("v");
 
-const parsed =
-new URL(url);
+      if(
+        u.pathname.startsWith("/shorts/")
+      )
+        return u.pathname.split("/")[2];
 
-const host =
-parsed.hostname.toLowerCase();
+      if(
+        u.pathname.startsWith("/embed/")
+      )
+        return u.pathname.split("/")[2];
+    }
 
+    if(
+      u.hostname === "youtu.be"
+    ){
 
-if(
-host==="youtu.be" ||
-host==="www.youtu.be"
-){
+      return u.pathname.substring(1);
+    }
 
-return parsed.pathname
-.replace("/","")
-.split("/")[0]
-|| null;
+  }catch(e){}
 
+  return null;
 }
 
+function getAutomaticThumbnail(url){
 
-if(
-host.includes("youtube.com") ||
-host.includes("youtube-nocookie.com")
-){
+  const id =
+    getYouTubeVideoId(url);
 
-const queryId =
-parsed.searchParams.get(
-"v"
-);
-
-if(queryId){
-
-return queryId;
-
+  return id
+    ? `https://img.youtube.com/vi/${id}/hqdefault.jpg`
+    : "";
 }
-
-
-const parts =
-parsed.pathname
-.split("/")
-.filter(
-Boolean
-);
-
-
-const index =
-parts.findIndex(
-part=>
-part==="shorts" ||
-part==="embed" ||
-part==="live"
-);
-
-
-if(
-index!==-1 &&
-parts[index+1]
-){
-
-return parts[
-index+1
-];
-
-}
-
-}
-
-}catch(error){
-
-return null;
-
-}
-
-
-return null;
-
-}
-
-
-
-/* =================================================
-   AUTOMATIC THUMBNAIL
-================================================= */
-
-function getAutomaticThumbnail(
-videoUrl
-){
-
-const videoId =
-getYouTubeVideoId(
-videoUrl
-);
-
-
-if(!videoId){
-
-return "";
-
-}
-
-
-return "https://img.youtube.com/vi/" +
-videoId +
-"/hqdefault.jpg";
-
-}
-
-
-
-/* =================================================
-   FINAL THUMBNAIL
-================================================= */
 
 function getFinalThumbnail(
-customThumbnail,
-videoUrl
+  thumbnailUrl,
+  videoUrl
 ){
 
-const custom =
-String(
-customThumbnail || ""
-).trim();
+  if(thumbnailUrl)
+    return thumbnailUrl;
 
+  const auto =
+    getAutomaticThumbnail(videoUrl);
 
-if(custom){
+  if(auto)
+    return auto;
 
-return custom;
-
+  return "";
 }
 
-
-return getAutomaticThumbnail(
-videoUrl
-);
-
-}
-
-
-
-/* =================================================
-   PREVIEW UPLOADED THUMBNAIL
-================================================= */
-
-function previewUploadedThumbnail(){
-
-const file =
-document.getElementById(
-"thumbnailFile"
-).files[0];
-
-
-if(!file){
-
-updateThumbnailPreview();
-
-return;
-
-}
-
-
-if(
-!file.type.startsWith(
-"image/"
-)
-){
-
-showStatus(
-"Please select a valid image file.",
-false
-);
-
-document.getElementById(
-"thumbnailFile"
-).value="";
-
-return;
-
-}
-
-
-const reader =
-new FileReader();
-
-
-reader.onload =
-function(){
-
-const preview =
-document.getElementById(
-"thumbnailPreview"
-);
-
-const image =
-document.getElementById(
-"thumbnailPreviewImage"
-);
-
-
-image.src =
-reader.result;
-
-preview.style.display =
-"block";
-
-};
-
-
-reader.readAsDataURL(
-file
-);
-
-}
-
-
-
-/* =================================================
-   THUMBNAIL PREVIEW
-================================================= */
+// ==========================================
+// THUMBNAIL PREVIEW
+// ==========================================
 
 function updateThumbnailPreview(){
 
-const uploadedFile =
-document.getElementById(
-"thumbnailFile"
-).files[0];
+  const input =
+    document.getElementById(
+      "thumbnailUrl"
+    );
 
+  const preview =
+    document.getElementById(
+      "thumbnailPreview"
+    );
 
-if(uploadedFile){
+  const url =
+    input.value.trim();
 
-return;
+  if(!url){
 
+    preview.style.display =
+      "none";
+
+    preview.removeAttribute("src");
+
+    return;
+  }
+
+  preview.src = url;
+
+  preview.style.display =
+    "block";
 }
 
+document
+  .getElementById("thumbnailUrl")
+  .addEventListener(
+    "input",
+    updateThumbnailPreview
+  );
 
-const custom =
-document.getElementById(
-"thumbnailUrl"
-).value.trim();
+document
+  .getElementById("thumbnailFile")
+  .addEventListener(
+    "change",
+    function(){
 
+      const file =
+        this.files?.[0];
 
-const videoUrl =
-document.getElementById(
-"videoUrl"
-).value.trim();
+      if(!file) return;
 
+      const preview =
+        document.getElementById(
+          "thumbnailPreview"
+        );
 
-const finalThumbnail =
-getFinalThumbnail(
-custom,
-videoUrl
-);
+      preview.src =
+        URL.createObjectURL(file);
 
+      preview.style.display =
+        "block";
+    }
+  );
 
-const preview =
-document.getElementById(
-"thumbnailPreview"
-);
+// ==========================================
+// STORAGE PATH
+// ==========================================
 
-const image =
-document.getElementById(
-"thumbnailPreviewImage"
-);
-
-
-if(!finalThumbnail){
-
-preview.style.display =
-"none";
-
-image.src="";
-
-return;
-
-}
-
-
-image.src =
-finalThumbnail;
-
-preview.style.display =
-"block";
-
-}
-
-
-
-/* =================================================
-   UPLOAD THUMBNAIL
-================================================= */
-
-async function uploadThumbnail(
-file
+function getStoragePath(
+  publicUrl,
+  bucket
 ){
 
-if(!file){
+  if(!publicUrl) return null;
 
-return null;
+  const marker =
+    `/storage/v1/object/public/${bucket}/`;
 
+  const index =
+    publicUrl.indexOf(marker);
+
+  if(index === -1)
+    return null;
+
+  return publicUrl.substring(
+    index + marker.length
+  );
 }
 
+function validUrl(value){
 
-if(
-!file.type.startsWith(
-"image/"
-)
-){
-
-throw new Error(
-"Invalid thumbnail image."
-);
-
+  try{
+    new URL(value);
+    return true;
+  }catch(e){
+    return false;
+  }
 }
 
-
-const extension =
-file.name.includes(".")
-?
-file.name
-.split(".")
-.pop()
-.toLowerCase()
-:
-"jpg";
-
-
-const path =
-"thumbnails/" +
-Date.now() +
-"-" +
-Math.random()
-.toString(36)
-.substring(2,8) +
-"." +
-extension;
-
-
-const {
-error
-} =
-await supabaseClient
-
-.storage
-
-.from(
-"ssc-edge-videos"
-)
-
-.upload(
-path,
-file,
-{
-contentType:
-file.type,
-upsert:false
-}
-);
-
-
-if(error){
-
-throw error;
-
-}
-
-
-const {
-data
-} =
-supabaseClient
-
-.storage
-
-.from(
-"ssc-edge-videos"
-)
-
-.getPublicUrl(
-path
-);
-
-
-return {
-
-url:
-data.publicUrl,
-
-path:
-path
-
-};
-
-}
-
-
-
-/* =================================================
-   SAVE VIDEO
-================================================= */
+// ==========================================
+// SAVE VIDEO
+// ==========================================
 
 async function saveVideo(){
 
-const title =
-document.getElementById(
-"title"
-).value.trim();
+  const saveBtn =
+    document.getElementById(
+      "saveBtn"
+    );
 
+  if(saveBtn.disabled)
+    return;
 
-const subjectId =
-document.getElementById(
-"subject"
-).value;
+  const title =
+    document.getElementById(
+      "title"
+    ).value.trim();
 
+  const subjectId =
+    document.getElementById(
+      "subject"
+    ).value;
 
-const folderId =
-document.getElementById(
-"folder"
-).value;
+  const folderId =
+    document.getElementById(
+      "folder"
+    ).value;
 
+  const description =
+    document.getElementById(
+      "description"
+    ).value.trim();
 
-const description =
-document.getElementById(
-"description"
-).value.trim();
+  const thumbnailUrl =
+    document.getElementById(
+      "thumbnailUrl"
+    ).value.trim();
 
+  const thumbnailFile =
+    document.getElementById(
+      "thumbnailFile"
+    ).files?.[0];
 
-const customThumbnail =
-document.getElementById(
-"thumbnailUrl"
-).value.trim();
+  const source =
+    getSource();
 
+  const videoFile =
+    document.getElementById(
+      "videoFile"
+    ).files?.[0];
 
-const thumbnailFile =
-document.getElementById(
-"thumbnailFile"
-).files[0];
+  const videoUrl =
+    document.getElementById(
+      "videoUrl"
+    ).value.trim();
 
+  if(!title){
 
-const source =
-getSource();
+    showStatus(
+      "status",
+      "Please enter video title.",
+      "error"
+    );
 
+    return;
+  }
 
-const button =
-document.getElementById(
-"saveBtn"
-);
+  if(!subjectId){
 
+    showStatus(
+      "status",
+      "Please select subject.",
+      "error"
+    );
 
-if(!title){
+    return;
+  }
 
-showStatus(
-"Please enter video title.",
-false
-);
+  if(
+    thumbnailUrl &&
+    !validUrl(thumbnailUrl)
+  ){
 
-return;
+    showStatus(
+      "status",
+      "Thumbnail URL is invalid.",
+      "error"
+    );
 
+    return;
+  }
+
+  if(editingId){
+
+    await updateVideo({
+      title,
+      subjectId,
+      folderId,
+      description,
+      thumbnailUrl,
+      thumbnailFile,
+      source,
+      videoFile,
+      videoUrl
+    });
+
+    return;
+  }
+
+  if(source === "url"){
+
+    if(!videoUrl){
+
+      showStatus(
+        "status",
+        "Please enter video URL.",
+        "error"
+      );
+
+      return;
+    }
+
+    if(!validUrl(videoUrl)){
+
+      showStatus(
+        "status",
+        "Video URL is invalid.",
+        "error"
+      );
+
+      return;
+    }
+
+  }else{
+
+    if(!videoFile){
+
+      showStatus(
+        "status",
+        "Please select a video file.",
+        "error"
+      );
+
+      return;
+    }
+  }
+
+  saveBtn.disabled = true;
+  saveBtn.textContent = "Saving...";
+
+  try{
+
+    let fileUrl = "";
+    let thumbnailFinal =
+      getFinalThumbnail(
+        thumbnailUrl,
+        videoUrl
+      );
+
+    let uploadedVideoPath = null;
+    let uploadedThumbnailPath = null;
+
+    // ==========================
+    // VIDEO URL
+    // ==========================
+
+    if(source === "url"){
+
+      fileUrl = videoUrl;
+
+    }
+
+    // ==========================
+    // VIDEO UPLOAD
+    // ==========================
+
+    else{
+
+      const extension =
+        videoFile.name
+          .split(".")
+          .pop()
+          .toLowerCase();
+
+      const path =
+        `videos/${Date.now()}-${Math.random()
+          .toString(36)
+          .substring(2,10)}.${extension}`;
+
+      const {
+        error
+      } = await supabaseClient
+        .storage
+        .from("ssc-edge-videos")
+        .upload(
+          path,
+          videoFile,
+          {
+            upsert:false
+          }
+        );
+
+      if(error)
+        throw error;
+
+      uploadedVideoPath =
+        path;
+
+      const {
+        data
+      } =
+        supabaseClient
+          .storage
+          .from("ssc-edge-videos")
+          .getPublicUrl(path);
+
+      fileUrl =
+        data.publicUrl;
+    }
+
+    // ==========================
+    // THUMBNAIL UPLOAD
+    // ==========================
+
+    if(thumbnailFile){
+
+      const extension =
+        thumbnailFile.name
+          .split(".")
+          .pop()
+          .toLowerCase();
+
+      const path =
+        `thumbnails/${Date.now()}-${Math.random()
+          .toString(36)
+          .substring(2,10)}.${extension}`;
+
+      const {
+        error
+      } = await supabaseClient
+        .storage
+        .from("ssc-edge-videos")
+        .upload(
+          path,
+          thumbnailFile,
+          {
+            upsert:false
+          }
+        );
+
+      if(error)
+        throw error;
+
+      uploadedThumbnailPath =
+        path;
+
+      const {
+        data
+      } =
+        supabaseClient
+          .storage
+          .from("ssc-edge-videos")
+          .getPublicUrl(path);
+
+      thumbnailFinal =
+        data.publicUrl;
+    }
+
+    // ==========================
+    // INSERT DATABASE
+    // ==========================
+
+    const payload = {
+
+      subject_id:Number(subjectId),
+
+      folder_id:
+        folderId
+          ? Number(folderId)
+          : null,
+
+      title:title,
+
+      description:
+        description || null,
+
+      material_type:"VIDEO",
+
+      file_url:fileUrl,
+
+      thumbnail_url:
+        thumbnailFinal || null,
+
+      is_active:true
+    };
+
+    const {
+      error
+    } = await supabaseClient
+      .from("study_material")
+      .insert(payload);
+
+    if(error)
+      throw error;
+
+    showStatus(
+      "status",
+      "Video saved successfully.",
+      "ok"
+    );
+
+    resetForm();
+
+    await loadVideos();
+
+  }catch(error){
+
+    console.error(error);
+
+    showStatus(
+      "status",
+      "Could not save video: " +
+      error.message,
+      "error"
+    );
+
+  }finally{
+
+    saveBtn.disabled = false;
+    saveBtn.textContent =
+      editingId
+        ? "Update Video"
+        : "Save Video";
+  }
 }
 
+// ==========================================
+// UPDATE VIDEO
+// ==========================================
 
-if(!subjectId){
+async function updateVideo({
+  title,
+  subjectId,
+  folderId,
+  description,
+  thumbnailUrl,
+  thumbnailFile,
+  source,
+  videoFile,
+  videoUrl
+}){
 
-showStatus(
-"Please select subject.",
-false
-);
+  const saveBtn =
+    document.getElementById(
+      "saveBtn"
+    );
 
-return;
+  saveBtn.disabled = true;
+  saveBtn.textContent =
+    "Updating...";
 
+  let newFileUrl = null;
+  let newVideoPath = null;
+
+  let finalThumbnail =
+    thumbnailUrl || null;
+
+  let newThumbnailPath = null;
+
+  try{
+
+    // ==========================
+    // REPLACE VIDEO
+    // ==========================
+
+    if(source === "upload"){
+
+      if(videoFile){
+
+        const extension =
+          videoFile.name
+            .split(".")
+            .pop()
+            .toLowerCase();
+
+        const path =
+          `videos/${Date.now()}-${Math.random()
+            .toString(36)
+            .substring(2,10)}.${extension}`;
+
+        const {
+          error
+        } = await supabaseClient
+          .storage
+          .from("ssc-edge-videos")
+          .upload(
+            path,
+            videoFile,
+            {
+              upsert:false
+            }
+          );
+
+        if(error)
+          throw error;
+
+        newVideoPath =
+          path;
+
+        const {
+          data
+        } =
+          supabaseClient
+            .storage
+            .from("ssc-edge-videos")
+            .getPublicUrl(path);
+
+        newFileUrl =
+          data.publicUrl;
+      }
+
+    }else{
+
+      if(videoUrl){
+
+        if(!validUrl(videoUrl))
+          throw new Error(
+            "Video URL is invalid."
+          );
+
+        newFileUrl =
+          videoUrl;
+      }
+    }
+
+    // ==========================
+    // THUMBNAIL
+    // ==========================
+
+    if(thumbnailFile){
+
+      const extension =
+        thumbnailFile.name
+          .split(".")
+          .pop()
+          .toLowerCase();
+
+      const path =
+        `thumbnails/${Date.now()}-${Math.random()
+          .toString(36)
+          .substring(2,10)}.${extension}`;
+
+      const {
+        error
+      } = await supabaseClient
+        .storage
+        .from("ssc-edge-videos")
+        .upload(
+          path,
+          thumbnailFile,
+          {
+            upsert:false
+          }
+        );
+
+      if(error)
+        throw error;
+
+      newThumbnailPath =
+        path;
+
+      const {
+        data
+      } =
+        supabaseClient
+          .storage
+          .from("ssc-edge-videos")
+          .getPublicUrl(path);
+
+      finalThumbnail =
+        data.publicUrl;
+    }
+
+    // ==========================
+    // UPDATE
+    // ==========================
+
+    const payload = {
+
+      subject_id:Number(subjectId),
+
+      folder_id:
+        folderId
+          ? Number(folderId)
+          : null,
+
+      title:title,
+
+      description:
+        description || null,
+
+      thumbnail_url:
+        finalThumbnail
+    };
+
+    if(newFileUrl){
+
+      payload.file_url =
+        newFileUrl;
+    }
+
+    const {
+      error
+    } = await supabaseClient
+      .from("study_material")
+      .update(payload)
+      .eq("id", editingId);
+
+    if(error)
+      throw error;
+
+    // ==========================
+    // DELETE OLD FILE
+    // ==========================
+
+    if(
+      newVideoPath &&
+      editingOldFilePath
+    ){
+
+      await supabaseClient
+        .storage
+        .from("ssc-edge-videos")
+        .remove([
+          editingOldFilePath
+        ]);
+    }
+
+    if(
+      newThumbnailPath &&
+      editingOldThumbnailPath
+    ){
+
+      await supabaseClient
+        .storage
+        .from("ssc-edge-videos")
+        .remove([
+          editingOldThumbnailPath
+        ]);
+    }
+
+    showStatus(
+      "status",
+      "Video updated successfully.",
+      "ok"
+    );
+
+    resetForm();
+
+    await loadVideos();
+
+  }catch(error){
+
+    console.error(error);
+
+    showStatus(
+      "status",
+      "Could not update video: " +
+      error.message,
+      "error"
+    );
+
+  }finally{
+
+    saveBtn.disabled = false;
+    saveBtn.textContent =
+      "Save Video";
+  }
 }
 
+// ==========================================
+// EDIT VIDEO
+// ==========================================
 
-if(
-customThumbnail &&
-!isValidURL(
-customThumbnail
-)
-){
+async function editVideo(video){
 
-showStatus(
-"Please enter a valid thumbnail URL.",
-false
-);
+  editingId =
+    video.id;
 
-return;
+  editingOldFilePath =
+    getStoragePath(
+      video.file_url,
+      "ssc-edge-videos"
+    );
 
+  editingOldThumbnailPath =
+    getStoragePath(
+      video.thumbnail_url,
+      "ssc-edge-videos"
+    );
+
+  document.getElementById(
+    "formHeading"
+  ).textContent =
+    "Edit Video";
+
+  document.getElementById(
+    "title"
+  ).value =
+    video.title || "";
+
+  document.getElementById(
+    "description"
+  ).value =
+    video.description || "";
+
+  document.getElementById(
+    "subject"
+  ).value =
+    video.subject_id || "";
+
+  await loadFoldersForSubject(
+    video.subject_id,
+    video.folder_id
+  );
+
+  document.getElementById(
+    "thumbnailUrl"
+  ).value =
+    video.thumbnail_url || "";
+
+  if(video.thumbnail_url){
+
+    const preview =
+      document.getElementById(
+        "thumbnailPreview"
+      );
+
+    preview.src =
+      video.thumbnail_url;
+
+    preview.style.display =
+      "block";
+  }
+
+  const isStorageVideo =
+    !!editingOldFilePath;
+
+  const radios =
+    document.querySelectorAll(
+      'input[name="videoSource"]'
+    );
+
+  radios.forEach(
+    radio => {
+      radio.checked =
+        (
+          isStorageVideo
+            ? radio.value === "upload"
+            : radio.value === "url"
+        );
+    }
+  );
+
+  document.getElementById(
+    "videoUrl"
+  ).value =
+    isStorageVideo
+      ? ""
+      : video.file_url || "";
+
+  document.getElementById(
+    "videoFile"
+  ).value = "";
+
+  document.getElementById(
+    "thumbnailFile"
+  ).value = "";
+
+  document.getElementById(
+    "saveBtn"
+  ).textContent =
+    "Update Video";
+
+  document.getElementById(
+    "cancelBtn"
+  ).classList.remove(
+    "hidden"
+  );
+
+  changeSource();
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
 }
 
+// ==========================================
+// DELETE VIDEO
+// ==========================================
 
-/* EDIT */
+async function deleteVideo(video){
 
-if(editingId){
+  const confirmed =
+    confirm(
+      `Delete "${video.title}"?`
+    );
 
-await updateVideo(
-title,
-subjectId,
-folderId,
-description,
-customThumbnail,
-thumbnailFile,
-source,
-button
-);
+  if(!confirmed)
+    return;
 
-return;
+  try{
 
+    const {
+      error
+    } = await supabaseClient
+      .from("study_material")
+      .delete()
+      .eq("id", video.id);
+
+    if(error)
+      throw error;
+
+    const videoPath =
+      getStoragePath(
+        video.file_url,
+        "ssc-edge-videos"
+      );
+
+    const thumbnailPath =
+      getStoragePath(
+        video.thumbnail_url,
+        "ssc-edge-videos"
+      );
+
+    const files = [];
+
+    if(videoPath)
+      files.push(videoPath);
+
+    if(thumbnailPath)
+      files.push(thumbnailPath);
+
+    if(files.length){
+
+      await supabaseClient
+        .storage
+        .from("ssc-edge-videos")
+        .remove(files);
+    }
+
+    await loadVideos();
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "Could not delete video: " +
+      error.message
+    );
+  }
 }
 
-
-/* =================================================
-   NEW URL
-================================================= */
-
-if(source==="url"){
-
-const videoUrl =
-document.getElementById(
-"videoUrl"
-).value.trim();
-
-
-if(!videoUrl){
-
-showStatus(
-"Please enter video URL.",
-false
-);
-
-return;
-
-}
-
-
-if(!isValidURL(videoUrl)){
-
-showStatus(
-"Please enter a valid video URL.",
-false
-);
-
-return;
-
-}
-
-
-button.disabled=true;
-
-button.textContent=
-"Saving...";
-
-
-try{
-
-let finalThumbnail =
-getFinalThumbnail(
-customThumbnail,
-videoUrl
-);
-
-
-let uploadedThumbnailPath =
-null;
-
-
-if(thumbnailFile){
-
-const uploaded =
-await uploadThumbnail(
-thumbnailFile
-);
-
-finalThumbnail =
-uploaded.url;
-
-uploadedThumbnailPath =
-uploaded.path;
-
-}
-
-
-const {
-error
-} =
-await supabaseClient
-
-.from(
-"study_material"
-)
-
-.insert({
-
-subject_id:
-Number(subjectId),
-
-folder_id:
-folderId
-?
-Number(folderId)
-:
-null,
-
-title:
-title,
-
-description:
-description ||
-null,
-
-material_type:
-"VIDEO",
-
-file_url:
-videoUrl,
-
-thumbnail_url:
-finalThumbnail ||
-null,
-
-is_active:
-true
-
-});
-
-
-if(error){
-
-if(
-uploadedThumbnailPath
-){
-
-await supabaseClient
-.storage
-.from(
-"ssc-edge-videos"
-)
-.remove([
-uploadedThumbnailPath
-]);
-
-}
-
-throw error;
-
-}
-
-
-showStatus(
-"✅ Video URL saved successfully!",
-true
-);
-
-
-resetForm();
-
-await loadVideos();
-
-}catch(error){
-
-console.error(error);
-
-showStatus(
-"Error: " +
-error.message,
-false
-);
-
-}
-
-
-button.disabled=false;
-
-button.textContent=
-"Save Video";
-
-return;
-
-}
-
-
-
-/* =================================================
-   NEW UPLOAD VIDEO
-================================================= */
-
-const videoFile =
-document.getElementById(
-"videoFile"
-).files[0];
-
-
-if(!videoFile){
-
-showStatus(
-"Please choose a video file.",
-false
-);
-
-return;
-
-}
-
-
-if(
-!videoFile.type.startsWith(
-"video/"
-)
-){
-
-showStatus(
-"Please select a valid video file.",
-false
-);
-
-return;
-
-}
-
-
-button.disabled=true;
-
-button.textContent=
-"Uploading...";
-
-
-try{
-
-showStatus(
-"Uploading video...",
-true
-);
-
-
-const extension =
-videoFile.name.includes(".")
-?
-videoFile.name
-.split(".")
-.pop()
-.toLowerCase()
-:
-"mp4";
-
-
-const fileName =
-Date.now() +
-"-" +
-Math.random()
-.toString(36)
-.substring(2,8) +
-"." +
-extension;
-
-
-const filePath =
-"videos/" +
-fileName;
-
-
-const {
-error:uploadError
-} =
-await supabaseClient
-
-.storage
-
-.from(
-"ssc-edge-videos"
-)
-
-.upload(
-filePath,
-videoFile,
-{
-contentType:
-videoFile.type,
-upsert:false
-}
-);
-
-
-if(uploadError){
-
-throw uploadError;
-
-}
-
-
-const {
-data:publicData
-} =
-supabaseClient
-
-.storage
-
-.from(
-"ssc-edge-videos"
-)
-
-.getPublicUrl(
-filePath
-);
-
-
-const videoUrl =
-publicData.publicUrl;
-
-
-let finalThumbnail =
-customThumbnail ||
-"";
-
-
-let uploadedThumbnailPath =
-null;
-
-
-if(thumbnailFile){
-
-const uploaded =
-await uploadThumbnail(
-thumbnailFile
-);
-
-finalThumbnail =
-uploaded.url;
-
-uploadedThumbnailPath =
-uploaded.path;
-
-}
-
-
-const {
-error:dbError
-} =
-await supabaseClient
-
-.from(
-"study_material"
-)
-
-.insert({
-
-subject_id:
-Number(subjectId),
-
-folder_id:
-folderId
-?
-Number(folderId)
-:
-null,
-
-title:
-title,
-
-description:
-description ||
-null,
-
-material_type:
-"VIDEO",
-
-file_url:
-videoUrl,
-
-thumbnail_url:
-finalThumbnail ||
-null,
-
-is_active:
-true
-
-});
-
-
-if(dbError){
-
-await supabaseClient
-.storage
-.from(
-"ssc-edge-videos"
-)
-.remove([
-filePath
-]);
-
-
-if(
-uploadedThumbnailPath
-){
-
-await supabaseClient
-.storage
-.from(
-"ssc-edge-videos"
-)
-.remove([
-uploadedThumbnailPath
-]);
-
-}
-
-
-throw dbError;
-
-}
-
-
-showStatus(
-"✅ Video uploaded and saved successfully!",
-true
-);
-
-
-resetForm();
-
-await loadVideos();
-
-}catch(error){
-
-console.error(error);
-
-showStatus(
-"Upload failed: " +
-error.message,
-false
-);
-
-}
-
-
-button.disabled=false;
-
-button.textContent=
-"Save Video";
-
-}
-
-
-
-/* =================================================
-   UPDATE VIDEO
-================================================= */
-
-async function updateVideo(
-title,
-subjectId,
-folderId,
-description,
-customThumbnail,
-thumbnailFile,
-source,
-button
-){
-
-button.disabled=true;
-
-button.textContent=
-"Updating...";
-
-
-let newVideoUrl =
-null;
-
-let newVideoPath =
-null;
-
-let newThumbnailUrl =
-null;
-
-let newThumbnailPath =
-null;
-
-
-try{
-
-/* VIDEO URL SOURCE */
-
-if(source==="url"){
-
-const url =
-document.getElementById(
-"videoUrl"
-).value.trim();
-
-
-if(!url){
-
-throw new Error(
-"Please enter video URL."
-);
-
-}
-
-
-if(!isValidURL(url)){
-
-throw new Error(
-"Please enter a valid video URL."
-);
-
-}
-
-
-newVideoUrl =
-url;
-
-}
-
-
-/* NEW VIDEO UPLOAD */
-
-if(source==="upload"){
-
-const file =
-document.getElementById(
-"videoFile"
-).files[0];
-
-
-if(file){
-
-if(
-!file.type.startsWith(
-"video/"
-)
-){
-
-throw new Error(
-"Please select a valid video file."
-);
-
-}
-
-
-const extension =
-file.name.includes(".")
-?
-file.name
-.split(".")
-.pop()
-.toLowerCase()
-:
-"mp4";
-
-
-const fileName =
-Date.now() +
-"-" +
-Math.random()
-.toString(36)
-.substring(2,8) +
-"." +
-extension;
-
-
-newVideoPath =
-"videos/" +
-fileName;
-
-
-const {
-error
-} =
-await supabaseClient
-
-.storage
-
-.from(
-"ssc-edge-videos"
-)
-
-.upload(
-newVideoPath,
-file,
-{
-contentType:
-file.type,
-upsert:false
-}
-);
-
-
-if(error){
-
-throw error;
-
-}
-
-
-const {
-data
-} =
-supabaseClient
-
-.storage
-
-.from(
-"ssc-edge-videos"
-)
-
-.getPublicUrl(
-newVideoPath
-);
-
-
-newVideoUrl =
-data.publicUrl;
-
-}
-
-
-/*
-   If editing an uploaded video and
-   no new file is selected, its old
-   file_url remains unchanged.
-*/
-
-}
-
-
-/* NEW THUMBNAIL */
-
-if(thumbnailFile){
-
-const uploaded =
-await uploadThumbnail(
-thumbnailFile
-);
-
-newThumbnailUrl =
-uploaded.url;
-
-newThumbnailPath =
-uploaded.path;
-
-}else{
-
-newThumbnailUrl =
-getFinalThumbnail(
-
-customThumbnail,
-
-newVideoUrl ||
-
-document.getElementById(
-"videoUrl"
-).value.trim()
-
-);
-
-}
-
-
-/* =================================================
-   UPDATE DATABASE
-================================================= */
-
-const updateData = {
-
-subject_id:
-Number(subjectId),
-
-folder_id:
-folderId
-?
-Number(folderId)
-:
-null,
-
-title:
-title,
-
-description:
-description ||
-null,
-
-thumbnail_url:
-newThumbnailUrl ||
-null
-
-};
-
-
-if(newVideoUrl){
-
-updateData.file_url =
-newVideoUrl;
-
-}
-
-
-const {
-error
-} =
-await supabaseClient
-
-.from(
-"study_material"
-)
-
-.update(
-updateData
-)
-
-.eq(
-"id",
-editingId
-);
-
-
-if(error){
-
-throw error;
-
-}
-
-
-/* REMOVE OLD VIDEO */
-
-if(
-newVideoPath &&
-editingOldFilePath
-){
-
-await supabaseClient
-
-.storage
-
-.from(
-"ssc-edge-videos"
-)
-
-.remove([
-editingOldFilePath
-]);
-
-}
-
-
-/* REMOVE OLD THUMBNAIL */
-
-if(
-newThumbnailPath &&
-editingOldThumbnailPath
-){
-
-await supabaseClient
-
-.storage
-
-.from(
-"ssc-edge-videos"
-)
-
-.remove([
-editingOldThumbnailPath
-]);
-
-}
-
-
-showStatus(
-"✅ Video updated successfully!",
-true
-);
-
-
-resetForm();
-
-await loadVideos();
-
-
-}catch(error){
-
-console.error(error);
-
-
-/* CLEAN NEW FILE IF DB UPDATE FAILED */
-
-if(newVideoPath){
-
-await supabaseClient
-.storage
-.from(
-"ssc-edge-videos"
-)
-.remove([
-newVideoPath
-]);
-
-}
-
-
-if(newThumbnailPath){
-
-await supabaseClient
-.storage
-.from(
-"ssc-edge-videos"
-)
-.remove([
-newThumbnailPath
-]);
-
-}
-
-
-showStatus(
-"Update failed: " +
-error.message,
-false
-);
-
-}
-
-
-button.disabled=false;
-
-button.textContent=
-"Update Video";
-
-}
-
-
-
-/* =================================================
-   EDIT VIDEO
-================================================= */
-
-function editVideo(
-video
-){
-
-editingId =
-video.id;
-
-
-editingOldFilePath =
-getStoragePath(
-video.file_url
-);
-
-
-editingOldThumbnailPath =
-getThumbnailStoragePath(
-video.thumbnail_url
-);
-
-
-document.getElementById(
-"formTitle"
-).textContent =
-"Edit Video";
-
-
-document.getElementById(
-"title"
-).value =
-video.title || "";
-
-
-document.getElementById(
-"description"
-).value =
-video.description || "";
-
-
-document.getElementById(
-"thumbnailUrl"
-).value =
-video.thumbnail_url || "";
-
-
-document.getElementById(
-"thumbnailFile"
-).value =
-"";
-
-
-document.getElementById(
-"subject"
-).value =
-video.subject_id || "";
-
-
-/*
-   Folder selection
-*/
-
-document.getElementById(
-"folder"
-).value =
-video.folder_id || "";
-
-
-document.getElementById(
-"videoUrl"
-).value =
-video.file_url || "";
-
-
-if(editingOldFilePath){
-
-document.querySelector(
-'input[name="source"][value="upload"]'
-).checked=true;
-
-changeSource(
-"upload"
-);
-
-}else{
-
-document.querySelector(
-'input[name="source"][value="url"]'
-).checked=true;
-
-changeSource(
-"url"
-);
-
-}
-
-
-updateThumbnailPreview();
-
-
-document.getElementById(
-"saveBtn"
-).textContent =
-"Update Video";
-
-
-document.getElementById(
-"cancelBtn"
-)
-.classList.remove(
-"hidden"
-);
-
-
-window.scrollTo({
-top:0,
-behavior:"smooth"
-});
-
-}
-
-
-
-/* =================================================
-   DELETE VIDEO
-================================================= */
-
-async function deleteVideo(
-video
-){
-
-if(!confirm(
-"Delete this video?\n\n" +
-video.title
-)){
-
-return;
-
-}
-
-
-const storagePath =
-getStoragePath(
-video.file_url
-);
-
-
-const thumbnailPath =
-getThumbnailStoragePath(
-video.thumbnail_url
-);
-
-
-const {
-error
-} =
-await supabaseClient
-
-.from(
-"study_material"
-)
-
-.delete()
-
-.eq(
-"id",
-video.id
-);
-
-
-if(error){
-
-alert(
-"Delete failed: " +
-error.message
-);
-
-return;
-
-}
-
-
-if(storagePath){
-
-await supabaseClient
-.storage
-.from(
-"ssc-edge-videos"
-)
-.remove([
-storagePath
-]);
-
-}
-
-
-if(thumbnailPath){
-
-await supabaseClient
-.storage
-.from(
-"ssc-edge-videos"
-)
-.remove([
-thumbnailPath
-]);
-
-}
-
-
-showStatus(
-"✅ Video deleted successfully!",
-true
-);
-
-
-await loadVideos();
-
-}
-
-
-
-/* =================================================
-   LOAD VIDEOS
-================================================= */
+// ==========================================
+// LOAD VIDEOS
+// ==========================================
 
 async function loadVideos(){
 
-const container =
-document.getElementById(
-"videoList"
-);
-
-
-container.innerHTML =
-'<div class="empty">Loading videos...</div>';
-
-
-const {
-data,
-error
-} =
-await supabaseClient
-
-.from(
-"study_material"
-)
-
-.select(`
-id,
-title,
-description,
-file_url,
-thumbnail_url,
-subject_id,
-folder_id,
-created_at,
-subjects(name)
-`)
-
-.eq(
-"material_type",
-"VIDEO"
-)
-
-.order(
-"created_at",
-{
-ascending:false
-}
-);
-
-
-if(error){
-
-console.error(error);
-
-container.innerHTML =
-'<div class="empty">Unable to load videos.</div>';
-
-return;
-
-}
-
-
-window.currentVideoData =
-data || [];
-
-
-renderFolderList();
-
-
-if(
-!data ||
-!data.length
-){
-
-container.innerHTML =
-'<div class="empty">No videos added yet.</div>';
-
-return;
-
-}
-
-
-container.innerHTML="";
-
-
-data.forEach(
-function(video){
-
-const item =
-document.createElement(
-"div"
-);
-
-
-item.className =
-"video-item";
-
-
-const subject =
-video.subjects?.name ||
-"General";
-
-
-const folder =
-folders.find(
-function(item){
-
-return String(
-item.id
-) ===
-String(
-video.folder_id
-);
-
-}
-);
-
-
-const folderName =
-folder?.subjects?.name ||
-folder?.name ||
-"";
-
-
-const thumbnail =
-video.thumbnail_url ||
-getAutomaticThumbnail(
-video.file_url
-);
-
-
-const thumbnailHtml =
-thumbnail
-
-?
-
-`
-
-<div class="video-thumbnail-small">
-
-<img
-src="${escapeHTML(thumbnail)}"
-alt="${escapeHTML(video.title || "Video")}"
-loading="lazy"
-decoding="async"
-onerror="this.parentElement.innerHTML='<div class=&quot;thumbnail-fallback-small&quot;><strong>SSC EDGE</strong><span>Learn • Practice • Improve</span></div>'"
->
-
-</div>
-
-`
-
-:
-
-`
-
-<div class="video-thumbnail-small">
-
-<div class="thumbnail-fallback-small">
-
-<strong>
-SSC EDGE
-</strong>
-
-<span>
-Learn • Practice • Improve
-</span>
-
-</div>
-
-</div>
-
-`;
-
-
-item.innerHTML = `
-
-${thumbnailHtml}
-
-
-<div class="video-title">
-${escapeHTML(
-video.title
-)}
-</div>
-
-
-<div class="video-subject">
-${escapeHTML(
-subject
-)}
-</div>
-
-
-${
-folderName
-
-?
-
-`
-
-<div class="video-folder">
-📁 ${escapeHTML(
-folderName
-)}
-</div>
-
-`
-
-:
-
-""
+  const container =
+    document.getElementById(
+      "videos"
+    );
+
+  container.innerHTML =
+    '<div class="empty">Loading videos...</div>';
+
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from("study_material")
+    .select(`
+      id,
+      title,
+      description,
+      file_url,
+      thumbnail_url,
+      subject_id,
+      folder_id,
+      created_at,
+      subjects(name),
+      video_folders(name)
+    `)
+    .eq("material_type", "VIDEO")
+    .order("created_at", {
+      ascending:false
+    });
+
+  if(error){
+
+    console.error(error);
+
+    container.innerHTML =
+      '<div class="empty">Unable to load videos.</div>';
+
+    return;
+  }
+
+  if(!data || !data.length){
+
+    container.innerHTML =
+      '<div class="empty">No videos found.</div>';
+
+    return;
+  }
+
+  container.innerHTML = "";
+
+  data.forEach(video => {
+
+    const thumb =
+      video.thumbnail_url ||
+      getAutomaticThumbnail(
+        video.file_url
+      ) ||
+      "";
+
+    const item =
+      document.createElement("div");
+
+    item.className =
+      "video-item";
+
+    item.innerHTML = `
+
+      ${
+        thumb
+          ? `
+            <img
+              class="video-thumb"
+              src="${escapeHtml(thumb)}"
+              alt=""
+              onerror="this.style.display='none'"
+            >
+          `
+          : `
+            <div
+              class="video-thumb"
+              style="
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                color:#81778e;
+              "
+            >
+              SSC EDGE
+            </div>
+          `
+      }
+
+      <div class="video-info">
+
+        <div class="video-title">
+          ${escapeHtml(video.title || "")}
+        </div>
+
+        <div class="badges">
+
+          <span class="badge">
+            ${escapeHtml(
+              video.subjects?.name ||
+              "No Subject"
+            )}
+          </span>
+
+          ${
+            video.video_folders?.name
+              ? `
+                <span class="badge folder-badge">
+                  📁 ${escapeHtml(
+                    video.video_folders.name
+                  )}
+                </span>
+              `
+              : `
+                <span class="badge">
+                  No Folder
+                </span>
+              `
+          }
+
+        </div>
+
+        ${
+          video.description
+            ? `
+              <div class="video-desc">
+                ${escapeHtml(
+                  video.description
+                )}
+              </div>
+            `
+            : ""
+        }
+
+        <div class="video-actions">
+
+          <button
+            type="button"
+            class="secondary"
+            onclick='editVideo(${JSON.stringify(video)})'
+          >
+            Edit
+          </button>
+
+          <button
+            type="button"
+            class="danger"
+            onclick='deleteVideo(${JSON.stringify(video)})'
+          >
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+    `;
+
+    container.appendChild(item);
+  });
 }
 
-
-${
-video.description
-
-?
-
-`
-
-<div class="video-description">
-${escapeHTML(
-video.description
-)}
-</div>
-
-`
-
-:
-
-""
-}
-
-
-<div class="video-actions">
-
-<button
-type="button"
-class="edit-btn"
-data-action="edit"
->
-✏️ Edit
-</button>
-
-
-<button
-type="button"
-class="delete-btn"
-data-action="delete"
->
-🗑️ Delete
-</button>
-
-</div>
-
-`;
-
-
-item.querySelector(
-'[data-action="edit"]'
-)
-.onclick =
-function(){
-
-editVideo(
-video
-);
-
-};
-
-
-item.querySelector(
-'[data-action="delete"]'
-)
-.onclick =
-function(){
-
-deleteVideo(
-video
-);
-
-};
-
-
-container.appendChild(
-item
-);
-
-});
-
-}
-
-
-
-/* =================================================
-   VIDEO STORAGE PATH
-================================================= */
-
-function getStoragePath(
-url
-){
-
-if(!url){
-
-return null;
-
-}
-
-
-const marker =
-"/storage/v1/object/public/ssc-edge-videos/";
-
-
-const index =
-url.indexOf(
-marker
-);
-
-
-if(index===-1){
-
-return null;
-
-}
-
-
-return decodeURIComponent(
-url.substring(
-index + marker.length
-)
-);
-
-}
-
-
-
-/* =================================================
-   THUMBNAIL STORAGE PATH
-================================================= */
-
-function getThumbnailStoragePath(
-url
-){
-
-if(!url){
-
-return null;
-
-}
-
-
-const marker =
-"/storage/v1/object/public/ssc-edge-videos/";
-
-
-const index =
-url.indexOf(
-marker
-);
-
-
-if(index===-1){
-
-return null;
-
-}
-
-
-const path =
-decodeURIComponent(
-url.substring(
-index + marker.length
-)
-);
-
-
-if(
-path.startsWith(
-"thumbnails/"
-)
-){
-
-return path;
-
-}
-
-
-return null;
-
-}
-
-
-
-/* =================================================
-   URL VALIDATION
-================================================= */
-
-function isValidURL(
-url
-){
-
-try{
-
-const parsed =
-new URL(
-url
-);
-
-
-return(
-parsed.protocol==="https:" ||
-parsed.protocol==="http:"
-);
-
-}catch(error){
-
-return false;
-
-}
-
-}
-
-
-
-/* =================================================
-   ESCAPE HTML
-================================================= */
-
-function escapeHTML(
-text
-){
-
-return String(
-text ?? ""
-)
-
-.replace(
-/&/g,
-"&amp;"
-)
-
-.replace(
-/</g,
-"&lt;"
-)
-
-.replace(
-/>/g,
-"&gt;"
-)
-
-.replace(
-/"/g,
-"&quot;"
-)
-
-.replace(
-/'/g,
-"&#039;"
-);
-
-}
-
-
-
-/* =================================================
-   CANCEL
-================================================= */
-
-function cancelEdit(){
-
-resetForm();
-
-}
-
-
-
-/* =================================================
-   RESET
-================================================= */
+// ==========================================
+// RESET FORM
+// ==========================================
 
 function resetForm(){
 
-editingId =
-null;
+  editingId = null;
+  editingOldFilePath = null;
+  editingOldThumbnailPath = null;
 
-editingOldFilePath =
-null;
+  document.getElementById(
+    "formHeading"
+  ).textContent =
+    "Add Video";
 
-editingOldThumbnailPath =
-null;
+  document.getElementById(
+    "title"
+  ).value = "";
 
+  document.getElementById(
+    "subject"
+  ).value = "";
 
-document.getElementById(
-"formTitle"
-).textContent =
-"Add Video";
+  document.getElementById(
+    "folder"
+  ).innerHTML =
+    '<option value="">No Folder — Show Directly</option>';
 
+  document.getElementById(
+    "description"
+  ).value = "";
 
-document.getElementById(
-"title"
-).value =
-"";
+  document.getElementById(
+    "thumbnailUrl"
+  ).value = "";
 
+  document.getElementById(
+    "thumbnailFile"
+  ).value = "";
 
-document.getElementById(
-"subject"
-).value =
-"";
+  document.getElementById(
+    "videoFile"
+  ).value = "";
 
+  document.getElementById(
+    "videoUrl"
+  ).value = "";
 
-document.getElementById(
-"folder"
-).value =
-"";
+  document.getElementById(
+    "thumbnailPreview"
+  ).style.display =
+    "none";
 
+  document.getElementById(
+    "thumbnailPreview"
+  ).removeAttribute(
+    "src"
+  );
 
-document.getElementById(
-"description"
-).value =
-"";
+  document.querySelector(
+    'input[name="videoSource"][value="upload"]'
+  ).checked = true;
 
+  document.getElementById(
+    "saveBtn"
+  ).textContent =
+    "Save Video";
 
-document.getElementById(
-"thumbnailUrl"
-).value =
-"";
+  document.getElementById(
+    "cancelBtn"
+  ).classList.add(
+    "hidden"
+  );
 
+  document.getElementById(
+    "status"
+  ).className =
+    "status";
 
-document.getElementById(
-"thumbnailFile"
-).value =
-"";
-
-
-document.getElementById(
-"videoFile"
-).value =
-"";
-
-
-document.getElementById(
-"videoUrl"
-).value =
-"";
-
-
-document.querySelector(
-'input[name="source"][value="upload"]'
-).checked =
-true;
-
-
-changeSource(
-"upload"
-);
-
-
-document.getElementById(
-"thumbnailPreview"
-).style.display =
-"none";
-
-
-document.getElementById(
-"thumbnailPreviewImage"
-).src =
-"";
-
-
-document.getElementById(
-"saveBtn"
-).textContent =
-"Save Video";
-
-
-document.getElementById(
-"saveBtn"
-).disabled =
-false;
-
-
-document.getElementById(
-"cancelBtn"
-)
-.classList.add(
-"hidden"
-);
-
+  changeSource();
 }
 
+// ==========================================
+// SUBJECT CHANGE
+// ==========================================
 
+document
+  .getElementById("subject")
+  .addEventListener(
+    "change",
+    async function(){
 
-/* =================================================
-   START
-================================================= */
+      await loadFoldersForSubject(
+        this.value
+      );
+    }
+  );
+
+document
+  .getElementById("folderSubject")
+  .addEventListener(
+    "change",
+    loadFolderManager
+  );
+
+document
+  .getElementById("addFolderBtn")
+  .addEventListener(
+    "click",
+    addFolder
+  );
+
+document
+  .getElementById("refreshFoldersBtn")
+  .addEventListener(
+    "click",
+    loadFolderManager
+  );
+
+// ==========================================
+// ESCAPE HTML
+// ==========================================
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function escapeJs(value){
+
+  return String(value ?? "")
+    .replace(/\\/g,"\\\\")
+    .replace(/'/g,"\\'")
+    .replace(/\n/g,"\\n")
+    .replace(/\r/g,"\\r");
+}
+
+// ==========================================
+// START
+// ==========================================
 
 (async function(){
 
-const isAdmin =
-await checkAdmin();
+  const isAdmin =
+    await checkAdmin();
 
+  if(!isAdmin)
+    return;
 
-if(!isAdmin){
+  await loadSubjects();
 
-return;
+  await loadVideos();
 
-}
+  loadFolderManager();
 
-
-await loadSubjects();
-
-await loadFolders();
-
-await loadVideos();
+  changeSource();
 
 })();
+
 </script>
 
 </body>
-
-  </html>
+</html>
