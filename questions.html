@@ -14,6 +14,7 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 
 <link rel="stylesheet" href="css/style.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <style>
 .page{
@@ -178,6 +179,10 @@ button.danger{
   background:#b42318;
 }
 
+button.import-btn{
+  background:#7c3aed;
+}
+
 .actions{
   display:flex;
   gap:8px;
@@ -268,7 +273,106 @@ button.danger{
   margin-top:5px;
 }
 
+.import-note{
+  padding:12px;
+  border-radius:10px;
+  background:var(--card2);
+  color:var(--muted);
+  line-height:1.6;
+  font-size:13px;
+  margin-bottom:14px;
+}
+
+.import-preview{
+  max-height:500px;
+  overflow:auto;
+  margin-top:15px;
+}
+
+.import-row{
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:11px;
+  margin-bottom:8px;
+  background:var(--bg);
+}
+
+.import-row.valid{
+  border-left:4px solid #22c55e;
+}
+
+.import-row.invalid{
+  border-left:4px solid #ef4444;
+}
+
+.import-row-title{
+  font-weight:bold;
+  margin-bottom:5px;
+}
+
+.import-error{
+  color:#ef4444;
+  font-size:13px;
+  white-space:pre-wrap;
+  margin-top:5px;
+}
+
+.import-success{
+  color:#22c55e;
+  font-weight:bold;
+}
+
+.import-warning{
+  color:#f59e0b;
+  font-size:13px;
+}
+
+.import-table-wrap{
+  overflow-x:auto;
+  margin-top:12px;
+}
+
+.import-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:12px;
+  min-width:900px;
+}
+
+.import-table th,
+.import-table td{
+  border:1px solid var(--border);
+  padding:8px;
+  text-align:left;
+  vertical-align:top;
+}
+
+.import-table th{
+  background:var(--card2);
+  position:sticky;
+  top:0;
+  z-index:2;
+}
+
+.file-name{
+  margin-top:8px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.template-box{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+
+.hidden{
+  display:none !important;
+}
+
 @media(max-width:650px){
+
   .grid,
   .language-grid{
     grid-template-columns:1fr;
@@ -280,6 +384,14 @@ button.danger{
 
   .correct-box{
     grid-template-columns:1fr 1fr;
+  }
+
+  .header{
+    gap:10px;
+  }
+
+  .header h1{
+    font-size:21px;
   }
 }
 </style>
@@ -300,6 +412,8 @@ button.danger{
 
   <div id="app" style="display:none;">
 
+    <!-- ADD / EDIT QUESTION -->
+
     <div class="card">
 
       <h2 id="formTitle">Add Question</h2>
@@ -318,12 +432,18 @@ button.danger{
 
         <div class="language-box">
           <div class="language-title">🇬🇧 English Question</div>
-          <textarea id="questionText" placeholder="Enter English question..."></textarea>
+          <textarea
+            id="questionText"
+            placeholder="Enter English question..."
+          ></textarea>
         </div>
 
         <div class="language-box">
           <div class="language-title">🇮🇳 Hindi Question</div>
-          <textarea id="questionTextHi" placeholder="प्रश्न हिंदी में लिखें..."></textarea>
+          <textarea
+            id="questionTextHi"
+            placeholder="प्रश्न हिंदी में लिखें..."
+          ></textarea>
         </div>
 
       </div>
@@ -357,6 +477,7 @@ button.danger{
       <label>Correct Options — select one or more</label>
 
       <div class="correct-box">
+
         <label class="check-item">
           <input type="checkbox" class="correctOption" value="A">
           Correct A
@@ -376,6 +497,7 @@ button.danger{
           <input type="checkbox" class="correctOption" value="D">
           Correct D
         </label>
+
       </div>
 
       <div class="checkbox-line">
@@ -385,28 +507,21 @@ button.danger{
         </label>
       </div>
 
-      <div class="grid">
-
-        <div>
-          <label>Marks</label>
-          <input id="marks" type="number" step="0.01" value="2">
-        </div>
-
-        <div>
-          <label>Negative Marks</label>
-          <input id="negativeMarks" type="number" step="0.01" value="0.5">
-        </div>
-
-      </div>
-
       <label>Common Solution / Explanation</label>
+
       <textarea
         id="explanation"
         placeholder="Write solution. Line breaks will be preserved exactly..."
       ></textarea>
 
       <label>Solution Image — optional</label>
-      <input id="solutionImage" type="file" accept="image/*">
+
+      <input
+        id="solutionImage"
+        type="file"
+        accept="image/*"
+      >
+
       <div class="small-note">
         Upload an image of handwritten solution, diagram, chart, etc.
       </div>
@@ -414,6 +529,7 @@ button.danger{
       <div id="existingImageBox"></div>
 
       <label>Solution Video Link — optional</label>
+
       <input
         id="solutionVideo"
         type="url"
@@ -434,6 +550,125 @@ button.danger{
 
     </div>
 
+    <!-- BULK IMPORT -->
+
+    <div class="card">
+
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+
+        <h2 style="margin:0;">
+          📥 Bulk Import Questions
+        </h2>
+
+        <button
+          class="import-btn"
+          onclick="toggleBulkImport()"
+        >
+          Bulk Import
+        </button>
+
+      </div>
+
+      <div id="bulkImportBox" class="hidden" style="margin-top:15px;">
+
+        <div class="import-note">
+
+          <b>How to use:</b><br>
+
+          Upload an Excel <b>.xlsx / .xls</b> file or a <b>.csv</b> file.
+          Each row becomes one question.<br><br>
+
+          <b>Required columns:</b><br>
+
+          Subject, Chapter, Question English, Question Hindi,
+          Option A English, Option A Hindi,
+          Option B English, Option B Hindi,
+          Option C English, Option C Hindi,
+          Option D English, Option D Hindi, Correct<br><br>
+
+          <b>Optional columns:</b>
+          Explanation, Bonus, Video Link.<br><br>
+
+          Subject and Chapter are matched automatically with your existing
+          SSC EDGE Subject/Chapter records.
+          You do not need to enter database IDs.
+          <br><br>
+
+          <b>Important:</b>
+          Do not change the column names in the template.
+        </div>
+
+        <div class="template-box">
+
+          <button
+            class="secondary"
+            onclick="downloadTemplate()"
+          >
+            ⬇ Download Excel Template
+          </button>
+
+          <button
+            class="secondary"
+            onclick="downloadCSVTemplate()"
+          >
+            ⬇ Download CSV Template
+          </button>
+
+        </div>
+
+        <label>
+          Select Excel / CSV file
+        </label>
+
+        <input
+          id="bulkFile"
+          type="file"
+          accept=".xlsx,.xls,.csv"
+          onchange="handleBulkFile(event)"
+        >
+
+        <div id="bulkFileName" class="file-name"></div>
+
+        <div
+          id="bulkSummary"
+          style="margin-top:12px;"
+        ></div>
+
+        <div
+          id="bulkPreview"
+          class="import-preview"
+        ></div>
+
+        <div class="actions">
+
+          <button
+            id="importAllButton"
+            class="import-btn hidden"
+            onclick="importAllQuestions()"
+          >
+            Import All Valid Questions
+          </button>
+
+          <button
+            id="clearBulkButton"
+            class="secondary hidden"
+            onclick="clearBulkImport()"
+          >
+            Clear Import
+          </button>
+
+        </div>
+
+        <div
+          id="bulkImportResult"
+          style="margin-top:12px;"
+        ></div>
+
+      </div>
+
+    </div>
+
+    <!-- QUESTION FILTER -->
 
     <div class="card">
 
@@ -458,7 +693,11 @@ button.danger{
       </div>
 
       <label>Search</label>
-      <input id="search" placeholder="Search English or Hindi question...">
+
+      <input
+        id="search"
+        placeholder="Search English or Hindi question..."
+      >
 
     </div>
 
@@ -466,7 +705,6 @@ button.danger{
 
   </div>
 </div>
-
 
 <script>
 
@@ -484,72 +722,102 @@ const db = supabase.createClient(
 let subjects = [];
 let chapters = [];
 let questions = [];
+
 let editingId = null;
 let existingImageUrl = "";
 
+let bulkRows = [];
+let bulkValidatedRows = [];
 
 /* ADMIN CHECK */
 
 async function checkAdmin(){
 
-  const { data:{user} } = await db.auth.getUser();
+  const { data:{user} } =
+    await db.auth.getUser();
 
   if(!user){
     showStatus("Admin access required.");
     return false;
   }
 
-  const { data,error } = await db
-    .from("admin_users")
-    .select("user_id")
-    .eq("user_id",user.id)
-    .maybeSingle();
+  const { data,error } =
+    await db
+      .from("admin_users")
+      .select("user_id")
+      .eq("user_id",user.id)
+      .maybeSingle();
 
   if(error){
+
     console.error(error);
-    showStatus("Unable to verify admin access.");
+
+    showStatus(
+      "Unable to verify admin access."
+    );
+
     return false;
   }
 
   if(!data){
+
     await db.auth.signOut();
-    showStatus("Access denied. Admin account required.");
+
+    showStatus(
+      "Access denied. Admin account required."
+    );
+
     return false;
   }
 
-  document.getElementById("status").style.display = "none";
-  document.getElementById("app").style.display = "block";
+  document.getElementById("status").style.display =
+    "none";
+
+  document.getElementById("app").style.display =
+    "block";
 
   return true;
 }
 
-
 function showStatus(text){
-  document.getElementById("status").textContent = text;
-}
 
+  document.getElementById("status").textContent =
+    text;
+}
 
 /* SUBJECTS */
 
 async function loadSubjects(){
 
-  const { data,error } = await db
-    .from("subjects")
-    .select("*")
-    .order("name");
+  const { data,error } =
+    await db
+      .from("subjects")
+      .select("*")
+      .order("name");
 
   if(error){
-    alert("Could not load subjects:\n" + error.message);
+
+    alert(
+      "Could not load subjects:\n" +
+      error.message
+    );
+
     return;
   }
 
   subjects = data || [];
 
-  const subject = document.getElementById("subject");
-  const filter = document.getElementById("filterSubject");
+  const subject =
+    document.getElementById("subject");
 
-  subject.innerHTML = `<option value="">Select Subject</option>`;
-  filter.innerHTML = `<option value="">All Subjects</option>`;
+  const filter =
+    document.getElementById("filterSubject");
+
+  subject.innerHTML =
+    `<option value="">Select Subject</option>`;
+
+  filter.innerHTML =
+    `<option value="">All Subjects</option>`;
 
   subjects.forEach(s => {
 
@@ -566,18 +834,23 @@ async function loadSubjects(){
   });
 }
 
-
 /* CHAPTERS */
 
 async function loadChapters(){
 
-  const { data,error } = await db
-    .from("chapters")
-    .select("*")
-    .order("name");
+  const { data,error } =
+    await db
+      .from("chapters")
+      .select("*")
+      .order("name");
 
   if(error){
-    alert("Could not load chapters:\n" + error.message);
+
+    alert(
+      "Could not load chapters:\n" +
+      error.message
+    );
+
     return;
   }
 
@@ -587,197 +860,287 @@ async function loadChapters(){
   updateFilterChapter();
 }
 
-
 function updateChapterSelect(){
 
-  const subjectId = document.getElementById("subject").value;
-  const select = document.getElementById("chapter");
+  const subjectId =
+    document.getElementById("subject").value;
 
-  select.innerHTML = `<option value="">Select Chapter</option>`;
+  const select =
+    document.getElementById("chapter");
+
+  select.innerHTML =
+    `<option value="">Select Chapter</option>`;
 
   chapters
     .filter(c =>
       subjectId &&
-      String(c.subject_id) === String(subjectId)
+      String(c.subject_id) ===
+      String(subjectId)
     )
     .forEach(c => {
+
       select.innerHTML += `
         <option value="${c.id}">
           ${escapeHtml(c.name)}
         </option>`;
+
     });
 }
 
-
 function updateFilterChapter(){
 
-  const subjectId = document.getElementById("filterSubject").value;
-  const select = document.getElementById("filterChapter");
+  const subjectId =
+    document.getElementById("filterSubject").value;
 
-  select.innerHTML = `<option value="">All Chapters</option>`;
+  const select =
+    document.getElementById("filterChapter");
+
+  select.innerHTML =
+    `<option value="">All Chapters</option>`;
 
   chapters
     .filter(c =>
       !subjectId ||
-      String(c.subject_id) === String(subjectId)
+      String(c.subject_id) ===
+      String(subjectId)
     )
     .forEach(c => {
+
       select.innerHTML += `
         <option value="${c.id}">
           ${escapeHtml(c.name)}
         </option>`;
+
     });
 
   renderQuestions();
 }
-
 
 /* LOAD QUESTIONS */
 
 async function loadQuestions(){
 
-  const { data,error } = await db
-    .from("questions")
-    .select(`
-      *,
-      subjects(name),
-      chapters(name)
-    `)
-    .order("id",{ascending:false});
+  const { data,error } =
+    await db
+      .from("questions")
+      .select(`
+        *,
+        subjects(name),
+        chapters(name)
+      `)
+      .order("id",{ascending:false});
 
   if(error){
-    alert("Could not load questions:\n" + error.message);
+
+    alert(
+      "Could not load questions:\n" +
+      error.message
+    );
+
     return;
   }
 
   questions = data || [];
+
   renderQuestions();
 }
-
 
 /* RENDER */
 
 async function renderQuestions(){
 
-  const list = document.getElementById("questionList");
+  const list =
+    document.getElementById("questionList");
 
-  const subjectId = document.getElementById("filterSubject").value;
-  const chapterId = document.getElementById("filterChapter").value;
-  const search = document.getElementById("search").value.trim().toLowerCase();
+  const subjectId =
+    document.getElementById("filterSubject").value;
 
-  const filtered = questions.filter(q => {
+  const chapterId =
+    document.getElementById("filterChapter").value;
 
-    if(
-      subjectId &&
-      String(q.subject_id) !== String(subjectId)
-    ) return false;
+  const search =
+    document.getElementById("search").value
+      .trim()
+      .toLowerCase();
 
-    if(
-      chapterId &&
-      String(q.chapter_id) !== String(chapterId)
-    ) return false;
+  const filtered =
+    questions.filter(q => {
 
-    if(search){
+      if(
+        subjectId &&
+        String(q.subject_id) !==
+        String(subjectId)
+      ){
+        return false;
+      }
 
-      const combined = (
-        String(q.question_text || "") + " " +
-        String(q.question_text_hi || "") + " " +
-        String(q.explanation || "")
-      ).toLowerCase();
+      if(
+        chapterId &&
+        String(q.chapter_id) !==
+        String(chapterId)
+      ){
+        return false;
+      }
 
-      if(!combined.includes(search)) return false;
-    }
+      if(search){
 
-    return true;
-  });
+        const combined = (
+
+          String(q.question_text || "") +
+          " " +
+          String(q.question_text_hi || "") +
+          " " +
+          String(q.explanation || "")
+
+        ).toLowerCase();
+
+        if(!combined.includes(search)){
+          return false;
+        }
+      }
+
+      return true;
+
+    });
 
   if(!filtered.length){
+
     list.innerHTML = `
       <div class="card empty">
         No questions found.
       </div>`;
+
     return;
   }
 
-  const ids = filtered.map(q => q.id);
+  const ids =
+    filtered.map(q => q.id);
 
-  const { data:options,error } = await db
-    .from("question_options")
-    .select("*")
-    .in("question_id",ids)
-    .order("option_label");
+  const { data:options,error } =
+    await db
+      .from("question_options")
+      .select("*")
+      .in("question_id",ids)
+      .order("option_label");
 
   if(error){
+
     list.innerHTML = `
       <div class="card empty">
-        Questions loaded, but options could not be loaded.
+        Questions loaded, but options
+        could not be loaded.
       </div>`;
+
     return;
   }
 
   const optionMap = {};
 
   (options || []).forEach(o => {
+
     if(!optionMap[o.question_id]){
       optionMap[o.question_id] = [];
     }
+
     optionMap[o.question_id].push(o);
+
   });
 
   list.innerHTML = "";
 
   filtered.forEach((q,index) => {
 
-    const opts = optionMap[q.id] || [];
+    const opts =
+      optionMap[q.id] || [];
+
     let optionHtml = "";
 
     opts.forEach(o => {
 
       optionHtml += `
-        <div class="option ${o.is_correct ? "correct" : ""}">
+        <div class="option ${
+          o.is_correct ? "correct" : ""
+        }">
+
           ${escapeHtml(o.option_label)}.
           ${escapeHtml(o.option_text || "")}
+
           ${
             o.option_text_hi
-            ? " | " + escapeHtml(o.option_text_hi)
+            ? " | " +
+              escapeHtml(o.option_text_hi)
             : ""
           }
-          ${o.is_correct ? " ✓" : ""}
+
+          ${
+            o.is_correct
+            ? " ✓"
+            : ""
+          }
+
         </div>`;
     });
 
-    const correctList = opts
-      .filter(o => o.is_correct)
-      .map(o => o.option_label)
-      .join(", ");
+    const correctList =
+      opts
+        .filter(o => o.is_correct)
+        .map(o => o.option_label)
+        .join(", ");
 
     list.innerHTML += `
+
       <div class="question">
 
         <div class="question-title">
-          ${index+1}. ${escapeHtml(q.question_text || "")}
+          ${index+1}.
+          ${escapeHtml(
+            q.question_text || ""
+          )}
         </div>
 
         ${
           q.question_text_hi
-          ? `<div class="question-hi">
-              🇮🇳 ${escapeHtml(q.question_text_hi)}
-             </div>`
+          ? `
+            <div class="question-hi">
+              🇮🇳
+              ${escapeHtml(
+                q.question_text_hi
+              )}
+            </div>
+          `
           : ""
         }
 
         <div class="meta">
-          ${escapeHtml(q.subjects?.name || "No Subject")}
+
+          ${escapeHtml(
+            q.subjects?.name ||
+            "No Subject"
+          )}
+
           •
-          ${escapeHtml(q.chapters?.name || "No Chapter")}
-          • Marks: ${q.marks ?? 0}
-          • Negative: ${q.negative_marks ?? 0}
-          • Correct: ${escapeHtml(correctList || "Not set")}
+
+          ${escapeHtml(
+            q.chapters?.name ||
+            "No Chapter"
+          )}
+
+          •
+
+          Correct:
+          ${escapeHtml(
+            correctList || "Not set"
+          )}
+
         </div>
 
         ${
           q.is_bonus
-          ? `<span class="bonus">BONUS QUESTION</span>`
+          ? `
+            <span class="bonus">
+              BONUS QUESTION
+            </span>
+          `
           : ""
         }
 
@@ -787,28 +1150,36 @@ async function renderQuestions(){
 
         ${
           q.explanation
-          ? `<div class="solution-preview">
+          ? `
+            <div class="solution-preview">
               <b>Solution:</b><br>
               ${escapeHtml(q.explanation)}
-             </div>`
+            </div>
+          `
           : ""
         }
 
         ${
           q.solution_image_url
-          ? `<img
+          ? `
+            <img
               class="solution-image-preview"
-              src="${escapeHtml(q.solution_image_url)}"
+              src="${escapeHtml(
+                q.solution_image_url
+              )}"
               alt="Solution image"
-             >`
+            >
+          `
           : ""
         }
 
         ${
           q.solution_video_url
-          ? `<div class="meta">
+          ? `
+            <div class="meta">
               🎥 Video solution added
-             </div>`
+            </div>
+          `
           : ""
         }
 
@@ -831,83 +1202,125 @@ async function renderQuestions(){
         </div>
 
       </div>`;
+
   });
 }
 
-
 /* IMAGE UPLOAD */
 
-async function uploadSolutionImage(file,questionId){
+async function uploadSolutionImage(
+  file,
+  questionId
+){
 
-  if(!file) return existingImageUrl || null;
+  if(!file){
+    return existingImageUrl || null;
+  }
 
   const extension =
-    file.name.split(".").pop().toLowerCase();
+    file.name
+      .split(".")
+      .pop()
+      .toLowerCase();
 
   const fileName =
     `${questionId}_${Date.now()}.${extension}`;
 
   const filePath = fileName;
 
-  const { error:uploadError } = await db.storage
-    .from("solution-images")
-    .upload(filePath,file,{
-      upsert:true,
-      contentType:file.type
-    });
+  const { error:uploadError } =
+    await db.storage
+      .from("solution-images")
+      .upload(
+        filePath,
+        file,
+        {
+          upsert:true,
+          contentType:file.type
+        }
+      );
 
   if(uploadError){
     throw uploadError;
   }
 
-  const { data } = db.storage
-    .from("solution-images")
-    .getPublicUrl(filePath);
+  const { data } =
+    db.storage
+      .from("solution-images")
+      .getPublicUrl(filePath);
 
   return data.publicUrl;
 }
-
 
 /* SAVE QUESTION */
 
 async function saveQuestion(){
 
-  const subjectId = document.getElementById("subject").value;
-  const chapterId = document.getElementById("chapter").value;
+  const subjectId =
+    document.getElementById("subject").value;
 
-  const text = document.getElementById("questionText").value.trim();
-  const textHi = document.getElementById("questionTextHi").value.trim();
+  const chapterId =
+    document.getElementById("chapter").value;
 
-  const A = document.getElementById("optionA").value.trim();
-  const B = document.getElementById("optionB").value.trim();
-  const C = document.getElementById("optionC").value.trim();
-  const D = document.getElementById("optionD").value.trim();
+  const text =
+    document.getElementById("questionText")
+      .value.trim();
 
-  const AHi = document.getElementById("optionAHi").value.trim();
-  const BHi = document.getElementById("optionBHi").value.trim();
-  const CHi = document.getElementById("optionCHi").value.trim();
-  const DHi = document.getElementById("optionDHi").value.trim();
+  const textHi =
+    document.getElementById("questionTextHi")
+      .value.trim();
+
+  const A =
+    document.getElementById("optionA")
+      .value.trim();
+
+  const B =
+    document.getElementById("optionB")
+      .value.trim();
+
+  const C =
+    document.getElementById("optionC")
+      .value.trim();
+
+  const D =
+    document.getElementById("optionD")
+      .value.trim();
+
+  const AHi =
+    document.getElementById("optionAHi")
+      .value.trim();
+
+  const BHi =
+    document.getElementById("optionBHi")
+      .value.trim();
+
+  const CHi =
+    document.getElementById("optionCHi")
+      .value.trim();
+
+  const DHi =
+    document.getElementById("optionDHi")
+      .value.trim();
 
   const correctOptions = [
-    ...document.querySelectorAll(".correctOption:checked")
+    ...document.querySelectorAll(
+      ".correctOption:checked"
+    )
   ].map(x => x.value);
 
-  const isBonus = document.getElementById("isBonus").checked;
-
-  const marks =
-    parseFloat(document.getElementById("marks").value) || 0;
-
-  const negative =
-    parseFloat(document.getElementById("negativeMarks").value) || 0;
+  const isBonus =
+    document.getElementById("isBonus").checked;
 
   const explanation =
     document.getElementById("explanation").value;
 
   const videoUrl =
-    document.getElementById("solutionVideo").value.trim();
+    document.getElementById("solutionVideo")
+      .value.trim();
 
   const imageFile =
-    document.getElementById("solutionImage").files[0];
+    document.getElementById("solutionImage")
+      .files[0];
 
   if(!subjectId){
     alert("Please select a subject.");
@@ -930,17 +1343,29 @@ async function saveQuestion(){
   }
 
   if(!A || !B || !C || !D){
-    alert("Please enter all English options.");
+
+    alert(
+      "Please enter all English options."
+    );
+
     return;
   }
 
   if(!AHi || !BHi || !CHi || !DHi){
-    alert("Please enter all Hindi options.");
+
+    alert(
+      "Please enter all Hindi options."
+    );
+
     return;
   }
 
   if(!correctOptions.length){
-    alert("Please select at least one correct option.");
+
+    alert(
+      "Please select at least one correct option."
+    );
+
     return;
   }
 
@@ -949,49 +1374,61 @@ async function saveQuestion(){
     let questionId;
 
     const questionData = {
+
       subject_id:subjectId,
       chapter_id:chapterId,
+
       question_text:text,
       question_text_hi:textHi,
+
       explanation:explanation,
-      marks:marks,
-      negative_marks:negative,
+
       correct_options:correctOptions,
+
       is_bonus:isBonus,
-      solution_video_url:videoUrl || null
+
+      solution_video_url:
+        videoUrl || null
     };
 
     /* UPDATE */
 
     if(editingId){
 
-      const { error } = await db
-        .from("questions")
-        .update(questionData)
-        .eq("id",editingId);
+      const { error } =
+        await db
+          .from("questions")
+          .update(questionData)
+          .eq("id",editingId);
 
       if(error) throw error;
 
       questionId = editingId;
 
       if(imageFile){
-        const imageUrl =
-          await uploadSolutionImage(imageFile,questionId);
 
-        const { error:imageError } = await db
-          .from("questions")
-          .update({
-            solution_image_url:imageUrl
-          })
-          .eq("id",questionId);
+        const imageUrl =
+          await uploadSolutionImage(
+            imageFile,
+            questionId
+          );
+
+        const { error:imageError } =
+          await db
+            .from("questions")
+            .update({
+              solution_image_url:imageUrl
+            })
+            .eq("id",questionId);
 
         if(imageError) throw imageError;
       }
 
-      const { error:deleteError } = await db
-        .from("question_options")
-        .delete()
-        .eq("question_id",questionId);
+      const { error:deleteError } =
+        await db
+          .from("question_options")
+          .delete()
+          .eq("question_id",questionId);
 
       if(deleteError) throw deleteError;
 
@@ -1003,11 +1440,12 @@ async function saveQuestion(){
 
       questionData.mock_test_id = null;
 
-      const { data,error } = await db
-        .from("questions")
-        .insert(questionData)
-        .select("id")
-        .single();
+      const { data,error } =
+        await db
+          .from("questions")
+          .insert(questionData)
+          .select("id")
+          .single();
 
       if(error) throw error;
 
@@ -1016,14 +1454,18 @@ async function saveQuestion(){
       if(imageFile){
 
         const imageUrl =
-          await uploadSolutionImage(imageFile,questionId);
+          await uploadSolutionImage(
+            imageFile,
+            questionId
+          );
 
-        const { error:imageError } = await db
-          .from("questions")
-          .update({
-            solution_image_url:imageUrl
-          })
-          .eq("id",questionId);
+        const { error:imageError } =
+          await db
+            .from("questions")
+            .update({
+              solution_image_url:imageUrl
+            })
+            .eq("id",questionId);
 
         if(imageError) throw imageError;
       }
@@ -1036,7 +1478,8 @@ async function saveQuestion(){
         option_label:"A",
         option_text:A,
         option_text_hi:AHi,
-        is_correct:correctOptions.includes("A")
+        is_correct:
+          correctOptions.includes("A")
       },
 
       {
@@ -1044,7 +1487,8 @@ async function saveQuestion(){
         option_label:"B",
         option_text:B,
         option_text_hi:BHi,
-        is_correct:correctOptions.includes("B")
+        is_correct:
+          correctOptions.includes("B")
       },
 
       {
@@ -1052,7 +1496,8 @@ async function saveQuestion(){
         option_label:"C",
         option_text:C,
         option_text_hi:CHi,
-        is_correct:correctOptions.includes("C")
+        is_correct:
+          correctOptions.includes("C")
       },
 
       {
@@ -1060,14 +1505,16 @@ async function saveQuestion(){
         option_label:"D",
         option_text:D,
         option_text_hi:DHi,
-        is_correct:correctOptions.includes("D")
+        is_correct:
+          correctOptions.includes("D")
       }
 
     ];
 
-    const { error:optionError } = await db
-      .from("question_options")
-      .insert(optionRows);
+    const { error:optionError } =
+      await db
+        .from("question_options")
+        .insert(optionRows);
 
     if(optionError) throw optionError;
 
@@ -1078,9 +1525,11 @@ async function saveQuestion(){
     );
 
     resetForm();
+
     await loadQuestions();
 
-  }catch(error){
+  }
+  catch(error){
 
     console.error(error);
 
@@ -1091,79 +1540,111 @@ async function saveQuestion(){
   }
 }
 
-
 /* EDIT QUESTION */
 
 async function editQuestion(id){
 
-  const q = questions.find(
-    x => String(x.id) === String(id)
-  );
+  const q =
+    questions.find(
+      x => String(x.id) === String(id)
+    );
 
   if(!q) return;
 
   editingId = q.id;
-  existingImageUrl = q.solution_image_url || "";
 
-  document.getElementById("formTitle").textContent =
+  existingImageUrl =
+    q.solution_image_url || "";
+
+  document.getElementById(
+    "formTitle"
+  ).textContent =
     "Edit Question";
 
-  document.getElementById("subject").value =
+  document.getElementById(
+    "subject"
+  ).value =
     q.subject_id || "";
 
   updateChapterSelect();
 
-  document.getElementById("chapter").value =
+  document.getElementById(
+    "chapter"
+  ).value =
     q.chapter_id || "";
 
-  document.getElementById("questionText").value =
+  document.getElementById(
+    "questionText"
+  ).value =
     q.question_text || "";
 
-  document.getElementById("questionTextHi").value =
+  document.getElementById(
+    "questionTextHi"
+  ).value =
     q.question_text_hi || "";
 
-  document.getElementById("marks").value =
-    q.marks ?? 0;
-
-  document.getElementById("negativeMarks").value =
-    q.negative_marks ?? 0;
-
-  document.getElementById("explanation").value =
+  document.getElementById(
+    "explanation"
+  ).value =
     q.explanation || "";
 
-  document.getElementById("solutionVideo").value =
+  document.getElementById(
+    "solutionVideo"
+  ).value =
     q.solution_video_url || "";
 
-  document.getElementById("isBonus").checked =
+  document.getElementById(
+    "isBonus"
+  ).checked =
     q.is_bonus === true;
 
-  document.querySelectorAll(".correctOption")
-    .forEach(cb => {
-      cb.checked =
-        Array.isArray(q.correct_options) &&
-        q.correct_options.includes(cb.value);
-    });
+  document.querySelectorAll(
+    ".correctOption"
+  ).forEach(cb => {
 
-  document.getElementById("existingImageBox").innerHTML =
+    cb.checked =
+      Array.isArray(q.correct_options) &&
+      q.correct_options.includes(
+        cb.value
+      );
+
+  });
+
+  document.getElementById(
+    "existingImageBox"
+  ).innerHTML =
+
     existingImageUrl
+
     ? `
-      <div class="small-note">Current solution image:</div>
+      <div class="small-note">
+        Current solution image:
+      </div>
+
       <img
         class="solution-image-preview"
-        src="${escapeHtml(existingImageUrl)}"
+        src="${escapeHtml(
+          existingImageUrl
+        )}"
         alt="Current solution"
       >
     `
+
     : "";
 
-  const { data,error } = await db
-    .from("question_options")
-    .select("*")
-    .eq("question_id",id)
-    .order("option_label");
+  const { data,error } =
+    await db
+      .from("question_options")
+      .select("*")
+      .eq("question_id",id)
+      .order("option_label");
 
   if(error){
-    alert("Could not load options.");
+
+    alert(
+      "Could not load options."
+    );
+
     return;
   }
 
@@ -1173,28 +1654,44 @@ async function editQuestion(id){
     map[o.option_label] = o;
   });
 
-  document.getElementById("optionA").value =
+  document.getElementById(
+    "optionA"
+  ).value =
     map.A?.option_text || "";
 
-  document.getElementById("optionB").value =
+  document.getElementById(
+    "optionB"
+  ).value =
     map.B?.option_text || "";
 
-  document.getElementById("optionC").value =
+  document.getElementById(
+    "optionC"
+  ).value =
     map.C?.option_text || "";
 
-  document.getElementById("optionD").value =
+  document.getElementById(
+    "optionD"
+  ).value =
     map.D?.option_text || "";
 
-  document.getElementById("optionAHi").value =
+  document.getElementById(
+    "optionAHi"
+  ).value =
     map.A?.option_text_hi || "";
 
-  document.getElementById("optionBHi").value =
+  document.getElementById(
+    "optionBHi"
+  ).value =
     map.B?.option_text_hi || "";
 
-  document.getElementById("optionCHi").value =
+  document.getElementById(
+    "optionCHi"
+  ).value =
     map.C?.option_text_hi || "";
 
-  document.getElementById("optionDHi").value =
+  document.getElementById(
+    "optionDHi"
+  ).value =
     map.D?.option_text_hi || "";
 
   window.scrollTo({
@@ -1203,71 +1700,1165 @@ async function editQuestion(id){
   });
 }
 
-
 /* DELETE */
 
 async function deleteQuestion(id){
 
-  if(!confirm("Delete this question permanently?")){
+  if(!confirm(
+    "Delete this question permanently?"
+  )){
     return;
   }
 
-  const { error } = await db
-    .from("questions")
-    .delete()
-    .eq("id",id);
+  const { error } =
+    await db
+      .from("questions")
+      .delete()
+      .eq("id",id);
 
   if(error){
-    alert("Could not delete question:\n" + error.message);
+
+    alert(
+      "Could not delete question:\n" +
+      error.message
+    );
+
     return;
   }
 
   alert("Question deleted.");
+
   await loadQuestions();
 }
-
 
 /* RESET */
 
 function resetForm(){
 
   editingId = null;
+
   existingImageUrl = "";
 
-  document.getElementById("formTitle").textContent =
+  document.getElementById(
+    "formTitle"
+  ).textContent =
     "Add Question";
 
-  document.getElementById("subject").value = "";
+  document.getElementById(
+    "subject"
+  ).value = "";
+
   updateChapterSelect();
 
-  document.getElementById("questionText").value = "";
-  document.getElementById("questionTextHi").value = "";
+  document.getElementById(
+    "questionText"
+  ).value = "";
 
-  document.getElementById("optionA").value = "";
-  document.getElementById("optionB").value = "";
-  document.getElementById("optionC").value = "";
-  document.getElementById("optionD").value = "";
+  document.getElementById(
+    "questionTextHi"
+  ).value = "";
 
-  document.getElementById("optionAHi").value = "";
-  document.getElementById("optionBHi").value = "";
-  document.getElementById("optionCHi").value = "";
-  document.getElementById("optionDHi").value = "";
+  document.getElementById(
+    "optionA"
+  ).value = "";
 
-  document.querySelectorAll(".correctOption")
-    .forEach(cb => cb.checked = false);
+  document.getElementById(
+    "optionB"
+  ).value = "";
 
-  document.getElementById("isBonus").checked = false;
+  document.getElementById(
+    "optionC"
+  ).value = "";
 
-  document.getElementById("marks").value = "2";
-  document.getElementById("negativeMarks").value = "0.5";
+  document.getElementById(
+    "optionD"
+  ).value = "";
 
-  document.getElementById("explanation").value = "";
-  document.getElementById("solutionVideo").value = "";
-  document.getElementById("solutionImage").value = "";
+  document.getElementById(
+    "optionAHi"
+  ).value = "";
 
-  document.getElementById("existingImageBox").innerHTML = "";
+  document.getElementById(
+    "optionBHi"
+  ).value = "";
+
+  document.getElementById(
+    "optionCHi"
+  ).value = "";
+
+  document.getElementById(
+    "optionDHi"
+  ).value = "";
+
+  document.querySelectorAll(
+    ".correctOption"
+  ).forEach(cb =>
+    cb.checked = false
+  );
+
+  document.getElementById(
+    "isBonus"
+  ).checked = false;
+
+  document.getElementById(
+    "explanation"
+  ).value = "";
+
+  document.getElementById(
+    "solutionVideo"
+  ).value = "";
+
+  document.getElementById(
+    "solutionImage"
+  ).value = "";
+
+  document.getElementById(
+    "existingImageBox"
+  ).innerHTML = "";
 }
 
+/* BULK IMPORT UI */
+
+function toggleBulkImport(){
+
+  const box =
+    document.getElementById(
+      "bulkImportBox"
+    );
+
+  box.classList.toggle("hidden");
+
+}
+
+function clearBulkImport(){
+
+  bulkRows = [];
+  bulkValidatedRows = [];
+
+  document.getElementById(
+    "bulkFile"
+  ).value = "";
+
+  document.getElementById(
+    "bulkFileName"
+  ).textContent = "";
+
+  document.getElementById(
+    "bulkSummary"
+  ).innerHTML = "";
+
+  document.getElementById(
+    "bulkPreview"
+  ).innerHTML = "";
+
+  document.getElementById(
+    "bulkImportResult"
+  ).innerHTML = "";
+
+  document.getElementById(
+    "importAllButton"
+  ).classList.add("hidden");
+
+  document.getElementById(
+    "clearBulkButton"
+  ).classList.add("hidden");
+
+}
+
+function normalizeHeader(value){
+
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g," ")
+    .replace(/[_-]+/g," ");
+}
+
+function cleanCell(value){
+
+  if(
+    value === null ||
+    value === undefined
+  ){
+    return "";
+  }
+
+  return String(value)
+    .replace(/\r\n/g,"\n")
+    .replace(/\r/g,"\n")
+    .trim();
+}
+
+function parseCorrectOptions(value){
+
+  const raw =
+    cleanCell(value)
+      .toUpperCase();
+
+  if(!raw) return [];
+
+  const matches =
+    raw.match(/[ABCD]/g);
+
+  if(!matches) return [];
+
+  return [
+    ...new Set(matches)
+  ];
+}
+
+function parseBonus(value){
+
+  const raw =
+    cleanCell(value)
+      .toLowerCase();
+
+  return [
+    "true",
+    "1",
+    "yes",
+    "y",
+    "bonus",
+    "हाँ",
+    "हां"
+  ].includes(raw);
+}
+
+function getColumn(row,possibleNames){
+
+  const keys =
+    Object.keys(row);
+
+  for(const wanted of possibleNames){
+
+    const normalizedWanted =
+      normalizeHeader(wanted);
+
+    const key =
+      keys.find(k =>
+        normalizeHeader(k) ===
+        normalizedWanted
+      );
+
+    if(key !== undefined){
+      return cleanCell(row[key]);
+    }
+  }
+
+  return "";
+}
+
+function findSubject(name){
+
+  const target =
+    normalizeHeader(name);
+
+  if(!target) return null;
+
+  return subjects.find(s =>
+    normalizeHeader(s.name) === target
+  ) || null;
+}
+
+function findChapter(name,subjectId){
+
+  const target =
+    normalizeHeader(name);
+
+  if(!target) return null;
+
+  return chapters.find(c =>
+    String(c.subject_id) ===
+    String(subjectId) &&
+    normalizeHeader(c.name) === target
+  ) || null;
+}
+
+async function handleBulkFile(event){
+
+  clearBulkImport();
+
+  const file =
+    event.target.files[0];
+
+  if(!file) return;
+
+  document.getElementById(
+    "bulkFileName"
+  ).textContent =
+    "Selected: " + file.name;
+
+  try{
+
+    const buffer =
+      await file.arrayBuffer();
+
+    let workbook;
+
+    if(
+      file.name
+        .toLowerCase()
+        .endsWith(".csv")
+    ){
+
+      const text =
+        new TextDecoder("utf-8")
+          .decode(buffer);
+
+      workbook =
+        XLSX.read(
+          text,
+          {
+            type:"string",
+            cellDates:false
+          }
+        );
+
+    }
+    else{
+
+      workbook =
+        XLSX.read(
+          buffer,
+          {
+            type:"array",
+            cellDates:false
+          }
+        );
+
+    }
+
+    const firstSheet =
+      workbook.Sheets[
+        workbook.SheetNames[0]
+      ];
+
+    const rows =
+      XLSX.utils.sheet_to_json(
+        firstSheet,
+        {
+          defval:"",
+          raw:false
+        }
+      );
+
+    if(!rows.length){
+
+      alert(
+        "The uploaded file is empty."
+      );
+
+      return;
+    }
+
+    bulkRows = rows;
+
+    await validateBulkRows();
+
+  }
+  catch(error){
+
+    console.error(error);
+
+    alert(
+      "Could not read file:\n" +
+      error.message
+    );
+  }
+}
+
+async function validateBulkRows(){
+
+  bulkValidatedRows = [];
+
+  let validCount = 0;
+  let invalidCount = 0;
+
+  for(
+    let i=0;
+    i<bulkRows.length;
+    i++
+  ){
+
+    const row =
+      bulkRows[i];
+
+    const errors = [];
+
+    const subjectName =
+      getColumn(row,[
+        "Subject",
+        "subject"
+      ]);
+
+    const chapterName =
+      getColumn(row,[
+        "Chapter",
+        "chapter"
+      ]);
+
+    const questionEnglish =
+      getColumn(row,[
+        "Question English",
+        "Question",
+        "English Question",
+        "question_text"
+      ]);
+
+    const questionHindi =
+      getColumn(row,[
+        "Question Hindi",
+        "Hindi Question",
+        "question_text_hi"
+      ]);
+
+    const A =
+      getColumn(row,[
+        "Option A English",
+        "A English",
+        "Option A",
+        "A"
+      ]);
+
+    const AHi =
+      getColumn(row,[
+        "Option A Hindi",
+        "A Hindi",
+        "A Hindi Option"
+      ]);
+
+    const B =
+      getColumn(row,[
+        "Option B English",
+        "B English",
+        "Option B",
+        "B"
+      ]);
+
+    const BHi =
+      getColumn(row,[
+        "Option B Hindi",
+        "B Hindi",
+        "B Hindi Option"
+      ]);
+
+    const C =
+      getColumn(row,[
+        "Option C English",
+        "C English",
+        "Option C",
+        "C"
+      ]);
+
+    const CHi =
+      getColumn(row,[
+        "Option C Hindi",
+        "C Hindi",
+        "C Hindi Option"
+      ]);
+
+    const D =
+      getColumn(row,[
+        "Option D English",
+        "D English",
+        "Option D",
+        "D"
+      ]);
+
+    const DHi =
+      getColumn(row,[
+        "Option D Hindi",
+        "D Hindi",
+        "D Hindi Option"
+      ]);
+
+    const correct =
+      parseCorrectOptions(
+        getColumn(row,[
+          "Correct",
+          "Correct Option",
+          "Answer",
+          "Correct Answer"
+        ])
+      );
+
+    const explanation =
+      getColumn(row,[
+        "Explanation",
+        "Solution",
+        "Common Solution"
+      ]);
+
+    const bonus =
+      parseBonus(
+        getColumn(row,[
+          "Bonus",
+          "Is Bonus",
+          "is_bonus"
+        ])
+      );
+
+    const video =
+      getColumn(row,[
+        "Video Link",
+        "Video",
+        "Solution Video",
+        "solution_video_url"
+      ]);
+
+    if(!subjectName){
+      errors.push("Subject missing");
+    }
+
+    if(!chapterName){
+      errors.push("Chapter missing");
+    }
+
+    const subject =
+      findSubject(subjectName);
+
+    if(subjectName && !subject){
+
+      errors.push(
+        `Subject not found: ${subjectName}`
+      );
+    }
+
+    let chapter = null;
+
+    if(subject){
+
+      chapter =
+        findChapter(
+          chapterName,
+          subject.id
+        );
+
+      if(
+        chapterName &&
+        !chapter
+      ){
+
+        errors.push(
+          `Chapter not found for "${subject.name}": ${chapterName}`
+        );
+      }
+    }
+
+    if(!questionEnglish){
+      errors.push(
+        "English question missing"
+      );
+    }
+
+    if(!questionHindi){
+      errors.push(
+        "Hindi question missing"
+      );
+    }
+
+    if(!A || !B || !C || !D){
+
+      errors.push(
+        "All English options A-D are required"
+      );
+    }
+
+    if(!AHi || !BHi || !CHi || !DHi){
+
+      errors.push(
+        "All Hindi options A-D are required"
+      );
+    }
+
+    if(!correct.length){
+
+      errors.push(
+        "Correct option missing/invalid"
+      );
+    }
+
+    const validated = {
+
+      rowNumber:i + 2,
+
+      subjectName,
+      chapterName,
+
+      subjectId:
+        subject?.id || null,
+
+      chapterId:
+        chapter?.id || null,
+
+      questionEnglish,
+      questionHindi,
+
+      A,
+      AHi,
+      B,
+      BHi,
+      C,
+      CHi,
+      D,
+      DHi,
+
+      correct,
+
+      explanation,
+
+      bonus,
+
+      video,
+
+      errors
+
+    };
+
+    bulkValidatedRows.push(
+      validated
+    );
+
+    if(errors.length){
+      invalidCount++;
+    }
+    else{
+      validCount++;
+    }
+  }
+
+  renderBulkPreview(
+    validCount,
+    invalidCount
+  );
+}
+
+function renderBulkPreview(
+  validCount,
+  invalidCount
+){
+
+  const summary =
+    document.getElementById(
+      "bulkSummary"
+    );
+
+  const preview =
+    document.getElementById(
+      "bulkPreview"
+    );
+
+  summary.innerHTML = `
+
+    <div class="status">
+
+      <b>
+        ${bulkValidatedRows.length}
+        questions found
+      </b>
+
+      <br>
+
+      <span class="import-success">
+        ✓ ${validCount} valid
+      </span>
+
+      &nbsp;&nbsp;
+
+      <span style="color:#ef4444;">
+        ✕ ${invalidCount} invalid
+      </span>
+
+    </div>
+  `;
+
+  let html = "";
+
+  bulkValidatedRows.forEach(r => {
+
+    const valid =
+      r.errors.length === 0;
+
+    html += `
+
+      <div class="import-row ${
+        valid
+        ? "valid"
+        : "invalid"
+      }">
+
+        <div class="import-row-title">
+
+          Row ${r.rowNumber}
+
+          ${
+            valid
+            ? `
+              <span class="import-success">
+                ✓ Ready
+              </span>
+            `
+            : `
+              <span style="color:#ef4444;">
+                ✕ Error
+              </span>
+            `
+          }
+
+        </div>
+
+        <div>
+          <b>Subject:</b>
+          ${escapeHtml(r.subjectName)}
+          &nbsp; • &nbsp;
+          <b>Chapter:</b>
+          ${escapeHtml(r.chapterName)}
+        </div>
+
+        <div style="margin-top:6px;">
+          <b>Question:</b>
+          ${escapeHtml(
+            r.questionEnglish
+          )}
+        </div>
+
+        ${
+          r.questionHindi
+          ? `
+            <div class="question-hi">
+              ${escapeHtml(
+                r.questionHindi
+              )}
+            </div>
+          `
+          : ""
+        }
+
+        ${
+          r.errors.length
+          ? `
+            <div class="import-error">
+              ${escapeHtml(
+                r.errors.join("\n")
+              )}
+            </div>
+          `
+          : `
+            <div class="small-note">
+              Correct:
+              ${escapeHtml(
+                r.correct.join(", ")
+              )}
+            </div>
+          `
+        }
+
+      </div>
+    `;
+  });
+
+  preview.innerHTML = html;
+
+  document.getElementById(
+    "importAllButton"
+  ).classList.toggle(
+    "hidden",
+    validCount === 0
+  );
+
+  document.getElementById(
+    "clearBulkButton"
+  ).classList.remove(
+    "hidden"
+  );
+
+  if(validCount > 0){
+
+    document.getElementById(
+      "importAllButton"
+    ).textContent =
+      `Import ${validCount} Valid Questions`;
+  }
+}
+
+/* BULK IMPORT DATABASE */
+
+async function importAllQuestions(){
+
+  const validRows =
+    bulkValidatedRows.filter(
+      r => r.errors.length === 0
+    );
+
+  if(!validRows.length){
+
+    alert(
+      "There are no valid questions to import."
+    );
+
+    return;
+  }
+
+  const button =
+    document.getElementById(
+      "importAllButton"
+    );
+
+  button.disabled = true;
+
+  button.textContent =
+    "Importing...";
+
+  const resultBox =
+    document.getElementById(
+      "bulkImportResult"
+    );
+
+  resultBox.innerHTML =
+    `<div class="status">
+      Importing ${validRows.length} questions...
+    </div>`;
+
+  let imported = 0;
+  let failed = 0;
+  const failures = [];
+
+  try{
+
+    for(
+      let i=0;
+      i<validRows.length;
+      i++
+    ){
+
+      const r =
+        validRows[i];
+
+      try{
+
+        const questionData = {
+
+          subject_id:
+            r.subjectId,
+
+          chapter_id:
+            r.chapterId,
+
+          question_text:
+            r.questionEnglish,
+
+          question_text_hi:
+            r.questionHindi,
+
+          explanation:
+            r.explanation,
+
+          correct_options:
+            r.correct,
+
+          is_bonus:
+            r.bonus,
+
+          solution_video_url:
+            r.video || null,
+
+          mock_test_id:
+            null
+        };
+
+        const {
+          data,
+          error
+        } =
+          await db
+            .from("questions")
+            .insert(questionData)
+            .select("id")
+            .single();
+
+        if(error) throw error;
+
+        const questionId =
+          data.id;
+
+        const optionRows = [
+
+          {
+            question_id:questionId,
+            option_label:"A",
+            option_text:r.A,
+            option_text_hi:r.AHi,
+            is_correct:
+              r.correct.includes("A")
+          },
+
+          {
+            question_id:questionId,
+            option_label:"B",
+            option_text:r.B,
+            option_text_hi:r.BHi,
+            is_correct:
+              r.correct.includes("B")
+          },
+
+          {
+            question_id:questionId,
+            option_label:"C",
+            option_text:r.C,
+            option_text_hi:r.CHi,
+            is_correct:
+              r.correct.includes("C")
+          },
+
+          {
+            question_id:questionId,
+            option_label:"D",
+            option_text:r.D,
+            option_text_hi:r.DHi,
+            is_correct:
+              r.correct.includes("D")
+          }
+
+        ];
+
+        const {
+          error:optionError
+        } =
+          await db
+            .from("question_options")
+            .insert(optionRows);
+
+        if(optionError){
+
+          await db
+            .from("questions")
+            .delete()
+            .eq("id",questionId);
+
+          throw optionError;
+        }
+
+        imported++;
+
+      }
+      catch(error){
+
+        failed++;
+
+        failures.push(
+          `Row ${r.rowNumber}: ${
+            error.message
+          }`
+        );
+      }
+    }
+
+    resultBox.innerHTML = `
+
+      <div class="status">
+
+        <div class="import-success">
+          ✓ ${imported} questions imported successfully.
+        </div>
+
+        ${
+          failed
+          ? `
+            <div class="import-error"
+                 style="margin-top:8px;">
+              ${failed} questions failed.
+              ${escapeHtml(
+                failures.join("\n")
+              )}
+            </div>
+          `
+          : `
+            <div class="small-note"
+                 style="margin-top:8px;">
+              All valid questions were imported.
+            </div>
+          `
+        }
+
+      </div>
+    `;
+
+    await loadQuestions();
+
+  }
+  catch(error){
+
+    console.error(error);
+
+    resultBox.innerHTML = `
+
+      <div class="status">
+
+        <div class="import-error">
+          Import failed:
+          ${escapeHtml(
+            error.message
+          )}
+        </div>
+
+      </div>
+    `;
+  }
+
+  button.disabled = false;
+
+  button.textContent =
+    imported
+    ? "Import Completed"
+    : "Import All Valid Questions";
+}
+
+/* EXCEL TEMPLATE */
+
+function getTemplateHeaders(){
+
+  return [
+
+    "Subject",
+    "Chapter",
+
+    "Question English",
+    "Question Hindi",
+
+    "Option A English",
+    "Option A Hindi",
+
+    "Option B English",
+    "Option B Hindi",
+
+    "Option C English",
+    "Option C Hindi",
+
+    "Option D English",
+    "Option D Hindi",
+
+    "Correct",
+
+    "Explanation",
+    "Bonus",
+    "Video Link"
+
+  ];
+}
+
+function downloadTemplate(){
+
+  const headers =
+    getTemplateHeaders();
+
+  const example = {
+
+    "Subject":"General Awareness",
+    "Chapter":"History",
+
+    "Question English":
+      "Example question",
+
+    "Question Hindi":
+      "उदाहरण प्रश्न",
+
+    "Option A English":
+      "Option A",
+
+    "Option A Hindi":
+      "विकल्प A",
+
+    "Option B English":
+      "Option B",
+
+    "Option B Hindi":
+      "विकल्प B",
+
+    "Option C English":
+      "Option C",
+
+    "Option C Hindi":
+      "विकल्प C",
+
+    "Option D English":
+      "Option D",
+
+    "Option D Hindi":
+      "विकल्प D",
+
+    "Correct":"A",
+
+    "Explanation":
+      "Explanation here",
+
+    "Bonus":"No",
+
+    "Video Link":""
+
+  };
+
+  const worksheet =
+    XLSX.utils.json_to_sheet(
+      [example],
+      {
+        header:headers
+      }
+    );
+
+  const workbook =
+    XLSX.utils.book_new();
+
+  XLSX.utils.book_append_sheet(
+    workbook,
+    worksheet,
+    "Questions"
+  );
+
+  XLSX.writeFile(
+    workbook,
+    "SSC_EDGE_Question_Import_Template.xlsx"
+  );
+}
+
+function downloadCSVTemplate(){
+
+  const headers =
+    getTemplateHeaders();
+
+  const csv =
+    headers.join(",") +
+    "\n" +
+    headers
+      .map(h => `"${h.replace(/"/g,'""')}"`)
+      .join(",");
+
+  const blob =
+    new Blob(
+      [csv],
+      {
+        type:"text/csv;charset=utf-8;"
+      }
+    );
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const a =
+    document.createElement("a");
+
+  a.href = url;
+
+  a.download =
+    "SSC_EDGE_Question_Import_Template.csv";
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+  URL.revokeObjectURL(url);
+}
 
 /* ESCAPE */
 
@@ -1281,36 +2872,48 @@ function escapeHtml(value){
     .replace(/'/g,"&#039;");
 }
 
-
 /* EVENTS */
 
 document.getElementById("subject")
-  .addEventListener("change",updateChapterSelect);
+  .addEventListener(
+    "change",
+    updateChapterSelect
+  );
 
 document.getElementById("filterSubject")
-  .addEventListener("change",updateFilterChapter);
+  .addEventListener(
+    "change",
+    updateFilterChapter
+  );
 
 document.getElementById("filterChapter")
-  .addEventListener("change",renderQuestions);
+  .addEventListener(
+    "change",
+    renderQuestions
+  );
 
 document.getElementById("search")
-  .addEventListener("input",renderQuestions);
-
+  .addEventListener(
+    "input",
+    renderQuestions
+  );
 
 /* START */
 
 (async function(){
 
-  const admin = await checkAdmin();
+  const admin =
+    await checkAdmin();
 
   if(!admin) return;
 
   await loadSubjects();
+
   await loadChapters();
+
   await loadQuestions();
 
 })();
-
 </script>
 
 </body>
