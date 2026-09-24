@@ -39,6 +39,108 @@ localStorage.getItem("ssc-edge-theme") || "dark";
     gap:18px;
 }
 
+
+/* =========================
+   FOLDER LIST
+========================= */
+
+.folder-list{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:14px;
+    margin-bottom:22px;
+}
+
+.folder-card{
+    min-height:125px;
+    padding:18px 12px;
+
+    box-sizing:border-box;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:17px;
+
+    text-decoration:none;
+    color:inherit;
+
+    box-shadow:0 5px 18px rgba(0,0,0,.07);
+
+    cursor:pointer;
+}
+
+.folder-icon{
+    width:48px;
+    height:48px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    margin-bottom:8px;
+
+    font-size:34px;
+}
+
+.folder-name{
+    font-size:15px;
+    font-weight:700;
+    line-height:1.3;
+}
+
+.folder-count{
+    margin-top:5px;
+
+    font-size:12px;
+    color:var(--muted);
+}
+
+
+/* =========================
+   BACK BUTTON
+========================= */
+
+.folder-back{
+    width:100%;
+
+    min-height:44px;
+
+    margin-bottom:18px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:11px;
+
+    padding:10px 12px;
+
+    box-sizing:border-box;
+
+    font-weight:700;
+    font-size:14px;
+
+    text-decoration:none;
+
+    background:var(--card);
+    color:var(--text);
+
+    border:1px solid var(--border);
+
+    cursor:pointer;
+}
+
+
+/* =========================
+   VIDEO CARD
+========================= */
+
 .video-card{
     background:var(--card);
     border:1px solid var(--border);
@@ -203,12 +305,34 @@ localStorage.getItem("ssc-edge-theme") || "dark";
     border:1px solid var(--purple);
 }
 
+
+/* =========================
+   EMPTY
+========================= */
+
 .empty{
     text-align:center;
 
     color:var(--muted);
 
     padding:35px 10px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:420px){
+
+    .folder-list{
+        gap:11px;
+    }
+
+    .folder-card{
+        min-height:115px;
+    }
+
 }
 
 </style>
@@ -224,9 +348,21 @@ localStorage.getItem("ssc-edge-theme") || "dark";
         Videos
     </div>
 
-    <div class="page-subtitle">
+    <div class="page-subtitle" id="pageSubtitle">
         SSC EDGE Video Classes
     </div>
+
+
+    <!-- =========================
+         FOLDER AREA
+    ========================= -->
+
+    <div id="folderArea"></div>
+
+
+    <!-- =========================
+         VIDEO AREA
+    ========================= -->
 
     <div id="videoList" class="video-list">
 
@@ -239,9 +375,12 @@ localStorage.getItem("ssc-edge-theme") || "dark";
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
+
+/* =====================================================
+   SUPABASE
+   Lazy loaded for faster initial page rendering
+===================================================== */
 
 const SUPABASE_URL =
 "https://dvvyoygahzzbnpqrfhen.supabase.co";
@@ -249,16 +388,112 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 "sb_publishable_2uiQtIIUylApCJSCpnaDkg_Ihh09v8s";
 
-const supabaseClient =
-supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
+let supabaseClient = null;
+let supabaseLoadPromise = null;
 
 
-/* =========================
+function loadSupabase(){
+
+    if(window.supabase){
+
+        return Promise.resolve(
+            window.supabase
+        );
+
+    }
+
+
+    if(supabaseLoadPromise){
+
+        return supabaseLoadPromise;
+
+    }
+
+
+    supabaseLoadPromise =
+        new Promise(
+            function(resolve,reject){
+
+                const script =
+                    document.createElement("script");
+
+                script.src =
+                    "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+
+                script.onload =
+                    function(){
+
+                        resolve(
+                            window.supabase
+                        );
+
+                    };
+
+                script.onerror =
+                    function(){
+
+                        reject(
+                            new Error(
+                                "Unable to load Supabase"
+                            )
+                        );
+
+                    };
+
+                document.head.appendChild(script);
+
+            }
+        );
+
+
+    return supabaseLoadPromise;
+
+}
+
+
+async function getSupabaseClient(){
+
+    if(supabaseClient){
+
+        return supabaseClient;
+
+    }
+
+
+    const sdk =
+        await loadSupabase();
+
+
+    supabaseClient =
+        sdk.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+
+    return supabaseClient;
+
+}
+
+
+/* =====================================================
+   STATE
+===================================================== */
+
+let allVideos = [];
+
+let currentFolderId = null;
+
+let folderSystemAvailable = true;
+
+let videosLoaded = false;
+
+let videosLoadingPromise = null;
+
+
+/* =====================================================
    ESCAPE HTML
-========================= */
+===================================================== */
 
 function escapeHtml(value){
 
@@ -272,68 +507,60 @@ function escapeHtml(value){
 }
 
 
-/* =========================
+/* =====================================================
    THUMBNAIL
-========================= */
+===================================================== */
 
 function getThumbnail(video){
-
-    /*
-       Admin can provide:
-
-       video.thumbnail_url
-
-       If thumbnail_url exists,
-       it will be shown.
-
-       Otherwise SSC EDGE fallback
-       thumbnail is shown.
-    */
 
     return video.thumbnail_url || "";
 
 }
 
 
-/* =========================
+/* =====================================================
    FALLBACK THUMBNAIL
-========================= */
+===================================================== */
 
 function fallbackThumbnail(){
 
     return `
 
-    <div class="thumbnail-fallback">
+        <div class="thumbnail-fallback">
 
-        <div class="thumbnail-logo">
-            SSC EDGE
+            <div class="thumbnail-logo">
+                SSC EDGE
+            </div>
+
+            <div class="thumbnail-text">
+                Learn • Practice • Improve
+            </div>
+
         </div>
-
-        <div class="thumbnail-text">
-            Learn • Practice • Improve
-        </div>
-
-    </div>
 
     `;
 
 }
 
 
-/* =========================
+/* =====================================================
    STUDY MATERIAL PROGRESS
-========================= */
+===================================================== */
 
 async function markStudyMaterialComplete(materialId){
 
     try{
 
+        const client =
+            await getSupabaseClient();
+
+
         const {
-            data: {
+            data:{
                 user
             }
         } =
-        await supabaseClient.auth.getUser();
+            await client.auth.getUser();
 
 
         if(!user){
@@ -346,32 +573,32 @@ async function markStudyMaterialComplete(materialId){
         const {
             error
         } =
-        await supabaseClient
+            await client
 
-            .from("study_material_progress")
+                .from("study_material_progress")
 
-            .upsert(
+                .upsert(
 
-                {
-                    user_id:
-                        user.id,
+                    {
+                        user_id:
+                            user.id,
 
-                    material_id:
-                        Number(materialId),
+                        material_id:
+                            Number(materialId),
 
-                    completed:
-                        true,
+                        completed:
+                            true,
 
-                    completed_at:
-                        new Date().toISOString()
-                },
+                        completed_at:
+                            new Date().toISOString()
+                    },
 
-                {
-                    onConflict:
-                        "user_id,material_id"
-                }
+                    {
+                        onConflict:
+                            "user_id,material_id"
+                    }
 
-            );
+                );
 
 
         if(error){
@@ -395,72 +622,350 @@ async function markStudyMaterialComplete(materialId){
 }
 
 
-/* =========================
+/* =====================================================
+   LOAD FOLDERS
+===================================================== */
+
+async function loadVideoFolders(){
+
+    try{
+
+        const client =
+            await getSupabaseClient();
+
+
+        const {
+            data,
+            error
+        } =
+            await client
+
+                .from("video_folders")
+
+                .select(`
+                    id,
+                    name,
+                    subject_id,
+                    sort_order,
+                    is_active,
+                    subjects (
+                        name
+                    )
+                `)
+
+                .eq(
+                    "is_active",
+                    true
+                )
+
+                .order(
+                    "sort_order",
+                    {
+                        ascending:true
+                    }
+                )
+
+                .order(
+                    "name",
+                    {
+                        ascending:true
+                    }
+                );
+
+
+        /*
+           If table does not exist yet,
+           keep old direct-video behaviour.
+        */
+
+        if(error){
+
+            console.warn(
+                "Video folder system unavailable. Using direct videos.",
+                error
+            );
+
+            folderSystemAvailable = false;
+
+            return [];
+
+        }
+
+
+        return data || [];
+
+    }catch(error){
+
+        console.warn(
+            "Video folder loading error:",
+            error
+        );
+
+        folderSystemAvailable = false;
+
+        return [];
+
+    }
+
+}
+
+
+/* =====================================================
    LOAD VIDEOS
-========================= */
+===================================================== */
 
 async function loadVideos(){
 
-    const videoList =
-        document.getElementById("videoList");
+    if(videosLoaded){
+
+        return allVideos;
+
+    }
 
 
-    const {
-        data:videos,
-        error
-    } = await supabaseClient
+    if(videosLoadingPromise){
 
-        .from("study_material")
+        return videosLoadingPromise;
 
-        .select(`
-            *,
-            subjects (
-                name
-            )
-        `)
+    }
 
-        .eq(
-            "material_type",
-            "VIDEO"
-        )
 
-        .eq(
-            "is_active",
-            true
-        )
+    videosLoadingPromise =
+        (async function(){
 
-        .order(
-            "created_at",
-            {
-                ascending:false
+            const videoList =
+                document.getElementById(
+                    "videoList"
+                );
+
+
+            try{
+
+                const client =
+                    await getSupabaseClient();
+
+
+                const {
+                    data:videos,
+                    error
+                } =
+                    await client
+
+                        .from("study_material")
+
+                        /*
+                           Only fields actually needed
+                           by this page.
+                        */
+
+                        .select(`
+                            id,
+                            title,
+                            description,
+                            file_url,
+                            thumbnail_url,
+                            material_type,
+                            is_active,
+                            created_at,
+                            folder_id,
+                            subject_id,
+                            subjects (
+                                name
+                            )
+                        `)
+
+                        .eq(
+                            "material_type",
+                            "VIDEO"
+                        )
+
+                        .eq(
+                            "is_active",
+                            true
+                        )
+
+                        .order(
+                            "created_at",
+                            {
+                                ascending:false
+                            }
+                        );
+
+
+                if(error){
+
+                    throw error;
+
+                }
+
+
+                allVideos =
+                    videos || [];
+
+                videosLoaded = true;
+
+
+                return allVideos;
+
+            }catch(error){
+
+                console.error(error);
+
+                videoList.innerHTML = `
+
+                    <div class="empty">
+                        Unable to load videos.
+                    </div>
+
+                `;
+
+                return [];
+
             }
+
+        })();
+
+
+    try{
+
+        return await videosLoadingPromise;
+
+    }finally{
+
+        videosLoadingPromise = null;
+
+    }
+
+}
+
+
+/* =====================================================
+   RENDER FOLDER LIST
+===================================================== */
+
+function renderFolders(folders){
+
+    const folderArea =
+        document.getElementById(
+            "folderArea"
         );
 
 
-    /* =========================
-       ERROR
-    ========================= */
+    if(
+        !folders ||
+        folders.length === 0
+    ){
 
-    if(error){
-
-        console.error(error);
-
-        videoList.innerHTML = `
-
-            <div class="empty">
-                Unable to load videos.
-            </div>
-
-        `;
+        folderArea.innerHTML = "";
 
         return;
 
     }
 
 
-    /* =========================
-       NO VIDEOS
-    ========================= */
+    /*
+       Count videos inside every folder.
+    */
+
+    const folderCards =
+        folders.map(
+            function(folder){
+
+                const count =
+                    allVideos.filter(
+                        function(video){
+
+                            return String(
+                                video.folder_id
+                            ) === String(
+                                folder.id
+                            );
+
+                        }
+                    ).length;
+
+
+                const subjectName =
+                    folder.subjects?.name ||
+                    folder.name ||
+                    "Subject";
+
+
+                return `
+
+                    <div
+                        class="folder-card"
+                        data-folder-id="${escapeHtml(folder.id)}"
+                    >
+
+                        <div class="folder-icon">
+                            📁
+                        </div>
+
+                        <div class="folder-name">
+                            ${escapeHtml(subjectName)}
+                        </div>
+
+                        <div class="folder-count">
+                            ${count}
+                            ${count === 1 ? "Video" : "Videos"}
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+        ).join("");
+
+
+    folderArea.innerHTML = `
+
+        <div class="folder-list">
+
+            ${folderCards}
+
+        </div>
+
+    `;
+
+
+    folderArea
+        .querySelectorAll(
+            ".folder-card"
+        )
+        .forEach(
+            function(card){
+
+                card.addEventListener(
+                    "click",
+                    function(){
+
+                        openFolder(
+                            this.dataset.folderId,
+                            folders
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* =====================================================
+   RENDER VIDEOS
+===================================================== */
+
+function renderVideos(videos){
+
+    const videoList =
+        document.getElementById(
+            "videoList"
+        );
+
 
     if(
         !videos ||
@@ -480,205 +985,185 @@ async function loadVideos(){
     }
 
 
-    /* =========================
-       CREATE CARDS
-    ========================= */
+    videoList.innerHTML =
+        videos.map(
 
-    videoList.innerHTML = videos.map(
+            function(video){
 
-        video => {
-
-            const rawId =
-                video.id ||
-                video.file_url ||
-                "";
+                const rawId =
+                    video.id ||
+                    video.file_url ||
+                    "";
 
 
-            const title =
-                escapeHtml(
-                    video.title ||
-                    "Untitled Video"
-                );
+                const title =
+                    escapeHtml(
+                        video.title ||
+                        "Untitled Video"
+                    );
 
 
-            const description =
-                escapeHtml(
-                    video.description ||
-                    ""
-                );
+                const description =
+                    escapeHtml(
+                        video.description ||
+                        ""
+                    );
 
 
-            const subject =
-                escapeHtml(
-                    video.subjects?.name ||
-                    "General"
-                );
+                const subject =
+                    escapeHtml(
+                        video.subjects?.name ||
+                        "General"
+                    );
 
 
-            const rawUrl =
-                video.file_url ||
-                "";
+                const rawUrl =
+                    video.file_url ||
+                    "";
 
 
-            const url =
-                escapeHtml(rawUrl);
+                const url =
+                    escapeHtml(
+                        rawUrl
+                    );
 
 
-            const materialId =
-                escapeHtml(rawId);
+                const materialId =
+                    escapeHtml(
+                        rawId
+                    );
 
 
-            const thumbnail =
-                getThumbnail(video);
+                const thumbnail =
+                    getThumbnail(video);
 
 
-            /* =========================
-               THUMBNAIL
-            ========================= */
+                const thumbnailHtml =
 
-            const thumbnailHtml =
+                    thumbnail
 
-                thumbnail
+                    ?
 
-                ?
+                    `
 
-                `
+                    <div class="video-thumbnail">
 
-                <div class="video-thumbnail">
+                        <img
+                            src="${escapeHtml(thumbnail)}"
+                            alt="${title}"
+                            loading="lazy"
+                            decoding="async"
+                        >
 
-                    <img
-                        src="${escapeHtml(thumbnail)}"
-                        alt="${title}"
-                        loading="lazy"
-                    >
+                        <div class="thumbnail-play">
+                            ▶
+                        </div>
 
-                    <div class="thumbnail-play">
-                        ▶
                     </div>
 
-                </div>
+                    `
 
-                `
+                    :
 
-                :
+                    `
 
-                `
+                    <div class="video-thumbnail">
 
-                <div class="video-thumbnail">
+                        ${fallbackThumbnail()}
 
-                    ${fallbackThumbnail()}
+                        <div class="thumbnail-play">
+                            ▶
+                        </div>
 
-                    <div class="thumbnail-play">
-                        ▶
                     </div>
 
-                </div>
+                    `;
+
+
+                return `
+
+                    <div class="video-card">
+
+                        ${thumbnailHtml}
+
+
+                        <div class="video-content">
+
+                            <div class="video-title">
+                                ${title}
+                            </div>
+
+
+                            <div class="video-meta">
+
+                                <span class="subject-badge">
+                                    📚 ${subject}
+                                </span>
+
+                                <span>
+                                    🎥 Video Class
+                                </span>
+
+                            </div>
+
+
+                            ${
+                                description
+
+                                ?
+
+                                `
+
+                                <div class="video-description">
+                                    ${description}
+                                </div>
+
+                                `
+
+                                :
+
+                                ""
+                            }
+
+
+                            <div class="video-actions">
+
+                                <a
+                                    class="open-video"
+                                    href="${url}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    data-material-id="${materialId}"
+                                >
+
+                                    ▶️ Open Video
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
 
                 `;
 
+            }
 
-            /*
-               IMPORTANT:
-
-               There is NO <video> element here.
-
-               Every video uses exactly the
-               same thumbnail-based interface.
-
-               This means:
-
-               ✓ No automatic video loading
-               ✓ No video player on page
-               ✓ No first-video special behaviour
-               ✓ No browser preloading
-               ✓ Only thumbnail is shown
-               ✓ Open Video opens the actual URL
-            */
+        ).join("");
 
 
-            return `
+    /*
+       Progress events are attached only
+       to currently rendered cards.
+    */
 
-            <div class="video-card">
-
-                ${thumbnailHtml}
-
-
-                <div class="video-content">
-
-                    <div class="video-title">
-                        ${title}
-                    </div>
-
-
-                    <div class="video-meta">
-
-                        <span class="subject-badge">
-                            📚 ${subject}
-                        </span>
-
-                        <span>
-                            🎥 Video Class
-                        </span>
-
-                    </div>
-
-
-                    ${
-                        description
-
-                        ?
-
-                        `
-
-                        <div class="video-description">
-                            ${description}
-                        </div>
-
-                        `
-
-                        :
-
-                        ""
-                    }
-
-
-                    <div class="video-actions">
-
-                        <a
-                            class="open-video"
-                            href="${url}"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            data-material-id="${materialId}"
-                        >
-
-                            ▶️ Open Video
-
-                        </a>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            `;
-
-        }
-
-    ).join("");
-
-
-    /* =========================
-       OPEN VIDEO PROGRESS
-========================= */
-
-    document
+    videoList
         .querySelectorAll(
             ".open-video[data-material-id]"
         )
         .forEach(
-            button => {
+            function(button){
 
                 button.addEventListener(
                     "click",
@@ -697,11 +1182,240 @@ async function loadVideos(){
 }
 
 
-/* =========================
-   INITIAL LOAD
-========================= */
+/* =====================================================
+   OPEN FOLDER
+===================================================== */
 
-loadVideos();
+function openFolder(
+    folderId,
+    folders
+){
+
+    currentFolderId =
+        String(folderId);
+
+
+    const folder =
+        folders.find(
+            function(item){
+
+                return String(
+                    item.id
+                ) === String(
+                    folderId
+                );
+
+            }
+        );
+
+
+    const folderName =
+        folder?.subjects?.name ||
+        folder?.name ||
+        "Subject";
+
+
+    const folderArea =
+        document.getElementById(
+            "folderArea"
+        );
+
+
+    const pageSubtitle =
+        document.getElementById(
+            "pageSubtitle"
+        );
+
+
+    const videos =
+        allVideos.filter(
+            function(video){
+
+                return String(
+                    video.folder_id
+                ) === String(
+                    folderId
+                );
+
+            }
+        );
+
+
+    folderArea.innerHTML = `
+
+        <button
+            type="button"
+            class="folder-back"
+            id="backToFolders"
+        >
+            ← All Subjects
+        </button>
+
+    `;
+
+
+    pageSubtitle.textContent =
+        folderName;
+
+
+    renderVideos(videos);
+
+
+    document
+        .getElementById(
+            "backToFolders"
+        )
+        .addEventListener(
+            "click",
+            showAllFolders
+        );
+
+}
+
+
+/* =====================================================
+   SHOW ALL FOLDERS
+===================================================== */
+
+async function showAllFolders(){
+
+    currentFolderId = null;
+
+
+    const pageSubtitle =
+        document.getElementById(
+            "pageSubtitle"
+        );
+
+
+    pageSubtitle.textContent =
+        "SSC EDGE Video Classes";
+
+
+    const folders =
+        await loadVideoFolders();
+
+
+    renderFolders(folders);
+
+
+    /*
+       Videos without a folder remain
+       directly visible.
+
+       This keeps the system backward
+       compatible.
+    */
+
+    const directVideos =
+        allVideos.filter(
+            function(video){
+
+                return !video.folder_id;
+
+            }
+        );
+
+
+    renderVideos(directVideos);
+
+}
+
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
+
+async function initializeVideos(){
+
+    const videoList =
+        document.getElementById(
+            "videoList"
+        );
+
+
+    try{
+
+        /*
+           Load videos first because folder
+           counts depend on them.
+        */
+
+        await loadVideos();
+
+
+        /*
+           Folder loading and rendering.
+        */
+
+        const folders =
+            await loadVideoFolders();
+
+
+        if(
+            folders.length > 0
+        ){
+
+            renderFolders(
+                folders
+            );
+
+
+            /*
+               Videos without folder remain
+               available directly.
+            */
+
+            const directVideos =
+                allVideos.filter(
+                    function(video){
+
+                        return !video.folder_id;
+
+                    }
+                );
+
+
+            renderVideos(
+                directVideos
+            );
+
+        }else{
+
+            /*
+               No folders:
+               original behaviour.
+            */
+
+            renderFolders([]);
+
+            renderVideos(
+                allVideos
+            );
+
+        }
+
+    }catch(error){
+
+        console.error(
+            error
+        );
+
+
+        videoList.innerHTML = `
+
+            <div class="empty">
+                Unable to load videos.
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+initializeVideos();
 
 </script>
 
