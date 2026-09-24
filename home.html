@@ -1472,84 +1472,47 @@ type="button"
 <div class="side-menu-links">
 
 <a href="home.html">
-
-<div class="menu-link-icon">
-🏠
-</div>
-
+<div class="menu-link-icon">🏠</div>
 Home
-
 </a>
 
 <a href="study.html">
-
-<div class="menu-link-icon">
-📚
-</div>
-
+<div class="menu-link-icon">📚</div>
 Study Material
-
 </a>
 
 <a href="practice.html">
-
-<div class="menu-link-icon">
-📝
-</div>
-
+<div class="menu-link-icon">📝</div>
 Practice
-
 </a>
 
 <div class="menu-divider"></div>
 
 <a href="progress.html">
-
-<div class="menu-link-icon">
-📊
-</div>
-
+<div class="menu-link-icon">📊</div>
 My Progress
-
 </a>
 
 <a href="daily-task.html">
-
-<div class="menu-link-icon">
-🎯
-</div>
-
+<div class="menu-link-icon">🎯</div>
 Daily Task
-
 </a>
 
 <a href="history.html">
-
-<div class="menu-link-icon">
-📋
-</div>
-
+<div class="menu-link-icon">📋</div>
 Test History
-
 </a>
 
 <a href="saved_questions.html">
-
-<div class="menu-link-icon">
-🔖
-</div>
-
+<div class="menu-link-icon">🔖</div>
 Saved Questions
-
 </a>
 
 <div class="menu-divider"></div>
 
 <div class="menu-theme">
 
-<span>
-Theme
-</span>
+<span>Theme</span>
 
 <div class="theme-options">
 
@@ -1643,9 +1606,7 @@ id="updatesOverlay"
 
 <div>
 
-<h2>
-Updates
-</h2>
+<h2>Updates</h2>
 
 <p>
 SSC EDGE latest updates
@@ -1721,9 +1682,7 @@ class="welcome-action"
 
 Get Started
 
-<span>
-→
-</span>
+<span>→</span>
 
 </a>
 
@@ -1741,7 +1700,7 @@ class="dashboard-card"
 >
 
 <div class="dash-icon">
-  📚
+📚
 </div>
 
 <strong>
@@ -1760,7 +1719,7 @@ class="dashboard-card"
 >
 
 <div class="dash-icon">
-  📝
+📝
 </div>
 
 <strong>
@@ -1798,7 +1757,7 @@ class="dashboard-card"
 >
 
 <div class="dash-icon">
-  📊
+📊
 </div>
 
 <strong>
@@ -2019,9 +1978,7 @@ Practice SSC mock tests
 
 </div>
 
-<b>
-›
-</b>
+<b>›</b>
 
 </a>
 
@@ -2063,9 +2020,7 @@ Continue video classes
 
 </div>
 
-<b>
-›
-</b>
+<b>›</b>
 
 </a>
 
@@ -2098,9 +2053,7 @@ Revise saved questions
 
 </div>
 
-<b>
-›
-</b>
+<b>›</b>
 
 </a>
 
@@ -2133,9 +2086,7 @@ Check your performance
 
 </div>
 
-<b>
-›
-</b>
+<b>›</b>
 
 </a>
 
@@ -2215,15 +2166,6 @@ Profile
 /* ==================================================
    SUPABASE
    ================================================== */
-
-/*
-FIX #1 + FIX #2
-
-Create the Supabase client before anything
-uses updatesDb.
-
-This was missing from the Home file.
-*/
 
 const SUPABASE_URL =
 "https://dvvyoygahzzbnpqrfhen.supabase.co";
@@ -2344,7 +2286,7 @@ if(photo){
 document.getElementById(
 "sideProfilePhoto"
 ).innerHTML =
-`<img src="${photo}" alt="Profile">`;
+`<img src="${escapeHtml(photo)}" alt="Profile">`;
 
 break;
 
@@ -2375,99 +2317,20 @@ document.getElementById("searchInput");
 const searchResults =
 document.getElementById("searchResults");
 
-const searchIndex = [
+/*
+Performance cache.
 
-{
-title:"Home",
-text:"SSC EDGE home dashboard welcome community continue learning",
-url:"home.html"
-},
+Same query ko dobara database se fetch nahi karna.
+*/
 
-{
-title:"Study Material",
-text:"Study Material Video E-Books Notes PDFs Quantitative Aptitude General Awareness English Reasoning",
-url:"study.html"
-},
+const searchCache =
+new Map();
 
-{
-title:"Video Classes",
-text:"Video classes study videos",
-url:"video.html"
-},
+let searchTimer =
+null;
 
-{
-title:"E-Books",
-text:"E Books PDFs books study material downloads",
-url:"ebooks.html"
-},
-
-{
-title:"Quantitative Aptitude",
-text:"Quant maths mathematics notes PDF practice",
-url:"quant.html"
-},
-
-{
-title:"General Awareness",
-text:"GK General Knowledge Current Affairs notes PDF",
-url:"gk.html"
-},
-
-{
-title:"English",
-text:"English Grammar Vocabulary notes PDF",
-url:"english.html"
-},
-
-{
-title:"Reasoning",
-text:"Reasoning Logic Practice notes PDF",
-url:"reasoning.html"
-},
-
-{
-title:"Practice",
-text:"Practice Mock Tests Full Mocks CGL PRE CGL MAINS Sectional Mocks SSC",
-url:"practice.html"
-},
-
-{
-title:"My Progress",
-text:"Progress performance score accuracy rank percentile test performance",
-url:"progress.html"
-},
-
-{
-title:"Daily Task",
-text:"Daily tasks daily learning tasks preparation",
-url:"daily-task.html"
-},
-
-{
-title:"Test History",
-text:"Previous attempts test history mock tests",
-url:"history.html"
-},
-
-{
-title:"Saved Questions",
-text:"Saved questions questions saved for revision",
-url:"saved_questions.html"
-},
-
-{
-title:"Downloads",
-text:"Downloaded PDFs E Books downloads",
-url:"downloads.html"
-},
-
-{
-title:"Profile",
-text:"Profile account downloads saved questions test history theme about logout",
-url:"profile.html"
-}
-
-];
+let activeSearchId =
+0;
 
 function openSearch(){
 
@@ -2487,6 +2350,10 @@ searchOverlay.classList.remove("show");
 
 searchInput.value="";
 
+clearTimeout(searchTimer);
+
+activeSearchId++;
+
 showSearchEmpty();
 
 }
@@ -2503,16 +2370,9 @@ Search SSC EDGE exams, mocks, PDFs and study material.
 
 }
 
-/*
-==================================================
-PRACTICE DRILL CHECK
-
-Same logic used by practice.html.
-
-Practice Drill exams should not appear
-as public SSC/RRB exam search results.
-==================================================
-*/
+/* ==================================================
+   PRACTICE DRILL CHECK
+   ================================================== */
 
 function normalizeSearchValue(value){
 
@@ -2552,11 +2412,9 @@ stage.includes("practice drill")
 
 }
 
-/*
-==================================================
-RENDER SEARCH RESULT
-==================================================
-*/
+/* ==================================================
+   RENDER SEARCH RESULT
+   ================================================== */
 
 function addSearchResult(item){
 
@@ -2585,67 +2443,20 @@ searchResults.appendChild(result);
 
 }
 
-/*
-==================================================
-PERFORM SEARCH
-==================================================
-*/
+/* ==================================================
+   SEARCH RENDER
+   ================================================== */
 
-function performSearch(){
-
-const query =
-searchInput.value
-.trim()
-.toLowerCase();
-
-if(!query){
-
-showSearchEmpty();
-
-return;
-
-}
-
-/* ORIGINAL PAGE SEARCH */
-
-const pageResults =
-searchIndex.filter(function(item){
-
-return (
-
-item.title
-.toLowerCase()
-.includes(query)
-
-||
-
-item.text
-.toLowerCase()
-.includes(query)
-
-);
-
-});
-
-searchResults.innerHTML = `
-
-<div class="search-empty">
-Searching SSC EDGE...
-</div>
-
-`;
-
-/* DATABASE SEARCH */
-
-searchDatabase(query)
-.then(function(databaseResults){
+function renderSearchResults(
+query,
+pageResults,
+databaseResults
+){
 
 const allResults = [
 ...pageResults,
 ...databaseResults
 ];
-
-/* Remove duplicates */
 
 const uniqueResults = [];
 
@@ -2699,18 +2510,152 @@ addSearchResult(item);
 
 });
 
-})
-.catch(function(error){
+}
+
+/* ==================================================
+   PERFORM SEARCH
+   ================================================== */
+
+function performSearch(){
+
+clearTimeout(searchTimer);
+
+const query =
+searchInput.value
+.trim()
+.toLowerCase();
+
+const searchId =
+++activeSearchId;
+
+if(!query){
+
+showSearchEmpty();
+
+return;
+
+}
+
+/*
+Very short queries generate huge result sets
+and unnecessary database work.
+*/
+
+if(query.length < 2){
+
+searchResults.innerHTML = `
+
+<div class="search-empty">
+Type at least 2 characters to search.
+</div>
+
+`;
+
+return;
+
+}
+
+/*
+Original local page search.
+This is immediate and does not need Supabase.
+*/
+
+const pageResults =
+searchIndex.filter(function(item){
+
+return (
+
+item.title
+.toLowerCase()
+.includes(query)
+
+||
+
+item.text
+.toLowerCase()
+.includes(query)
+
+);
+
+});
+
+/*
+If database result for this exact query is already
+available, render immediately.
+*/
+
+if(searchCache.has(query)){
+
+renderSearchResults(
+query,
+pageResults,
+searchCache.get(query)
+);
+
+return;
+
+}
+
+searchResults.innerHTML = `
+
+<div class="search-empty">
+Searching SSC EDGE...
+</div>
+
+`;
+
+/*
+Debounce database search.
+
+Rapid typing such as:
+s -> st -> stu -> stud
+
+will now create only one DB request
+after typing pauses.
+*/
+
+searchTimer =
+setTimeout(async function(){
+
+try{
+
+const databaseResults =
+await searchDatabase(query);
+
+/*
+Ignore an older search response if the user
+has already typed something newer.
+*/
+
+if(searchId !== activeSearchId){
+
+return;
+
+}
+
+searchCache.set(
+query,
+databaseResults
+);
+
+renderSearchResults(
+query,
+pageResults,
+databaseResults
+);
+
+}catch(error){
 
 console.error(
 "Search error:",
 error
 );
 
-/*
-If database search fails, the original
-page search still works.
-*/
+if(searchId !== activeSearchId){
+
+return;
+
+}
 
 if(pageResults.length === 0){
 
@@ -2737,7 +2682,9 @@ addSearchResult(item);
 
 }
 
-});
+}
+
+},300);
 
 }
 
@@ -2751,12 +2698,7 @@ const results = [];
 
 /*
 ==================================================
-FIX #2 — EXAMS
-
-Use the SAME exam fields and filters as
-practice.html.
-
-This makes CGL / CHSL / SSC exams searchable.
+EXAMS
 ==================================================
 */
 
@@ -2792,10 +2734,6 @@ ascending:true
 if(!examsError && exams){
 
 exams.forEach(function(exam){
-
-/*
-Do not show Practice Drill as a public exam.
-*/
 
 if(isPracticeDrillExam(exam)){
 
@@ -2862,9 +2800,7 @@ error
 
 /*
 ==================================================
-FIX #2 — MOCK TESTS
-
-Use the same mock_tests fields as practice.html.
+MOCK TESTS
 ==================================================
 */
 
@@ -2966,8 +2902,6 @@ error
 /*
 ==================================================
 OTHER DATABASE TABLES
-
-Keep the existing study/PDF search.
 ==================================================
 */
 
@@ -2999,7 +2933,18 @@ url:"study.html"
 
 ];
 
-for(const table of tables){
+/*
+Run independent table searches in parallel.
+This reduces total waiting time compared with
+waiting for one table after another.
+*/
+
+const tableResults =
+await Promise.all(
+
+tables.map(async function(table){
+
+const localResults = [];
 
 try{
 
@@ -3014,7 +2959,7 @@ error
 
 if(error || !data){
 
-continue;
+return localResults;
 
 }
 
@@ -3055,11 +3000,6 @@ row.filename ||
 let url =
 table.url;
 
-/*
-If a study/PDF row already contains
-a usable URL, use it.
-*/
-
 if(
 table.type === "PDF" ||
 table.type === "E-Book" ||
@@ -3075,7 +3015,7 @@ table.url;
 
 }
 
-results.push({
+localResults.push({
 
 title:String(title),
 
@@ -3096,10 +3036,6 @@ type:table.type
 
 }catch(error){
 
-/*
-A table that does not exist is ignored.
-*/
-
 console.log(
 "Search table skipped:",
 table.name
@@ -3107,7 +3043,17 @@ table.name
 
 }
 
-}
+return localResults;
+
+})
+
+);
+
+tableResults.forEach(function(items){
+
+results.push(...items);
+
+});
 
 return results;
 
@@ -3172,24 +3118,14 @@ document.getElementById("updatesContent");
 const updateDot =
 document.getElementById("updateDot");
 
-/*
-==================================================
-FIX #1
-
-Unread notification is remembered locally.
-
-The red dot appears when there is an active
-update newer than the last update the user saw.
-
-Opening the bell marks the currently displayed
-updates as read.
-
-A newly added update gets the red dot again.
-==================================================
-*/
-
 const UPDATE_READ_KEY =
 "ssc-edge-updates-last-read";
+
+let updatesLoadingPromise =
+null;
+
+let updatesCache =
+null;
 
 function getLastReadUpdate(){
 
@@ -3212,11 +3148,6 @@ return;
 
 const lastRead =
 getLastReadUpdate();
-
-/*
-First ever visit:
-show red dot because updates exist.
-*/
 
 if(!lastRead){
 
@@ -3270,11 +3201,6 @@ return;
 
 }
 
-/*
-loadUpdates() already requests newest first,
-so find() gets the newest dated update.
-*/
-
 const newest =
 data.find(function(update){
 
@@ -3296,6 +3222,12 @@ updateDot.style.display =
 
 }
 
+/*
+Updates are now loaded ONLY when the bell is opened.
+This removes an unnecessary DB request from the
+initial Home page load.
+*/
+
 updateBell.addEventListener(
 "click",
 async function(){
@@ -3304,11 +3236,6 @@ updatesOverlay.classList.add("show");
 
 const data =
 await loadUpdates();
-
-/*
-Only mark as read when updates were actually
-loaded successfully.
-*/
 
 if(data && data.length){
 
@@ -3347,7 +3274,38 @@ updatesOverlay.classList.remove("show");
 
 async function loadUpdates(){
 
-updateDot.style.display = "none";
+/*
+If updates were already loaded during this page
+session, use the memory cache immediately.
+*/
+
+if(updatesCache){
+
+checkUnreadUpdates(
+updatesCache
+);
+
+renderUpdates(
+updatesCache
+);
+
+return updatesCache;
+
+}
+
+/*
+If a request is already running, share the same
+Promise instead of sending another request.
+*/
+
+if(updatesLoadingPromise){
+
+return updatesLoadingPromise;
+
+}
+
+updateDot.style.display =
+"none";
 
 updatesContent.innerHTML = `
 
@@ -3376,6 +3334,9 @@ Please wait
 </div>
 
 `;
+
+updatesLoadingPromise =
+(async function(){
 
 try{
 
@@ -3414,16 +3375,50 @@ data.length === 0
 
 showNoUpdates();
 
+updatesCache = [];
+
 return [];
 
 }
 
-/*
-When loading normally, check whether
-there is an unread notification.
-*/
+updatesCache =
+data;
 
 checkUnreadUpdates(data);
+
+renderUpdates(data);
+
+return data;
+
+}catch(error){
+
+console.error(
+"Updates loading exception:",
+error
+);
+
+showNoUpdates();
+
+return [];
+
+}finally{
+
+updatesLoadingPromise =
+null;
+
+}
+
+})();
+
+return updatesLoadingPromise;
+
+}
+
+/* ==================================================
+   RENDER UPDATES
+   ================================================== */
+
+function renderUpdates(data){
 
 updatesContent.innerHTML = "";
 
@@ -3495,29 +3490,6 @@ updatesContent.appendChild(item);
 
 });
 
-return data;
-
-}catch(error){
-
-/*
-IMPORTANT FIX:
-
-If Supabase/network/client throws an exception,
-the popup must NOT remain stuck on
-"Loading updates...".
-*/
-
-console.error(
-"Updates loading exception:",
-error
-);
-
-showNoUpdates();
-
-return [];
-
-}
-
 }
 
 /* ==================================================
@@ -3559,11 +3531,14 @@ New SSC EDGE updates will appear here.
 
 }
 
-/* ==================================================
-   INITIAL LOAD
-   ================================================== */
+/*
+IMPORTANT:
+There is intentionally NO loadUpdates()
+here anymore.
 
-loadUpdates();
+Home page first render is now independent
+of the updates database.
+*/
 
 /* ==================================================
    THEME
