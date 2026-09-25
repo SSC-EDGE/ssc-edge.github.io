@@ -2167,21 +2167,31 @@ async function getCompletedAttemptCount(){
 
   if(!currentUser) return 0;
 
-  const { data, error } =
-    await supabaseClient
-      .from("test_attempts")
-      .select("id,completed_at")
-      .eq("user_id", currentUser.id)
-      .eq("mock_test_id", testId)
-      .not("completed_at", "is", null)
-      .order("completed_at", { ascending:true });
+  /*
+    We only need the COUNT here.
+    Do not download every completed attempt row.
+    HEAD + exact count lets PostgREST return the count
+    without transferring the matching records.
+  */
+  const {
+    count,
+    error
+  } = await supabaseClient
+    .from("test_attempts")
+    .select("id", {
+      count: "exact",
+      head: true
+    })
+    .eq("user_id", currentUser.id)
+    .eq("mock_test_id", testId)
+    .not("completed_at", "is", null);
 
   if(error){
     console.error("Attempt count error:", error);
     throw error;
   }
 
-  return (data || []).length;
+  return Number(count || 0);
 }
 
 /* ==================================================
@@ -2509,7 +2519,13 @@ async function loadTestData(){
       error:testError
     } = await supabaseClient
       .from("mock_tests")
-      .select("*")
+      .select(`
+        id,
+        title,
+        test_type,
+        duration_minutes,
+        subject_wise_timing
+      `)
       .eq("id", testId)
       .maybeSingle();
 

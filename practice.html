@@ -913,6 +913,7 @@ let tests = [];
 let folders = [];
 
 let examsLoaded = false;
+let examsLoadPromise = null;
 
 let currentGateway = "";
 
@@ -1731,7 +1732,10 @@ async function openSSC(){
     .classList.remove("hidden");
 
   const loaded =
-    await loadExams();
+    await (
+      examsLoadPromise ||
+      (examsLoadPromise = loadExams())
+    );
 
   if(loaded){
     renderExams("SSC");
@@ -1751,7 +1755,10 @@ async function openRRB(){
     .classList.remove("hidden");
 
   const loaded =
-    await loadExams();
+    await (
+      examsLoadPromise ||
+      (examsLoadPromise = loadExams())
+    );
 
   if(loaded){
     renderExams("RRB");
@@ -3438,12 +3445,17 @@ async function renderTests(
   }
 
   /*
-    Render the actual cards
-    immediately.
+    FAST RENDER:
 
-    Attempt status is loaded
-    afterward.
+    Mock cards are painted immediately from the
+    already-loaded mock_tests data.
+
+    Attempt status is fetched in the background,
+    so a slow test_attempts request can no longer
+    delay the mock list itself.
   */
+
+  box.className = "test-list";
 
   box.innerHTML =
     list.map(
@@ -3484,15 +3496,11 @@ async function renderTests(
           </div>
 
           <div
-            class="attempt-placeholder"
-            style="
-              margin-top:11px;
-              font-size:11px;
-              color:var(--p-muted);
-            "
-          >
-            Loading status...
-          </div>
+            class="test-actions"
+            data-test-actions="${escapeHtml(
+              test.id
+            )}"
+          ></div>
 
         </div>
 
@@ -3500,178 +3508,187 @@ async function renderTests(
     ).join("");
 
   /*
-    ONE attempt query for all
-    currently visible tests.
+    Fill cached status immediately where available.
+    This also avoids unnecessary visual waiting when
+    the same test list is reopened.
   */
+  list.forEach(test=>{
 
+    if(attemptCache.has(String(test.id))){
+      updateTestCardStatus(test);
+    }
+
+  });
+
+  /*
+    Network work continues after the cards are visible.
+    It is one batched request for all visible tests.
+  */
   await loadAttemptData(
     list.map(
       t => t.id
     )
   );
 
-  let html = "";
+  list.forEach(test=>{
+    updateTestCardStatus(test);
+  });
 
-  for(
-    const test of list
+}
+
+function updateTestCardStatus(test){
+
+  const id =
+    String(test.id);
+
+  const card =
+    document.querySelector(
+      `[data-test-card="${CSS.escape(id)}"]`
+    );
+
+  if(!card){
+    return;
+  }
+
+  const actionsBox =
+    card.querySelector(
+      `[data-test-actions="${CSS.escape(id)}"]`
+    );
+
+  if(!actionsBox){
+    return;
+  }
+
+  const status =
+    getAttemptStateFromCache(id);
+
+  let actions = "";
+
+  if(
+    status.state==="resume"
   ){
 
-    const status =
-      getAttemptStateFromCache(
-        test.id
-      );
-
-    let actions = "";
-
-    if(
-      status.state==="resume"
-    ){
-
-      actions = `
-        <a
-          class="start-test"
-          href="${testUrl(
-            test.id,
-            false
-          )}"
-        >
-          Resume Test
-        </a>
-      `;
-
-    }
-
-    else if(
-      status.completedCount===0
-    ){
-
-      actions = `
-        <a
-          class="start-test"
-          href="${testUrl(
-            test.id,
-            false
-          )}"
-        >
-          Start
-        </a>
-      `;
-
-    }
-
-    else{
-
-      const latest =
-        status.attempts[
-          status.attempts.length-1
-        ];
-
-      if(
-        status.completedCount < 4
-      ){
-
-        actions += `
-          <a
-            class="start-test"
-            href="${testUrl(
-              test.id,
-              true
-            )}"
-          >
-            Re-attempt
-          </a>
-        `;
-
-      }
-
-      if(latest){
-
-        actions += `
-
-          <a
-            class="secondary-test"
-            href="${solutionsUrl(
-              test,
-              latest
-            )}"
-          >
-            Solutions
-          </a>
-
-          <a
-            class="secondary-test"
-            href="${analysisUrl(
-              latest
-            )}"
-          >
-            Analysis
-          </a>
-
-        `;
-
-      }
-
-    }
-
-    html += `
-
-      <div class="test-card">
-
-        <div class="test-title">
-          ${escapeHtml(
-            test.title ||
-            "Mock Test"
-          )}
-        </div>
-
-        <div class="test-info">
-
-          ⏱
-          ${escapeHtml(
-            test.duration_minutes ||
-            "-"
-          )}
-          minutes
-
-          <br>
-
-          📝
-          ${escapeHtml(
-            test.total_questions ||
-            "-"
-          )}
-          questions
-
-        </div>
-
-        ${
-          status.completedCount
-            ? `
-              <div class="attempt-info">
-                ${
-                  status.completedCount
-                }
-                / 4 attempts completed
-              </div>
-            `
-            : ""
-        }
-
-        <div class="test-actions">
-          ${actions}
-        </div>
-
-      </div>
-
+    actions = `
+      <a
+        class="start-test"
+        href="${testUrl(
+          test.id,
+          false
+        )}"
+      >
+        Resume Test
+      </a>
     `;
 
   }
 
-  box.className =
-    "test-list";
+  else if(
+    status.completedCount===0
+  ){
 
-  box.innerHTML =
-    html;
+    actions = `
+      <a
+        class="start-test"
+        href="${testUrl(
+          test.id,
+          false
+        )}"
+      >
+        Start
+      </a>
+    `;
+
+  }
+
+  else{
+
+    const latest =
+      status.attempts[
+        status.attempts.length-1
+      ];
+
+    if(
+      status.completedCount < 4
+    ){
+
+      actions += `
+        <a
+          class="start-test"
+          href="${testUrl(
+            test.id,
+            true
+          )}"
+        >
+          Re-attempt
+        </a>
+      `;
+
+    }
+
+    if(latest){
+
+      actions += `
+
+        <a
+          class="secondary-test"
+          href="${solutionsUrl(
+            test,
+            latest
+          )}"
+        >
+          Solutions
+        </a>
+
+        <a
+          class="secondary-test"
+          href="${analysisUrl(
+            latest
+          )}"
+        >
+          Analysis
+        </a>
+
+      `;
+
+    }
+
+  }
+
+  actionsBox.innerHTML = actions;
+
+  /*
+    Keep the existing completed-attempt indicator,
+    but only add/update it after status is known.
+  */
+  const oldInfo =
+    card.querySelector(".attempt-info");
+
+  if(oldInfo){
+    oldInfo.remove();
+  }
+
+  if(status.completedCount){
+
+    const info =
+      document.createElement("div");
+
+    info.className =
+      "attempt-info";
+
+    info.textContent =
+      `${status.completedCount} / 4 attempts completed`;
+
+    const testInfo =
+      card.querySelector(".test-info");
+
+    if(testInfo){
+      testInfo.insertAdjacentElement(
+        "afterend",
+        info
+      );
+    }
+
+  }
 
 }
 
@@ -3878,12 +3895,69 @@ async function renderChapterTests(
 
   }
 
+  /*
+    Paint practice cards immediately.
+    Attempt status is loaded in the background.
+  */
+  box.className = "test-list";
+
   box.innerHTML =
-    `
-      <div class="practice-empty">
-        Loading test status...
-      </div>
-    `;
+    list.map(
+      test=>`
+
+        <div
+          class="test-card"
+          data-chapter-test-card="${escapeHtml(
+            test.id
+          )}"
+        >
+
+          <div class="test-title">
+            ${escapeHtml(
+              test.title ||
+              "Practice Test"
+            )}
+          </div>
+
+          <div class="test-info">
+
+            ⏱
+            ${escapeHtml(
+              test.duration_minutes ||
+              "-"
+            )}
+            minutes
+
+            <br>
+
+            📝
+            ${escapeHtml(
+              test.total_questions ||
+              "-"
+            )}
+            questions
+
+          </div>
+
+          <div
+            class="test-actions"
+            data-chapter-test-actions="${escapeHtml(
+              test.id
+            )}"
+          ></div>
+
+        </div>
+
+      `
+    ).join("");
+
+  list.forEach(test=>{
+
+    if(attemptCache.has(String(test.id))){
+      updateChapterTestCardStatus(test);
+    }
+
+  });
 
   await loadAttemptData(
     list.map(
@@ -3891,168 +3965,161 @@ async function renderChapterTests(
     )
   );
 
-  let html = "";
+  list.forEach(test=>{
+    updateChapterTestCardStatus(test);
+  });
 
-  for(
-    const test of list
+}
+
+function updateChapterTestCardStatus(test){
+
+  const id =
+    String(test.id);
+
+  const card =
+    document.querySelector(
+      `[data-chapter-test-card="${CSS.escape(id)}"]`
+    );
+
+  if(!card){
+    return;
+  }
+
+  const actionsBox =
+    card.querySelector(
+      `[data-chapter-test-actions="${CSS.escape(id)}"]`
+    );
+
+  if(!actionsBox){
+    return;
+  }
+
+  const status =
+    getAttemptStateFromCache(id);
+
+  let actions = "";
+
+  if(
+    status.state==="resume"
   ){
 
-    const status =
-      getAttemptStateFromCache(
-        test.id
-      );
-
-    let actions = "";
-
-    if(
-      status.state==="resume"
-    ){
-
-      actions = `
-        <a
-          class="start-test"
-          href="${testUrl(
-            test.id,
-            false
-          )}"
-        >
-          Resume Practice
-        </a>
-      `;
-
-    }
-
-    else if(
-      status.completedCount===0
-    ){
-
-      actions = `
-        <a
-          class="start-test"
-          href="${testUrl(
-            test.id,
-            false
-          )}"
-        >
-          Start Practice
-        </a>
-      `;
-
-    }
-
-    else{
-
-      const latest =
-        status.attempts[
-          status.attempts.length-1
-        ];
-
-      if(
-        status.completedCount < 4
-      ){
-
-        actions += `
-          <a
-            class="start-test"
-            href="${testUrl(
-              test.id,
-              true
-            )}"
-          >
-            Re-attempt
-          </a>
-        `;
-
-      }
-
-      if(latest){
-
-        actions += `
-
-          <a
-            class="secondary-test"
-            href="${solutionsUrl(
-              test,
-              latest
-            )}"
-          >
-            Solutions
-          </a>
-
-          <a
-            class="secondary-test"
-            href="${analysisUrl(
-              latest
-            )}"
-          >
-            Analysis
-          </a>
-
-        `;
-
-      }
-
-    }
-
-    html += `
-
-      <div class="test-card">
-
-        <div class="test-title">
-          ${escapeHtml(
-            test.title ||
-            "Practice Test"
-          )}
-        </div>
-
-        <div class="test-info">
-
-          ⏱
-          ${escapeHtml(
-            test.duration_minutes ||
-            "-"
-          )}
-          minutes
-
-          <br>
-
-          📝
-          ${escapeHtml(
-            test.total_questions ||
-            "-"
-          )}
-          questions
-
-        </div>
-
-        ${
-          status.completedCount
-            ? `
-              <div class="attempt-info">
-                ${
-                  status.completedCount
-                }
-                / 4 attempts completed
-              </div>
-            `
-            : ""
-        }
-
-        <div class="test-actions">
-          ${actions}
-        </div>
-
-      </div>
-
+    actions = `
+      <a
+        class="start-test"
+        href="${testUrl(
+          test.id,
+          false
+        )}"
+      >
+        Resume Practice
+      </a>
     `;
 
   }
 
-  box.className =
-    "test-list";
+  else if(
+    status.completedCount===0
+  ){
 
-  box.innerHTML =
-    html;
+    actions = `
+      <a
+        class="start-test"
+        href="${testUrl(
+          test.id,
+          false
+        )}"
+      >
+        Start Practice
+      </a>
+    `;
+
+  }
+
+  else{
+
+    const latest =
+      status.attempts[
+        status.attempts.length-1
+      ];
+
+    if(
+      status.completedCount < 4
+    ){
+
+      actions += `
+        <a
+          class="start-test"
+          href="${testUrl(
+            test.id,
+            true
+          )}"
+        >
+          Re-attempt
+        </a>
+      `;
+
+    }
+
+    if(latest){
+
+      actions += `
+
+        <a
+          class="secondary-test"
+          href="${solutionsUrl(
+            test,
+            latest
+          )}"
+        >
+          Solutions
+        </a>
+
+        <a
+          class="secondary-test"
+          href="${analysisUrl(
+            latest
+          )}"
+        >
+          Analysis
+        </a>
+
+      `;
+
+    }
+
+  }
+
+  actionsBox.innerHTML = actions;
+
+  const oldInfo =
+    card.querySelector(".attempt-info");
+
+  if(oldInfo){
+    oldInfo.remove();
+  }
+
+  if(status.completedCount){
+
+    const info =
+      document.createElement("div");
+
+    info.className =
+      "attempt-info";
+
+    info.textContent =
+      `${status.completedCount} / 4 attempts completed`;
+
+    const testInfo =
+      card.querySelector(".test-info");
+
+    if(testInfo){
+      testInfo.insertAdjacentElement(
+        "afterend",
+        info
+      );
+    }
+
+  }
 
 }
 
@@ -4117,6 +4184,15 @@ async function startPracticePage(){
   */
 
   await loadInitialData();
+
+  /*
+    Preload the small exam list in the background.
+    It is shared with openSSC/openRRB, so no duplicate
+    Supabase request is created if the user taps quickly.
+  */
+  if(!examsLoaded && !examsLoadPromise){
+    examsLoadPromise = loadExams();
+  }
 
   /*
     Home se:
