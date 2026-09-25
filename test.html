@@ -17,6 +17,9 @@
 
 <title>SSC EDGE - Test</title>
 
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://dvvyoygahzzbnpqrfhen.supabase.co" crossorigin>
+
 <link
   rel="stylesheet"
   href="css/style.css"
@@ -1544,7 +1547,7 @@ body{
 
   <div
     id="loading"
-    class="loading"
+    class="loading hidden"
   >
     Loading test...
   </div>
@@ -2451,11 +2454,49 @@ async function initializeTest(){
 
   }
 
-  await loadCurrentUser();
+  /*
+    Fast boot:
+    Show the existing start-screen shell immediately.
+    Authentication and test data are fetched in parallel.
+    The Start button stays disabled until data is ready.
+  */
+  hide("loading");
+  show("startScreen");
 
-  buildResumeKey();
+  const startBtn = $("startTestBtn");
+  if(startBtn){
+    startBtn.disabled = true;
+  }
 
-  await loadTestData();
+  try{
+
+    await Promise.all([
+      loadCurrentUser(),
+      loadTestData()
+    ]);
+
+    buildResumeKey();
+
+    await checkResumeAvailability();
+
+  }catch(error){
+
+    console.error(
+      "Test initialization error:",
+      error
+    );
+
+    showError(
+      "Unable to load test. Please try again."
+    );
+
+  }finally{
+
+    if(startBtn && !testData){
+      startBtn.disabled = true;
+    }
+
+  }
 
 }
 
@@ -2544,10 +2585,11 @@ async function loadTestData(){
     renderSectionBar();
     renderStartSummary();
 
-    hide("loading");
-    show("startScreen");
-
-    await checkResumeAvailability();
+    /*
+      Data is ready. Keep the same start screen; only remove
+      the temporary disabled state used during fast boot.
+    */
+    $("startTestBtn")?.removeAttribute("disabled");
 
   }catch(error){
 
@@ -2614,11 +2656,17 @@ async function loadSections(){
 
   }
 
-  for(const section of sections){
-
-    await loadQuestionsForSection(section);
-
-  }
+  /*
+    Load every section's questions in parallel instead of
+    waiting for one section to finish before starting the next.
+    This does not change ordering; each section keeps its own
+    question_order and the original sections array order.
+  */
+  await Promise.all(
+    sections.map(section =>
+      loadQuestionsForSection(section)
+    )
+  );
 
 }
 
