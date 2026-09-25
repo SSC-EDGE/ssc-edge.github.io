@@ -2618,7 +2618,13 @@ async function loadSections(){
   } = await supabaseClient
     .from("mock_test_sections")
     .select(`
-      *,
+      id,
+      mock_test_id,
+      subject_id,
+      section_order,
+      duration_minutes,
+      section_name,
+      question_count,
       subjects(
         id,
         name
@@ -2657,121 +2663,99 @@ async function loadSections(){
   }
 
   /*
-    Load every section's questions in parallel instead of
-    waiting for one section to finish before starting the next.
-    This does not change ordering; each section keeps its own
-    question_order and the original sections array order.
+    PERFORMANCE OPTIMIZATION:
+    Load ALL question assignments for this test in ONE request
+    instead of making one Supabase request per section.
+
+    The nested questions + question_options relation is kept,
+    so the existing question data structure used by the UI remains
+    the same.
   */
-  await Promise.all(
-    sections.map(section =>
-      loadQuestionsForSection(section)
-    )
-  );
+  await loadAllQuestionsForTest();
 
 }
 
-async function loadQuestionsForSection(section){
+async function loadAllQuestionsForTest(){
 
-  let query =
-    supabaseClient
+  const {
+    data:assignmentRows,
+    error:assignmentError
+  } = await supabaseClient
+    .from("mock_test_questions")
+    .select(`
+      id,
+      mock_test_id,
+      section_id,
+      question_id,
+      question_order,
+      questions(
+        id,
+        question_text,
+        explanation,
+        marks,
+        negative_marks,
+        subject_id,
+        chapter_id,
+        question_options(
+          id,
+          question_id,
+          option_label,
+          option_text,
+          option_text_hi,
+          is_correct
+        )
+      )
+    `)
+    .eq("mock_test_id", testId)
+    .order("question_order", {
+      ascending:true
+    });
+
+  /*
+    If the nested relation is unavailable, use the existing
+    separate-table fallback, but still do it only once for
+    the whole test.
+  */
+  if(assignmentError){
+
+    console.warn(
+      "Nested question query failed. Using optimized fallback:",
+      assignmentError
+    );
+
+    const {
+      data:fallbackRows,
+      error:fallbackError
+    } = await supabaseClient
       .from("mock_test_questions")
       .select(`
         id,
         mock_test_id,
         section_id,
         question_id,
-        question_order,
-        questions(
-          id,
-          question_text,
-          question_text_hi,
-          explanation,
-          marks,
-          negative_marks,
-          subject_id,
-          chapter_id,
-          correct_options,
-          is_bonus,
-          solution_image_url,
-          solution_video_url,
-          question_options(
-            id,
-            question_id,
-            option_label,
-            option_text,
-            option_text_hi,
-            is_correct
-          )
-        )
+        question_order
       `)
       .eq("mock_test_id", testId)
       .order("question_order", {
         ascending:true
       });
 
-  if(!section.virtual){
-
-    query = query.eq(
-      "section_id",
-      section.id
-    );
-
-  }
-
-  const {
-    data:assignmentRows,
-    error:assignmentError
-  } = await query;
-
-  if(assignmentError){
-
-    /*
-      Fallback for installations where
-      nested relation is not available.
-    */
-
-    console.warn(
-      "Nested question query failed:",
-      assignmentError
-    );
-
-    let fallbackQuery =
-      supabaseClient
-        .from("mock_test_questions")
-        .select("*")
-        .eq("mock_test_id", testId)
-        .order("question_order", {
-          ascending:true
-        });
-
-    if(!section.virtual){
-
-      fallbackQuery =
-        fallbackQuery.eq(
-          "section_id",
-          section.id
-        );
-
-    }
-
-    const {
-      data:fallbackRows,
-      error:fallbackError
-    } = await fallbackQuery;
-
     if(fallbackError) throw fallbackError;
 
     const questionIds =
-      (fallbackRows || []).map(
-        row => row.question_id
-      );
+      [...new Set(
+        (fallbackRows || [])
+          .map(row => row.question_id)
+          .filter(Boolean)
+      )];
 
     if(!questionIds.length){
 
-      section.questions = [];
+      sections.forEach(section => {
+        section.questions = [];
+      });
 
       return;
-
     }
 
     const {
@@ -2782,16 +2766,11 @@ async function loadQuestionsForSection(section){
       .select(`
         id,
         question_text,
-        question_text_hi,
         explanation,
         marks,
         negative_marks,
         subject_id,
         chapter_id,
-        correct_options,
-        is_bonus,
-        solution_image_url,
-        solution_video_url,
         question_options(
           id,
           question_id,
@@ -2807,53 +2786,119 @@ async function loadQuestionsForSection(section){
 
     const questionMap = new Map(
       (questionRows || []).map(
-        q => [q.id, q]
+        q => [String(q.id), q]
       )
     );
 
-    section.questions =
-      (fallbackRows || [])
-        .map(row => {
+    const sectionMap = new Map(
+      sections.map(section => [
+        String(section.id),
+        section
+      ])
+    );
 
-          const q =
-            questionMap.get(row.question_id);
+    sections.forEach(section => {
+      section.questions = [];
+    });
 
-          if(!q) return null;
+    /*
+      Preserve question_order and section grouping exactly.
+    */
+    (fallbackRows || []).forEach(row => {
 
-          return {
-            ...q,
-            assignment_id:row.id,
-            question_order:row.question_order
-          };
+      const section =
+        section.virtual
+          ? null
+          : sectionMap.get(String(row.section_id));
 
-        })
-        .filter(Boolean)
-        .sort(
-          (a,b) =>
-            (a.question_order || 0) -
-            (b.question_order || 0)
+      const targetSection =
+        section ||
+        (
+          sections.length === 1 &&
+          sections[0].virtual
+            ? sections[0]
+            : null
         );
 
-    return;
+      if(!targetSection) return;
 
+      const q =
+        questionMap.get(String(row.question_id));
+
+      if(!q) return;
+
+      targetSection.questions.push({
+        ...q,
+        assignment_id:row.id,
+        question_order:row.question_order
+      });
+
+    });
+
+    sections.forEach(section => {
+      section.questions.sort(
+        (a,b) =>
+          (a.question_order || 0) -
+          (b.question_order || 0)
+      );
+    });
+
+    return;
   }
 
-  section.questions =
-    (assignmentRows || [])
-      .map(row => {
+  /*
+    Build the same section.questions structure used everywhere
+    else in the existing test UI.
+  */
+  const sectionMap = new Map(
+    sections
+      .filter(section => !section.virtual)
+      .map(section => [
+        String(section.id),
+        section
+      ])
+  );
 
-        const q = row.questions;
+  sections.forEach(section => {
+    section.questions = [];
+  });
 
-        if(!q) return null;
+  /*
+    Virtual-section tests have no section_id requirement.
+    All assignments therefore go into the single virtual section.
+  */
+  const virtualSection =
+    sections.find(section => section.virtual) || null;
 
-        return {
-          ...q,
-          assignment_id:row.id,
-          question_order:row.question_order
-        };
+  (assignmentRows || []).forEach(row => {
 
-      })
-      .filter(Boolean);
+    const targetSection =
+      virtualSection ||
+      sectionMap.get(String(row.section_id));
+
+    if(!targetSection) return;
+
+    const q = row.questions;
+
+    if(!q) return;
+
+    targetSection.questions.push({
+      ...q,
+      assignment_id:row.id,
+      question_order:row.question_order
+    });
+
+  });
+
+  sections.forEach(section => {
+
+    section.questions.sort(
+      (a,b) =>
+        (a.question_order || 0) -
+        (b.question_order || 0)
+    );
+
+  });
 
 }
 
