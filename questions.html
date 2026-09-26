@@ -2014,18 +2014,20 @@ function toggleBulkImport(){
 
 }
 
-function clearBulkImport(){
+function clearBulkImport(keepFile = false){
 
   bulkRows = [];
   bulkValidatedRows = [];
 
-  document.getElementById(
-    "bulkFile"
-  ).value = "";
+  if(!keepFile){
+    document.getElementById(
+      "bulkFile"
+    ).value = "";
 
-  document.getElementById(
-    "bulkFileName"
-  ).textContent = "";
+    document.getElementById(
+      "bulkFileName"
+    ).textContent = "";
+  }
 
   document.getElementById(
     "bulkSummary"
@@ -2160,7 +2162,8 @@ function findChapter(name,subjectId){
 
 async function handleBulkFile(event){
 
-  clearBulkImport();
+  /* Clear previous preview/data but keep the newly selected file. */
+  clearBulkImport(true);
 
   const file =
     event.target.files[0];
