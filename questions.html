@@ -367,6 +367,38 @@ button.import-btn{
   margin-top:10px;
 }
 
+.bulk-actions{
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px;
+  margin-bottom:16px;
+  background:var(--card);
+}
+
+.bulk-select-row{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin-bottom:10px;
+}
+
+.bulk-select-row input{
+  width:auto;
+  accent-color:var(--purple);
+}
+
+.question-select{
+  width:auto !important;
+  accent-color:var(--purple);
+  margin-right:8px;
+}
+
+.bulk-count{
+  font-size:13px;
+  color:var(--muted);
+  margin-top:5px;
+}
+
 .hidden{
   display:none !important;
 }
@@ -589,13 +621,14 @@ button.import-btn{
           <b>Optional columns:</b>
           Explanation, Bonus, Video Link.<br><br>
 
-          Subject and Chapter are matched automatically with your existing
-          SSC EDGE Subject/Chapter records.
-          You do not need to enter database IDs.
+          Subject and Chapter columns are optional.
+          Every imported question is first stored in the dedicated
+          <b>BULK IMPORT</b> subject. You can assign the questions to
+          the final Subject + Chapter later using the selection tools below.
           <br><br>
 
           <b>Important:</b>
-          Do not change the column names in the template.
+          Do not change the question/option column names in the template.
         </div>
 
         <div class="template-box">
@@ -701,6 +734,50 @@ button.import-btn{
 
     </div>
 
+    <div id="bulkActions" class="bulk-actions hidden">
+
+      <h2 style="margin:0 0 10px;">📦 Assign / Move Bulk Questions</h2>
+
+      <div class="bulk-select-row">
+        <input
+          id="selectAllBulk"
+          type="checkbox"
+          onchange="toggleAllBulkQuestions(this.checked)"
+        >
+        <label for="selectAllBulk" style="margin:0;color:var(--text);">
+          Select all visible BULK IMPORT questions
+        </label>
+      </div>
+
+      <div id="bulkSelectedCount" class="bulk-count">
+        0 questions selected
+      </div>
+
+      <label>Assign Subject</label>
+      <select id="bulkTargetSubject" onchange="updateBulkTargetChapters()">
+        <option value="">Select Subject</option>
+      </select>
+
+      <label>Assign Chapter</label>
+      <select id="bulkTargetChapter">
+        <option value="">Select Chapter</option>
+      </select>
+
+      <div class="actions">
+        <button onclick="moveSelectedBulkQuestions()">
+          Save / Move Selected
+        </button>
+        <button class="secondary" onclick="clearBulkSelection()">
+          Clear Selection
+        </button>
+      </div>
+
+      <div class="small-note">
+        Imported questions stay in BULK IMPORT until you select them and move them to a Subject + Chapter.
+      </div>
+
+    </div>
+
     <div id="questionList"></div>
 
   </div>
@@ -728,6 +805,12 @@ let existingImageUrl = "";
 
 let bulkRows = [];
 let bulkValidatedRows = [];
+
+const BULK_IMPORT_SUBJECT_NAME = "BULK IMPORT";
+const BULK_IMPORT_CHAPTER_NAME = "Unassigned";
+let bulkImportSubjectId = null;
+let bulkImportChapterId = null;
+let bulkSelectedIds = new Set();
 
 /* ADMIN CHECK */
 
@@ -785,9 +868,66 @@ function showStatus(text){
     text;
 }
 
+/* BULK IMPORT LOCATION */
+
+async function ensureBulkImportLocation(){
+
+  let { data:bulkSubject,error } =
+    await db
+      .from("subjects")
+      .select("id,name")
+      .ilike("name",BULK_IMPORT_SUBJECT_NAME)
+      .limit(1);
+
+  if(error) throw error;
+
+  if(!bulkSubject?.length){
+
+    const result = await db
+      .from("subjects")
+      .insert({name:BULK_IMPORT_SUBJECT_NAME})
+      .select("id,name")
+      .single();
+
+    if(result.error) throw result.error;
+    bulkSubject = [result.data];
+  }
+
+  bulkImportSubjectId = bulkSubject[0].id;
+
+  let { data:bulkChapter,error:chapterError } =
+    await db
+      .from("chapters")
+      .select("id,name,subject_id")
+      .eq("subject_id",bulkImportSubjectId)
+      .ilike("name",BULK_IMPORT_CHAPTER_NAME)
+      .limit(1);
+
+  if(chapterError) throw chapterError;
+
+  if(!bulkChapter?.length){
+
+    const result = await db
+      .from("chapters")
+      .insert({
+        subject_id:bulkImportSubjectId,
+        name:BULK_IMPORT_CHAPTER_NAME
+      })
+      .select("id,name,subject_id")
+      .single();
+
+    if(result.error) throw result.error;
+    bulkChapter = [result.data];
+  }
+
+  bulkImportChapterId = bulkChapter[0].id;
+}
+
 /* SUBJECTS */
 
 async function loadSubjects(){
+
+  await ensureBulkImportLocation();
 
   const { data,error } =
     await db
@@ -819,7 +959,21 @@ async function loadSubjects(){
   filter.innerHTML =
     `<option value="">All Subjects</option>`;
 
-  subjects.forEach(s => {
+  const normalSubjects = subjects.filter(
+    s => String(s.name).toLowerCase() !==
+      BULK_IMPORT_SUBJECT_NAME.toLowerCase()
+  );
+
+  const bulkSubject = subjects.find(
+    s => String(s.name).toLowerCase() ===
+      BULK_IMPORT_SUBJECT_NAME.toLowerCase()
+  );
+
+  const orderedSubjects = bulkSubject
+    ? [...normalSubjects,bulkSubject]
+    : normalSubjects;
+
+  orderedSubjects.forEach(s => {
 
     subject.innerHTML += `
       <option value="${s.id}">
@@ -832,6 +986,8 @@ async function loadSubjects(){
       </option>`;
 
   });
+
+  populateBulkTargetSubjects();
 }
 
 /* CHAPTERS */
@@ -858,6 +1014,7 @@ async function loadChapters(){
 
   updateChapterSelect();
   updateFilterChapter();
+  updateBulkTargetChapters();
 }
 
 function updateChapterSelect(){
@@ -1046,6 +1203,17 @@ async function renderQuestions(){
 
   });
 
+  const isBulkView =
+    String(subjectId) === String(bulkImportSubjectId);
+
+  document.getElementById("bulkActions")
+    .classList.toggle("hidden",!isBulkView);
+
+  if(!isBulkView){
+    bulkSelectedIds.clear();
+    updateBulkSelectionUI();
+  }
+
   list.innerHTML = "";
 
   filtered.forEach((q,index) => {
@@ -1090,6 +1258,22 @@ async function renderQuestions(){
     list.innerHTML += `
 
       <div class="question">
+
+        ${
+          isBulkView
+          ? `
+            <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;">
+              <input
+                class="question-select"
+                type="checkbox"
+                ${bulkSelectedIds.has(q.id) ? "checked" : ""}
+                onchange="toggleBulkQuestion(${q.id},this.checked)"
+              >
+              <span class="small-note" style="margin:0;">Select for Subject + Chapter assignment</span>
+            </div>
+          `
+          : ""
+        }
 
         <div class="question-title">
           ${index+1}.
@@ -2206,43 +2390,23 @@ async function validateBulkRows(){
         "solution_video_url"
       ]);
 
-    if(!subjectName){
-      errors.push("Subject missing");
-    }
+    /*
+      Subject/Chapter columns are optional during bulk import.
+      Every imported question goes to the dedicated BULK IMPORT
+      subject + Unassigned chapter first.
+    */
 
-    if(!chapterName){
-      errors.push("Chapter missing");
+    if(!bulkImportSubjectId){
+      errors.push("BULK IMPORT subject is not available");
     }
 
     const subject =
       findSubject(subjectName);
 
-    if(subjectName && !subject){
-
-      errors.push(
-        `Subject not found: ${subjectName}`
-      );
-    }
-
     let chapter = null;
 
-    if(subject){
-
-      chapter =
-        findChapter(
-          chapterName,
-          subject.id
-        );
-
-      if(
-        chapterName &&
-        !chapter
-      ){
-
-        errors.push(
-          `Chapter not found for "${subject.name}": ${chapterName}`
-        );
-      }
+    if(subject && chapterName){
+      chapter = findChapter(chapterName,subject.id);
     }
 
     if(!questionEnglish){
@@ -2286,10 +2450,10 @@ async function validateBulkRows(){
       chapterName,
 
       subjectId:
-        subject?.id || null,
+        bulkImportSubjectId,
 
       chapterId:
-        chapter?.id || null,
+        bulkImportChapterId,
 
       questionEnglish,
       questionHindi,
@@ -2539,10 +2703,10 @@ async function importAllQuestions(){
         const questionData = {
 
           subject_id:
-            r.subjectId,
+            bulkImportSubjectId,
 
           chapter_id:
-            r.chapterId,
+            bulkImportChapterId,
 
           question_text:
             r.questionEnglish,
@@ -2713,6 +2877,187 @@ async function importAllQuestions(){
     : "Import All Valid Questions";
 }
 
+/* BULK QUESTION SELECTION / MOVE */
+
+function populateBulkTargetSubjects(){
+
+  const select = document.getElementById("bulkTargetSubject");
+  if(!select) return;
+
+  select.innerHTML = `<option value="">Select Subject</option>`;
+
+  subjects
+    .filter(s => String(s.id) !== String(bulkImportSubjectId))
+    .forEach(s => {
+      select.innerHTML += `
+        <option value="${s.id}">${escapeHtml(s.name)}</option>`;
+    });
+
+  updateBulkTargetChapters();
+}
+
+function updateBulkTargetChapters(){
+
+  const subjectId =
+    document.getElementById("bulkTargetSubject")?.value;
+
+  const select =
+    document.getElementById("bulkTargetChapter");
+
+  if(!select) return;
+
+  select.innerHTML = `<option value="">Select Chapter</option>`;
+
+  chapters
+    .filter(c =>
+      subjectId &&
+      String(c.subject_id) === String(subjectId) &&
+      String(c.id) !== String(bulkImportChapterId)
+    )
+    .forEach(c => {
+      select.innerHTML += `
+        <option value="${c.id}">${escapeHtml(c.name)}</option>`;
+    });
+}
+
+function toggleBulkQuestion(id,checked){
+
+  if(checked){
+    bulkSelectedIds.add(Number(id));
+  }else{
+    bulkSelectedIds.delete(Number(id));
+  }
+
+  updateBulkSelectionUI();
+}
+
+function toggleAllBulkQuestions(checked){
+
+  const checkboxes =
+    document.querySelectorAll(".question-select");
+
+  checkboxes.forEach(cb => {
+
+    cb.checked = checked;
+
+    const match =
+      cb.getAttribute("onchange")?.match(/toggleBulkQuestion\((\d+)/);
+
+    if(!match) return;
+
+    const id = Number(match[1]);
+
+    if(checked){
+      bulkSelectedIds.add(id);
+    }else{
+      bulkSelectedIds.delete(id);
+    }
+  });
+
+  updateBulkSelectionUI();
+}
+
+function updateBulkSelectionUI(){
+
+  const count = bulkSelectedIds.size;
+
+  const el = document.getElementById("bulkSelectedCount");
+
+  if(el){
+    el.textContent =
+      `${count} question${count === 1 ? "" : "s"} selected`;
+  }
+
+  const all =
+    document.getElementById("selectAllBulk");
+
+  const boxes =
+    document.querySelectorAll(".question-select");
+
+  if(all){
+    all.checked =
+      boxes.length > 0 &&
+      [...boxes].every(cb => cb.checked);
+  }
+}
+
+function clearBulkSelection(){
+
+  bulkSelectedIds.clear();
+
+  document.querySelectorAll(".question-select")
+    .forEach(cb => cb.checked = false);
+
+  const all = document.getElementById("selectAllBulk");
+  if(all) all.checked = false;
+
+  updateBulkSelectionUI();
+}
+
+async function moveSelectedBulkQuestions(){
+
+  const ids = [...bulkSelectedIds];
+
+  if(!ids.length){
+    alert("Please select at least one question.");
+    return;
+  }
+
+  const subjectId =
+    document.getElementById("bulkTargetSubject").value;
+
+  const chapterId =
+    document.getElementById("bulkTargetChapter").value;
+
+  if(!subjectId){
+    alert("Please select the target subject.");
+    return;
+  }
+
+  if(!chapterId){
+    alert("Please select the target chapter.");
+    return;
+  }
+
+  if(!confirm(
+    `Move ${ids.length} selected question${ids.length === 1 ? "" : "s"} to the selected Subject + Chapter?`
+  )){
+    return;
+  }
+
+  try{
+
+    const { error } =
+      await db
+        .from("questions")
+        .update({
+          subject_id:subjectId,
+          chapter_id:chapterId
+        })
+        .in("id",ids);
+
+    if(error) throw error;
+
+    alert(
+      `${ids.length} question${ids.length === 1 ? "" : "s"} moved successfully.`
+    );
+
+    clearBulkSelection();
+
+    await loadQuestions();
+
+  }
+  catch(error){
+
+    console.error(error);
+
+    alert(
+      "Could not move questions:\n" +
+      error.message
+    );
+  }
+}
+
 /* EXCEL TEMPLATE */
 
 function getTemplateHeaders(){
@@ -2753,8 +3098,8 @@ function downloadTemplate(){
 
   const example = {
 
-    "Subject":"General Awareness",
-    "Chapter":"History",
+    "Subject":"",
+    "Chapter":"",
 
     "Question English":
       "Example question",
@@ -2883,7 +3228,11 @@ document.getElementById("subject")
 document.getElementById("filterSubject")
   .addEventListener(
     "change",
-    updateFilterChapter
+    () => {
+      bulkSelectedIds.clear();
+      updateFilterChapter();
+      updateBulkSelectionUI();
+    }
   );
 
 document.getElementById("filterChapter")
